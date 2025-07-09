@@ -13,7 +13,6 @@ import {
   ArrowLeftIcon,
   ShareIcon,
   HeartIcon,
-  PlayIcon,
   MapPinIcon
 } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
@@ -46,7 +45,8 @@ export default function ArtistProfilePage() {
   }
 
   // Combine all photos for gallery
-  const allPhotos = [...artist.performancePhotos, ...artist.bandPhotos];
+  const allPhotos = [...(artist.performancePhotos || []), ...(artist.bandPhotos || [])];
+  
   const getGenre = () => {
     const genres = ['folk', 'rock', 'indie', 'country', 'blues', 'jazz', 'experimental'];
     const bio = artist.bio.toLowerCase();
@@ -140,7 +140,7 @@ export default function ArtistProfilePage() {
                 <VideoPlayer
                   videoUrl={artist.livePerformanceVideo}
                   title={`${artist.name} - Live Performance`}
-                  thumbnailUrl={artist.performancePhotos[0]?.url}
+                  thumbnailUrl={allPhotos[0]?.url}
                 />
               </div>
             )}
