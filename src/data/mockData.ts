@@ -32,8 +32,40 @@ export const mockHosts = [
       accessible: false,
       bnbOffered: true
     },
-    housePhotos: [],
-    performanceSpacePhotos: [],
+    housePhotos: [
+      {
+        id: 'house1',
+        url: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800',
+        alt: 'Cozy living room with fireplace and piano',
+        category: 'house' as const
+      },
+      {
+        id: 'house2', 
+        url: 'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?w=800',
+        alt: 'Kitchen and dining area',
+        category: 'house' as const
+      },
+      {
+        id: 'house3',
+        url: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800',
+        alt: 'Outdoor garden seating area',
+        category: 'exterior' as const
+      }
+    ],
+    performanceSpacePhotos: [
+      {
+        id: 'perf1',
+        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800',
+        alt: 'Performance space setup with chairs arranged',
+        category: 'performance_space' as const
+      },
+      {
+        id: 'perf2',
+        url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800', 
+        alt: 'Intimate acoustic performance in living room',
+        category: 'crowd' as const
+      }
+    ],
     rating: 4.9,
     reviewCount: 12,
     createdAt: new Date('2023-01-15'),
@@ -72,8 +104,34 @@ export const mockHosts = [
       accessible: true,
       bnbOffered: false
     },
-    housePhotos: [],
-    performanceSpacePhotos: [],
+    housePhotos: [
+      {
+        id: 'barn1',
+        url: 'https://images.unsplash.com/photo-1544264503-9fb1f3b91040?w=800',
+        alt: 'Rustic barn exterior with countryside views',
+        category: 'exterior' as const
+      },
+      {
+        id: 'barn2',
+        url: 'https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=800',
+        alt: 'Barn interior with exposed beams and stage area',
+        category: 'house' as const
+      }
+    ],
+    performanceSpacePhotos: [
+      {
+        id: 'barnperf1',
+        url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800',
+        alt: 'Concert setup in barn with stage and seating',
+        category: 'performance_space' as const
+      },
+      {
+        id: 'barnperf2',
+        url: 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=800',
+        alt: 'Live performance with audience in barn',
+        category: 'crowd' as const
+      }
+    ],
     rating: 4.7,
     reviewCount: 28,
     createdAt: new Date('2022-03-10'),
@@ -81,7 +139,7 @@ export const mockHosts = [
   },
   {
     id: '3',
-    userId: 'host3',
+    userId: 'host3', 
     name: 'Urban Loft Sessions',
     bio: 'Modern downtown loft with city views. Perfect for indie and experimental artists. We keep it intimate with 15-20 people max and focus on creating a listening room atmosphere.',
     city: 'Portland',
@@ -112,8 +170,28 @@ export const mockHosts = [
       accessible: true,
       bnbOffered: false
     },
-    housePhotos: [],
-    performanceSpacePhotos: [],
+    housePhotos: [
+      {
+        id: 'loft1',
+        url: 'https://images.unsplash.com/photo-1560184897-ae75f418493e?w=800',
+        alt: 'Modern loft with city skyline views',
+        category: 'house' as const
+      },
+      {
+        id: 'loft2',
+        url: 'https://images.unsplash.com/photo-1556020685-ae41abfc9365?w=800',
+        alt: 'Minimalist interior with large windows',
+        category: 'house' as const
+      }
+    ],
+    performanceSpacePhotos: [
+      {
+        id: 'loftperf1', 
+        url: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=800',
+        alt: 'Intimate listening room setup with ambient lighting',
+        category: 'performance_space' as const
+      }
+    ],
     rating: 4.8,
     reviewCount: 7,
     createdAt: new Date('2023-08-22'),
