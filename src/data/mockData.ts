@@ -199,6 +199,10 @@ export const mockHosts = [
   }
 ];
 
+
+
+
+
 export const mockArtists = [
   {
     id: '1',
@@ -237,6 +241,41 @@ export const mockArtists = [
     rating: 4.8,
     reviewCount: 15,
     approved: true,
+    // Add photo arrays
+    performancePhotos: [
+      {
+        id: 'sarah_perf1',
+        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800',
+        alt: 'Sarah & The Wanderers performing in intimate living room setting',
+        category: 'performance' as const
+      },
+      {
+        id: 'sarah_perf2',
+        url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800',
+        alt: 'Acoustic performance with audience engagement',
+        category: 'performance' as const
+      },
+      {
+        id: 'sarah_perf3',
+        url: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800',
+        alt: 'Band performing on outdoor stage',
+        category: 'performance' as const
+      }
+    ],
+    bandPhotos: [
+      {
+        id: 'sarah_band1',
+        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800',
+        alt: 'Band portrait - Sarah, Mike, and Lisa with instruments',
+        category: 'band' as const
+      },
+      {
+        id: 'sarah_band2',
+        url: 'https://images.unsplash.com/photo-1551847404-9e05c30b1204?w=800',
+        alt: 'Candid backstage moment before show',
+        category: 'band' as const
+      }
+    ],
     createdAt: new Date('2023-02-10'),
     updatedAt: new Date('2024-11-30')
   },
@@ -275,6 +314,35 @@ export const mockArtists = [
     rating: 4.9,
     reviewCount: 32,
     approved: true,
+    // Add photo arrays
+    performancePhotos: [
+      {
+        id: 'tommy_perf1',
+        url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800',
+        alt: 'Tommy Blue solo acoustic performance',
+        category: 'performance' as const
+      },
+      {
+        id: 'tommy_perf2',
+        url: 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=800',
+        alt: 'Energetic blues performance with guitar',
+        category: 'performance' as const
+      },
+      {
+        id: 'tommy_perf3',
+        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800',
+        alt: 'Tommy performing at outdoor festival',
+        category: 'performance' as const
+      }
+    ],
+    bandPhotos: [
+      {
+        id: 'tommy_band1',
+        url: 'https://images.unsplash.com/photo-1601077700705-8ae13e0da8ac?w=800',
+        alt: 'Tommy Blue with guitar and harmonica',
+        category: 'band' as const
+      }
+    ],
     createdAt: new Date('2022-11-15'),
     updatedAt: new Date('2024-12-01')
   },
@@ -314,6 +382,29 @@ export const mockArtists = [
     rating: 4.6,
     reviewCount: 8,
     approved: true,
+    // Add photo arrays
+    performancePhotos: [
+      {
+        id: 'echo_perf1',
+        url: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=800',
+        alt: 'Echo & Iris experimental performance with electronics',
+        category: 'performance' as const
+      },
+      {
+        id: 'echo_perf2',
+        url: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800',
+        alt: 'Atmospheric duo performance with violin and synth',
+        category: 'performance' as const
+      }
+    ],
+    bandPhotos: [
+      {
+        id: 'echo_band1',
+        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800',
+        alt: 'Echo and Iris duo portrait with instruments',
+        category: 'band' as const
+      }
+    ],
     createdAt: new Date('2023-07-01'),
     updatedAt: new Date('2024-12-03')
   }
