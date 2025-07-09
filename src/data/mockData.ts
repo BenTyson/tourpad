@@ -241,7 +241,6 @@ export const mockArtists = [
     rating: 4.8,
     reviewCount: 15,
     approved: true,
-    // Add photo arrays
     performancePhotos: [
       {
         id: 'sarah_perf1',
@@ -265,13 +264,13 @@ export const mockArtists = [
     bandPhotos: [
       {
         id: 'sarah_band1',
-        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800',
+        url: 'https://images.unsplash.com/photo-1551847404-9e05c30b1204?w=800',
         alt: 'Band portrait - Sarah, Mike, and Lisa with instruments',
         category: 'band' as const
       },
       {
         id: 'sarah_band2',
-        url: 'https://images.unsplash.com/photo-1551847404-9e05c30b1204?w=800',
+        url: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=800',
         alt: 'Candid backstage moment before show',
         category: 'band' as const
       }
@@ -314,7 +313,6 @@ export const mockArtists = [
     rating: 4.9,
     reviewCount: 32,
     approved: true,
-    // Add photo arrays
     performancePhotos: [
       {
         id: 'tommy_perf1',
@@ -330,7 +328,7 @@ export const mockArtists = [
       },
       {
         id: 'tommy_perf3',
-        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800',
+        url: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=800',
         alt: 'Tommy performing at outdoor festival',
         category: 'performance' as const
       }
@@ -382,7 +380,6 @@ export const mockArtists = [
     rating: 4.6,
     reviewCount: 8,
     approved: true,
-    // Add photo arrays
     performancePhotos: [
       {
         id: 'echo_perf1',
@@ -400,7 +397,7 @@ export const mockArtists = [
     bandPhotos: [
       {
         id: 'echo_band1',
-        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800',
+        url: 'https://images.unsplash.com/photo-1551847404-9e05c30b1204?w=800',
         alt: 'Echo and Iris duo portrait with instruments',
         category: 'band' as const
       }
