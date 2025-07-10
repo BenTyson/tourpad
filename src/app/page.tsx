@@ -50,53 +50,96 @@ export default function HomePage() {
   return (
     <div className="bg-white">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
+      <section className="relative min-h-screen flex items-center bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-yellow-300/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-pink-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        </div>
+        
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 sm:py-32 z-10">
           <div className="text-center">
+            {/* Enhanced headline with dramatic animation */}
             <div className={`transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-              <h1 className="text-4xl sm:text-6xl font-bold text-white mb-6">
+              <h1 className="text-5xl sm:text-7xl font-bold text-white mb-6 leading-tight">
                 Where Music
-                <span className="block text-yellow-300">Feels Like Home</span>
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-200 to-yellow-300 animate-pulse">
+                  Feels Like Home
+                </span>
               </h1>
             </div>
             
             <div className={`transition-all duration-1000 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-              <p className="text-xl text-blue-100 max-w-3xl mx-auto mb-8">
+              <p className="text-xl sm:text-2xl text-blue-100 max-w-4xl mx-auto mb-12 leading-relaxed">
                 Connect touring artists with passionate hosts for unforgettable intimate concerts.
+                <span className="block mt-2 text-yellow-200">
+                  Building community, one show at a time.
+                </span>
               </p>
             </div>
-            
-            {/* Search Bar */}
-            <div className="max-w-2xl mx-auto bg-white rounded-lg p-2 flex flex-col sm:flex-row gap-2 mb-8">
-              <div className="flex-1 flex items-center px-4">
-                <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 mr-2" />
-                <input
-                  type="text"
-                  placeholder="City, artist, or genre..."
-                  className="flex-1 outline-none text-gray-700"
-                />
+
+            {/* Enhanced search bar with backdrop blur */}
+            <div className={`transition-all duration-1000 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              <div className="max-w-2xl mx-auto bg-white/95 backdrop-blur-sm rounded-2xl p-3 flex flex-col sm:flex-row gap-3 mb-12 shadow-2xl border border-white/20">
+                <div className="flex-1 flex items-center px-4">
+                  <MagnifyingGlassIcon className="h-6 w-6 text-gray-400 mr-3" />
+                  <input
+                    type="text"
+                    placeholder="Search by city, artist, or venue..."
+                    className="flex-1 outline-none text-gray-700 placeholder-gray-400 text-lg bg-transparent"
+                  />
+                </div>
+                <Button size="lg" className="px-8 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <MagnifyingGlassIcon className="w-5 h-5 mr-2" />
+                  Search
+                </Button>
               </div>
-              <Button size="lg" className="px-8">
-                Search
-              </Button>
             </div>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/register?type=host">
-                <Button size="lg" variant="secondary" className="px-8">
-                  <HomeIcon className="w-5 h-5 mr-2" />
-                  Become a Host
-                </Button>
-              </Link>
-              <Link href="/register?type=artist">
-                <Button size="lg" variant="outline" className="px-8 bg-white/10 border-white text-white hover:bg-white hover:text-gray-900">
-                  <MusicalNoteIcon className="w-5 h-5 mr-2" />
-                  Join as Artist
-                </Button>
-              </Link>
+            {/* Enhanced CTA Buttons with dramatic hover effects */}
+            <div className={`transition-all duration-1000 delay-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                <Link href="/register?type=host">
+                  <Button size="lg" variant="secondary" className="px-10 py-4 text-lg shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group">
+                    <HomeIcon className="w-6 h-6 mr-3 group-hover:animate-bounce" />
+                    Become a Host
+                    <span className="ml-2 transition-transform group-hover:translate-x-1">→</span>
+                  </Button>
+                </Link>
+                <Link href="/register?type=artist">
+                  <Button size="lg" variant="outline" className="px-10 py-4 text-lg bg-white/10 border-white/30 text-white hover:bg-white hover:text-gray-900 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group backdrop-blur-sm">
+                    <MusicalNoteIcon className="w-6 h-6 mr-3 group-hover:animate-bounce" />
+                    Join as Artist
+                    <span className="ml-2 transition-transform group-hover:translate-x-1">→</span>
+                  </Button>
+                </Link>
+              </div>
             </div>
+
+            {/* Floating musical elements */}
+            <div className="absolute top-20 left-10 animate-float">
+              <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm">
+                <MusicalNoteIcon className="w-8 h-8 text-white" />
+              </div>
+            </div>
+            <div className="absolute bottom-32 right-16 animate-float" style={{ animationDelay: '1s' }}>
+              <div className="w-16 h-16 bg-yellow-300/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                <HomeIcon className="w-6 h-6 text-white" />
+              </div>
+            </div>
+            <div className="absolute top-1/3 right-10 animate-float" style={{ animationDelay: '2s' }}>
+              <div className="w-12 h-12 bg-purple-400/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                <StarIcon className="w-5 h-5 text-white" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-pulse"></div>
           </div>
         </div>
       </section>
