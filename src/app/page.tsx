@@ -144,73 +144,123 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-12 bg-gray-50">
+      {/* Enhanced Stats Section */}
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white relative">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {featuredStats.map((stat) => (
-              <div key={stat.label}>
-                <div className="text-3xl font-bold text-blue-600">{stat.value}</div>
-                <div className="text-sm text-gray-600 mt-1">{stat.label}</div>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Trusted by Musicians & Hosts Nationwide
+            </h2>
+            <p className="text-xl text-gray-600">Real numbers from our growing community</p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {featuredStats.map((stat, index) => (
+              <div 
+                key={stat.label}
+                className="text-center group cursor-pointer transform hover:scale-110 transition-all duration-500"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 group-hover:bg-white group-hover:shadow-xl transition-all duration-300 mb-4">
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full group-hover:scale-110 transition-transform duration-300"></div>
+                </div>
+                <div className="text-4xl font-bold text-gray-900 mb-2 group-hover:scale-110 transition-transform duration-300 group-hover:text-blue-600">
+                  {stat.value}
+                </div>
+                <div className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">
+                  {stat.label}
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+      {/* Enhanced How It Works */}
+      <section className="py-24 bg-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50"></div>
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 text-purple-800 rounded-full text-sm font-medium mb-4">
+              Simple Process
+            </div>
+            <h2 className="text-5xl font-bold text-gray-900 mb-6">
               How It Works
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Simple steps to create meaningful musical connections in your community
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Three simple steps to create meaningful musical connections in your community
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-12">
             {howItWorksSteps.map((step, index) => (
-              <Card key={step.title} className="text-center">
-                <CardContent className="p-8">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 text-blue-600 rounded-full mb-4">
-                    <step.icon className="w-8 h-8" />
+              <div key={step.title} className="group relative">
+                {/* Connecting line */}
+                {index < howItWorksSteps.length - 1 && (
+                  <div className="hidden md:block absolute top-12 left-full w-12 h-0.5 bg-gradient-to-r from-gray-300 to-transparent transform translate-x-6"></div>
+                )}
+                
+                <Card className="text-center hover:shadow-2xl transform hover:-translate-y-4 transition-all duration-500 group border-0 shadow-lg bg-white/80 backdrop-blur-sm relative overflow-hidden">
+                  {/* Number badge */}
+                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg group-hover:scale-125 transition-transform duration-300">
+                    {index + 1}
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {step.title}
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    {step.description}
-                  </p>
-                  <Button variant="outline" size="sm">
-                    {step.cta}
-                  </Button>
-                </CardContent>
-              </Card>
+                  
+                  <CardContent className="p-10">
+                    <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br ${
+                      index === 0 ? 'from-blue-500 to-purple-600' :
+                      index === 1 ? 'from-purple-500 to-pink-600' :
+                      'from-pink-500 to-red-600'
+                    } text-white mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-lg`}>
+                      <step.icon className="w-10 h-10" />
+                    </div>
+                    
+                    <h3 className="text-2xl font-semibold text-gray-900 mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 transition-all duration-300">
+                      {step.title}
+                    </h3>
+                    <p className="text-gray-600 mb-6 leading-relaxed text-lg">
+                      {step.description}
+                    </p>
+                    <Button variant="outline" size="sm" className="group-hover:shadow-lg transform group-hover:scale-105 transition-all duration-300">
+                      {step.cta}
+                      <span className="ml-2 transition-transform group-hover:translate-x-1">→</span>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 bg-blue-600">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
+      {/* Enhanced Final CTA Section */}
+      <section className="py-24 bg-gradient-to-br from-blue-600 to-purple-700 relative overflow-hidden">
+        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-1/4 left-1/4 w-72 h-72 bg-yellow-300/10 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-5xl font-bold text-white mb-6">
             Ready to Get Started?
           </h2>
-          <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
-            Join our community of music lovers and start creating unforgettable experiences today.
+          <p className="text-xl text-blue-100 mb-12 max-w-2xl mx-auto leading-relaxed">
+            Join thousands of musicians and hosts creating unforgettable experiences together.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Link href="/register?type=host">
-              <Button size="lg" variant="secondary" className="px-8">
+              <Button size="lg" variant="secondary" className="px-12 py-4 text-lg shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group">
+                <HomeIcon className="w-6 h-6 mr-3" />
                 Host a Concert
+                <span className="ml-3 transition-transform group-hover:translate-x-1">→</span>
               </Button>
             </Link>
             <Link href="/register?type=artist">
-              <Button size="lg" variant="outline" className="px-8 border-white text-white hover:bg-white hover:text-blue-600">
+              <Button size="lg" variant="outline" className="px-12 py-4 text-lg border-white/30 text-white hover:bg-white hover:text-purple-600 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group backdrop-blur-sm">
+                <MusicalNoteIcon className="w-6 h-6 mr-3" />
                 Perform at Shows
+                <span className="ml-3 transition-transform group-hover:translate-x-1">→</span>
               </Button>
             </Link>
           </div>
