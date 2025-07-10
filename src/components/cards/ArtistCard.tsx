@@ -4,7 +4,8 @@ import {
   UserGroupIcon,
   MusicalNoteIcon,
   GlobeAltIcon,
-  CheckCircleIcon
+  CheckCircleIcon,
+  PlayIcon
 } from '@heroicons/react/24/outline';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -52,6 +53,18 @@ interface ArtistProfile {
   rating: number;
   reviewCount: number;
   approved: boolean;
+  performancePhotos?: Array<{
+    id: string;
+    url: string;
+    alt: string;
+    category: 'performance' | 'band';
+  }>;
+  bandPhotos?: Array<{
+    id: string;
+    url: string;
+    alt: string;
+    category: 'performance' | 'band';
+  }>;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -70,25 +83,46 @@ export function ArtistCard({ artist, showBookingButton = false }: ArtistCardProp
     return foundGenre || 'music';
   };
 
+  const allPhotos = [...(artist.performancePhotos || []), ...(artist.bandPhotos || [])];
+  const hasVideo = !!artist.livePerformanceVideo;
+
   return (
-    <Card className="overflow-hidden transition-shadow hover:shadow-lg">
+    <Card hover clickable className="overflow-hidden group">
       <div className="relative">
-        <div className="aspect-video relative bg-gray-200">
-          {artist.livePerformanceVideo ? (
-            <div className="flex items-center justify-center h-full bg-gradient-to-br from-purple-600 to-blue-600">
-              <MusicalNoteIcon className="w-12 h-12 text-white" />
-            </div>
+        <div className="aspect-video relative bg-gray-200 overflow-hidden">
+          {allPhotos.length > 0 ? (
+            <img
+              src={allPhotos[0].url}
+              alt={`${artist.name} performance`}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            />
           ) : (
-            <div className="flex items-center justify-center h-full bg-gradient-to-br from-indigo-500 to-purple-600">
-              <MusicalNoteIcon className="w-12 h-12 text-white" />
+            <div className="flex items-center justify-center h-full bg-gradient-to-br from-indigo-500 to-purple-600 transition-all duration-500 group-hover:from-indigo-600 group-hover:to-purple-700">
+              <MusicalNoteIcon className="w-12 h-12 text-white transition-transform duration-500 group-hover:scale-110" />
             </div>
           )}
         </div>
         
         {/* Approval status */}
         {artist.approved && (
-          <div className="absolute top-3 right-3 bg-green-500 text-white rounded-full p-1">
+          <div className="absolute top-3 right-3 bg-green-500 text-white rounded-full p-1 transition-all duration-300 group-hover:scale-110 group-hover:bg-green-600">
             <CheckCircleIcon className="w-4 h-4" />
+          </div>
+        )}
+
+        {/* Video play overlay */}
+        {hasVideo && (
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+            <div className="bg-white/90 hover:bg-white text-gray-900 rounded-full p-3 transition-all duration-300 transform scale-75 group-hover:scale-100">
+              <PlayIcon className="w-6 h-6" />
+            </div>
+          </div>
+        )}
+
+        {/* Photo count indicator */}
+        {allPhotos.length > 1 && (
+          <div className="absolute bottom-3 right-3 bg-black/70 text-white px-2 py-1 rounded text-xs transition-all duration-300 group-hover:bg-black/80">
+            {allPhotos.length} photos
           </div>
         )}
       </div>
@@ -97,14 +131,17 @@ export function ArtistCard({ artist, showBookingButton = false }: ArtistCardProp
         <div className="space-y-3">
           {/* Header */}
           <div>
-            <h3 className="font-semibold text-lg text-gray-900 line-clamp-1">
+            <h3 className="font-semibold text-lg text-gray-900 line-clamp-1 group-hover:text-purple-600 transition-colors duration-300">
               {artist.name}
             </h3>
             <div className="flex items-center space-x-2 mt-1">
-              <Badge variant="default">
+              <Badge 
+                variant="default" 
+                className="transition-all duration-300 group-hover:scale-105 group-hover:bg-purple-100 group-hover:text-purple-800"
+              >
                 {getGenreFromBio()}
               </Badge>
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-gray-600 transition-colors duration-300 group-hover:text-gray-700">
                 {artist.yearsActive} years active
               </span>
             </div>
@@ -112,30 +149,36 @@ export function ArtistCard({ artist, showBookingButton = false }: ArtistCardProp
 
           {/* Band info */}
           <div className="flex items-center space-x-4 text-sm text-gray-600">
-            <div className="flex items-center">
+            <div className="flex items-center transition-all duration-300 group-hover:text-purple-600">
               <UserGroupIcon className="w-4 h-4 mr-1" />
               {artist.members.length} {artist.members.length === 1 ? 'member' : 'members'}
             </div>
             <div className="flex items-center">
-              <StarIcon className="w-4 h-4 mr-1" />
+              <StarIcon className="w-4 h-4 mr-1 transition-colors duration-300 group-hover:text-yellow-500" />
               {artist.rating.toFixed(1)} ({artist.reviewCount})
             </div>
           </div>
 
           {/* Tour info */}
           <div className="flex items-center space-x-2">
-            <Badge variant="default">
+            <Badge 
+              variant="default" 
+              className="transition-all duration-300 group-hover:scale-105"
+            >
               {artist.tourMonthsPerYear} months/year touring
             </Badge>
             {artist.requireHomeStay && (
-              <Badge variant="warning">
+              <Badge 
+                variant="warning" 
+                className="transition-all duration-300 group-hover:scale-105"
+              >
                 Needs lodging
               </Badge>
             )}
           </div>
 
           {/* Bio preview */}
-          <p className="text-sm text-gray-600 line-clamp-2">
+          <p className="text-sm text-gray-600 line-clamp-2 transition-colors duration-300 group-hover:text-gray-700">
             {artist.bio}
           </p>
 
@@ -143,24 +186,28 @@ export function ArtistCard({ artist, showBookingButton = false }: ArtistCardProp
           {(artist.socialLinks.website || artist.socialLinks.spotify) && (
             <div className="flex items-center space-x-2">
               {artist.socialLinks.website && (
-                <GlobeAltIcon className="w-4 h-4 text-gray-400" />
+                <div className="transition-all duration-300 group-hover:scale-110 group-hover:text-blue-600">
+                  <GlobeAltIcon className="w-4 h-4 text-gray-400" />
+                </div>
               )}
               {artist.socialLinks.spotify && (
-                <span className="text-xs text-green-600 font-medium">Spotify</span>
+                <span className="text-xs text-green-600 font-medium transition-all duration-300 group-hover:text-green-700 group-hover:scale-105">
+                  Spotify
+                </span>
               )}
             </div>
           )}
 
           {/* Actions */}
-          <div className="flex items-center justify-between pt-2">
+          <div className="flex items-center justify-between pt-2 transform transition-all duration-300 group-hover:translate-y-0 translate-y-1">
             <Link href={`/artists/${artist.id}`}>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="transition-all duration-300 hover:shadow-md">
                 View Profile
               </Button>
             </Link>
             {showBookingButton && artist.approved && (
               <Link href={`/bookings/new?artistId=${artist.id}`}>
-                <Button size="sm">
+                <Button size="sm" className="transition-all duration-300 hover:shadow-lg">
                   Book Artist
                 </Button>
               </Link>
