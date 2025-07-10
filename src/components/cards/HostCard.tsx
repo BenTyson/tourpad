@@ -50,8 +50,18 @@ interface HostProfile {
   zip: string;
   showSpecs: HostShowSpecs;
   amenities: HostAmenities;
-  housePhotos: string[];
-  performanceSpacePhotos: string[];
+  housePhotos: Array<{
+    id: string;
+    url: string;
+    alt: string;
+    category: 'house' | 'performance_space' | 'crowd' | 'exterior';
+  }>;
+  performanceSpacePhotos: Array<{
+    id: string;
+    url: string;
+    alt: string;
+    category: 'house' | 'performance_space' | 'crowd' | 'exterior';
+  }>;
   rating: number;
   reviewCount: number;
   createdAt: Date;
@@ -77,25 +87,27 @@ export function HostCard({ host, showBookingButton = false }: HostCardProps) {
     return `${host.city}, ${host.state}`;
   };
 
+  const allPhotos = [...host.housePhotos, ...host.performanceSpacePhotos];
+
   return (
-    <Card className="overflow-hidden transition-shadow hover:shadow-lg">
+    <Card hover clickable className="overflow-hidden group">
       <div className="relative">
-        <div className="aspect-video relative bg-gray-200">
-          {host.housePhotos.length > 0 ? (
+        <div className="aspect-video relative bg-gray-200 overflow-hidden">
+          {allPhotos.length > 0 ? (
             <img
-              src={host.housePhotos[0]}
+              src={allPhotos[0].url}
               alt={`${host.name} venue`}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
           ) : (
-            <div className="flex items-center justify-center h-full bg-gradient-to-br from-green-400 to-blue-500">
-              <HomeIcon className="w-12 h-12 text-white" />
+            <div className="flex items-center justify-center h-full bg-gradient-to-br from-green-400 to-blue-500 transition-all duration-500 group-hover:from-green-500 group-hover:to-blue-600">
+              <HomeIcon className="w-12 h-12 text-white transition-transform duration-500 group-hover:scale-110" />
             </div>
           )}
         </div>
         
         {/* Quick stats overlay */}
-        <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-lg px-2 py-1">
+        <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-lg px-2 py-1 transition-all duration-300 group-hover:bg-white group-hover:shadow-md">
           <div className="flex items-center space-x-1">
             <StarIcon className="w-4 h-4 text-yellow-500 fill-current" />
             <span className="text-sm font-medium">
@@ -103,13 +115,20 @@ export function HostCard({ host, showBookingButton = false }: HostCardProps) {
             </span>
           </div>
         </div>
+
+        {/* Hover overlay */}
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+          <Button variant="secondary" size="sm" className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+            View Photos
+          </Button>
+        </div>
       </div>
 
       <CardContent className="p-4">
         <div className="space-y-3">
           {/* Header */}
           <div>
-            <h3 className="font-semibold text-lg text-gray-900 line-clamp-1">
+            <h3 className="font-semibold text-lg text-gray-900 line-clamp-1 group-hover:text-blue-600 transition-colors duration-300">
               {host.name}
             </h3>
             <div className="flex items-center text-sm text-gray-600 mt-1">
@@ -127,40 +146,45 @@ export function HostCard({ host, showBookingButton = false }: HostCardProps) {
             <div>
               ${host.showSpecs.avgDoorFee} door
             </div>
-            <Badge variant="default">
+            <Badge variant="default" className="transition-all duration-300 group-hover:scale-105">
               {host.showSpecs.performanceLocation}
             </Badge>
           </div>
 
           {/* Amenities */}
           <div className="flex items-center space-x-2">
-            {getAmenityIcons().map(({ icon: Icon, label }) => (
-              <div key={label} className="flex items-center text-gray-600" title={label}>
+            {getAmenityIcons().map(({ icon: Icon, label }, index) => (
+              <div 
+                key={label} 
+                className="flex items-center text-gray-600 transition-all duration-300 hover:text-blue-600" 
+                title={label}
+                style={{ transitionDelay: `${index * 50}ms` }}
+              >
                 <Icon className="w-4 h-4" />
               </div>
             ))}
             {host.amenities.bnbOffered && (
-              <Badge variant="success" className="ml-2">
+              <Badge variant="success" className="ml-2 transition-all duration-300 group-hover:scale-105">
                 BNB Available
               </Badge>
             )}
           </div>
 
           {/* Bio preview */}
-          <p className="text-sm text-gray-600 line-clamp-2">
+          <p className="text-sm text-gray-600 line-clamp-2 transition-colors duration-300 group-hover:text-gray-700">
             {host.bio}
           </p>
 
           {/* Actions */}
-          <div className="flex items-center justify-between pt-2">
+          <div className="flex items-center justify-between pt-2 transform transition-all duration-300 group-hover:translate-y-0 translate-y-1">
             <Link href={`/hosts/${host.id}`}>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="transition-all duration-300 hover:shadow-md">
                 View Profile
               </Button>
             </Link>
             {showBookingButton && (
               <Link href={`/bookings/new?hostId=${host.id}`}>
-                <Button size="sm">
+                <Button size="sm" className="transition-all duration-300 hover:shadow-lg">
                   Request Booking
                 </Button>
               </Link>

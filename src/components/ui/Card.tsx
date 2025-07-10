@@ -1,12 +1,17 @@
 import { HTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 
-interface CardProps extends HTMLAttributes<HTMLDivElement> {}
+interface CardProps extends HTMLAttributes<HTMLDivElement> {
+  hover?: boolean;
+  clickable?: boolean;
+}
 
-const Card = ({ className, ...props }: CardProps) => (
+const Card = ({ className, hover = false, clickable = false, ...props }: CardProps) => (
   <div
     className={cn(
-      'rounded-lg border border-gray-200 bg-white shadow-sm',
+      'rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300',
+      hover && 'hover:shadow-lg hover:-translate-y-1 hover:border-gray-300',
+      clickable && 'cursor-pointer hover:shadow-xl hover:-translate-y-2 hover:scale-[1.02] active:scale-[0.98] active:translate-y-0',
       className
     )}
     {...props}
