@@ -271,7 +271,7 @@ export default function ArtistProfilePage() {
                   {Object.entries(artist.socialLinks).map(([platform, url]) => {
                     if (!url) return null;
                     return (
-                      
+                      <a
                         key={platform}
                         href={url}
                         target="_blank"
