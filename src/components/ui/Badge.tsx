@@ -8,10 +8,10 @@ interface BadgeProps extends HTMLAttributes<HTMLDivElement> {
 
 const Badge = ({ className, variant = 'default', pulse = false, ...props }: BadgeProps) => {
   const variants = {
-    default: 'bg-gray-100 text-gray-800 hover:bg-gray-200',
-    success: 'bg-green-100 text-green-800 hover:bg-green-200',
-    warning: 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200',
-    error: 'bg-red-100 text-red-800 hover:bg-red-200'
+    default: 'bg-neutral-100 text-neutral-800 hover:bg-neutral-200',
+    success: 'bg-sage-100 text-sage-800 hover:bg-sage-200',
+    warning: 'bg-secondary-100 text-secondary-800 hover:bg-secondary-200',
+    error: 'bg-primary-100 text-primary-800 hover:bg-primary-200'
   };
 
   return (

@@ -12,10 +12,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const baseStyles = 'inline-flex items-center justify-center rounded-md font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none relative overflow-hidden group';
     
     const variants = {
-      primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] hover:-translate-y-0.5',
-      secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500 hover:shadow-md hover:scale-[1.02] active:scale-[0.98]',
-      outline: 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-gray-500 hover:border-gray-400 hover:shadow-md hover:scale-[1.02] active:scale-[0.98]',
-      ghost: 'text-gray-700 hover:bg-gray-100 focus:ring-gray-500 hover:scale-[1.05] active:scale-[0.95]'
+      primary: 'bg-primary-400 text-white hover:bg-primary-500 focus:ring-primary-300 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] hover:-translate-y-0.5',
+      secondary: 'bg-secondary-300 text-neutral-800 hover:bg-secondary-400 focus:ring-secondary-200 hover:shadow-md hover:scale-[1.02] active:scale-[0.98]',
+      outline: 'border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 focus:ring-primary-300 hover:border-primary-300 hover:shadow-md hover:scale-[1.02] active:scale-[0.98]',
+      ghost: 'text-neutral-700 hover:bg-neutral-100 focus:ring-primary-300 hover:scale-[1.05] active:scale-[0.95]'
     };
 
     const sizes = {

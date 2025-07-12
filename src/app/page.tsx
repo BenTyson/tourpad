@@ -50,12 +50,12 @@ export default function HomePage() {
   return (
     <div className="bg-white">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 overflow-hidden">
+      <section className="relative min-h-screen flex items-center overflow-hidden" style={{background: 'linear-gradient(to bottom right, #C7999F, #E0BCA8, #A1CCAD)'}}>
         {/* Animated background elements */}
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-yellow-300/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-          <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-pink-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-secondary-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-sage-200/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
         </div>
         
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 sm:py-32 z-10">
@@ -64,16 +64,16 @@ export default function HomePage() {
             <div className={`transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
               <h1 className="text-5xl sm:text-7xl font-bold text-white mb-6 leading-tight">
                 Where Music
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-200 to-yellow-300 animate-pulse">
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-secondary-200 via-secondary-100 to-secondary-200 animate-pulse">
                   Feels Like Home
                 </span>
               </h1>
             </div>
             
             <div className={`transition-all duration-1000 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-              <p className="text-xl sm:text-2xl text-blue-100 max-w-4xl mx-auto mb-12 leading-relaxed">
+              <p className="text-xl sm:text-2xl text-white/90 max-w-4xl mx-auto mb-12 leading-relaxed">
                 Connect touring artists with passionate hosts for unforgettable intimate concerts.
-                <span className="block mt-2 text-yellow-200">
+                <span className="block mt-2 text-secondary-100">
                   Building community, one show at a time.
                 </span>
               </p>
@@ -145,7 +145,7 @@ export default function HomePage() {
       </section>
 
       {/* Enhanced Stats Section */}
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white relative">
+      <section className="py-20 bg-gradient-to-b from-neutral-50 to-white relative">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -161,13 +161,13 @@ export default function HomePage() {
                 className="text-center group cursor-pointer transform hover:scale-110 transition-all duration-500"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 group-hover:bg-white group-hover:shadow-xl transition-all duration-300 mb-4">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full group-hover:scale-110 transition-transform duration-300"></div>
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-neutral-100 group-hover:bg-white group-hover:shadow-xl transition-all duration-300 mb-4">
+                  <div className="w-8 h-8 bg-gradient-to-br from-primary-400 to-sage-400 rounded-full group-hover:scale-110 transition-transform duration-300"></div>
                 </div>
-                <div className="text-4xl font-bold text-gray-900 mb-2 group-hover:scale-110 transition-transform duration-300 group-hover:text-blue-600">
+                <div className="text-4xl font-bold text-neutral-900 mb-2 group-hover:scale-110 transition-transform duration-300 group-hover:text-primary-500">
                   {stat.value}
                 </div>
-                <div className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">
+                <div className="text-sm text-neutral-600 group-hover:text-neutral-900 transition-colors">
                   {stat.label}
                 </div>
               </div>
@@ -178,10 +178,10 @@ export default function HomePage() {
 
       {/* Enhanced How It Works */}
       <section className="py-24 bg-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-50/50 to-sage-50/50"></div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 text-purple-800 rounded-full text-sm font-medium mb-4">
+            <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-primary-100 to-sage-100 text-primary-800 rounded-full text-sm font-medium mb-4">
               Simple Process
             </div>
             <h2 className="text-5xl font-bold text-gray-900 mb-6">
@@ -234,18 +234,18 @@ export default function HomePage() {
       </section>
 
       {/* Enhanced Final CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-blue-600 to-purple-700 relative overflow-hidden">
+      <section className="py-24 bg-gradient-to-br from-primary-500 to-sage-500 relative overflow-hidden">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="absolute inset-0">
           <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 left-1/4 w-72 h-72 bg-yellow-300/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-1/4 left-1/4 w-72 h-72 bg-secondary-200/20 rounded-full blur-3xl"></div>
         </div>
         
         <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-5xl font-bold text-white mb-6">
             Ready to Get Started?
           </h2>
-          <p className="text-xl text-blue-100 mb-12 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-white/90 mb-12 max-w-2xl mx-auto leading-relaxed">
             Join thousands of musicians and hosts creating unforgettable experiences together.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">

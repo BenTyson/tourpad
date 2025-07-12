@@ -9,9 +9,9 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 const Card = ({ className, hover = false, clickable = false, ...props }: CardProps) => (
   <div
     className={cn(
-      'rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300',
-      hover && 'hover:shadow-lg hover:-translate-y-1 hover:border-gray-300',
-      clickable && 'cursor-pointer hover:shadow-xl hover:-translate-y-2 hover:scale-[1.02] active:scale-[0.98] active:translate-y-0',
+      'rounded-lg border border-neutral-200 bg-white shadow-sm transition-all duration-300',
+      hover && 'hover:shadow-lg hover:-translate-y-1 hover:border-primary-200',
+      clickable && 'cursor-pointer hover:shadow-xl hover:-translate-y-2 hover:scale-[1.02] active:scale-[0.98] active:translate-y-0 hover:border-primary-300',
       className
     )}
     {...props}
