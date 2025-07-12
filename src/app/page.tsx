@@ -50,7 +50,7 @@ export default function HomePage() {
   return (
     <div className="bg-white">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center overflow-hidden" style={{background: 'linear-gradient(to bottom right, #C7999F, #E0BCA8, #A1CCAD)'}}>
+      <section className="relative min-h-screen flex items-center overflow-hidden" style={{background: 'linear-gradient(to bottom right, #658371, #8BB097, #A1CCAD)'}}>
         {/* Animated background elements */}
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
@@ -162,7 +162,7 @@ export default function HomePage() {
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-neutral-100 group-hover:bg-white group-hover:shadow-xl transition-all duration-300 mb-4">
-                  <div className="w-8 h-8 bg-gradient-to-br from-primary-400 to-sage-400 rounded-full group-hover:scale-110 transition-transform duration-300"></div>
+                  <div className="w-8 h-8 bg-gradient-to-br from-sage-600 to-sage-300 rounded-full group-hover:scale-110 transition-transform duration-300"></div>
                 </div>
                 <div className="text-4xl font-bold text-neutral-900 mb-2 group-hover:scale-110 transition-transform duration-300 group-hover:text-primary-500">
                   {stat.value}
@@ -178,10 +178,10 @@ export default function HomePage() {
 
       {/* Enhanced How It Works */}
       <section className="py-24 bg-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-50/50 to-sage-50/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-sage-50/50 to-sage-100/30"></div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-primary-100 to-sage-100 text-primary-800 rounded-full text-sm font-medium mb-4">
+            <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-sage-100 to-sage-200 text-sage-800 rounded-full text-sm font-medium mb-4">
               Simple Process
             </div>
             <h2 className="text-5xl font-bold text-gray-900 mb-6">
@@ -234,7 +234,7 @@ export default function HomePage() {
       </section>
 
       {/* Enhanced Final CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-primary-500 to-sage-500 relative overflow-hidden">
+      <section className="py-24 bg-gradient-to-br from-sage-600 to-sage-400 relative overflow-hidden">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="absolute inset-0">
           <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>

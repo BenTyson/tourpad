@@ -19,3 +19,187 @@
  GET /artists 200 in 14ms
  ✓ Compiled /artists/[id] in 192ms (873 modules)
  GET /artists/1 200 in 598ms
+ GET / 200 in 39ms
+ ✓ Compiled in 490ms (871 modules)
+ GET / 200 in 76ms
+ ✓ Compiled in 379ms (871 modules)
+ GET / 200 in 49ms
+ ✓ Compiled in 424ms (871 modules)
+ GET / 200 in 33ms
+ ✓ Compiled in 167ms (871 modules)
+ GET / 200 in 36ms
+ ✓ Compiled in 252ms (871 modules)
+ GET / 200 in 46ms
+ ✓ Compiled in 290ms (378 modules)
+ GET / 200 in 38ms
+ ✓ Compiled in 948ms (378 modules)
+ GET / 200 in 29ms
+ ✓ Compiled in 437ms (857 modules)
+ GET / 200 in 243ms
+ GET / 200 in 11ms
+ ✓ Compiled in 512ms (871 modules)
+ GET / 200 in 45ms
+ GET /artists 200 in 40ms
+ ✓ Compiled /bookings/new in 231ms (868 modules)
+ GET /bookings/new?artistId=1 200 in 272ms
+ GET /artists/1 200 in 26ms
+ GET / 200 in 141ms
+ GET /artists/2 200 in 101ms
+ ✓ Compiled in 961ms (868 modules)
+ ○ Compiling /dashboard/media ...
+ ✓ Compiled /dashboard/media in 612ms (919 modules)
+ GET /dashboard/media 200 in 819ms
+ ✓ Compiled /_not-found in 128ms (923 modules)
+ GET /api/placeholder/800/600 404 in 199ms
+ ✓ Compiled in 625ms (933 modules)
+ GET /dashboard/media 200 in 62ms
+ ✓ Compiled /_not-found in 144ms (923 modules)
+ GET /api/placeholder/800/600 404 in 235ms
+ ✓ Compiled in 297ms (406 modules)
+ GET /dashboard/media 200 in 90ms
+ ✓ Compiled in 155ms (406 modules)
+ GET /dashboard/media 200 in 15ms
+ ✓ Compiled in 262ms (406 modules)
+ GET /dashboard/media 200 in 14ms
+ ✓ Compiled in 231ms (406 modules)
+ GET /dashboard/media 200 in 14ms
+ ✓ Compiled in 359ms (406 modules)
+ GET /dashboard/media 200 in 14ms
+ ✓ Compiled in 320ms (406 modules)
+ GET /dashboard/media 200 in 15ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 524ms (934 modules)
+Booking: 1
+Event date: 2025-08-16T01:00:00.000Z
+Now: 2025-07-12T18:56:42.515Z
+Is upcoming: true
+Is approved: true
+---
+Booking: 3
+Event date: 2025-10-11T01:30:00.000Z
+Now: 2025-07-12T18:56:42.516Z
+Is upcoming: true
+Is approved: false
+---
+ GET /dashboard 200 in 694ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 110ms
+ ✓ Compiled /admin in 280ms (959 modules)
+ GET /admin 200 in 418ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ✓ Compiled /favicon.ico in 145ms (566 modules)
+ GET /favicon.ico 200 in 199ms
+ ✓ Compiled /_not-found in 153ms (970 modules)
+ GET /admin/bookings 404 in 203ms
+ GET /admin/bookings 404 in 63ms
+ GET /admin 200 in 97ms
+ GET /admin/applications 404 in 42ms
+ GET /admin/applications 404 in 64ms
+ GET /admin 200 in 78ms
+ GET /admin/users 404 in 19ms
+ GET /admin/users 404 in 34ms
+ GET /admin 200 in 92ms
+ ✓ Compiled /hosts in 324ms (963 modules)
+ GET /hosts 200 in 450ms
+ GET /stories 404 in 46ms
+ GET /stories 404 in 85ms
+ GET /hosts 200 in 90ms
+ GET /hosts 200 in 133ms
+ ✓ Compiled in 1208ms (945 modules)
+ ✓ Compiled in 506ms (945 modules)
+ ✓ Compiled in 556ms (945 modules)
+ ✓ Compiled /_not-found in 329ms (949 modules)
+ GET /stories 404 in 438ms
+ GET /hosts 200 in 94ms
+ GET /admin 200 in 20ms
+ GET /admin 200 in 93ms
+ ✓ Compiled /favicon.ico in 318ms (548 modules)
+ GET /favicon.ico 200 in 370ms
+ ✓ Compiled /admin/applications in 288ms (977 modules)
+ GET /admin/applications 200 in 335ms
+ GET /admin 200 in 35ms
+ ✓ Compiled /admin/users in 320ms (980 modules)
+ GET /admin/users 200 in 354ms
+ GET /admin 200 in 48ms
+ ✓ Compiled /admin/bookings in 264ms (958 modules)
+ GET /admin/bookings 200 in 294ms
+ GET /admin 200 in 29ms
+ GET /admin/finance 404 in 20ms
+ GET /admin/finance 404 in 75ms
+ GET /admin 200 in 91ms
+ GET /admin/operations 404 in 13ms
+ GET /admin/operations 404 in 35ms
+ GET /admin 200 in 87ms
+ GET /admin/support 404 in 18ms
+ GET /admin/support 404 in 44ms
+ GET /admin 200 in 74ms
+ GET /admin/reports 404 in 14ms
+ GET /admin/reports 404 in 39ms
+ GET /admin 200 in 79ms
+ GET /admin/security 404 in 24ms
+ GET /admin/security 404 in 28ms
+ GET /admin 200 in 81ms
+ GET /admin/activity 404 in 12ms
+ GET /admin/activity 404 in 37ms
+ GET /admin 200 in 86ms
+ ✓ Compiled in 573ms (948 modules)
+ GET /admin 200 in 129ms
+ ✓ Compiled in 597ms (948 modules)
+ GET /admin 200 in 48ms
+ ✓ Compiled in 293ms (948 modules)
+ GET /admin 200 in 24ms
+ ✓ Compiled in 347ms (948 modules)
+ GET /admin 200 in 29ms
+ ✓ Compiled in 203ms (948 modules)
+ GET /admin 200 in 41ms
+ ✓ Compiled in 318ms (944 modules)
+ GET /admin 200 in 28ms
+ ✓ Compiled in 212ms (944 modules)
+ GET /admin 200 in 25ms
+ ✓ Compiled in 619ms (944 modules)
+ GET /admin 200 in 27ms
+ ✓ Compiled in 609ms (944 modules)
+ GET /admin 200 in 30ms
+ GET /admin 200 in 111ms
+ ✓ Compiled in 648ms (930 modules)
+ ✓ Compiled in 452ms (930 modules)
+ ○ Compiling /admin/finance ...
+ ✓ Compiled /admin/finance in 525ms (945 modules)
+ GET /admin/finance 200 in 576ms
+ GET /admin/finance 200 in 15ms
+ GET /admin/finance 200 in 11ms
+ GET /admin/finance 200 in 13ms
+ GET /admin 200 in 52ms
+ ✓ Compiled /admin/operations in 401ms (958 modules)
+ GET /admin/operations 200 in 459ms
+ GET /admin 200 in 61ms
+ ✓ Compiled /_not-found in 351ms (942 modules)
+ GET /admin/support 404 in 375ms
+ GET /admin/support 404 in 65ms
+ GET /admin 200 in 97ms
+ GET /admin/reports 404 in 14ms
+ GET /admin/reports 404 in 41ms
+ GET /admin 200 in 72ms
+ GET /admin/security 404 in 17ms
+ GET /admin/security 404 in 31ms
+ GET /admin 200 in 66ms
+ GET /admin 200 in 206ms
+ ✓ Compiled in 692ms (938 modules)
+ ✓ Compiled in 443ms (449 modules)
+ ✓ Compiled in 510ms (952 modules)
+ ✓ Compiled in 580ms (938 modules)
+ ✓ Compiled in 527ms (938 modules)
+ ○ Compiling /admin/support ...
+ ✓ Compiled /admin/support in 629ms (950 modules)
+ GET /admin/support 200 in 679ms
+ GET /admin/support 200 in 15ms
+ GET /admin/support 200 in 12ms
+ GET /admin/support 200 in 13ms
+ GET /admin/support 200 in 13ms
+ GET /admin/support 200 in 12ms
+ GET /admin/support 200 in 12ms
+ GET /admin/support 200 in 10ms
+ GET /admin 200 in 42ms
+ ✓ Compiled /admin/reports in 379ms (954 modules)
+ GET /admin/reports 200 in 421ms
+ GET /admin 200 in 16ms
