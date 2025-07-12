@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { 
   CalendarIcon,
@@ -23,11 +24,37 @@ import { mockBookings, mockHosts, mockArtists } from '@/data/mockData';
 export default function BookingDetailPage() {
   const params = useParams();
   const bookingId = params.id as string;
+  const { data: session, status } = useSession();
   
   const booking = mockBookings.find(b => b.id === bookingId);
   const [currentStatus, setCurrentStatus] = useState(booking?.status || 'requested');
   const [showDeclineModal, setShowDeclineModal] = useState(false);
   const [declineReason, setDeclineReason] = useState('');
+
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!session?.user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
+          <p className="text-gray-600 mb-4">Please sign in to view booking details.</p>
+          <Link href="/login">
+            <Button>Sign In</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   if (!booking) {
     return (
@@ -45,9 +72,10 @@ export default function BookingDetailPage() {
   const host = mockHosts.find(h => h.id === booking.hostId);
   const artist = mockArtists.find(a => a.id === booking.artistId);
 
-  // Simulate current user - in real app this would come from auth
-  const currentUserRole = 'host'; // or 'artist'
+  // Get user role from session
+  const currentUserRole = session.user.type;
   const isHost = currentUserRole === 'host';
+  const isArtist = currentUserRole === 'artist';
   const canTakeAction = isHost && currentStatus === 'requested';
 
   const handleApprove = () => {
@@ -65,6 +93,11 @@ export default function BookingDetailPage() {
     setShowDeclineModal(false);
     // TODO: Send to backend, notify artist with reason
     console.log('Booking declined:', bookingId, 'Reason:', declineReason);
+    
+    // Show user feedback
+    setTimeout(() => {
+      alert('Booking declined successfully. The artist has been notified.');
+    }, 500);
   };
 
   const formatDate = (date: Date) => {
@@ -490,6 +523,19 @@ export default function BookingDetailPage() {
           </Card>
         </div>
       )}
+
+      {/* Demo Notice */}
+      <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="flex items-center">
+          <ExclamationTriangleIcon className="w-5 h-5 text-blue-600 mr-3" />
+          <div>
+            <h4 className="font-medium text-blue-800">Demo Mode Notice</h4>
+            <p className="text-sm text-blue-700">
+              This is demo data. In the full version, declined bookings will be removed from your dashboard in real-time and all parties will be notified automatically.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

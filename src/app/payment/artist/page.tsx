@@ -14,6 +14,8 @@ import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Badge } from '@/components/ui/Badge';
+import { apiClient, handleApiResponse } from '@/lib/api-client';
+import { getStripe } from '@/lib/stripe';
 
 export default function ArtistPaymentPage() {
   const [paymentStep, setPaymentStep] = useState<'plan' | 'payment' | 'processing' | 'success'>('plan');
@@ -45,10 +47,40 @@ export default function ArtistPaymentPage() {
     e.preventDefault();
     setPaymentStep('processing');
     
-    // Simulate payment processing
-    setTimeout(() => {
-      setPaymentStep('success');
-    }, 2000);
+    try {
+      // Create Stripe checkout session
+      const response = await apiClient.request('/payments/create-checkout', {
+        method: 'POST',
+        body: JSON.stringify({
+          priceId: process.env.NEXT_PUBLIC_STRIPE_ARTIST_PRICE_ID || 'price_1234567890', // Would be configured in env
+          successUrl: `${window.location.origin}/payment/success`,
+          cancelUrl: `${window.location.origin}/payment/artist`
+        })
+      });
+      
+      await handleApiResponse(
+        response,
+        async (data) => {
+          // Redirect to Stripe Checkout
+          const stripe = await getStripe();
+          if (stripe && data.sessionId) {
+            await stripe.redirectToCheckout({ sessionId: data.sessionId });
+          } else {
+            throw new Error('Failed to initialize Stripe');
+          }
+        },
+        (error) => {
+          console.error('Payment error:', error);
+          setPaymentStep('payment');
+          // TODO: Show error message to user
+        }
+      );
+      
+    } catch (error) {
+      console.error('Error creating payment:', error);
+      setPaymentStep('payment');
+      // TODO: Show error message to user
+    }
   };
 
   if (paymentStep === 'success') {

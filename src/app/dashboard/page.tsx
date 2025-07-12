@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 import { 
   CalendarIcon,
   EnvelopeIcon,
@@ -12,7 +13,9 @@ import {
   PlusIcon,
   EyeIcon,
   CheckCircleIcon,
-  ExclamationTriangleIcon
+  ExclamationTriangleIcon,
+  PhotoIcon,
+  VideoCameraIcon
 } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
@@ -20,25 +23,61 @@ import { Badge } from '@/components/ui/Badge';
 import { mockBookings, mockMessages, mockNotifications } from '@/data/mockData';
 import { useRouter } from 'next/navigation';
 
-type UserRole = 'host' | 'artist';
+type UserRole = 'host' | 'artist' | 'admin';
 
 export default function DashboardPage() {
-  // For demo purposes, we'll simulate different user types
-  const [userRole, setUserRole] = useState<UserRole>('host');
-  const selectedUserId = userRole === 'host' ? 'host1' : 'artist1';
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  
+  // If not authenticated, redirect to login
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
-  // Filter data based on user
-  const userBookings = mockBookings.filter(booking => 
-    userRole === 'host' ? booking.hostId === selectedUserId : booking.artistId === selectedUserId
-  );
+  if (!session?.user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
+          <p className="text-gray-600 mb-4">Please sign in to access your dashboard.</p>
+          <Link href="/login">
+            <Button>Sign In</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
-  const userMessages = mockMessages.filter(msg => 
-    msg.senderId === selectedUserId || msg.recipientId === selectedUserId
-  );
+  // Get user info from session
+  const userRole = session.user.type as 'host' | 'artist' | 'admin';
+  const selectedUserId = session.user.id;
 
-  const userNotifications = mockNotifications.filter(notif => 
-    notif.userId === selectedUserId
-  );
+  // Filter data based on user role
+  const userBookings = userRole === 'admin' 
+    ? mockBookings // Admin sees all bookings
+    : mockBookings.filter(booking => 
+        userRole === 'host' ? booking.hostId === selectedUserId : booking.artistId === selectedUserId
+      );
+
+  const userMessages = userRole === 'admin'
+    ? mockMessages // Admin sees all messages
+    : mockMessages.filter(msg => 
+        msg.senderId === selectedUserId || msg.recipientId === selectedUserId
+      );
+
+  const userNotifications = userRole === 'admin'
+    ? mockNotifications // Admin sees all notifications  
+    : mockNotifications.filter(notif => 
+        notif.userId === selectedUserId
+      );
 
   const upcomingBookings = userBookings
   .filter(booking => {
@@ -60,7 +99,9 @@ export default function DashboardPage() {
   .sort((a, b) => new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime());
 
   const pendingActions = userBookings.filter(booking => 
-    userRole === 'host' ? booking.status === 'requested' : booking.status === 'pending'
+    // Filter out declined bookings and show only actionable items
+    booking.status !== 'declined' && booking.status !== 'cancelled' &&
+    (userRole === 'host' ? booking.status === 'requested' : booking.status === 'pending')
   );
 
   const unreadMessages = userMessages.filter(msg => !msg.read && msg.recipientId === selectedUserId);
@@ -85,9 +126,6 @@ export default function DashboardPage() {
     }
   };
 
-  const router = useRouter();
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
@@ -95,41 +133,16 @@ export default function DashboardPage() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {userRole === 'host' ? 'Host Dashboard' : 'Artist Dashboard'}
+              {userRole === 'admin' ? 'Admin Dashboard' : 
+               userRole === 'host' ? 'Host Dashboard' : 'Artist Dashboard'}
             </h1>
             <p className="text-gray-600">
-              {userRole === 'host' 
+              {userRole === 'admin' ? 'Platform overview and management' :
+               userRole === 'host' 
                 ? 'Manage your venue and upcoming shows' 
                 : 'Track your tour and upcoming performances'
               }
             </p>
-          </div>
-
-          {/* Role Switcher - Demo only */}
-          <div className="flex items-center space-x-2 mt-4 md:mt-0">
-            <span className="text-sm text-gray-600">Demo as:</span>
-            <div className="flex bg-gray-100 p-1 rounded-lg">
-              <button
-                onClick={() => setUserRole('host')}
-                className={`px-3 py-1 text-sm rounded-md transition-colors ${
-                  userRole === 'host'
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                Host
-              </button>
-              <button
-                onClick={() => setUserRole('artist')}
-                className={`px-3 py-1 text-sm rounded-md transition-colors ${
-                  userRole === 'artist'
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                Artist
-              </button>
-            </div>
           </div>
         </div>
 
@@ -238,9 +251,11 @@ export default function DashboardPage() {
                           <Badge variant={getStatusColor(booking.status) as any}>
                             {booking.status}
                           </Badge>
-                          <Button variant="outline" size="sm">
-                            Details
-                          </Button>
+                          <Link href={`/bookings/${booking.id}`}>
+                            <Button variant="outline" size="sm">
+                              Details
+                            </Button>
+                          </Link>
                         </div>
                       </div>
                     ))}
@@ -397,6 +412,22 @@ export default function DashboardPage() {
                       All Messages
                     </Button>
                   </Link>
+                  {userRole === 'artist' && (
+                    <Link href="/dashboard/artist-media">
+                      <Button variant="outline" className="w-full justify-start">
+                        <VideoCameraIcon className="w-4 h-4 mr-3" />
+                        Manage Media
+                      </Button>
+                    </Link>
+                  )}
+                  {userRole === 'host' && (
+                    <Link href="/dashboard/media">
+                      <Button variant="outline" className="w-full justify-start">
+                        <PhotoIcon className="w-4 h-4 mr-3" />
+                        Venue Photos
+                      </Button>
+                    </Link>
+                  )}
                 </div>
               </CardContent>
             </Card>

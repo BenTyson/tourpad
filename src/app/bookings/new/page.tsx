@@ -16,6 +16,8 @@ import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Badge } from '@/components/ui/Badge';
 import { mockHosts, mockArtists } from '@/data/mockData';
+import { apiClient, handleApiResponse } from '@/lib/api-client';
+import { validateData, bookingSchema } from '@/lib/validation';
 
 export default function NewBookingPage() {
   const searchParams = useSearchParams();
@@ -41,6 +43,8 @@ export default function NewBookingPage() {
   });
 
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<string[]>([]);
 
   if (!host && !artist) {
     return (
@@ -56,18 +60,54 @@ export default function NewBookingPage() {
     );
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // TODO: Submit booking request to backend
-    console.log('Booking request:', {
-      ...formData,
-      hostId,
-      artistId,
-      type: isHostBookingArtist ? 'host_booking_artist' : 'artist_booking_host'
-    });
+    if (isSubmitting) return;
     
-    setShowConfirmation(true);
+    setIsSubmitting(true);
+    setErrors([]);
+    
+    try {
+      // Prepare booking data
+      const eventDateTime = `${formData.eventDate}T${formData.eventTime}:00.000Z`;
+      const duration = 120; // Default 2 hours, could be made configurable
+      
+      const bookingData = {
+        artistId: artistId || 'current-artist-id', // Would come from session
+        hostId: hostId || 'current-host-id', // Would come from session
+        eventDate: eventDateTime,
+        duration,
+        message: formData.message
+      };
+      
+      // Validate data
+      const validation = validateData(bookingSchema, bookingData);
+      if (!validation.success) {
+        setErrors(validation.errors || ['Invalid booking data']);
+        return;
+      }
+      
+      // Submit to API
+      const response = await apiClient.createBooking(validation.data);
+      
+      await handleApiResponse(
+        response,
+        (data) => {
+          console.log('Booking created:', data);
+          setShowConfirmation(true);
+        },
+        (error, apiErrors) => {
+          setErrors(apiErrors || [error]);
+        }
+      );
+      
+    } catch (error) {
+      console.error('Error creating booking:', error);
+      setErrors(['Failed to create booking. Please try again.']);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (showConfirmation) {
@@ -134,6 +174,22 @@ export default function NewBookingPage() {
                 <h2 className="text-xl font-semibold">Booking Details</h2>
               </CardHeader>
               <CardContent>
+                {errors.length > 0 && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                    <div className="flex items-start">
+                      <ExclamationTriangleIcon className="w-5 h-5 text-red-600 mt-0.5 mr-3 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-medium text-red-800 mb-1">Please fix the following errors:</h4>
+                        <ul className="text-sm text-red-700 space-y-1">
+                          {errors.map((error, index) => (
+                            <li key={index}>• {error}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Date & Time */}
                   <div className="grid md:grid-cols-2 gap-4">
@@ -242,8 +298,13 @@ export default function NewBookingPage() {
                   </div>
 
                   {/* Submit */}
-                  <Button type="submit" size="lg" className="w-full">
-                    Send Booking Request
+                  <Button 
+                    type="submit" 
+                    size="lg" 
+                    className="w-full"
+                    disabled={isSubmitting || !formData.agreeToTerms}
+                  >
+                    {isSubmitting ? 'Sending Request...' : 'Send Booking Request'}
                   </Button>
                 </form>
               </CardContent>
