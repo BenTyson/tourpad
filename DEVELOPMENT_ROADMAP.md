@@ -335,8 +335,36 @@ These files contain TODO comments that need backend implementation:
 - **Tour Planning**: Premium add-on with placeholder pricing during development
 - **Notifications**: Dashboard-based notification center, not push notifications
 
+### **Streamlined Application Data Models:**
+
+**Artist Application (Stage 1) - Minimal & Focused:**
+```typescript
+interface ArtistApplication {
+  bio: string; // Character limit (300-500 chars)
+  performanceVideoUrl: string; // YouTube/Vimeo live performance
+  musicProfileUrl: string; // Spotify or Apple Music artist profile
+  socialLinks: {
+    facebook?: string;
+    instagram?: string;
+  };
+  pressPhoto: File; // Single high-quality press photo upload
+  genre: string; // Primary genre selection
+}
+```
+
+**Host Application (Stage 1) - Streamlined Essentials:**
+```typescript
+interface HostApplication {
+  location: string; // City, State format
+  estimatedAttendance: number; // Average attendance at their concerts
+  concertSpacePhotos: File[]; // Photo(s) of concert space
+  hostingMotivation: string; // "What do you enjoy most about hosting house concerts?"
+  additionalInfo?: string; // "Is there anything else you would like to let us know?" (optional)
+}
+```
+
 ### **Next Critical Implementations:**
-1. Split current artist onboarding into application vs. profile
+1. Split current artist onboarding into streamlined application vs. profile
 2. Build admin dashboard for application review
 3. Complete host media management system  
 4. Design public landing pages with separate artist/host value propositions
