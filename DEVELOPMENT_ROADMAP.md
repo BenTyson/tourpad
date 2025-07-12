@@ -75,6 +75,14 @@ TourPad is a Next.js-based platform connecting touring musicians with hosts for 
   - [ ] Create smart filter presets ("Weekend Warrior", "Intimate Acoustic")
   - [ ] Implement map integration with address privacy (Mapbox recommended)
 
+- [ ] **Design System Overhaul**
+  - [ ] Update color palette from blue/purple to warm earth tones
+  - [ ] Implement new palette: Rose (#C7999F), Beige (#E0BCA8), Neutral (#E1E1E1), Sage Light (#A1CCAD), Sage Deep (#8BB097)
+  - [ ] Update Tailwind CSS configuration with new color tokens
+  - [ ] Redesign components (buttons, cards, badges) with new palette
+  - [ ] Update gradients and accent colors throughout application
+  - [ ] Ensure accessibility compliance with new color combinations
+
 - [ ] **Production Cleanup**
   - [ ] Remove all console.log statements
   - [ ] Clean up debug code in dashboard date filtering
@@ -306,6 +314,7 @@ These files contain TODO comments that need backend implementation:
 - **Mapbox Integration**: Better privacy controls and customization for address hiding
 - **Hybrid Video Strategy**: YouTube/Vimeo URLs for applications, direct uploads for profiles
 - **48-Hour Response Standard**: Industry-appropriate timeframe with automated reminders
+- **Warm Earth Tone Palette**: Moving from blue/purple to rose/beige/sage for more intimate, organic feel
 
 ### Future Considerations
 - **Mobile App**: Consider React Native or PWA for mobile experience
@@ -321,10 +330,11 @@ These files contain TODO comments that need backend implementation:
 ## 🚀 Implementation Strategy Summary
 
 ### **Phase Priority Order:**
-1. **Application/Approval System** - Critical for gated access model
-2. **Host Media Management** - Complete feature parity with artists
-3. **Backend Integration** - Replace mock data with real functionality
-4. **Premium Features** - Tour planning tools and advanced matching
+1. **Design System Overhaul** - New warm earth tone palette and component redesign
+2. **Application/Approval System** - Critical for gated access model with new visual identity
+3. **Host Media Management** - Complete feature parity with artists
+4. **Backend Integration** - Replace mock data with real functionality
+5. **Premium Features** - Tour planning tools and advanced matching
 
 ### **Key Technical Decisions Made:**
 - **User Flow**: Application (minimal) → Approval → Payment → Full Profile (detailed)
@@ -364,11 +374,11 @@ interface HostApplication {
 ```
 
 ### **Next Critical Implementations:**
-1. Split current artist onboarding into streamlined application vs. profile
-2. Build admin dashboard for application review
-3. Complete host media management system  
-4. Design public landing pages with separate artist/host value propositions
-5. Implement enhanced search and filtering systems
+1. **Design System Overhaul** - Update color palette and redesign components with new earth tone identity
+2. **Streamlined Applications** - Split current onboarding into minimal application vs. detailed profile
+3. **Admin Dashboard** - Build application review interface with new visual design
+4. **Public Landing Pages** - Design compelling artist/host value propositions with new branding
+5. **Host Media Management** - Complete system using new design patterns
 
 ---
 
