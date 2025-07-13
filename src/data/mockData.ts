@@ -7,6 +7,7 @@ export const mockHosts = [
     city: 'Austin',
     state: 'TX',
     zip: '78701',
+    venueType: 'Home/Living Room',
     showSpecs: {
       avgAttendance: 25,
       avgDoorFee: 15,
@@ -79,6 +80,7 @@ export const mockHosts = [
     city: 'Nashville',
     state: 'TN',
     zip: '37201',
+    venueType: 'Other',
     showSpecs: {
       avgAttendance: 45,
       avgDoorFee: 20,
@@ -145,6 +147,7 @@ export const mockHosts = [
     city: 'Portland',
     state: 'OR',
     zip: '97201',
+    venueType: 'Loft/Warehouse',
     showSpecs: {
       avgAttendance: 18,
       avgDoorFee: 12,
@@ -210,6 +213,10 @@ export const mockArtists = [
     name: 'Sarah & The Wanderers',
     bio: 'Indie folk trio from Colorado with harmonious vocals and acoustic storytelling. We create intimate, emotional performances that connect deeply with audiences in living room settings.',
     yearsActive: 5,
+    location: 'Denver, CO',
+    genres: ['Folk', 'Indie', 'Acoustic'],
+    instruments: ['Guitar', 'Mandolin', 'Bass', 'Vocals'],
+    experienceLevel: 'intermediate' as const,
     members: [
       { name: 'Sarah Johnson', instrument: 'Guitar, Vocals' },
       { name: 'Mike Chen', instrument: 'Mandolin, Harmony' },
@@ -284,6 +291,10 @@ export const mockArtists = [
     name: 'Tommy Blue',
     bio: 'Solo blues and country artist with 20+ years on the road. Powerful voice and masterful guitar work. Perfect for barn venues and outdoor shows with full band or acoustic solo sets.',
     yearsActive: 22,
+    location: 'Nashville, TN',
+    genres: ['Blues', 'Country', 'Rock'],
+    instruments: ['Guitar', 'Harmonica', 'Vocals'],
+    experienceLevel: 'professional' as const,
     members: [
       { name: 'Tommy Blue', instrument: 'Guitar, Vocals, Harmonica' }
     ],
@@ -350,6 +361,10 @@ export const mockArtists = [
     name: 'Echo & Iris',
     bio: 'Experimental folk duo combining traditional instruments with electronic elements. We create atmospheric, genre-bending music perfect for listening room environments.',
     yearsActive: 3,
+    location: 'Portland, OR',
+    genres: ['Experimental', 'Electronic', 'Folk'],
+    instruments: ['Vocals', 'Synth', 'Violin', 'Electronics'],
+    experienceLevel: 'intermediate' as const,
     members: [
       { name: 'Echo Martinez', instrument: 'Vocals, Synth, Loop Pedals' },
       { name: 'Iris Kim', instrument: 'Violin, Electronics' }

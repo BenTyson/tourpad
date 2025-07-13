@@ -2,21 +2,24 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { HomeIcon, MusicalNoteIcon } from '@heroicons/react/24/outline';
+import { HomeIcon, MusicalNoteIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
+import { registerSchema, validateData } from '@/lib/validation';
 
 export default function RegisterPage() {
   const searchParams = useSearchParams();
   const defaultType = searchParams.get('type') || 'host';
   const [userType, setUserType] = useState<'host' | 'artist'>(defaultType as 'host' | 'artist');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     location: '',
+    type: userType,
     // Artist specific
     genre: '',
     experience: '',
@@ -27,13 +30,37 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
     setIsSubmitting(true);
     
-    // TODO: Submit to backend API
-    await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate API call
-    
-    alert(`${userType === 'artist' ? 'Artist' : 'Host'} application submitted successfully! We'll review and get back to you within 48 hours.`);
-    setIsSubmitting(false);
+    try {
+      // Update form data with current user type
+      const dataToValidate = { ...formData, type: userType };
+      
+      // Validate form data
+      const validation = validateData(registerSchema, dataToValidate);
+      
+      if (!validation.success) {
+        const errorMap: Record<string, string> = {};
+        validation.errors?.forEach(error => {
+          const [field, message] = error.split(': ');
+          errorMap[field] = message;
+        });
+        setErrors(errorMap);
+        return;
+      }
+      
+      // TODO: Submit to backend API
+      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate API call
+      
+      alert(`${userType === 'artist' ? 'Artist' : 'Host'} application submitted successfully! We'll review and get back to you within 48 hours.`);
+      
+    } catch (error) {
+      console.error('Submission error:', error);
+      setErrors({ general: 'An error occurred while submitting your application. Please try again.' });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -63,7 +90,11 @@ export default function RegisterPage() {
             {/* User Type Selection */}
             <div className="flex space-x-2 bg-sage-100 p-1 rounded-lg">
               <button
-                onClick={() => setUserType('host')}
+                onClick={() => {
+                  setUserType('host');
+                  setFormData(prev => ({ ...prev, type: 'host' }));
+                  setErrors({});
+                }}
                 className={`flex-1 flex items-center justify-center py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                   userType === 'host'
                     ? 'bg-white text-primary-600 shadow-sm'
@@ -74,7 +105,11 @@ export default function RegisterPage() {
                 Host
               </button>
               <button
-                onClick={() => setUserType('artist')}
+                onClick={() => {
+                  setUserType('artist');
+                  setFormData(prev => ({ ...prev, type: 'artist' }));
+                  setErrors({});
+                }}
                 className={`flex-1 flex items-center justify-center py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                   userType === 'artist'
                     ? 'bg-white text-primary-600 shadow-sm'
@@ -88,52 +123,100 @@ export default function RegisterPage() {
           </CardHeader>
 
           <CardContent className="p-8">
+            {/* General Error Display */}
+            {errors.general && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center">
+                <ExclamationCircleIcon className="w-5 h-5 text-red-600 mr-3" />
+                <p className="text-sm text-red-700">{errors.general}</p>
+              </div>
+            )}
+            
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Common fields */}
-              <Input
-                label="Full Name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                required
-                placeholder="Your full name"
-              />
+              <div>
+                <Input
+                  label="Full Name"
+                  value={formData.name}
+                  onChange={(e) => {
+                    setFormData({ ...formData, name: e.target.value });
+                    if (errors.name) setErrors(prev => ({ ...prev, name: '' }));
+                  }}
+                  required
+                  placeholder="Your full name"
+                />
+                {errors.name && (
+                  <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                )}
+              </div>
 
-              <Input
-                label="Email Address"
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                required
-                placeholder="your@email.com"
-              />
+              <div>
+                <Input
+                  label="Email Address"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => {
+                    setFormData({ ...formData, email: e.target.value });
+                    if (errors.email) setErrors(prev => ({ ...prev, email: '' }));
+                  }}
+                  required
+                  placeholder="your@email.com"
+                />
+                {errors.email && (
+                  <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                )}
+              </div>
 
-              <Input
-                label="Phone Number"
-                type="tel"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                required
-                placeholder="(555) 123-4567"
-              />
+              <div>
+                <Input
+                  label="Phone Number"
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => {
+                    setFormData({ ...formData, phone: e.target.value });
+                    if (errors.phone) setErrors(prev => ({ ...prev, phone: '' }));
+                  }}
+                  required
+                  placeholder="(555) 123-4567"
+                />
+                {errors.phone && (
+                  <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
+                )}
+              </div>
 
-              <Input
-                label="Location"
-                value={formData.location}
-                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                required
-                placeholder="City, State"
-              />
+              <div>
+                <Input
+                  label="Location"
+                  value={formData.location}
+                  onChange={(e) => {
+                    setFormData({ ...formData, location: e.target.value });
+                    if (errors.location) setErrors(prev => ({ ...prev, location: '' }));
+                  }}
+                  required
+                  placeholder="City, State"
+                />
+                {errors.location && (
+                  <p className="mt-1 text-sm text-red-600">{errors.location}</p>
+                )}
+              </div>
 
               {/* Artist-specific fields */}
               {userType === 'artist' && (
                 <>
-                  <Input
-                    label="Primary Genre"
-                    value={formData.genre}
-                    onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
-                    required
-                    placeholder="Folk, Rock, Jazz, etc."
-                  />
+                  <div>
+                    <Input
+                      label="Primary Genre"
+                      value={formData.genre}
+                      onChange={(e) => {
+                        setFormData({ ...formData, genre: e.target.value });
+                        if (errors.genre) setErrors(prev => ({ ...prev, genre: '' }));
+                      }}
+                      required
+                      placeholder="Folk, Rock, Jazz, etc."
+                    />
+                    {errors.genre && (
+                      <p className="mt-1 text-sm text-red-600">{errors.genre}</p>
+                    )}
+                  </div>
 
                   <div className="space-y-1">
                     <label className="block text-sm font-medium text-neutral-700">
@@ -141,12 +224,18 @@ export default function RegisterPage() {
                     </label>
                     <textarea
                       value={formData.experience}
-                      onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, experience: e.target.value });
+                        if (errors.experience) setErrors(prev => ({ ...prev, experience: '' }));
+                      }}
                       required
                       rows={4}
                       className="block w-full rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-900 placeholder-neutral-400 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400 transition-colors"
-                      placeholder="Brief description of your performance experience and style..."
+                      placeholder="Brief description of your performance experience and style... (minimum 20 characters)"
                     />
+                    {errors.experience && (
+                      <p className="mt-1 text-sm text-red-600">{errors.experience}</p>
+                    )}
                   </div>
                 </>
               )}
@@ -159,12 +248,18 @@ export default function RegisterPage() {
                   </label>
                   <textarea
                     value={formData.venueDescription}
-                    onChange={(e) => setFormData({ ...formData, venueDescription: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, venueDescription: e.target.value });
+                      if (errors.venueDescription) setErrors(prev => ({ ...prev, venueDescription: '' }));
+                    }}
                     required
                     rows={4}
                     className="block w-full rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-900 placeholder-neutral-400 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400 transition-colors"
-                    placeholder="Describe your space, capacity, amenities, and what makes it special..."
+                    placeholder="Describe your space, capacity, amenities, and what makes it special... (minimum 20 characters)"
                   />
+                  {errors.venueDescription && (
+                    <p className="mt-1 text-sm text-red-600">{errors.venueDescription}</p>
+                  )}
                 </div>
               )}
 
@@ -178,25 +273,36 @@ export default function RegisterPage() {
                 </ul>
               </div>
 
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="terms"
-                  checked={formData.agreeToTerms}
-                  onChange={(e) => setFormData({ ...formData, agreeToTerms: e.target.checked })}
-                  className="mr-2 h-4 w-4 text-primary-600 focus:ring-primary-500 border-neutral-300 rounded"
-                  required
-                />
-                <label htmlFor="terms" className="text-sm text-neutral-600">
-                  I agree to the{' '}
-                  <Link href="/terms" className="text-primary-600 hover:text-primary-700 underline">
-                    Terms of Service
-                  </Link>{' '}
-                  and{' '}
-                  <Link href="/privacy" className="text-primary-600 hover:text-primary-700 underline">
-                    Privacy Policy
-                  </Link>
-                </label>
+              <div>
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="terms"
+                    checked={formData.agreeToTerms}
+                    onChange={(e) => {
+                      setFormData({ ...formData, agreeToTerms: e.target.checked });
+                      if (errors.agreeToTerms) setErrors(prev => ({ ...prev, agreeToTerms: '' }));
+                    }}
+                    className="mr-2 h-4 w-4 text-primary-600 focus:ring-primary-500 border-neutral-300 rounded"
+                    required
+                  />
+                  <label htmlFor="terms" className="text-sm text-neutral-600">
+                    I agree to the{' '}
+                    <Link href="/terms" className="text-primary-600 hover:text-primary-700 underline">
+                      Terms of Service
+                    </Link>{' '}
+                    and{' '}
+                    <Link href="/privacy" className="text-primary-600 hover:text-primary-700 underline">
+                      Privacy Policy
+                    </Link>
+                  </label>
+                </div>
+                {errors.agreeToTerms && (
+                  <p className="mt-1 text-sm text-red-600">{errors.agreeToTerms}</p>
+                )}
+                {errors.type && (
+                  <p className="mt-1 text-sm text-red-600">{errors.type}</p>
+                )}
               </div>
 
               <Button

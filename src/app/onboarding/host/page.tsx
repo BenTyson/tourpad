@@ -1,13 +1,16 @@
 'use client';
 import { useState } from 'react';
-import { HomeIcon, ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { HomeIcon, ArrowRightIcon, ArrowLeftIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
+import { hostOnboardingSchema, validateData } from '@/lib/validation';
 
 export default function HostOnboardingPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 3;
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
     // Step 1: Venue Info
@@ -57,11 +60,48 @@ export default function HostOnboardingPage() {
     }
   };
 
-  const handleSubmit = () => {
-    console.log('Host onboarding data:', formData);
-    // TODO: Submit to backend
-    alert('Host application submitted! You will be reviewed and approved soon.');
-    window.location.href = '/dashboard';
+  const handleSubmit = async () => {
+    setErrors({});
+    setIsSubmitting(true);
+    
+    try {
+      // Validate the complete form data
+      const validation = validateData(hostOnboardingSchema, formData);
+      
+      if (!validation.success) {
+        const errorMap: Record<string, string> = {};
+        validation.errors?.forEach(error => {
+          const [field, message] = error.split(': ');
+          errorMap[field] = message;
+        });
+        setErrors(errorMap);
+        
+        // Find the first step with errors and navigate to it
+        const errorFields = Object.keys(errorMap);
+        if (errorFields.some(field => ['venueName', 'address', 'city', 'state', 'zip', 'bio'].includes(field))) {
+          setCurrentStep(1);
+        } else if (errorFields.some(field => ['avgAttendance', 'avgDoorFee', 'indoorMax', 'outdoorMax', 'showDuration', 'showFormat', 'estimatedShows', 'performanceLocation', 'daysAvailable'].includes(field))) {
+          setCurrentStep(2);
+        } else if (errorFields.some(field => field.includes('amenities'))) {
+          setCurrentStep(3);
+        }
+        
+        return;
+      }
+      
+      console.log('Host onboarding data:', validation.data);
+      // TODO: Submit to backend
+      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate API call
+      
+      alert('Host application submitted! You will be reviewed and approved soon.');
+      window.location.href = '/dashboard';
+      
+    } catch (error) {
+      console.error('Submission error:', error);
+      setErrors({ general: 'An error occurred while submitting your application. Please try again.' });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const updateAmenity = (amenity: string, value: boolean) => {
@@ -121,6 +161,27 @@ export default function HostOnboardingPage() {
           </CardHeader>
 
           <CardContent>
+            {/* General Error Display */}
+            {(errors.general || Object.keys(errors).length > 0) && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div className="flex items-center mb-2">
+                  <ExclamationCircleIcon className="w-5 h-5 text-red-600 mr-2" />
+                  <h3 className="text-sm font-medium text-red-800">
+                    {errors.general ? 'Submission Error' : 'Please fix the following errors:'}
+                  </h3>
+                </div>
+                {errors.general ? (
+                  <p className="text-sm text-red-700">{errors.general}</p>
+                ) : (
+                  <ul className="text-sm text-red-700 space-y-1">
+                    {Object.entries(errors).map(([field, message]) => (
+                      <li key={field}>• {field}: {message}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
+            
             {/* Step 1: Venue Info */}
             {currentStep === 1 && (
               <div className="space-y-4">
@@ -308,8 +369,8 @@ export default function HostOnboardingPage() {
                   <ArrowRightIcon className="w-4 h-4 ml-2" />
                 </Button>
               ) : (
-                <Button onClick={handleSubmit}>
-                  Submit Application
+                <Button onClick={handleSubmit} disabled={isSubmitting}>
+                  {isSubmitting ? 'Submitting...' : 'Submit Application'}
                 </Button>
               )}
             </div>

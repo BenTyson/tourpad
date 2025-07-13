@@ -1,8 +1,5 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import bcrypt from 'bcryptjs';
-import { db } from '@/lib/db';
-import { validateData, loginSchema } from '@/lib/validation';
 import { getCurrentUser } from '@/data/realTestData';
 
 const handler = NextAuth({
@@ -15,12 +12,6 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
-
-        // Validate input
-        const validation = validateData(loginSchema, credentials);
-        if (!validation.success) {
           return null;
         }
 
@@ -53,7 +44,7 @@ const handler = NextAuth({
 
           // Check if user account is approved (except for admin)
           if (user.type !== 'admin' && user.status !== 'approved') {
-            throw new Error('Account pending approval');
+            return null;
           }
 
           // Return user object that will be stored in the JWT

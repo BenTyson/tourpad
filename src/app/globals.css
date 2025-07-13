@@ -11,7 +11,7 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   
-  /* Custom color palette for TourPad */
+  /* TourPad color palette - Primary (Rose) */
   --color-primary-50: #faf9f7;
   --color-primary-100: #f5f2ed;
   --color-primary-200: #e8ddd1;
@@ -22,28 +22,20 @@
   --color-primary-700: #8a606f;
   --color-primary-800: #6d4c5a;
   --color-primary-900: #4f3945;
+  --color-primary: #C7999F;
   
-  --color-secondary-50: #faf9f6;
-  --color-secondary-100: #f5f3ed;
-  --color-secondary-200: #ebe5d9;
-  --color-secondary-300: #E0BCA8;
-  --color-secondary-400: #d6a994;
-  --color-secondary-500: #cc9680;
-  --color-secondary-600: #b8836c;
-  --color-secondary-700: #9c6e58;
-  --color-secondary-800: #7f5944;
-  --color-secondary-900: #634530;
-  
-  --color-sage-50: #f6f9f7;
-  --color-sage-100: #edf3ef;
-  --color-sage-200: #d3e4d7;
-  --color-sage-300: #A1CCAD;
-  --color-sage-400: #8bb097;
-  --color-sage-500: #8BB097;
-  --color-sage-600: #7a9d86;
-  --color-sage-700: #658371;
-  --color-sage-800: #51685c;
-  --color-sage-900: #3d4e47;
+  /* TourPad color palette - Secondary (Sage) */
+  --color-secondary-50: #f6f9f7;
+  --color-secondary-100: #edf3ef;
+  --color-secondary-200: #d3e4d7;
+  --color-secondary-300: #A1CCAD;
+  --color-secondary-400: #8bb097;
+  --color-secondary-500: #8BB097;
+  --color-secondary-600: #7a9d86;
+  --color-secondary-700: #658371;
+  --color-secondary-800: #51685c;
+  --color-secondary-900: #3d4e47;
+  --color-secondary: #8BB097;
   
   --color-neutral-50: #fafafa;
   --color-neutral-100: #f5f5f5;

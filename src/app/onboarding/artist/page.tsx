@@ -1,9 +1,10 @@
 'use client';
 import { useState } from 'react';
-import { MusicalNoteIcon, ArrowRightIcon, ArrowLeftIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { MusicalNoteIcon, ArrowRightIcon, ArrowLeftIcon, PlusIcon, XMarkIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
+import { artistOnboardingSchema, validateData } from '@/lib/validation';
 
 interface Member {
   name: string;
@@ -13,6 +14,8 @@ interface Member {
 export default function ArtistOnboardingPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 4;
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
     // Step 1: About Artist/Band
@@ -62,12 +65,51 @@ export default function ArtistOnboardingPage() {
     }
   };
 
-  const handleSubmit = () => {
-  console.log('Artist onboarding data:', formData);
-  // TODO: Submit to backend for approval first
-  alert('Application submitted for review! You will receive an email when approved, then you can complete your $400 annual membership payment.');
-  window.location.href = '/dashboard';
-};
+  const handleSubmit = async () => {
+    setErrors({});
+    setIsSubmitting(true);
+    
+    try {
+      // Validate the complete form data
+      const validation = validateData(artistOnboardingSchema, formData);
+      
+      if (!validation.success) {
+        const errorMap: Record<string, string> = {};
+        validation.errors?.forEach(error => {
+          const [field, message] = error.split(': ');
+          errorMap[field] = message;
+        });
+        setErrors(errorMap);
+        
+        // Find the first step with errors and navigate to it
+        const errorFields = Object.keys(errorMap);
+        if (errorFields.some(field => ['name', 'bio', 'yearsActive', 'members'].includes(field))) {
+          setCurrentStep(1);
+        } else if (errorFields.some(field => ['tourMonthsPerYear', 'tourVehicle', 'petAllergies', 'dietaryRestrictions'].includes(field))) {
+          setCurrentStep(2);
+        } else if (errorFields.some(field => ['socialLinks', 'paymentLinks', 'livePerformanceVideo'].includes(field))) {
+          setCurrentStep(3);
+        } else if (errorFields.some(field => ['cancellationPolicy', 'cancellationGuarantee'].includes(field))) {
+          setCurrentStep(4);
+        }
+        
+        return;
+      }
+      
+      console.log('Artist onboarding data:', validation.data);
+      // TODO: Submit to backend for approval first
+      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate API call
+      
+      alert('Application submitted for review! You will receive an email when approved, then you can complete your $400 annual membership payment.');
+      window.location.href = '/dashboard';
+      
+    } catch (error) {
+      console.error('Submission error:', error);
+      setErrors({ general: 'An error occurred while submitting your application. Please try again.' });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const addMember = () => {
     setFormData({
@@ -127,6 +169,27 @@ export default function ArtistOnboardingPage() {
           </CardHeader>
 
           <CardContent>
+            {/* General Error Display */}
+            {(errors.general || Object.keys(errors).length > 0) && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div className="flex items-center mb-2">
+                  <ExclamationCircleIcon className="w-5 h-5 text-red-600 mr-2" />
+                  <h3 className="text-sm font-medium text-red-800">
+                    {errors.general ? 'Submission Error' : 'Please fix the following errors:'}
+                  </h3>
+                </div>
+                {errors.general ? (
+                  <p className="text-sm text-red-700">{errors.general}</p>
+                ) : (
+                  <ul className="text-sm text-red-700 space-y-1">
+                    {Object.entries(errors).map(([field, message]) => (
+                      <li key={field}>• {field}: {message}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
+            
             {/* Step 1: About Artist/Band */}
             {currentStep === 1 && (
               <div className="space-y-4">
@@ -423,8 +486,8 @@ export default function ArtistOnboardingPage() {
                   <ArrowRightIcon className="w-4 h-4 ml-2" />
                 </Button>
               ) : (
-                <Button onClick={handleSubmit}>
-                  Submit for Review
+                <Button onClick={handleSubmit} disabled={isSubmitting}>
+                  {isSubmitting ? 'Submitting...' : 'Submit for Review'}
                 </Button>
               )}
             </div>
