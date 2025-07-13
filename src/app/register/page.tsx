@@ -18,13 +18,21 @@ export default function RegisterPage() {
     name: '',
     email: '',
     phone: '',
-    location: '',
     type: userType,
     // Artist specific
+    bio: '',
+    performanceVideoUrl: '',
+    musicProfileUrl: '',
+    socialFacebook: '',
+    socialInstagram: '',
+    pressPhoto: null as File | null,
     genre: '',
-    experience: '',
     // Host specific
-    venueDescription: '',
+    location: '',
+    estimatedAttendance: '',
+    concertSpacePhotos: [] as File[],
+    hostingMotivation: '',
+    additionalInfo: '',
     agreeToTerms: false
   });
 
@@ -183,25 +191,68 @@ export default function RegisterPage() {
                 )}
               </div>
 
-              <div>
-                <Input
-                  label="Location"
-                  value={formData.location}
-                  onChange={(e) => {
-                    setFormData({ ...formData, location: e.target.value });
-                    if (errors.location) setErrors(prev => ({ ...prev, location: '' }));
-                  }}
-                  required
-                  placeholder="City, State"
-                />
-                {errors.location && (
-                  <p className="mt-1 text-sm text-red-600">{errors.location}</p>
-                )}
-              </div>
-
-              {/* Artist-specific fields */}
+              {/* Artist Application Fields */}
               {userType === 'artist' && (
                 <>
+                  <div className="space-y-1">
+                    <label className="block text-sm font-medium text-neutral-700">
+                      Artist Bio <span className="text-neutral-500">(300-500 characters)</span>
+                    </label>
+                    <textarea
+                      value={formData.bio}
+                      onChange={(e) => {
+                        setFormData({ ...formData, bio: e.target.value });
+                        if (errors.bio) setErrors(prev => ({ ...prev, bio: '' }));
+                      }}
+                      required
+                      rows={4}
+                      maxLength={500}
+                      className="block w-full rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-900 placeholder-neutral-400 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400 transition-colors"
+                      placeholder="Brief bio about your music style, background, and what makes your performances special..."
+                    />
+                    <div className="flex justify-between text-xs text-neutral-500">
+                      <span>{formData.bio.length}/500 characters</span>
+                      <span>{formData.bio.length < 300 ? `${300 - formData.bio.length} more needed` : '✓'}</span>
+                    </div>
+                    {errors.bio && (
+                      <p className="mt-1 text-sm text-red-600">{errors.bio}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <Input
+                      label="Performance Video URL"
+                      value={formData.performanceVideoUrl}
+                      onChange={(e) => {
+                        setFormData({ ...formData, performanceVideoUrl: e.target.value });
+                        if (errors.performanceVideoUrl) setErrors(prev => ({ ...prev, performanceVideoUrl: '' }));
+                      }}
+                      required
+                      placeholder="https://youtube.com/watch?v=... or https://vimeo.com/..."
+                    />
+                    <p className="mt-1 text-xs text-neutral-500">Share a live performance video (YouTube or Vimeo)</p>
+                    {errors.performanceVideoUrl && (
+                      <p className="mt-1 text-sm text-red-600">{errors.performanceVideoUrl}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <Input
+                      label="Music Profile URL"
+                      value={formData.musicProfileUrl}
+                      onChange={(e) => {
+                        setFormData({ ...formData, musicProfileUrl: e.target.value });
+                        if (errors.musicProfileUrl) setErrors(prev => ({ ...prev, musicProfileUrl: '' }));
+                      }}
+                      required
+                      placeholder="https://open.spotify.com/artist/... or https://music.apple.com/..."
+                    />
+                    <p className="mt-1 text-xs text-neutral-500">Link to your Spotify, Apple Music, or Bandcamp profile</p>
+                    {errors.musicProfileUrl && (
+                      <p className="mt-1 text-sm text-red-600">{errors.musicProfileUrl}</p>
+                    )}
+                  </div>
+
                   <div>
                     <Input
                       label="Primary Genre"
@@ -211,56 +262,167 @@ export default function RegisterPage() {
                         if (errors.genre) setErrors(prev => ({ ...prev, genre: '' }));
                       }}
                       required
-                      placeholder="Folk, Rock, Jazz, etc."
+                      placeholder="Folk, Rock, Jazz, Blues, Indie, etc."
                     />
                     {errors.genre && (
                       <p className="mt-1 text-sm text-red-600">{errors.genre}</p>
                     )}
                   </div>
 
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Input
+                        label="Facebook (optional)"
+                        value={formData.socialFacebook}
+                        onChange={(e) => {
+                          setFormData({ ...formData, socialFacebook: e.target.value });
+                          if (errors.socialFacebook) setErrors(prev => ({ ...prev, socialFacebook: '' }));
+                        }}
+                        placeholder="facebook.com/yourpage"
+                      />
+                      {errors.socialFacebook && (
+                        <p className="mt-1 text-sm text-red-600">{errors.socialFacebook}</p>
+                      )}
+                    </div>
+                    <div>
+                      <Input
+                        label="Instagram (optional)"
+                        value={formData.socialInstagram}
+                        onChange={(e) => {
+                          setFormData({ ...formData, socialInstagram: e.target.value });
+                          if (errors.socialInstagram) setErrors(prev => ({ ...prev, socialInstagram: '' }));
+                        }}
+                        placeholder="@yourhandle"
+                      />
+                      {errors.socialInstagram && (
+                        <p className="mt-1 text-sm text-red-600">{errors.socialInstagram}</p>
+                      )}
+                    </div>
+                  </div>
+
                   <div className="space-y-1">
                     <label className="block text-sm font-medium text-neutral-700">
-                      Performance Experience
+                      Press Photo
                     </label>
-                    <textarea
-                      value={formData.experience}
+                    <input
+                      type="file"
+                      accept="image/*"
                       onChange={(e) => {
-                        setFormData({ ...formData, experience: e.target.value });
-                        if (errors.experience) setErrors(prev => ({ ...prev, experience: '' }));
+                        const file = e.target.files?.[0] || null;
+                        setFormData({ ...formData, pressPhoto: file });
+                        if (errors.pressPhoto) setErrors(prev => ({ ...prev, pressPhoto: '' }));
                       }}
                       required
-                      rows={4}
-                      className="block w-full rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-900 placeholder-neutral-400 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400 transition-colors"
-                      placeholder="Brief description of your performance experience and style... (minimum 20 characters)"
+                      className="block w-full text-sm text-neutral-900 border border-neutral-300 rounded-md cursor-pointer bg-neutral-50 focus:outline-none focus:border-primary-400"
                     />
-                    {errors.experience && (
-                      <p className="mt-1 text-sm text-red-600">{errors.experience}</p>
+                    <p className="mt-1 text-xs text-neutral-500">Upload a high-quality promotional photo</p>
+                    {errors.pressPhoto && (
+                      <p className="mt-1 text-sm text-red-600">{errors.pressPhoto}</p>
                     )}
                   </div>
                 </>
               )}
 
-              {/* Host-specific field */}
+              {/* Host Application Fields */}
               {userType === 'host' && (
-                <div className="space-y-1">
-                  <label className="block text-sm font-medium text-neutral-700">
-                    Venue Description
-                  </label>
-                  <textarea
-                    value={formData.venueDescription}
-                    onChange={(e) => {
-                      setFormData({ ...formData, venueDescription: e.target.value });
-                      if (errors.venueDescription) setErrors(prev => ({ ...prev, venueDescription: '' }));
-                    }}
-                    required
-                    rows={4}
-                    className="block w-full rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-900 placeholder-neutral-400 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400 transition-colors"
-                    placeholder="Describe your space, capacity, amenities, and what makes it special... (minimum 20 characters)"
-                  />
-                  {errors.venueDescription && (
-                    <p className="mt-1 text-sm text-red-600">{errors.venueDescription}</p>
-                  )}
-                </div>
+                <>
+                  <div>
+                    <Input
+                      label="Location"
+                      value={formData.location}
+                      onChange={(e) => {
+                        setFormData({ ...formData, location: e.target.value });
+                        if (errors.location) setErrors(prev => ({ ...prev, location: '' }));
+                      }}
+                      required
+                      placeholder="City, State (e.g., Austin, TX)"
+                    />
+                    {errors.location && (
+                      <p className="mt-1 text-sm text-red-600">{errors.location}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <Input
+                      label="Estimated Attendance"
+                      type="number"
+                      value={formData.estimatedAttendance}
+                      onChange={(e) => {
+                        setFormData({ ...formData, estimatedAttendance: e.target.value });
+                        if (errors.estimatedAttendance) setErrors(prev => ({ ...prev, estimatedAttendance: '' }));
+                      }}
+                      required
+                      placeholder="25"
+                      min="1"
+                      max="200"
+                    />
+                    <p className="mt-1 text-xs text-neutral-500">Average number of people who attend your concerts</p>
+                    {errors.estimatedAttendance && (
+                      <p className="mt-1 text-sm text-red-600">{errors.estimatedAttendance}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-sm font-medium text-neutral-700">
+                      Concert Space Photos
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={(e) => {
+                        const files = Array.from(e.target.files || []);
+                        setFormData({ ...formData, concertSpacePhotos: files });
+                        if (errors.concertSpacePhotos) setErrors(prev => ({ ...prev, concertSpacePhotos: '' }));
+                      }}
+                      required
+                      className="block w-full text-sm text-neutral-900 border border-neutral-300 rounded-md cursor-pointer bg-neutral-50 focus:outline-none focus:border-primary-400"
+                    />
+                    <p className="mt-1 text-xs text-neutral-500">Upload photos of your performance space (1-5 images)</p>
+                    {errors.concertSpacePhotos && (
+                      <p className="mt-1 text-sm text-red-600">{errors.concertSpacePhotos}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-sm font-medium text-neutral-700">
+                      What do you enjoy most about hosting house concerts?
+                    </label>
+                    <textarea
+                      value={formData.hostingMotivation}
+                      onChange={(e) => {
+                        setFormData({ ...formData, hostingMotivation: e.target.value });
+                        if (errors.hostingMotivation) setErrors(prev => ({ ...prev, hostingMotivation: '' }));
+                      }}
+                      required
+                      rows={4}
+                      className="block w-full rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-900 placeholder-neutral-400 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400 transition-colors"
+                      placeholder="Share what motivates you to host intimate concerts in your space..."
+                    />
+                    {errors.hostingMotivation && (
+                      <p className="mt-1 text-sm text-red-600">{errors.hostingMotivation}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-sm font-medium text-neutral-700">
+                      Additional Information <span className="text-neutral-500">(optional)</span>
+                    </label>
+                    <textarea
+                      value={formData.additionalInfo}
+                      onChange={(e) => {
+                        setFormData({ ...formData, additionalInfo: e.target.value });
+                        if (errors.additionalInfo) setErrors(prev => ({ ...prev, additionalInfo: '' }));
+                      }}
+                      rows={3}
+                      className="block w-full rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-900 placeholder-neutral-400 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400 transition-colors"
+                      placeholder="Is there anything else you would like to let us know?"
+                    />
+                    {errors.additionalInfo && (
+                      <p className="mt-1 text-sm text-red-600">{errors.additionalInfo}</p>
+                    )}
+                  </div>
+                </>
               )}
 
               <div className="bg-sage-50 p-4 rounded-lg">
