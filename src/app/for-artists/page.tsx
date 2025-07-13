@@ -83,7 +83,7 @@ export default function ForArtistsPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-rose-50 via-beige-50 to-sage-light-50 py-24">
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary-50 via-neutral-50 to-secondary-50 py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="lg:grid lg:grid-cols-12 lg:gap-8">
             <div className="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">

@@ -176,7 +176,7 @@ export default function UsersPage() {
   const stats = getUserStats();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sage-50 to-neutral-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-secondary-50 to-neutral-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
@@ -267,7 +267,7 @@ export default function UsersPage() {
               </div>
 
               {/* Status Filter */}
-              <div className="flex space-x-1 bg-sage-100 p-1 rounded-lg">
+              <div className="flex space-x-1 bg-secondary-100 p-1 rounded-lg">
                 {['all', 'active', 'suspended', 'pending_verification'].map((statusOption) => (
                   <button
                     key={statusOption}
@@ -275,7 +275,7 @@ export default function UsersPage() {
                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                       statusFilter === statusOption
                         ? 'bg-white text-primary-600 shadow-sm'
-                        : 'text-sage-700 hover:text-sage-900'
+                        : 'text-secondary-700 hover:text-secondary-900'
                     }`}
                   >
                     {statusOption === 'pending_verification' ? 'Pending' : 
