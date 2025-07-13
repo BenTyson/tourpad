@@ -59,7 +59,12 @@ export default function DashboardPage() {
 
   // Get user info from session
   const userRole = session.user.type as 'host' | 'artist' | 'admin';
+  const userStatus = session.user.status;
   const selectedUserId = session.user.id;
+
+  // Check if user has access to full dashboard functionality
+  const hasFullAccess = userRole === 'admin' || userStatus === 'approved';
+  const needsPayment = userRole === 'artist' && userStatus === 'approved' && !session.user.paymentStatus;
 
   // Filter data based on user role
   const userBookings = userRole === 'admin' 
@@ -147,8 +152,61 @@ export default function DashboardPage() {
           </div>
         </div>
 
+        {/* Status-based restrictions */}
+        {!hasFullAccess && (
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 mb-6">
+            <div className="flex items-start">
+              <ExclamationTriangleIcon className="w-6 h-6 text-amber-600 mr-3 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <h3 className="font-medium text-amber-900 mb-2">Limited Dashboard Access</h3>
+                <p className="text-amber-800 mb-4">
+                  {userStatus === 'pending' && 'Your application is under review. Full dashboard functionality will be available once approved.'}
+                  {userStatus === 'rejected' && 'Your application was not approved. Please review your application status for next steps.'}
+                  {userStatus === 'suspended' && 'Your account has been suspended. Contact support for assistance.'}
+                </p>
+                <div className="flex space-x-3">
+                  <Link
+                    href="/account/status"
+                    className="bg-amber-100 text-amber-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-200 transition-colors"
+                  >
+                    Check Status
+                  </Link>
+                  {userStatus === 'rejected' && (
+                    <Link
+                      href="/register"
+                      className="bg-white text-amber-800 px-4 py-2 rounded-lg text-sm font-medium border border-amber-300 hover:bg-amber-50 transition-colors"
+                    >
+                      Reapply
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {needsPayment && (
+          <div className="bg-primary-50 border border-primary-200 rounded-lg p-6 mb-6">
+            <div className="flex items-start">
+              <CheckCircleIcon className="w-6 h-6 text-primary-600 mr-3 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <h3 className="font-medium text-primary-900 mb-2">Complete Your Registration</h3>
+                <p className="text-primary-800 mb-4">
+                  Congratulations! Your application has been approved. Complete your $400 annual membership payment to unlock full platform access.
+                </p>
+                <Link
+                  href="/subscription"
+                  className="bg-primary-400 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-primary-500 transition-colors"
+                >
+                  Complete Payment
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Alert Bar - Action Items */}
-        {(pendingActions.length > 0 || unreadMessages.length > 0) && (
+        {hasFullAccess && (pendingActions.length > 0 || unreadMessages.length > 0) && (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
             <div className="flex items-center">
               <ExclamationTriangleIcon className="w-5 h-5 text-blue-600 mr-3" />
@@ -174,8 +232,11 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Quick Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        {/* Dashboard Content - Only show for approved users */}
+        {hasFullAccess ? (
+          <>
+            {/* Quick Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <Card>
             <CardContent className="p-4 text-center">
               <div className="text-2xl font-bold text-blue-600">{upcomingBookings.length}</div>
@@ -458,6 +519,35 @@ export default function DashboardPage() {
             </Card>
           </div>
         </div>
+          </>
+        ) : (
+          /* Limited Dashboard for Non-Approved Users */
+          <div className="text-center py-12">
+            <div className="max-w-md mx-auto">
+              <ClockIcon className="w-16 h-16 text-neutral-400 mx-auto mb-4" />
+              <h2 className="text-2xl font-semibold text-neutral-800 mb-4">
+                Dashboard Unavailable
+              </h2>
+              <p className="text-neutral-600 mb-6">
+                Your dashboard will be available once your application is approved and any required payments are complete.
+              </p>
+              <div className="space-y-3">
+                <Link
+                  href="/account/status"
+                  className="block w-full bg-primary-400 text-white py-3 px-6 rounded-lg font-medium hover:bg-primary-500 transition-colors"
+                >
+                  Check Application Status
+                </Link>
+                <Link
+                  href="/"
+                  className="block w-full bg-white text-primary-600 py-3 px-6 rounded-lg font-medium border-2 border-primary-400 hover:bg-primary-50 transition-colors"
+                >
+                  Browse TourPad
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

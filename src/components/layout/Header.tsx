@@ -31,11 +31,48 @@ export function Header() {
     };
   }, []);
 
-  const navigation = [
-    { name: 'Find Hosts', href: '/hosts' },
-    { name: 'Browse Artists', href: '/artists' },
-    { name: 'How It Works', href: '/how-it-works' },
-  ];
+  // Dynamic navigation based on user status and type
+  const getNavigation = () => {
+    const baseNavigation = [
+      { name: 'How It Works', href: '/how-it-works', requiresAuth: false },
+    ];
+
+    // Only show browse links to approved users or non-authenticated users (as teasers)
+    if (!session || (session && session.user.status === 'approved')) {
+      baseNavigation.unshift(
+        { name: 'Find Hosts', href: '/hosts', requiresAuth: false },
+        { name: 'Browse Artists', href: '/artists', requiresAuth: false }
+      );
+    }
+
+    // Add conditional navigation items for authenticated users
+    if (session) {
+      const userStatus = session.user.status;
+      const userType = session.user.type;
+
+      // Add status-specific items
+      if (userStatus === 'pending') {
+        baseNavigation.push(
+          { name: 'Application Status', href: '/account/status', requiresAuth: true, highlight: true }
+        );
+      } else if (userStatus === 'approved') {
+        // Full access for approved users
+        if (userType === 'artist') {
+          baseNavigation.push(
+            { name: 'My Bookings', href: '/dashboard', requiresAuth: true }
+          );
+        } else if (userType === 'host') {
+          baseNavigation.push(
+            { name: 'My Venue', href: '/dashboard', requiresAuth: true }
+          );
+        }
+      }
+    }
+
+    return baseNavigation;
+  };
+
+  const navigation = getNavigation();
 
   return (
     <header className="bg-white shadow-sm border-b border-gray-200">
@@ -57,7 +94,11 @@ export function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium"
+                className={`px-3 py-2 text-sm font-medium transition-colors ${
+                  item.highlight 
+                    ? 'bg-primary-100 text-primary-700 rounded-lg hover:bg-primary-200' 
+                    : 'text-gray-700 hover:text-primary-600'
+                }`}
               >
                 {item.name}
               </Link>
@@ -91,13 +132,23 @@ export function Header() {
                           <div className="text-xs text-gray-600">{session.user?.email}</div>
                           <div className="text-xs text-blue-600 mt-1 capitalize">{session.user?.type}</div>
                         </div>
-                        <Link 
-                          href="/dashboard"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                          onClick={() => setUserMenuOpen(false)}
-                        >
-                          Dashboard
-                        </Link>
+                        {session.user?.status === 'approved' ? (
+                          <Link 
+                            href="/dashboard"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                            onClick={() => setUserMenuOpen(false)}
+                          >
+                            Dashboard
+                          </Link>
+                        ) : (
+                          <Link 
+                            href="/account/status"
+                            className="block px-4 py-2 text-sm text-primary-600 hover:bg-primary-50 font-medium"
+                            onClick={() => setUserMenuOpen(false)}
+                          >
+                            Check Application Status
+                          </Link>
+                        )}
                         {session.user?.type === 'admin' && (
                           <Link 
                             href="/admin"
@@ -167,7 +218,11 @@ export function Header() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="block px-3 py-2 text-gray-700 hover:text-blue-600"
+                  className={`block px-3 py-2 transition-colors ${
+                    item.highlight 
+                      ? 'bg-primary-100 text-primary-700 rounded-lg mx-3 hover:bg-primary-200' 
+                      : 'text-gray-700 hover:text-primary-600'
+                  }`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {item.name}
@@ -175,17 +230,27 @@ export function Header() {
               ))}
               {session && (
                 <>
-                  <Link
-                    href="/dashboard"
-                    className="block px-3 py-2 text-gray-700 hover:text-blue-600"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Dashboard
-                  </Link>
+                  {session.user?.status === 'approved' ? (
+                    <Link
+                      href="/dashboard"
+                      className="block px-3 py-2 text-gray-700 hover:text-primary-600"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                  ) : (
+                    <Link
+                      href="/account/status"
+                      className="block px-3 py-2 text-primary-600 hover:text-primary-700 font-medium"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Check Application Status
+                    </Link>
+                  )}
                   {session.user?.type === 'admin' && (
                     <Link
                       href="/admin"
-                      className="block px-3 py-2 text-gray-700 hover:text-blue-600"
+                      className="block px-3 py-2 text-gray-700 hover:text-primary-600"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       Admin Panel
@@ -196,7 +261,7 @@ export function Header() {
                       setMobileMenuOpen(false);
                       signOut();
                     }}
-                    className="block w-full text-left px-3 py-2 text-gray-700 hover:text-blue-600"
+                    className="block w-full text-left px-3 py-2 text-gray-700 hover:text-primary-600"
                   >
                     Sign Out
                   </button>
@@ -206,14 +271,14 @@ export function Header() {
                 <>
                   <Link
                     href="/login"
-                    className="block px-3 py-2 text-gray-700 hover:text-blue-600"
+                    className="block px-3 py-2 text-gray-700 hover:text-primary-600"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Login
                   </Link>
                   <Link
                     href="/register"
-                    className="block px-3 py-2 text-gray-700 hover:text-blue-600"
+                    className="block px-3 py-2 text-gray-700 hover:text-primary-600"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Get Started
