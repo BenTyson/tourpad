@@ -1,38 +1,55 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { HomeIcon, MusicalNoteIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { HomeIcon, MusicalNoteIcon, ExclamationCircleIcon, PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { registerSchema, validateData } from '@/lib/validation';
 
+// US States for dropdown
+const US_STATES = [
+  'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
+  'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
+  'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
+  'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
+  'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
+];
+
 export default function RegisterPage() {
   const searchParams = useSearchParams();
-  const defaultType = searchParams.get('type') || 'host';
-  const [userType, setUserType] = useState<'host' | 'artist'>(defaultType as 'host' | 'artist');
+  const router = useRouter();
+  const userType = searchParams.get('type') as 'host' | 'artist';
+  
+  // Always call hooks in the same order
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    phone: '',
-    type: userType,
+    type: userType || 'host',
     // Artist specific
+    bandName: '',
     bio: '',
     performanceVideoUrl: '',
+    performanceVideoFile: null as File | null,
     musicProfileUrl: '',
+    bandWebsite: '',
     socialFacebook: '',
     socialInstagram: '',
-    pressPhoto: null as File | null,
+    pressPhoto: [] as File[],
     genre: '',
     // Host specific
-    location: '',
+    address: '',
+    city: '',
+    state: '',
+    zipCode: '',
     estimatedAttendance: '',
     concertSpacePhotos: [] as File[],
     hostingMotivation: '',
     additionalInfo: '',
+    newToHosting: '',
     agreeToTerms: false
   });
 
@@ -71,21 +88,19 @@ export default function RegisterPage() {
     }
   };
 
+  // Show user type selection if no valid type specified
+  if (!userType || (userType !== 'host' && userType !== 'artist')) {
+    return <UserTypeSelection />;
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sage-50 to-neutral-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-sage-600 to-sage-800 py-12">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-400 to-sage-500 rounded-full mb-4">
-            {userType === 'artist' ? (
-              <MusicalNoteIcon className="w-8 h-8 text-white" />
-            ) : (
-              <HomeIcon className="w-8 h-8 text-white" />
-            )}
-          </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            {userType === 'artist' ? 'Apply as an Artist' : 'Register as a Host'}
+          <h1 className="text-4xl font-bold text-white mb-2">
+            {userType === 'artist' ? 'Artist Application' : 'Host Application'}
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-sage-100">
             {userType === 'artist' 
               ? 'Join our community of touring musicians'
               : 'Open your space for intimate concerts'
@@ -94,41 +109,6 @@ export default function RegisterPage() {
         </div>
 
         <Card className="shadow-xl border-0">
-          <CardHeader className="pb-4">
-            {/* User Type Selection */}
-            <div className="flex space-x-2 bg-sage-100 p-1 rounded-lg">
-              <button
-                onClick={() => {
-                  setUserType('host');
-                  setFormData(prev => ({ ...prev, type: 'host' }));
-                  setErrors({});
-                }}
-                className={`flex-1 flex items-center justify-center py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-                  userType === 'host'
-                    ? 'bg-white text-primary-600 shadow-sm'
-                    : 'text-sage-700 hover:text-sage-900'
-                }`}
-              >
-                <HomeIcon className="w-4 h-4 mr-2" />
-                Host
-              </button>
-              <button
-                onClick={() => {
-                  setUserType('artist');
-                  setFormData(prev => ({ ...prev, type: 'artist' }));
-                  setErrors({});
-                }}
-                className={`flex-1 flex items-center justify-center py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-                  userType === 'artist'
-                    ? 'bg-white text-primary-600 shadow-sm'
-                    : 'text-sage-700 hover:text-sage-900'
-                }`}
-              >
-                <MusicalNoteIcon className="w-4 h-4 mr-2" />
-                Artist
-              </button>
-            </div>
-          </CardHeader>
 
           <CardContent className="p-8">
             {/* General Error Display */}
@@ -143,7 +123,7 @@ export default function RegisterPage() {
               {/* Common fields */}
               <div>
                 <Input
-                  label="Full Name"
+                  label="Your Name *"
                   value={formData.name}
                   onChange={(e) => {
                     setFormData({ ...formData, name: e.target.value });
@@ -159,7 +139,7 @@ export default function RegisterPage() {
 
               <div>
                 <Input
-                  label="Email Address"
+                  label="Email Address *"
                   type="email"
                   value={formData.email}
                   onChange={(e) => {
@@ -174,29 +154,28 @@ export default function RegisterPage() {
                 )}
               </div>
 
-              <div>
-                <Input
-                  label="Phone Number"
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) => {
-                    setFormData({ ...formData, phone: e.target.value });
-                    if (errors.phone) setErrors(prev => ({ ...prev, phone: '' }));
-                  }}
-                  required
-                  placeholder="(555) 123-4567"
-                />
-                {errors.phone && (
-                  <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
-                )}
-              </div>
 
               {/* Artist Application Fields */}
               {userType === 'artist' && (
                 <>
+                  <div>
+                    <Input
+                      label="Band Name / Act Name *"
+                      value={formData.bandName}
+                      onChange={(e) => {
+                        setFormData({ ...formData, bandName: e.target.value });
+                        if (errors.bandName) setErrors(prev => ({ ...prev, bandName: '' }));
+                      }}
+                      required
+                      placeholder="Your band or stage name"
+                    />
+                    {errors.bandName && (
+                      <p className="mt-1 text-sm text-red-600">{errors.bandName}</p>
+                    )}
+                  </div>
                   <div className="space-y-1">
                     <label className="block text-sm font-medium text-neutral-700">
-                      Artist Bio <span className="text-neutral-500">(300-500 characters)</span>
+                      Artist Bio *
                     </label>
                     <textarea
                       value={formData.bio}
@@ -210,9 +189,8 @@ export default function RegisterPage() {
                       className="block w-full rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-900 placeholder-neutral-400 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400 transition-colors"
                       placeholder="Brief bio about your music style, background, and what makes your performances special..."
                     />
-                    <div className="flex justify-between text-xs text-neutral-500">
-                      <span>{formData.bio.length}/500 characters</span>
-                      <span>{formData.bio.length < 300 ? `${300 - formData.bio.length} more needed` : '✓'}</span>
+                    <div className="text-xs text-neutral-500 text-right">
+                      {formData.bio.length}/500 characters
                     </div>
                     {errors.bio && (
                       <p className="mt-1 text-sm text-red-600">{errors.bio}</p>
@@ -227,18 +205,41 @@ export default function RegisterPage() {
                         setFormData({ ...formData, performanceVideoUrl: e.target.value });
                         if (errors.performanceVideoUrl) setErrors(prev => ({ ...prev, performanceVideoUrl: '' }));
                       }}
-                      required
                       placeholder="https://youtube.com/watch?v=... or https://vimeo.com/..."
                     />
-                    <p className="mt-1 text-xs text-neutral-500">Share a live performance video (YouTube or Vimeo)</p>
+                    <p className="mt-1 text-xs text-neutral-500">Share a live performance video (preferred)</p>
                     {errors.performanceVideoUrl && (
                       <p className="mt-1 text-sm text-red-600">{errors.performanceVideoUrl}</p>
                     )}
                   </div>
 
+                  <div className="space-y-1">
+                    <label className="block text-sm font-medium text-neutral-700">
+                      Or Upload Performance Video (.mp4)
+                    </label>
+                    <input
+                      type="file"
+                      accept="video/mp4"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0] || null;
+                        if (file && file.size > 100 * 1024 * 1024) { // 100MB limit
+                          setErrors(prev => ({ ...prev, performanceVideoFile: 'File size must be under 100MB' }));
+                          return;
+                        }
+                        setFormData({ ...formData, performanceVideoFile: file });
+                        if (errors.performanceVideoFile) setErrors(prev => ({ ...prev, performanceVideoFile: '' }));
+                      }}
+                      className="block w-full text-sm text-neutral-900 border border-neutral-300 rounded-md cursor-pointer bg-neutral-50 focus:outline-none focus:border-primary-400"
+                    />
+                    <p className="mt-1 text-xs text-neutral-500">Upload a 3-6 minute performance video (max 100MB)</p>
+                    {errors.performanceVideoFile && (
+                      <p className="mt-1 text-sm text-red-600">{errors.performanceVideoFile}</p>
+                    )}
+                  </div>
+
                   <div>
                     <Input
-                      label="Music Profile URL"
+                      label="Primary Music Profile *"
                       value={formData.musicProfileUrl}
                       onChange={(e) => {
                         setFormData({ ...formData, musicProfileUrl: e.target.value });
@@ -247,7 +248,7 @@ export default function RegisterPage() {
                       required
                       placeholder="https://open.spotify.com/artist/... or https://music.apple.com/..."
                     />
-                    <p className="mt-1 text-xs text-neutral-500">Link to your Spotify, Apple Music, or Bandcamp profile</p>
+                    <p className="mt-1 text-xs text-neutral-500">Link to your Spotify, Apple Music, Bandcamp, etc</p>
                     {errors.musicProfileUrl && (
                       <p className="mt-1 text-sm text-red-600">{errors.musicProfileUrl}</p>
                     )}
@@ -255,15 +256,56 @@ export default function RegisterPage() {
 
                   <div>
                     <Input
-                      label="Primary Genre"
-                      value={formData.genre}
+                      label="Band Website"
+                      value={formData.bandWebsite}
                       onChange={(e) => {
-                        setFormData({ ...formData, genre: e.target.value });
-                        if (errors.genre) setErrors(prev => ({ ...prev, genre: '' }));
+                        setFormData({ ...formData, bandWebsite: e.target.value });
+                        if (errors.bandWebsite) setErrors(prev => ({ ...prev, bandWebsite: '' }));
                       }}
-                      required
-                      placeholder="Folk, Rock, Jazz, Blues, Indie, etc."
+                      placeholder="https://yourbandwebsite.com"
                     />
+                    {errors.bandWebsite && (
+                      <p className="mt-1 text-sm text-red-600">{errors.bandWebsite}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-2">Primary Genre * (choose at least 1)</label>
+                    <div className="space-y-3">
+                      <div className="flex flex-wrap gap-2">
+                        {formData.genre.split(',').filter(g => g.trim()).map(genre => (
+                          <span key={genre.trim()} className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
+                            {genre.trim()}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const genres = formData.genre.split(',').filter(g => g.trim() !== genre.trim());
+                                setFormData({ ...formData, genre: genres.join(', ') });
+                              }}
+                              className="ml-1 text-xs hover:text-red-600"
+                            >
+                              <XMarkIcon className="w-3 h-3" />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {['Folk', 'Rock', 'Pop', 'Jazz', 'Blues', 'Country', 'Classical', 'Electronic', 'Hip Hop', 'R&B', 'Soul', 'Funk', 'Reggae', 'World', 'Experimental', 'Ambient'].filter(g => !formData.genre.includes(g)).map(genre => (
+                          <button
+                            key={genre}
+                            type="button"
+                            onClick={() => {
+                              const currentGenres = formData.genre.split(',').filter(g => g.trim());
+                              const newGenres = [...currentGenres, genre];
+                              setFormData({ ...formData, genre: newGenres.join(', ') });
+                            }}
+                            className="px-3 py-1 text-xs bg-neutral-100 hover:bg-neutral-200 rounded-full transition-colors"
+                          >
+                            + {genre}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                     {errors.genre && (
                       <p className="mt-1 text-sm text-red-600">{errors.genre}</p>
                     )}
@@ -272,7 +314,7 @@ export default function RegisterPage() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <Input
-                        label="Facebook (optional)"
+                        label="Facebook"
                         value={formData.socialFacebook}
                         onChange={(e) => {
                           setFormData({ ...formData, socialFacebook: e.target.value });
@@ -286,7 +328,7 @@ export default function RegisterPage() {
                     </div>
                     <div>
                       <Input
-                        label="Instagram (optional)"
+                        label="Instagram"
                         value={formData.socialInstagram}
                         onChange={(e) => {
                           setFormData({ ...formData, socialInstagram: e.target.value });
@@ -300,51 +342,116 @@ export default function RegisterPage() {
                     </div>
                   </div>
 
-                  <div className="space-y-1">
-                    <label className="block text-sm font-medium text-neutral-700">
-                      Press Photo
-                    </label>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0] || null;
-                        setFormData({ ...formData, pressPhoto: file });
-                        if (errors.pressPhoto) setErrors(prev => ({ ...prev, pressPhoto: '' }));
-                      }}
-                      required
-                      className="block w-full text-sm text-neutral-900 border border-neutral-300 rounded-md cursor-pointer bg-neutral-50 focus:outline-none focus:border-primary-400"
-                    />
-                    <p className="mt-1 text-xs text-neutral-500">Upload a high-quality promotional photo</p>
-                    {errors.pressPhoto && (
-                      <p className="mt-1 text-sm text-red-600">{errors.pressPhoto}</p>
-                    )}
-                  </div>
+                  <PhotoUploadSection
+                    files={formData.pressPhoto}
+                    onChange={(files) => {
+                      setFormData({ ...formData, pressPhoto: files });
+                      if (errors.pressPhoto) setErrors(prev => ({ ...prev, pressPhoto: '' }));
+                    }}
+                    error={errors.pressPhoto}
+                    label="Press Photos"
+                    description="Upload 1-5 high-quality promotional photos"
+                    required
+                  />
                 </>
               )}
 
               {/* Host Application Fields */}
               {userType === 'host' && (
                 <>
-                  <div>
-                    <Input
-                      label="Location"
-                      value={formData.location}
-                      onChange={(e) => {
-                        setFormData({ ...formData, location: e.target.value });
-                        if (errors.location) setErrors(prev => ({ ...prev, location: '' }));
-                      }}
-                      required
-                      placeholder="City, State (e.g., Austin, TX)"
-                    />
-                    {errors.location && (
-                      <p className="mt-1 text-sm text-red-600">{errors.location}</p>
-                    )}
+                  <div className="space-y-4">
+                    <div>
+                      <Input
+                        label="Street Address *"
+                        value={formData.address}
+                        onChange={(e) => {
+                          setFormData({ ...formData, address: e.target.value });
+                          if (errors.address) setErrors(prev => ({ ...prev, address: '' }));
+                        }}
+                        required
+                        placeholder="123 Main Street"
+                      />
+                      {errors.address && (
+                        <p className="mt-1 text-sm text-red-600">{errors.address}</p>
+                      )}
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Input
+                          label="City *"
+                          value={formData.city}
+                          onChange={(e) => {
+                            setFormData({ ...formData, city: e.target.value });
+                            if (errors.city) setErrors(prev => ({ ...prev, city: '' }));
+                          }}
+                          required
+                          placeholder="Austin"
+                        />
+                        {errors.city && (
+                          <p className="mt-1 text-sm text-red-600">{errors.city}</p>
+                        )}
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-1">
+                          State *
+                        </label>
+                        <select
+                          value={formData.state}
+                          onChange={(e) => {
+                            setFormData({ ...formData, state: e.target.value });
+                            if (errors.state) setErrors(prev => ({ ...prev, state: '' }));
+                          }}
+                          required
+                          className="block w-full rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-900 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400 transition-colors"
+                        >
+                          <option value="">Select State</option>
+                          {US_STATES.map(state => (
+                            <option key={state} value={state}>{state}</option>
+                          ))}
+                        </select>
+                        {errors.state && (
+                          <p className="mt-1 text-sm text-red-600">{errors.state}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div>
+                      <Input
+                        label="Zip Code *"
+                        value={formData.zipCode}
+                        onChange={(e) => {
+                          setFormData({ ...formData, zipCode: e.target.value });
+                          if (errors.zipCode) setErrors(prev => ({ ...prev, zipCode: '' }));
+                        }}
+                        required
+                        placeholder="78701"
+                        maxLength={5}
+                        pattern="[0-9]{5}"
+                      />
+                      {errors.zipCode && (
+                        <p className="mt-1 text-sm text-red-600">{errors.zipCode}</p>
+                      )}
+                    </div>
+
+                    <div className="bg-sage-50 border border-sage-200 rounded-lg p-4">
+                      <div className="flex items-start">
+                        <svg className="w-5 h-5 text-sage-600 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                        </svg>
+                        <div>
+                          <h4 className="text-sm font-medium text-sage-800">Privacy Notice</h4>
+                          <p className="text-sm text-sage-700 mt-1">
+                            Your complete address stays private and is only shared with artists after a show is confirmed at your venue.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   <div>
                     <Input
-                      label="Estimated Attendance"
+                      label="Expected Average Attendance *"
                       type="number"
                       value={formData.estimatedAttendance}
                       onChange={(e) => {
@@ -356,7 +463,7 @@ export default function RegisterPage() {
                       min="1"
                       max="200"
                     />
-                    <p className="mt-1 text-xs text-neutral-500">Average number of people who attend your concerts</p>
+                    <p className="mt-1 text-xs text-neutral-500">Expected average attendance</p>
                     {errors.estimatedAttendance && (
                       <p className="mt-1 text-sm text-red-600">{errors.estimatedAttendance}</p>
                     )}
@@ -364,29 +471,60 @@ export default function RegisterPage() {
 
                   <div className="space-y-1">
                     <label className="block text-sm font-medium text-neutral-700">
-                      Concert Space Photos
+                      Are you new to hosting house concerts? *
                     </label>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      onChange={(e) => {
-                        const files = Array.from(e.target.files || []);
-                        setFormData({ ...formData, concertSpacePhotos: files });
-                        if (errors.concertSpacePhotos) setErrors(prev => ({ ...prev, concertSpacePhotos: '' }));
-                      }}
-                      required
-                      className="block w-full text-sm text-neutral-900 border border-neutral-300 rounded-md cursor-pointer bg-neutral-50 focus:outline-none focus:border-primary-400"
-                    />
-                    <p className="mt-1 text-xs text-neutral-500">Upload photos of your performance space (1-5 images)</p>
-                    {errors.concertSpacePhotos && (
-                      <p className="mt-1 text-sm text-red-600">{errors.concertSpacePhotos}</p>
+                    <div className="space-y-2">
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          name="newToHosting"
+                          value="yes"
+                          checked={formData.newToHosting === 'yes'}
+                          onChange={(e) => {
+                            setFormData({ ...formData, newToHosting: e.target.value });
+                            if (errors.newToHosting) setErrors(prev => ({ ...prev, newToHosting: '' }));
+                          }}
+                          required
+                          className="mr-2 text-primary-600 focus:ring-primary-500"
+                        />
+                        <span className="text-sm text-neutral-700">Yes, this would be my first time hosting</span>
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          name="newToHosting"
+                          value="no"
+                          checked={formData.newToHosting === 'no'}
+                          onChange={(e) => {
+                            setFormData({ ...formData, newToHosting: e.target.value });
+                            if (errors.newToHosting) setErrors(prev => ({ ...prev, newToHosting: '' }));
+                          }}
+                          required
+                          className="mr-2 text-primary-600 focus:ring-primary-500"
+                        />
+                        <span className="text-sm text-neutral-700">No, I have experience hosting house concerts</span>
+                      </label>
+                    </div>
+                    {errors.newToHosting && (
+                      <p className="mt-1 text-sm text-red-600">{errors.newToHosting}</p>
                     )}
                   </div>
 
+                  <PhotoUploadSection
+                    files={formData.concertSpacePhotos}
+                    onChange={(files) => {
+                      setFormData({ ...formData, concertSpacePhotos: files });
+                      if (errors.concertSpacePhotos) setErrors(prev => ({ ...prev, concertSpacePhotos: '' }));
+                    }}
+                    error={errors.concertSpacePhotos}
+                    label="Concert Space Photos *"
+                    description="Upload 1-5 photos of your performance space"
+                    required
+                  />
+
                   <div className="space-y-1">
                     <label className="block text-sm font-medium text-neutral-700">
-                      What do you enjoy most about hosting house concerts?
+                      What do you enjoy most about hosting house concerts? *
                     </label>
                     <textarea
                       value={formData.hostingMotivation}
@@ -431,7 +569,7 @@ export default function RegisterPage() {
                   <li>• We'll review your application within 48 hours</li>
                   <li>• Approved {userType === 'artist' ? 'artists' : 'hosts'} get full platform access</li>
                   <li>• You'll receive email confirmation once approved</li>
-                  {userType === 'artist' && <li>• Annual membership fee of $400 applies after approval</li>}
+                  {userType === 'artist' && <li>• Annual membership fee applies after approval</li>}
                 </ul>
               </div>
 
@@ -477,17 +615,197 @@ export default function RegisterPage() {
               </Button>
             </form>
 
-            <div className="mt-6 text-center">
+            <div className="mt-6 text-center space-y-2">
               <p className="text-sm text-gray-500">
                 Already have an account?{' '}
                 <Link href="/login" className="text-primary-600 hover:text-primary-700 font-medium">
                   Sign in here
                 </Link>
               </p>
+              {userType === 'host' && (
+                <p className="text-sm text-gray-500">
+                  Looking for Artist Registration?{' '}
+                  <Link href="/register?type=artist" className="text-primary-600 hover:text-primary-700 font-medium">
+                    Click here
+                  </Link>
+                </p>
+              )}
+              {userType === 'artist' && (
+                <p className="text-sm text-gray-500">
+                  Looking for Host Registration?{' '}
+                  <Link href="/register?type=host" className="text-primary-600 hover:text-primary-700 font-medium">
+                    Click here
+                  </Link>
+                </p>
+              )}
             </div>
           </CardContent>
         </Card>
       </div>
+    </div>
+  );
+}
+
+// User Type Selection Component
+function UserTypeSelection() {
+  const router = useRouter();
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-sage-600 to-sage-800 py-12 flex items-center">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-white mb-4">
+            Join TourPad
+          </h1>
+          <p className="text-xl text-sage-100">
+            Are you an artist looking for venues, or a host opening your space?
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Artist Option */}
+          <Card className="shadow-xl border-0 hover:shadow-2xl transition-shadow cursor-pointer" onClick={() => router.push('/register?type=artist')}>
+            <CardContent className="p-8 text-center">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary-400 to-sage-500 rounded-full mb-6">
+                <MusicalNoteIcon className="w-10 h-10 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">I'm an Artist</h2>
+              <p className="text-gray-600 mb-6">
+                I'm a touring musician looking for intimate venues and house concert opportunities.
+              </p>
+              <ul className="text-left text-sm text-gray-600 space-y-2 mb-6">
+                <li>• Connect with verified hosts</li>
+                <li>• Access exclusive house concert network</li>
+                <li>• Tour planning tools and resources</li>
+                <li>• $400/year membership after approval</li>
+              </ul>
+              <Button size="lg" className="w-full">
+                Apply as Artist
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Host Option */}
+          <Card className="shadow-xl border-0 hover:shadow-2xl transition-shadow cursor-pointer" onClick={() => router.push('/register?type=host')}>
+            <CardContent className="p-8 text-center">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-sage-400 to-primary-500 rounded-full mb-6">
+                <HomeIcon className="w-10 h-10 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">I'm a Host</h2>
+              <p className="text-gray-600 mb-6">
+                I want to open my space for intimate concerts and connect with touring artists.
+              </p>
+              <ul className="text-left text-sm text-gray-600 space-y-2 mb-6">
+                <li>• Browse approved touring artists</li>
+                <li>• Host intimate house concerts</li>
+                <li>• Build community through music</li>
+                <li>• Free to join and use</li>
+              </ul>
+              <Button size="lg" className="w-full" variant="outline">
+                Apply as Host
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="text-center mt-8">
+          <p className="text-sm text-sage-200">
+            Already have an account?{' '}
+            <Link href="/login" className="text-white hover:text-sage-100 font-medium underline">
+              Sign in here
+            </Link>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Photo Upload Section Component
+function PhotoUploadSection({ 
+  files, 
+  onChange, 
+  error, 
+  label, 
+  description, 
+  required = false,
+  multiple = true 
+}: {
+  files: File[];
+  onChange: (files: File[]) => void;
+  error?: string;
+  label: string;
+  description: string;
+  required?: boolean;
+  multiple?: boolean;
+}) {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newFiles = Array.from(e.target.files || []);
+    if (multiple) {
+      onChange([...files, ...newFiles]);
+    } else {
+      onChange(newFiles.slice(0, 1));
+    }
+  };
+
+  const removeFile = (index: number) => {
+    const updatedFiles = files.filter((_, i) => i !== index);
+    onChange(updatedFiles);
+  };
+
+  return (
+    <div className="space-y-1">
+      <label className="block text-sm font-medium text-neutral-700">
+        {label} {required && <span className="text-red-500">*</span>}
+      </label>
+      
+      {/* Upload Area */}
+      <div className="border-2 border-dashed border-neutral-300 rounded-lg p-6 text-center hover:border-primary-400 transition-colors">
+        <PhotoIcon className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+        <div className="space-y-2">
+          <label className="cursor-pointer">
+            <span className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors inline-block">
+              Choose Photos
+            </span>
+            <input
+              type="file"
+              accept="image/*"
+              multiple={multiple}
+              onChange={handleFileChange}
+              className="hidden"
+            />
+          </label>
+          <p className="text-sm text-neutral-500">{description}</p>
+        </div>
+      </div>
+
+      {/* File List */}
+      {files.length > 0 && (
+        <div className="space-y-2">
+          {files.map((file, index) => (
+            <div key={index} className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
+              <div className="flex items-center space-x-3">
+                <PhotoIcon className="w-5 h-5 text-neutral-400" />
+                <span className="text-sm text-neutral-700 truncate">{file.name}</span>
+                <span className="text-xs text-neutral-500">
+                  ({(file.size / 1024 / 1024).toFixed(1)} MB)
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => removeFile(index)}
+                className="text-red-500 hover:text-red-700"
+              >
+                <XMarkIcon className="w-4 h-4" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {error && (
+        <p className="mt-1 text-sm text-red-600">{error}</p>
+      )}
     </div>
   );
 }

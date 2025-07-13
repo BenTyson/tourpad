@@ -13,14 +13,14 @@ export const registerSchema = z.object({
     message: 'You must agree to the terms and conditions'
   }),
   // Artist-specific fields (conditional)
-  genre: z.string().optional(),
+  genre: z.string().min(1, 'At least one genre is required'),
   experience: z.string().optional(),
   // Host-specific fields (conditional)
   venueDescription: z.string().optional()
 }).refine((data) => {
   // Conditional validation based on user type
   if (data.type === 'artist') {
-    return data.genre && data.genre.length >= 2 && data.experience && data.experience.length >= 20;
+    return data.genre && data.genre.trim().length >= 1;
   }
   if (data.type === 'host') {
     return data.venueDescription && data.venueDescription.length >= 20;

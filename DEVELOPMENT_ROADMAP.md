@@ -9,7 +9,8 @@ TourPad is a Next.js-based platform connecting touring musicians with hosts for 
 - ✅ **Booking Workflow UI**: Complete booking request and approval interface
 - ✅ **Dashboard System**: Role-based dashboards for artists and hosts
 - ✅ **Mock Data Infrastructure**: Rich data models for testing and development
-- 🔄 **Host Media Management**: In progress - missing upload/management functionality
+- ✅ **Host Media Management**: Complete dashboard and upload functionality
+- ✅ **Access Control & Registration**: Complete UI architecture with streamlined forms
 - ❌ **Backend Integration**: All features currently use mock data
 
 ## Technology Stack
@@ -25,8 +26,10 @@ TourPad is a Next.js-based platform connecting touring musicians with hosts for 
 - **Form Validation**: ✅ Complete with comprehensive Zod schemas for all forms
 - **Design System**: ✅ Updated to warm earth tone palette (Rose, Sage, Neutral)
 - **Host Media Management**: ✅ Complete dashboard and upload functionality
+- **Access Control UI Architecture**: ✅ Complete with status pages and conditional navigation
+- **Artist Registration**: ✅ Streamlined with tag-based genre selection and optional video
 - **Enhanced Search**: ❌ Reverted due to server issues - needs reimplementation
-- **Current Priority**: Access Control UI Architecture (approval status pages)
+- **Current Priority**: Backend Integration Foundation (API setup and database design)
 
 ## Key File Locations
 - **Validation schemas**: `/src/lib/validation.ts`
@@ -45,11 +48,15 @@ TourPad is a Next.js-based platform connecting touring musicians with hosts for 
 ## Phase 1: Complete Frontend with Mock Data
 
 ### 🎯 Immediate Priority A: Application/Approval System
-- [ ] **Split Artist Onboarding into Application vs Profile**
-  - [ ] Create minimal application form (essential approval data only)
-  - [ ] Design approval-pending status page
+- [x] **Streamlined Artist Registration Form**
+  - [x] Implement tag-based genre selection system (matching profile editor)
+  - [x] Make performance video URL optional (preferred)
+  - [x] Update field labels and descriptions for clarity
+  - [x] Add asterisk system for required fields consistency
+  - [x] Remove specific dollar amounts from "What happens next?"
+  - [x] Update validation to require at least 1 genre selection
+  - [ ] Split into minimal application vs detailed profile (post-approval)
   - [ ] Create payment gateway integration for approved artists
-  - [ ] Build complete profile creation (post-payment detailed data)
 
 - [x] **Admin Dashboard for Application Review**
   - [x] Create admin application review interface
@@ -134,12 +141,14 @@ TourPad is a Next.js-based platform connecting touring musicians with hosts for 
   - [x] Add consistent error display patterns across all forms
   - [x] Add loading states and try-catch blocks to all form submissions
 
-- [ ] **Access Control UI Architecture**
+- [x] **Access Control UI Architecture**
+  - [x] Create approval status pages (/account/status, /pending-approval, /unauthorized)
+  - [x] Implement conditional dashboard access based on approval + payment status
+  - [x] Add status-based alerts and payment prompts in dashboard
+  - [x] Implement conditional navigation based on user access level
+  - [x] Design middleware redirect pages for restricted access
   - [ ] Design public landing/teaser pages (separate artist/host sections)
   - [ ] Create compelling value propositions and CTAs
-  - [ ] Design approval status pages and notifications
-  - [ ] Plan gated dashboard access based on approval + payment status
-  - [ ] Implement conditional navigation based on user access level
 
 - [ ] **Enhanced Search & Filtering (Airbnb-style)** ⚠️ *REVERTED DUE TO SERVER ISSUES*
   - [ ] Build advanced search interface with location radius
@@ -162,10 +171,11 @@ TourPad is a Next.js-based platform connecting touring musicians with hosts for 
   - [x] Ensure accessibility compliance with new color combinations
 
 - [ ] **Production Cleanup**
-  - [ ] Remove all console.log statements
+  - [ ] Remove all console.log statements (especially dashboard date filtering debug)
   - [ ] Clean up debug code in dashboard date filtering
   - [ ] Remove demo role switching functionality
   - [ ] Replace placeholder content with proper messaging
+  - [ ] Review and clean TODO comments throughout codebase
 
 ---
 
@@ -452,13 +462,13 @@ interface HostApplication {
 ```
 
 ### **Next Critical Implementations:**
-1. **Design System Overhaul** - Update color palette and redesign components with new earth tone identity
-2. **Streamlined Applications** - Split current onboarding into minimal application vs. detailed profile
-3. **Admin Dashboard** - Build application review interface with new visual design
-4. **Public Landing Pages** - Design compelling artist/host value propositions with new branding
-5. **Host Media Management** - Complete system using new design patterns
+1. **Backend Foundation** - Database design and API setup for real data integration
+2. **Payment Integration** - Stripe setup for artist membership ($400/year) and subscription management
+3. **Authentication System** - NextAuth integration with user session management
+4. **Public Landing Pages** - Design compelling artist/host value propositions with earth tone branding
+5. **Enhanced Search Reimplementation** - Carefully rebuild advanced filtering without server issues
 
 ---
 
-*Last Updated: 2025-07-12*
-*Next Review: After implementing application/approval system*
+*Last Updated: 2025-07-13*
+*Next Review: After implementing backend foundation*
