@@ -536,3 +536,366 @@ Import trace for requested module:
  ✓ Compiled in 600ms (1281 modules)
  ✓ Compiled in 574ms (1281 modules)
  ✓ Compiled in 454ms (1281 modules)
+ GET /bookings/3 200 in 189ms
+ GET /bookings/3 200 in 23ms
+ GET /bookings/3 200 in 26ms
+ GET /bookings/3 200 in 27ms
+ GET /bookings/3 200 in 21ms
+ GET /bookings/3 200 in 17ms
+ GET /bookings/3 200 in 15ms
+ GET /bookings/3 200 in 14ms
+ ○ Compiling /messages ...
+ ✓ Compiled /messages in 938ms (1279 modules)
+ GET /messages 200 in 1002ms
+ GET /dashboard 200 in 70ms
+ GET /bookings/1 200 in 30ms
+ GET /dashboard 200 in 51ms
+ GET /bookings/3 200 in 75ms
+ GET /dashboard 200 in 25ms
+ ○ Compiling /artists ...
+ ✓ Compiled /artists in 612ms (563 modules)
+ GET /artists 200 in 679ms
+ ✓ Compiled /hosts/[id] in 448ms (1301 modules)
+ GET /hosts/host1 200 in 813ms
+ ✓ Compiled /_not-found in 267ms (1305 modules)
+ GET /calendar 404 in 317ms
+ GET /calendar 404 in 169ms
+ ✓ Compiled /api/auth/[...nextauth] in 397ms (827 modules)
+ GET /api/auth/session 200 in 511ms
+ GET /api/auth/session 200 in 4ms
+ GET /dashboard 200 in 137ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 5ms
+ GET /messages 200 in 48ms
+ ○ Compiling /dashboard/media ...
+ ✓ Compiled /dashboard/media in 504ms (845 modules)
+ GET /dashboard/media 200 in 568ms
+ GET /dashboard/media 200 in 13ms
+ GET /api/auth/csrf 200 in 91ms
+ POST /api/auth/signout 200 in 15ms
+ GET /api/auth/session 200 in 6ms
+ GET /dashboard 200 in 118ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 4ms
+ GET /login 200 in 35ms
+ GET /api/auth/providers 200 in 18ms
+ GET /api/auth/csrf 200 in 5ms
+ POST /api/auth/callback/credentials 200 in 9ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 14ms
+ GET /dashboard 200 in 17ms
+ ✓ Compiled /bookings/[id] in 416ms (833 modules)
+ GET /bookings/1 200 in 515ms
+ GET /dashboard 200 in 39ms
+ GET /bookings/4 200 in 62ms
+ GET /dashboard 200 in 21ms
+ ○ Compiling /artists/[id] ...
+ ✓ Compiled /artists/[id] in 851ms (591 modules)
+ GET /artists/artist1 200 in 989ms
+ GET /artists/artist1 200 in 14ms
+ ✓ Compiled /dashboard/artist-media in 268ms (593 modules)
+ GET /dashboard/artist-media 200 in 344ms
+ GET /dashboard 200 in 30ms
+ ✓ Compiled in 1762ms (1322 modules)
+ GET /dashboard 200 in 63ms
+ ✓ Compiled in 1133ms (1322 modules)
+ GET /dashboard 200 in 65ms
+ ✓ Compiled in 739ms (1322 modules)
+ GET /dashboard 200 in 42ms
+ ✓ Compiled in 708ms (1322 modules)
+ GET /dashboard 200 in 42ms
+ ✓ Compiled in 430ms (1322 modules)
+ GET /dashboard 200 in 74ms
+ ✓ Compiled in 328ms (1322 modules)
+ GET /dashboard 200 in 30ms
+ ✓ Compiled in 486ms (1322 modules)
+ GET /dashboard 200 in 29ms
+ ✓ Compiled in 411ms (1322 modules)
+ GET /dashboard 200 in 44ms
+ GET /dashboard 200 in 334ms
+ ✓ Compiled in 1066ms (1308 modules)
+ ✓ Compiled in 1502ms (1322 modules)
+ ✓ Compiled in 1010ms (1322 modules)
+ ○ Compiling /dashboard/edit-profile ...
+ ✓ Compiled /dashboard/edit-profile in 976ms (1318 modules)
+ GET /dashboard/edit-profile 200 in 1067ms
+ GET /dashboard/edit-profile 200 in 36ms
+ GET /dashboard/edit-profile 200 in 66ms
+ GET /dashboard/edit-profile 200 in 30ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 1491ms (832 modules)
+ GET /api/auth/session 200 in 1725ms
+ GET /api/auth/session 200 in 13ms
+ GET /api/auth/session 200 in 75ms
+ GET /api/auth/session 200 in 6ms
+ GET /dashboard 200 in 250ms
+ GET /dashboard/artist-media 200 in 37ms
+ ✓ Compiled in 1179ms (1324 modules)
+ ✓ Compiled in 1012ms (1324 modules)
+ ✓ Compiled in 549ms (1324 modules)
+ ✓ Compiled in 496ms (1324 modules)
+ ✓ Compiled in 967ms (1325 modules)
+ ⨯ ./src/app/dashboard/edit-profile/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+     ,-[[36;1;4m/Users/bentyson/pad/src/app/dashboard/edit-profile/page.tsx[0m:271:1]
+ [2m268[0m |   };
+ [2m269[0m | 
+ [2m270[0m |   return (
+ [2m271[0m |     <div className="min-h-screen bg-gray-50">
+     : [35;1m     ^^^[0m
+ [2m272[0m |       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+ [2m273[0m |         {/* Header */}
+ [2m274[0m |         <div className="flex items-center justify-between mb-8">
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/dashboard/edit-profile/page.tsx
+ ⨯ ./src/app/dashboard/edit-profile/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+     ,-[[36;1;4m/Users/bentyson/pad/src/app/dashboard/edit-profile/page.tsx[0m:271:1]
+ [2m268[0m |   };
+ [2m269[0m | 
+ [2m270[0m |   return (
+ [2m271[0m |     <div className="min-h-screen bg-gray-50">
+     : [35;1m     ^^^[0m
+ [2m272[0m |       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+ [2m273[0m |         {/* Header */}
+ [2m274[0m |         <div className="flex items-center justify-between mb-8">
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/dashboard/edit-profile/page.tsx
+ ⨯ ./src/app/dashboard/edit-profile/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+     ,-[[36;1;4m/Users/bentyson/pad/src/app/dashboard/edit-profile/page.tsx[0m:271:1]
+ [2m268[0m |   };
+ [2m269[0m | 
+ [2m270[0m |   return (
+ [2m271[0m |     <div className="min-h-screen bg-gray-50">
+     : [35;1m     ^^^[0m
+ [2m272[0m |       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+ [2m273[0m |         {/* Header */}
+ [2m274[0m |         <div className="flex items-center justify-between mb-8">
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/dashboard/edit-profile/page.tsx
+ ⨯ ./src/app/dashboard/edit-profile/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+     ,-[[36;1;4m/Users/bentyson/pad/src/app/dashboard/edit-profile/page.tsx[0m:271:1]
+ [2m268[0m |   };
+ [2m269[0m | 
+ [2m270[0m |   return (
+ [2m271[0m |     <div className="min-h-screen bg-gray-50">
+     : [35;1m     ^^^[0m
+ [2m272[0m |       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+ [2m273[0m |         {/* Header */}
+ [2m274[0m |         <div className="flex items-center justify-between mb-8">
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/dashboard/edit-profile/page.tsx
+ ⨯ ./src/app/dashboard/edit-profile/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+     ,-[[36;1;4m/Users/bentyson/pad/src/app/dashboard/edit-profile/page.tsx[0m:271:1]
+ [2m268[0m |   };
+ [2m269[0m | 
+ [2m270[0m |   return (
+ [2m271[0m |     <div className="min-h-screen bg-gray-50">
+     : [35;1m     ^^^[0m
+ [2m272[0m |       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+ [2m273[0m |         {/* Header */}
+ [2m274[0m |         <div className="flex items-center justify-between mb-8">
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/dashboard/edit-profile/page.tsx
+ ✓ Compiled in 996ms (1300 modules)
+ GET /dashboard 200 in 149ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 705ms (1304 modules)
+ GET /dashboard/edit-profile 404 in 758ms
+ GET /dashboard/edit-profile 404 in 102ms
+ ✓ Compiled /api/auth/[...nextauth] in 276ms (826 modules)
+ GET /api/auth/session 200 in 457ms
+ GET /api/auth/session 200 in 4ms
+ GET /dashboard 200 in 150ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 4ms
+ ✓ Compiled /dashboard/profile in 485ms (1563 modules)
+ GET /dashboard/profile 200 in 529ms
+ GET /artists/artist1 200 in 171ms
+ GET /api/auth/session 200 in 58ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 11ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/auth/session 200 in 3ms
+ ✓ Compiled in 970ms (1299 modules)
+ GET /dashboard/profile 200 in 156ms
+ GET /artists/artist1 200 in 154ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /dashboard/profile 200 in 101ms
+ ✓ Compiled /api/auth/[...nextauth] in 188ms (575 modules)
+ ✓ Compiled (821 modules)
+ GET /favicon.ico 200 in 471ms
+ GET /api/auth/session 200 in 446ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 620ms (1561 modules)
+ GET /dashboard/profile 200 in 152ms
+ GET /artists/artist1 200 in 139ms
+ GET /favicon.ico 200 in 13ms
+ GET /api/auth/session 200 in 41ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 4ms
+ ✓ Compiled in 563ms (1561 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /artists/artist1 200 in 259ms
+ GET /dashboard/profile 200 in 273ms
+ GET /favicon.ico 200 in 6ms
+ GET /api/auth/session 200 in 27ms
+ GET /api/auth/session 200 in 11ms
+ GET /api/auth/session 200 in 6ms
+ ✓ Compiled in 875ms (1561 modules)
+ GET /artists/artist1 200 in 178ms
+ GET /dashboard/profile 200 in 183ms
+ GET /favicon.ico 200 in 13ms
+ GET /api/auth/session 200 in 39ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 5ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 517ms (1561 modules)
+ GET /dashboard/profile 200 in 119ms
+ GET /artists/artist1 200 in 96ms
+ GET /favicon.ico 200 in 7ms
+ GET /api/auth/session 200 in 37ms
+ GET /api/auth/session 200 in 23ms
+ GET /api/auth/session 200 in 104ms
+ ✓ Compiled in 1000ms (1561 modules)
+ GET /artists/artist1 200 in 153ms
+ GET /dashboard/profile 200 in 268ms
+ GET /favicon.ico 200 in 62ms
+ GET /api/auth/session 200 in 168ms
+ GET /api/auth/session 200 in 209ms
+ GET /api/auth/session 200 in 12ms
+ ✓ Compiled in 914ms (1561 modules)
+ GET /dashboard/profile 200 in 111ms
+ GET /artists/artist1 200 in 108ms
+ GET /api/auth/session 200 in 751ms
+ GET /api/auth/session 200 in 31ms
+ GET /api/auth/session 200 in 11ms
+ ✓ Compiled in 2.6s (1547 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 819ms (1537 modules)
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/bentyson/pad/.next/server/vendor-chunks/next.js'
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:198:28)
+    at <unknown> (.next/server/webpack-runtime.js:111:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:162:22)
+    at <unknown> (.next/server/app/_not-found/page.js:260:47)
+    at Object.<anonymous> (.next/server/app/_not-found/page.js:263:3) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/bentyson/pad/.next/server/vendor-chunks/next.js'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 895ms (1871 modules)
+ GET /dashboard/profile 500 in 3318ms
+ GET /dashboard/profile 200 in 275ms
+ GET /_next/static/css/app/layout.css?v=1752373792863 404 in 155ms
+ GET /_next/static/chunks/app/layout.js 404 in 156ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 157ms
+ GET /_next/static/chunks/app/dashboard/profile/page.js 404 in 156ms
+ GET /_next/static/chunks/main-app.js?v=1752373792863 404 in 157ms
+ ✓ Compiled /favicon.ico in 174ms (909 modules)
+ GET /favicon.ico 200 in 239ms
+ GET /dashboard 200 in 147ms
+ GET /_next/static/css/app/layout.css?v=1752373796246 404 in 102ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 144ms
+ GET /_next/static/chunks/main-app.js?v=1752373796246 404 in 144ms
+ GET /_next/static/chunks/app/layout.js 404 in 143ms
+ GET /_next/static/chunks/app/dashboard/page.js 404 in 144ms
+ GET /favicon.ico 200 in 3ms
+ GET /dashboard 200 in 213ms
+ GET /_next/static/css/app/layout.css?v=1752373797888 404 in 255ms
+ GET /_next/static/chunks/app/layout.js 404 in 257ms
+ GET /_next/static/chunks/main-app.js?v=1752373797888 404 in 259ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 260ms
+ GET /_next/static/chunks/app/dashboard/page.js 404 in 260ms
+ GET /favicon.ico 200 in 7ms
+ GET /dashboard 200 in 61ms
+ GET /_next/static/css/app/layout.css?v=1752373799159 404 in 102ms
+ GET /_next/static/chunks/app/layout.js 404 in 128ms
+ GET /_next/static/chunks/main-app.js?v=1752373799159 404 in 130ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 129ms
+ GET /_next/static/chunks/app/dashboard/page.js 404 in 128ms
+ GET /favicon.ico 200 in 4ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/bentyson/pad/.next/server/app/api/auth/[...nextauth]/route.js'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/bentyson/pad/.next/server/app/api/auth/[...nextauth]/route.js',
+  page: '/api/auth/session'
+}
+ GET /api/auth/session 500 in 457ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/bentyson/pad/.next/server/app/api/auth/[...nextauth]/route.js'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/bentyson/pad/.next/server/app/api/auth/[...nextauth]/route.js',
+  page: '/api/auth/_log'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/bentyson/pad/.next/server/app/api/auth/[...nextauth]/route.js'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/bentyson/pad/.next/server/app/api/auth/[...nextauth]/route.js',
+  page: '/api/auth/session'
+}
+ POST /api/auth/_log 500 in 241ms
+ GET /api/auth/session 500 in 275ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/bentyson/pad/.next/server/app/api/auth/[...nextauth]/route.js'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/bentyson/pad/.next/server/app/api/auth/[...nextauth]/route.js',
+  page: '/api/auth/_log'
+}
+ POST /api/auth/_log 500 in 251ms
+ GET /dashboard 200 in 58ms
+ GET /_next/static/css/app/layout.css?v=1752373802235 404 in 35ms
+ GET /_next/static/chunks/app/dashboard/page.js 404 in 130ms
+ GET /_next/static/chunks/app/layout.js 404 in 131ms
+ GET /_next/static/chunks/main-app.js?v=1752373802235 404 in 132ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 132ms
+ GET /favicon.ico 200 in 4ms
+ ○ Compiling / ...
+ ✓ Compiled / in 756ms (916 modules)
+ GET / 200 in 527ms
+ GET /_next/static/css/app/layout.css?v=1752373804830 404 in 45ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 247ms
+ GET /_next/static/chunks/app/layout.js 404 in 268ms
+ GET /_next/static/chunks/main-app.js?v=1752373804830 404 in 269ms
+ GET /_next/static/chunks/app/page.js 404 in 231ms
+[?25h

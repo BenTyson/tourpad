@@ -30,6 +30,8 @@ export default function BookingDetailPage() {
   const [currentStatus, setCurrentStatus] = useState(booking?.status || 'requested');
   const [showDeclineModal, setShowDeclineModal] = useState(false);
   const [declineReason, setDeclineReason] = useState('');
+  const [showCancellationModal, setShowCancellationModal] = useState(false);
+  const [cancellationReason, setCancellationReason] = useState('');
 
   if (status === 'loading') {
     return (
@@ -100,6 +102,22 @@ export default function BookingDetailPage() {
     }, 500);
   };
 
+  const handleCancellationRequest = () => {
+    if (!cancellationReason.trim()) {
+      alert('Please provide a reason for requesting cancellation');
+      return;
+    }
+    setCurrentStatus('cancellation_requested');
+    setShowCancellationModal(false);
+    // TODO: Send to backend, notify other party
+    console.log('Cancellation requested:', bookingId, 'Reason:', cancellationReason);
+    
+    // Show user feedback
+    setTimeout(() => {
+      alert('Cancellation request sent. The other party will be notified to review your request.');
+    }, 500);
+  };
+
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('en-US', {
       weekday: 'long',
@@ -133,6 +151,13 @@ export default function BookingDetailPage() {
           icon: XCircleIcon,
           text: 'Declined',
           description: 'This booking request was declined.'
+        };
+      case 'cancellation_requested':
+        return {
+          color: 'warning',
+          icon: ExclamationTriangleIcon,
+          text: 'Cancellation Requested',
+          description: 'A cancellation has been requested and is pending review.'
         };
       case 'pending':
         return {
@@ -217,9 +242,23 @@ export default function BookingDetailPage() {
             </div>
             <div className="text-green-800 space-y-2">
               <p>🎉 Great! This show is confirmed.</p>
-              <p>📍 <strong>Venue address:</strong> {host?.address}, {host?.city}, {host?.state}</p>
+              <p>📍 <strong>Venue location:</strong> {host?.city}, {host?.state} {host?.zip}</p>
               <p>📞 <strong>Contact info has been shared</strong> between both parties</p>
               <p>💬 <strong>Continue coordination</strong> in Messages</p>
+            </div>
+            <div className="mt-4 pt-4 border-t border-green-200">
+              <p className="text-sm text-green-700 mb-3">
+                Need to cancel? Both parties can request cancellation if circumstances change.
+              </p>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setShowCancellationModal(true)}
+                className="border-red-300 text-red-700 hover:bg-red-50"
+              >
+                <ExclamationTriangleIcon className="w-4 h-4 mr-2" />
+                Request Cancellation
+              </Button>
             </div>
           </div>
         )}
@@ -516,6 +555,46 @@ export default function BookingDetailPage() {
                     className="flex-1 bg-red-600 hover:bg-red-700"
                   >
                     Decline Booking
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Cancellation Request Modal */}
+      {showCancellationModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <h3 className="text-lg font-semibold text-red-900">Request Cancellation</h3>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <p className="text-sm text-gray-600">
+                  Please provide a reason for requesting cancellation. This will be shared with the other party.
+                </p>
+                <textarea
+                  value={cancellationReason}
+                  onChange={(e) => setCancellationReason(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-900 placeholder-gray-400"
+                  rows={4}
+                  placeholder="e.g., Schedule conflict, venue issue, emergency, etc."
+                />
+                <div className="flex space-x-3">
+                  <Button
+                    onClick={() => setShowCancellationModal(false)}
+                    variant="outline"
+                    className="flex-1"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleCancellationRequest}
+                    className="flex-1 bg-red-600 hover:bg-red-700"
+                  >
+                    Request Cancellation
                   </Button>
                 </div>
               </div>

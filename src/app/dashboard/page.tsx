@@ -15,7 +15,8 @@ import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
   PhotoIcon,
-  VideoCameraIcon
+  VideoCameraIcon,
+  PencilIcon
 } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
@@ -99,8 +100,8 @@ export default function DashboardPage() {
   .sort((a, b) => new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime());
 
   const pendingActions = userBookings.filter(booking => 
-    // Filter out declined bookings and show only actionable items
-    booking.status !== 'declined' && booking.status !== 'cancelled' &&
+    // Filter out completed bookings and show only actionable items
+    booking.status !== 'declined' && booking.status !== 'cancelled' && booking.status !== 'approved' &&
     (userRole === 'host' ? booking.status === 'requested' : booking.status === 'pending')
   );
 
@@ -412,22 +413,12 @@ export default function DashboardPage() {
                       All Messages
                     </Button>
                   </Link>
-                  {userRole === 'artist' && (
-                    <Link href="/dashboard/artist-media">
-                      <Button variant="outline" className="w-full justify-start">
-                        <VideoCameraIcon className="w-4 h-4 mr-3" />
-                        Manage Media
-                      </Button>
-                    </Link>
-                  )}
-                  {userRole === 'host' && (
-                    <Link href="/dashboard/media">
-                      <Button variant="outline" className="w-full justify-start">
-                        <PhotoIcon className="w-4 h-4 mr-3" />
-                        Venue Photos
-                      </Button>
-                    </Link>
-                  )}
+                  <Link href="/dashboard/profile">
+                    <Button variant="outline" className="w-full justify-start">
+                      <PencilIcon className="w-4 h-4 mr-3" />
+                      Manage Profile & Media
+                    </Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>
