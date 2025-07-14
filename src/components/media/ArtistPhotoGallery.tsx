@@ -1,5 +1,11 @@
 'use client';
-import { Photo as ArtistPhoto } from '@/types/artist';
+
+interface ArtistPhoto {
+  id: string;
+  url: string;
+  alt: string;
+  category: 'performance' | 'band';
+}
 
 interface ArtistPhotoGalleryProps {
   photos: ArtistPhoto[];
@@ -26,6 +32,16 @@ export function ArtistPhotoGallery({ photos, onPhotoClick }: ArtistPhotoGalleryP
                   src={photo.url}
                   alt={photo.alt}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  onError={(e) => {
+                    console.error('Failed to load image:', photo.url);
+                    const target = e.target as HTMLImageElement;
+                    target.style.backgroundColor = '#f3f4f6';
+                    target.style.display = 'flex';
+                    target.style.alignItems = 'center';
+                    target.style.justifyContent = 'center';
+                    target.innerHTML = '<div style="color: #6b7280; font-size: 12px; text-align: center;">Image<br>Loading...</div>';
+                  }}
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-300" />
               </div>
@@ -48,6 +64,16 @@ export function ArtistPhotoGallery({ photos, onPhotoClick }: ArtistPhotoGalleryP
                   src={photo.url}
                   alt={photo.alt}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  onError={(e) => {
+                    console.error('Failed to load image:', photo.url);
+                    const target = e.target as HTMLImageElement;
+                    target.style.backgroundColor = '#f3f4f6';
+                    target.style.display = 'flex';
+                    target.style.alignItems = 'center';
+                    target.style.justifyContent = 'center';
+                    target.innerHTML = '<div style="color: #6b7280; font-size: 12px; text-align: center;">Image<br>Loading...</div>';
+                  }}
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-300" />
               </div>

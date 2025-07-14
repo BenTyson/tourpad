@@ -1,7 +1,13 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Photo as ArtistPhoto } from '@/types/artist';
 import { XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+
+interface ArtistPhoto {
+  id: string;
+  url: string;
+  alt: string;
+  category: 'performance' | 'band';
+}
 
 interface ArtistPhotoLightboxProps {
   photos: ArtistPhoto[];
