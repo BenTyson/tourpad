@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { HomeIcon, MusicalNoteIcon, ExclamationCircleIcon, PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline';
@@ -17,7 +17,7 @@ const US_STATES = [
   'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
 ];
 
-export default function RegisterPage() {
+function RegisterForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const userType = searchParams.get('type') as 'host' | 'artist';
@@ -109,7 +109,6 @@ export default function RegisterPage() {
         </div>
 
         <Card className="shadow-xl border-0">
-
           <CardContent className="p-8">
             {/* General Error Display */}
             {errors.general && (
@@ -718,6 +717,19 @@ function UserTypeSelection() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+        <p className="text-gray-600">Loading...</p>
+      </div>
+    </div>}>
+      <RegisterForm />
+    </Suspense>
   );
 }
 

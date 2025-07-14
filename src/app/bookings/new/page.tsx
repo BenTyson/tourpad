@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { 
@@ -19,7 +19,7 @@ import { mockHosts, mockArtists } from '@/data/mockData';
 import { apiClient, handleApiResponse } from '@/lib/api-client';
 import { validateData, bookingSchema } from '@/lib/validation';
 
-export default function NewBookingPage() {
+function NewBookingForm() {
   const searchParams = useSearchParams();
   const hostId = searchParams.get('hostId');
   const artistId = searchParams.get('artistId');
@@ -404,5 +404,18 @@ export default function NewBookingPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function NewBookingPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+        <p className="text-gray-600">Loading...</p>
+      </div>
+    </div>}>
+      <NewBookingForm />
+    </Suspense>
   );
 }

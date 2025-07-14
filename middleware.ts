@@ -1,9 +1,17 @@
 import { withAuth } from 'next-auth/middleware';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import type { JWT } from 'next-auth/jwt';
+
+// Define route configuration type
+type RouteConfig = {
+  requireRole?: 'artist' | 'host' | 'admin';
+  requireApproved?: boolean;
+  requireAuth?: boolean;
+};
 
 // Define protected routes and their requirements
-const protectedRoutes = {
+const protectedRoutes: Record<string, RouteConfig> = {
   // Admin routes - require admin role
   '/admin': { requireRole: 'admin', requireApproved: true },
   
@@ -30,9 +38,10 @@ const publicRoutes = [
 ];
 
 export default withAuth(
-  function middleware(req: NextRequest) {
+  function middleware(req) {
     const { pathname } = req.nextUrl;
-    const token = req.nextauth.token;
+    // Token is passed through the req parameter in the withAuth middleware
+    const token = (req as any).nextauth?.token as JWT | null;
 
     // Allow public routes
     if (publicRoutes.some(route => pathname.startsWith(route))) {
@@ -56,12 +65,12 @@ export default withAuth(
     }
 
     // Check role requirements
-    if (routeConfig.requireRole && token.type !== routeConfig.requireRole) {
+    if ('requireRole' in routeConfig && routeConfig.requireRole && token?.type !== routeConfig.requireRole) {
       return NextResponse.redirect(new URL('/unauthorized', req.url));
     }
 
     // Check approval requirements
-    if (routeConfig.requireApproved && token.status !== 'approved') {
+    if ('requireApproved' in routeConfig && routeConfig.requireApproved && token?.status !== 'approved') {
       return NextResponse.redirect(new URL('/pending-approval', req.url));
     }
 
