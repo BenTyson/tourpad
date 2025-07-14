@@ -137,6 +137,11 @@ export default function ProfilePage() {
     venueType: 'home' as 'home' | 'studio' | 'backyard' | 'loft' | 'other',
     capacity: 20,
     amenities: [] as string[],
+    hostInfo: {
+      hostName: '',
+      aboutMe: '',
+      profilePhoto: ''
+    },
     socialLinks: {
       website: '',
       instagram: '',
@@ -453,6 +458,69 @@ export default function ProfilePage() {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Host-specific personal information */}
+              {!isArtist && (
+                <Card>
+                  <CardHeader>
+                    <h2 className="text-xl font-semibold">Personal Host Information</h2>
+                    <p className="text-sm text-gray-600">
+                      This personal information helps artists get to know you as a host. This is separate from your venue description.
+                    </p>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <Input
+                      label="Host Name(s)"
+                      value={hostProfile.hostInfo.hostName}
+                      onChange={(e) => updateHostProfile({ 
+                        hostInfo: { ...hostProfile.hostInfo, hostName: e.target.value } 
+                      })}
+                      placeholder="Your name or names (e.g., 'Sarah & Mike Johnson')"
+                    />
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        About Me/Us
+                      </label>
+                      <textarea
+                        value={hostProfile.hostInfo.aboutMe}
+                        onChange={(e) => updateHostProfile({ 
+                          hostInfo: { ...hostProfile.hostInfo, aboutMe: e.target.value } 
+                        })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        rows={4}
+                        placeholder="Tell artists about yourself as a host. What drew you to house concerts? What do you enjoy about hosting? This is your personal story, separate from your venue description..."
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Host Profile Photo</label>
+                      <div className="flex items-center space-x-4">
+                        <div className="w-20 h-20 bg-gray-100 rounded-full overflow-hidden flex items-center justify-center">
+                          {hostProfile.hostInfo.profilePhoto ? (
+                            <img 
+                              src={hostProfile.hostInfo.profilePhoto} 
+                              alt="Host profile" 
+                              className="w-20 h-20 object-cover"
+                            />
+                          ) : (
+                            <UserCircleIcon className="w-10 h-10 text-gray-400" />
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <Button variant="outline" size="sm" className="mb-2">
+                            <PhotoIcon className="w-4 h-4 mr-2" />
+                            {hostProfile.hostInfo.profilePhoto ? 'Change Photo' : 'Upload Photo'}
+                          </Button>
+                          <p className="text-xs text-gray-500">
+                            A friendly photo of yourself or yourselves as hosts
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
 
               {/* Artist-specific fields */}
               {isArtist && (

@@ -4,6 +4,11 @@ export const mockHosts = [
     userId: 'host1',
     name: 'The Garden House',
     bio: 'Cozy living room with a piano and fireplace. We love hosting intimate acoustic shows for 20-30 people. Our home has a warm, welcoming atmosphere perfect for singer-songwriters and small bands.',
+    hostInfo: {
+      hostName: 'Sarah & Mike Johnson',
+      aboutMe: 'We\'re a couple who fell in love with live music through house concerts. As musicians ourselves, we understand what artists need to feel comfortable and put on their best show. When we\'re not hosting, you\'ll find us at local venues supporting the music community.',
+      profilePhoto: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=faces'
+    },
     city: 'Austin',
     state: 'TX',
     zip: '78701',
@@ -77,6 +82,11 @@ export const mockHosts = [
     userId: 'host2',
     name: 'Riverside Barn',
     bio: 'Rustic barn venue on 5 acres outside the city. Great acoustics and room for 50+ people. We provide a full sound system and have hosted everyone from folk duos to full bands.',
+    hostInfo: {
+      hostName: 'Jake Martinez',
+      aboutMe: 'I\'ve been hosting concerts in my barn for over 5 years. Music has always been my passion, and I love creating a space where artists can connect with audiences in an intimate setting. My family has been farming this land for generations, and we\'re proud to share it with the music community.',
+      profilePhoto: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face'
+    },
     city: 'Nashville',
     state: 'TN',
     zip: '37201',
@@ -144,6 +154,11 @@ export const mockHosts = [
     userId: 'host3', 
     name: 'Urban Loft Sessions',
     bio: 'Modern downtown loft with city views. Perfect for indie and experimental artists. We keep it intimate with 15-20 people max and focus on creating a listening room atmosphere.',
+    hostInfo: {
+      hostName: 'Alex Chen',
+      aboutMe: 'I\'m a sound engineer and music lover who transformed my loft into a dedicated listening space. I believe in creating an environment where experimental and indie artists can showcase their art without compromise. When I\'m not hosting, I\'m usually working on audio projects or discovering new music.',
+      profilePhoto: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face'
+    },
     city: 'Portland',
     state: 'OR',
     zip: '97201',

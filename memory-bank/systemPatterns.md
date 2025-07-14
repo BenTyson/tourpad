@@ -70,6 +70,11 @@ try {
 
 ### 5. Media Management Pattern
 - Categorized uploads (performance, band, venue photos)
+- Artist-specific photo types: 'performance' | 'band'
+- Host-specific photo types: 'house' | 'exterior' | 'performance_space'
+- Custom photo gallery components for each role (ArtistPhotoGallery, PhotoGallery)
+- Lightbox components with keyboard navigation (ArtistPhotoLightbox, PhotoLightbox)
+- Simplified CSS structure to prevent black box display issues
 - Drag-and-drop with preview
 - Mock upload simulation before backend
 
@@ -135,9 +140,17 @@ PUT    /api/bookings/:id # Update booking status
 
 ## UI/UX Patterns
 
-### 1. Earth Tone Design System
-- Consistent color palette (Rose, Sage, Neutral)
-- Accessible color contrasts
+### 1. Enhanced Profile Page Design System
+- Clean white backgrounds replacing gradient designs
+- Consistent color palette (Rose, Sage, Neutral earth tones)
+- Professional hero sections with featured content
+- Sticky navigation bars with backdrop blur effects
+- Social media integration with platform-specific styling
+- Venue/artist details cards with gradient accents
+- Responsive photo galleries with grid layouts
+- Professional lightbox implementations
+- Mobile-first responsive design throughout
+- Accessible color contrasts maintained
 - Warm, intimate feeling matching house concerts
 
 ### 2. Progressive Disclosure
@@ -184,5 +197,5 @@ PUT    /api/bookings/:id # Update booking status
 - Logging for debugging (remove for production)
 
 ---
-*Last Updated: 2025-07-13*
+*Last Updated: 2025-07-14*
 *Note: These patterns guide consistent development across all features*
