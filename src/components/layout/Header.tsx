@@ -3,12 +3,12 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { 
-  Bars3Icon, 
-  XMarkIcon,
-  UserCircleIcon,
-  HomeIcon,
-  ChevronDownIcon
-} from '@heroicons/react/24/outline';
+  Menu, 
+  X,
+  UserCircle,
+  Home,
+  ChevronDown
+} from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
 export function Header() {
@@ -81,7 +81,7 @@ export function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <HomeIcon className="h-8 w-8 text-blue-600" />
+              <Home className="h-8 w-8 text-blue-600" />
               <span className="text-xl font-bold text-gray-900">
                 TourPad
               </span>
@@ -120,8 +120,8 @@ export function Header() {
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
                     className="flex items-center space-x-1 px-3 py-2 text-sm text-gray-700 hover:text-gray-900 focus:outline-none"
                   >
-                    <UserCircleIcon className="h-5 w-5" />
-                    <ChevronDownIcon className="h-4 w-4" />
+                    <UserCircle className="h-5 w-5" />
+                    <ChevronDown className="h-4 w-4" />
                   </button>
                   
                   {userMenuOpen && (
@@ -195,9 +195,9 @@ export function Header() {
               className="text-gray-700"
             >
               {mobileMenuOpen ? (
-                <XMarkIcon className="h-6 w-6" />
+                <X className="h-6 w-6" />
               ) : (
-                <Bars3Icon className="h-6 w-6" />
+                <Menu className="h-6 w-6" />
               )}
             </button>
           </div>

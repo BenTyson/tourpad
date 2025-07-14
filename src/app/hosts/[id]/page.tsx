@@ -3,25 +3,37 @@ import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { 
-  MapPinIcon,
-  StarIcon,
-  UserGroupIcon,
-  CalendarIcon,
-  ClockIcon,
-  CurrencyDollarIcon,
-  HomeIcon,
-  CheckCircleIcon,
-  ArrowLeftIcon,
-  ShareIcon,
-  HeartIcon,
-  PhoneIcon,
-  WiFiIcon,
-  TruckIcon,
-  SparklesIcon,
-  SunIcon,
-  WifiIcon,
-  ShieldCheckIcon
-} from '@heroicons/react/24/outline';
+  MapPin,
+  Star,
+  Users,
+  Calendar,
+  Clock,
+  DollarSign,
+  Home,
+  CheckCircle,
+  ArrowLeft,
+  Share2,
+  Heart,
+  Phone,
+  Wifi,
+  Truck,
+  Sparkles,
+  Sun,
+  Shield,
+  Zap,
+  Snowflake,
+  Signal,
+  Baby,
+  Car,
+  Dog,
+  Volume2,
+  Trees,
+  Accessibility,
+  Bed,
+  Copy,
+  Mail,
+  Twitter
+} from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -68,7 +80,7 @@ export default function HostProfilePage() {
           <div className="flex items-center justify-between h-16">
             <Link href="/hosts">
               <Button variant="ghost" size="sm" className="hover:bg-primary-50 hover:text-primary-700">
-                <ArrowLeftIcon className="w-4 h-4 mr-2" />
+                <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to hosts
               </Button>
             </Link>
@@ -80,21 +92,21 @@ export default function HostProfilePage() {
                   className="hover:bg-primary-50 hover:text-primary-700"
                   onClick={() => setShowShareMenu(!showShareMenu)}
                 >
-                  <ShareIcon className="w-4 h-4 mr-2" />
+                  <Share2 className="w-4 h-4 mr-2" />
                   Share
                 </Button>
                 {showShareMenu && (
                   <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-neutral-200 py-2 z-50">
                     <button className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center">
-                      <span className="w-4 h-4 mr-3">📋</span>
+                      <Copy className="w-4 h-4 mr-3" />
                       Copy Link
                     </button>
                     <button className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center">
-                      <span className="w-4 h-4 mr-3">📧</span>
+                      <Mail className="w-4 h-4 mr-3" />
                       Email
                     </button>
                     <button className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center">
-                      <span className="w-4 h-4 mr-3">🐦</span>
+                      <Twitter className="w-4 h-4 mr-3" />
                       Twitter
                     </button>
                   </div>
@@ -106,7 +118,7 @@ export default function HostProfilePage() {
                 className={isFollowing ? "bg-primary-600 hover:bg-primary-700" : "hover:bg-primary-50 hover:text-primary-700 hover:border-primary-400"}
                 onClick={() => setIsFollowing(!isFollowing)}
               >
-                <HeartIcon className="w-4 h-4 mr-2" />
+                <Heart className="w-4 h-4 mr-2" />
                 {isFollowing ? 'Following' : 'Follow'}
               </Button>
             </div>
@@ -124,7 +136,7 @@ export default function HostProfilePage() {
                   Verified Host
                 </Badge>
                 <Badge variant="secondary" className="bg-neutral-100 text-neutral-700 border-neutral-200">
-                  <MapPinIcon className="w-4 h-4 mr-1" />
+                  <MapPin className="w-4 h-4 mr-1" />
                   {host.city}, {host.state}
                 </Badge>
               </div>
@@ -139,16 +151,16 @@ export default function HostProfilePage() {
               
               <div className="flex flex-wrap gap-4 mb-8">
                 <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
-                  <StarIcon className="w-5 h-5 mr-2 text-yellow-500" />
+                  <Star className="w-5 h-5 mr-2 text-yellow-500" />
                   <span className="font-semibold text-neutral-900">{host.rating}</span>
                   <span className="ml-1 text-neutral-600">({host.reviewCount} reviews)</span>
                 </div>
                 <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
-                  <UserGroupIcon className="w-5 h-5 mr-2 text-neutral-600" />
+                  <Users className="w-5 h-5 mr-2 text-neutral-600" />
                   <span className="text-neutral-900">Up to {host.showSpecs.indoorAttendanceMax} guests</span>
                 </div>
                 <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
-                  <CurrencyDollarIcon className="w-5 h-5 mr-2 text-neutral-600" />
+                  <DollarSign className="w-5 h-5 mr-2 text-neutral-600" />
                   <span className="text-neutral-900">${host.showSpecs.avgDoorFee} suggested door</span>
                 </div>
               </div>
@@ -219,7 +231,7 @@ export default function HostProfilePage() {
               <div className="group bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl p-6 border border-primary-200 hover:shadow-md transition-all duration-300">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-primary-500 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
-                    <UserGroupIcon className="w-6 h-6 text-white" />
+                    <Users className="w-6 h-6 text-white" />
                   </div>
                   <div>
                     <div className="font-semibold text-neutral-900">Capacity</div>
@@ -233,7 +245,7 @@ export default function HostProfilePage() {
               <div className="group bg-gradient-to-br from-secondary-50 to-secondary-100 rounded-xl p-6 border border-secondary-200 hover:shadow-md transition-all duration-300">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-secondary-500 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
-                    <ClockIcon className="w-6 h-6 text-white" />
+                    <Clock className="w-6 h-6 text-white" />
                   </div>
                   <div>
                     <div className="font-semibold text-neutral-900">Show Length</div>
@@ -247,7 +259,7 @@ export default function HostProfilePage() {
               <div className="group bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-xl p-6 border border-neutral-200 hover:shadow-md transition-all duration-300">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-neutral-600 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
-                    <CalendarIcon className="w-6 h-6 text-white" />
+                    <Calendar className="w-6 h-6 text-white" />
                   </div>
                   <div>
                     <div className="font-semibold text-neutral-900">Availability</div>
@@ -267,23 +279,27 @@ export default function HostProfilePage() {
             <h2 className="text-2xl font-bold text-neutral-900 mb-6">What This Venue Offers</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {Object.entries({
-                powerAccess: { label: 'Power access for equipment', icon: '🔌' },
-                airConditioning: { label: 'Air conditioning', icon: '❄️' },
-                wifi: { label: 'WiFi available', icon: '📶' },
-                kidFriendly: { label: 'Kid friendly environment', icon: '👶' },
-                parking: { label: 'Free parking on premises', icon: '🚗' },
-                petFriendly: { label: 'Pets allowed', icon: '🐕' },
-                soundSystem: { label: 'Sound system provided', icon: '🔊' },
-                outdoorSpace: { label: 'Private outdoor space', icon: '🌿' },
-                accessible: { label: 'Step-free access', icon: '♿' },
-                bnbOffered: { label: 'Overnight accommodation', icon: '🛏️' }
-              }).map(([key, {label, icon}]) => (
+                powerAccess: { label: 'Power access for equipment', icon: Zap },
+                airConditioning: { label: 'Air conditioning', icon: Snowflake },
+                wifi: { label: 'WiFi available', icon: Wifi },
+                kidFriendly: { label: 'Kid friendly environment', icon: Baby },
+                parking: { label: 'Free parking on premises', icon: Car },
+                petFriendly: { label: 'Pets allowed', icon: Dog },
+                soundSystem: { label: 'Sound system provided', icon: Volume2 },
+                outdoorSpace: { label: 'Private outdoor space', icon: Trees },
+                accessible: { label: 'Step-free access', icon: Accessibility },
+                bnbOffered: { label: 'Overnight accommodation', icon: Bed }
+              }).map(([key, {label, icon: IconComponent}]) => (
                 <div key={key} className={`flex items-center p-4 rounded-lg border ${
                   host.amenities[key as keyof typeof host.amenities] 
                     ? 'bg-green-50 border-green-200' 
                     : 'bg-gray-50 border-gray-200'
                 }`}>
-                  <span className="text-2xl mr-3">{icon}</span>
+                  <IconComponent className={`w-5 h-5 mr-3 ${
+                    host.amenities[key as keyof typeof host.amenities] 
+                      ? 'text-green-600' 
+                      : 'text-gray-400'
+                  }`} />
                   <div className="flex-1">
                     <span className={`font-medium ${
                       host.amenities[key as keyof typeof host.amenities] 
@@ -294,7 +310,7 @@ export default function HostProfilePage() {
                     </span>
                   </div>
                   {host.amenities[key as keyof typeof host.amenities] && (
-                    <CheckCircleIcon className="w-5 h-5 text-green-600" />
+                    <CheckCircle className="w-5 h-5 text-green-600" />
                   )}
                 </div>
               ))}

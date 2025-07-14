@@ -2,12 +2,26 @@
 > pad@0.1.0 dev
 > next dev
 
- ⚠ Port 3000 is in use, using available port 3001 instead.
    ▲ Next.js 15.3.5
-   - Local:        http://localhost:3001
-   - Network:      http://10.0.0.84:3001
+   - Local:        http://localhost:3000
+   - Network:      http://10.0.0.84:3000
    - Environments: .env.local
 
  ✓ Starting...
- ✓ Ready in 1133ms
-[?25h
+ ✓ Ready in 977ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1973ms (901 modules)
+ GET / 200 in 2206ms
+ ✓ Compiled /api/auth/[...nextauth] in 334ms (517 modules)
+ ✓ Compiled in 410ms (392 modules)
+ GET /favicon.ico 200 in 1209ms
+ GET / 200 in 136ms
+ GET /api/auth/session 200 in 1448ms
+ GET /api/auth/session 200 in 5ms
+ GET / 200 in 85ms
+ ✓ Compiled /artists in 193ms (1163 modules)
+ GET /artists 200 in 233ms
+ ✓ Compiled /hosts in 296ms (1182 modules)
+ GET /hosts 200 in 321ms
+ ✓ Compiled /hosts/[id] in 276ms (1243 modules)
+ GET /hosts/1 200 in 582ms

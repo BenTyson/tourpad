@@ -3,18 +3,21 @@ import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { 
-  StarIcon,
-  UserGroupIcon,
-  ClockIcon,
-  TruckIcon,
-  GlobeAltIcon,
-  MusicalNoteIcon,
-  CheckCircleIcon,
-  ArrowLeftIcon,
-  ShareIcon,
-  HeartIcon,
-  MapPinIcon
-} from '@heroicons/react/24/outline';
+  Star,
+  Users,
+  Clock,
+  Truck,
+  Globe,
+  Music,
+  CheckCircle,
+  ArrowLeft,
+  Share2,
+  Heart,
+  MapPin,
+  Copy,
+  Mail,
+  Twitter
+} from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -74,7 +77,7 @@ export default function ArtistProfilePage() {
           <div className="flex items-center justify-between h-16">
             <Link href="/artists">
               <Button variant="ghost" size="sm" className="hover:bg-primary-50 hover:text-primary-700">
-                <ArrowLeftIcon className="w-4 h-4 mr-2" />
+                <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to artists
               </Button>
             </Link>
@@ -86,21 +89,21 @@ export default function ArtistProfilePage() {
                   className="hover:bg-primary-50 hover:text-primary-700"
                   onClick={() => setShowShareMenu(!showShareMenu)}
                 >
-                  <ShareIcon className="w-4 h-4 mr-2" />
+                  <Share2 className="w-4 h-4 mr-2" />
                   Share
                 </Button>
                 {showShareMenu && (
                   <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-neutral-200 py-2 z-50">
                     <button className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center">
-                      <span className="w-4 h-4 mr-3">📋</span>
+                      <Copy className="w-4 h-4 mr-3" />
                       Copy Link
                     </button>
                     <button className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center">
-                      <span className="w-4 h-4 mr-3">📧</span>
+                      <Mail className="w-4 h-4 mr-3" />
                       Email
                     </button>
                     <button className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center">
-                      <span className="w-4 h-4 mr-3">🐦</span>
+                      <Twitter className="w-4 h-4 mr-3" />
                       Twitter
                     </button>
                   </div>
@@ -112,7 +115,7 @@ export default function ArtistProfilePage() {
                 className={isFollowing ? "bg-primary-600 hover:bg-primary-700" : "hover:bg-primary-50 hover:text-primary-700 hover:border-primary-400"}
                 onClick={() => setIsFollowing(!isFollowing)}
               >
-                <HeartIcon className="w-4 h-4 mr-2" />
+                <Heart className="w-4 h-4 mr-2" />
                 {isFollowing ? 'Following' : 'Follow'}
               </Button>
             </div>
@@ -130,7 +133,7 @@ export default function ArtistProfilePage() {
                   {artist.approved ? 'Verified Artist' : 'Pending'}
                 </Badge>
                 <Badge variant="secondary" className="bg-neutral-100 text-neutral-700 border-neutral-200">
-                  <MapPinIcon className="w-4 h-4 mr-1" />
+                  <MapPin className="w-4 h-4 mr-1" />
                   {artist.location}
                 </Badge>
               </div>
@@ -145,16 +148,16 @@ export default function ArtistProfilePage() {
               
               <div className="flex flex-wrap gap-4 mb-8">
                 <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
-                  <StarIcon className="w-5 h-5 mr-2 text-yellow-500" />
+                  <Star className="w-5 h-5 mr-2 text-yellow-500" />
                   <span className="font-semibold text-neutral-900">{artist.rating}</span>
                   <span className="ml-1 text-neutral-600">({artist.reviewCount} reviews)</span>
                 </div>
                 <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
-                  <UserGroupIcon className="w-5 h-5 mr-2 text-neutral-600" />
+                  <Users className="w-5 h-5 mr-2 text-neutral-600" />
                   <span className="text-neutral-900">{artist.members.length} member{artist.members.length > 1 ? 's' : ''}</span>
                 </div>
                 <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
-                  <MusicalNoteIcon className="w-5 h-5 mr-2 text-neutral-600" />
+                  <Music className="w-5 h-5 mr-2 text-neutral-600" />
                   <span className="capitalize text-neutral-900">{getGenre()}</span>
                 </div>
               </div>
@@ -212,7 +215,7 @@ export default function ArtistProfilePage() {
                   rel="noopener noreferrer"
                   className="flex items-center bg-white hover:bg-neutral-50 border border-neutral-200 rounded-lg px-6 py-3 transition-colors group"
                 >
-                  <GlobeAltIcon className="w-5 h-5 mr-3 text-neutral-600 group-hover:text-primary-600" />
+                  <Globe className="w-5 h-5 mr-3 text-neutral-600 group-hover:text-primary-600" />
                   <span className="font-medium text-neutral-900">Official Website</span>
                 </a>
               )}
@@ -381,7 +384,7 @@ export default function ArtistProfilePage() {
               <div className="group bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl p-6 border border-primary-200 hover:shadow-md transition-all duration-300">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-primary-500 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
-                    <ClockIcon className="w-6 h-6 text-white" />
+                    <Clock className="w-6 h-6 text-white" />
                   </div>
                   <div>
                     <div className="font-semibold text-neutral-900">Tour Schedule</div>
@@ -395,7 +398,7 @@ export default function ArtistProfilePage() {
               <div className="group bg-gradient-to-br from-secondary-50 to-secondary-100 rounded-xl p-6 border border-secondary-200 hover:shadow-md transition-all duration-300">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-secondary-500 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
-                    <TruckIcon className="w-6 h-6 text-white" />
+                    <Truck className="w-6 h-6 text-white" />
                   </div>
                   <div>
                     <div className="font-semibold text-neutral-900">Transport</div>
@@ -409,7 +412,7 @@ export default function ArtistProfilePage() {
               <div className="group bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-xl p-6 border border-neutral-200 hover:shadow-md transition-all duration-300">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-neutral-600 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
-                    <GlobeAltIcon className="w-6 h-6 text-white" />
+                    <Globe className="w-6 h-6 text-white" />
                   </div>
                   <div>
                     <div className="font-semibold text-neutral-900">Tour Radius</div>
@@ -430,7 +433,7 @@ export default function ArtistProfilePage() {
             <div className="grid md:grid-cols-2 gap-8">
               <div>
                 <h3 className="font-semibold text-neutral-900 mb-4 flex items-center">
-                  <CheckCircleIcon className="w-5 h-5 text-green-600 mr-2" />
+                  <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
                   Equipment Provided by Artist
                 </h3>
                 <ul className="space-y-2 text-neutral-700">
@@ -454,7 +457,7 @@ export default function ArtistProfilePage() {
               </div>
               <div>
                 <h3 className="font-semibold text-neutral-900 mb-4 flex items-center">
-                  <CheckCircleIcon className="w-5 h-5 text-blue-600 mr-2" />
+                  <CheckCircle className="w-5 h-5 text-blue-600 mr-2" />
                   Venue Requirements
                 </h3>
                 <ul className="space-y-2 text-neutral-700">
@@ -491,7 +494,7 @@ export default function ArtistProfilePage() {
                     <CardContent className="p-6">
                       <div className="flex items-center mb-4">
                         <div className="w-12 h-12 bg-gradient-to-br from-primary-400 to-secondary-500 rounded-full flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
-                          <MusicalNoteIcon className="w-6 h-6 text-white" />
+                          <Music className="w-6 h-6 text-white" />
                         </div>
                         <div className="flex-1">
                           <h3 className="font-semibold text-neutral-900 group-hover:text-primary-600 transition-colors">
@@ -502,7 +505,7 @@ export default function ArtistProfilePage() {
                       </div>
                       <p className="text-sm text-neutral-700 line-clamp-2">{relatedArtist.bio}</p>
                       <div className="flex items-center mt-4 text-sm text-neutral-600">
-                        <StarIcon className="w-4 h-4 text-yellow-400 mr-1" />
+                        <Star className="w-4 h-4 text-yellow-400 mr-1" />
                         <span className="font-medium">{relatedArtist.rating}</span>
                         <span className="mx-2">•</span>
                         <span>{relatedArtist.members.length} member{relatedArtist.members.length > 1 ? 's' : ''}</span>

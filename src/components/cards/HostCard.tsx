@@ -1,13 +1,13 @@
 import Link from 'next/link';
 import { 
-  MapPinIcon, 
-  StarIcon, 
-  UserGroupIcon,
-  SpeakerWaveIcon,
-  WifiIcon,
-  TruckIcon,
-  HomeIcon
-} from '@heroicons/react/24/outline';
+  MapPin, 
+  Star, 
+  Users,
+  Volume2,
+  Wifi,
+  Truck,
+  Home
+} from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -76,10 +76,10 @@ interface HostCardProps {
 export function HostCard({ host, showBookingButton = false }: HostCardProps) {
   const getAmenityIcons = () => {
     const icons = [];
-    if (host.amenities.parking) icons.push({ icon: TruckIcon, label: 'Parking' });
-    if (host.amenities.wifi) icons.push({ icon: WifiIcon, label: 'WiFi' });
-    if (host.amenities.soundSystem) icons.push({ icon: SpeakerWaveIcon, label: 'Sound System' });
-    if (host.amenities.kidFriendly) icons.push({ icon: HomeIcon, label: 'Kid Friendly' });
+    if (host.amenities.parking) icons.push({ icon: Truck, label: 'Parking' });
+    if (host.amenities.wifi) icons.push({ icon: Wifi, label: 'WiFi' });
+    if (host.amenities.soundSystem) icons.push({ icon: Volume2, label: 'Sound System' });
+    if (host.amenities.kidFriendly) icons.push({ icon: Home, label: 'Kid Friendly' });
     return icons.slice(0, 3); // Show max 3 icons
   };
 
@@ -101,7 +101,7 @@ export function HostCard({ host, showBookingButton = false }: HostCardProps) {
             />
           ) : (
             <div className="flex items-center justify-center h-full bg-gradient-to-br from-secondary-400 to-primary-500 transition-all duration-500 group-hover:from-secondary-500 group-hover:to-primary-600">
-              <HomeIcon className="w-12 h-12 text-white transition-transform duration-500 group-hover:scale-110" />
+              <Home className="w-12 h-12 text-white transition-transform duration-500 group-hover:scale-110" />
             </div>
           )}
         </div>
@@ -109,7 +109,7 @@ export function HostCard({ host, showBookingButton = false }: HostCardProps) {
         {/* Quick stats overlay */}
         <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-lg px-2 py-1 transition-all duration-300 group-hover:bg-white group-hover:shadow-md">
           <div className="flex items-center space-x-1">
-            <StarIcon className="w-4 h-4 text-yellow-500 fill-current" />
+            <Star className="w-4 h-4 text-yellow-500 fill-current" />
             <span className="text-sm font-medium">
               {host.rating.toFixed(1)} ({host.reviewCount})
             </span>
@@ -132,7 +132,7 @@ export function HostCard({ host, showBookingButton = false }: HostCardProps) {
               {host.name}
             </h3>
             <div className="flex items-center text-sm text-gray-600 mt-1">
-              <MapPinIcon className="w-4 h-4 mr-1" />
+              <MapPin className="w-4 h-4 mr-1" />
               {formatLocation()}
             </div>
           </div>
@@ -140,7 +140,7 @@ export function HostCard({ host, showBookingButton = false }: HostCardProps) {
           {/* Show specs */}
           <div className="flex items-center space-x-4 text-sm text-gray-600">
             <div className="flex items-center">
-              <UserGroupIcon className="w-4 h-4 mr-1" />
+              <Users className="w-4 h-4 mr-1" />
               {host.showSpecs.avgAttendance} avg
             </div>
             <div>

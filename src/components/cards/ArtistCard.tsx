@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import { 
-  StarIcon, 
-  UserGroupIcon,
-  MusicalNoteIcon,
-  GlobeAltIcon,
-  CheckCircleIcon,
-  PlayIcon
-} from '@heroicons/react/24/outline';
+  Star, 
+  Users,
+  Music,
+  Globe,
+  CheckCircle,
+  Play
+} from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -98,7 +98,7 @@ export function ArtistCard({ artist, showBookingButton = false }: ArtistCardProp
             />
           ) : (
             <div className="flex items-center justify-center h-full bg-gradient-to-br from-primary-500 to-secondary-600 transition-all duration-500 group-hover:from-primary-600 group-hover:to-secondary-700">
-              <MusicalNoteIcon className="w-12 h-12 text-white transition-transform duration-500 group-hover:scale-110" />
+              <Music className="w-12 h-12 text-white transition-transform duration-500 group-hover:scale-110" />
             </div>
           )}
         </div>
@@ -106,7 +106,7 @@ export function ArtistCard({ artist, showBookingButton = false }: ArtistCardProp
         {/* Approval status */}
         {artist.approved && (
           <div className="absolute top-3 right-3 bg-green-500 text-white rounded-full p-1 transition-all duration-300 group-hover:scale-110 group-hover:bg-green-600">
-            <CheckCircleIcon className="w-4 h-4" />
+            <CheckCircle className="w-4 h-4" />
           </div>
         )}
 
@@ -114,7 +114,7 @@ export function ArtistCard({ artist, showBookingButton = false }: ArtistCardProp
         {hasVideo && (
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
             <div className="bg-white/90 hover:bg-white text-gray-900 rounded-full p-3 transition-all duration-300 transform scale-75 group-hover:scale-100">
-              <PlayIcon className="w-6 h-6" />
+              <Play className="w-6 h-6" />
             </div>
           </div>
         )}
@@ -150,11 +150,11 @@ export function ArtistCard({ artist, showBookingButton = false }: ArtistCardProp
           {/* Band info */}
           <div className="flex items-center space-x-4 text-sm text-gray-600">
             <div className="flex items-center transition-all duration-300 group-hover:text-primary-600">
-              <UserGroupIcon className="w-4 h-4 mr-1" />
+              <Users className="w-4 h-4 mr-1" />
               {artist.members.length} {artist.members.length === 1 ? 'member' : 'members'}
             </div>
             <div className="flex items-center">
-              <StarIcon className="w-4 h-4 mr-1 transition-colors duration-300 group-hover:text-yellow-500" />
+              <Star className="w-4 h-4 mr-1 transition-colors duration-300 group-hover:text-yellow-500" />
               {artist.rating.toFixed(1)} ({artist.reviewCount})
             </div>
           </div>
@@ -187,7 +187,7 @@ export function ArtistCard({ artist, showBookingButton = false }: ArtistCardProp
             <div className="flex items-center space-x-2">
               {artist.socialLinks.website && (
                 <div className="transition-all duration-300 group-hover:scale-110 group-hover:text-primary-600">
-                  <GlobeAltIcon className="w-4 h-4 text-gray-400" />
+                  <Globe className="w-4 h-4 text-gray-400" />
                 </div>
               )}
               {artist.socialLinks.spotify && (

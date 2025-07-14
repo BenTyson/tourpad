@@ -3,23 +3,23 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { 
-  ArrowLeftIcon,
-  PhotoIcon,
-  VideoCameraIcon,
-  MusicalNoteIcon,
-  UserCircleIcon,
-  MapPinIcon,
-  GlobeAltIcon,
-  DocumentTextIcon,
-  CheckCircleIcon,
-  ExclamationTriangleIcon,
-  PlusIcon,
-  XMarkIcon,
-  StarIcon,
-  EyeIcon,
-  PencilIcon,
-  UserGroupIcon
-} from '@heroicons/react/24/outline';
+  ArrowLeft,
+  Camera,
+  Video,
+  Music,
+  UserCircle,
+  MapPin,
+  Globe,
+  FileText,
+  CheckCircle,
+  AlertTriangle,
+  Plus,
+  X,
+  Star,
+  Eye,
+  Edit,
+  Users
+} from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
@@ -307,7 +307,7 @@ export default function ProfilePage() {
           <div className="flex items-center space-x-4">
             <Link href="/dashboard">
               <Button variant="outline" size="sm">
-                <ArrowLeftIcon className="w-4 h-4 mr-2" />
+                <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Dashboard
               </Button>
             </Link>
@@ -322,14 +322,14 @@ export default function ProfilePage() {
           <div className="flex items-center space-x-3">
             <Link href={`/${isArtist ? 'artists' : 'hosts'}/${session.user.id}`} target="_blank">
               <Button variant="outline" size="sm">
-                <EyeIcon className="w-4 h-4 mr-2" />
+                <Eye className="w-4 h-4 mr-2" />
                 Preview Live Profile
               </Button>
             </Link>
             {hasChanges && (
               <>
                 <Badge variant="warning" className="bg-yellow-100 text-yellow-800">
-                  <ExclamationTriangleIcon className="w-3 h-3 mr-1" />
+                  <AlertTriangle className="w-3 h-3 mr-1" />
                   Unsaved Changes
                 </Badge>
                 <Button onClick={handleSave} disabled={loading}>
@@ -351,7 +351,7 @@ export default function ProfilePage() {
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
-              <DocumentTextIcon className="w-4 h-4 mr-2 inline" />
+              <FileText className="w-4 h-4 mr-2 inline" />
               Profile Information
             </button>
             <button
@@ -362,7 +362,7 @@ export default function ProfilePage() {
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
-              <UserCircleIcon className="w-4 h-4 mr-2 inline" />
+              <UserCircle className="w-4 h-4 mr-2 inline" />
               {isArtist ? 'Press Photos & Band' : 'Venue Photos'}
             </button>
             <button
@@ -374,9 +374,9 @@ export default function ProfilePage() {
               }`}
             >
               {isArtist ? (
-                <VideoCameraIcon className="w-4 h-4 mr-2 inline" />
+                <Video className="w-4 h-4 mr-2 inline" />
               ) : (
-                <PhotoIcon className="w-4 h-4 mr-2 inline" />
+                <Camera className="w-4 h-4 mr-2 inline" />
               )}
               {isArtist ? 'Music & Media' : 'Gallery'}
             </button>
@@ -504,12 +504,12 @@ export default function ProfilePage() {
                               className="w-20 h-20 object-cover"
                             />
                           ) : (
-                            <UserCircleIcon className="w-10 h-10 text-gray-400" />
+                            <UserCircle className="w-10 h-10 text-gray-400" />
                           )}
                         </div>
                         <div className="flex-1">
                           <Button variant="outline" size="sm" className="mb-2">
-                            <PhotoIcon className="w-4 h-4 mr-2" />
+                            <Camera className="w-4 h-4 mr-2" />
                             {hostProfile.hostInfo.profilePhoto ? 'Change Photo' : 'Upload Photo'}
                           </Button>
                           <p className="text-xs text-gray-500">
@@ -543,7 +543,7 @@ export default function ProfilePage() {
                                   onClick={() => removeGenre(genre)}
                                   className="ml-1 text-xs hover:text-red-600"
                                 >
-                                  <XMarkIcon className="w-3 h-3" />
+                                  <X className="w-3 h-3" />
                                 </button>
                               </Badge>
                             ))}
@@ -574,7 +574,7 @@ export default function ProfilePage() {
                                   onClick={() => removeInstrument(instrument)}
                                   className="ml-1 text-xs hover:text-red-600"
                                 >
-                                  <XMarkIcon className="w-3 h-3" />
+                                  <X className="w-3 h-3" />
                                 </button>
                               </Badge>
                             ))}
@@ -700,7 +700,7 @@ export default function ProfilePage() {
                                 onClick={() => removeAmenity(amenity)}
                                 className="ml-1 text-xs hover:text-red-600"
                               >
-                                <XMarkIcon className="w-3 h-3" />
+                                <X className="w-3 h-3" />
                               </button>
                             </Badge>
                           ))}
@@ -821,12 +821,12 @@ export default function ProfilePage() {
                           className="w-32 h-32 rounded-lg object-cover"
                         />
                       ) : (
-                        <PhotoIcon className="w-12 h-12 text-gray-400" />
+                        <Camera className="w-12 h-12 text-gray-400" />
                       )}
                     </div>
                     <div className="flex-1">
                       <Button variant="outline" className="mb-2">
-                        <PhotoIcon className="w-4 h-4 mr-2" />
+                        <Camera className="w-4 h-4 mr-2" />
                         {(isArtist ? artistProfile.profilePhoto : hostProfile.profilePhoto) ? 'Change Photo' : 'Upload Photo'}
                       </Button>
                       <p className="text-xs text-gray-500">
@@ -854,7 +854,7 @@ export default function ProfilePage() {
                         </p>
                       </div>
                       <Button onClick={addBandMember} size="sm">
-                        <PlusIcon className="w-4 h-4 mr-2" />
+                        <Plus className="w-4 h-4 mr-2" />
                         Add Member
                       </Button>
                     </div>
@@ -862,7 +862,7 @@ export default function ProfilePage() {
                   <CardContent>
                     {artistProfile.bandMembers.length === 0 ? (
                       <div className="text-center py-8 text-gray-500">
-                        <UserGroupIcon className="w-12 h-12 mx-auto mb-2 text-gray-400" />
+                        <Users className="w-12 h-12 mx-auto mb-2 text-gray-400" />
                         <p>No band members added yet</p>
                         <p className="text-sm">Add your band members to showcase your full lineup</p>
                       </div>
@@ -878,7 +878,7 @@ export default function ProfilePage() {
                                   className="w-16 h-16 rounded-full object-cover"
                                 />
                               ) : (
-                                <UserCircleIcon className="w-8 h-8 text-gray-400" />
+                                <UserCircle className="w-8 h-8 text-gray-400" />
                               )}
                             </div>
                             <div className="flex-1 grid md:grid-cols-2 gap-4">
@@ -895,7 +895,7 @@ export default function ProfilePage() {
                             </div>
                             <div className="flex items-center space-x-2">
                               <Button variant="outline" size="sm">
-                                <PhotoIcon className="w-4 h-4" />
+                                <Camera className="w-4 h-4" />
                               </Button>
                               <Button
                                 variant="outline"
@@ -903,7 +903,7 @@ export default function ProfilePage() {
                                 onClick={() => removeBandMember(member.id)}
                                 className="text-red-600 hover:text-red-700"
                               >
-                                <XMarkIcon className="w-4 h-4" />
+                                <X className="w-4 h-4" />
                               </Button>
                             </div>
                           </div>
@@ -935,9 +935,9 @@ export default function ProfilePage() {
                   <div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
                     <div className="space-y-4">
                       {isArtist ? (
-                        <VideoCameraIcon className="w-12 h-12 text-gray-400 mx-auto" />
+                        <Video className="w-12 h-12 text-gray-400 mx-auto" />
                       ) : (
-                        <PhotoIcon className="w-12 h-12 text-gray-400 mx-auto" />
+                        <Camera className="w-12 h-12 text-gray-400 mx-auto" />
                       )}
                       <div>
                         <h3 className="text-lg font-medium text-gray-900 mb-2">
@@ -953,9 +953,9 @@ export default function ProfilePage() {
                           <Link href={isArtist ? "/dashboard/artist-media" : "/dashboard/media"}>
                             <Button>
                               {isArtist ? (
-                                <VideoCameraIcon className="w-4 h-4 mr-2" />
+                                <Video className="w-4 h-4 mr-2" />
                               ) : (
-                                <PhotoIcon className="w-4 h-4 mr-2" />
+                                <Camera className="w-4 h-4 mr-2" />
                               )}
                               {isArtist ? 'Manage Music & Media' : 'Manage Photos'}
                             </Button>
@@ -994,7 +994,7 @@ export default function ProfilePage() {
                       </div>
                     ) : (
                       <>
-                        <CheckCircleIcon className="w-4 h-4 mr-2" />
+                        <CheckCircle className="w-4 h-4 mr-2" />
                         Save Changes
                       </>
                     )}
@@ -1008,7 +1008,7 @@ export default function ProfilePage() {
         {/* Preview Notice */}
         <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
           <div className="flex items-center">
-            <StarIcon className="w-5 h-5 text-blue-600 mr-3" />
+            <Star className="w-5 h-5 text-blue-600 mr-3" />
             <div>
               <h4 className="font-medium text-blue-800">Live Profile Preview</h4>
               <p className="text-sm text-blue-700">

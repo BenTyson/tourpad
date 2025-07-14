@@ -3,21 +3,21 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { 
-  CalendarIcon,
-  EnvelopeIcon,
-  BellIcon,
-  StarIcon,
-  UserGroupIcon,
-  MapPinIcon,
-  ClockIcon,
-  PlusIcon,
-  EyeIcon,
-  CheckCircleIcon,
-  ExclamationTriangleIcon,
-  PhotoIcon,
-  VideoCameraIcon,
-  PencilIcon
-} from '@heroicons/react/24/outline';
+  Calendar,
+  Mail,
+  Bell,
+  Star,
+  Users,
+  MapPin,
+  Clock,
+  Plus,
+  Eye,
+  CheckCircle,
+  AlertTriangle,
+  Camera,
+  Video,
+  Edit
+} from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -156,7 +156,7 @@ export default function DashboardPage() {
         {!hasFullAccess && (
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 mb-6">
             <div className="flex items-start">
-              <ExclamationTriangleIcon className="w-6 h-6 text-amber-600 mr-3 flex-shrink-0 mt-0.5" />
+              <AlertTriangle className="w-6 h-6 text-amber-600 mr-3 flex-shrink-0 mt-0.5" />
               <div className="flex-1">
                 <h3 className="font-medium text-amber-900 mb-2">Limited Dashboard Access</h3>
                 <p className="text-amber-800 mb-4">
@@ -188,7 +188,7 @@ export default function DashboardPage() {
         {needsPayment && (
           <div className="bg-primary-50 border border-primary-200 rounded-lg p-6 mb-6">
             <div className="flex items-start">
-              <CheckCircleIcon className="w-6 h-6 text-primary-600 mr-3 flex-shrink-0 mt-0.5" />
+              <CheckCircle className="w-6 h-6 text-primary-600 mr-3 flex-shrink-0 mt-0.5" />
               <div className="flex-1">
                 <h3 className="font-medium text-primary-900 mb-2">Complete Your Registration</h3>
                 <p className="text-primary-800 mb-4">
@@ -209,7 +209,7 @@ export default function DashboardPage() {
         {hasFullAccess && (pendingActions.length > 0 || unreadMessages.length > 0) && (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
             <div className="flex items-center">
-              <ExclamationTriangleIcon className="w-5 h-5 text-blue-600 mr-3" />
+              <AlertTriangle className="w-5 h-5 text-blue-600 mr-3" />
               <div className="flex-1">
                 <h3 className="font-medium text-blue-900">You have items that need attention</h3>
                 <div className="text-sm text-blue-800 mt-1">
@@ -276,7 +276,7 @@ export default function DashboardPage() {
                 </h2>
                 <Link href="/calendar">
                   <Button variant="outline" size="sm">
-                    <CalendarIcon className="w-4 h-4 mr-2" />
+                    <Calendar className="w-4 h-4 mr-2" />
                     View Calendar
                   </Button>
                 </Link>
@@ -288,7 +288,7 @@ export default function DashboardPage() {
                       <div key={booking.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                         <div className="flex items-center space-x-4">
                           <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <CalendarIcon className="w-6 h-6 text-blue-600" />
+                            <Calendar className="w-6 h-6 text-blue-600" />
                           </div>
                           <div>
                             <h3 className="font-medium text-gray-900">
@@ -297,12 +297,12 @@ export default function DashboardPage() {
                             <div className="flex items-center text-sm text-gray-600 space-x-4">
                               <span>{formatDate(booking.eventDate)}</span>
                               <div className="flex items-center">
-                                <UserGroupIcon className="w-4 h-4 mr-1" />
+                                <Users className="w-4 h-4 mr-1" />
                                 {booking.guestCount} guests
                               </div>
                               {userRole === 'artist' && (
                                 <div className="flex items-center">
-                                  <MapPinIcon className="w-4 h-4 mr-1" />
+                                  <MapPin className="w-4 h-4 mr-1" />
                                   {booking.host.city}, {booking.host.state}
                                 </div>
                               )}
@@ -324,7 +324,7 @@ export default function DashboardPage() {
                   </div>
                 ) : (
                   <div className="text-center py-8">
-                    <CalendarIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                     <h3 className="text-lg font-medium text-gray-900 mb-2">No upcoming shows</h3>
                     <p className="text-gray-600 mb-4">
                       {userRole === 'host' 
@@ -334,7 +334,7 @@ export default function DashboardPage() {
                     </p>
                     <Link href={userRole === 'host' ? '/artists' : '/hosts'}>
                       <Button>
-                        <PlusIcon className="w-4 h-4 mr-2" />
+                        <Plus className="w-4 h-4 mr-2" />
                         {userRole === 'host' ? 'Browse Artists' : 'Find Venues'}
                       </Button>
                     </Link>
@@ -357,7 +357,7 @@ export default function DashboardPage() {
                       <div key={booking.id} className="flex items-center justify-between p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                         <div className="flex items-center space-x-4">
                           <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-                            <ClockIcon className="w-5 h-5 text-yellow-600" />
+                            <Clock className="w-5 h-5 text-yellow-600" />
                           </div>
                           <div>
                             <h3 className="font-medium text-gray-900">
@@ -400,7 +400,7 @@ export default function DashboardPage() {
                 <h2 className="text-lg font-semibold">Recent Messages</h2>
                 <Link href="/messages">
                   <Button variant="outline" size="sm">
-                    <EnvelopeIcon className="w-4 h-4 mr-2" />
+                    <Mail className="w-4 h-4 mr-2" />
                     View All
                   </Button>
                 </Link>
@@ -436,7 +436,7 @@ export default function DashboardPage() {
                   </div>
                 ) : (
                   <div className="text-center py-6">
-                    <EnvelopeIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    <Mail className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                     <p className="text-sm text-gray-600">No messages yet</p>
                   </div>
                 )}
@@ -452,31 +452,31 @@ export default function DashboardPage() {
                 <div className="space-y-3">
                   <Link href={userRole === 'host' ? '/artists' : '/hosts'}>
                     <Button variant="outline" className="w-full justify-start">
-                      <PlusIcon className="w-4 h-4 mr-3" />
+                      <Plus className="w-4 h-4 mr-3" />
                       {userRole === 'host' ? 'Find Artists' : 'Find Venues'}
                     </Button>
                   </Link>
                   <Link href={`/${userRole}s/${selectedUserId}`}>
                     <Button variant="outline" className="w-full justify-start">
-                      <EyeIcon className="w-4 h-4 mr-3" />
+                      <Eye className="w-4 h-4 mr-3" />
                       View My Profile
                     </Button>
                   </Link>
                   <Link href="/calendar">
                     <Button variant="outline" className="w-full justify-start">
-                      <CalendarIcon className="w-4 h-4 mr-3" />
+                      <Calendar className="w-4 h-4 mr-3" />
                       Manage Calendar
                     </Button>
                   </Link>
                   <Link href="/messages">
                     <Button variant="outline" className="w-full justify-start">
-                      <EnvelopeIcon className="w-4 h-4 mr-3" />
+                      <Mail className="w-4 h-4 mr-3" />
                       All Messages
                     </Button>
                   </Link>
                   <Link href="/dashboard/profile">
                     <Button variant="outline" className="w-full justify-start">
-                      <PencilIcon className="w-4 h-4 mr-3" />
+                      <Edit className="w-4 h-4 mr-3" />
                       Manage Profile & Media
                     </Button>
                   </Link>
@@ -498,7 +498,7 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-600">Average Rating</span>
                     <div className="flex items-center">
-                      <StarIcon className="w-4 h-4 text-yellow-500 fill-current mr-1" />
+                      <Star className="w-4 h-4 text-yellow-500 fill-current mr-1" />
                       <span className="text-sm font-medium">4.8</span>
                     </div>
                   </div>
@@ -524,7 +524,7 @@ export default function DashboardPage() {
           /* Limited Dashboard for Non-Approved Users */
           <div className="text-center py-12">
             <div className="max-w-md mx-auto">
-              <ClockIcon className="w-16 h-16 text-neutral-400 mx-auto mb-4" />
+              <Clock className="w-16 h-16 text-neutral-400 mx-auto mb-4" />
               <h2 className="text-2xl font-semibold text-neutral-800 mb-4">
                 Dashboard Unavailable
               </h2>
