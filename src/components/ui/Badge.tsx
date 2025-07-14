@@ -10,7 +10,7 @@ const Badge = ({ className, variant = 'default', pulse = false, ...props }: Badg
   const variants = {
     default: 'bg-neutral-100 text-neutral-800 hover:bg-neutral-200',
     secondary: 'bg-neutral-100 text-neutral-700 border border-neutral-200',
-    success: 'bg-sage-100 text-sage-800 hover:bg-sage-200',
+    success: 'bg-secondary-100 text-secondary-800 hover:bg-secondary-200',
     warning: 'bg-secondary-100 text-secondary-800 hover:bg-secondary-200',
     error: 'bg-primary-100 text-primary-800 hover:bg-primary-200'
   };

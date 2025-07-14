@@ -119,7 +119,7 @@ export default function HostMediaPage() {
   }, {} as Record<string, HostMedia[]>);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sage-50 to-neutral-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-secondary-50 to-neutral-50 py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Venue Media Management</h1>
@@ -127,10 +127,10 @@ export default function HostMediaPage() {
         </div>
 
         {/* Media Guidelines */}
-        <Card className="mb-8 border-l-4 border-l-sage-500">
+        <Card className="mb-8 border-l-4 border-l-secondary-500">
           <CardContent className="p-6">
             <div className="flex items-start space-x-3">
-              <InformationCircleIcon className="w-6 h-6 text-sage-600 mt-0.5" />
+              <InformationCircleIcon className="w-6 h-6 text-secondary-600 mt-0.5" />
               <div>
                 <h3 className="font-semibold text-gray-900 mb-2">Photo Guidelines for Hosts</h3>
                 <ul className="text-sm text-gray-600 space-y-1">

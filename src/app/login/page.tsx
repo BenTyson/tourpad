@@ -77,7 +77,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sage-50 to-neutral-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-secondary-50 to-neutral-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div className="text-center">
@@ -86,24 +86,24 @@ export default function LoginPage() {
         </div>
 
         {/* Demo Users */}
-        <Card className="border-sage-200">
+        <Card className="border-secondary-200">
           <CardHeader>
-            <h3 className="text-sm font-medium text-sage-800">Demo Accounts (Click to Auto-Fill)</h3>
+            <h3 className="text-sm font-medium text-secondary-800">Demo Accounts (Click to Auto-Fill)</h3>
           </CardHeader>
           <CardContent className="space-y-2">
             {demoUsers.map((user, index) => (
               <button
                 key={index}
                 onClick={() => handleDemoLogin(user.email, user.password)}
-                className="w-full text-left p-3 bg-sage-50 hover:bg-sage-100 rounded-lg transition-colors border border-sage-200"
+                className="w-full text-left p-3 bg-secondary-50 hover:bg-secondary-100 rounded-lg transition-colors border border-secondary-200"
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="font-medium text-sage-900">{user.type}</div>
-                    <div className="text-xs text-sage-600">{user.email}</div>
-                    <div className="text-xs text-sage-500">{user.description}</div>
+                    <div className="font-medium text-secondary-900">{user.type}</div>
+                    <div className="text-xs text-secondary-600">{user.email}</div>
+                    <div className="text-xs text-secondary-500">{user.description}</div>
                   </div>
-                  <UserIcon className="w-4 h-4 text-sage-400" />
+                  <UserIcon className="w-4 h-4 text-secondary-400" />
                 </div>
               </button>
             ))}
@@ -168,7 +168,7 @@ export default function LoginPage() {
                   <input type="checkbox" className="mr-2" />
                   <span className="text-sm text-gray-600">Remember me</span>
                 </label>
-                <Link href="/forgot-password" className="text-sm text-sage-600 hover:text-sage-800">
+                <Link href="/forgot-password" className="text-sm text-secondary-600 hover:text-secondary-800">
                   Forgot password?
                 </Link>
               </div>
@@ -217,11 +217,11 @@ export default function LoginPage() {
         <div className="text-center text-sm text-gray-500">
           <p>
             By signing in, you agree to our{' '}
-            <Link href="/terms" className="text-sage-600 hover:text-sage-800">
+            <Link href="/terms" className="text-secondary-600 hover:text-secondary-800">
               Terms of Service
             </Link>{' '}
             and{' '}
-            <Link href="/privacy" className="text-sage-600 hover:text-sage-800">
+            <Link href="/privacy" className="text-secondary-600 hover:text-secondary-800">
               Privacy Policy
             </Link>
           </p>

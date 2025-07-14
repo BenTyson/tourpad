@@ -94,13 +94,13 @@ function RegisterForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sage-600 to-sage-800 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-secondary-600 to-secondary-800 py-12">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-2">
             {userType === 'artist' ? 'Artist Application' : 'Host Application'}
           </h1>
-          <p className="text-lg text-sage-100">
+          <p className="text-lg text-secondary-100">
             {userType === 'artist' 
               ? 'Join our community of touring musicians'
               : 'Open your space for intimate concerts'
@@ -433,14 +433,14 @@ function RegisterForm() {
                       )}
                     </div>
 
-                    <div className="bg-sage-50 border border-sage-200 rounded-lg p-4">
+                    <div className="bg-secondary-50 border border-secondary-200 rounded-lg p-4">
                       <div className="flex items-start">
-                        <svg className="w-5 h-5 text-sage-600 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <svg className="w-5 h-5 text-secondary-600 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                         </svg>
                         <div>
-                          <h4 className="text-sm font-medium text-sage-800">Privacy Notice</h4>
-                          <p className="text-sm text-sage-700 mt-1">
+                          <h4 className="text-sm font-medium text-secondary-800">Privacy Notice</h4>
+                          <p className="text-sm text-secondary-700 mt-1">
                             Your complete address stays private and is only shared with artists after a show is confirmed at your venue.
                           </p>
                         </div>
@@ -562,9 +562,9 @@ function RegisterForm() {
                 </>
               )}
 
-              <div className="bg-sage-50 p-4 rounded-lg">
-                <h3 className="font-medium text-sage-800 mb-2">What happens next?</h3>
-                <ul className="text-sm text-sage-700 space-y-1">
+              <div className="bg-secondary-50 p-4 rounded-lg">
+                <h3 className="font-medium text-secondary-800 mb-2">What happens next?</h3>
+                <ul className="text-sm text-secondary-700 space-y-1">
                   <li>• We'll review your application within 48 hours</li>
                   <li>• Approved {userType === 'artist' ? 'artists' : 'hosts'} get full platform access</li>
                   <li>• You'll receive email confirmation once approved</li>
@@ -650,13 +650,13 @@ function UserTypeSelection() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sage-600 to-sage-800 py-12 flex items-center">
+    <div className="min-h-screen bg-gradient-to-br from-secondary-600 to-secondary-800 py-12 flex items-center">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-white mb-4">
             Join TourPad
           </h1>
-          <p className="text-xl text-sage-100">
+          <p className="text-xl text-secondary-100">
             Are you an artist looking for venues, or a host opening your space?
           </p>
         </div>
@@ -665,7 +665,7 @@ function UserTypeSelection() {
           {/* Artist Option */}
           <Card className="shadow-xl border-0 hover:shadow-2xl transition-shadow cursor-pointer" onClick={() => router.push('/register?type=artist')}>
             <CardContent className="p-8 text-center">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary-400 to-sage-500 rounded-full mb-6">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary-400 to-secondary-500 rounded-full mb-6">
                 <MusicalNoteIcon className="w-10 h-10 text-white" />
               </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">I'm an Artist</h2>
@@ -687,7 +687,7 @@ function UserTypeSelection() {
           {/* Host Option */}
           <Card className="shadow-xl border-0 hover:shadow-2xl transition-shadow cursor-pointer" onClick={() => router.push('/register?type=host')}>
             <CardContent className="p-8 text-center">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-sage-400 to-primary-500 rounded-full mb-6">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-secondary-400 to-primary-500 rounded-full mb-6">
                 <HomeIcon className="w-10 h-10 text-white" />
               </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">I'm a Host</h2>
@@ -708,9 +708,9 @@ function UserTypeSelection() {
         </div>
 
         <div className="text-center mt-8">
-          <p className="text-sm text-sage-200">
+          <p className="text-sm text-secondary-200">
             Already have an account?{' '}
-            <Link href="/login" className="text-white hover:text-sage-100 font-medium underline">
+            <Link href="/login" className="text-white hover:text-secondary-100 font-medium underline">
               Sign in here
             </Link>
           </p>

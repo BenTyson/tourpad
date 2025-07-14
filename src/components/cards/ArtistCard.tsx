@@ -97,7 +97,7 @@ export function ArtistCard({ artist, showBookingButton = false }: ArtistCardProp
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
           ) : (
-            <div className="flex items-center justify-center h-full bg-gradient-to-br from-indigo-500 to-purple-600 transition-all duration-500 group-hover:from-indigo-600 group-hover:to-purple-700">
+            <div className="flex items-center justify-center h-full bg-gradient-to-br from-primary-500 to-secondary-600 transition-all duration-500 group-hover:from-primary-600 group-hover:to-secondary-700">
               <MusicalNoteIcon className="w-12 h-12 text-white transition-transform duration-500 group-hover:scale-110" />
             </div>
           )}
@@ -131,13 +131,13 @@ export function ArtistCard({ artist, showBookingButton = false }: ArtistCardProp
         <div className="space-y-3">
           {/* Header */}
           <div>
-            <h3 className="font-semibold text-lg text-gray-900 line-clamp-1 group-hover:text-purple-600 transition-colors duration-300">
+            <h3 className="font-semibold text-lg text-gray-900 line-clamp-1 group-hover:text-primary-600 transition-colors duration-300">
               {artist.name}
             </h3>
             <div className="flex items-center space-x-2 mt-1">
               <Badge 
                 variant="default" 
-                className="transition-all duration-300 group-hover:scale-105 group-hover:bg-purple-100 group-hover:text-purple-800"
+                className="transition-all duration-300 group-hover:scale-105 group-hover:bg-primary-100 group-hover:text-primary-800"
               >
                 {getGenreFromBio()}
               </Badge>
@@ -149,7 +149,7 @@ export function ArtistCard({ artist, showBookingButton = false }: ArtistCardProp
 
           {/* Band info */}
           <div className="flex items-center space-x-4 text-sm text-gray-600">
-            <div className="flex items-center transition-all duration-300 group-hover:text-purple-600">
+            <div className="flex items-center transition-all duration-300 group-hover:text-primary-600">
               <UserGroupIcon className="w-4 h-4 mr-1" />
               {artist.members.length} {artist.members.length === 1 ? 'member' : 'members'}
             </div>
@@ -186,7 +186,7 @@ export function ArtistCard({ artist, showBookingButton = false }: ArtistCardProp
           {(artist.socialLinks.website || artist.socialLinks.spotify) && (
             <div className="flex items-center space-x-2">
               {artist.socialLinks.website && (
-                <div className="transition-all duration-300 group-hover:scale-110 group-hover:text-blue-600">
+                <div className="transition-all duration-300 group-hover:scale-110 group-hover:text-primary-600">
                   <GlobeAltIcon className="w-4 h-4 text-gray-400" />
                 </div>
               )}

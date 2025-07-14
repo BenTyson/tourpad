@@ -100,7 +100,7 @@ export function HostCard({ host, showBookingButton = false }: HostCardProps) {
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
           ) : (
-            <div className="flex items-center justify-center h-full bg-gradient-to-br from-green-400 to-blue-500 transition-all duration-500 group-hover:from-green-500 group-hover:to-blue-600">
+            <div className="flex items-center justify-center h-full bg-gradient-to-br from-secondary-400 to-primary-500 transition-all duration-500 group-hover:from-secondary-500 group-hover:to-primary-600">
               <HomeIcon className="w-12 h-12 text-white transition-transform duration-500 group-hover:scale-110" />
             </div>
           )}
@@ -128,7 +128,7 @@ export function HostCard({ host, showBookingButton = false }: HostCardProps) {
         <div className="space-y-3">
           {/* Header */}
           <div>
-            <h3 className="font-semibold text-lg text-gray-900 line-clamp-1 group-hover:text-blue-600 transition-colors duration-300">
+            <h3 className="font-semibold text-lg text-gray-900 line-clamp-1 group-hover:text-primary-600 transition-colors duration-300">
               {host.name}
             </h3>
             <div className="flex items-center text-sm text-gray-600 mt-1">
@@ -156,7 +156,7 @@ export function HostCard({ host, showBookingButton = false }: HostCardProps) {
             {getAmenityIcons().map(({ icon: Icon, label }, index) => (
               <div 
                 key={label} 
-                className="flex items-center text-gray-600 transition-all duration-300 hover:text-blue-600" 
+                className="flex items-center text-gray-600 transition-all duration-300 hover:text-primary-600" 
                 title={label}
                 style={{ transitionDelay: `${index * 50}ms` }}
               >
