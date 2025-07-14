@@ -96,13 +96,15 @@ export default function EnhancedHomePage() {
       quote: "TourPad helped us book 30 shows across 3 states. The hosts are amazing and the audiences are engaged.",
       author: "Sarah Chen",
       role: "Folk Singer-Songwriter",
-      location: "Portland, OR"
+      location: "Portland, OR",
+      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&auto=format&fit=crop&q=80"
     },
     {
       quote: "Finally, a platform that connects us with people who actually love live music. Every show feels special.",
       author: "The Wandering Souls",
       role: "Indie Folk Duo",
-      location: "Austin, TX"
+      location: "Austin, TX",
+      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=150&h=150&auto=format&fit=crop&q=80"
     }
   ];
 
@@ -111,27 +113,40 @@ export default function EnhancedHomePage() {
       quote: "Hosting concerts through TourPad has brought our community together. It's magic every time.",
       author: "Mike & Lisa Johnson",
       role: "House Concert Hosts",
-      location: "Nashville, TN"
+      location: "Nashville, TN",
+      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&auto=format&fit=crop&q=80"
     },
     {
       quote: "The artists are professional and the process is seamless. We've hosted 15 shows and loved every one.",
       author: "David Rodriguez",
       role: "Venue Host",
-      location: "Denver, CO"
+      location: "Denver, CO",
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&auto=format&fit=crop&q=80"
     }
   ];
 
   return (
     <div className="bg-white">
       {/* Enhanced Hero Section with Dual Paths */}
-      <section className="relative min-h-screen flex items-center overflow-hidden" style={{background: 'linear-gradient(to bottom right, #658371, #8BB097, #A1CCAD)'}}>
+      <section className="relative min-h-screen flex items-center overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: 'url(https://images.unsplash.com/photo-1524863479829-916d8e77f114?w=1920&h=1080&auto=format&fit=crop&q=80)',
+          }}
+        >
+          {/* Overlay with gradient */}
+          <div className="absolute inset-0 bg-gradient-to-br from-secondary-700/90 via-secondary-600/85 to-secondary-500/90"></div>
+        </div>
+        
         {/* Animated background elements */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 z-10">
           <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-secondary-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
         </div>
         
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 sm:py-32 z-10">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 sm:py-32 z-20">
           <div className="text-center">
             <div className={`transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
               <h1 className="text-5xl sm:text-7xl font-bold text-white mb-6 leading-tight">
@@ -253,18 +268,52 @@ export default function EnhancedHomePage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {(activeTab === 'artist' ? artistBenefits : hostBenefits).map((benefit, index) => (
-              <Card key={benefit.title} className="text-center hover:shadow-lg transition-all duration-300 border-0 shadow-sm">
-                <CardContent className="p-8">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-100 text-primary-600 mb-6">
-                    <benefit.icon className="w-8 h-8" />
+          {/* Photo + Text Layout */}
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Compelling Image */}
+            <div className="relative">
+              <div className="relative overflow-hidden rounded-2xl shadow-2xl">
+                <img 
+                  src={activeTab === 'artist' 
+                    ? 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=800&h=600&auto=format&fit=crop&q=80'
+                    : 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&auto=format&fit=crop&q=80'
+                  }
+                  alt={activeTab === 'artist' ? 'Intimate acoustic performance' : 'Beautiful home venue'}
+                  className="w-full h-96 object-cover transition-all duration-1000"
+                />
+                {/* Image overlay with gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/20 to-transparent"></div>
+              </div>
+              
+              {/* Floating stats card */}
+              <div className="absolute -bottom-8 -right-8 bg-white rounded-xl shadow-xl p-6 border border-gray-100">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-primary-600 mb-1">
+                    {activeTab === 'artist' ? '2,500+' : '1,000+'}
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">{benefit.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{benefit.description}</p>
-                </CardContent>
-              </Card>
-            ))}
+                  <div className="text-sm text-gray-600">
+                    {activeTab === 'artist' ? 'Shows Booked' : 'Concerts Hosted'}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="space-y-8">
+              {(activeTab === 'artist' ? artistBenefits : hostBenefits).map((benefit, index) => (
+                <div key={benefit.title} className="flex items-start space-x-4">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center">
+                      <benefit.icon className="w-6 h-6" />
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">{benefit.title}</h3>
+                    <p className="text-gray-600 leading-relaxed">{benefit.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -296,8 +345,22 @@ export default function EnhancedHomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-24 bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-24 relative overflow-hidden">
+        {/* Background with subtle imagery */}
+        <div className="absolute inset-0">
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: activeTab === 'artist' 
+                ? 'url(https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=1920&h=1080&auto=format&fit=crop&q=80)'
+                : 'url(https://images.unsplash.com/photo-1565182999561-18d7dc61c393?w=1920&h=1080&auto=format&fit=crop&q=80)',
+            }}
+          >
+            <div className="absolute inset-0 bg-white/80"></div>
+          </div>
+        </div>
+        
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
               What {activeTab === 'artist' ? 'Artists' : 'Hosts'} Are Saying
@@ -315,13 +378,11 @@ export default function EnhancedHomePage() {
                   </div>
                   <p className="text-gray-700 mb-6 italic leading-relaxed">"{testimonial.quote}"</p>
                   <div className="flex items-center">
-                    <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mr-4">
-                      {activeTab === 'artist' ? (
-                        <Music className="w-6 h-6 text-primary-600" />
-                      ) : (
-                        <Home className="w-6 h-6 text-primary-600" />
-                      )}
-                    </div>
+                    <img 
+                      src={testimonial.image} 
+                      alt={testimonial.author}
+                      className="w-12 h-12 rounded-full object-cover mr-4 border-2 border-primary-200"
+                    />
                     <div>
                       <div className="font-semibold text-gray-900">{testimonial.author}</div>
                       <div className="text-sm text-gray-600">{testimonial.role}</div>

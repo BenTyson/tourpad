@@ -11,18 +11,18 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   
-  /* TourPad color palette - Primary (Rose) */
-  --color-primary-50: #faf9f7;
-  --color-primary-100: #f5f2ed;
-  --color-primary-200: #e8ddd1;
-  --color-primary-300: #dac8b5;
-  --color-primary-400: #C7999F;
-  --color-primary-500: #b88691;
-  --color-primary-600: #a67483;
-  --color-primary-700: #8a606f;
-  --color-primary-800: #6d4c5a;
-  --color-primary-900: #4f3945;
-  --color-primary: #C7999F;
+  /* TourPad color palette - Primary (Periwinkle) */
+  --color-primary-50: #f7f8fd;
+  --color-primary-100: #eff1fb;
+  --color-primary-200: #dfe3f7;
+  --color-primary-300: #c7cef1;
+  --color-primary-400: #afb9eb;
+  --color-primary-500: #97a4e5;
+  --color-primary-600: #7f8fdf;
+  --color-primary-700: #6779d3;
+  --color-primary-800: #5563c7;
+  --color-primary-900: #434dbb;
+  --color-primary: #afb9eb;
   
   /* TourPad color palette - Secondary (Sage) */
   --color-secondary-50: #f6f9f7;
@@ -37,16 +37,16 @@
   --color-secondary-900: #3d4e47;
   --color-secondary: #8BB097;
   
-  --color-neutral-50: #fafafa;
-  --color-neutral-100: #f5f5f5;
-  --color-neutral-200: #e5e5e5;
-  --color-neutral-300: #E1E1E1;
-  --color-neutral-400: #d4d4d4;
-  --color-neutral-500: #a3a3a3;
-  --color-neutral-600: #737373;
-  --color-neutral-700: #525252;
-  --color-neutral-800: #404040;
-  --color-neutral-900: #262626;
+  --color-neutral-50: #f8f9f9;
+  --color-neutral-100: #f1f3f3;
+  --color-neutral-200: #e3e7e7;
+  --color-neutral-300: #d5dbdb;
+  --color-neutral-400: #c7cfcf;
+  --color-neutral-500: #9ba5a5;
+  --color-neutral-600: #6f7b7b;
+  --color-neutral-700: #546b6c;
+  --color-neutral-800: #445859;
+  --color-neutral-900: #344546;
 }
 
 @media (prefers-color-scheme: dark) {

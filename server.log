@@ -74,3 +74,60 @@
  ○ Compiling /register ...
  ✓ Compiled /register in 516ms (1020 modules)
  GET /register?type=host 200 in 595ms
+ ✓ Compiled in 450ms (1034 modules)
+ GET /register?type=host 200 in 60ms
+ ✓ Compiled in 333ms (1034 modules)
+ GET /register?type=host 200 in 77ms
+ GET / 200 in 27ms
+ ✓ Compiled /artists in 278ms (582 modules)
+ GET /artists 200 in 309ms
+ GET /artists 200 in 13ms
+ ✓ Compiled /artists/[id] in 302ms (1042 modules)
+ GET /artists/1 200 in 659ms
+ GET / 200 in 36ms
+ ✓ Compiled in 344ms (1049 modules)
+ GET / 200 in 60ms
+ ✓ Compiled in 202ms (1049 modules)
+ GET / 200 in 33ms
+ ✓ Compiled in 213ms (1049 modules)
+ GET / 200 in 29ms
+ ✓ Compiled in 372ms (1049 modules)
+ GET / 200 in 53ms
+ ✓ Compiled in 210ms (1049 modules)
+ GET / 200 in 29ms
+ ✓ Compiled in 227ms (1049 modules)
+ GET / 200 in 28ms
+ ✓ Compiled in 243ms (1049 modules)
+ GET / 200 in 35ms
+ ✓ Compiled in 192ms (1049 modules)
+ GET / 200 in 29ms
+ ✓ Compiled in 232ms (1049 modules)
+ GET / 200 in 33ms
+ ✓ Compiled /hosts in 301ms (590 modules)
+ GET /hosts 200 in 335ms
+ GET /hosts 200 in 14ms
+ GET /hosts/1 200 in 37ms
+ GET /hosts 200 in 30ms
+ GET / 200 in 24ms
+ ✓ Compiled in 217ms (1036 modules)
+ GET / 200 in 30ms
+ ✓ Compiled in 338ms (1036 modules)
+ GET / 200 in 61ms
+ ✓ Compiled in 182ms (1036 modules)
+ GET / 200 in 30ms
+ ✓ Compiled in 297ms (1036 modules)
+ GET / 200 in 57ms
+ ✓ Compiled in 185ms (1036 modules)
+ GET / 200 in 30ms
+ ✓ Compiled /_not-found in 168ms (1026 modules)
+ GET /url(https:/images.unsplash.com/photo-1524863479829-916d8e77f114?w=800&h=600&auto=format&fit=crop&q=80) 404 in 256ms
+ GET / 200 in 93ms
+ GET /url(https:/images.unsplash.com/photo-1524863479829-916d8e77f114?w=800&h=600&auto=format&fit=crop&q=80) 404 in 58ms
+ ✓ Compiled in 291ms (1036 modules)
+ GET / 200 in 25ms
+ ✓ Compiled in 295ms (1036 modules)
+ GET / 200 in 57ms
+ ✓ Compiled in 183ms (1036 modules)
+ GET / 200 in 28ms
+ ✓ Compiled in 348ms (1036 modules)
+ GET / 200 in 48ms
