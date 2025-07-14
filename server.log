@@ -25,3 +25,52 @@
  GET /hosts 200 in 321ms
  ✓ Compiled /hosts/[id] in 276ms (1243 modules)
  GET /hosts/1 200 in 582ms
+ GET / 200 in 43ms
+ ✓ Compiled in 522ms (984 modules)
+ GET / 200 in 73ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⨯ ReferenceError: UserGroupIcon is not defined
+    at HomePage (src/app/page.tsx:24:12)
+  22 |   const howItWorksSteps = [
+  23 |     {
+> 24 |       icon: UserGroupIcon,
+     |            ^
+  25 |       title: 'Join the Community',
+  26 |       description: 'Artists apply and get approved. Hosts create their venue profiles.',
+  27 |       cta: 'Apply Now' {
+  digest: '1833063891'
+}
+ GET / 500 in 86ms
+ ✓ Compiled /favicon.ico in 120ms (562 modules)
+ GET /favicon.ico 200 in 170ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 360ms (1005 modules)
+ GET / 200 in 226ms
+ GET / 200 in 159ms
+ GET /favicon.ico 200 in 9ms
+ ✓ Compiled /api/auth/[...nextauth] in 149ms (800 modules)
+ GET /api/auth/session 200 in 234ms
+ ✓ Compiled in 160ms (440 modules)
+ GET / 200 in 73ms
+ ✓ Compiled /_not-found in 551ms (967 modules)
+ GET / 404 in 411ms
+ GET / 404 in 11ms
+ GET / 404 in 65ms
+ ✓ Compiled /api/auth/[...nextauth] in 61ms (779 modules)
+ GET /api/auth/session 200 in 142ms
+ ✓ Compiled in 94ms (439 modules)
+ GET / 404 in 29ms
+ GET / 404 in 60ms
+ ✓ Compiled in 83ms (1204 modules)
+ GET /api/auth/session 200 in 31ms
+ ✓ Compiled / in 484ms (983 modules)
+ GET / 200 in 634ms
+ GET / 200 in 96ms
+ ✓ Compiled /api/auth/[...nextauth] in 240ms (569 modules)
+ ✓ Compiled (804 modules)
+ GET /favicon.ico 200 in 385ms
+ GET /api/auth/session 200 in 336ms
+ ○ Compiling /register ...
+ ✓ Compiled /register in 516ms (1020 modules)
+ GET /register?type=host 200 in 595ms
