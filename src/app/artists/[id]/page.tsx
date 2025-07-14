@@ -67,7 +67,7 @@ export default function ArtistProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-secondary-50">
+    <div className="min-h-screen bg-white">
       {/* Enhanced Navigation Bar with backdrop blur */}
       <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200 shadow-sm">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -120,74 +120,73 @@ export default function ArtistProfilePage() {
         </div>
       </div>
 
-      {/* Hero Section with Enhanced Design */}
-      <section className="relative bg-gradient-to-br from-primary-600 via-secondary-600 to-primary-700 text-white">
-        <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+      {/* Hero Section - Clean White Design */}
+      <section className="bg-white border-b border-neutral-200">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
             <div>
               <div className="flex items-center space-x-3 mb-6">
-                <Badge variant="secondary" className="bg-white/20 text-white border-white/30 backdrop-blur-sm">
+                <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">
                   {artist.approved ? 'Verified Artist' : 'Pending'}
                 </Badge>
-                <Badge variant="secondary" className="text-white border-white/30 bg-white/10 backdrop-blur-sm">
+                <Badge variant="secondary" className="bg-neutral-100 text-neutral-700 border-neutral-200">
                   <MapPinIcon className="w-4 h-4 mr-1" />
                   {artist.location}
                 </Badge>
               </div>
               
-              <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-white/90">
+              <h1 className="text-5xl font-bold mb-4 text-neutral-900">
                 {artist.name}
               </h1>
               
-              <p className="text-xl mb-8 text-white/90 leading-relaxed">
+              <p className="text-xl mb-8 text-neutral-600 leading-relaxed">
                 {artist.bio}
               </p>
               
               <div className="flex flex-wrap gap-4 mb-8">
-                <div className="flex items-center bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
-                  <StarIcon className="w-5 h-5 mr-2 text-yellow-400" />
-                  <span className="font-semibold">{artist.rating}</span>
-                  <span className="ml-1 text-white/70">({artist.reviewCount} reviews)</span>
+                <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
+                  <StarIcon className="w-5 h-5 mr-2 text-yellow-500" />
+                  <span className="font-semibold text-neutral-900">{artist.rating}</span>
+                  <span className="ml-1 text-neutral-600">({artist.reviewCount} reviews)</span>
                 </div>
-                <div className="flex items-center bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
-                  <UserGroupIcon className="w-5 h-5 mr-2" />
-                  <span>{artist.members.length} member{artist.members.length > 1 ? 's' : ''}</span>
+                <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
+                  <UserGroupIcon className="w-5 h-5 mr-2 text-neutral-600" />
+                  <span className="text-neutral-900">{artist.members.length} member{artist.members.length > 1 ? 's' : ''}</span>
                 </div>
-                <div className="flex items-center bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
-                  <MusicalNoteIcon className="w-5 h-5 mr-2" />
-                  <span className="capitalize">{getGenre()}</span>
+                <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
+                  <MusicalNoteIcon className="w-5 h-5 mr-2 text-neutral-600" />
+                  <span className="capitalize text-neutral-900">{getGenre()}</span>
                 </div>
               </div>
               
               <div className="flex flex-wrap gap-4">
                 <Link href={`/bookings/new?artistId=${artist.id}`}>
-                  <Button size="lg" className="bg-white text-primary-700 hover:bg-neutral-100 shadow-lg">
+                  <Button size="lg" className="bg-primary-600 hover:bg-primary-700 text-white shadow-lg">
                     Request Booking
                   </Button>
                 </Link>
                 <Link href={`/messages?artistId=${artist.id}`}>
-                  <Button size="lg" variant="outline" className="text-white border-white/30 hover:bg-white/10">
+                  <Button size="lg" variant="outline" className="border-neutral-300 text-neutral-700 hover:bg-neutral-50">
                     Send Message
                   </Button>
                 </Link>
               </div>
             </div>
             
-            {/* Featured Video Placeholder */}
-            {allPhotos.length > 0 && (
+            {/* Featured Video with Mock Data */}
+            {artist.livePerformanceVideo && (
               <div className="lg:pl-8">
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-primary-300 to-secondary-300 rounded-2xl blur opacity-30"></div>
-                  <div className="relative rounded-xl bg-gradient-to-br from-primary-100 to-secondary-100 aspect-video flex items-center justify-center">
-                    <div className="text-center">
-                      <MusicalNoteIcon className="w-16 h-16 text-primary-600 mx-auto mb-4" />
-                      <p className="text-lg font-semibold text-primary-800">Performance Video</p>
-                      <p className="text-sm text-primary-600">Coming Soon</p>
-                    </div>
+                <div className="relative rounded-2xl overflow-hidden shadow-xl bg-black">
+                  <div className="relative aspect-video">
+                    <iframe
+                      src={artist.livePerformanceVideo.replace('watch?v=', 'embed/')}
+                      title="Live Performance Video"
+                      className="w-full h-full"
+                      allowFullScreen
+                    />
                   </div>
                 </div>
-                <p className="mt-4 text-center text-white/80 text-sm">
+                <p className="mt-4 text-center text-neutral-600 text-sm">
                   Watch {artist.name} perform live
                 </p>
               </div>
@@ -195,6 +194,88 @@ export default function ArtistProfilePage() {
           </div>
         </div>
       </section>
+
+      {/* Music & Website Links Section */}
+      {(artist.socialLinks?.website || artist.socialLinks?.spotify || artist.socialLinks?.youtube || artist.socialLinks?.instagram) && (
+        <section className="bg-neutral-50 border-b border-neutral-200">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-neutral-900 mb-2">Listen & Connect</h2>
+              <p className="text-neutral-600">Find {artist.name} on your favorite platforms</p>
+            </div>
+            
+            <div className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
+              {artist.socialLinks?.website && (
+                <a 
+                  href={artist.socialLinks.website} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center bg-white hover:bg-neutral-50 border border-neutral-200 rounded-lg px-6 py-3 transition-colors group"
+                >
+                  <GlobeAltIcon className="w-5 h-5 mr-3 text-neutral-600 group-hover:text-primary-600" />
+                  <span className="font-medium text-neutral-900">Official Website</span>
+                </a>
+              )}
+              
+              {artist.socialLinks?.spotify && (
+                <a 
+                  href={artist.socialLinks.spotify} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center bg-white hover:bg-green-50 border border-neutral-200 rounded-lg px-6 py-3 transition-colors group"
+                >
+                  <div className="w-5 h-5 mr-3 bg-green-500 rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">S</span>
+                  </div>
+                  <span className="font-medium text-neutral-900 group-hover:text-green-700">Spotify</span>
+                </a>
+              )}
+              
+              {artist.socialLinks?.youtube && (
+                <a 
+                  href={artist.socialLinks.youtube} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center bg-white hover:bg-red-50 border border-neutral-200 rounded-lg px-6 py-3 transition-colors group"
+                >
+                  <div className="w-5 h-5 mr-3 bg-red-600 rounded flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">▶</span>
+                  </div>
+                  <span className="font-medium text-neutral-900 group-hover:text-red-700">YouTube</span>
+                </a>
+              )}
+              
+              {artist.socialLinks?.instagram && (
+                <a 
+                  href={`https://instagram.com/${artist.socialLinks.instagram.replace('@', '')}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center bg-white hover:bg-pink-50 border border-neutral-200 rounded-lg px-6 py-3 transition-colors group"
+                >
+                  <div className="w-5 h-5 mr-3 bg-gradient-to-br from-purple-500 to-pink-500 rounded flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">@</span>
+                  </div>
+                  <span className="font-medium text-neutral-900 group-hover:text-pink-700">Instagram</span>
+                </a>
+              )}
+              
+              {artist.socialLinks?.facebook && (
+                <a 
+                  href={artist.socialLinks.facebook} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center bg-white hover:bg-blue-50 border border-neutral-200 rounded-lg px-6 py-3 transition-colors group"
+                >
+                  <div className="w-5 h-5 mr-3 bg-blue-600 rounded flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">f</span>
+                  </div>
+                  <span className="font-medium text-neutral-900 group-hover:text-blue-700">Facebook</span>
+                </a>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Content Sections */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 space-y-8">
@@ -251,17 +332,32 @@ export default function ArtistProfilePage() {
               </Badge>
             </div>
             <div className="grid md:grid-cols-2 gap-6">
-              {artist.members.map((member, index) => (
-                <div key={index} className="group flex items-center p-6 bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-xl border border-neutral-200 hover:shadow-md transition-all duration-300">
-                  <div className="w-14 h-14 bg-gradient-to-br from-primary-400 to-secondary-500 rounded-full flex items-center justify-center mr-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <MusicalNoteIcon className="w-7 h-7 text-white" />
+              {artist.members.map((member, index) => {
+                // Generate consistent profile photo URLs for band members
+                const profilePhotos = [
+                  'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=face',
+                  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
+                  'https://images.unsplash.com/photo-1494790108755-2616b9a8af3c?w=400&h=400&fit=crop&crop=face',
+                  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face',
+                  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face'
+                ];
+                
+                return (
+                  <div key={index} className="group flex items-center p-6 bg-white rounded-xl border border-neutral-200 hover:shadow-md transition-all duration-300">
+                    <div className="w-16 h-16 rounded-full overflow-hidden mr-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                      <img 
+                        src={profilePhotos[index % profilePhotos.length]} 
+                        alt={`${member.name} profile photo`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div>
+                      <div className="font-semibold text-neutral-900 text-lg">{member.name}</div>
+                      <div className="text-sm text-neutral-600 font-medium">{member.instrument}</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="font-semibold text-neutral-900 text-lg">{member.name}</div>
-                    <div className="text-sm text-neutral-600 font-medium">{member.instrument}</div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
@@ -306,7 +402,7 @@ export default function ArtistProfilePage() {
                     <div className="text-sm text-neutral-600">Travel method</div>
                   </div>
                 </div>
-                <div className="text-lg font-bold text-secondary-700">{artist.transportType}</div>
+                <div className="text-lg font-bold text-secondary-700">{artist.transportType || 'Van'}</div>
                 <div className="text-sm text-neutral-600 mt-1">Professional setup</div>
               </div>
               
@@ -320,7 +416,7 @@ export default function ArtistProfilePage() {
                     <div className="text-sm text-neutral-600">From home base</div>
                   </div>
                 </div>
-                <div className="text-lg font-bold text-neutral-700">{artist.willingToTravel} miles</div>
+                <div className="text-lg font-bold text-neutral-700">{artist.willingToTravel || 500} miles</div>
                 <div className="text-sm text-neutral-600 mt-1">Touring range</div>
               </div>
             </div>
@@ -376,7 +472,7 @@ export default function ArtistProfilePage() {
                   </li>
                   <li className="flex items-start">
                     <span className="text-blue-600 mr-2">•</span>
-                    Parking space for {artist.transportType === 'Van' ? 'van' : 'vehicle'}
+                    Parking space for {(artist.transportType || 'Van') === 'Van' ? 'van' : 'vehicle'}
                   </li>
                 </ul>
               </div>
