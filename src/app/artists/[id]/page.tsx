@@ -53,6 +53,10 @@ export default function ArtistProfilePage() {
 
   // Combine all photos for gallery
   const allPhotos = [...(artist.performancePhotos || []), ...(artist.bandPhotos || [])];
+  console.log('Artist data:', artist);
+  console.log('Performance photos:', artist.performancePhotos);
+  console.log('Band photos:', artist.bandPhotos);
+  console.log('All photos combined:', allPhotos);
   
   const getGenre = () => {
     const genres = ['folk', 'rock', 'indie', 'country', 'blues', 'jazz', 'experimental'];
