@@ -217,3 +217,66 @@
  ✓ Compiled in 106ms (463 modules)
  ✓ Compiled in 142ms (463 modules)
  ✓ Compiled in 103ms (463 modules)
+ ✓ Compiled /hosts in 418ms (1054 modules)
+ GET /hosts 200 in 506ms
+ ✓ Compiled /api/auth/[...nextauth] in 265ms (831 modules)
+ GET /api/auth/csrf 200 in 361ms
+ POST /api/auth/signout 200 in 7ms
+ GET /hosts 200 in 103ms
+ GET /api/auth/session 200 in 5ms
+ GET /login 200 in 27ms
+ GET /api/auth/providers 200 in 9ms
+ GET /api/auth/csrf 200 in 10ms
+ POST /api/auth/callback/credentials 200 in 15ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 6ms
+ GET /dashboard 200 in 14ms
+ GET /hosts 200 in 17ms
+ ✓ Compiled /hosts/[id] in 286ms (1336 modules)
+ GET /hosts/1 200 in 597ms
+ ○ Compiling /bookings/new ...
+ ✓ Compiled /bookings/new in 509ms (1351 modules)
+ GET /bookings/new?hostId=1 200 in 546ms
+ ✓ Compiled in 398ms (1102 modules)
+ GET /bookings/new?hostId=1 200 in 99ms
+ ✓ Compiled in 214ms (499 modules)
+ GET /bookings/new?hostId=1 200 in 54ms
+ ✓ Compiled in 129ms (499 modules)
+ GET /bookings/new?hostId=1 200 in 19ms
+ ✓ Compiled in 127ms (499 modules)
+ GET /bookings/new?hostId=1 200 in 22ms
+ ✓ Compiled in 143ms (499 modules)
+ GET /bookings/new?hostId=1 200 in 36ms
+ ⨯ ./src/app/register/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+     ,-[[36;1;4m/Users/bentyson/pad/src/app/register/page.tsx[0m:140:1]
+ [2m137[0m |   }
+ [2m138[0m | 
+ [2m139[0m |   return (
+ [2m140[0m |     <div className="min-h-screen bg-gradient-to-br from-secondary-600 to-secondary-800 py-12">
+     : [35;1m     ^^^[0m
+ [2m141[0m |       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+ [2m142[0m |         <div className="text-center mb-8">
+ [2m143[0m |           <h1 className="text-4xl font-bold text-white mb-2">
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/register/page.tsx
+ ✓ Compiled in 155ms (499 modules)
+ GET /bookings/new?hostId=1 200 in 31ms
+ ✓ Compiled in 175ms (499 modules)
+ GET /bookings/new?hostId=1 200 in 47ms
+ ✓ Compiled in 126ms (499 modules)
+ GET /bookings/new?hostId=1 200 in 19ms
+ ✓ Compiled in 124ms (499 modules)
+ GET /bookings/new?hostId=1 200 in 17ms
+ ✓ Compiled in 163ms (499 modules)
+ GET /bookings/new?hostId=1 200 in 92ms
+ ✓ Compiled in 185ms (1088 modules)
+ ✓ Compiled in 154ms (499 modules)
+ ✓ Compiled in 143ms (1088 modules)
+ ✓ Compiled /api/auth/[...nextauth] in 119ms (840 modules)
+ GET /api/auth/session 200 in 227ms

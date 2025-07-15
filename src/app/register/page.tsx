@@ -21,6 +21,7 @@ function RegisterForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const userType = searchParams.get('type') as 'host' | 'artist' | 'fan';
+  const hostType = searchParams.get('hostType') as 'lodging' | null;
   
   // Always call hooks in the same order
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -50,6 +51,10 @@ function RegisterForm() {
     hostingMotivation: '',
     additionalInfo: '',
     newToHosting: '',
+    // Lodging-only host specific
+    serviceRadius: '15',
+    lodgingDescription: '',
+    whyLodging: '',
     // Fan specific
     fanCity: '',
     fanState: '',
@@ -136,13 +141,15 @@ function RegisterForm() {
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-2">
-            {userType === 'artist' ? 'Artist Application' : userType === 'host' ? 'Host Application' : 'Fan Registration'}
+            {userType === 'artist' ? 'Artist Application' : 
+             userType === 'host' ? (hostType === 'lodging' ? 'Lodging Host Application' : 'Host Application') : 
+             'Fan Registration'}
           </h1>
           <p className="text-lg text-secondary-100">
             {userType === 'artist' 
               ? 'Join our community of touring musicians'
               : userType === 'host' 
-              ? 'Open your space for intimate concerts'
+              ? (hostType === 'lodging' ? 'Provide accommodation for touring artists' : 'Open your space for intimate concerts')
               : 'Get instant access to exclusive house concerts'
             }
           </p>
@@ -488,29 +495,52 @@ function RegisterForm() {
                     </div>
                   </div>
 
-                  <div>
-                    <Input
-                      label="Expected Average Attendance *"
-                      type="number"
-                      value={formData.estimatedAttendance}
-                      onChange={(e) => {
-                        setFormData({ ...formData, estimatedAttendance: e.target.value });
-                        if (errors.estimatedAttendance) setErrors(prev => ({ ...prev, estimatedAttendance: '' }));
-                      }}
-                      required
-                      placeholder="25"
-                      min="1"
-                      max="200"
-                    />
-                    <p className="mt-1 text-xs text-neutral-500">Expected average attendance</p>
-                    {errors.estimatedAttendance && (
-                      <p className="mt-1 text-sm text-red-600">{errors.estimatedAttendance}</p>
-                    )}
-                  </div>
+                  {/* Show different fields based on host type */}
+                  {hostType === 'lodging' ? (
+                    <div>
+                      <Input
+                        label="Service Radius (miles) *"
+                        type="number"
+                        value={formData.serviceRadius}
+                        onChange={(e) => {
+                          setFormData({ ...formData, serviceRadius: e.target.value });
+                          if (errors.serviceRadius) setErrors(prev => ({ ...prev, serviceRadius: '' }));
+                        }}
+                        required
+                        min="1"
+                        max="100"
+                        placeholder="15"
+                        help="How far from your location are you willing to accommodate artists?"
+                      />
+                      {errors.serviceRadius && (
+                        <p className="mt-1 text-sm text-red-600">{errors.serviceRadius}</p>
+                      )}
+                    </div>
+                  ) : (
+                    <div>
+                      <Input
+                        label="Expected Average Attendance *"
+                        type="number"
+                        value={formData.estimatedAttendance}
+                        onChange={(e) => {
+                          setFormData({ ...formData, estimatedAttendance: e.target.value });
+                          if (errors.estimatedAttendance) setErrors(prev => ({ ...prev, estimatedAttendance: '' }));
+                        }}
+                        required
+                        placeholder="25"
+                        min="1"
+                        max="200"
+                      />
+                      <p className="mt-1 text-xs text-neutral-500">Expected average attendance</p>
+                      {errors.estimatedAttendance && (
+                        <p className="mt-1 text-sm text-red-600">{errors.estimatedAttendance}</p>
+                      )}
+                    </div>
+                  )}
 
                   <div className="space-y-1">
                     <label className="block text-sm font-medium text-neutral-700">
-                      Are you new to hosting house concerts? *
+                      {hostType === 'lodging' ? 'Are you new to hosting touring artists for lodging? *' : 'Are you new to hosting house concerts? *'}
                     </label>
                     <div className="space-y-2">
                       <label className="flex items-center">
@@ -556,30 +586,66 @@ function RegisterForm() {
                       if (errors.concertSpacePhotos) setErrors(prev => ({ ...prev, concertSpacePhotos: '' }));
                     }}
                     error={errors.concertSpacePhotos}
-                    label="Concert Space Photos *"
-                    description="Upload 1-5 photos of your performance space"
+                    label={hostType === 'lodging' ? 'Lodging Space Photos *' : 'Concert Space Photos *'}
+                    description={hostType === 'lodging' 
+                      ? 'Upload 1-5 photos of your lodging space (bedroom, common areas, etc.)'
+                      : 'Upload 1-5 photos of your performance space'
+                    }
                     required
                   />
 
                   <div className="space-y-1">
                     <label className="block text-sm font-medium text-neutral-700">
-                      What do you enjoy most about hosting house concerts? *
+                      {hostType === 'lodging' 
+                        ? 'Why do you want to offer lodging to touring artists? *'
+                        : 'What do you enjoy most about hosting house concerts? *'
+                      }
                     </label>
                     <textarea
-                      value={formData.hostingMotivation}
+                      value={hostType === 'lodging' ? formData.whyLodging : formData.hostingMotivation}
                       onChange={(e) => {
-                        setFormData({ ...formData, hostingMotivation: e.target.value });
-                        if (errors.hostingMotivation) setErrors(prev => ({ ...prev, hostingMotivation: '' }));
+                        if (hostType === 'lodging') {
+                          setFormData({ ...formData, whyLodging: e.target.value });
+                          if (errors.whyLodging) setErrors(prev => ({ ...prev, whyLodging: '' }));
+                        } else {
+                          setFormData({ ...formData, hostingMotivation: e.target.value });
+                          if (errors.hostingMotivation) setErrors(prev => ({ ...prev, hostingMotivation: '' }));
+                        }
                       }}
                       required
                       rows={4}
                       className="block w-full rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-900 placeholder-neutral-400 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400 transition-colors"
-                      placeholder="Share what motivates you to host intimate concerts in your space..."
+                      placeholder={hostType === 'lodging' 
+                        ? 'Share what motivates you to support touring artists with accommodation...'
+                        : 'Share what motivates you to host intimate concerts in your space...'
+                      }
                     />
-                    {errors.hostingMotivation && (
-                      <p className="mt-1 text-sm text-red-600">{errors.hostingMotivation}</p>
+                    {(hostType === 'lodging' ? errors.whyLodging : errors.hostingMotivation) && (
+                      <p className="mt-1 text-sm text-red-600">{hostType === 'lodging' ? errors.whyLodging : errors.hostingMotivation}</p>
                     )}
                   </div>
+
+                  {hostType === 'lodging' && (
+                    <div className="space-y-1">
+                      <label className="block text-sm font-medium text-neutral-700">
+                        Describe your lodging space *
+                      </label>
+                      <textarea
+                        value={formData.lodgingDescription}
+                        onChange={(e) => {
+                          setFormData({ ...formData, lodgingDescription: e.target.value });
+                          if (errors.lodgingDescription) setErrors(prev => ({ ...prev, lodgingDescription: '' }));
+                        }}
+                        required
+                        rows={3}
+                        className="block w-full rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-900 placeholder-neutral-400 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400 transition-colors"
+                        placeholder="Describe the sleeping arrangements, amenities, and what makes your space welcoming for artists..."
+                      />
+                      {errors.lodgingDescription && (
+                        <p className="mt-1 text-sm text-red-600">{errors.lodgingDescription}</p>
+                      )}
+                    </div>
+                  )}
 
                   <div className="space-y-1">
                     <label className="block text-sm font-medium text-neutral-700">
@@ -858,24 +924,23 @@ function UserTypeSelection() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Artist Option */}
           <Card className="shadow-xl border-0 hover:shadow-2xl transition-shadow cursor-pointer" onClick={() => router.push('/register?type=artist')}>
-            <CardContent className="p-8 text-center">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary-400 to-secondary-500 rounded-full mb-6">
-                <MusicalNoteIcon className="w-10 h-10 text-white" />
+            <CardContent className="p-6 text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-400 to-secondary-500 rounded-full mb-4">
+                <MusicalNoteIcon className="w-8 h-8 text-white" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">I'm an Artist</h2>
-              <p className="text-gray-600 mb-6">
-                I'm a touring musician looking for intimate venues and house concert opportunities.
+              <h2 className="text-lg font-bold text-gray-900 mb-3">I'm an Artist</h2>
+              <p className="text-gray-600 mb-4 text-sm">
+                I'm a touring musician looking for intimate venues.
               </p>
-              <ul className="text-left text-sm text-gray-600 space-y-2 mb-6">
+              <ul className="text-left text-xs text-gray-600 space-y-1 mb-4">
                 <li>• Connect with verified hosts</li>
-                <li>• Access exclusive house concert network</li>
-                <li>• Tour planning tools and resources</li>
-                <li>• $400/year membership after approval</li>
+                <li>• Tour planning tools</li>
+                <li>• $400/year after approval</li>
               </ul>
-              <Button size="lg" className="w-full">
+              <Button size="sm" className="w-full">
                 Apply as Artist
               </Button>
             </CardContent>
@@ -883,45 +948,66 @@ function UserTypeSelection() {
 
           {/* Host Option */}
           <Card className="shadow-xl border-0 hover:shadow-2xl transition-shadow cursor-pointer" onClick={() => router.push('/register?type=host')}>
-            <CardContent className="p-8 text-center">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-secondary-400 to-primary-500 rounded-full mb-6">
-                <HomeIcon className="w-10 h-10 text-white" />
+            <CardContent className="p-6 text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-secondary-400 to-primary-500 rounded-full mb-4">
+                <HomeIcon className="w-8 h-8 text-white" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">I'm a Host</h2>
-              <p className="text-gray-600 mb-6">
-                I want to open my space for intimate concerts and connect with touring artists.
+              <h2 className="text-lg font-bold text-gray-900 mb-3">I'm a Host</h2>
+              <p className="text-gray-600 mb-4 text-sm">
+                I want to host intimate concerts in my space.
               </p>
-              <ul className="text-left text-sm text-gray-600 space-y-2 mb-6">
-                <li>• Browse approved touring artists</li>
-                <li>• Host intimate house concerts</li>
-                <li>• Build community through music</li>
+              <ul className="text-left text-xs text-gray-600 space-y-1 mb-4">
+                <li>• Browse touring artists</li>
+                <li>• Host house concerts</li>
                 <li>• Free to join and use</li>
               </ul>
-              <Button size="lg" className="w-full" variant="outline">
+              <Button size="sm" className="w-full" variant="outline">
                 Apply as Host
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Lodging-Only Host Option */}
+          <Card className="shadow-xl border-0 hover:shadow-2xl transition-shadow cursor-pointer" onClick={() => router.push('/register?type=host&hostType=lodging')}>
+            <CardContent className="p-6 text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-400 to-green-500 rounded-full mb-4">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2V7zm0 0V5a2 2 0 012-2h6l2 2h6a2 2 0 012 2v2M7 13h10l-1 8H8l-1-8z" />
+                </svg>
+              </div>
+              <h2 className="text-lg font-bold text-gray-900 mb-3">I Offer Lodging</h2>
+              <p className="text-gray-600 mb-4 text-sm">
+                I provide accommodation for touring artists.
+              </p>
+              <ul className="text-left text-xs text-gray-600 space-y-1 mb-4">
+                <li>• Support touring musicians</li>
+                <li>• Earn from accommodation</li>
+                <li>• Free to join and use</li>
+              </ul>
+              <Button size="sm" className="w-full" variant="outline">
+                Apply as Lodging Host
               </Button>
             </CardContent>
           </Card>
 
           {/* Fan Option */}
           <Card className="shadow-xl border-0 hover:shadow-2xl transition-shadow cursor-pointer" onClick={() => router.push('/register?type=fan')}>
-            <CardContent className="p-8 text-center">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full mb-6">
-                <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <CardContent className="p-6 text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full mb-4">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">I'm a Fan</h2>
-              <p className="text-gray-600 mb-6">
-                I want to discover and attend exclusive house concerts in my area.
+              <h2 className="text-lg font-bold text-gray-900 mb-3">I'm a Fan</h2>
+              <p className="text-gray-600 mb-4 text-sm">
+                I want to discover exclusive house concerts.
               </p>
-              <ul className="text-left text-sm text-gray-600 space-y-2 mb-6">
-                <li>• Discover intimate concerts nearby</li>
-                <li>• Direct access to exclusive events</li>
+              <ul className="text-left text-xs text-gray-600 space-y-1 mb-4">
+                <li>• Discover intimate concerts</li>
                 <li>• Support independent artists</li>
                 <li>• Pay & get instant access</li>
               </ul>
-              <Button size="lg" className="w-full" variant="secondary">
+              <Button size="sm" className="w-full" variant="secondary">
                 Join as Fan
               </Button>
             </CardContent>

@@ -437,6 +437,148 @@ export const testHosts: Host[] = [
     ],
     lastActive: '2024-01-21T14:25:00Z',
     joinedDate: '2019-08-10T11:00:00Z'
+  },
+  
+  // Lodging-only host example
+  {
+    id: 'host3',
+    name: 'Sarah Martinez',
+    email: 'sarah.lodging@email.com',
+    type: 'host',
+    status: 'approved',
+    bio: 'I love supporting touring musicians by providing comfortable accommodation in my home. While I don\'t host shows myself, I\'m happy to offer a peaceful place to rest.',
+    venueName: 'Cozy Guest Suite',
+    venueType: 'home',
+    location: {
+      address: '789 Maple Street (exact address hidden)',
+      city: 'Nashville',
+      state: 'TN',
+      zipCode: '37204',
+      coordinates: { lat: 36.1580, lng: -86.7644 }
+    },
+    capacity: {
+      indoor: 0,
+      outdoor: 0,
+      preferred: 0
+    },
+    amenities: ['WiFi', 'Parking', 'Kitchen access', 'Laundry'],
+    showSpecs: {
+      avgAttendance: 0,
+      avgDoorFee: 0,
+      indoorAttendanceMax: 0,
+      hostingHistory: 'Lodging-only host. Provides accommodation for touring artists.',
+      preferredGenres: []
+    },
+    availability: {
+      daysOfWeek: [0, 1, 2, 3, 4, 5, 6], // Available all days
+      timeSlots: [],
+      blackoutDates: ['2024-12-25', '2024-01-01']
+    },
+    rating: 4.9,
+    reviewCount: 15,
+    totalShows: 0,
+    media: [
+      {
+        id: 'host3-media1',
+        url: 'https://picsum.photos/800/600?random=30',
+        type: 'image',
+        category: 'interior',
+        title: 'Guest Bedroom',
+        description: 'Comfortable private room with queen bed'
+      },
+      {
+        id: 'host3-media2',
+        url: 'https://picsum.photos/800/600?random=31',
+        type: 'image',
+        category: 'interior',
+        title: 'Common Area',
+        description: 'Shared living space with kitchen access'
+      }
+    ],
+    // New lodging system fields
+    hostingCapabilities: {
+      showHosting: {
+        enabled: false // This is a lodging-only host
+      },
+      lodgingHosting: {
+        enabled: true,
+        lodgingDetails: {
+          roomType: 'private_bedroom',
+          bathroomType: 'shared',
+          bedConfiguration: {
+            beds: [
+              { type: 'queen', quantity: 1 }
+            ],
+            maxOccupancy: 2
+          },
+          amenities: {
+            breakfast: true,
+            breakfastType: 'continental',
+            wifi: true,
+            parking: true,
+            laundry: true,
+            kitchenAccess: true,
+            workspace: false,
+            linensProvided: true,
+            towelsProvided: true,
+            transportation: 'can_pickup'
+          },
+          houseRules: {
+            checkInTime: '3:00 PM',
+            checkOutTime: '11:00 AM',
+            quietHours: { start: '10:00 PM', end: '8:00 AM' },
+            smokingPolicy: 'no_smoking',
+            petPolicy: 'case_by_case',
+            alcoholPolicy: 'allowed'
+          },
+          pricing: {
+            baseRate: 60,
+            additionalGuestFee: 15,
+            cleaningFee: 15
+          },
+          availability: {
+            blackoutDates: ['2024-12-25', '2024-01-01'],
+            minimumStay: 1,
+            maximumStay: 14,
+            advanceBookingRequired: 1
+          },
+          lodgingPhotos: [
+            {
+              id: 'lodging3-bed1',
+              url: 'https://picsum.photos/800/600?random=32',
+              category: 'bedroom',
+              title: 'Guest Bedroom',
+              description: 'Comfortable queen bed with reading area',
+              isRequired: true
+            },
+            {
+              id: 'lodging3-bath1',
+              url: 'https://picsum.photos/800/600?random=33',
+              category: 'bathroom',
+              title: 'Shared Bathroom',
+              description: 'Clean shared bathroom with shower',
+              isRequired: true
+            },
+            {
+              id: 'lodging3-common1',
+              url: 'https://picsum.photos/800/600?random=34',
+              category: 'common_area',
+              title: 'Kitchen',
+              description: 'Fully equipped kitchen available for guests',
+              isRequired: false
+            }
+          ],
+          accessibility: [],
+          specialConsiderations: 'Perfect for musicians who need a quiet place to rest between shows. Located 10 minutes from downtown Nashville music venues.',
+          localRecommendations: 'Walking distance to Centennial Park. Great local coffee shop (Frothy Monkey) around the corner. Easy access to Music Row.',
+          safetyFeatures: ['Smoke detectors', 'Carbon monoxide detector', 'First aid kit', 'Secure parking', 'Well-lit entrance']
+        }
+      }
+    },
+    primaryHostType: 'lodging',
+    serviceRadius: 25, // Willing to serve guests within 25 miles
+    lastActive: '2024-12-13T09:15:00Z',
+    joinedDate: '2024-08-15T00:00:00Z'
   }
 ];
 
