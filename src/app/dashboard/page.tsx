@@ -18,7 +18,9 @@ import {
   Video,
   Edit,
   Home,
-  Volume2
+  Volume2,
+  UserCheck,
+  Shield
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
@@ -148,25 +150,35 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {userRole === 'admin' ? 'Admin Dashboard' : 
-               userRole === 'host' ? 'Host Dashboard' : 
-               userRole === 'artist' ? 'Artist Dashboard' : 'Fan Dashboard'}
-            </h1>
-            <p className="text-gray-600">
-              {userRole === 'admin' ? 'Platform overview and management' :
-               userRole === 'host' 
-                ? 'Manage your venue and upcoming shows' 
-                : userRole === 'artist'
-                ? 'Track your tour and upcoming performances'
-                : 'Discover and attend exclusive house concerts'
-              }
-            </p>
+        {/* Modern Header with Welcome Message */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-neutral-900 mb-2">
+                Welcome back, {session?.user?.name || 'Artist'}
+              </h1>
+              <p className="text-neutral-600 text-lg">
+                {userRole === 'admin' ? 'Platform overview and management' :
+                 userRole === 'host' 
+                  ? 'Manage your venue and upcoming shows' 
+                  : userRole === 'artist'
+                  ? 'Track your tour and upcoming performances'
+                  : 'Discover and attend exclusive house concerts'
+                }
+              </p>
+            </div>
+            <div className="text-right">
+              <div className="text-sm text-neutral-500">
+                {new Date().toLocaleDateString('en-US', { 
+                  weekday: 'long', 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -263,73 +275,309 @@ export default function DashboardPage() {
         {/* Dashboard Content - Only show for approved users */}
         {hasFullAccess ? (
           <>
-            {/* Quick Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <Card>
-            <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-blue-600">{upcomingBookings.length}</div>
-              <div className="text-sm text-gray-600">
-                {userRole === 'fan' ? 'My Reservations' : 'Upcoming Shows'}
+            {/* Quick Actions - Prominent Section */}
+            <div className="mb-8">
+              <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
+                <div className="px-6 py-4 border-b border-neutral-200">
+                  <h2 className="text-lg font-semibold text-neutral-900">Quick Actions</h2>
+                  <p className="text-sm text-neutral-600 mt-1">Common tasks and navigation shortcuts</p>
+                </div>
+                <div className="p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {/* Primary Action */}
+                    <Link href={userRole === 'fan' ? '/artists' : userRole === 'host' ? '/artists' : '/hosts'}>
+                      <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 p-6 text-white transition-all duration-300 hover:from-primary-600 hover:to-primary-700 hover:shadow-lg">
+                        <div className="flex items-center">
+                          <div className="flex-shrink-0">
+                            <Plus className="w-8 h-8" />
+                          </div>
+                          <div className="ml-4">
+                            <h3 className="text-lg font-semibold">
+                              {userRole === 'fan' ? 'Browse Concerts' : userRole === 'host' ? 'Find Artists' : 'Find Venues'}
+                            </h3>
+                            <p className="text-sm text-primary-100">
+                              {userRole === 'fan' ? 'Discover upcoming shows' : userRole === 'host' ? 'Book touring musicians' : 'Book your next show'}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+
+                    {/* Secondary Actions */}
+                    <Link href={userRole === 'fan' ? '/dashboard/profile' : `/${userRole}s/${selectedUserId}`}>
+                      <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                        <div className="flex items-center">
+                          <div className="flex-shrink-0">
+                            <Eye className="w-6 h-6 text-neutral-600 group-hover:text-primary-600" />
+                          </div>
+                          <div className="ml-4">
+                            <h3 className="text-base font-semibold text-neutral-900">View Profile</h3>
+                            <p className="text-sm text-neutral-600">See how others see you</p>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+
+                    <Link href="/messages">
+                      <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                        <div className="flex items-center">
+                          <div className="flex-shrink-0">
+                            <div className="relative">
+                              <Mail className="w-6 h-6 text-neutral-600 group-hover:text-primary-600" />
+                              {unreadMessages.length > 0 && (
+                                <div className="absolute -top-2 -right-2 w-5 h-5 bg-primary-500 rounded-full flex items-center justify-center">
+                                  <span className="text-xs font-medium text-white">{unreadMessages.length}</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          <div className="ml-4">
+                            <h3 className="text-base font-semibold text-neutral-900">Messages</h3>
+                            <p className="text-sm text-neutral-600">
+                              {unreadMessages.length > 0 ? `${unreadMessages.length} unread` : 'No new messages'}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+
+                    <Link href="/calendar">
+                      <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                        <div className="flex items-center">
+                          <div className="flex-shrink-0">
+                            <Calendar className="w-6 h-6 text-neutral-600 group-hover:text-primary-600" />
+                          </div>
+                          <div className="ml-4">
+                            <h3 className="text-base font-semibold text-neutral-900">Calendar</h3>
+                            <p className="text-sm text-neutral-600">
+                              {userRole === 'fan' ? 'Concert schedule' : 'Show schedule'}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+
+                    <Link href="/dashboard/profile">
+                      <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                        <div className="flex items-center">
+                          <div className="flex-shrink-0">
+                            <Edit className="w-6 h-6 text-neutral-600 group-hover:text-primary-600" />
+                          </div>
+                          <div className="ml-4">
+                            <h3 className="text-base font-semibold text-neutral-900">Edit Profile</h3>
+                            <p className="text-sm text-neutral-600">Update info & media</p>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+
+                    {/* Host-specific actions */}
+                    {userRole === 'host' && (
+                      <>
+                        <Link href="/dashboard/sound-system">
+                          <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0">
+                                <Volume2 className="w-6 h-6 text-neutral-600 group-hover:text-primary-600" />
+                              </div>
+                              <div className="ml-4">
+                                <h3 className="text-base font-semibold text-neutral-900">Sound System</h3>
+                                <p className="text-sm text-neutral-600">Setup audio equipment</p>
+                              </div>
+                            </div>
+                          </div>
+                        </Link>
+                        
+                        <Link href="/dashboard/lodging/setup">
+                          <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0">
+                                <Home className="w-6 h-6 text-neutral-600 group-hover:text-primary-600" />
+                              </div>
+                              <div className="ml-4">
+                                <h3 className="text-base font-semibold text-neutral-900">Lodging Setup</h3>
+                                <p className="text-sm text-neutral-600">Configure guest accommodations</p>
+                              </div>
+                            </div>
+                          </div>
+                        </Link>
+                      </>
+                    )}
+
+                    {/* Fan-specific actions */}
+                    {userRole === 'fan' && (
+                      <>
+                        <Link href="/hosts">
+                          <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0">
+                                <Home className="w-6 h-6 text-neutral-600 group-hover:text-primary-600" />
+                              </div>
+                              <div className="ml-4">
+                                <h3 className="text-base font-semibold text-neutral-900">Browse Venues</h3>
+                                <p className="text-sm text-neutral-600">Discover amazing concert venues</p>
+                              </div>
+                            </div>
+                          </div>
+                        </Link>
+                        
+                        <Link href="/payment/fan">
+                          <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0">
+                                <Star className="w-6 h-6 text-neutral-600 group-hover:text-primary-600" />
+                              </div>
+                              <div className="ml-4">
+                                <h3 className="text-base font-semibold text-neutral-900">Manage Membership</h3>
+                                <p className="text-sm text-neutral-600">View billing and subscription</p>
+                              </div>
+                            </div>
+                          </div>
+                        </Link>
+                      </>
+                    )}
+
+                    {/* Admin-specific actions */}
+                    {userRole === 'admin' && (
+                      <>
+                        <Link href="/admin/applications">
+                          <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0">
+                                <UserCheck className="w-6 h-6 text-neutral-600 group-hover:text-primary-600" />
+                              </div>
+                              <div className="ml-4">
+                                <h3 className="text-base font-semibold text-neutral-900">Review Applications</h3>
+                                <p className="text-sm text-neutral-600">Approve artists and hosts</p>
+                              </div>
+                            </div>
+                          </div>
+                        </Link>
+                        
+                        <Link href="/admin/platform">
+                          <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0">
+                                <Shield className="w-6 h-6 text-neutral-600 group-hover:text-primary-600" />
+                              </div>
+                              <div className="ml-4">
+                                <h3 className="text-base font-semibold text-neutral-900">Platform Management</h3>
+                                <p className="text-sm text-neutral-600">System settings and monitoring</p>
+                              </div>
+                            </div>
+                          </div>
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-green-600">
-                {userRole === 'fan' ? fanConcerts.length : pendingActions.length}
+            </div>
+
+            {/* Key Metrics */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+              <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
+                      <Calendar className="w-6 h-6 text-primary-600" />
+                    </div>
+                  </div>
+                  <div className="ml-4">
+                    <div className="text-2xl font-bold text-neutral-900">{upcomingBookings.length}</div>
+                    <div className="text-sm text-neutral-600">
+                      {userRole === 'fan' ? 'My Reservations' : 'Upcoming Shows'}
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="text-sm text-gray-600">
-                {userRole === 'fan' ? 'Available Concerts' : 
-                 userRole === 'host' ? 'New Requests' : 'Pending Responses'}
+
+              <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 bg-secondary-100 rounded-lg flex items-center justify-center">
+                      <Clock className="w-6 h-6 text-secondary-600" />
+                    </div>
+                  </div>
+                  <div className="ml-4">
+                    <div className="text-2xl font-bold text-neutral-900">
+                      {userRole === 'fan' ? fanConcerts.length : pendingActions.length}
+                    </div>
+                    <div className="text-sm text-neutral-600">
+                      {userRole === 'fan' ? 'Available Concerts' : 
+                       userRole === 'host' ? 'New Requests' : 'Pending Responses'}
+                    </div>
+                  </div>
+                </div>
               </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-purple-600">{unreadMessages.length}</div>
-              <div className="text-sm text-gray-600">Unread Messages</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-yellow-600">4.8</div>
-              <div className="text-sm text-gray-600">Average Rating</div>
-            </CardContent>
-          </Card>
-        </div>
+
+              <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 bg-neutral-100 rounded-lg flex items-center justify-center">
+                      <Mail className="w-6 h-6 text-neutral-600" />
+                    </div>
+                  </div>
+                  <div className="ml-4">
+                    <div className="text-2xl font-bold text-neutral-900">{unreadMessages.length}</div>
+                    <div className="text-sm text-neutral-600">Unread Messages</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
+                      <Star className="w-6 h-6 text-primary-600" />
+                    </div>
+                  </div>
+                  <div className="ml-4">
+                    <div className="text-2xl font-bold text-neutral-900">4.8</div>
+                    <div className="text-sm text-neutral-600">Average Rating</div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Upcoming Bookings */}
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between">
-                <h2 className="text-xl font-semibold">
-                  {userRole === 'fan' ? 'Your Concert Reservations' :
-                   userRole === 'host' ? 'Upcoming Shows at Your Venue' : 'Your Upcoming Performances'}
-                </h2>
+            <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
+              <div className="px-6 py-4 border-b border-neutral-200 flex items-center justify-between">
+                <div>
+                  <h2 className="text-xl font-semibold text-neutral-900">
+                    {userRole === 'fan' ? 'Your Concert Reservations' :
+                     userRole === 'host' ? 'Upcoming Shows at Your Venue' : 'Your Upcoming Performances'}
+                  </h2>
+                  <p className="text-sm text-neutral-600 mt-1">
+                    {userRole === 'fan' ? 'Concerts you\'ve reserved' :
+                     userRole === 'host' ? 'Artists performing at your venue' : 'Your confirmed performances'}
+                  </p>
+                </div>
                 <Link href="/calendar">
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" className="flex items-center">
                     <Calendar className="w-4 h-4 mr-2" />
                     View Calendar
                   </Button>
                 </Link>
-              </CardHeader>
-              <CardContent>
+              </div>
+              <div className="p-6">
                 {upcomingBookings.length > 0 ? (
                   <div className="space-y-4">
                     {upcomingBookings.slice(0, 3).map((booking) => (
-                      <div key={booking.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                      <div key={booking.id} className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors">
                         <div className="flex items-center space-x-4">
-                          <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <Calendar className="w-6 h-6 text-blue-600" />
+                          <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
+                            <Calendar className="w-6 h-6 text-primary-600" />
                           </div>
                           <div>
-                            <h3 className="font-medium text-gray-900">
+                            <h3 className="font-medium text-neutral-900">
                               {userRole === 'fan' ? booking.title :
                                userRole === 'host' ? booking.artist.name : booking.host.name}
                             </h3>
-                            <div className="flex items-center text-sm text-gray-600 space-x-4">
+                            <div className="flex items-center text-sm text-neutral-600 space-x-4">
                               <span>{userRole === 'fan' ? formatDate(new Date(booking.date + 'T' + booking.startTime)) : formatDate(booking.eventDate)}</span>
                               <div className="flex items-center">
                                 <Users className="w-4 h-4 mr-1" />
@@ -345,7 +593,7 @@ export default function DashboardPage() {
                           </div>
                         </div>
                         <div className="flex items-center space-x-3">
-                          <Badge variant={getStatusColor(userRole === 'fan' ? 'success' : booking.status) as any}>
+                          <Badge variant={getStatusColor(userRole === 'fan' ? 'success' : booking.status) as any} className="bg-primary-100 text-primary-700">
                             {userRole === 'fan' ? 'Reserved' : booking.status}
                           </Badge>
                           <Link href={userRole === 'fan' ? `/concerts/${booking.id}` : `/bookings/${booking.id}`}>
@@ -358,12 +606,14 @@ export default function DashboardPage() {
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-8">
-                    <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  <div className="text-center py-12">
+                    <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Calendar className="w-8 h-8 text-neutral-400" />
+                    </div>
+                    <h3 className="text-lg font-medium text-neutral-900 mb-2">
                       {userRole === 'fan' ? 'No upcoming concerts' : 'No upcoming shows'}
                     </h3>
-                    <p className="text-gray-600 mb-4">
+                    <p className="text-neutral-600 mb-6">
                       {userRole === 'fan' 
                         ? 'Discover and book your first house concert experience'
                         : userRole === 'host' 
@@ -372,15 +622,15 @@ export default function DashboardPage() {
                       }
                     </p>
                     <Link href={userRole === 'fan' ? '/artists' : userRole === 'host' ? '/artists' : '/hosts'}>
-                      <Button>
+                      <Button className="bg-primary-600 text-white hover:bg-primary-700">
                         <Plus className="w-4 h-4 mr-2" />
                         {userRole === 'fan' ? 'Browse Concerts' : userRole === 'host' ? 'Browse Artists' : 'Find Venues'}
                       </Button>
                     </Link>
                   </div>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             {/* Past Shows - Only show for artists and hosts */}
             {(userRole === 'artist' || userRole === 'host') && (
@@ -394,25 +644,28 @@ export default function DashboardPage() {
 
             {/* Action Items */}
             {pendingActions.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <h2 className="text-xl font-semibold">
+              <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
+                <div className="px-6 py-4 border-b border-neutral-200">
+                  <h2 className="text-xl font-semibold text-neutral-900">
                     {userRole === 'host' ? 'Booking Requests' : 'Pending Requests'}
                   </h2>
-                </CardHeader>
-                <CardContent>
+                  <p className="text-sm text-neutral-600 mt-1">
+                    {userRole === 'host' ? 'Artists requesting to book your venue' : 'Waiting for host responses'}
+                  </p>
+                </div>
+                <div className="p-6">
                   <div className="space-y-4">
                     {pendingActions.map((booking) => (
-                      <div key={booking.id} className="flex items-center justify-between p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                      <div key={booking.id} className="flex items-center justify-between p-4 bg-secondary-50 border border-secondary-200 rounded-lg">
                         <div className="flex items-center space-x-4">
-                          <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-                            <Clock className="w-5 h-5 text-yellow-600" />
+                          <div className="w-10 h-10 bg-secondary-100 rounded-lg flex items-center justify-center">
+                            <Clock className="w-5 h-5 text-secondary-600" />
                           </div>
                           <div>
-                            <h3 className="font-medium text-gray-900">
+                            <h3 className="font-medium text-neutral-900">
                               {userRole === 'host' ? booking.artist.name : booking.host.name}
                             </h3>
-                            <div className="text-sm text-gray-600">
+                            <div className="text-sm text-neutral-600">
                               {formatDate(booking.eventDate)} • {booking.guestCount} guests
                             </div>
                           </div>
@@ -424,7 +677,7 @@ export default function DashboardPage() {
                                 <Button variant="outline" size="sm">View Details</Button>
                               </Link>
                               <Link href={`/bookings/${booking.id}`}>
-                                <Button size="sm">Review</Button>
+                                <Button size="sm" className="bg-secondary-600 text-white hover:bg-secondary-700">Review</Button>
                               </Link>
                             </>
                           ) : (
@@ -436,43 +689,46 @@ export default function DashboardPage() {
                       </div>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             )}
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Messages */}
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between">
-                <h2 className="text-lg font-semibold">Recent Messages</h2>
+            <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
+              <div className="px-6 py-4 border-b border-neutral-200 flex items-center justify-between">
+                <div>
+                  <h2 className="text-lg font-semibold text-neutral-900">Recent Messages</h2>
+                  <p className="text-sm text-neutral-600 mt-1">Latest conversations</p>
+                </div>
                 <Link href="/messages">
                   <Button variant="outline" size="sm">
                     <Mail className="w-4 h-4 mr-2" />
                     View All
                   </Button>
                 </Link>
-              </CardHeader>
-              <CardContent>
+              </div>
+              <div className="p-6">
                 {userMessages.length > 0 ? (
                   <div className="space-y-3">
                     {userMessages.slice(0, 3).map((message) => (
-                      <div key={message.id} className={`p-3 rounded-lg border transition-colors hover:bg-gray-50 ${
+                      <div key={message.id} className={`p-3 rounded-lg border transition-colors hover:bg-neutral-50 ${
                         !message.read && message.recipientId === selectedUserId 
-                          ? 'bg-blue-50 border-blue-200' 
-                          : 'border-gray-200'
+                          ? 'bg-primary-50 border-primary-200' 
+                          : 'border-neutral-200'
                       }`}>
                         <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-medium text-sm">{message.senderName}</h4>
-                          <span className="text-xs text-gray-500">
+                          <h4 className="font-medium text-sm text-neutral-900">{message.senderName}</h4>
+                          <span className="text-xs text-neutral-500">
                             {new Intl.DateTimeFormat('en-US', { 
                               month: 'short', 
                               day: 'numeric' 
                             }).format(new Date(message.timestamp))}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-600 line-clamp-2">
+                        <p className="text-sm text-neutral-600 line-clamp-2">
                           {message.content}
                         </p>
                         {!message.read && message.recipientId === selectedUserId && (
@@ -484,113 +740,52 @@ export default function DashboardPage() {
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-6">
-                    <Mail className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                    <p className="text-sm text-gray-600">No messages yet</p>
+                  <div className="text-center py-8">
+                    <div className="w-12 h-12 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <Mail className="w-6 h-6 text-neutral-400" />
+                    </div>
+                    <p className="text-sm text-neutral-600">No messages yet</p>
                   </div>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
-            {/* Quick Actions */}
-            <Card>
-              <CardHeader>
-                <h2 className="text-lg font-semibold">Quick Actions</h2>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <Link href={userRole === 'fan' ? '/artists' : userRole === 'host' ? '/artists' : '/hosts'}>
-                    <Button variant="outline" className="w-full justify-start">
-                      <Plus className="w-4 h-4 mr-3" />
-                      {userRole === 'fan' ? 'Browse Concerts' : userRole === 'host' ? 'Find Artists' : 'Find Venues'}
-                    </Button>
-                  </Link>
-                  <Link href={userRole === 'fan' ? '/dashboard/profile' : `/${userRole}s/${selectedUserId}`}>
-                    <Button variant="outline" className="w-full justify-start">
-                      <Eye className="w-4 h-4 mr-3" />
-                      View My Profile
-                    </Button>
-                  </Link>
-                  <Link href="/calendar">
-                    <Button variant="outline" className="w-full justify-start">
-                      <Calendar className="w-4 h-4 mr-3" />
-                      {userRole === 'fan' ? 'My Concert Calendar' : 'Manage Calendar'}
-                    </Button>
-                  </Link>
-                  <Link href="/messages">
-                    <Button variant="outline" className="w-full justify-start">
-                      <Mail className="w-4 h-4 mr-3" />
-                      All Messages
-                    </Button>
-                  </Link>
-                  <Link href="/dashboard/profile">
-                    <Button variant="outline" className="w-full justify-start">
-                      <Edit className="w-4 h-4 mr-3" />
-                      Manage Profile & Media
-                    </Button>
-                  </Link>
-                  {userRole === 'host' && (
-                    <Link href="/dashboard/lodging/setup">
-                      <Button variant="outline" className="w-full justify-start">
-                        <Home className="w-4 h-4 mr-3" />
-                        Setup Lodging
-                      </Button>
-                    </Link>
-                  )}
-                  {userRole === 'host' && (
-                    <Link href="/dashboard/lodging/photos">
-                      <Button variant="outline" className="w-full justify-start">
-                        <Camera className="w-4 h-4 mr-3" />
-                        Lodging Photos
-                      </Button>
-                    </Link>
-                  )}
-                  {userRole === 'host' && (
-                    <Link href="/dashboard/sound-system">
-                      <Button variant="outline" className="w-full justify-start">
-                        <Volume2 className="w-4 h-4 mr-3" />
-                        Sound System Setup
-                      </Button>
-                    </Link>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
 
             {/* Performance Stats */}
-            <Card>
-              <CardHeader>
-                <h2 className="text-lg font-semibold">Your Stats</h2>
-              </CardHeader>
-              <CardContent>
+            <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
+              <div className="px-6 py-4 border-b border-neutral-200">
+                <h2 className="text-lg font-semibold text-neutral-900">Your Stats</h2>
+                <p className="text-sm text-neutral-600 mt-1">Performance metrics</p>
+              </div>
+              <div className="p-6">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Response Rate</span>
-                    <span className="text-sm font-medium">95%</span>
+                    <span className="text-sm text-neutral-600">Response Rate</span>
+                    <span className="text-sm font-medium text-neutral-900">95%</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Average Rating</span>
+                    <span className="text-sm text-neutral-600">Average Rating</span>
                     <div className="flex items-center">
-                      <Star className="w-4 h-4 text-yellow-500 fill-current mr-1" />
-                      <span className="text-sm font-medium">4.8</span>
+                      <Star className="w-4 h-4 text-primary-500 fill-current mr-1" />
+                      <span className="text-sm font-medium text-neutral-900">4.8</span>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-neutral-600">
                       {userRole === 'fan' ? 'Concerts Attended' : 
                        userRole === 'host' ? 'Shows Hosted' : 'Shows Played'}
                     </span>
-                    <span className="text-sm font-medium">
+                    <span className="text-sm font-medium text-neutral-900">
                       {userRole === 'fan' ? '8' : userRole === 'host' ? '12' : '24'} this year
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Profile Views</span>
-                    <span className="text-sm font-medium">156 this month</span>
+                    <span className="text-sm text-neutral-600">Profile Views</span>
+                    <span className="text-sm font-medium text-neutral-900">156 this month</span>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
           </>

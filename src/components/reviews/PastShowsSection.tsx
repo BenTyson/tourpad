@@ -148,7 +148,13 @@ export function PastShowsSection({ userId, userType }: PastShowsSectionProps) {
                         <Button
                           size="sm"
                           onClick={() => handleLeaveReview(booking)}
-                          className="bg-blue-600 hover:bg-blue-700"
+                          className="text-neutral-800 hover:text-neutral-900 transition-colors"
+                          style={{ 
+                            backgroundColor: '#ebebe9', 
+                            '&:hover': { backgroundColor: '#ddddd9' } 
+                          }}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#ddddd9'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ebebe9'}
                         >
                           <MessageCircle className="w-4 h-4 mr-2" />
                           Leave Review
