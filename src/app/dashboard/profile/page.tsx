@@ -183,6 +183,11 @@ export default function ProfilePage() {
           venueType: userData.venueType || 'home',
           capacity: userData.capacity || 20,
           amenities: userData.amenities || [],
+          hostInfo: {
+            hostName: userData.hostInfo?.hostName || '',
+            aboutMe: userData.hostInfo?.aboutMe || '',
+            profilePhoto: userData.hostInfo?.profilePhoto || ''
+          },
           socialLinks: userData.socialLinks || {
             website: '', instagram: '', youtube: '', facebook: ''
           }
@@ -193,10 +198,10 @@ export default function ProfilePage() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading profile...</p>
+          <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-neutral-600">Loading profile...</p>
         </div>
       </div>
     );
@@ -204,10 +209,10 @@ export default function ProfilePage() {
 
   if (!session?.user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
-          <p className="text-gray-600 mb-4">Please sign in to edit your profile.</p>
+          <h1 className="text-2xl font-bold text-neutral-900 mb-4">Access Denied</h1>
+          <p className="text-neutral-600 mb-4">Please sign in to edit your profile.</p>
           <Link href="/login">
             <Button>Sign In</Button>
           </Link>
@@ -300,55 +305,57 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-4">
+        {/* Modern Header */}
+        <div className="mb-8">
+          <div className="flex items-center mb-4">
             <Link href="/dashboard">
               <Button variant="outline" size="sm">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Dashboard
               </Button>
             </Link>
+          </div>
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Profile Manager</h1>
-              <p className="text-gray-600">
+              <h1 className="text-3xl font-bold text-neutral-900 mb-2">Profile Manager</h1>
+              <p className="text-neutral-600">
                 {isArtist ? 'Manage your artist profile, photos, and media' : 'Manage your venue profile and photos'}
               </p>
             </div>
-          </div>
-          
-          <div className="flex items-center space-x-3">
-            <Link href={`/${isArtist ? 'artists' : 'hosts'}/${session.user.id}`} target="_blank">
-              <Button variant="outline" size="sm">
-                <Eye className="w-4 h-4 mr-2" />
-                Preview Live Profile
-              </Button>
-            </Link>
-            {hasChanges && (
-              <>
-                <Badge variant="warning" className="bg-yellow-100 text-yellow-800">
-                  <AlertTriangle className="w-3 h-3 mr-1" />
-                  Unsaved Changes
-                </Badge>
-                <Button onClick={handleSave} disabled={loading}>
-                  {loading ? 'Saving...' : 'Save Changes'}
+            
+            <div className="flex items-center space-x-3">
+              <Link href={`/${isArtist ? 'artists' : 'hosts'}/${session.user.id}`} target="_blank">
+                <Button variant="outline" size="sm">
+                  <Eye className="w-4 h-4 mr-2" />
+                  Preview Live Profile
                 </Button>
-              </>
-            )}
+              </Link>
+              {hasChanges && (
+                <>
+                  <Badge variant="warning" className="bg-yellow-100 text-yellow-800">
+                    <AlertTriangle className="w-3 h-3 mr-1" />
+                    Unsaved Changes
+                  </Badge>
+                  <Button onClick={handleSave} disabled={loading}>
+                    {loading ? 'Saving...' : 'Save Changes'}
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Tab Navigation */}
         <div className="mb-8">
-          <nav className="flex space-x-8 border-b border-gray-200">
+          <nav className="flex space-x-8 border-b border-neutral-200">
             <button
               onClick={() => setActiveTab('info')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'info'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-primary-500 text-primary-600'
+                  : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300'
               }`}
             >
               <FileText className="w-4 h-4 mr-2 inline" />
@@ -358,8 +365,8 @@ export default function ProfilePage() {
               onClick={() => setActiveTab('photos')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'photos'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-primary-500 text-primary-600'
+                  : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300'
               }`}
             >
               <UserCircle className="w-4 h-4 mr-2 inline" />
@@ -369,8 +376,8 @@ export default function ProfilePage() {
               onClick={() => setActiveTab('media')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'media'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-primary-500 text-primary-600'
+                  : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300'
               }`}
             >
               {isArtist ? (
@@ -389,9 +396,9 @@ export default function ProfilePage() {
           {activeTab === 'info' && (
             <div className="space-y-6">
               {/* Basic Information */}
-              <Card>
+              <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
                 <CardHeader>
-                  <h2 className="text-xl font-semibold">Basic Information</h2>
+                  <h2 className="text-xl font-semibold text-neutral-900">Basic Information</h2>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <Input
@@ -404,7 +411,7 @@ export default function ProfilePage() {
                     placeholder={isArtist ? "Your stage name or band name" : "Your venue name"}
                   />
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                       {isArtist ? "Artist Bio" : "Venue Description"}
                     </label>
                     <textarea
@@ -413,7 +420,7 @@ export default function ProfilePage() {
                         if (isArtist) updateArtistProfile({ bio: e.target.value });
                         else updateHostProfile({ bio: e.target.value });
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                       rows={4}
                       placeholder={isArtist 
                         ? "Tell hosts about your music, style, and what makes your performances special..."
@@ -431,14 +438,14 @@ export default function ProfilePage() {
                       }}
                     />
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">State</label>
                       <select
                         value={isArtist ? artistProfile.state : hostProfile.state}
                         onChange={(e) => {
                           if (isArtist) updateArtistProfile({ state: e.target.value });
                           else updateHostProfile({ state: e.target.value });
                         }}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                       >
                         <option value="">Select a state</option>
                         {US_STATES.map((state) => (
@@ -461,10 +468,10 @@ export default function ProfilePage() {
 
               {/* Host-specific personal information */}
               {!isArtist && (
-                <Card>
+                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
                   <CardHeader>
-                    <h2 className="text-xl font-semibold">Personal Host Information</h2>
-                    <p className="text-sm text-gray-600">
+                    <h2 className="text-xl font-semibold text-neutral-900">Personal Host Information</h2>
+                    <p className="text-sm text-neutral-600">
                       This personal information helps artists get to know you as a host. This is separate from your venue description.
                     </p>
                   </CardHeader>
@@ -479,7 +486,7 @@ export default function ProfilePage() {
                     />
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">
                         About Me/Us
                       </label>
                       <textarea
@@ -487,16 +494,16 @@ export default function ProfilePage() {
                         onChange={(e) => updateHostProfile({ 
                           hostInfo: { ...hostProfile.hostInfo, aboutMe: e.target.value } 
                         })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                         rows={4}
                         placeholder="Tell artists about yourself as a host. What drew you to house concerts? What do you enjoy about hosting? This is your personal story, separate from your venue description..."
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Host Profile Photo</label>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">Host Profile Photo</label>
                       <div className="flex items-center space-x-4">
-                        <div className="w-20 h-20 bg-gray-100 rounded-full overflow-hidden flex items-center justify-center">
+                        <div className="w-20 h-20 bg-neutral-100 rounded-full overflow-hidden flex items-center justify-center">
                           {hostProfile.hostInfo.profilePhoto ? (
                             <img 
                               src={hostProfile.hostInfo.profilePhoto} 
@@ -504,7 +511,7 @@ export default function ProfilePage() {
                               className="w-20 h-20 object-cover"
                             />
                           ) : (
-                            <UserCircle className="w-10 h-10 text-gray-400" />
+                            <UserCircle className="w-10 h-10 text-neutral-400" />
                           )}
                         </div>
                         <div className="flex-1">
@@ -512,7 +519,7 @@ export default function ProfilePage() {
                             <Camera className="w-4 h-4 mr-2" />
                             {hostProfile.hostInfo.profilePhoto ? 'Change Photo' : 'Upload Photo'}
                           </Button>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-neutral-500">
                             A friendly photo of yourself or yourselves as hosts
                           </p>
                         </div>
@@ -526,14 +533,14 @@ export default function ProfilePage() {
               {isArtist && (
                 <>
                   {/* Musical Details */}
-                  <Card>
+                  <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
                     <CardHeader>
-                      <h2 className="text-xl font-semibold">Musical Details</h2>
+                      <h2 className="text-xl font-semibold text-neutral-900">Musical Details</h2>
                     </CardHeader>
                     <CardContent className="space-y-6">
                       {/* Genres */}
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Genres</label>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Genres</label>
                         <div className="space-y-3">
                           <div className="flex flex-wrap gap-2">
                             {artistProfile.genres.map(genre => (
@@ -553,7 +560,7 @@ export default function ProfilePage() {
                               <button
                                 key={genre}
                                 onClick={() => addGenre(genre)}
-                                className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
+                                className="px-3 py-1 text-xs bg-neutral-100 hover:bg-neutral-200 rounded-full transition-colors"
                               >
                                 + {genre}
                               </button>
@@ -564,7 +571,7 @@ export default function ProfilePage() {
 
                       {/* Instruments */}
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Instruments</label>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Instruments</label>
                         <div className="space-y-3">
                           <div className="flex flex-wrap gap-2">
                             {artistProfile.instruments.map(instrument => (
@@ -584,7 +591,7 @@ export default function ProfilePage() {
                               <button
                                 key={instrument}
                                 onClick={() => addInstrument(instrument)}
-                                className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
+                                className="px-3 py-1 text-xs bg-neutral-100 hover:bg-neutral-200 rounded-full transition-colors"
                               >
                                 + {instrument}
                               </button>
@@ -596,11 +603,11 @@ export default function ProfilePage() {
                       {/* Experience Level & Years */}
                       <div className="grid md:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Experience Level</label>
+                          <label className="block text-sm font-medium text-neutral-700 mb-2">Experience Level</label>
                           <select
                             value={artistProfile.experienceLevel}
                             onChange={(e) => updateArtistProfile({ experienceLevel: e.target.value as any })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                           >
                             <option value="beginner">Beginner (0-2 years)</option>
                             <option value="intermediate">Intermediate (2-5 years)</option>
@@ -639,11 +646,11 @@ export default function ProfilePage() {
 
                       {/* Cancellation Policy */}
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Cancellation Policy</label>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Cancellation Policy</label>
                         <select
                           value={artistProfile.cancellationPolicy}
                           onChange={(e) => updateArtistProfile({ cancellationPolicy: e.target.value as any })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                         >
                           <option value="flexible">Flexible - Free cancellation 48+ hours before</option>
                           <option value="moderate">Moderate - Free cancellation 7+ days before</option>
@@ -657,19 +664,19 @@ export default function ProfilePage() {
 
               {/* Host-specific fields */}
               {!isArtist && (
-                <Card>
+                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
                   <CardHeader>
-                    <h2 className="text-xl font-semibold">Venue Details</h2>
+                    <h2 className="text-xl font-semibold text-neutral-900">Venue Details</h2>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     {/* Venue Type & Capacity */}
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Venue Type</label>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Venue Type</label>
                         <select
                           value={hostProfile.venueType}
                           onChange={(e) => updateHostProfile({ venueType: e.target.value as any })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                         >
                           <option value="home">Home/Living Room</option>
                           <option value="studio">Studio Space</option>
@@ -690,7 +697,7 @@ export default function ProfilePage() {
 
                     {/* Amenities */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Amenities & Features</label>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">Amenities & Features</label>
                       <div className="space-y-3">
                         <div className="flex flex-wrap gap-2">
                           {hostProfile.amenities.map(amenity => (
@@ -710,7 +717,7 @@ export default function ProfilePage() {
                             <button
                               key={amenity}
                               onClick={() => addAmenity(amenity)}
-                              className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
+                              className="px-3 py-1 text-xs bg-neutral-100 hover:bg-neutral-200 rounded-full transition-colors"
                             >
                               + {amenity}
                             </button>
@@ -723,9 +730,9 @@ export default function ProfilePage() {
               )}
 
               {/* Social Links */}
-              <Card>
+              <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
                 <CardHeader>
-                  <h2 className="text-xl font-semibold">Social Links & Website</h2>
+                  <h2 className="text-xl font-semibold text-neutral-900">Social Links & Website</h2>
                 </CardHeader>
                 <CardContent>
                   <div className="grid md:grid-cols-2 gap-4">
@@ -799,12 +806,12 @@ export default function ProfilePage() {
           {activeTab === 'photos' && (
             <div className="space-y-6">
               {/* Primary Photo */}
-              <Card>
+              <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
                 <CardHeader>
-                  <h2 className="text-xl font-semibold">
+                  <h2 className="text-xl font-semibold text-neutral-900">
                     {isArtist ? 'Press Photo / Primary Photo' : 'Main Venue Photo'}
                   </h2>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-neutral-600">
                     {isArtist 
                       ? 'This is your featured profile image that appears on your public profile and in search results.'
                       : 'This is the main photo that represents your venue to potential artists.'
@@ -813,7 +820,7 @@ export default function ProfilePage() {
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center space-x-6">
-                    <div className="w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <div className="w-32 h-32 bg-neutral-100 rounded-lg flex items-center justify-center">
                       {(isArtist ? artistProfile.profilePhoto : hostProfile.profilePhoto) ? (
                         <img 
                           src={isArtist ? artistProfile.profilePhoto : hostProfile.profilePhoto} 
@@ -821,7 +828,7 @@ export default function ProfilePage() {
                           className="w-32 h-32 rounded-lg object-cover"
                         />
                       ) : (
-                        <Camera className="w-12 h-12 text-gray-400" />
+                        <Camera className="w-12 h-12 text-neutral-400" />
                       )}
                     </div>
                     <div className="flex-1">
@@ -829,11 +836,11 @@ export default function ProfilePage() {
                         <Camera className="w-4 h-4 mr-2" />
                         {(isArtist ? artistProfile.profilePhoto : hostProfile.profilePhoto) ? 'Change Photo' : 'Upload Photo'}
                       </Button>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-neutral-500">
                         Recommended: High-quality photo, 1000x1000px minimum, JPG or PNG
                       </p>
                       {isArtist && (
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-neutral-500 mt-1">
                           Professional press photos work best for booking opportunities
                         </p>
                       )}
@@ -844,12 +851,12 @@ export default function ProfilePage() {
 
               {/* Band Members (Artist only) */}
               {isArtist && (
-                <Card>
+                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <div>
-                        <h2 className="text-xl font-semibold">Band Members</h2>
-                        <p className="text-sm text-gray-600">
+                        <h2 className="text-xl font-semibold text-neutral-900">Band Members</h2>
+                        <p className="text-sm text-neutral-600">
                           Add photos and information for each member of your band
                         </p>
                       </div>
@@ -861,16 +868,16 @@ export default function ProfilePage() {
                   </CardHeader>
                   <CardContent>
                     {artistProfile.bandMembers.length === 0 ? (
-                      <div className="text-center py-8 text-gray-500">
-                        <Users className="w-12 h-12 mx-auto mb-2 text-gray-400" />
+                      <div className="text-center py-8 text-neutral-500">
+                        <Users className="w-12 h-12 mx-auto mb-2 text-neutral-400" />
                         <p>No band members added yet</p>
                         <p className="text-sm">Add your band members to showcase your full lineup</p>
                       </div>
                     ) : (
                       <div className="space-y-4">
                         {artistProfile.bandMembers.map((member) => (
-                          <div key={member.id} className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg">
-                            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                          <div key={member.id} className="flex items-center space-x-4 p-4 border border-neutral-200 rounded-lg">
+                            <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center">
                               {member.photo ? (
                                 <img 
                                   src={member.photo} 
@@ -878,7 +885,7 @@ export default function ProfilePage() {
                                   className="w-16 h-16 rounded-full object-cover"
                                 />
                               ) : (
-                                <UserCircle className="w-8 h-8 text-gray-400" />
+                                <UserCircle className="w-8 h-8 text-neutral-400" />
                               )}
                             </div>
                             <div className="flex-1 grid md:grid-cols-2 gap-4">
@@ -919,12 +926,12 @@ export default function ProfilePage() {
           {/* Media Tab */}
           {activeTab === 'media' && (
             <div className="space-y-6">
-              <Card>
+              <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
                 <CardHeader>
-                  <h2 className="text-xl font-semibold">
+                  <h2 className="text-xl font-semibold text-neutral-900">
                     {isArtist ? 'Music & Media Management' : 'Venue Photo Gallery'}
                   </h2>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-neutral-600">
                     {isArtist 
                       ? 'Upload your music, videos, and media to showcase your talent'
                       : 'Upload photos of your venue space, both interior and exterior'
@@ -932,18 +939,18 @@ export default function ProfilePage() {
                   </p>
                 </CardHeader>
                 <CardContent>
-                  <div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                  <div className="bg-neutral-50 border-2 border-dashed border-neutral-300 rounded-lg p-8 text-center">
                     <div className="space-y-4">
                       {isArtist ? (
-                        <Video className="w-12 h-12 text-gray-400 mx-auto" />
+                        <Video className="w-12 h-12 text-neutral-400 mx-auto" />
                       ) : (
-                        <Camera className="w-12 h-12 text-gray-400 mx-auto" />
+                        <Camera className="w-12 h-12 text-neutral-400 mx-auto" />
                       )}
                       <div>
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">
+                        <h3 className="text-lg font-medium text-neutral-900 mb-2">
                           {isArtist ? 'Media Management' : 'Photo Gallery'}
                         </h3>
-                        <p className="text-gray-600 mb-4">
+                        <p className="text-neutral-600 mb-4">
                           {isArtist 
                             ? 'Upload audio tracks, videos, and other media to showcase your music'
                             : 'Add photos of your venue to help artists visualize the space'
@@ -972,12 +979,12 @@ export default function ProfilePage() {
 
         {/* Save Section */}
         {hasChanges && (
-          <Card className="mt-8">
+          <Card className="bg-white rounded-xl shadow-sm border border-neutral-200 mt-8">
             <CardContent className="py-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-medium text-gray-900">Save Your Changes</h3>
-                  <p className="text-sm text-gray-600">
+                  <h3 className="font-medium text-neutral-900">Save Your Changes</h3>
+                  <p className="text-sm text-neutral-600">
                     You have unsaved changes that will be lost if you navigate away.
                   </p>
                 </div>
@@ -1006,12 +1013,12 @@ export default function ProfilePage() {
         )}
 
         {/* Preview Notice */}
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="mt-8 bg-primary-50 border border-primary-200 rounded-lg p-4">
           <div className="flex items-center">
-            <Star className="w-5 h-5 text-blue-600 mr-3" />
+            <Star className="w-5 h-5 text-primary-600 mr-3" />
             <div>
-              <h4 className="font-medium text-blue-800">Live Profile Preview</h4>
-              <p className="text-sm text-blue-700">
+              <h4 className="font-medium text-primary-800">Live Profile Preview</h4>
+              <p className="text-sm text-primary-700">
                 Click "Preview Live Profile" above to see exactly how your profile appears to {isArtist ? 'hosts' : 'artists'} in real-time.
               </p>
             </div>

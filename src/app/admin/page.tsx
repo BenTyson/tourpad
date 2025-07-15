@@ -136,12 +136,30 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-secondary-50 to-neutral-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Modern Header with Welcome Message */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">TourPad Admin Dashboard</h1>
-          <p className="text-lg text-gray-600">Platform oversight and management center</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-neutral-900 mb-2">
+                TourPad Admin Dashboard
+              </h1>
+              <p className="text-neutral-600 text-lg">
+                Platform oversight and management center
+              </p>
+            </div>
+            <div className="text-right">
+              <div className="text-sm text-neutral-500">
+                {new Date().toLocaleDateString('en-US', { 
+                  weekday: 'long', 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })}
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Platform Health Alert */}
@@ -159,133 +177,133 @@ export default function AdminPage() {
 
         {/* Key Metrics Dashboard */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Total Users</p>
-                  <p className="text-3xl font-bold text-gray-900">{platformMetrics.totalUsers.toLocaleString()}</p>
-                  <p className="text-sm text-green-600 flex items-center mt-1">
-                    <ArrowTrendingUpIcon className="w-4 h-4 mr-1" />
-                    +12% this month
-                  </p>
-                </div>
-                <div className="p-3 bg-blue-100 rounded-full">
-                  <UsersIcon className="w-8 h-8 text-blue-600" />
+          <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
+                  <UsersIcon className="w-6 h-6 text-primary-600" />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+              <div className="ml-4">
+                <div className="text-2xl font-bold text-neutral-900">{platformMetrics.totalUsers.toLocaleString()}</div>
+                <div className="text-sm text-neutral-600">Total Users</div>
+                <div className="text-sm text-primary-600 flex items-center mt-1">
+                  <ArrowTrendingUpIcon className="w-4 h-4 mr-1" />
+                  +12% this month
+                </div>
+              </div>
+            </div>
+          </div>
 
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Monthly Revenue</p>
-                  <p className="text-3xl font-bold text-gray-900">${(platformMetrics.monthlyRevenue / 1000).toFixed(0)}k</p>
-                  <p className="text-sm text-green-600 flex items-center mt-1">
-                    <ArrowTrendingUpIcon className="w-4 h-4 mr-1" />
-                    +8% vs last month
-                  </p>
-                </div>
-                <div className="p-3 bg-green-100 rounded-full">
-                  <CurrencyDollarIcon className="w-8 h-8 text-green-600" />
+          <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 bg-secondary-100 rounded-lg flex items-center justify-center">
+                  <CurrencyDollarIcon className="w-6 h-6 text-secondary-600" />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+              <div className="ml-4">
+                <div className="text-2xl font-bold text-neutral-900">${(platformMetrics.monthlyRevenue / 1000).toFixed(0)}k</div>
+                <div className="text-sm text-neutral-600">Monthly Revenue</div>
+                <div className="text-sm text-secondary-600 flex items-center mt-1">
+                  <ArrowTrendingUpIcon className="w-4 h-4 mr-1" />
+                  +8% vs last month
+                </div>
+              </div>
+            </div>
+          </div>
 
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Pending Applications</p>
-                  <p className="text-3xl font-bold text-gray-900">{platformMetrics.pendingApplications}</p>
-                  <p className="text-sm text-yellow-600">Requires attention</p>
-                </div>
-                <div className="p-3 bg-yellow-100 rounded-full">
-                  <ExclamationTriangleIcon className="w-8 h-8 text-yellow-600" />
+          <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                  <ExclamationTriangleIcon className="w-6 h-6 text-orange-600" />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+              <div className="ml-4">
+                <div className="text-2xl font-bold text-neutral-900">{platformMetrics.pendingApplications}</div>
+                <div className="text-sm text-neutral-600">Pending Applications</div>
+                <div className="text-sm text-orange-600">Requires attention</div>
+              </div>
+            </div>
+          </div>
 
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Active Bookings</p>
-                  <p className="text-3xl font-bold text-gray-900">{platformMetrics.upcomingEvents}</p>
-                  <p className="text-sm text-purple-600">Next 30 days</p>
-                </div>
-                <div className="p-3 bg-purple-100 rounded-full">
-                  <CalendarIcon className="w-8 h-8 text-purple-600" />
+          <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
+                  <CalendarIcon className="w-6 h-6 text-primary-600" />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+              <div className="ml-4">
+                <div className="text-2xl font-bold text-neutral-900">{platformMetrics.upcomingEvents}</div>
+                <div className="text-sm text-neutral-600">Active Bookings</div>
+                <div className="text-sm text-primary-600">Next 30 days</div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Admin Sections Grid */}
           <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <h2 className="text-2xl font-semibold text-gray-900">Admin Sections</h2>
-                <p className="text-gray-600">Access all administrative functions</p>
-              </CardHeader>
-              <CardContent>
+            <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
+              <div className="px-6 py-4 border-b border-neutral-200">
+                <h2 className="text-xl font-semibold text-neutral-900">Admin Sections</h2>
+                <p className="text-sm text-neutral-600 mt-1">Access all administrative functions</p>
+              </div>
+              <div className="p-6">
                 <div className="grid md:grid-cols-2 gap-4">
                   {adminSections.map((section) => {
                     const Icon = section.icon;
                     return (
                       <Link key={section.title} href={section.href}>
-                        <Card className="hover:shadow-lg transition-all duration-200 hover:scale-105 cursor-pointer border-2 hover:border-primary-200">
-                          <CardContent className="p-6">
-                            <div className="flex items-start space-x-4">
-                              <div className={`p-3 rounded-lg ${section.color} bg-opacity-10`}>
-                                <Icon className={`w-6 h-6 ${section.color.replace('bg-', 'text-')}`} />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center justify-between">
-                                  <h3 className="font-semibold text-gray-900 truncate">{section.title}</h3>
-                                  <Badge variant="secondary">{section.count}</Badge>
-                                </div>
-                                <p className="text-sm text-gray-600 mt-1">{section.description}</p>
+                        <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                          <div className="flex items-center">
+                            <div className="flex-shrink-0">
+                              <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
+                                <Icon className="w-6 h-6 text-primary-600" />
                               </div>
                             </div>
-                          </CardContent>
-                        </Card>
+                            <div className="ml-4">
+                              <div className="flex items-center justify-between">
+                                <h3 className="text-base font-semibold text-neutral-900">{section.title}</h3>
+                                <Badge variant="secondary" className="bg-neutral-100 text-neutral-700">{section.count}</Badge>
+                              </div>
+                              <p className="text-sm text-neutral-600 mt-1">{section.description}</p>
+                            </div>
+                          </div>
+                        </div>
                       </Link>
                     );
                   })}
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
 
           {/* Recent Activity Sidebar */}
           <div>
-            <Card>
-              <CardHeader>
-                <h2 className="text-xl font-semibold text-gray-900">Recent Activity</h2>
-                <p className="text-sm text-gray-600">Latest platform events</p>
-              </CardHeader>
-              <CardContent>
+            <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
+              <div className="px-6 py-4 border-b border-neutral-200">
+                <h2 className="text-lg font-semibold text-neutral-900">Recent Activity</h2>
+                <p className="text-sm text-neutral-600 mt-1">Latest platform events</p>
+              </div>
+              <div className="p-6">
                 <div className="space-y-4">
                   {recentActivity.map((activity) => {
                     const Icon = getActivityIcon(activity.type);
                     const colorClasses = getActivityColor(activity.type, activity.urgent);
                     
                     return (
-                      <div key={activity.id} className={`p-3 rounded-lg border ${activity.urgent ? 'border-red-200 bg-red-50' : 'border-gray-200'}`}>
+                      <div key={activity.id} className={`p-3 rounded-lg border ${activity.urgent ? 'border-red-200 bg-red-50' : 'border-neutral-200'}`}>
                         <div className="flex items-start space-x-3">
                           <div className={`p-2 rounded-full ${colorClasses}`}>
                             <Icon className="w-4 h-4" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm text-gray-900 leading-relaxed">{activity.message}</p>
-                            <p className="text-xs text-gray-500 mt-1">{activity.time}</p>
+                            <p className="text-sm text-neutral-900 leading-relaxed">{activity.message}</p>
+                            <p className="text-xs text-neutral-500 mt-1">{activity.time}</p>
                             {activity.urgent && (
                               <Badge variant="secondary" className="bg-red-100 text-red-800 border-red-200 mt-2">
                                 Urgent
@@ -297,15 +315,15 @@ export default function AdminPage() {
                     );
                   })}
                 </div>
-                <div className="mt-4 pt-4 border-t">
+                <div className="mt-4 pt-4 border-t border-neutral-200">
                   <Link href="/admin/activity">
                     <Button variant="outline" className="w-full">
                       View All Activity
                     </Button>
                   </Link>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       </div>
