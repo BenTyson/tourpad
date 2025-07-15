@@ -137,7 +137,9 @@ export default function EnhancedHomePage() {
           }}
         >
           {/* Overlay with gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-secondary-700/90 via-secondary-600/85 to-secondary-500/90"></div>
+          <div className="absolute inset-0" style={{
+            background: 'linear-gradient(135deg, rgba(140, 162, 180, 0.9) 0%, rgba(156, 176, 194, 0.85) 50%, rgba(172, 190, 208, 0.9) 100%)'
+          }}></div>
         </div>
         
         {/* Animated background elements */}

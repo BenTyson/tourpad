@@ -11,31 +11,38 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   
-  /* TourPad color palette - Primary (Periwinkle) */
-  --color-primary-50: #f7f8fd;
-  --color-primary-100: #eff1fb;
-  --color-primary-200: #dfe3f7;
-  --color-primary-300: #c7cef1;
-  --color-primary-400: #afb9eb;
-  --color-primary-500: #97a4e5;
-  --color-primary-600: #7f8fdf;
-  --color-primary-700: #6779d3;
-  --color-primary-800: #5563c7;
-  --color-primary-900: #434dbb;
-  --color-primary: #afb9eb;
+  /* TourPad color palette - Primary (French Blue - coastal waters) */
+  --color-primary-50: #f0f4f6;
+  --color-primary-100: #e1e9ed;
+  --color-primary-200: #c3d3db;
+  --color-primary-300: #a5bdc9;
+  --color-primary-400: #8ea58c;
+  --color-primary-500: #7a9bb0;
+  --color-primary-600: #6b8ca4;
+  --color-primary-700: #5c7d98;
+  --color-primary-800: #4d6e8c;
+  --color-primary-900: #3e5f80;
+  --color-primary: #8ea58c;
   
-  /* TourPad color palette - Secondary (Sage) */
-  --color-secondary-50: #f6f9f7;
-  --color-secondary-100: #edf3ef;
-  --color-secondary-200: #d3e4d7;
-  --color-secondary-300: #A1CCAD;
-  --color-secondary-400: #8bb097;
-  --color-secondary-500: #8BB097;
-  --color-secondary-600: #7a9d86;
-  --color-secondary-700: #658371;
-  --color-secondary-800: #51685c;
-  --color-secondary-900: #3d4e47;
-  --color-secondary: #8BB097;
+  /* TourPad color palette - Secondary (Sage - calming green) */
+  --color-secondary-50: #f2f5f3;
+  --color-secondary-100: #e6ebe7;
+  --color-secondary-200: #c0d0c3;
+  --color-secondary-300: #9ab59f;
+  --color-secondary-400: #85a089;
+  --color-secondary-500: #738a6e;
+  --color-secondary-600: #5e7259;
+  --color-secondary-700: #4a5a46;
+  --color-secondary-800: #344c3d;
+  --color-secondary-900: #2d3f34;
+  --color-secondary: #738a6e;
+  
+  /* Coastal accent colors */
+  --color-mist: #bfcfbb;
+  --color-sand: #d4c4a8;
+  --color-french-blue: #8ea58c;
+  --color-sage: #738a6e;
+  --color-evergreen: #344c3d;
   
   --color-neutral-50: #f8f9f9;
   --color-neutral-100: #f1f3f3;

@@ -480,3 +480,46 @@ Import trace for requested module:
  GET /dashboard 200 in 16ms
  ✓ Compiled in 117ms (538 modules)
  GET /dashboard 200 in 24ms
+ ✓ Compiled / in 412ms (613 modules)
+ GET / 200 in 467ms
+ ✓ Compiled in 328ms (1140 modules)
+ GET / 200 in 82ms
+ ✓ Compiled in 256ms (1140 modules)
+ GET / 200 in 30ms
+ ✓ Compiled /artists in 187ms (612 modules)
+ GET /artists 200 in 246ms
+ GET /artists 200 in 40ms
+ GET /artists/1 200 in 35ms
+ GET /artists 200 in 20ms
+ GET / 200 in 18ms
+ ✓ Compiled /_not-found in 318ms (1123 modules)
+ GET /how-it-works 404 in 361ms
+ GET /how-it-works 404 in 111ms
+ GET /how-it-works 404 in 82ms
+ ✓ Compiled /api/auth/[...nextauth] in 314ms (833 modules)
+ GET /api/auth/session 200 in 401ms
+ ✓ Compiled /dashboard in 156ms (850 modules)
+ GET /dashboard 200 in 225ms
+ GET / 200 in 12ms
+ GET /api/auth/session 200 in 60ms
+ ✓ Compiled in 487ms (1383 modules)
+ GET / 200 in 50ms
+ ✓ Compiled in 452ms (1379 modules)
+ GET / 200 in 42ms
+ ✓ Compiled in 281ms (1142 modules)
+ GET / 200 in 74ms
+ ✓ Compiled /hosts in 301ms (617 modules)
+ GET /hosts 200 in 372ms
+ GET /hosts 200 in 38ms
+ ✓ Compiled /hosts/[id] in 236ms (634 modules)
+ GET /hosts/1 200 in 300ms
+ GET /hosts/1 200 in 65ms
+ ✓ Compiled in 274ms (1142 modules)
+ GET /hosts/1 200 in 65ms
+ ✓ Compiled /api/auth/[...nextauth] in 356ms (841 modules)
+ GET /api/auth/session 200 in 452ms
+ GET / 200 in 66ms
+ GET /artists 200 in 30ms
+ ✓ Compiled /artists/[id] in 236ms (849 modules)
+ GET /artists/1 200 in 305ms
+ GET /artists/1 200 in 44ms
