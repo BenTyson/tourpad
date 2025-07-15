@@ -6,8 +6,8 @@ export const registerSchema = z.object({
   email: z.string().email('Invalid email format'),
   phone: z.string().regex(/^\(\d{3}\) \d{3}-\d{4}$|^\d{10}$|^\+1\d{10}$/, 'Please enter a valid phone number'),
   location: z.string().min(5, 'Please enter city and state').max(100, 'Location cannot exceed 100 characters'),
-  type: z.enum(['artist', 'host'], {
-    errorMap: () => ({ message: 'User type must be artist or host' })
+  type: z.enum(['artist', 'host', 'fan'], {
+    errorMap: () => ({ message: 'Please select a valid user type' })
   }),
   agreeToTerms: z.boolean().refine(val => val === true, {
     message: 'You must agree to the terms and conditions'
@@ -24,6 +24,10 @@ export const registerSchema = z.object({
   }
   if (data.type === 'host') {
     return data.venueDescription && data.venueDescription.length >= 20;
+  }
+  if (data.type === 'fan') {
+    // Fans don't have special validation requirements beyond the basic fields
+    return true;
   }
   return true;
 }, {

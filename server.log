@@ -8,358 +8,61 @@
    - Environments: .env.local
 
  ✓ Starting...
- ✓ Ready in 977ms
+ ✓ Ready in 1023ms
  ○ Compiling / ...
- ✓ Compiled / in 1973ms (901 modules)
- GET / 200 in 2206ms
- ✓ Compiled /api/auth/[...nextauth] in 334ms (517 modules)
- ✓ Compiled in 410ms (392 modules)
- GET /favicon.ico 200 in 1209ms
- GET / 200 in 136ms
- GET /api/auth/session 200 in 1448ms
- GET /api/auth/session 200 in 5ms
- GET / 200 in 85ms
- ✓ Compiled /artists in 193ms (1163 modules)
- GET /artists 200 in 233ms
- ✓ Compiled /hosts in 296ms (1182 modules)
- GET /hosts 200 in 321ms
- ✓ Compiled /hosts/[id] in 276ms (1243 modules)
- GET /hosts/1 200 in 582ms
- GET / 200 in 43ms
- ✓ Compiled in 522ms (984 modules)
- GET / 200 in 73ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- ⨯ ReferenceError: UserGroupIcon is not defined
-    at HomePage (src/app/page.tsx:24:12)
-  22 |   const howItWorksSteps = [
-  23 |     {
-> 24 |       icon: UserGroupIcon,
-     |            ^
-  25 |       title: 'Join the Community',
-  26 |       description: 'Artists apply and get approved. Hosts create their venue profiles.',
-  27 |       cta: 'Apply Now' {
-  digest: '1833063891'
-}
- GET / 500 in 86ms
- ✓ Compiled /favicon.ico in 120ms (562 modules)
- GET /favicon.ico 200 in 170ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- ✓ Compiled in 360ms (1005 modules)
- GET / 200 in 226ms
- GET / 200 in 159ms
- GET /favicon.ico 200 in 9ms
- ✓ Compiled /api/auth/[...nextauth] in 149ms (800 modules)
- GET /api/auth/session 200 in 234ms
- ✓ Compiled in 160ms (440 modules)
- GET / 200 in 73ms
- ✓ Compiled /_not-found in 551ms (967 modules)
- GET / 404 in 411ms
- GET / 404 in 11ms
- GET / 404 in 65ms
- ✓ Compiled /api/auth/[...nextauth] in 61ms (779 modules)
- GET /api/auth/session 200 in 142ms
- ✓ Compiled in 94ms (439 modules)
- GET / 404 in 29ms
- GET / 404 in 60ms
- ✓ Compiled in 83ms (1204 modules)
+ ✓ Compiled / in 721ms (899 modules)
+ HEAD / 200 in 954ms
+ GET / 200 in 123ms
+ ✓ Compiled /favicon.ico in 392ms (1151 modules)
+ GET /favicon.ico 200 in 380ms
+ GET /api/auth/session 200 in 812ms
  GET /api/auth/session 200 in 31ms
- ✓ Compiled / in 484ms (983 modules)
- GET / 200 in 634ms
- GET / 200 in 96ms
- ✓ Compiled /api/auth/[...nextauth] in 240ms (569 modules)
- ✓ Compiled (804 modules)
- GET /favicon.ico 200 in 385ms
- GET /api/auth/session 200 in 336ms
- ○ Compiling /register ...
- ✓ Compiled /register in 516ms (1020 modules)
- GET /register?type=host 200 in 595ms
- ✓ Compiled in 450ms (1034 modules)
- GET /register?type=host 200 in 60ms
- ✓ Compiled in 333ms (1034 modules)
- GET /register?type=host 200 in 77ms
- GET / 200 in 27ms
- ✓ Compiled /artists in 278ms (582 modules)
- GET /artists 200 in 309ms
- GET /artists 200 in 13ms
- ✓ Compiled /artists/[id] in 302ms (1042 modules)
- GET /artists/1 200 in 659ms
+ ✓ Compiled in 605ms (397 modules)
+ GET / 200 in 47ms
+ ✓ Compiled in 196ms (397 modules)
+ GET / 200 in 32ms
+ ✓ Compiled in 170ms (397 modules)
+ GET / 200 in 108ms
+ ✓ Compiled in 113ms (397 modules)
+ GET / 200 in 34ms
+ ✓ Compiled in 149ms (397 modules)
  GET / 200 in 36ms
- ✓ Compiled in 344ms (1049 modules)
- GET / 200 in 60ms
- ✓ Compiled in 202ms (1049 modules)
- GET / 200 in 33ms
- ✓ Compiled in 213ms (1049 modules)
- GET / 200 in 29ms
- ✓ Compiled in 372ms (1049 modules)
- GET / 200 in 53ms
- ✓ Compiled in 210ms (1049 modules)
- GET / 200 in 29ms
- ✓ Compiled in 227ms (1049 modules)
- GET / 200 in 28ms
- ✓ Compiled in 243ms (1049 modules)
- GET / 200 in 35ms
- ✓ Compiled in 192ms (1049 modules)
- GET / 200 in 29ms
- ✓ Compiled in 232ms (1049 modules)
- GET / 200 in 33ms
- ✓ Compiled /hosts in 301ms (590 modules)
- GET /hosts 200 in 335ms
- GET /hosts 200 in 14ms
- GET /hosts/1 200 in 37ms
- GET /hosts 200 in 30ms
- GET / 200 in 24ms
- ✓ Compiled in 217ms (1036 modules)
+ ✓ Compiled in 148ms (397 modules)
  GET / 200 in 30ms
- ✓ Compiled in 338ms (1036 modules)
- GET / 200 in 61ms
- ✓ Compiled in 182ms (1036 modules)
- GET / 200 in 30ms
- ✓ Compiled in 297ms (1036 modules)
- GET / 200 in 57ms
- ✓ Compiled in 185ms (1036 modules)
- GET / 200 in 30ms
- ✓ Compiled /_not-found in 168ms (1026 modules)
- GET /url(https:/images.unsplash.com/photo-1524863479829-916d8e77f114?w=800&h=600&auto=format&fit=crop&q=80) 404 in 256ms
- GET / 200 in 93ms
- GET /url(https:/images.unsplash.com/photo-1524863479829-916d8e77f114?w=800&h=600&auto=format&fit=crop&q=80) 404 in 58ms
- ✓ Compiled in 291ms (1036 modules)
- GET / 200 in 25ms
- ✓ Compiled in 295ms (1036 modules)
- GET / 200 in 57ms
- ✓ Compiled in 183ms (1036 modules)
- GET / 200 in 28ms
- ✓ Compiled in 348ms (1036 modules)
- GET / 200 in 48ms
- ✓ Compiled in 476ms (1034 modules)
- GET / 200 in 40ms
- ✓ Compiled in 198ms (1034 modules)
+ ✓ Compiled in 125ms (397 modules)
+ GET / 200 in 19ms
+ ✓ Compiled in 123ms (397 modules)
+ ✓ Compiled in 138ms (397 modules)
+ GET / 200 in 138ms
+ GET / 200 in 15ms
+ ✓ Compiled in 141ms (397 modules)
+ GET / 200 in 37ms
+ ✓ Compiled in 154ms (397 modules)
  GET / 200 in 31ms
- ✓ Compiled in 368ms (1034 modules)
- GET / 200 in 60ms
- ✓ Compiled in 371ms (1034 modules)
+ ✓ Compiled in 120ms (397 modules)
+ GET / 200 in 20ms
+ ✓ Compiled in 121ms (397 modules)
  GET / 200 in 27ms
- ✓ Compiled in 199ms (1034 modules)
- GET / 200 in 27ms
- ✓ Compiled in 357ms (1034 modules)
- GET / 200 in 45ms
- ✓ Compiled in 320ms (1034 modules)
- GET / 200 in 71ms
- ✓ Compiled in 143ms (465 modules)
- GET / 200 in 33ms
- ✓ Compiled in 111ms (465 modules)
- GET / 200 in 13ms
- ✓ Compiled in 104ms (465 modules)
- GET / 200 in 12ms
- ✓ Compiled in 119ms (465 modules)
- GET / 200 in 23ms
- ✓ Compiled in 108ms (465 modules)
- GET / 200 in 14ms
- ✓ Compiled in 101ms (465 modules)
- GET / 200 in 14ms
- ✓ Compiled in 138ms (465 modules)
- GET / 200 in 42ms
- ✓ Compiled in 115ms (465 modules)
- GET / 200 in 13ms
- ✓ Compiled in 365ms (1029 modules)
- ✓ Compiled in 176ms (1039 modules)
- ✓ Compiled in 182ms (1043 modules)
- ✓ Compiled in 212ms (1043 modules)
- ✓ Compiled in 285ms (1045 modules)
- GET / 200 in 177ms
- ✓ Compiled /favicon.ico in 288ms (817 modules)
- ✓ Compiled (831 modules)
- GET /favicon.ico 200 in 401ms
- GET /api/auth/session 200 in 467ms
- ✓ Compiled in 352ms (1296 modules)
- GET / 200 in 83ms
- ✓ Compiled in 215ms (1045 modules)
+ ✓ Compiled in 142ms (397 modules)
+ GET / 200 in 29ms
+ ✓ Compiled in 170ms (397 modules)
+ GET / 200 in 35ms
+ ✓ Compiled in 150ms (397 modules)
+ GET / 200 in 32ms
+ GET / 200 in 37ms
+ ✓ Compiled in 138ms (900 modules)
  GET / 200 in 74ms
- ✓ Compiled in 570ms (1049 modules)
- GET / 200 in 57ms
- GET /hosts 200 in 15ms
- GET /artists 200 in 39ms
- GET /hosts 200 in 24ms
- ✓ Compiled in 357ms (1035 modules)
- GET /hosts 200 in 113ms
- ⚠ Fast Refresh had to perform a full reload when entyson/pad/node_modules/next/dist/client/app-dir/link.js","ids":["__esModule","default"]} changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /hosts 200 in 116ms
- ✓ Compiled /api/auth/[...nextauth] in 70ms (597 modules)
- ✓ Compiled (832 modules)
- GET /favicon.ico 200 in 404ms
- GET /api/auth/session 200 in 369ms
- ✓ Compiled in 146ms (454 modules)
- GET /hosts 200 in 103ms
- ✓ Compiled in 109ms (454 modules)
- GET /hosts 200 in 36ms
- ✓ Compiled in 110ms (454 modules)
- GET /hosts 200 in 36ms
- ✓ Compiled in 118ms (454 modules)
- GET /hosts 200 in 60ms
- ✓ Compiled in 109ms (454 modules)
- GET /hosts 200 in 36ms
- ✓ Compiled in 107ms (454 modules)
- GET /hosts 200 in 32ms
- ✓ Compiled in 103ms (454 modules)
- ✓ Compiled in 162ms (454 modules)
- GET /hosts 200 in 171ms
- GET /hosts 200 in 34ms
- GET / 200 in 38ms
- GET /artists 200 in 165ms
- GET /api/auth/session 200 in 11ms
- ○ Compiling /login ...
- ✓ Compiled /login in 612ms (1289 modules)
- GET /login 200 in 707ms
- GET /api/auth/providers 200 in 79ms
- GET /api/auth/csrf 200 in 4ms
- POST /api/auth/callback/credentials 200 in 8ms
- GET /api/auth/session 200 in 10ms
- GET /api/auth/session 200 in 6ms
- ✓ Compiled /dashboard in 310ms (1306 modules)
- GET /dashboard 200 in 352ms
- GET /artists 200 in 62ms
- GET /hosts 200 in 64ms
- GET /artists 200 in 38ms
- ✓ Compiled /_not-found in 169ms (1300 modules)
- GET /how-it-works 404 in 197ms
- GET /how-it-works 404 in 14ms
- GET /how-it-works 404 in 69ms
- GET /api/auth/session 200 in 35ms
- GET /artists 200 in 48ms
- GET /hosts 200 in 79ms
- ✓ Compiled in 713ms (1069 modules)
- GET /hosts 200 in 77ms
- ✓ Compiled /api/auth/[...nextauth] in 97ms (842 modules)
- GET /api/auth/session 200 in 182ms
- GET /api/auth/session 200 in 4ms
- ✓ Compiled in 525ms (1069 modules)
- GET /hosts 200 in 60ms
- ✓ Compiled /api/auth/[...nextauth] in 79ms (837 modules)
- GET /api/auth/session 200 in 154ms
- GET /api/auth/session 200 in 6ms
- GET /artists 200 in 64ms
- ✓ Compiled /_not-found in 209ms (1310 modules)
- GET /how-it-works 404 in 260ms
- GET /how-it-works 404 in 77ms
- GET /api/auth/session 200 in 19ms
- GET /artists 200 in 37ms
- GET /api/auth/csrf 200 in 16ms
- POST /api/auth/signout 200 in 12ms
- GET /artists 200 in 59ms
- GET /api/auth/session 200 in 4ms
- GET /artists 200 in 7ms
- GET /hosts 200 in 31ms
- GET /login 200 in 27ms
- GET /api/auth/providers 200 in 30ms
- GET /api/auth/csrf 200 in 8ms
- POST /api/auth/callback/credentials 200 in 9ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/session 200 in 9ms
- ○ Compiling /admin ...
- ✓ Compiled /admin in 533ms (1339 modules)
- GET /admin 200 in 559ms
- ✓ Compiled / in 179ms (861 modules)
- GET / 200 in 227ms
- ✓ Compiled /account/status in 219ms (1317 modules)
- GET /account/status 200 in 255ms
- GET /api/auth/session 200 in 79ms
- GET /admin 200 in 28ms
- ○ Compiling /admin/applications ...
- ✓ Compiled /admin/applications in 594ms (1317 modules)
- GET /admin/applications 200 in 645ms
- GET /admin 200 in 33ms
- ✓ Compiled /_not-found in 158ms (1084 modules)
- GET /admin/activity 404 in 236ms
- GET /admin/activity 404 in 92ms
- ✓ Compiled /api/auth/[...nextauth] in 99ms (824 modules)
- GET /api/auth/session 200 in 178ms
- GET /admin 200 in 174ms
- GET /api/auth/session 200 in 6ms
- GET /artists 200 in 31ms
- ✓ Compiled /artists/[id] in 248ms (840 modules)
- GET /artists/1 200 in 303ms
- GET /api/auth/session 200 in 104ms
- ✓ Compiled in 533ms (508 modules)
- GET /artists/1 200 in 25ms
- ✓ Compiled in 127ms (508 modules)
- GET /artists/1 200 in 20ms
- ✓ Compiled in 179ms (508 modules)
- GET /artists/1 200 in 71ms
- ✓ Compiled in 117ms (508 modules)
- GET /artists/1 200 in 17ms
- ✓ Compiled in 217ms (508 modules)
- GET /artists/1 200 in 57ms
- ✓ Compiled in 125ms (508 modules)
- GET /artists/1 200 in 19ms
- ✓ Compiled in 117ms (508 modules)
- GET /artists/1 200 in 19ms
- ✓ Compiled in 112ms (508 modules)
- GET /artists/1 200 in 20ms
- ✓ Compiled in 107ms (508 modules)
- GET /artists/1 200 in 18ms
- ✓ Compiled in 130ms (508 modules)
- GET /artists/1 200 in 30ms
- ✓ Compiled in 164ms (508 modules)
- GET /artists/1 200 in 44ms
- ✓ Compiled in 124ms (508 modules)
- GET /artists/1 200 in 16ms
- ✓ Compiled in 113ms (508 modules)
- GET /artists/1 200 in 20ms
- ✓ Compiled in 106ms (508 modules)
- GET /artists/1 200 in 22ms
- GET /api/auth/session 200 in 26ms
- GET /artists 200 in 35ms
- GET /artists/1 200 in 32ms
- GET /artists 200 in 25ms
- ✓ Compiled /hosts in 331ms (830 modules)
- GET /hosts 200 in 414ms
- ✓ Compiled /hosts/[id] in 132ms (846 modules)
- GET /hosts/1 200 in 181ms
- ✓ Compiled in 334ms (1092 modules)
- GET /hosts/1 200 in 78ms
- ✓ Compiled in 116ms (508 modules)
- GET /hosts/1 200 in 19ms
- ✓ Compiled in 125ms (508 modules)
- GET /hosts/1 200 in 20ms
- GET / 200 in 17ms
- ✓ Compiled /register in 288ms (604 modules)
- GET /register?type=host 200 in 336ms
- GET /register?type=host 200 in 17ms
- ✓ Compiled /artists in 131ms (613 modules)
- GET /artists 200 in 180ms
- GET /artists/1 200 in 38ms
- ✓ Compiled /bookings/new in 417ms (1115 modules)
- GET /bookings/new?artistId=1 200 in 460ms
- GET /artists/1 200 in 29ms
- GET /hosts 200 in 26ms
- GET /hosts/3 200 in 36ms
- GET /bookings/new?hostId=3 200 in 30ms
- ✓ Compiled /api/auth/[...nextauth] in 337ms (836 modules)
- GET /api/auth/csrf 200 in 434ms
- GET /bookings/new?hostId=3 200 in 129ms
- POST /api/auth/signout 200 in 6ms
- GET /bookings/new?hostId=3 200 in 111ms
- GET /api/auth/session 200 in 4ms
- ✓ Compiled /login in 183ms (846 modules)
- GET /login 200 in 252ms
- GET /api/auth/providers 200 in 68ms
- GET /api/auth/csrf 200 in 4ms
- POST /api/auth/callback/credentials 200 in 5ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 3ms
- ✓ Compiled /dashboard in 244ms (847 modules)
- GET /dashboard 200 in 280ms
- ✓ Compiled /messages in 323ms (1362 modules)
- GET /messages 200 in 351ms
- GET /dashboard 200 in 31ms
- ✓ Compiled in 567ms (1119 modules)
- GET /dashboard 200 in 109ms
- ✓ Compiled in 131ms (519 modules)
- GET /dashboard 200 in 16ms
- ✓ Compiled in 128ms (519 modules)
- GET /dashboard 200 in 106ms
- ✓ Compiled in 110ms (519 modules)
- GET /dashboard 200 in 18ms
- ✓ Compiled /api/auth/[...nextauth] in 263ms (837 modules)
- GET /api/auth/session 200 in 358ms
- GET /dashboard 200 in 124ms
+ ○ Compiling /register ...
+ ✓ Compiled /register in 582ms (945 modules)
+ GET /register 200 in 755ms
+ ✓ Compiled /api/auth/[...nextauth] in 63ms (778 modules)
+ GET /api/auth/session 200 in 152ms
+ GET /register?type=fan 200 in 71ms
+ ✓ Compiled in 271ms (959 modules)
+ GET /register?type=fan 200 in 91ms
+ ✓ Compiled in 162ms (959 modules)
+ GET /register?type=fan 200 in 36ms
+ ✓ Compiled in 227ms (959 modules)
+ GET /register?type=fan 200 in 44ms
+ ✓ Compiled /payment/fan in 375ms (966 modules)
+ GET /payment/fan 200 in 405ms

@@ -20,7 +20,7 @@ const US_STATES = [
 function RegisterForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const userType = searchParams.get('type') as 'host' | 'artist';
+  const userType = searchParams.get('type') as 'host' | 'artist' | 'fan';
   
   // Always call hooks in the same order
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -50,6 +50,12 @@ function RegisterForm() {
     hostingMotivation: '',
     additionalInfo: '',
     newToHosting: '',
+    // Fan specific
+    fanCity: '',
+    fanState: '',
+    favoriteGenres: [] as string[],
+    concertFrequency: '',
+    referralSource: '',
     agreeToTerms: false
   });
 
@@ -59,26 +65,58 @@ function RegisterForm() {
     setIsSubmitting(true);
     
     try {
-      // Update form data with current user type
-      const dataToValidate = { ...formData, type: userType };
-      
-      // Validate form data
-      const validation = validateData(registerSchema, dataToValidate);
-      
-      if (!validation.success) {
-        const errorMap: Record<string, string> = {};
-        validation.errors?.forEach(error => {
-          const [field, message] = error.split(': ');
-          errorMap[field] = message;
-        });
-        setErrors(errorMap);
-        return;
+      // For fans, we need minimal validation
+      if (userType === 'fan') {
+        // Basic validation for fan registration
+        const errors: Record<string, string> = {};
+        
+        if (!formData.name || formData.name.length < 2) {
+          errors.name = 'Name must be at least 2 characters';
+        }
+        if (!formData.email || !formData.email.includes('@')) {
+          errors.email = 'Please enter a valid email address';
+        }
+        if (!formData.fanCity) {
+          errors.fanCity = 'City is required';
+        }
+        if (!formData.fanState) {
+          errors.fanState = 'State is required';
+        }
+        if (!formData.agreeToTerms) {
+          errors.agreeToTerms = 'You must agree to the terms and conditions';
+        }
+        
+        if (Object.keys(errors).length > 0) {
+          setErrors(errors);
+          return;
+        }
+      } else {
+        // Use existing validation for artists and hosts
+        const dataToValidate = { ...formData, type: userType };
+        
+        // Validate form data
+        const validation = validateData(registerSchema, dataToValidate);
+        
+        if (!validation.success) {
+          const errorMap: Record<string, string> = {};
+          validation.errors?.forEach(error => {
+            const [field, message] = error.split(': ');
+            errorMap[field] = message;
+          });
+          setErrors(errorMap);
+          return;
+        }
       }
       
       // TODO: Submit to backend API
       await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate API call
       
-      alert(`${userType === 'artist' ? 'Artist' : 'Host'} application submitted successfully! We'll review and get back to you within 48 hours.`);
+      if (userType === 'fan') {
+        // For fans, redirect to payment page
+        router.push('/payment/fan');
+      } else {
+        alert(`${userType === 'artist' ? 'Artist' : 'Host'} application submitted successfully! We'll review and get back to you within 48 hours.`);
+      }
       
     } catch (error) {
       console.error('Submission error:', error);
@@ -89,7 +127,7 @@ function RegisterForm() {
   };
 
   // Show user type selection if no valid type specified
-  if (!userType || (userType !== 'host' && userType !== 'artist')) {
+  if (!userType || (userType !== 'host' && userType !== 'artist' && userType !== 'fan')) {
     return <UserTypeSelection />;
   }
 
@@ -98,12 +136,14 @@ function RegisterForm() {
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-2">
-            {userType === 'artist' ? 'Artist Application' : 'Host Application'}
+            {userType === 'artist' ? 'Artist Application' : userType === 'host' ? 'Host Application' : 'Fan Registration'}
           </h1>
           <p className="text-lg text-secondary-100">
             {userType === 'artist' 
               ? 'Join our community of touring musicians'
-              : 'Open your space for intimate concerts'
+              : userType === 'host' 
+              ? 'Open your space for intimate concerts'
+              : 'Get instant access to exclusive house concerts'
             }
           </p>
         </div>
@@ -562,13 +602,150 @@ function RegisterForm() {
                 </>
               )}
 
+              {/* Fan Registration Fields */}
+              {userType === 'fan' && (
+                <>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Input
+                        label="City *"
+                        value={formData.fanCity}
+                        onChange={(e) => {
+                          setFormData({ ...formData, fanCity: e.target.value });
+                          if (errors.fanCity) setErrors(prev => ({ ...prev, fanCity: '' }));
+                        }}
+                        required
+                        placeholder="Portland"
+                      />
+                      {errors.fanCity && (
+                        <p className="mt-1 text-sm text-red-600">{errors.fanCity}</p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">
+                        State *
+                      </label>
+                      <select
+                        value={formData.fanState}
+                        onChange={(e) => {
+                          setFormData({ ...formData, fanState: e.target.value });
+                          if (errors.fanState) setErrors(prev => ({ ...prev, fanState: '' }));
+                        }}
+                        required
+                        className="block w-full rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-900 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400 transition-colors"
+                      >
+                        <option value="">Select State</option>
+                        {US_STATES.map(state => (
+                          <option key={state} value={state}>{state}</option>
+                        ))}
+                      </select>
+                      {errors.fanState && (
+                        <p className="mt-1 text-sm text-red-600">{errors.fanState}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-2">Favorite Music Genres (optional)</label>
+                    <div className="space-y-3">
+                      <div className="flex flex-wrap gap-2">
+                        {formData.favoriteGenres.map(genre => (
+                          <span key={genre} className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
+                            {genre}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setFormData({ 
+                                  ...formData, 
+                                  favoriteGenres: formData.favoriteGenres.filter(g => g !== genre) 
+                                });
+                              }}
+                              className="ml-1 text-xs hover:text-red-600"
+                            >
+                              <XMarkIcon className="w-3 h-3" />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {['Folk', 'Rock', 'Pop', 'Jazz', 'Blues', 'Country', 'Classical', 'Electronic', 'Hip Hop', 'R&B', 'Soul', 'Indie', 'Alternative'].filter(g => !formData.favoriteGenres.includes(g)).map(genre => (
+                          <button
+                            key={genre}
+                            type="button"
+                            onClick={() => {
+                              setFormData({ 
+                                ...formData, 
+                                favoriteGenres: [...formData.favoriteGenres, genre] 
+                              });
+                            }}
+                            className="px-3 py-1 text-xs bg-neutral-100 hover:bg-neutral-200 rounded-full transition-colors"
+                          >
+                            + {genre}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <p className="mt-1 text-xs text-neutral-500">Help us recommend concerts you'll love</p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
+                      How often do you attend live music events?
+                    </label>
+                    <select
+                      value={formData.concertFrequency}
+                      onChange={(e) => {
+                        setFormData({ ...formData, concertFrequency: e.target.value });
+                        if (errors.concertFrequency) setErrors(prev => ({ ...prev, concertFrequency: '' }));
+                      }}
+                      className="block w-full rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-900 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400 transition-colors"
+                    >
+                      <option value="">Select frequency</option>
+                      <option value="weekly">Weekly</option>
+                      <option value="monthly">Monthly</option>
+                      <option value="few-times-year">A few times a year</option>
+                      <option value="rarely">Rarely</option>
+                    </select>
+                    {errors.concertFrequency && (
+                      <p className="mt-1 text-sm text-red-600">{errors.concertFrequency}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <Input
+                      label="How did you hear about TourPad? (optional)"
+                      value={formData.referralSource}
+                      onChange={(e) => {
+                        setFormData({ ...formData, referralSource: e.target.value });
+                        if (errors.referralSource) setErrors(prev => ({ ...prev, referralSource: '' }));
+                      }}
+                      placeholder="Friend, social media, search, etc."
+                    />
+                    {errors.referralSource && (
+                      <p className="mt-1 text-sm text-red-600">{errors.referralSource}</p>
+                    )}
+                  </div>
+                </>
+              )}
+
               <div className="bg-secondary-50 p-4 rounded-lg">
                 <h3 className="font-medium text-secondary-800 mb-2">What happens next?</h3>
                 <ul className="text-sm text-secondary-700 space-y-1">
-                  <li>• We'll review your application within 48 hours</li>
-                  <li>• Approved {userType === 'artist' ? 'artists' : 'hosts'} get full platform access</li>
-                  <li>• You'll receive email confirmation once approved</li>
-                  {userType === 'artist' && <li>• Annual membership fee applies after approval</li>}
+                  {userType === 'fan' ? (
+                    <>
+                      <li>• You'll be directed to secure payment page</li>
+                      <li>• After payment, you get instant access to all concerts</li>
+                      <li>• Start discovering and booking exclusive house concerts</li>
+                      <li>• Cancel anytime - no long-term commitment</li>
+                    </>
+                  ) : (
+                    <>
+                      <li>• We'll review your application within 48 hours</li>
+                      <li>• Approved {userType === 'artist' ? 'artists' : 'hosts'} get full platform access</li>
+                      <li>• You'll receive email confirmation once approved</li>
+                      {userType === 'artist' && <li>• Annual membership fee applies after approval</li>}
+                    </>
+                  )}
                 </ul>
               </div>
 
@@ -610,7 +787,7 @@ function RegisterForm() {
                 disabled={isSubmitting}
                 className="w-full"
               >
-                {isSubmitting ? 'Submitting...' : `Submit ${userType === 'artist' ? 'Artist' : 'Host'} Application`}
+                {isSubmitting ? 'Submitting...' : userType === 'fan' ? 'Continue to Payment' : `Submit ${userType === 'artist' ? 'Artist' : 'Host'} Application`}
               </Button>
             </form>
 
@@ -627,6 +804,10 @@ function RegisterForm() {
                   <Link href="/register?type=artist" className="text-primary-600 hover:text-primary-700 font-medium">
                     Click here
                   </Link>
+                  {' '}| Fan?{' '}
+                  <Link href="/register?type=fan" className="text-primary-600 hover:text-primary-700 font-medium">
+                    Join here
+                  </Link>
                 </p>
               )}
               {userType === 'artist' && (
@@ -634,6 +815,22 @@ function RegisterForm() {
                   Looking for Host Registration?{' '}
                   <Link href="/register?type=host" className="text-primary-600 hover:text-primary-700 font-medium">
                     Click here
+                  </Link>
+                  {' '}| Fan?{' '}
+                  <Link href="/register?type=fan" className="text-primary-600 hover:text-primary-700 font-medium">
+                    Join here
+                  </Link>
+                </p>
+              )}
+              {userType === 'fan' && (
+                <p className="text-sm text-gray-500">
+                  Are you an artist?{' '}
+                  <Link href="/register?type=artist" className="text-primary-600 hover:text-primary-700 font-medium">
+                    Apply here
+                  </Link>
+                  {' '}| Host?{' '}
+                  <Link href="/register?type=host" className="text-primary-600 hover:text-primary-700 font-medium">
+                    Apply here
                   </Link>
                 </p>
               )}
@@ -657,11 +854,11 @@ function UserTypeSelection() {
             Join TourPad
           </h1>
           <p className="text-xl text-secondary-100">
-            Are you an artist looking for venues, or a host opening your space?
+            Choose how you want to experience the magic of house concerts
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-3 gap-8">
           {/* Artist Option */}
           <Card className="shadow-xl border-0 hover:shadow-2xl transition-shadow cursor-pointer" onClick={() => router.push('/register?type=artist')}>
             <CardContent className="p-8 text-center">
@@ -702,6 +899,30 @@ function UserTypeSelection() {
               </ul>
               <Button size="lg" className="w-full" variant="outline">
                 Apply as Host
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Fan Option */}
+          <Card className="shadow-xl border-0 hover:shadow-2xl transition-shadow cursor-pointer" onClick={() => router.push('/register?type=fan')}>
+            <CardContent className="p-8 text-center">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full mb-6">
+                <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">I'm a Fan</h2>
+              <p className="text-gray-600 mb-6">
+                I want to discover and attend exclusive house concerts in my area.
+              </p>
+              <ul className="text-left text-sm text-gray-600 space-y-2 mb-6">
+                <li>• Discover intimate concerts nearby</li>
+                <li>• Direct access to exclusive events</li>
+                <li>• Support independent artists</li>
+                <li>• Pay & get instant access</li>
+              </ul>
+              <Button size="lg" className="w-full" variant="secondary">
+                Join as Fan
               </Button>
             </CardContent>
           </Card>
