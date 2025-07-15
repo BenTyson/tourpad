@@ -26,6 +26,8 @@ import { Badge } from '@/components/ui/Badge';
 import { mockBookings, mockMessages, mockNotifications } from '@/data/mockData';
 import { testConcerts } from '@/data/realTestData';
 import { useRouter } from 'next/navigation';
+import { PastShowsSection } from '@/components/reviews/PastShowsSection';
+import { PrivateReviewsSection } from '@/components/reviews/PrivateReviewsSection';
 
 type UserRole = 'host' | 'artist' | 'admin' | 'fan';
 
@@ -379,6 +381,16 @@ export default function DashboardPage() {
                 )}
               </CardContent>
             </Card>
+
+            {/* Past Shows - Only show for artists and hosts */}
+            {(userRole === 'artist' || userRole === 'host') && (
+              <PastShowsSection userId={selectedUserId} userType={userRole} />
+            )}
+
+            {/* Private Reviews - Only show for artists and hosts */}
+            {(userRole === 'artist' || userRole === 'host') && (
+              <PrivateReviewsSection userId={selectedUserId} userType={userRole} />
+            )}
 
             {/* Action Items */}
             {pendingActions.length > 0 && (

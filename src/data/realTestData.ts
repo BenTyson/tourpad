@@ -219,6 +219,27 @@ export interface Application {
   data: any;
 }
 
+export interface Review {
+  id: string;
+  bookingId: string;
+  reviewerId: string;
+  reviewerType: 'artist' | 'host';
+  reviewedId: string;
+  reviewedType: 'artist' | 'host';
+  rating: number; // 1-5 stars
+  feedback: string;
+  isPublic: boolean;
+  showDate: string;
+  venueName?: string;
+  artistName?: string;
+  createdAt: string;
+  helpfulVotes?: number;
+  response?: {
+    text: string;
+    createdAt: string;
+  };
+}
+
 // Realistic Artists
 export const testArtists: Artist[] = [
   {

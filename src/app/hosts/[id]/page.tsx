@@ -40,6 +40,7 @@ import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { PhotoGallery } from '@/components/media/PhotoGallery';
 import { PhotoLightbox } from '@/components/media/PhotoLightbox';
+import { PublicReviewsSection } from '@/components/reviews/PublicReviewsSection';
 import { mockHosts } from '@/data/mockData';
 import { testHosts } from '@/data/realTestData';
 
@@ -659,6 +660,13 @@ export default function HostProfilePage() {
             </div>
           </section>
         )}
+
+        {/* Reviews Section */}
+        <PublicReviewsSection 
+          userId={host.id}
+          userType="host"
+          userName={host.name}
+        />
 
         {/* Booking Information */}
         <section className="bg-gradient-to-br from-primary-50 to-secondary-50 rounded-2xl p-8">

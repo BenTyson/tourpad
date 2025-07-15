@@ -24,6 +24,7 @@ import { Badge } from '@/components/ui/Badge';
 import { ArtistPhotoGallery } from '@/components/media/ArtistPhotoGallery';
 import { ArtistPhotoLightbox } from '@/components/media/ArtistPhotoLightbox';
 import { VideoPlayer } from '@/components/media/VideoPlayer';
+import { PublicReviewsSection } from '@/components/reviews/PublicReviewsSection';
 import { mockArtists } from '@/data/mockData';
 
 export default function ArtistProfilePage() {
@@ -482,6 +483,13 @@ export default function ArtistProfilePage() {
             </div>
           </div>
         </section>
+
+        {/* Reviews Section */}
+        <PublicReviewsSection 
+          userId={artist.id}
+          userType="artist"
+          userName={artist.name}
+        />
 
         {/* Related Artists */}
         {relatedArtists.length > 0 && (

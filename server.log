@@ -358,3 +358,113 @@ Import trace for requested module:
  GET /hosts/2 200 in 29ms
  ✓ Compiled in 389ms (1113 modules)
  GET /hosts/2 200 in 56ms
+ ✓ Compiled /api/auth/[...nextauth] in 191ms (834 modules)
+ GET /api/auth/csrf 200 in 311ms
+ POST /api/auth/signout 200 in 5ms
+ GET /hosts/2 200 in 167ms
+ GET /api/auth/session 200 in 7ms
+ ✓ Compiled /login in 136ms (844 modules)
+ GET /login 200 in 175ms
+ GET /api/auth/providers 200 in 58ms
+ GET /api/auth/csrf 200 in 4ms
+ POST /api/auth/callback/credentials 200 in 6ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 5ms
+ GET /dashboard 200 in 16ms
+ ✓ Compiled /artists in 413ms (859 modules)
+ GET /artists 200 in 471ms
+ GET /hosts/host1 200 in 20ms
+ GET /dashboard 200 in 114ms
+ ✓ Compiled /favicon.ico in 184ms (873 modules)
+ GET /favicon.ico 200 in 340ms
+ GET /api/auth/session 200 in 333ms
+ GET /dashboard/profile 200 in 66ms
+ GET /dashboard 200 in 114ms
+ GET /favicon.ico 200 in 4ms
+ GET /api/auth/session 200 in 4ms
+ GET /dashboard/profile 200 in 30ms
+ GET /dashboard 200 in 87ms
+ GET /favicon.ico 200 in 6ms
+ GET /api/auth/session 200 in 7ms
+ ✓ Compiled in 530ms (1389 modules)
+ GET /dashboard 200 in 53ms
+ ✓ Compiled in 155ms (516 modules)
+ GET /dashboard 200 in 43ms
+ ✓ Compiled in 130ms (516 modules)
+ GET /dashboard 200 in 21ms
+ ✓ Compiled in 167ms (516 modules)
+ GET /dashboard 200 in 50ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 466ms (1092 modules)
+ GET /dashboard 200 in 393ms
+ ✓ Compiled /api/auth/[...nextauth] in 64ms (592 modules)
+ ✓ Compiled (827 modules)
+ GET /favicon.ico 200 in 246ms
+ GET /api/auth/session 200 in 215ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 658ms (1364 modules)
+ GET /dashboard 200 in 446ms
+ GET /favicon.ico 200 in 8ms
+ GET /api/auth/session 200 in 37ms
+ ✓ Compiled in 197ms (526 modules)
+ GET /dashboard 200 in 50ms
+ ✓ Compiled in 140ms (526 modules)
+ GET /dashboard 200 in 119ms
+ ✓ Compiled in 181ms (526 modules)
+ GET /dashboard 200 in 47ms
+ GET /favicon.ico 200 in 13ms
+ GET /favicon.ico 200 in 21ms
+ ✓ Compiled in 126ms (526 modules)
+ GET /dashboard 200 in 101ms
+ ✓ Compiled in 327ms (530 modules)
+ GET /dashboard 200 in 17ms
+ ✓ Compiled in 215ms (530 modules)
+ GET /dashboard 200 in 44ms
+ ✓ Compiled in 137ms (530 modules)
+ GET /dashboard 200 in 16ms
+ GET /api/auth/session 200 in 17ms
+ ✓ Compiled in 172ms (530 modules)
+ GET /dashboard 200 in 40ms
+ ✓ Compiled in 450ms (1117 modules)
+ GET /dashboard 200 in 131ms
+ ✓ Compiled in 612ms (1123 modules)
+ GET /dashboard 200 in 59ms
+ ✓ Compiled /bookings/[id] in 400ms (1126 modules)
+ GET /bookings/3 200 in 738ms
+ GET /dashboard 200 in 26ms
+ ✓ Compiled in 371ms (1129 modules)
+ GET /dashboard 200 in 67ms
+ ✓ Compiled /artists in 324ms (606 modules)
+ GET /artists 200 in 373ms
+ ✓ Compiled /artists/[id] in 191ms (625 modules)
+ GET /artists/2 200 in 227ms
+ GET /dashboard 200 in 30ms
+ ✓ Compiled /api/auth/[...nextauth] in 333ms (852 modules)
+ GET /api/auth/csrf 200 in 422ms
+ POST /api/auth/signout 200 in 5ms
+ GET /dashboard 200 in 169ms
+ GET /api/auth/session 200 in 10ms
+ GET /login 200 in 29ms
+ GET /api/auth/providers 200 in 14ms
+ GET /api/auth/csrf 200 in 8ms
+ POST /api/auth/callback/credentials 200 in 9ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/auth/session 200 in 5ms
+ GET /dashboard 200 in 9ms
+ GET /dashboard 200 in 18ms
+ ✓ Compiled in 369ms (1141 modules)
+ GET /dashboard 200 in 89ms
+ ✓ Compiled /api/auth/[...nextauth] in 122ms (840 modules)
+ GET /api/auth/session 200 in 199ms
+ GET /dashboard/profile 200 in 65ms
+ ✓ Compiled in 234ms (1378 modules)
+ GET /dashboard 200 in 36ms
+ GET /dashboard 200 in 111ms
+ ✓ Compiled /api/auth/[...nextauth] in 153ms (619 modules)
+ ✓ Compiled (854 modules)
+ GET /favicon.ico 200 in 372ms
+ GET /api/auth/session 200 in 343ms
+ ✓ Compiled in 350ms (1141 modules)
+ GET /dashboard 200 in 117ms
+ ✓ Compiled in 193ms (1141 modules)
+ GET /dashboard 200 in 45ms
