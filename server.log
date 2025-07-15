@@ -307,3 +307,59 @@
  GET /artists/1 200 in 20ms
  ✓ Compiled in 106ms (508 modules)
  GET /artists/1 200 in 22ms
+ GET /api/auth/session 200 in 26ms
+ GET /artists 200 in 35ms
+ GET /artists/1 200 in 32ms
+ GET /artists 200 in 25ms
+ ✓ Compiled /hosts in 331ms (830 modules)
+ GET /hosts 200 in 414ms
+ ✓ Compiled /hosts/[id] in 132ms (846 modules)
+ GET /hosts/1 200 in 181ms
+ ✓ Compiled in 334ms (1092 modules)
+ GET /hosts/1 200 in 78ms
+ ✓ Compiled in 116ms (508 modules)
+ GET /hosts/1 200 in 19ms
+ ✓ Compiled in 125ms (508 modules)
+ GET /hosts/1 200 in 20ms
+ GET / 200 in 17ms
+ ✓ Compiled /register in 288ms (604 modules)
+ GET /register?type=host 200 in 336ms
+ GET /register?type=host 200 in 17ms
+ ✓ Compiled /artists in 131ms (613 modules)
+ GET /artists 200 in 180ms
+ GET /artists/1 200 in 38ms
+ ✓ Compiled /bookings/new in 417ms (1115 modules)
+ GET /bookings/new?artistId=1 200 in 460ms
+ GET /artists/1 200 in 29ms
+ GET /hosts 200 in 26ms
+ GET /hosts/3 200 in 36ms
+ GET /bookings/new?hostId=3 200 in 30ms
+ ✓ Compiled /api/auth/[...nextauth] in 337ms (836 modules)
+ GET /api/auth/csrf 200 in 434ms
+ GET /bookings/new?hostId=3 200 in 129ms
+ POST /api/auth/signout 200 in 6ms
+ GET /bookings/new?hostId=3 200 in 111ms
+ GET /api/auth/session 200 in 4ms
+ ✓ Compiled /login in 183ms (846 modules)
+ GET /login 200 in 252ms
+ GET /api/auth/providers 200 in 68ms
+ GET /api/auth/csrf 200 in 4ms
+ POST /api/auth/callback/credentials 200 in 5ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ ✓ Compiled /dashboard in 244ms (847 modules)
+ GET /dashboard 200 in 280ms
+ ✓ Compiled /messages in 323ms (1362 modules)
+ GET /messages 200 in 351ms
+ GET /dashboard 200 in 31ms
+ ✓ Compiled in 567ms (1119 modules)
+ GET /dashboard 200 in 109ms
+ ✓ Compiled in 131ms (519 modules)
+ GET /dashboard 200 in 16ms
+ ✓ Compiled in 128ms (519 modules)
+ GET /dashboard 200 in 106ms
+ ✓ Compiled in 110ms (519 modules)
+ GET /dashboard 200 in 18ms
+ ✓ Compiled /api/auth/[...nextauth] in 263ms (837 modules)
+ GET /api/auth/session 200 in 358ms
+ GET /dashboard 200 in 124ms

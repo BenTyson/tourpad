@@ -31,7 +31,10 @@ const handler = NextAuth({
             { email: 'mike.host@email.com', password: 'host123' },
             { email: 'marcus.artist@email.com', password: 'artist123' },
             { email: 'emma.artist@email.com', password: 'artist123' },
-            { email: 'lisa.host@email.com', password: 'host123' }
+            { email: 'lisa.host@email.com', password: 'host123' },
+            { email: 'jessica.fan@email.com', password: 'fan123' },
+            { email: 'david.music@email.com', password: 'fan123' },
+            { email: 'emma.concerts@email.com', password: 'fan123' }
           ];
 
           const validCredential = validCredentials.find(
@@ -42,8 +45,14 @@ const handler = NextAuth({
             return null;
           }
 
-          // Check if user account is approved (except for admin)
-          if (user.type !== 'admin' && user.status !== 'approved') {
+          // Check if user account is approved (except for admin and fans)
+          // Fans use payment status instead of approval status
+          if (user.type === 'fan') {
+            // For fans, check payment status instead of approval
+            if (user.paymentStatus !== 'active') {
+              return null;
+            }
+          } else if (user.type !== 'admin' && user.status !== 'approved') {
             return null;
           }
 

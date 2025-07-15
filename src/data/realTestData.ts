@@ -92,6 +92,47 @@ export interface Host {
   joinedDate: string;
 }
 
+export interface Fan {
+  id: string;
+  name: string;
+  email: string;
+  type: 'fan';
+  status: 'active' | 'payment_expired' | 'suspended';
+  bio?: string;
+  location: {
+    city: string;
+    state: string;
+    coordinates?: { lat: number; lng: number };
+  };
+  musicPreferences: {
+    favoriteGenres: string[];
+    concertFrequency: 'weekly' | 'monthly' | 'few-times-year' | 'rarely';
+    preferredVenueSize: 'intimate' | 'small' | 'any';
+    willingToTravel: number; // miles
+  };
+  paymentStatus: 'active' | 'expired' | 'failed' | 'cancelled';
+  subscriptionExpiry: string;
+  attendanceHistory: {
+    concertId: string;
+    artistName: string;
+    venueName: string;
+    date: string;
+    rating?: number;
+    review?: string;
+  }[];
+  upcomingReservations: string[]; // concert IDs
+  favoriteArtists: string[]; // artist IDs
+  favoriteVenues: string[]; // host IDs
+  communicationPreferences: {
+    emailNotifications: boolean;
+    smsNotifications: boolean;
+    newConcertAlerts: boolean;
+    favoriteArtistAlerts: boolean;
+  };
+  joinedDate: string;
+  lastActive: string;
+}
+
 export interface AdminUser {
   id: string;
   name: string;
@@ -129,6 +170,27 @@ export interface Booking {
     message: string;
     timestamp: string;
   }[];
+}
+
+export interface Concert {
+  id: string;
+  artistId: string;
+  hostId: string;
+  artist: Artist;
+  host: Host;
+  title: string;
+  description: string;
+  date: string;
+  startTime: string;
+  duration: number; // minutes
+  genres: string[];
+  capacity: number;
+  ticketPrice: number;
+  status: 'upcoming' | 'sold_out' | 'cancelled' | 'completed';
+  attendees: string[]; // fan IDs
+  waitlist: string[]; // fan IDs
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Application {
@@ -378,6 +440,144 @@ export const testHosts: Host[] = [
   }
 ];
 
+// Fan Users
+export const testFans: Fan[] = [
+  {
+    id: 'fan1',
+    name: 'Jessica Chen',
+    email: 'jessica.fan@email.com',
+    type: 'fan',
+    status: 'active',
+    bio: 'Music lover and regular concert-goer. I discovered house concerts through a friend and fell in love with the intimate atmosphere. Always excited to discover new artists!',
+    location: {
+      city: 'Austin',
+      state: 'TX',
+      coordinates: { lat: 30.2672, lng: -97.7431 }
+    },
+    musicPreferences: {
+      favoriteGenres: ['Folk', 'Indie', 'Singer-Songwriter', 'Acoustic'],
+      concertFrequency: 'monthly',
+      preferredVenueSize: 'intimate',
+      willingToTravel: 25
+    },
+    paymentStatus: 'active',
+    subscriptionExpiry: '2025-12-15',
+    attendanceHistory: [
+      {
+        concertId: 'concert1',
+        artistName: 'Sarah & The Wanderers',
+        venueName: 'The Garden House',
+        date: '2024-11-15',
+        rating: 5,
+        review: 'Absolutely magical evening! Sarah\'s voice filled the room beautifully.'
+      },
+      {
+        concertId: 'concert2',
+        artistName: 'Marcus Rivers',
+        venueName: 'Riverside Barn',
+        date: '2024-10-22',
+        rating: 4,
+        review: 'Great energy and the barn setting was perfect for his folk style.'
+      }
+    ],
+    upcomingReservations: ['concert3', 'concert4'],
+    favoriteArtists: ['1', '3'], // Sarah & The Wanderers, Marcus Rivers
+    favoriteVenues: ['1', '2'], // The Garden House, Riverside Barn
+    communicationPreferences: {
+      emailNotifications: true,
+      smsNotifications: false,
+      newConcertAlerts: true,
+      favoriteArtistAlerts: true
+    },
+    joinedDate: '2024-09-01',
+    lastActive: '2025-01-14'
+  },
+  {
+    id: 'fan2',
+    name: 'David Rodriguez',
+    email: 'david.music@email.com',
+    type: 'fan',
+    status: 'active',
+    bio: 'Jazz enthusiast and music photographer. I love capturing the magic of live performances and supporting emerging artists.',
+    location: {
+      city: 'Nashville',
+      state: 'TN',
+      coordinates: { lat: 36.1627, lng: -86.7816 }
+    },
+    musicPreferences: {
+      favoriteGenres: ['Jazz', 'Blues', 'Soul', 'R&B'],
+      concertFrequency: 'weekly',
+      preferredVenueSize: 'small',
+      willingToTravel: 50
+    },
+    paymentStatus: 'active',
+    subscriptionExpiry: '2025-08-30',
+    attendanceHistory: [
+      {
+        concertId: 'concert5',
+        artistName: 'Luna Martinez',
+        venueName: 'The City Loft',
+        date: '2024-12-03',
+        rating: 5,
+        review: 'Luna\'s jazz fusion set was incredible. The loft acoustics were perfect.'
+      }
+    ],
+    upcomingReservations: ['concert6'],
+    favoriteArtists: ['4'], // Luna Martinez
+    favoriteVenues: ['3'], // The City Loft
+    communicationPreferences: {
+      emailNotifications: true,
+      smsNotifications: true,
+      newConcertAlerts: true,
+      favoriteArtistAlerts: true
+    },
+    joinedDate: '2024-08-15',
+    lastActive: '2025-01-15'
+  },
+  {
+    id: 'fan3',
+    name: 'Emma Thompson',
+    email: 'emma.concerts@email.com',
+    type: 'fan',
+    status: 'payment_expired',
+    bio: 'College student who loves discovering new music. House concerts are the perfect way to experience music on a budget.',
+    location: {
+      city: 'Portland',
+      state: 'OR',
+      coordinates: { lat: 45.5152, lng: -122.6784 }
+    },
+    musicPreferences: {
+      favoriteGenres: ['Indie', 'Alternative', 'Electronic', 'Pop'],
+      concertFrequency: 'few-times-year',
+      preferredVenueSize: 'intimate',
+      willingToTravel: 15
+    },
+    paymentStatus: 'expired',
+    subscriptionExpiry: '2024-12-31',
+    attendanceHistory: [
+      {
+        concertId: 'concert7',
+        artistName: 'The Electric Dreams',
+        venueName: 'Portland Creative Space',
+        date: '2024-11-08',
+        rating: 4,
+        review: 'Great show, loved the electronic-folk fusion sound!'
+      }
+    ],
+    upcomingReservations: [],
+    favoriteArtists: [],
+    favoriteVenues: [],
+    communicationPreferences: {
+      emailNotifications: true,
+      smsNotifications: false,
+      newConcertAlerts: false,
+      favoriteArtistAlerts: false
+    },
+    joinedDate: '2024-06-12',
+    lastActive: '2025-01-02'
+  }
+];
+
 // Admin Users
 export const testAdminUsers: AdminUser[] = [
   {
@@ -480,9 +680,53 @@ export const testApplications: Application[] = [
   }
 ];
 
+// Test Concerts
+export const testConcerts: Concert[] = [
+  {
+    id: 'concert1',
+    artistId: '1',
+    hostId: '1',
+    artist: testArtists[0],
+    host: testHosts[0],
+    title: 'An Evening with Sarah & The Wanderers',
+    description: 'Intimate acoustic performance featuring songs from their latest album plus fan favorites.',
+    date: '2025-02-15',
+    startTime: '19:30',
+    duration: 90,
+    genres: ['Folk', 'Indie', 'Acoustic'],
+    capacity: 25,
+    ticketPrice: 15,
+    status: 'upcoming',
+    attendees: ['fan1'],
+    waitlist: [],
+    createdAt: '2025-01-10',
+    updatedAt: '2025-01-12'
+  },
+  {
+    id: 'concert2',
+    artistId: '3',
+    hostId: '2',
+    artist: testArtists[2],
+    host: testHosts[1],
+    title: 'Marcus Rivers: Stories & Songs',
+    description: 'Join Marcus for an evening of storytelling through song in the beautiful riverside barn setting.',
+    date: '2025-02-22',
+    startTime: '20:00',
+    duration: 120,
+    genres: ['Folk', 'Americana', 'Singer-Songwriter'],
+    capacity: 45,
+    ticketPrice: 20,
+    status: 'upcoming',
+    attendees: ['fan1', 'fan2'],
+    waitlist: [],
+    createdAt: '2025-01-08',
+    updatedAt: '2025-01-10'
+  }
+];
+
 // Helper functions for real-time data
 export function getCurrentUser(email: string) {
-  const user = [...testArtists, ...testHosts, ...testAdminUsers].find(u => u.email === email);
+  const user = [...testArtists, ...testHosts, ...testFans, ...testAdminUsers].find(u => u.email === email);
   return user || null;
 }
 
