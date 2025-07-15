@@ -66,3 +66,37 @@
  GET /register?type=fan 200 in 44ms
  ✓ Compiled /payment/fan in 375ms (966 modules)
  GET /payment/fan 200 in 405ms
+ ✓ Compiled in 161ms (427 modules)
+ GET /payment/fan 200 in 47ms
+ ✓ Compiled in 144ms (427 modules)
+ GET /payment/fan 200 in 34ms
+ ✓ Compiled in 145ms (427 modules)
+ GET /payment/fan 200 in 39ms
+ ✓ Compiled in 142ms (427 modules)
+ GET /payment/fan 200 in 40ms
+ ✓ Compiled in 108ms (427 modules)
+ GET /payment/fan 200 in 19ms
+ ✓ Compiled in 101ms (427 modules)
+ GET /payment/fan 200 in 17ms
+ ✓ Compiled in 112ms (427 modules)
+ GET /payment/fan 200 in 29ms
+ ✓ Compiled in 131ms (427 modules)
+ GET /payment/fan 200 in 38ms
+ ✓ Compiled in 98ms (427 modules)
+ GET /payment/fan 200 in 19ms
+ ✓ Compiled in 113ms (427 modules)
+ GET /payment/fan 200 in 37ms
+ ✓ Compiled in 137ms (427 modules)
+ GET /payment/fan 200 in 43ms
+ ✓ Compiled in 108ms (427 modules)
+ GET /payment/fan 200 in 18ms
+ ✓ Compiled in 105ms (427 modules)
+ GET /payment/fan 200 in 30ms
+ ✓ Compiled in 127ms (427 modules)
+ GET /payment/fan 200 in 38ms
+ ✓ Compiled in 105ms (427 modules)
+ GET /payment/fan 200 in 17ms
+ ✓ Compiled in 107ms (427 modules)
+ GET /payment/fan 200 in 30ms
+ ✓ Compiled in 130ms (427 modules)
+ GET /payment/fan 200 in 39ms

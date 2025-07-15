@@ -22,9 +22,10 @@ import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { mockBookings, mockMessages, mockNotifications } from '@/data/mockData';
+import { testConcerts } from '@/data/realTestData';
 import { useRouter } from 'next/navigation';
 
-type UserRole = 'host' | 'artist' | 'admin';
+type UserRole = 'host' | 'artist' | 'admin' | 'fan';
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
@@ -58,20 +59,37 @@ export default function DashboardPage() {
   }
 
   // Get user info from session
-  const userRole = session.user.type as 'host' | 'artist' | 'admin';
+  const userRole = session.user.type as 'host' | 'artist' | 'admin' | 'fan';
   const userStatus = session.user.status;
   const selectedUserId = session.user.id;
 
   // Check if user has access to full dashboard functionality
-  const hasFullAccess = userRole === 'admin' || userStatus === 'approved';
+  // Fans have access if payment is active, others need approval
+  const hasFullAccess = userRole === 'admin' || 
+                       userStatus === 'approved' || 
+                       (userRole === 'fan' && session.user.paymentStatus === 'active');
   const needsPayment = userRole === 'artist' && userStatus === 'approved' && !session.user.paymentStatus;
 
   // Filter data based on user role
   const userBookings = userRole === 'admin' 
     ? mockBookings // Admin sees all bookings
+    : userRole === 'fan'
+    ? [] // Fans don't have bookings, they have concert reservations
     : mockBookings.filter(booking => 
         userRole === 'host' ? booking.hostId === selectedUserId : booking.artistId === selectedUserId
       );
+
+  // Fan-specific data
+  const fanConcerts = userRole === 'fan' 
+    ? testConcerts.filter(concert => concert.status === 'upcoming')
+    : [];
+  
+  const fanUpcomingConcerts = userRole === 'fan'
+    ? testConcerts.filter(concert => 
+        concert.status === 'upcoming' && 
+        concert.attendees.includes(selectedUserId)
+      )
+    : [];
 
   const userMessages = userRole === 'admin'
     ? mockMessages // Admin sees all messages
@@ -85,24 +103,17 @@ export default function DashboardPage() {
         notif.userId === selectedUserId
       );
 
-  const upcomingBookings = userBookings
-  .filter(booking => {
-    const eventDate = new Date(booking.eventDate);
-    const now = new Date();
-    const isUpcoming = eventDate > now;
-    const isApproved = booking.status === 'approved';
-    
-    // Debug logging
-    console.log('Booking:', booking.id);
-    console.log('Event date:', eventDate);
-    console.log('Now:', now);
-    console.log('Is upcoming:', isUpcoming);
-    console.log('Is approved:', isApproved);
-    console.log('---');
-    
-    return isUpcoming && isApproved;
-  })
-  .sort((a, b) => new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime());
+  const upcomingBookings = userRole === 'fan'
+    ? fanUpcomingConcerts.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    : userBookings
+        .filter(booking => {
+          const eventDate = new Date(booking.eventDate);
+          const now = new Date();
+          const isUpcoming = eventDate > now;
+          const isApproved = booking.status === 'approved';
+          return isUpcoming && isApproved;
+        })
+        .sort((a, b) => new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime());
 
   const pendingActions = userBookings.filter(booking => 
     // Filter out completed bookings and show only actionable items
@@ -140,13 +151,16 @@ export default function DashboardPage() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               {userRole === 'admin' ? 'Admin Dashboard' : 
-               userRole === 'host' ? 'Host Dashboard' : 'Artist Dashboard'}
+               userRole === 'host' ? 'Host Dashboard' : 
+               userRole === 'artist' ? 'Artist Dashboard' : 'Fan Dashboard'}
             </h1>
             <p className="text-gray-600">
               {userRole === 'admin' ? 'Platform overview and management' :
                userRole === 'host' 
                 ? 'Manage your venue and upcoming shows' 
-                : 'Track your tour and upcoming performances'
+                : userRole === 'artist'
+                ? 'Track your tour and upcoming performances'
+                : 'Discover and attend exclusive house concerts'
               }
             </p>
           </div>
@@ -240,14 +254,19 @@ export default function DashboardPage() {
           <Card>
             <CardContent className="p-4 text-center">
               <div className="text-2xl font-bold text-blue-600">{upcomingBookings.length}</div>
-              <div className="text-sm text-gray-600">Upcoming Shows</div>
+              <div className="text-sm text-gray-600">
+                {userRole === 'fan' ? 'My Reservations' : 'Upcoming Shows'}
+              </div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-green-600">{pendingActions.length}</div>
+              <div className="text-2xl font-bold text-green-600">
+                {userRole === 'fan' ? fanConcerts.length : pendingActions.length}
+              </div>
               <div className="text-sm text-gray-600">
-                {userRole === 'host' ? 'New Requests' : 'Pending Responses'}
+                {userRole === 'fan' ? 'Available Concerts' : 
+                 userRole === 'host' ? 'New Requests' : 'Pending Responses'}
               </div>
             </CardContent>
           </Card>
@@ -272,7 +291,8 @@ export default function DashboardPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <h2 className="text-xl font-semibold">
-                  {userRole === 'host' ? 'Upcoming Shows at Your Venue' : 'Your Upcoming Performances'}
+                  {userRole === 'fan' ? 'Your Concert Reservations' :
+                   userRole === 'host' ? 'Upcoming Shows at Your Venue' : 'Your Upcoming Performances'}
                 </h2>
                 <Link href="/calendar">
                   <Button variant="outline" size="sm">
@@ -292,13 +312,14 @@ export default function DashboardPage() {
                           </div>
                           <div>
                             <h3 className="font-medium text-gray-900">
-                              {userRole === 'host' ? booking.artist.name : booking.host.name}
+                              {userRole === 'fan' ? booking.title :
+                               userRole === 'host' ? booking.artist.name : booking.host.name}
                             </h3>
                             <div className="flex items-center text-sm text-gray-600 space-x-4">
-                              <span>{formatDate(booking.eventDate)}</span>
+                              <span>{userRole === 'fan' ? formatDate(new Date(booking.date + 'T' + booking.startTime)) : formatDate(booking.eventDate)}</span>
                               <div className="flex items-center">
                                 <Users className="w-4 h-4 mr-1" />
-                                {booking.guestCount} guests
+                                {userRole === 'fan' ? booking.capacity : booking.guestCount} {userRole === 'fan' ? 'capacity' : 'guests'}
                               </div>
                               {userRole === 'artist' && (
                                 <div className="flex items-center">
@@ -310,10 +331,10 @@ export default function DashboardPage() {
                           </div>
                         </div>
                         <div className="flex items-center space-x-3">
-                          <Badge variant={getStatusColor(booking.status) as any}>
-                            {booking.status}
+                          <Badge variant={getStatusColor(userRole === 'fan' ? 'success' : booking.status) as any}>
+                            {userRole === 'fan' ? 'Reserved' : booking.status}
                           </Badge>
-                          <Link href={`/bookings/${booking.id}`}>
+                          <Link href={userRole === 'fan' ? `/concerts/${booking.id}` : `/bookings/${booking.id}`}>
                             <Button variant="outline" size="sm">
                               Details
                             </Button>
@@ -325,17 +346,21 @@ export default function DashboardPage() {
                 ) : (
                   <div className="text-center py-8">
                     <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">No upcoming shows</h3>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">
+                      {userRole === 'fan' ? 'No upcoming concerts' : 'No upcoming shows'}
+                    </h3>
                     <p className="text-gray-600 mb-4">
-                      {userRole === 'host' 
+                      {userRole === 'fan' 
+                        ? 'Discover and book your first house concert experience'
+                        : userRole === 'host' 
                         ? 'Start hosting by browsing artists looking for venues'
                         : 'Find your next performance venue'
                       }
                     </p>
-                    <Link href={userRole === 'host' ? '/artists' : '/hosts'}>
+                    <Link href={userRole === 'fan' ? '/artists' : userRole === 'host' ? '/artists' : '/hosts'}>
                       <Button>
                         <Plus className="w-4 h-4 mr-2" />
-                        {userRole === 'host' ? 'Browse Artists' : 'Find Venues'}
+                        {userRole === 'fan' ? 'Browse Concerts' : userRole === 'host' ? 'Browse Artists' : 'Find Venues'}
                       </Button>
                     </Link>
                   </div>
@@ -450,13 +475,13 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <Link href={userRole === 'host' ? '/artists' : '/hosts'}>
+                  <Link href={userRole === 'fan' ? '/artists' : userRole === 'host' ? '/artists' : '/hosts'}>
                     <Button variant="outline" className="w-full justify-start">
                       <Plus className="w-4 h-4 mr-3" />
-                      {userRole === 'host' ? 'Find Artists' : 'Find Venues'}
+                      {userRole === 'fan' ? 'Browse Concerts' : userRole === 'host' ? 'Find Artists' : 'Find Venues'}
                     </Button>
                   </Link>
-                  <Link href={`/${userRole}s/${selectedUserId}`}>
+                  <Link href={userRole === 'fan' ? '/dashboard/profile' : `/${userRole}s/${selectedUserId}`}>
                     <Button variant="outline" className="w-full justify-start">
                       <Eye className="w-4 h-4 mr-3" />
                       View My Profile
@@ -465,7 +490,7 @@ export default function DashboardPage() {
                   <Link href="/calendar">
                     <Button variant="outline" className="w-full justify-start">
                       <Calendar className="w-4 h-4 mr-3" />
-                      Manage Calendar
+                      {userRole === 'fan' ? 'My Concert Calendar' : 'Manage Calendar'}
                     </Button>
                   </Link>
                   <Link href="/messages">
@@ -504,10 +529,11 @@ export default function DashboardPage() {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-600">
-                      {userRole === 'host' ? 'Shows Hosted' : 'Shows Played'}
+                      {userRole === 'fan' ? 'Concerts Attended' : 
+                       userRole === 'host' ? 'Shows Hosted' : 'Shows Played'}
                     </span>
                     <span className="text-sm font-medium">
-                      {userRole === 'host' ? '12' : '24'} this year
+                      {userRole === 'fan' ? '8' : userRole === 'host' ? '12' : '24'} this year
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
