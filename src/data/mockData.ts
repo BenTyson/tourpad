@@ -146,6 +146,19 @@ export const mockHosts = [
     ],
     rating: 4.7,
     reviewCount: 28,
+    soundSystem: {
+      available: true,
+      description: 'Full professional sound system perfect for bands and solo acts. Our barn has been acoustically treated to provide excellent sound quality for audiences up to 100 people.',
+      equipment: {
+        speakers: 'JBL PRX815W powered speakers (4 units), JBL PRX818S subwoofers (2 units)',
+        microphones: '8x Shure SM58 dynamic mics, 4x Shure SM57 instrument mics, 2x AKG C214 condenser mics',
+        mixingBoard: 'Behringer X32 digital mixer with 32 channels and built-in effects',
+        instruments: 'Full drum kit (Pearl Export), bass amp (Ampeg BA-210), guitar amps (Fender Twin, Marshall JCM800)',
+        additional: 'DI boxes, monitor wedges, all necessary cables and stands, basic stage lighting'
+      },
+      limitations: 'System can handle full rock bands. No volume restrictions due to rural location. Shows must end by midnight on weekends, 10 PM on weeknights.',
+      setupNotes: 'Load-in through barn doors with easy vehicle access. Sound engineer available for additional fee. Artists arrive 3 hours before showtime for load-in and soundcheck.'
+    },
     createdAt: new Date('2022-03-10'),
     updatedAt: new Date('2024-11-20')
   },

@@ -394,6 +394,132 @@ export default function HostProfilePage() {
           </div>
         </section>
 
+        {/* Sound System Information */}
+        {host.soundSystem?.available && (
+          <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
+            <div className="p-8">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold text-neutral-900 mb-2">
+                    Sound System
+                  </h2>
+                  <p className="text-neutral-600">Professional audio equipment available</p>
+                </div>
+                <Badge variant="success" className="bg-green-100 text-green-800">
+                  Available
+                </Badge>
+              </div>
+              
+              <div className="mb-6">
+                <p className="text-neutral-700 leading-relaxed">
+                  {host.soundSystem.description}
+                </p>
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
+                <div className="space-y-6">
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
+                    <div className="flex items-center mb-4">
+                      <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mr-4">
+                        <Volume2 className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <div className="font-semibold text-neutral-900">Speakers</div>
+                        <div className="text-sm text-neutral-600">Sound output</div>
+                      </div>
+                    </div>
+                    <div className="text-sm text-neutral-700">
+                      {host.soundSystem.equipment.speakers}
+                    </div>
+                  </div>
+                  
+                  <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
+                    <div className="flex items-center mb-4">
+                      <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mr-4">
+                        <Volume2 className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <div className="font-semibold text-neutral-900">Microphones</div>
+                        <div className="text-sm text-neutral-600">Audio input</div>
+                      </div>
+                    </div>
+                    <div className="text-sm text-neutral-700">
+                      {host.soundSystem.equipment.microphones}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="space-y-6">
+                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-200">
+                    <div className="flex items-center mb-4">
+                      <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mr-4">
+                        <Volume2 className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <div className="font-semibold text-neutral-900">Mixing Board</div>
+                        <div className="text-sm text-neutral-600">Audio control</div>
+                      </div>
+                    </div>
+                    <div className="text-sm text-neutral-700">
+                      {host.soundSystem.equipment.mixingBoard || 'Basic mixing available'}
+                    </div>
+                  </div>
+                  
+                  {host.soundSystem.equipment.instruments && (
+                    <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl p-6 border border-amber-200">
+                      <div className="flex items-center mb-4">
+                        <div className="w-12 h-12 bg-amber-500 rounded-lg flex items-center justify-center mr-4">
+                          <Volume2 className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <div className="font-semibold text-neutral-900">Instruments</div>
+                          <div className="text-sm text-neutral-600">Available equipment</div>
+                        </div>
+                      </div>
+                      <div className="text-sm text-neutral-700">
+                        {host.soundSystem.equipment.instruments}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+              
+              {host.soundSystem.equipment.additional && (
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-neutral-900 mb-3">Additional Equipment</h3>
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <p className="text-sm text-neutral-700">
+                      {host.soundSystem.equipment.additional}
+                    </p>
+                  </div>
+                </div>
+              )}
+              
+              {host.soundSystem.limitations && (
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-neutral-900 mb-3">System Limitations</h3>
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <p className="text-sm text-yellow-800">
+                      {host.soundSystem.limitations}
+                    </p>
+                  </div>
+                </div>
+              )}
+              
+              {host.soundSystem.setupNotes && (
+                <div>
+                  <h3 className="text-lg font-semibold text-neutral-900 mb-3">Setup Notes</h3>
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <p className="text-sm text-blue-800">
+                      {host.soundSystem.setupNotes}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
         {/* Lodging Information */}
         {host.hostingCapabilities?.lodgingHosting?.enabled && host.hostingCapabilities?.lodgingHosting?.lodgingDetails && (
           <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">

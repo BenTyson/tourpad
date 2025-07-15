@@ -72,6 +72,19 @@ export interface Host {
     hostingHistory: string;
     preferredGenres: string[];
   };
+  soundSystem?: {
+    available: boolean;
+    description: string;
+    equipment: {
+      speakers: string;
+      microphones: string;
+      mixingBoard: string;
+      instruments: string;
+      additional: string;
+    };
+    limitations: string;
+    setupNotes: string;
+  };
   availability: {
     daysOfWeek: number[];
     timeSlots: string[];
@@ -387,6 +400,19 @@ export const testHosts: Host[] = [
         description: 'Intimate living room with excellent acoustics'
       }
     ],
+    soundSystem: {
+      available: true,
+      description: 'Professional-grade sound system perfect for intimate acoustic performances. The system has been optimized for the acoustics of our 1920s home.',
+      equipment: {
+        speakers: 'Pair of Yamaha HS8 studio monitors, JBL EON615 mains for larger events',
+        microphones: '2x Shure SM58 dynamic mics, 1x Audio-Technica AT2020 condenser mic with stand',
+        mixingBoard: 'Yamaha MG10XU 10-channel analog mixer with built-in effects',
+        instruments: 'Yamaha P-45 digital piano, acoustic guitar DI available',
+        additional: 'XLR and 1/4" cables, mic stands, basic lighting for performance area'
+      },
+      limitations: 'System works best for solo artists or small ensembles (max 3 pieces). Not suitable for full drum kits or high-volume rock performances.',
+      setupNotes: 'Artists can do soundcheck starting 1 hour before show. I handle all mixing during performance. Please bring your own instruments and any specific cables you need.'
+    },
     // New lodging system fields
     hostingCapabilities: {
       showHosting: {
@@ -508,6 +534,19 @@ export const testHosts: Host[] = [
         description: 'Industrial loft with professional stage setup'
       }
     ],
+    soundSystem: {
+      available: true,
+      description: 'Professional-grade sound system designed for live performances in our converted warehouse space. Perfect for jazz, blues, and world music acts.',
+      equipment: {
+        speakers: 'QSC K12.2 powered speakers (4 units), QSC KSub subwoofer for full-range sound',
+        microphones: '6x Shure SM57/SM58 dynamic mics, 2x AKG C414 condenser mics, DI boxes',
+        mixingBoard: 'Allen & Heath QU-24 digital mixer with built-in effects and recording capability',
+        instruments: 'Yamaha CFX concert grand piano, full backline available (bass amp, guitar amp, drum kit)',
+        additional: 'Professional stage lighting system, monitor speakers, wireless mic system, recording setup'
+      },
+      limitations: 'System can handle full band setups including drums. Volume limits apply due to neighborhood noise ordinances (events must end by 11 PM).',
+      setupNotes: 'Full technical crew available for setup and mixing. Artists can arrive 2 hours early for soundcheck. We provide all cables and stands. Recording available upon request.'
+    },
     // New lodging system fields - show-only host
     hostingCapabilities: {
       showHosting: {

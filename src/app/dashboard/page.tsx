@@ -17,7 +17,8 @@ import {
   Camera,
   Video,
   Edit,
-  Home
+  Home,
+  Volume2
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
@@ -529,6 +530,14 @@ export default function DashboardPage() {
                       <Button variant="outline" className="w-full justify-start">
                         <Camera className="w-4 h-4 mr-3" />
                         Lodging Photos
+                      </Button>
+                    </Link>
+                  )}
+                  {userRole === 'host' && (
+                    <Link href="/dashboard/sound-system">
+                      <Button variant="outline" className="w-full justify-start">
+                        <Volume2 className="w-4 h-4 mr-3" />
+                        Sound System Setup
                       </Button>
                     </Link>
                   )}

@@ -309,3 +309,52 @@ Import trace for requested module:
  ✓ Compiled in 108ms (499 modules)
  ✓ Compiled in 114ms (499 modules)
  ✓ Compiled in 96ms (499 modules)
+ GET /artists 200 in 43ms
+ ✓ Compiled /artists/[id] in 495ms (1101 modules)
+ GET /artists/1 200 in 878ms
+ ✓ Compiled in 298ms (1107 modules)
+ GET /hosts 200 in 61ms
+ GET /hosts/2 200 in 30ms
+ ✓ Compiled /dashboard in 201ms (614 modules)
+ GET /dashboard 200 in 237ms
+ ✓ Compiled in 270ms (1118 modules)
+ ✓ Compiled in 231ms (1118 modules)
+ ✓ Compiled in 147ms (504 modules)
+ ✓ Compiled in 165ms (1093 modules)
+ GET /hosts 200 in 92ms
+ ✓ Compiled /dashboard in 107ms (614 modules)
+ GET /dashboard 200 in 151ms
+ ✓ Compiled /artists/[id] in 285ms (622 modules)
+ GET /artists/artist1 200 in 337ms
+ ✓ Compiled in 389ms (1126 modules)
+ ✓ Compiled in 416ms (1107 modules)
+ ✓ Compiled in 363ms (1107 modules)
+ ✓ Compiled /_not-found in 214ms (1097 modules)
+ GET /calendar 404 in 260ms
+ GET /calendar 404 in 80ms
+ ✓ Compiled /api/auth/[...nextauth] in 361ms (841 modules)
+ GET /api/auth/session 200 in 501ms
+ GET /calendar 404 in 183ms
+ GET /calendar 404 in 67ms
+ GET /api/auth/session 200 in 5ms
+ ✓ Compiled in 478ms (1107 modules)
+ ✓ Compiled /_not-found in 114ms (1097 modules)
+ GET /calendar 404 in 188ms
+ GET /calendar 404 in 65ms
+ ✓ Compiled /api/auth/[...nextauth] in 82ms (841 modules)
+ GET /api/auth/session 200 in 139ms
+ ✓ Compiled /dashboard in 339ms (852 modules)
+ GET /dashboard 200 in 481ms
+ GET /api/auth/session 200 in 22ms
+ ✓ Compiled /messages in 322ms (1362 modules)
+ GET /messages 200 in 379ms
+ GET /dashboard 200 in 40ms
+ ✓ Compiled /dashboard/profile in 390ms (1350 modules)
+ GET /dashboard/profile 200 in 422ms
+ ✓ Compiled /hosts in 128ms (611 modules)
+ GET /hosts 200 in 210ms
+ GET /hosts/1 200 in 36ms
+ GET /hosts 200 in 21ms
+ GET /hosts/2 200 in 29ms
+ ✓ Compiled in 389ms (1113 modules)
+ GET /hosts/2 200 in 56ms
