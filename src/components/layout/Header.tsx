@@ -37,11 +37,17 @@ export function Header() {
       { name: 'How It Works', href: '/how-it-works', requiresAuth: false },
     ];
 
-    // Only show browse links to approved users or non-authenticated users (as teasers)
-    if (!session || (session && session.user.status === 'approved')) {
+    // Only show browse links to approved users, fans with active payment, or non-authenticated users (as teasers)
+    if (!session || 
+        (session && session.user.status === 'approved') ||
+        (session && session.user.type === 'fan' && session.user.paymentStatus === 'active')) {
+      // Customize link text based on user type
+      const browseArtistsText = (session && session.user.type === 'fan') ? 'Find Concerts' : 'Browse Artists';
+      const findHostsText = (session && session.user.type === 'fan') ? 'Find Venues' : 'Find Hosts';
+      
       baseNavigation.unshift(
-        { name: 'Find Hosts', href: '/hosts', requiresAuth: false },
-        { name: 'Browse Artists', href: '/artists', requiresAuth: false }
+        { name: findHostsText, href: '/hosts', requiresAuth: false },
+        { name: browseArtistsText, href: '/artists', requiresAuth: false }
       );
     }
 
@@ -66,6 +72,17 @@ export function Header() {
             { name: 'My Venue', href: '/dashboard', requiresAuth: true }
           );
         }
+      } else if (userType === 'fan' && session.user.paymentStatus === 'active') {
+        // Fans with active payment get full access
+        baseNavigation.push(
+          { name: 'My Concerts', href: '/dashboard', requiresAuth: true },
+          { name: 'Discover Shows', href: '/artists', requiresAuth: true }
+        );
+      } else if (userType === 'fan' && session.user.paymentStatus !== 'active') {
+        // Fans with expired payment get limited access
+        baseNavigation.push(
+          { name: 'Renew Membership', href: '/payment/fan', requiresAuth: true, highlight: true }
+        );
       }
     }
 

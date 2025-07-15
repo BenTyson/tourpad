@@ -23,6 +23,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Input } from '@/components/ui/Input';
 import { ArtistCard } from '@/components/cards/ArtistCard';
 import { mockArtists } from '@/data/mockData';
+import { testConcerts } from '@/data/realTestData';
 
 export default function ArtistsPage() {
   const { data: session, status } = useSession();
@@ -42,7 +43,8 @@ export default function ArtistsPage() {
   // Check if user has access to browse artists
   const hasAccess = session?.user && (
     session.user.type === 'admin' || 
-    (session.user.status === 'approved' && (session.user.type === 'artist' || session.user.type === 'host'))
+    (session.user.status === 'approved' && (session.user.type === 'artist' || session.user.type === 'host')) ||
+    (session.user.type === 'fan' && session.user.paymentStatus === 'active')
   );
 
   // If user doesn't have access, show gateway page
@@ -250,6 +252,24 @@ export default function ArtistsPage() {
   }
 
   // Browse functionality for authorized users
+  // For fans, show concerts; for others, show artists
+  const upcomingConcerts = testConcerts.filter(concert => 
+    concert.status === 'upcoming' && 
+    new Date(concert.date) > new Date()
+  );
+
+  // Filter concerts for fans
+  const filteredConcerts = session?.user?.type === 'fan' 
+    ? upcomingConcerts.filter(concert => {
+        const matchesSearch = searchQuery === '' || 
+          concert.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          concert.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          concert.artist.name.toLowerCase().includes(searchQuery.toLowerCase());
+        
+        return matchesSearch;
+      })
+    : [];
+
   // Filter artists based on search and filters
   const filteredArtists = mockArtists.filter(artist => {
     // Only show approved artists
@@ -292,7 +312,7 @@ export default function ArtistsPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Discover Touring Artists
+            {session?.user?.type === 'fan' ? 'Discover House Concerts' : 'Discover Touring Artists'}
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Connect with professional musicians who bring incredible live performances to intimate venues.
@@ -398,40 +418,112 @@ export default function ArtistsPage() {
         {/* Results */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold text-gray-900">
-            {filteredArtists.length} Artist{filteredArtists.length !== 1 ? 's' : ''} Found
+            {session?.user?.type === 'fan' 
+              ? `${filteredConcerts.length} Concert${filteredConcerts.length !== 1 ? 's' : ''} Found`
+              : `${filteredArtists.length} Artist${filteredArtists.length !== 1 ? 's' : ''} Found`
+            }
           </h2>
         </div>
 
-        {/* Artist Grid */}
-        {filteredArtists.length > 0 ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredArtists.map((artist) => (
-              <ArtistCard key={artist.id} artist={artist} />
-            ))}
-          </div>
+        {/* Concert Grid for Fans */}
+        {session?.user?.type === 'fan' ? (
+          filteredConcerts.length > 0 ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredConcerts.map((concert) => (
+                <Card key={concert.id} className="hover:shadow-lg transition-shadow">
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className="font-semibold text-lg text-gray-900 mb-1">
+                          {concert.title}
+                        </h3>
+                        <p className="text-sm text-gray-600">by {concert.artist.name}</p>
+                      </div>
+                      <Badge variant="outline" className="ml-2">
+                        ${concert.ticketPrice}
+                      </Badge>
+                    </div>
+                    
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                      {concert.description}
+                    </p>
+                    
+                    <div className="space-y-2 mb-4">
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Calendar className="w-4 h-4 mr-2" />
+                        {new Date(concert.date).toLocaleDateString('en-US', {
+                          weekday: 'long',
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })} at {concert.startTime}
+                      </div>
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Users className="w-4 h-4 mr-2" />
+                        {concert.capacity} capacity • {concert.attendees.length} going
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {concert.genres.slice(0, 3).map((genre) => (
+                        <Badge key={genre} variant="secondary" className="text-xs">
+                          {genre}
+                        </Badge>
+                      ))}
+                    </div>
+                    
+                    <Button className="w-full">
+                      <Heart className="w-4 h-4 mr-2" />
+                      Reserve Ticket
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">No concerts match your search criteria.</p>
+              <Button
+                onClick={() => setSearchQuery('')}
+                variant="outline"
+                className="mt-4"
+              >
+                Clear Search
+              </Button>
+            </div>
+          )
         ) : (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No artists match your search criteria.</p>
-            <Button
-              onClick={() => {
-                setSearchQuery('');
-                setFilters({
-                  minYearsActive: '',
-                  maxTourMonths: '',
-                  requirements: {
-                    requireHomeStay: false,
-                    ownSoundSystem: false,
-                    travelWithAnimals: false
-                  },
-                  cancellationPolicy: ''
-                });
-              }}
-              variant="outline"
-              className="mt-4"
-            >
-              Clear Filters
-            </Button>
-          </div>
+          /* Artist Grid for Hosts/Artists */
+          filteredArtists.length > 0 ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredArtists.map((artist) => (
+                <ArtistCard key={artist.id} artist={artist} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">No artists match your search criteria.</p>
+              <Button
+                onClick={() => {
+                  setSearchQuery('');
+                  setFilters({
+                    minYearsActive: '',
+                    maxTourMonths: '',
+                    requirements: {
+                      requireHomeStay: false,
+                      ownSoundSystem: false,
+                      travelWithAnimals: false
+                    },
+                    cancellationPolicy: ''
+                  });
+                }}
+                variant="outline"
+                className="mt-4"
+              >
+                Clear Filters
+              </Button>
+            </div>
+          )
         )}
       </div>
     </div>

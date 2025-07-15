@@ -62,7 +62,8 @@ const handler = NextAuth({
             email: user.email,
             name: user.name,
             type: user.type,
-            status: user.status
+            status: user.status,
+            paymentStatus: user.paymentStatus // Include payment status for fans
           };
         } catch (error) {
           console.error('Auth error:', error);
@@ -81,6 +82,7 @@ const handler = NextAuth({
       if (user) {
         token.type = user.type;
         token.status = user.status;
+        token.paymentStatus = user.paymentStatus;
       }
       return token;
     },
@@ -90,6 +92,7 @@ const handler = NextAuth({
         session.user.id = token.sub!;
         session.user.type = token.type as string;
         session.user.status = token.status as string;
+        session.user.paymentStatus = token.paymentStatus as string;
       }
       return session;
     }

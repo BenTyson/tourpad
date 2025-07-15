@@ -174,18 +174,28 @@ export default function DashboardPage() {
               <div className="flex-1">
                 <h3 className="font-medium text-amber-900 mb-2">Limited Dashboard Access</h3>
                 <p className="text-amber-800 mb-4">
-                  {userStatus === 'pending' && 'Your application is under review. Full dashboard functionality will be available once approved.'}
-                  {userStatus === 'rejected' && 'Your application was not approved. Please review your application status for next steps.'}
-                  {userStatus === 'suspended' && 'Your account has been suspended. Contact support for assistance.'}
+                  {userRole === 'fan' && session.user.paymentStatus !== 'active' && 'Your membership has expired. Renew to continue accessing exclusive house concerts.'}
+                  {userRole !== 'fan' && userStatus === 'pending' && 'Your application is under review. Full dashboard functionality will be available once approved.'}
+                  {userRole !== 'fan' && userStatus === 'rejected' && 'Your application was not approved. Please review your application status for next steps.'}
+                  {userRole !== 'fan' && userStatus === 'suspended' && 'Your account has been suspended. Contact support for assistance.'}
                 </p>
                 <div className="flex space-x-3">
-                  <Link
-                    href="/account/status"
-                    className="bg-amber-100 text-amber-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-200 transition-colors"
-                  >
-                    Check Status
-                  </Link>
-                  {userStatus === 'rejected' && (
+                  {userRole === 'fan' && session.user.paymentStatus !== 'active' ? (
+                    <Link
+                      href="/payment/fan"
+                      className="bg-amber-100 text-amber-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-200 transition-colors"
+                    >
+                      Renew Membership
+                    </Link>
+                  ) : (
+                    <Link
+                      href="/account/status"
+                      className="bg-amber-100 text-amber-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-200 transition-colors"
+                    >
+                      Check Status
+                    </Link>
+                  )}
+                  {userRole !== 'fan' && userStatus === 'rejected' && (
                     <Link
                       href="/register"
                       className="bg-white text-amber-800 px-4 py-2 rounded-lg text-sm font-medium border border-amber-300 hover:bg-amber-50 transition-colors"

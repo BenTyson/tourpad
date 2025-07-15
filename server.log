@@ -100,3 +100,97 @@
  GET /payment/fan 200 in 30ms
  ✓ Compiled in 130ms (427 modules)
  GET /payment/fan 200 in 39ms
+ ✓ Compiled /api/auth/[...nextauth] in 340ms (790 modules)
+ GET /api/auth/session 200 in 447ms
+ GET /api/auth/session 200 in 28ms
+ GET /api/auth/csrf 200 in 19ms
+ POST /api/auth/signout 200 in 13ms
+ GET /payment/fan 200 in 133ms
+ GET /api/auth/session 200 in 5ms
+ ✓ Compiled /login in 397ms (1220 modules)
+ GET /login 200 in 459ms
+ ✓ Compiled in 283ms (997 modules)
+ GET /login 200 in 97ms
+ ✓ Compiled /api/auth/[...nextauth] in 130ms (800 modules)
+ GET /api/auth/providers 200 in 221ms
+ GET /api/auth/csrf 200 in 6ms
+ POST /api/auth/callback/credentials 200 in 10ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 8ms
+ ✓ Compiled /dashboard in 448ms (1247 modules)
+ GET /dashboard 200 in 490ms
+ ✓ Compiled /account/status in 265ms (1260 modules)
+ GET /account/status 200 in 322ms
+ GET /api/auth/session 200 in 88ms
+ ✓ Compiled in 522ms (1262 modules)
+ GET /account/status 200 in 54ms
+ GET /api/auth/session 200 in 83ms
+ ✓ Compiled in 328ms (1262 modules)
+ GET /account/status 200 in 77ms
+ ✓ Compiled in 198ms (1262 modules)
+ GET /account/status 200 in 30ms
+ GET /api/auth/session 200 in 59ms
+ ✓ Compiled in 146ms (451 modules)
+ ✓ Compiled in 137ms (451 modules)
+ GET /account/status 200 in 137ms
+ GET /account/status 200 in 16ms
+ GET /api/auth/session 200 in 20ms
+ GET /api/auth/session 200 in 23ms
+ ✓ Compiled in 136ms (451 modules)
+ GET /account/status 200 in 50ms
+ GET /api/auth/session 200 in 24ms
+ ✓ Compiled in 153ms (451 modules)
+ GET /account/status 200 in 40ms
+ ✓ Compiled in 106ms (451 modules)
+ GET /account/status 200 in 19ms
+ ✓ Compiled in 103ms (451 modules)
+ GET /account/status 200 in 21ms
+ ✓ Compiled in 111ms (451 modules)
+ GET /account/status 200 in 27ms
+ ✓ Compiled / in 151ms (586 modules)
+ GET / 200 in 225ms
+ GET / 200 in 14ms
+ ✓ Compiled /_not-found in 207ms (1027 modules)
+ GET /how-it-works 404 in 248ms
+ GET /how-it-works 404 in 73ms
+ ✓ Compiled /api/auth/[...nextauth] in 86ms (824 modules)
+ GET /api/auth/session 200 in 178ms
+ GET /how-it-works 404 in 27ms
+ GET /how-it-works 404 in 65ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/csrf 200 in 15ms
+ POST /api/auth/signout 200 in 16ms
+ GET /how-it-works 404 in 53ms
+ GET /api/auth/session 200 in 5ms
+ GET /login 200 in 32ms
+ GET /api/auth/providers 200 in 13ms
+ GET /api/auth/csrf 200 in 10ms
+ POST /api/auth/callback/credentials 200 in 12ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 5ms
+ GET /dashboard 200 in 15ms
+ GET /account/status 200 in 25ms
+ ✓ Compiled in 484ms (1027 modules)
+ GET /dashboard 200 in 77ms
+ ✓ Compiled in 282ms (1027 modules)
+ GET /dashboard 200 in 48ms
+ ✓ Compiled in 161ms (451 modules)
+ GET /dashboard 200 in 51ms
+ ✓ Compiled in 100ms (451 modules)
+ GET /dashboard 200 in 20ms
+ ✓ Compiled /api/auth/[...nextauth] in 118ms (813 modules)
+ GET /api/auth/csrf 200 in 206ms
+ POST /api/auth/signout 200 in 48ms
+ GET /dashboard 200 in 139ms
+ GET /dashboard 200 in 106ms
+ GET /api/auth/session 200 in 4ms
+ GET /login 200 in 29ms
+ GET /api/auth/providers 200 in 13ms
+ GET /api/auth/csrf 200 in 14ms
+ POST /api/auth/callback/credentials 200 in 10ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 5ms
+ GET /dashboard 200 in 9ms
+ ○ Compiling /artists ...
+ ✓ Compiled /artists in 540ms (1275 modules)
+ GET /artists 200 in 583ms

@@ -27,7 +27,8 @@ export default function LoginPage() {
   const [demoUsers] = useState([
     { email: 'admin@tourpad.com', password: 'admin123', type: 'Admin User', description: 'Full platform access' },
     { email: 'sarah.artist@email.com', password: 'artist123', type: 'Artist', description: 'Folk musician from Austin' },
-    { email: 'mike.host@email.com', password: 'host123', type: 'Host', description: 'Venue owner in Nashville' }
+    { email: 'mike.host@email.com', password: 'host123', type: 'Host', description: 'Venue owner in Nashville' },
+    { email: 'jessica.fan@email.com', password: 'fan123', type: 'Fan', description: 'Music lover from Austin' }
   ]);
 
   const handleSubmit = async (e: React.FormEvent) => {
