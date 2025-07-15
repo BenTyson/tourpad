@@ -278,3 +278,32 @@
  GET /artists 200 in 31ms
  ✓ Compiled /artists/[id] in 248ms (840 modules)
  GET /artists/1 200 in 303ms
+ GET /api/auth/session 200 in 104ms
+ ✓ Compiled in 533ms (508 modules)
+ GET /artists/1 200 in 25ms
+ ✓ Compiled in 127ms (508 modules)
+ GET /artists/1 200 in 20ms
+ ✓ Compiled in 179ms (508 modules)
+ GET /artists/1 200 in 71ms
+ ✓ Compiled in 117ms (508 modules)
+ GET /artists/1 200 in 17ms
+ ✓ Compiled in 217ms (508 modules)
+ GET /artists/1 200 in 57ms
+ ✓ Compiled in 125ms (508 modules)
+ GET /artists/1 200 in 19ms
+ ✓ Compiled in 117ms (508 modules)
+ GET /artists/1 200 in 19ms
+ ✓ Compiled in 112ms (508 modules)
+ GET /artists/1 200 in 20ms
+ ✓ Compiled in 107ms (508 modules)
+ GET /artists/1 200 in 18ms
+ ✓ Compiled in 130ms (508 modules)
+ GET /artists/1 200 in 30ms
+ ✓ Compiled in 164ms (508 modules)
+ GET /artists/1 200 in 44ms
+ ✓ Compiled in 124ms (508 modules)
+ GET /artists/1 200 in 16ms
+ ✓ Compiled in 113ms (508 modules)
+ GET /artists/1 200 in 20ms
+ ✓ Compiled in 106ms (508 modules)
+ GET /artists/1 200 in 22ms

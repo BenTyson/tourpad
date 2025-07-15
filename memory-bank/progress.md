@@ -25,7 +25,7 @@
 
 ### User Management
 - [x] **Registration & Login UI**
-  - Complete registration form
+  - Complete registration form (artist/host)
   - Login page with NextAuth
   - Basic auth flow (UI only)
 
@@ -33,6 +33,12 @@
   - Multi-step artist onboarding
   - Multi-step host onboarding
   - Progress indicators
+
+- [ ] **Fan User Type Integration** 🔥 **NEW PRIORITY**
+  - [ ] Fan registration flow (direct payment model)
+  - [ ] Fan dashboard and concert discovery interface
+  - [ ] Fan data model and authentication integration
+  - [ ] Fan access control and navigation updates
 
 - [x] **Form Validation**
   - Comprehensive Zod schemas

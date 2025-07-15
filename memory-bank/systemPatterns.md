@@ -24,9 +24,10 @@
 ├── (auth)/          # Auth-required routes
 ├── admin/           # Admin-only routes
 ├── api/             # API routes
-├── artists/         # Public artist views
-├── dashboard/       # User dashboards
-├── hosts/           # Public host views
+├── artists/         # Public artist views (gated access)
+├── dashboard/       # User dashboards (artist/host/fan-specific)
+├── hosts/           # Public host views (gated access)
+├── concerts/        # Concert discovery (fan-focused)
 └── onboarding/      # User onboarding flows
 ```
 
@@ -34,15 +35,16 @@
 
 ### 1. Role-Based Access Control (RBAC)
 ```typescript
-// User types: 'artist' | 'host' | 'admin'
-// Status types: 'pending' | 'approved' | 'suspended' | 'rejected'
+// User types: 'artist' | 'host' | 'fan' | 'admin'
+// Status types: 'pending' | 'approved' | 'suspended' | 'rejected' | 'active' | 'payment_expired'
 // Access determined by combination of type + status
 ```
 
 ### 2. Gated Access Model
 - Public pages show teasers only (no real user data)
-- Application → Approval → Payment (artists) → Full Access
-- Conditional UI rendering based on user.status
+- **Artists/Hosts**: Application → Approval → Payment (artists) → Full Access
+- **Fans**: Registration → Direct Payment → Immediate Access
+- Conditional UI rendering based on user.status and user.type
 
 ### 3. Form Validation Pattern
 ```typescript

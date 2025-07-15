@@ -1,7 +1,13 @@
 # TourPad Development Roadmap
 
 ## Project Overview
-TourPad is a Next.js-based platform connecting touring musicians with hosts for intimate house concerts and small shows. The platform uses a **gated access model** where artists and hosts must apply and be approved before accessing the community, with artists requiring additional payment verification. The public site serves as a teaser to generate interest without revealing actual user information. Currently in active development with a solid frontend foundation using mock data, preparing for backend integration.
+TourPad is a Next.js-based platform connecting touring musicians with hosts for intimate house concerts and small shows, while also serving music fans who want to discover and attend these exclusive events. The platform uses a **gated access model** where artists and hosts must apply and be approved before accessing the community, while fans can register and pay directly for immediate access. The public site serves as a teaser to generate interest without revealing actual user information. Currently in active development with a solid frontend foundation using mock data, preparing for backend integration.
+
+### User Types
+- **Artists**: Touring musicians who book shows ($400/year membership after approval)
+- **Hosts**: Venue owners who offer their spaces for concerts (free membership after approval)
+- **Fans**: Concert attendees who discover and attend house concerts (direct paid membership - no approval needed)
+- **Admin**: Platform administrators with full access
 
 ## Current Status
 - ✅ **Frontend Foundation Complete**: Comprehensive UI components, routing, and layouts
@@ -11,6 +17,7 @@ TourPad is a Next.js-based platform connecting touring musicians with hosts for 
 - ✅ **Gated Access System**: Gateway pages protecting artist/host directories with compelling application flows
 - ✅ **Booking Workflow UI**: Complete booking request and approval interface
 - ✅ **Dashboard System**: Role-based dashboards for artists and hosts
+- ❌ **Fan User Type Integration**: New user type for concert discovery and attendance
 - ✅ **Mock Data Infrastructure**: Rich data models for testing and development
 - ✅ **Host Media Management**: Complete dashboard and upload functionality
 - ✅ **Access Control & Registration**: Complete UI architecture with streamlined forms
@@ -122,6 +129,49 @@ TourPad is a Next.js-based platform connecting touring musicians with hosts for 
   - [ ] Design host application form (venue basics, preferences)
   - [ ] Create host approval workflow
   - [ ] Build host profile completion system
+
+### 🎯 NEW PRIORITY: Fan User Type Integration
+
+- [ ] **Fan Data Architecture** 🔥 **IMMEDIATE NEXT PHASE**
+  - [ ] Design Fan interface and data model (preferences, location, payment status)
+  - [ ] Create Fan mock data with realistic profiles
+  - [ ] Add Fan type to authentication system and session management
+  - [ ] Update TypeScript interfaces and validation schemas
+
+- [ ] **Fan Registration & Onboarding**
+  - [ ] Create Fan registration flow (/register?type=fan)
+  - [ ] Design Fan-specific registration form (basic info, music preferences, location)
+  - [ ] Create Fan payment gateway integration (direct subscription - no approval needed)
+  - [ ] Build Fan profile completion system (post-payment preferences)
+  - [ ] Implement immediate access upon successful payment
+
+- [ ] **Fan Dashboard System**
+  - [ ] Create Fan-specific dashboard (/dashboard for fan users)
+  - [ ] Implement concert discovery interface (upcoming shows in area)
+  - [ ] Add Fan booking/attendance tracking system
+  - [ ] Create Fan profile management (music tastes, notifications, privacy)
+  - [ ] Build Fan social features (favorites, attended shows, reviews)
+
+- [ ] **Fan Concert Discovery**
+  - [ ] Design concert browsing interface for Fans
+  - [ ] Implement location-based concert filtering
+  - [ ] Create concert detail pages with RSVP functionality
+  - [ ] Add calendar integration for upcoming concerts
+  - [ ] Build search and filter system (genre, date, distance, price)
+
+- [ ] **Fan Access Control & Navigation**
+  - [ ] Update Header navigation for Fan user type
+  - [ ] Implement Fan-specific routing and permissions
+  - [ ] Create Fan gateway pages for non-paying users
+  - [ ] Add Fan access to artist/host directories (view-only)
+  - [ ] Design Fan payment status pages (active, expired, payment failed)
+
+- [ ] **Fan-Host-Artist Integration**
+  - [ ] Enable Fans to view and RSVP to concerts
+  - [ ] Create Fan attendance confirmation system
+  - [ ] Implement Fan capacity management for hosts
+  - [ ] Add Fan reviews and rating system for concerts
+  - [ ] Build Fan communication with hosts (Q&A, requirements)
 
 ### 🎯 Immediate Priority B: Core Features
 - [x] **Host Media Management Dashboard**
@@ -453,13 +503,19 @@ These files contain TODO comments that need backend implementation:
 5. **Premium Features** - Tour planning tools and advanced matching
 
 ### **Key Technical Decisions Made:**
-- **User Flow**: Application (minimal) → Approval → Payment → Full Profile (detailed)
-- **Admin Review**: Human approval with follow-up questions capability
-- **Payment Model**: $400/year for artists, free for hosts (for now)
+- **User Flows**: 
+  - **Artists/Hosts**: Application (minimal) → Approval → Payment (artists only) → Full Profile
+  - **Fans**: Registration → Payment → Immediate Access
+- **Admin Review**: Human approval with follow-up questions capability (artists/hosts only)
+- **Payment Model**: 
+  - $400/year for artists (after approval)
+  - Free for hosts (after approval)
+  - TBD pricing for fans (likely $20-50/year for immediate concert access)
 - **Communication**: Platform-contained messaging with Airbnb-style retention
 - **Response Times**: 48-hour standard with automated reminders
 - **Tour Planning**: Premium add-on with placeholder pricing during development
 - **Notifications**: Dashboard-based notification center, not push notifications
+- **Fan Integration**: Direct payment access, view-only artist/host directories, full concert discovery features
 
 ### **Streamlined Application Data Models:**
 
@@ -486,6 +542,18 @@ interface HostApplication {
   concertSpacePhotos: File[]; // Photo(s) of concert space
   hostingMotivation: string; // "What do you enjoy most about hosting house concerts?"
   additionalInfo?: string; // "Is there anything else you would like to let us know?" (optional)
+}
+```
+
+**Fan Registration (Direct Payment) - Simple & Fast:**
+```typescript
+interface FanRegistration {
+  name: string; // Full name
+  email: string; // Email address
+  location: string; // City, State format for nearby concert discovery
+  favoriteGenres: string[]; // Musical preferences for recommendations (optional)
+  referralSource?: string; // How they heard about TourPad (optional)
+  // Note: No approval needed - goes straight to payment after registration
 }
 ```
 
