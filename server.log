@@ -175,3 +175,55 @@
  GET / 200 in 83ms
  ✓ Compiled in 215ms (1045 modules)
  GET / 200 in 74ms
+ ✓ Compiled in 570ms (1049 modules)
+ GET / 200 in 57ms
+ GET /hosts 200 in 15ms
+ GET /artists 200 in 39ms
+ GET /hosts 200 in 24ms
+ ✓ Compiled in 357ms (1035 modules)
+ GET /hosts 200 in 113ms
+ ⚠ Fast Refresh had to perform a full reload when entyson/pad/node_modules/next/dist/client/app-dir/link.js","ids":["__esModule","default"]} changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /hosts 200 in 116ms
+ ✓ Compiled /api/auth/[...nextauth] in 70ms (597 modules)
+ ✓ Compiled (832 modules)
+ GET /favicon.ico 200 in 404ms
+ GET /api/auth/session 200 in 369ms
+ ✓ Compiled in 146ms (454 modules)
+ GET /hosts 200 in 103ms
+ ✓ Compiled in 109ms (454 modules)
+ GET /hosts 200 in 36ms
+ ✓ Compiled in 110ms (454 modules)
+ GET /hosts 200 in 36ms
+ ✓ Compiled in 118ms (454 modules)
+ GET /hosts 200 in 60ms
+ ✓ Compiled in 109ms (454 modules)
+ GET /hosts 200 in 36ms
+ ✓ Compiled in 107ms (454 modules)
+ GET /hosts 200 in 32ms
+ ✓ Compiled in 103ms (454 modules)
+ ✓ Compiled in 162ms (454 modules)
+ GET /hosts 200 in 171ms
+ GET /hosts 200 in 34ms
+ GET / 200 in 38ms
+ GET /artists 200 in 165ms
+ GET /api/auth/session 200 in 11ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 612ms (1289 modules)
+ GET /login 200 in 707ms
+ GET /api/auth/providers 200 in 79ms
+ GET /api/auth/csrf 200 in 4ms
+ POST /api/auth/callback/credentials 200 in 8ms
+ GET /api/auth/session 200 in 10ms
+ GET /api/auth/session 200 in 6ms
+ ✓ Compiled /dashboard in 310ms (1306 modules)
+ GET /dashboard 200 in 352ms
+ GET /artists 200 in 62ms
+ GET /hosts 200 in 64ms
+ GET /artists 200 in 38ms
+ ✓ Compiled /_not-found in 169ms (1300 modules)
+ GET /how-it-works 404 in 197ms
+ GET /how-it-works 404 in 14ms
+ GET /how-it-works 404 in 69ms
+ GET /api/auth/session 200 in 35ms
+ GET /artists 200 in 48ms
+ GET /hosts 200 in 79ms
