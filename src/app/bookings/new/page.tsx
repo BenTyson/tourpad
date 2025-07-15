@@ -39,7 +39,17 @@ function NewBookingForm() {
     message: '',
     specialRequirements: '',
     contactPhone: '',
-    agreeToTerms: false
+    agreeToTerms: false,
+    // New lodging fields
+    needsLodging: false,
+    lodgingDetails: {
+      guestCount: 1,
+      arrivalDate: '',
+      departureDate: '',
+      specialRequirements: '',
+      dietaryRestrictions: '',
+      accessibilityNeeds: ''
+    }
   });
 
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -270,6 +280,118 @@ function NewBookingForm() {
                       placeholder="Sound setup, accessibility needs, dietary restrictions, etc."
                     />
                   </div>
+
+                  {/* Lodging Section */}
+                  {isArtistBookingHost && host && (
+                    <div className="border-t pt-6">
+                      <h3 className="text-lg font-semibold mb-4">Overnight Accommodation</h3>
+                      
+                      <div className="space-y-4">
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            id="needsLodging"
+                            checked={formData.needsLodging}
+                            onChange={(e) => setFormData({ ...formData, needsLodging: e.target.checked })}
+                            className="mr-3"
+                          />
+                          <label htmlFor="needsLodging" className="text-sm font-medium text-gray-700">
+                            I need overnight accommodation
+                          </label>
+                        </div>
+                        
+                        {formData.needsLodging && (
+                          <div className="ml-6 space-y-4 p-4 bg-gray-50 rounded-lg">
+                            <div className="grid md:grid-cols-2 gap-4">
+                              <Input
+                                label="Number of Guests"
+                                type="number"
+                                value={formData.lodgingDetails.guestCount}
+                                onChange={(e) => setFormData({ 
+                                  ...formData, 
+                                  lodgingDetails: { 
+                                    ...formData.lodgingDetails, 
+                                    guestCount: parseInt(e.target.value) 
+                                  } 
+                                })}
+                                min="1"
+                                max="10"
+                                required
+                              />
+                              <div></div>
+                            </div>
+                            
+                            <div className="grid md:grid-cols-2 gap-4">
+                              <Input
+                                label="Arrival Date"
+                                type="date"
+                                value={formData.lodgingDetails.arrivalDate}
+                                onChange={(e) => setFormData({ 
+                                  ...formData, 
+                                  lodgingDetails: { 
+                                    ...formData.lodgingDetails, 
+                                    arrivalDate: e.target.value 
+                                  } 
+                                })}
+                                required
+                              />
+                              <Input
+                                label="Departure Date"
+                                type="date"
+                                value={formData.lodgingDetails.departureDate}
+                                onChange={(e) => setFormData({ 
+                                  ...formData, 
+                                  lodgingDetails: { 
+                                    ...formData.lodgingDetails, 
+                                    departureDate: e.target.value 
+                                  } 
+                                })}
+                                required
+                              />
+                            </div>
+                            
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Dietary Restrictions
+                              </label>
+                              <textarea
+                                value={formData.lodgingDetails.dietaryRestrictions}
+                                onChange={(e) => setFormData({ 
+                                  ...formData, 
+                                  lodgingDetails: { 
+                                    ...formData.lodgingDetails, 
+                                    dietaryRestrictions: e.target.value 
+                                  } 
+                                })}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                                rows={2}
+                                placeholder="Any dietary restrictions or food allergies..."
+                              />
+                            </div>
+                            
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Lodging Special Requirements
+                              </label>
+                              <textarea
+                                value={formData.lodgingDetails.specialRequirements}
+                                onChange={(e) => setFormData({ 
+                                  ...formData, 
+                                  lodgingDetails: { 
+                                    ...formData.lodgingDetails, 
+                                    specialRequirements: e.target.value 
+                                  } 
+                                })}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                                rows={2}
+                                placeholder="Any specific needs for accommodation..."
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Terms */}
                   <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">

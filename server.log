@@ -194,3 +194,26 @@
  ○ Compiling /artists ...
  ✓ Compiled /artists in 540ms (1275 modules)
  GET /artists 200 in 583ms
+ GET /api/auth/session 200 in 80ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 16ms
+ GET /api/auth/session 200 in 13ms
+ GET /api/auth/session 200 in 18ms
+ ✓ Compiled in 183ms (462 modules)
+ ✓ Compiled in 145ms (462 modules)
+ ✓ Compiled in 132ms (462 modules)
+ ✓ Compiled in 103ms (462 modules)
+ ✓ Compiled in 170ms (462 modules)
+ ✓ Compiled in 138ms (462 modules)
+ ✓ Compiled in 162ms (1027 modules)
+ ✓ Compiled in 468ms (1041 modules)
+ ✓ Compiled in 319ms (1041 modules)
+ ✓ Compiled in 167ms (462 modules)
+ ✓ Compiled in 162ms (1027 modules)
+ ✓ Compiled in 359ms (1043 modules)
+ ✓ Compiled in 102ms (463 modules)
+ ✓ Compiled in 148ms (463 modules)
+ ✓ Compiled in 136ms (463 modules)
+ ✓ Compiled in 106ms (463 modules)
+ ✓ Compiled in 142ms (463 modules)
+ ✓ Compiled in 103ms (463 modules)

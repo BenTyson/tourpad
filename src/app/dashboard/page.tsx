@@ -16,7 +16,8 @@ import {
   AlertTriangle,
   Camera,
   Video,
-  Edit
+  Edit,
+  Home
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
@@ -515,6 +516,22 @@ export default function DashboardPage() {
                       Manage Profile & Media
                     </Button>
                   </Link>
+                  {userRole === 'host' && (
+                    <Link href="/dashboard/lodging/setup">
+                      <Button variant="outline" className="w-full justify-start">
+                        <Home className="w-4 h-4 mr-3" />
+                        Setup Lodging
+                      </Button>
+                    </Link>
+                  )}
+                  {userRole === 'host' && (
+                    <Link href="/dashboard/lodging/photos">
+                      <Button variant="outline" className="w-full justify-start">
+                        <Camera className="w-4 h-4 mr-3" />
+                        Lodging Photos
+                      </Button>
+                    </Link>
+                  )}
                 </div>
               </CardContent>
             </Card>

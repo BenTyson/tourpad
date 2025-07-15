@@ -32,7 +32,8 @@ import {
   Bed,
   Copy,
   Mail,
-  Twitter
+  Twitter,
+  Coffee
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -40,12 +41,13 @@ import { Badge } from '@/components/ui/Badge';
 import { PhotoGallery } from '@/components/media/PhotoGallery';
 import { PhotoLightbox } from '@/components/media/PhotoLightbox';
 import { mockHosts } from '@/data/mockData';
+import { testHosts } from '@/data/realTestData';
 
 export default function HostProfilePage() {
   const params = useParams();
   const hostId = params.id as string;
   
-  const host = mockHosts.find(h => h.id === hostId);
+  const host = testHosts.find(h => h.id === hostId) || mockHosts.find(h => h.id === hostId);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -391,6 +393,146 @@ export default function HostProfilePage() {
             </div>
           </div>
         </section>
+
+        {/* Lodging Information */}
+        {host.hostingCapabilities?.lodgingHosting?.enabled && host.hostingCapabilities?.lodgingHosting?.lodgingDetails && (
+          <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
+            <div className="p-8">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold text-neutral-900 mb-2">
+                    Overnight Accommodation
+                  </h2>
+                  <p className="text-neutral-600">Stay comfortably during your visit</p>
+                </div>
+                <Badge variant="success" className="bg-green-100 text-green-800">
+                  Available
+                </Badge>
+              </div>
+              
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mr-4">
+                      <Bed className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <div className="font-semibold text-neutral-900">Room Type</div>
+                      <div className="text-sm text-neutral-600">Sleeping arrangement</div>
+                    </div>
+                  </div>
+                  <div className="text-lg font-bold text-blue-700">
+                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.roomType.replace('_', ' ')}
+                  </div>
+                  <div className="text-sm text-neutral-600 mt-1">
+                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.bathroomType.replace('_', ' ')} bathroom
+                  </div>
+                </div>
+                
+                <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-200">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mr-4">
+                      <Users className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <div className="font-semibold text-neutral-900">Capacity</div>
+                      <div className="text-sm text-neutral-600">Maximum guests</div>
+                    </div>
+                  </div>
+                  <div className="text-lg font-bold text-green-700">
+                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.bedConfiguration.maxOccupancy} guests
+                  </div>
+                  <div className="text-sm text-neutral-600 mt-1">
+                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.bedConfiguration.beds.map(bed => 
+                      `${bed.quantity} ${bed.type.replace('_', ' ')}`
+                    ).join(', ')}
+                  </div>
+                </div>
+                
+                <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mr-4">
+                      <DollarSign className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <div className="font-semibold text-neutral-900">Pricing</div>
+                      <div className="text-sm text-neutral-600">Per night</div>
+                    </div>
+                  </div>
+                  <div className="text-lg font-bold text-purple-700">
+                    ${host.hostingCapabilities.lodgingHosting.lodgingDetails.pricing.baseRate}
+                  </div>
+                  <div className="text-sm text-neutral-600 mt-1">
+                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.pricing.additionalGuestFee && 
+                      `+$${host.hostingCapabilities.lodgingHosting.lodgingDetails.pricing.additionalGuestFee} per extra guest`
+                    }
+                  </div>
+                </div>
+              </div>
+              
+              {/* Lodging Amenities */}
+              <div className="mb-8">
+                <h3 className="text-lg font-semibold text-neutral-900 mb-4">Lodging Amenities</h3>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {Object.entries({
+                    breakfast: { label: 'Breakfast included', icon: Coffee },
+                    wifi: { label: 'WiFi access', icon: Wifi },
+                    parking: { label: 'Free parking', icon: Car },
+                    laundry: { label: 'Laundry access', icon: Sparkles },
+                    kitchenAccess: { label: 'Kitchen access', icon: Home },
+                    workspace: { label: 'Workspace available', icon: Zap },
+                    linensProvided: { label: 'Linens provided', icon: Bed },
+                    towelsProvided: { label: 'Towels provided', icon: Shield }
+                  }).map(([key, {label, icon: IconComponent}]) => (
+                    <div key={key} className={`flex items-center p-3 rounded-lg border ${
+                      host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities[key as keyof typeof host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities] 
+                        ? 'bg-green-50 border-green-200' 
+                        : 'bg-gray-50 border-gray-200'
+                    }`}>
+                      <IconComponent className={`w-5 h-5 mr-3 ${
+                        host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities[key as keyof typeof host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities] 
+                          ? 'text-green-600' 
+                          : 'text-gray-400'
+                      }`} />
+                      <span className={`text-sm font-medium ${
+                        host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities[key as keyof typeof host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities] 
+                          ? 'text-green-900' 
+                          : 'text-gray-500'
+                      }`}>
+                        {label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              {/* House Rules */}
+              <div className="bg-gray-50 rounded-xl p-6">
+                <h3 className="text-lg font-semibold text-neutral-900 mb-4">House Rules</h3>
+                <div className="grid md:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <strong>Check-in:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules.checkInTime}
+                  </div>
+                  <div>
+                    <strong>Check-out:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules.checkOutTime}
+                  </div>
+                  <div>
+                    <strong>Quiet hours:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules.quietHours.start} - {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules.quietHours.end}
+                  </div>
+                  <div>
+                    <strong>Smoking:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules.smokingPolicy.replace('_', ' ')}
+                  </div>
+                  <div>
+                    <strong>Pets:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules.petPolicy.replace('_', ' ')}
+                  </div>
+                  <div>
+                    <strong>Alcohol:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules.alcoholPolicy.replace('_', ' ')}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Booking Information */}
         <section className="bg-gradient-to-br from-primary-50 to-secondary-50 rounded-2xl p-8">
