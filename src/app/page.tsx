@@ -43,12 +43,12 @@ export default function EnhancedHomePage() {
       description: 'Perform for music lovers in intimate settings where every note matters and connections are real.'
     },
     {
-      icon: Shield,
-      title: 'Safe & Verified',
-      description: 'All hosts are background-checked and verified. Payment protection and clear agreements included.'
+      icon: Heart,
+      title: 'Genuine Connections',
+      description: 'Skip the noise and connect directly with music lovers who want to create something special together.'
     },
     {
-      icon: Heart,
+      icon: Star,
       title: 'Build Your Fanbase',
       description: 'Turn one-time listeners into lifelong fans through personal, memorable house concert experiences.'
     }
@@ -152,7 +152,7 @@ export default function EnhancedHomePage() {
               <h1 className="text-5xl sm:text-7xl font-bold text-white mb-6 leading-tight">
                 Where Music
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-secondary-200 via-secondary-100 to-secondary-200">
-                  Meets Community
+                  Feels Like Home
                 </span>
               </h1>
             </div>
@@ -201,20 +201,13 @@ export default function EnhancedHomePage() {
                     <p className="text-white/90 mb-8 text-lg">
                       Connect with verified hosts in 50+ cities. Professional venues, guaranteed audiences.
                     </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                      <Link href="/register?type=artist">
-                        <Button size="lg" className="px-10 py-4 text-lg shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group">
-                          <Guitar className="w-6 h-6 mr-3" />
-                          Apply as Artist
-                          <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                        </Button>
-                      </Link>
-                      <Link href="/artists">
-                        <Button size="lg" variant="outline" className="px-8 py-4 text-lg bg-white/10 border-white/30 text-white hover:bg-white hover:text-gray-900 shadow-2xl backdrop-blur-sm">
-                          Browse Artists
-                        </Button>
-                      </Link>
-                    </div>
+                    <Link href="/register?type=artist">
+                      <Button size="lg" className="px-12 py-4 text-lg shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group">
+                        <Guitar className="w-6 h-6 mr-3" />
+                        Apply as Artist
+                        <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </Link>
                   </div>
                 )}
 
@@ -225,20 +218,13 @@ export default function EnhancedHomePage() {
                     <p className="text-white/90 mb-8 text-lg">
                       Discover amazing touring artists and bring live music to your community.
                     </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                      <Link href="/register?type=host">
-                        <Button size="lg" className="px-10 py-4 text-lg shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group">
-                          <Home className="w-6 h-6 mr-3" />
-                          Become a Host
-                          <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                        </Button>
-                      </Link>
-                      <Link href="/hosts">
-                        <Button size="lg" variant="outline" className="px-8 py-4 text-lg bg-white/10 border-white/30 text-white hover:bg-white hover:text-gray-900 shadow-2xl backdrop-blur-sm">
-                          Browse Venues
-                        </Button>
-                      </Link>
-                    </div>
+                    <Link href="/register?type=host">
+                      <Button size="lg" className="px-12 py-4 text-lg shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group">
+                        <Home className="w-6 h-6 mr-3" />
+                        Become a Host
+                        <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </Link>
                   </div>
                 )}
               </div>
