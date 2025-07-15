@@ -227,3 +227,36 @@
  GET /api/auth/session 200 in 35ms
  GET /artists 200 in 48ms
  GET /hosts 200 in 79ms
+ ✓ Compiled in 713ms (1069 modules)
+ GET /hosts 200 in 77ms
+ ✓ Compiled /api/auth/[...nextauth] in 97ms (842 modules)
+ GET /api/auth/session 200 in 182ms
+ GET /api/auth/session 200 in 4ms
+ ✓ Compiled in 525ms (1069 modules)
+ GET /hosts 200 in 60ms
+ ✓ Compiled /api/auth/[...nextauth] in 79ms (837 modules)
+ GET /api/auth/session 200 in 154ms
+ GET /api/auth/session 200 in 6ms
+ GET /artists 200 in 64ms
+ ✓ Compiled /_not-found in 209ms (1310 modules)
+ GET /how-it-works 404 in 260ms
+ GET /how-it-works 404 in 77ms
+ GET /api/auth/session 200 in 19ms
+ GET /artists 200 in 37ms
+ GET /api/auth/csrf 200 in 16ms
+ POST /api/auth/signout 200 in 12ms
+ GET /artists 200 in 59ms
+ GET /api/auth/session 200 in 4ms
+ GET /artists 200 in 7ms
+ GET /hosts 200 in 31ms
+ GET /login 200 in 27ms
+ GET /api/auth/providers 200 in 30ms
+ GET /api/auth/csrf 200 in 8ms
+ POST /api/auth/callback/credentials 200 in 9ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 9ms
+ ○ Compiling /admin ...
+ ✓ Compiled /admin in 533ms (1339 modules)
+ GET /admin 200 in 559ms
+ ✓ Compiled / in 179ms (861 modules)
+ GET / 200 in 227ms
