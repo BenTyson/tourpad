@@ -260,3 +260,21 @@
  GET /admin 200 in 559ms
  ✓ Compiled / in 179ms (861 modules)
  GET / 200 in 227ms
+ ✓ Compiled /account/status in 219ms (1317 modules)
+ GET /account/status 200 in 255ms
+ GET /api/auth/session 200 in 79ms
+ GET /admin 200 in 28ms
+ ○ Compiling /admin/applications ...
+ ✓ Compiled /admin/applications in 594ms (1317 modules)
+ GET /admin/applications 200 in 645ms
+ GET /admin 200 in 33ms
+ ✓ Compiled /_not-found in 158ms (1084 modules)
+ GET /admin/activity 404 in 236ms
+ GET /admin/activity 404 in 92ms
+ ✓ Compiled /api/auth/[...nextauth] in 99ms (824 modules)
+ GET /api/auth/session 200 in 178ms
+ GET /admin 200 in 174ms
+ GET /api/auth/session 200 in 6ms
+ GET /artists 200 in 31ms
+ ✓ Compiled /artists/[id] in 248ms (840 modules)
+ GET /artists/1 200 in 303ms
