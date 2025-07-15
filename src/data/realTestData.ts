@@ -387,6 +387,79 @@ export const testHosts: Host[] = [
         description: 'Intimate living room with excellent acoustics'
       }
     ],
+    // New lodging system fields
+    hostingCapabilities: {
+      showHosting: {
+        enabled: true // This host can host shows
+      },
+      lodgingHosting: {
+        enabled: true,
+        lodgingDetails: {
+          roomType: 'private_bedroom',
+          bathroomType: 'private',
+          bedConfiguration: {
+            beds: [
+              { type: 'queen', quantity: 1 }
+            ],
+            maxOccupancy: 2
+          },
+          amenities: {
+            breakfast: true,
+            breakfastType: 'full',
+            wifi: true,
+            parking: true,
+            laundry: false,
+            kitchenAccess: true,
+            workspace: true,
+            linensProvided: true,
+            towelsProvided: true,
+            transportation: 'nearby_public'
+          },
+          houseRules: {
+            checkInTime: '4:00 PM',
+            checkOutTime: '11:00 AM',
+            quietHours: { start: '10:00 PM', end: '8:00 AM' },
+            smokingPolicy: 'no_smoking',
+            petPolicy: 'no_pets',
+            alcoholPolicy: 'allowed'
+          },
+          pricing: {
+            baseRate: 85,
+            additionalGuestFee: 20,
+            cleaningFee: 25
+          },
+          availability: {
+            blackoutDates: ['2024-12-25', '2024-01-01'],
+            minimumStay: 1,
+            maximumStay: 7,
+            advanceBookingRequired: 2
+          },
+          lodgingPhotos: [
+            {
+              id: 'lodging1-bed1',
+              url: 'https://picsum.photos/800/600?random=20',
+              category: 'bedroom',
+              title: 'Private Guest Room',
+              description: 'Comfortable queen bed with workspace',
+              isRequired: true
+            },
+            {
+              id: 'lodging1-bath1',
+              url: 'https://picsum.photos/800/600?random=21',
+              category: 'bathroom',
+              title: 'Private Bathroom',
+              description: 'Private full bathroom with shower',
+              isRequired: true
+            }
+          ],
+          accessibility: [],
+          specialConsiderations: 'Perfect for artists performing at The Wilson House. Private entrance and quiet environment for rest before/after shows.',
+          localRecommendations: 'Easy access to Music Row and downtown Nashville. Great local restaurants within walking distance.',
+          safetyFeatures: ['Smoke detectors', 'Carbon monoxide detector', 'Security system', 'Well-lit parking', 'Emergency contacts']
+        }
+      }
+    },
+    primaryHostType: 'hybrid',
     lastActive: '2024-01-22T20:00:00Z',
     joinedDate: '2021-05-15T16:30:00Z'
   },
@@ -435,6 +508,16 @@ export const testHosts: Host[] = [
         description: 'Industrial loft with professional stage setup'
       }
     ],
+    // New lodging system fields - show-only host
+    hostingCapabilities: {
+      showHosting: {
+        enabled: true // This host can host shows
+      },
+      lodgingHosting: {
+        enabled: false // This host does not offer lodging
+      }
+    },
+    primaryHostType: 'show',
     lastActive: '2024-01-21T14:25:00Z',
     joinedDate: '2019-08-10T11:00:00Z'
   },

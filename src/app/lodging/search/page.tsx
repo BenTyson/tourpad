@@ -67,7 +67,22 @@ export default function LodgingSearchPage() {
   
   const calculateDistance = (host: any) => {
     // Mock distance calculation - in real app would use coordinates
-    return Math.floor(Math.random() * 20) + 1;
+    // For now, simulate realistic distances based on location
+    const currentShowLocation = showLocation || 'Nashville, TN';
+    const hostLocation = `${host.location.city}, ${host.location.state}`;
+    
+    // Same city = 1-10 miles
+    if (host.location.city === currentShowLocation.split(',')[0]?.trim()) {
+      return Math.floor(Math.random() * 10) + 1;
+    }
+    
+    // Different city, same state = 15-50 miles
+    if (host.location.state === currentShowLocation.split(',')[1]?.trim()) {
+      return Math.floor(Math.random() * 35) + 15;
+    }
+    
+    // Different state = 50-200 miles
+    return Math.floor(Math.random() * 150) + 50;
   };
   
   const calculateTotalCost = (host: any) => {
