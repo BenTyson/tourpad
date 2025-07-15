@@ -304,6 +304,90 @@ export default function EnhancedHomePage() {
         </div>
       </section>
 
+      {/* Mission & Story Section - Immersive Design */}
+      <section className="relative py-32 overflow-hidden">
+        {/* Full-width background with parallax effect */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-fixed"
+          style={{
+            backgroundImage: 'url(https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=1920&h=1080&auto=format&fit=crop&q=80)',
+          }}
+        >
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/85 to-gray-900/95"></div>
+        </div>
+
+        {/* Floating content container */}
+        <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-sm text-white rounded-full text-sm font-medium mb-8 border border-white/20">
+              <Music className="w-4 h-4 mr-2" />
+              Our Story
+            </div>
+            
+            <h2 className="text-5xl sm:text-6xl font-bold text-white mb-8 leading-tight">
+              Turning Homes Into Venues,{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-300 to-secondary-300">
+                Nights Into Memories
+              </span>
+            </h2>
+          </div>
+
+          {/* Story cards in diagonal layout */}
+          <div className="space-y-12">
+            {/* Card 1 */}
+            <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
+              <div className="lg:w-2/3 order-2 lg:order-1">
+                <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-white/20">
+                  <p className="text-xl text-gray-700 leading-relaxed">
+                    Our goal is simple: to make it easier for musicians and hosts to come together and bring live music into homes and creative spaces everywhere. Whether you're an artist looking for fresh audiences or a host eager to share unforgettable nights with friends, we're here to help you make it happen.
+                  </p>
+                </div>
+              </div>
+              <div className="lg:w-1/3 order-1 lg:order-2">
+                <div className="w-24 h-24 bg-primary-500/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-primary-300/30">
+                  <Users className="w-12 h-12 text-primary-300" />
+                </div>
+              </div>
+            </div>
+
+            {/* Card 2 */}
+            <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
+              <div className="lg:w-1/3 order-1">
+                <div className="w-24 h-24 bg-secondary-500/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-secondary-300/30">
+                  <Heart className="w-12 h-12 text-secondary-300" />
+                </div>
+              </div>
+              <div className="lg:w-2/3 order-2">
+                <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-white/20">
+                  <p className="text-xl text-gray-700 leading-relaxed">
+                    House concerts break down barriers between performers and listeners. These aren't your average gigs—they're cozy, up-close shows where every note matters. We believe every living room, backyard, and community space has the potential to become a stage.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 3 - Featured Quote */}
+            <div className="text-center">
+              <div className="bg-gradient-to-r from-primary-500/10 to-secondary-500/10 backdrop-blur-sm rounded-3xl p-12 border border-white/20 shadow-2xl">
+                <blockquote className="text-3xl sm:text-4xl font-bold text-white leading-tight mb-6">
+                  "Let's turn more homes into venues and more nights into something worth remembering."
+                </blockquote>
+                <div className="flex items-center justify-center space-x-2">
+                  <Star className="w-6 h-6 text-primary-300" />
+                  <Star className="w-6 h-6 text-primary-300" />
+                  <Star className="w-6 h-6 text-primary-300" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Decorative elements */}
+        <div className="absolute top-1/4 left-8 w-32 h-32 bg-primary-400/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-8 w-40 h-40 bg-secondary-400/10 rounded-full blur-3xl"></div>
+      </section>
+
       {/* Stats Section */}
       <section className="py-20 bg-gradient-to-br from-primary-600 to-primary-400">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
