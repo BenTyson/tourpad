@@ -161,3 +161,17 @@
  GET / 200 in 42ms
  ✓ Compiled in 115ms (465 modules)
  GET / 200 in 13ms
+ ✓ Compiled in 365ms (1029 modules)
+ ✓ Compiled in 176ms (1039 modules)
+ ✓ Compiled in 182ms (1043 modules)
+ ✓ Compiled in 212ms (1043 modules)
+ ✓ Compiled in 285ms (1045 modules)
+ GET / 200 in 177ms
+ ✓ Compiled /favicon.ico in 288ms (817 modules)
+ ✓ Compiled (831 modules)
+ GET /favicon.ico 200 in 401ms
+ GET /api/auth/session 200 in 467ms
+ ✓ Compiled in 352ms (1296 modules)
+ GET / 200 in 83ms
+ ✓ Compiled in 215ms (1045 modules)
+ GET / 200 in 74ms
