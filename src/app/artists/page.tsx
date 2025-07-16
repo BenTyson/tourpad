@@ -335,17 +335,7 @@ export default function ArtistsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            {session?.user?.type === 'fan' ? 'Discover House Concerts' : 'Discover Touring Artists'}
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Connect with professional musicians who bring incredible live performances to intimate venues.
-          </p>
-        </div>
-
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         {/* Search and Filters */}
         <Card className="mb-8">
           <CardContent className="p-6">

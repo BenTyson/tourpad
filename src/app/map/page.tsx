@@ -65,22 +65,13 @@ export default function MapPage() {
       <div className="bg-white border-b border-neutral-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center">
               <Link href="/dashboard">
                 <Button variant="ghost" size="sm" className="hover:bg-primary-50 hover:text-primary-700">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back to Dashboard
                 </Button>
               </Link>
-              <div>
-                <h1 className="text-2xl font-bold text-neutral-900">Venue Map</h1>
-                <p className="text-neutral-600 text-sm">
-                  {userRole === 'artist' && 'Discover venues for your next tour'}
-                  {userRole === 'host' && 'Explore the TourPad host community'}
-                  {userRole === 'fan' && 'Find upcoming concerts near you'}
-                  {userRole === 'admin' && 'Platform venue overview'}
-                </p>
-              </div>
             </div>
             
             {/* View Mode Toggle */}

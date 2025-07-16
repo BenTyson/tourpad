@@ -14,7 +14,6 @@ import {
   Utensils,
   Briefcase,
   Users,
-  DollarSign,
   Calendar,
   Shield,
   ArrowLeft,
@@ -27,10 +26,16 @@ export default function LodgingSetupPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [lodgingData, setLodgingData] = useState({
     offerLodging: false,
-    roomType: 'private_bedroom',
-    bathroomType: 'private',
-    beds: [{ type: 'queen', quantity: 1 }],
-    maxOccupancy: 2,
+    numberOfRooms: 1,
+    rooms: [
+      {
+        id: 1,
+        roomType: 'private_bedroom',
+        bathroomType: 'private',
+        beds: [{ type: 'queen', quantity: 1 }],
+        maxOccupancy: 2
+      }
+    ],
     amenities: {
       breakfast: false,
       wifi: true,
@@ -50,11 +55,6 @@ export default function LodgingSetupPage() {
       petPolicy: 'no_pets',
       alcoholPolicy: 'allowed'
     },
-    pricing: {
-      baseRate: 50,
-      additionalGuestFee: 15,
-      cleaningFee: 20
-    },
     specialConsiderations: '',
     localRecommendations: '',
     safetyFeatures: ['smoke_detectors', 'first_aid_kit']
@@ -64,8 +64,45 @@ export default function LodgingSetupPage() {
     setLodgingData(prev => ({ ...prev, offerLodging: offer }));
   };
 
+  const handleNumberOfRoomsChange = (numRooms: number) => {
+    setLodgingData(prev => {
+      const newRooms = [...prev.rooms];
+      
+      if (numRooms > prev.rooms.length) {
+        // Add new rooms
+        for (let i = prev.rooms.length; i < numRooms; i++) {
+          newRooms.push({
+            id: i + 1,
+            roomType: 'private_bedroom',
+            bathroomType: 'private',
+            beds: [{ type: 'queen', quantity: 1 }],
+            maxOccupancy: 2
+          });
+        }
+      } else if (numRooms < prev.rooms.length) {
+        // Remove rooms
+        newRooms.splice(numRooms);
+      }
+      
+      return {
+        ...prev,
+        numberOfRooms: numRooms,
+        rooms: newRooms
+      };
+    });
+  };
+
+  const updateRoom = (roomId: number, updates: Partial<typeof lodgingData.rooms[0]>) => {
+    setLodgingData(prev => ({
+      ...prev,
+      rooms: prev.rooms.map(room => 
+        room.id === roomId ? { ...room, ...updates } : room
+      )
+    }));
+  };
+
   const handleNext = () => {
-    if (currentStep < 5) {
+    if (currentStep < 4) { // Changed from 5 to 4 (removed pricing step)
       setCurrentStep(currentStep + 1);
     } else {
       // Save and redirect
@@ -120,16 +157,16 @@ export default function LodgingSetupPage() {
         <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6 mb-8">
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium text-neutral-900">
-              Step {currentStep} of 5
+              Step {currentStep} of 4
             </span>
             <span className="text-sm text-neutral-600">
-              {Math.round((currentStep / 5) * 100)}% Complete
+              {Math.round((currentStep / 4) * 100)}% Complete
             </span>
           </div>
           <div className="w-full bg-neutral-200 rounded-full h-3">
             <div 
               className="bg-primary-600 h-3 rounded-full transition-all duration-300"
-              style={{ width: `${(currentStep / 5) * 100}%` }}
+              style={{ width: `${(currentStep / 4) * 100}%` }}
             />
           </div>
         </div>
@@ -194,88 +231,102 @@ export default function LodgingSetupPage() {
             </div>
             <div className="p-6">
               <div className="space-y-6">
-                {/* Room Type */}
+                {/* Number of Rooms */}
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-2">
-                    Room Type
+                    Number of Rooms Available
                   </label>
                   <select
-                    value={lodgingData.roomType}
-                    onChange={(e) => setLodgingData(prev => ({ ...prev, roomType: e.target.value }))}
+                    value={lodgingData.numberOfRooms}
+                    onChange={(e) => handleNumberOfRoomsChange(parseInt(e.target.value))}
                     className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   >
-                    <option value="private_bedroom">Private Bedroom</option>
-                    <option value="guest_room">Guest Room</option>
-                    <option value="shared_space">Shared Space</option>
-                    <option value="couch_surface">Couch/Surface</option>
+                    {[1, 2, 3, 4, 5].map(num => (
+                      <option key={num} value={num}>{num} Room{num > 1 ? 's' : ''}</option>
+                    ))}
                   </select>
                 </div>
 
-                {/* Bathroom Type */}
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2">
-                    Bathroom Access
-                  </label>
-                  <select
-                    value={lodgingData.bathroomType}
-                    onChange={(e) => setLodgingData(prev => ({ ...prev, bathroomType: e.target.value }))}
-                    className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                  >
-                    <option value="private">Private Bathroom</option>
-                    <option value="guest_bathroom">Guest Bathroom</option>
-                    <option value="shared">Shared Bathroom</option>
-                  </select>
-                </div>
+                {/* Room Details */}
+                <div className="space-y-6">
+                  {lodgingData.rooms.map((room, index) => (
+                    <div key={room.id} className="border border-neutral-200 rounded-lg p-4">
+                      <h3 className="text-lg font-medium text-neutral-900 mb-4">
+                        Room {index + 1}
+                      </h3>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* Room Type */}
+                        <div>
+                          <label className="block text-sm font-medium text-neutral-700 mb-2">
+                            Room Type
+                          </label>
+                          <select
+                            value={room.roomType}
+                            onChange={(e) => updateRoom(room.id, { roomType: e.target.value })}
+                            className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                          >
+                            <option value="private_bedroom">Private Bedroom</option>
+                            <option value="guest_room">Guest Room</option>
+                            <option value="shared_space">Shared Space</option>
+                            <option value="couch_surface">Couch/Surface</option>
+                          </select>
+                        </div>
 
-                {/* Bed Configuration */}
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2">
-                    Bed Configuration
-                  </label>
-                  <div className="grid grid-cols-2 gap-4">
-                    <select
-                      value={lodgingData.beds[0].type}
-                      onChange={(e) => setLodgingData(prev => ({
-                        ...prev,
-                        beds: [{ ...prev.beds[0], type: e.target.value }]
-                      }))}
-                      className="p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    >
-                      <option value="queen">Queen Bed</option>
-                      <option value="king">King Bed</option>
-                      <option value="full">Full Bed</option>
-                      <option value="twin">Twin Bed</option>
-                      <option value="sofa_bed">Sofa Bed</option>
-                      <option value="air_mattress">Air Mattress</option>
-                    </select>
-                    <input
-                      type="number"
-                      min="1"
-                      max="10"
-                      value={lodgingData.beds[0].quantity}
-                      onChange={(e) => setLodgingData(prev => ({
-                        ...prev,
-                        beds: [{ ...prev.beds[0], quantity: parseInt(e.target.value) }]
-                      }))}
-                      className="p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                      placeholder="Quantity"
-                    />
-                  </div>
-                </div>
+                        {/* Bathroom Type */}
+                        <div>
+                          <label className="block text-sm font-medium text-neutral-700 mb-2">
+                            Bathroom Access
+                          </label>
+                          <select
+                            value={room.bathroomType}
+                            onChange={(e) => updateRoom(room.id, { bathroomType: e.target.value })}
+                            className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                          >
+                            <option value="private">Private Bathroom</option>
+                            <option value="guest_bathroom">Guest Bathroom</option>
+                            <option value="shared">Shared Bathroom</option>
+                          </select>
+                        </div>
 
-                {/* Max Occupancy */}
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2">
-                    Maximum Guests
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="20"
-                    value={lodgingData.maxOccupancy}
-                    onChange={(e) => setLodgingData(prev => ({ ...prev, maxOccupancy: parseInt(e.target.value) }))}
-                    className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                  />
+                        {/* Bed Configuration */}
+                        <div>
+                          <label className="block text-sm font-medium text-neutral-700 mb-2">
+                            Bed Type
+                          </label>
+                          <select
+                            value={room.beds[0].type}
+                            onChange={(e) => updateRoom(room.id, { 
+                              beds: [{ ...room.beds[0], type: e.target.value }] 
+                            })}
+                            className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                          >
+                            <option value="queen">Queen Bed</option>
+                            <option value="king">King Bed</option>
+                            <option value="full">Full Bed</option>
+                            <option value="twin">Twin Bed</option>
+                            <option value="sofa_bed">Sofa Bed</option>
+                            <option value="air_mattress">Air Mattress</option>
+                          </select>
+                        </div>
+
+                        {/* Maximum Guests */}
+                        <div>
+                          <label className="block text-sm font-medium text-neutral-700 mb-2">
+                            Maximum Guests
+                          </label>
+                          <input
+                            type="number"
+                            min="1"
+                            max="10"
+                            value={room.maxOccupancy}
+                            onChange={(e) => updateRoom(room.id, { maxOccupancy: parseInt(e.target.value) })}
+                            className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -399,77 +450,8 @@ export default function LodgingSetupPage() {
           </div>
         )}
 
-        {/* Step 4: Pricing */}
+        {/* Step 4: Final Details */}
         {currentStep === 4 && lodgingData.offerLodging && (
-          <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
-            <div className="px-6 py-4 border-b border-neutral-200">
-              <h2 className="text-xl font-semibold flex items-center text-neutral-900">
-                <DollarSign className="w-5 h-5 mr-2 text-primary-600" />
-                Pricing
-              </h2>
-            </div>
-            <div className="p-6">
-              <div className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2">
-                    Base Rate (per night)
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    max="1000"
-                    value={lodgingData.pricing.baseRate}
-                    onChange={(e) => setLodgingData(prev => ({
-                      ...prev,
-                      pricing: { ...prev.pricing, baseRate: parseInt(e.target.value) }
-                    }))}
-                    className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    placeholder="50"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2">
-                    Additional Guest Fee (per person, per night)
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    max="200"
-                    value={lodgingData.pricing.additionalGuestFee}
-                    onChange={(e) => setLodgingData(prev => ({
-                      ...prev,
-                      pricing: { ...prev.pricing, additionalGuestFee: parseInt(e.target.value) }
-                    }))}
-                    className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    placeholder="15"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2">
-                    Cleaning Fee (one-time)
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    max="200"
-                    value={lodgingData.pricing.cleaningFee}
-                    onChange={(e) => setLodgingData(prev => ({
-                      ...prev,
-                      pricing: { ...prev.pricing, cleaningFee: parseInt(e.target.value) }
-                    }))}
-                    className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    placeholder="20"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Step 5: Final Details */}
-        {currentStep === 5 && lodgingData.offerLodging && (
           <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
             <div className="px-6 py-4 border-b border-neutral-200">
               <h2 className="text-xl font-semibold flex items-center text-neutral-900">
@@ -521,7 +503,7 @@ export default function LodgingSetupPage() {
             onClick={handleNext}
             disabled={!lodgingData.offerLodging && currentStep > 1}
           >
-            {currentStep === 5 ? 'Save Configuration' : 'Next'}
+            {currentStep === 4 ? 'Save Configuration' : 'Next'}
           </Button>
         </div>
       </div>
