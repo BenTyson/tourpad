@@ -1257,3 +1257,74 @@ Import trace for requested module:
  ✓ Compiled in 771ms (1852 modules)
  GET /map 200 in 88ms
  GET /api/auth/session 200 in 25ms
+ ✓ Compiled in 628ms (1615 modules)
+ GET /map 200 in 89ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled /api/auth/[...nextauth] in 830ms (1615 modules)
+ ✓ Compiled (1852 modules)
+ GET /api/auth/session 200 in 721ms
+ GET /map 200 in 749ms
+ POST /api/auth/_log 200 in 10ms
+ GET /api/auth/session 200 in 7ms
+ ✓ Compiled in 306ms (1852 modules)
+ GET /map 200 in 50ms
+ GET /api/auth/session 200 in 128ms
+ GET /api/auth/session 200 in 37ms
+ ✓ Compiled in 1051ms (1852 modules)
+ GET /map 200 in 108ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 268ms (1852 modules)
+ GET /api/auth/session 200 in 273ms
+ GET /map 200 in 289ms
+ GET /api/auth/session 200 in 7ms
+ ✓ Compiled in 613ms (1852 modules)
+ GET /map 200 in 38ms
+ ✓ Compiled in 276ms (1852 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ POST /api/auth/_log 200 in 28ms
+ GET /map 200 in 118ms
+ GET /api/auth/session 200 in 6ms
+ ✓ Compiled in 215ms (1852 modules)
+ GET /map 200 in 33ms
+ ⨯ ./src/components/map/MapContainer.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/Users/bentyson/pad/src/components/map/MapContainer.tsx[0m:50:1]
+ [2m47[0m |   }
+ [2m48[0m | 
+ [2m49[0m |   return (
+ [2m50[0m |     <div ref={mapRef} className={`relative ${className}`}>
+    : [35;1m     ^^^[0m
+ [2m51[0m |       {isClient && (
+ [2m52[0m |         <MapContainer
+ [2m53[0m |           center={initialCenter}
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/map/MapContainer.tsx
+./src/app/map/page.tsx
+ ✓ Compiled in 741ms (1852 modules)
+ GET /map 200 in 68ms
+ ✓ Compiled in 286ms (1852 modules)
+ GET /map 200 in 33ms
+ ✓ Compiled in 1093ms (1615 modules)
+ GET /map 200 in 162ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 229ms (1615 modules)
+ GET /map 200 in 142ms
+ ✓ Compiled /api/auth/[...nextauth] in 207ms (984 modules)
+ POST /api/auth/_log 200 in 182ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 114ms
+ ✓ Compiled in 1130ms (1615 modules)
+ GET /map 200 in 140ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled /api/auth/[...nextauth] in 378ms (1615 modules)
+ ✓ Compiled (1852 modules)
+ GET /api/auth/session 200 in 342ms
+ GET /map 200 in 355ms
+ POST /api/auth/_log 200 in 13ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 25ms

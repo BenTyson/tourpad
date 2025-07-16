@@ -46,13 +46,14 @@ export default function TourPadMapContainer({
   }
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative w-full h-full ${className}`}>
       <MapContainer
         center={initialCenter}
         zoom={initialZoom}
         className="w-full h-full rounded-xl"
         zoomControl={true}
         scrollWheelZoom={true}
+        style={{ height: '100%', width: '100%' }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
