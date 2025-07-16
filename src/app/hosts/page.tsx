@@ -20,7 +20,8 @@ import {
   Volume2,
   Baby,
   Moon,
-  Accessibility
+  Accessibility,
+  Calendar
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -146,6 +147,212 @@ export default function HostsPage() {
                     Join as Host
                   </Button>
                 </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        {/* Dashboard Preview Section */}
+        <section className="py-32 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
+          {/* Background decorative elements */}
+          <div className="absolute inset-0 opacity-30">
+            <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-secondary-200/20 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-primary-200/20 rounded-full blur-3xl"></div>
+          </div>
+
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <Badge variant="default" className="mb-4 bg-secondary-100 text-secondary-700">
+                Your Host Dashboard
+              </Badge>
+              <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                Everything You Need to 
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-secondary-600 to-primary-600">
+                  Host Amazing Concerts
+                </span>
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Join our community and get access to powerful tools that make hosting house concerts simple and rewarding
+              </p>
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-16 items-start">
+              {/* Left side - Features */}
+              <div className="space-y-8 order-2 lg:order-1">
+                <div className="space-y-6">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-secondary-500 to-secondary-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Users className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-900 mb-2">Artist Discovery & Booking</h3>
+                      <p className="text-gray-600 leading-relaxed">
+                        Browse our vetted network of professional touring musicians. View profiles, listen to samples, 
+                        and book the perfect artists for your venue and audience.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Calendar className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-900 mb-2">Event Management Suite</h3>
+                      <p className="text-gray-600 leading-relaxed">
+                        Manage all your concerts in one place. Track RSVPs, communicate with artists, 
+                        and handle logistics seamlessly from your dashboard.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-secondary-600 to-primary-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Home className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-900 mb-2">Venue Profile & Promotion</h3>
+                      <p className="text-gray-600 leading-relaxed">
+                        Showcase your space with beautiful photos and detailed descriptions. 
+                        Attract the right artists and build your reputation in the community.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-neutral-500 to-neutral-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Shield className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-900 mb-2">Community & Support</h3>
+                      <p className="text-gray-600 leading-relaxed">
+                        Connect with other hosts, share experiences, and get support from our team. 
+                        You're never alone in your hosting journey.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-br from-secondary-50 to-primary-50 p-6 rounded-2xl border border-secondary-100">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Why Hosts Love TourPad</h3>
+                  <ul className="space-y-2 text-sm text-gray-600">
+                    <li className="flex items-center">
+                      <div className="w-1.5 h-1.5 bg-secondary-600 rounded-full mr-2"></div>
+                      Free to join and host - no upfront costs
+                    </li>
+                    <li className="flex items-center">
+                      <div className="w-1.5 h-1.5 bg-secondary-600 rounded-full mr-2"></div>
+                      All artists are vetted and professional
+                    </li>
+                    <li className="flex items-center">
+                      <div className="w-1.5 h-1.5 bg-secondary-600 rounded-full mr-2"></div>
+                      Build lasting connections with musicians and fans
+                    </li>
+                    <li className="flex items-center">
+                      <div className="w-1.5 h-1.5 bg-secondary-600 rounded-full mr-2"></div>
+                      Easy-to-use tools for managing concerts
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Right side - Dashboard mockup */}
+              <div className="relative order-1 lg:order-2">
+                <div className="bg-white rounded-3xl shadow-2xl border border-gray-200 overflow-hidden">
+                  {/* Dashboard header */}
+                  <div className="bg-gradient-to-r from-secondary-600 to-secondary-500 px-6 py-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                          <Home className="w-5 h-5 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="text-white font-semibold">Host Dashboard</h3>
+                          <p className="text-secondary-100 text-sm">Welcome back, Mike</p>
+                        </div>
+                      </div>
+                      <div className="flex space-x-2">
+                        <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                        <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                        <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Dashboard content */}
+                  <div className="p-6 space-y-6">
+                    {/* Stats row */}
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="bg-gradient-to-br from-secondary-50 to-secondary-100 p-4 rounded-xl">
+                        <div className="text-2xl font-bold text-secondary-700">8</div>
+                        <div className="text-sm text-secondary-600">Shows Hosted</div>
+                      </div>
+                      <div className="bg-gradient-to-br from-primary-50 to-primary-100 p-4 rounded-xl">
+                        <div className="text-2xl font-bold text-primary-700">142</div>
+                        <div className="text-sm text-primary-600">Total Attendees</div>
+                      </div>
+                      <div className="bg-gradient-to-br from-neutral-50 to-neutral-100 p-4 rounded-xl">
+                        <div className="text-2xl font-bold text-neutral-700">4.8</div>
+                        <div className="text-sm text-neutral-600">Host Rating</div>
+                      </div>
+                    </div>
+
+                    {/* Quick actions */}
+                    <div className="space-y-3">
+                      <h4 className="font-semibold text-gray-900">Quick Actions</h4>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="flex items-center p-3 bg-gray-50 rounded-lg">
+                          <Users className="w-4 h-4 text-secondary-600 mr-2" />
+                          <span className="text-sm text-gray-700">Browse Artists</span>
+                        </div>
+                        <div className="flex items-center p-3 bg-gray-50 rounded-lg">
+                          <Calendar className="w-4 h-4 text-primary-600 mr-2" />
+                          <span className="text-sm text-gray-700">Schedule Show</span>
+                        </div>
+                        <div className="flex items-center p-3 bg-gray-50 rounded-lg">
+                          <Home className="w-4 h-4 text-secondary-600 mr-2" />
+                          <span className="text-sm text-gray-700">Edit Venue</span>
+                        </div>
+                        <div className="flex items-center p-3 bg-gray-50 rounded-lg">
+                          <Star className="w-4 h-4 text-primary-600 mr-2" />
+                          <span className="text-sm text-gray-700">View Reviews</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Upcoming shows */}
+                    <div className="space-y-3">
+                      <h4 className="font-semibold text-gray-900">Upcoming Shows</h4>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                          <div className="flex items-center">
+                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                              <Music className="w-4 h-4 text-white" />
+                            </div>
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">Sarah Chen</div>
+                              <div className="text-xs text-gray-500">Folk • March 15</div>
+                            </div>
+                          </div>
+                          <Badge variant="secondary" className="text-xs">Confirmed</Badge>
+                        </div>
+                        <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                          <div className="flex items-center">
+                            <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center mr-3">
+                              <Guitar className="w-4 h-4 text-white" />
+                            </div>
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">The Wandering Souls</div>
+                              <div className="text-xs text-gray-500">Indie • March 22</div>
+                            </div>
+                          </div>
+                          <Badge variant="warning" className="text-xs">Pending</Badge>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

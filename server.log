@@ -2020,3 +2020,273 @@ Import trace for requested module:
  GET /dashboard 200 in 61ms
  ✓ Compiled /api/auth/[...nextauth] in 282ms (963 modules)
  GET /api/auth/session 200 in 463ms
+ GET /api/auth/session 200 in 18ms
+ GET /api/auth/session 200 in 35ms
+ ✓ Compiled in 1452ms (1606 modules)
+ GET /dashboard 200 in 101ms
+ ✓ Compiled /api/auth/[...nextauth] in 153ms (963 modules)
+ GET /api/auth/session 200 in 266ms
+ GET / 200 in 40ms
+ ✓ Compiled in 1587ms (1843 modules)
+ ⨯ ReferenceError: activeTab is not defined
+    at EnhancedHomePage (src/app/page.tsx:176:22)
+  174 |                     onClick={() => setActiveTab('artist')}
+  175 |                     className={`flex-1 py-4 px-6 rounded-xl text-lg font-semibold transition-all duration-300 ${
+> 176 |                       activeTab === 'artist' 
+      |                      ^
+  177 |                         ? 'bg-primary-500 text-white shadow-lg' 
+  178 |                         : 'text-gray-600 hover:text-gray-900'
+  179 |                     }`} {
+  digest: '2800162732'
+}
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET / 500 in 156ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 672ms (1843 modules)
+ ⨯ ReferenceError: activeTab is not defined
+    at EnhancedHomePage (src/app/page.tsx:191:15)
+  189 |           <div className="text-center mb-16">
+  190 |             <Badge variant="default" className="mb-4 bg-primary-100 text-primary-700">
+> 191 |               {activeTab === 'artist' ? 'For Artists' : 'For Hosts'}
+      |               ^
+  192 |             </Badge>
+  193 |             <h2 className="text-4xl font-bold text-gray-900 mb-6">
+  194 |               {activeTab === 'artist'  {
+  digest: '2800162732'
+}
+ ⨯ ReferenceError: activeTab is not defined
+    at EnhancedHomePage (src/app/page.tsx:191:15)
+  189 |           <div className="text-center mb-16">
+  190 |             <Badge variant="default" className="mb-4 bg-primary-100 text-primary-700">
+> 191 |               {activeTab === 'artist' ? 'For Artists' : 'For Hosts'}
+      |               ^
+  192 |             </Badge>
+  193 |             <h2 className="text-4xl font-bold text-gray-900 mb-6">
+  194 |               {activeTab === 'artist'  {
+  digest: '2800162732'
+}
+ GET / 500 in 231ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 1456ms (1606 modules)
+ ⨯ ReferenceError: activeTab is not defined
+    at EnhancedHomePage (src/app/page.tsx:358:15)
+  356 |           <div className="text-center mb-16">
+  357 |             <h2 className="text-4xl font-bold text-white mb-4">
+> 358 |               {activeTab === 'artist' ? 'Join Successful Artists' : 'Join Amazing Hosts'}
+      |               ^
+  359 |             </h2>
+  360 |             <p className="text-xl text-white/90">
+  361 |               {activeTab === 'artist'  {
+  digest: '2800162732'
+}
+ ⨯ ReferenceError: activeTab is not defined
+    at EnhancedHomePage (src/app/page.tsx:358:15)
+  356 |           <div className="text-center mb-16">
+  357 |             <h2 className="text-4xl font-bold text-white mb-4">
+> 358 |               {activeTab === 'artist' ? 'Join Successful Artists' : 'Join Amazing Hosts'}
+      |               ^
+  359 |             </h2>
+  360 |             <p className="text-xl text-white/90">
+  361 |               {activeTab === 'artist'  {
+  digest: '2800162732'
+}
+ GET / 500 in 316ms
+ ✓ Compiled in 578ms (1606 modules)
+ ⨯ ReferenceError: activeTab is not defined
+    at EnhancedHomePage (src/app/page.tsx:350:15)
+  348 |           <div className="text-center mb-16">
+  349 |             <h2 className="text-4xl font-bold text-white mb-4">
+> 350 |               {activeTab === 'artist' ? 'Join Successful Artists' : 'Join Amazing Hosts'}
+      |               ^
+  351 |             </h2>
+  352 |             <p className="text-xl text-white/90">
+  353 |               {activeTab === 'artist'  {
+  digest: '2800162732'
+}
+ ⨯ ReferenceError: activeTab is not defined
+    at EnhancedHomePage (src/app/page.tsx:350:15)
+  348 |           <div className="text-center mb-16">
+  349 |             <h2 className="text-4xl font-bold text-white mb-4">
+> 350 |               {activeTab === 'artist' ? 'Join Successful Artists' : 'Join Amazing Hosts'}
+      |               ^
+  351 |             </h2>
+  352 |             <p className="text-xl text-white/90">
+  353 |               {activeTab === 'artist'  {
+  digest: '2800162732'
+}
+ GET / 500 in 186ms
+ ⨯ ./src/app/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+     ,-[[36;1;4m/Users/bentyson/pad/src/app/page.tsx[0m:127:1]
+ [2m124[0m |   ];
+ [2m125[0m | 
+ [2m126[0m |   return (
+ [2m127[0m |     <div className="bg-white">
+     : [35;1m     ^^^[0m
+ [2m128[0m |       {/* Modern Hero Section */}
+ [2m129[0m |       <section className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-primary-600 via-primary-500 to-secondary-600">
+ [2m130[0m |         {/* Animated background elements */}
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/page.tsx
+ GET / 500 in 9ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 1462ms (1596 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⨯ ReferenceError: activeTab is not defined
+    at EnhancedHomePage (src/app/page.tsx:385:31)
+  383 |             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+  384 |             style={{
+> 385 |               backgroundImage: activeTab === 'artist' 
+      |                               ^
+  386 |                 ? 'url(https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=1920&h=1080&auto=format&fit=crop&q=80)'
+  387 |                 : 'url(https://images.unsplash.com/photo-1565182999561-18d7dc61c393?w=1920&h=1080&auto=format&fit=crop&q=80)',
+  388 |             }} {
+  digest: '2800162732'
+}
+ ⨯ ReferenceError: activeTab is not defined
+    at EnhancedHomePage (src/app/page.tsx:385:31)
+  383 |             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+  384 |             style={{
+> 385 |               backgroundImage: activeTab === 'artist' 
+      |                               ^
+  386 |                 ? 'url(https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=1920&h=1080&auto=format&fit=crop&q=80)'
+  387 |                 : 'url(https://images.unsplash.com/photo-1565182999561-18d7dc61c393?w=1920&h=1080&auto=format&fit=crop&q=80)',
+  388 |             }} {
+  digest: '2800162732'
+}
+ GET /_next/static/webpack/b233bf5622693d12.webpack.hot-update.json 404 in 1662ms
+ GET / 500 in 122ms
+ ✓ Compiled in 625ms (1610 modules)
+ ⨯ ReferenceError: activeTab is not defined
+    at EnhancedHomePage (src/app/page.tsx:499:13)
+  497 |         <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+  498 |           <h2 className="text-5xl font-bold text-white mb-6">
+> 499 |             {activeTab === 'artist' ? 'Ready to Tour?' : 'Ready to Host?'}
+      |             ^
+  500 |           </h2>
+  501 |           <p className="text-xl text-white/90 mb-12 max-w-2xl mx-auto leading-relaxed">
+  502 |             {activeTab === 'artist'  {
+  digest: '2800162732'
+}
+ ⨯ ReferenceError: activeTab is not defined
+    at EnhancedHomePage (src/app/page.tsx:499:13)
+  497 |         <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+  498 |           <h2 className="text-5xl font-bold text-white mb-6">
+> 499 |             {activeTab === 'artist' ? 'Ready to Tour?' : 'Ready to Host?'}
+      |             ^
+  500 |           </h2>
+  501 |           <p className="text-xl text-white/90 mb-12 max-w-2xl mx-auto leading-relaxed">
+  502 |             {activeTab === 'artist'  {
+  digest: '2800162732'
+}
+ GET / 500 in 189ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 422ms (1610 modules)
+ GET / 200 in 232ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 2s (964 modules)
+ GET /api/auth/session 200 in 2147ms
+ ✓ Compiled in 689ms (1843 modules)
+ GET / 200 in 64ms
+ GET /api/auth/session 200 in 114ms
+ ○ Compiling /register ...
+ ✓ Compiled /register in 3.1s (748 modules)
+ GET /register?type=host 200 in 3203ms
+ GET /register?type=host 200 in 26ms
+ ✓ Compiled /api/auth/[...nextauth] in 268ms (923 modules)
+ GET /api/auth/csrf 200 in 400ms
+ POST /api/auth/signout 200 in 7ms
+ GET / 200 in 172ms
+ GET /api/auth/session 200 in 5ms
+ GET /register?type=host 200 in 25ms
+ GET /artists 200 in 41ms
+ ✓ Compiled in 3s (1568 modules)
+ GET / 200 in 813ms
+ GET / 200 in 15ms
+ ✓ Compiled in 2.1s (1568 modules)
+ GET / 200 in 60ms
+ ✓ Compiled in 599ms (1568 modules)
+ GET / 200 in 52ms
+ ✓ Compiled in 354ms (1568 modules)
+ GET / 200 in 35ms
+ ✓ Compiled in 316ms (1568 modules)
+ GET / 200 in 35ms
+ ✓ Compiled in 388ms (1568 modules)
+ GET / 200 in 41ms
+ ✓ Compiled in 375ms (1568 modules)
+ GET / 200 in 43ms
+ ✓ Compiled in 1223ms (1568 modules)
+ GET / 200 in 46ms
+ GET /register?type=fan 200 in 21ms
+ ✓ Compiled in 349ms (1568 modules)
+ GET /register?type=fan 200 in 36ms
+ GET /register?type=host 200 in 20ms
+ GET /hosts 200 in 57ms
+ GET /artists 200 in 54ms
+ GET /hosts 200 in 28ms
+ GET /artists 200 in 22ms
+ GET /hosts 200 in 20ms
+ GET /artists 200 in 96ms
+ GET /hosts 200 in 44ms
+ GET / 200 in 56ms
+ ✓ Compiled in 3s (1568 modules)
+ GET / 200 in 64ms
+ GET /hosts 200 in 48ms
+ ✓ Compiled in 2.7s (1568 modules)
+ GET /hosts 200 in 55ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /hosts 200 in 107ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 1329ms (924 modules)
+ GET /api/auth/session 200 in 1438ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 537ms (1805 modules)
+ GET /hosts 200 in 374ms
+ GET /api/auth/session 200 in 50ms
+ GET /artists 200 in 57ms
+ GET /hosts 200 in 136ms
+ GET /artists 200 in 19ms
+ ✓ Compiled in 2.5s (1568 modules)
+ ✓ Compiled in 320ms (1568 modules)
+ ✓ Compiled in 274ms (1568 modules)
+ ✓ Compiled in 259ms (1568 modules)
+ GET /hosts 200 in 172ms
+ GET /artists 200 in 106ms
+ GET /artists 200 in 239ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 2.5s (924 modules)
+ GET /api/auth/session 200 in 2612ms
+ GET /hosts 200 in 58ms
+ ✓ Compiled in 1313ms (881 modules)
+ GET /hosts 200 in 28ms
+ ✓ Compiled in 405ms (881 modules)
+ GET /hosts 200 in 34ms
+ ✓ Compiled in 356ms (881 modules)
+ GET /hosts 200 in 34ms
+ ✓ Compiled in 173ms (881 modules)
+ GET /hosts 200 in 25ms
+ ✓ Compiled in 240ms (881 modules)
+ GET /hosts 200 in 23ms
+ ✓ Compiled in 172ms (881 modules)
+ GET /hosts 200 in 18ms
+ ✓ Compiled in 190ms (881 modules)
+ GET /hosts 200 in 16ms
+ ✓ Compiled in 273ms (881 modules)
+ GET /hosts 200 in 38ms
+ ✓ Compiled in 220ms (881 modules)
+ GET /hosts 200 in 31ms
+ GET /artists 200 in 22ms
+ GET /hosts 200 in 7ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 2.9s (1558 modules)
+ GET /how-it-works 404 in 3103ms
+ GET /artists 200 in 206ms
+ GET /hosts 200 in 23ms
+ GET /artists 200 in 20ms
+ GET /hosts 200 in 23ms
+ GET /artists 200 in 29ms
