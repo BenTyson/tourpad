@@ -1358,3 +1358,21 @@ Import trace for requested module:
  ✓ Compiled in 660ms (1852 modules)
  GET /map 200 in 37ms
  GET /api/auth/session 200 in 732ms
+ GET /api/auth/session 200 in 140ms
+ ○ Compiling /hosts ...
+ ✓ Compiled /hosts in 2.5s (995 modules)
+ GET /hosts 200 in 2585ms
+ ○ Compiling /artists ...
+ ✓ Compiled /artists in 622ms (1005 modules)
+ GET /artists 200 in 690ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 1458ms (1863 modules)
+ GET /how-it-works 404 in 1612ms
+ GET /how-it-works 404 in 117ms
+ GET /api/auth/session 200 in 59ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 1232ms (1025 modules)
+ GET /dashboard 200 in 1285ms
+ GET /dashboard 200 in 25ms
+ ✓ Compiled in 1078ms (868 modules)
+ GET /dashboard 200 in 28ms

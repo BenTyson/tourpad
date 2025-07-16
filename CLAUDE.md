@@ -1,8 +1,30 @@
 # CLAUDE.md - Core Development Rules
 
+## Modular Framework Integration
+This project uses the Claude Code modular framework for optimized development workflows:
+- Commands are organized in `.claude/commands/` by category
+- Use `/[category]:[command]` syntax for execution (e.g., `/project:setup-environment`)
+- Framework provides 50-80% token savings through progressive disclosure
+- Commands are environment-aware and security-focused
+
+## Available Commands
+
+### Project Management
+- `/project:setup-environment` - Initialize development environment
+- `/project:create-feature` - Create new feature with scaffolding
+
+### Development Workflow  
+- `/dev:code-review` - Comprehensive code review with TourPad standards
+- `/dev:debug-session` - Systematic debugging and problem solving
+
+### Testing
+- `/test:generate-tests` - Generate comprehensive test suites
+- `/test:coverage-analysis` - Test coverage assessment and improvement
+
 ## Methodology
 - Development must follow the TDD (Test-Driven Development) methodology.
 - All implementation must strictly follow the steps outlined in PLAN.md.
+- Use modular commands for consistent workflows and token optimization.
 
 ## Tech Stack Constraints
 Our primary tech stack is:

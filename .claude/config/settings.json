@@ -1,0 +1,34 @@
+{
+  "framework": {
+    "name": "TourPad",
+    "version": "1.0.0",
+    "description": "Where Music Feels Like Home - Connect artists with intimate venues",
+    "tech_stack": ["Next.js 15.3.5", "React 19", "TypeScript", "Tailwind CSS", "NextAuth.js", "Stripe"]
+  },
+  "defaults": {
+    "max_tokens_per_session": 50000,
+    "progressive_disclosure": true,
+    "context_compression": true,
+    "smart_boundaries": true
+  },
+  "quality_gates": {
+    "require_tests": true,
+    "require_documentation": true,
+    "require_type_checking": true,
+    "require_linting": true,
+    "security_scan": true
+  },
+  "security": {
+    "require_env_vars": true,
+    "audit_logging": true,
+    "permission_validation": true,
+    "secret_scanning": true
+  },
+  "development": {
+    "build_command": "npm run build",
+    "dev_command": "npm run dev",
+    "test_command": "npm test",
+    "lint_command": "npm run lint",
+    "type_check_command": "npm run type-check"
+  }
+}

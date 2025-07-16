@@ -1,0 +1,21 @@
+{
+  "extends": "./settings.json",
+  "overrides": {
+    "defaults": {
+      "max_tokens_per_session": 75000,
+      "verbose_logging": true
+    },
+    "quality_gates": {
+      "require_tests": false,
+      "require_documentation": false
+    },
+    "security": {
+      "audit_logging": false
+    },
+    "debug": {
+      "enable_debug_mode": true,
+      "show_token_usage": true,
+      "enable_performance_monitoring": true
+    }
+  }
+}
