@@ -487,15 +487,17 @@ export default function CalendarPage() {
                 </div>
                 
                 <div className="flex space-x-3 mt-6">
-                  <Button 
+                  <Link 
+                    href={selectedEvent.type === 'booking' 
+                      ? `/bookings/${selectedEvent.details.id}` 
+                      : `/concerts/${selectedEvent.details.id}`
+                    }
                     className="flex-1"
-                    onClick={() => {
-                      // TODO: Navigate to booking details or concert page
-                      setSelectedEvent(null);
-                    }}
                   >
-                    View Details
-                  </Button>
+                    <Button className="w-full">
+                      View Details
+                    </Button>
+                  </Link>
                   <Button 
                     variant="outline" 
                     onClick={() => setSelectedEvent(null)}

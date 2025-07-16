@@ -1119,3 +1119,52 @@ Import trace for requested module:
  GET /calendar 200 in 34ms
  ✓ Compiled in 218ms (1513 modules)
  GET /calendar 200 in 36ms
+ ✓ Compiled in 594ms (1513 modules)
+ GET /calendar 200 in 75ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 591ms (943 modules)
+ GET /api/auth/session 200 in 706ms
+ ✓ Compiled /bookings/[id] in 492ms (959 modules)
+ GET /bookings/1 200 in 570ms
+ GET /bookings/1 200 in 27ms
+ ○ Compiling /hosts ...
+ ✓ Compiled /hosts in 916ms (711 modules)
+ GET /hosts 200 in 1093ms
+ GET /hosts/1 200 in 18ms
+ ✓ Compiled /bookings/new in 222ms (729 modules)
+ GET /bookings/new?hostId=1 200 in 298ms
+ GET /bookings/new?hostId=1 200 in 46ms
+ GET /hosts/1 200 in 38ms
+ ✓ Compiled in 1246ms (1524 modules)
+ GET /hosts/1 200 in 40ms
+ ✓ Compiled /api/auth/[...nextauth] in 158ms (953 modules)
+ GET /api/auth/session 200 in 261ms
+ GET /dashboard 200 in 73ms
+ GET /calendar 200 in 56ms
+ GET /bookings/1 200 in 37ms
+ ✓ Compiled in 590ms (1511 modules)
+ GET /bookings/1 200 in 93ms
+ ✓ Compiled in 267ms (1519 modules)
+ GET /bookings/1 200 in 43ms
+ ✓ Compiled in 814ms (1519 modules)
+ GET /bookings/1 200 in 49ms
+ ✓ Compiled in 281ms (1511 modules)
+ GET /bookings/1 200 in 40ms
+ ○ Compiling /messages ...
+ ✓ Compiled /messages in 568ms (713 modules)
+ GET /messages 200 in 615ms
+ GET /calendar 200 in 30ms
+ GET /dashboard 200 in 33ms
+ ✓ Compiled in 511ms (1511 modules)
+ GET /bookings/1 200 in 78ms
+ ✓ Compiled in 267ms (1511 modules)
+ GET /bookings/1 200 in 37ms
+ ✓ Compiled in 239ms (1511 modules)
+ GET /bookings/1 200 in 37ms
+ ✓ Compiled in 666ms (1511 modules)
+ GET /bookings/1 200 in 42ms
+ ✓ Compiled in 230ms (1511 modules)
+ GET /bookings/1 200 in 39ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 590ms (940 modules)
+ GET /api/auth/session 200 in 695ms

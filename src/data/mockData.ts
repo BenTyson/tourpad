@@ -299,13 +299,13 @@ export const mockArtists = [
     bandPhotos: [
       {
         id: 'sarah_band1',
-        url: 'https://images.unsplash.com/photo-1551847404-9e05c30b1204?w=800',
+        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800',
         alt: 'Band portrait - Sarah, Mike, and Lisa with instruments',
         category: 'band' as const
       },
       {
         id: 'sarah_band2',
-        url: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=800',
+        url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800',
         alt: 'Candid backstage moment before show',
         category: 'band' as const
       }
@@ -440,7 +440,7 @@ export const mockArtists = [
     bandPhotos: [
       {
         id: 'echo_band1',
-        url: 'https://images.unsplash.com/photo-1551847404-9e05c30b1204?w=800',
+        url: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800',
         alt: 'Echo and Iris duo portrait with instruments',
         category: 'band' as const
       }
