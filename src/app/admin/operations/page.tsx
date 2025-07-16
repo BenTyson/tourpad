@@ -129,13 +129,13 @@ export default function OperationsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'pending':
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200">Pending Review</Badge>;
+        return <Badge variant="secondary" className="bg-secondary-100 text-secondary-800 border-secondary-200">Pending Review</Badge>;
       case 'flagged':
-        return <Badge variant="secondary" className="bg-red-100 text-red-800 border-red-200">Flagged</Badge>;
+        return <Badge variant="secondary" className="bg-neutral-200 text-neutral-800 border-neutral-300">Flagged</Badge>;
       case 'approved':
-        return <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">Approved</Badge>;
+        return <Badge variant="secondary" className="bg-secondary-200 text-secondary-900 border-secondary-300">Approved</Badge>;
       case 'rejected':
-        return <Badge variant="secondary" className="bg-gray-100 text-gray-800 border-gray-200">Rejected</Badge>;
+        return <Badge variant="secondary" className="bg-neutral-200 text-neutral-800 border-neutral-300">Rejected</Badge>;
       default:
         return <Badge variant="secondary">Unknown</Badge>;
     }
@@ -164,8 +164,6 @@ export default function OperationsPage() {
               </Button>
             </Link>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Platform Operations</h1>
-          <p className="text-gray-600">System health, content moderation, and platform management</p>
         </div>
 
         {/* System Health Overview */}
@@ -235,19 +233,19 @@ export default function OperationsPage() {
             <CardContent>
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="text-center p-4 bg-yellow-50 rounded-lg">
-                  <div className="text-2xl font-bold text-yellow-600">{modStats.pending}</div>
+                  <div className="text-2xl font-bold text-secondary-600">{modStats.pending}</div>
                   <div className="text-sm text-yellow-700">Pending Review</div>
                 </div>
                 <div className="text-center p-4 bg-red-50 rounded-lg">
-                  <div className="text-2xl font-bold text-red-600">{modStats.flagged}</div>
+                  <div className="text-2xl font-bold text-neutral-700">{modStats.flagged}</div>
                   <div className="text-sm text-red-700">Flagged Items</div>
                 </div>
                 <div className="text-center p-4 bg-green-50 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600">{modStats.approved}</div>
+                  <div className="text-2xl font-bold text-secondary-700">{modStats.approved}</div>
                   <div className="text-sm text-green-700">Approved</div>
                 </div>
                 <div className="text-center p-4 bg-gray-50 rounded-lg">
-                  <div className="text-2xl font-bold text-gray-600">{modStats.rejected}</div>
+                  <div className="text-2xl font-bold text-neutral-800">{modStats.rejected}</div>
                   <div className="text-sm text-gray-700">Rejected</div>
                 </div>
               </div>
@@ -275,7 +273,7 @@ export default function OperationsPage() {
                       <button
                         onClick={() => toggleFeatureFlag(flag.name)}
                         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
-                          flag.enabled ? 'bg-green-600' : 'bg-gray-300'
+                          flag.enabled ? 'bg-secondary-600' : 'bg-neutral-300'
                         }`}
                       >
                         <span
@@ -289,7 +287,7 @@ export default function OperationsPage() {
                   <p className="text-sm text-gray-600">{flag.description}</p>
                   <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
                     <div 
-                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                      className="bg-primary-600 h-2 rounded-full transition-all duration-300"
                       style={{ width: `${flag.rollout}%` }}
                     ></div>
                   </div>

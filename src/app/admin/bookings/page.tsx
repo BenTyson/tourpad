@@ -123,13 +123,13 @@ export default function BookingsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'confirmed':
-        return <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">Confirmed</Badge>;
+        return <Badge variant="secondary" className="bg-secondary-100 text-secondary-800 border-secondary-200">Confirmed</Badge>;
       case 'pending_approval':
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200">Pending</Badge>;
+        return <Badge variant="secondary" className="bg-secondary-200 text-secondary-900 border-secondary-300">Pending</Badge>;
       case 'disputed':
-        return <Badge variant="secondary" className="bg-red-100 text-red-800 border-red-200">Disputed</Badge>;
+        return <Badge variant="secondary" className="bg-neutral-200 text-neutral-800 border-neutral-300">Disputed</Badge>;
       case 'cancelled':
-        return <Badge variant="secondary" className="bg-gray-100 text-gray-800 border-gray-200">Cancelled</Badge>;
+        return <Badge variant="secondary" className="bg-neutral-200 text-neutral-800 border-neutral-300">Cancelled</Badge>;
       default:
         return <Badge variant="secondary">Unknown</Badge>;
     }
@@ -173,45 +173,43 @@ export default function BookingsPage() {
               </Button>
             </Link>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Bookings & Events</h1>
-          <p className="text-gray-600">Monitor all platform bookings and resolve disputes</p>
         </div>
 
         {/* Stats Overview */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-blue-600">{stats.total}</div>
+              <div className="text-2xl font-bold text-primary-600">{stats.total}</div>
               <div className="text-sm text-gray-600">Total Bookings</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-green-600">{stats.confirmed}</div>
+              <div className="text-2xl font-bold text-secondary-600">{stats.confirmed}</div>
               <div className="text-sm text-gray-600">Confirmed</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-yellow-600">{stats.pending}</div>
+              <div className="text-2xl font-bold text-secondary-700">{stats.pending}</div>
               <div className="text-sm text-gray-600">Pending</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-red-600">{stats.disputed}</div>
+              <div className="text-2xl font-bold text-neutral-700">{stats.disputed}</div>
               <div className="text-sm text-gray-600">Disputed</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-gray-600">{stats.cancelled}</div>
+              <div className="text-2xl font-bold text-neutral-800">{stats.cancelled}</div>
               <div className="text-sm text-gray-600">Cancelled</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-purple-600">{bookings.filter(b => isUpcoming(b.eventDate)).length}</div>
+              <div className="text-2xl font-bold text-primary-700">{bookings.filter(b => isUpcoming(b.eventDate)).length}</div>
               <div className="text-sm text-gray-600">Upcoming</div>
             </CardContent>
           </Card>

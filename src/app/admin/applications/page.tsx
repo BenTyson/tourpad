@@ -138,11 +138,11 @@ export default function ApplicationsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'pending':
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200">Pending</Badge>;
+        return <Badge variant="secondary" className="bg-secondary-100 text-secondary-800 border-secondary-200">Pending</Badge>;
       case 'approved':
-        return <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">Approved</Badge>;
+        return <Badge variant="secondary" className="bg-secondary-200 text-secondary-900 border-secondary-300">Approved</Badge>;
       case 'rejected':
-        return <Badge variant="secondary" className="bg-red-100 text-red-800 border-red-200">Rejected</Badge>;
+        return <Badge variant="secondary" className="bg-neutral-200 text-neutral-800 border-neutral-300">Rejected</Badge>;
       default:
         return <Badge variant="secondary">Unknown</Badge>;
     }
@@ -171,34 +171,32 @@ export default function ApplicationsPage() {
               </Button>
             </Link>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Application Management</h1>
-          <p className="text-gray-600">Review and approve artist and host applications</p>
         </div>
 
         {/* Stats Overview */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-blue-600">{stats.total}</div>
-              <div className="text-sm text-gray-600">Total Applications</div>
+              <div className="text-2xl font-bold text-primary-600">{stats.total}</div>
+              <div className="text-sm text-neutral-600">Total Applications</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-yellow-600">{stats.pending}</div>
-              <div className="text-sm text-gray-600">Pending Review</div>
+              <div className="text-2xl font-bold text-secondary-600">{stats.pending}</div>
+              <div className="text-sm text-neutral-600">Pending Review</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-green-600">{stats.approved}</div>
-              <div className="text-sm text-gray-600">Approved</div>
+              <div className="text-2xl font-bold text-secondary-700">{stats.approved}</div>
+              <div className="text-sm text-neutral-600">Approved</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-red-600">{stats.rejected}</div>
-              <div className="text-sm text-gray-600">Rejected</div>
+              <div className="text-2xl font-bold text-neutral-700">{stats.rejected}</div>
+              <div className="text-sm text-neutral-600">Rejected</div>
             </CardContent>
           </Card>
         </div>
@@ -267,8 +265,8 @@ export default function ApplicationsPage() {
                   <div className="flex items-center space-x-3">
                     <div className={`p-2 rounded-full ${
                       application.type === 'artist' 
-                        ? 'bg-purple-100 text-purple-600' 
-                        : 'bg-blue-100 text-blue-600'
+                        ? 'bg-primary-100 text-primary-600' 
+                        : 'bg-secondary-100 text-secondary-600'
                     }`}>
                       {application.type === 'artist' ? (
                         <MusicalNoteIcon className="w-5 h-5" />

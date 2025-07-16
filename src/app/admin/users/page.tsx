@@ -140,11 +140,11 @@ export default function UsersPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'active':
-        return <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">Active</Badge>;
+        return <Badge variant="secondary" className="bg-secondary-100 text-secondary-800 border-secondary-200">Active</Badge>;
       case 'suspended':
-        return <Badge variant="secondary" className="bg-red-100 text-red-800 border-red-200">Suspended</Badge>;
+        return <Badge variant="secondary" className="bg-neutral-200 text-neutral-800 border-neutral-300">Suspended</Badge>;
       case 'pending_verification':
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200">Pending Verification</Badge>;
+        return <Badge variant="secondary" className="bg-secondary-200 text-secondary-900 border-secondary-300">Pending Verification</Badge>;
       default:
         return <Badge variant="secondary">Unknown</Badge>;
     }
@@ -188,46 +188,44 @@ export default function UsersPage() {
               </Button>
             </Link>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">User Management</h1>
-          <p className="text-gray-600">Manage all artists and hosts on the platform</p>
         </div>
 
         {/* Stats Overview */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-blue-600">{stats.total}</div>
-              <div className="text-sm text-gray-600">Total Users</div>
+              <div className="text-2xl font-bold text-primary-600">{stats.total}</div>
+              <div className="text-sm text-neutral-600">Total Users</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-purple-600">{stats.activeArtists}</div>
-              <div className="text-sm text-gray-600">Active Artists</div>
+              <div className="text-2xl font-bold text-primary-600">{stats.activeArtists}</div>
+              <div className="text-sm text-neutral-600">Active Artists</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-green-600">{stats.activeHosts}</div>
-              <div className="text-sm text-gray-600">Active Hosts</div>
+              <div className="text-2xl font-bold text-secondary-600">{stats.activeHosts}</div>
+              <div className="text-sm text-neutral-600">Active Hosts</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-yellow-600">{stats.pendingVerification}</div>
-              <div className="text-sm text-gray-600">Pending</div>
+              <div className="text-2xl font-bold text-secondary-700">{stats.pendingVerification}</div>
+              <div className="text-sm text-neutral-600">Pending</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-red-600">{stats.suspended}</div>
-              <div className="text-sm text-gray-600">Suspended</div>
+              <div className="text-2xl font-bold text-neutral-700">{stats.suspended}</div>
+              <div className="text-sm text-neutral-600">Suspended</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-orange-600">{stats.overduePayments}</div>
-              <div className="text-sm text-gray-600">Overdue</div>
+              <div className="text-2xl font-bold text-neutral-800">{stats.overduePayments}</div>
+              <div className="text-sm text-neutral-600">Overdue</div>
             </CardContent>
           </Card>
         </div>

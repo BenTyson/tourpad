@@ -138,13 +138,13 @@ export default function FinancePage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'paid':
-        return <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">Paid</Badge>;
+        return <Badge variant="secondary" className="bg-secondary-100 text-secondary-800 border-secondary-200">Paid</Badge>;
       case 'pending':
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200">Pending</Badge>;
+        return <Badge variant="secondary" className="bg-secondary-200 text-secondary-900 border-secondary-300">Pending</Badge>;
       case 'overdue':
-        return <Badge variant="secondary" className="bg-red-100 text-red-800 border-red-200">Overdue</Badge>;
+        return <Badge variant="secondary" className="bg-neutral-200 text-neutral-800 border-neutral-300">Overdue</Badge>;
       case 'failed':
-        return <Badge variant="secondary" className="bg-orange-100 text-orange-800 border-orange-200">Failed</Badge>;
+        return <Badge variant="secondary" className="bg-neutral-200 text-neutral-800 border-neutral-300">Failed</Badge>;
       default:
         return <Badge variant="secondary">Unknown</Badge>;
     }
@@ -191,45 +191,43 @@ export default function FinancePage() {
               </Button>
             </Link>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Financial Management</h1>
-          <p className="text-gray-600">Track artist payments, revenue, and financial reports</p>
         </div>
 
         {/* Stats Overview */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-green-600">${stats.totalRevenue.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-secondary-600">${stats.totalRevenue.toLocaleString()}</div>
               <div className="text-sm text-gray-600">Total Revenue</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-blue-600">{stats.activeArtists}</div>
+              <div className="text-2xl font-bold text-primary-600">{stats.activeArtists}</div>
               <div className="text-sm text-gray-600">Paid Artists</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-yellow-600">${stats.pendingRevenue.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-secondary-700">${stats.pendingRevenue.toLocaleString()}</div>
               <div className="text-sm text-gray-600">Pending</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-red-600">${stats.overdueRevenue.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-neutral-700">${stats.overdueRevenue.toLocaleString()}</div>
               <div className="text-sm text-gray-600">Overdue</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-orange-600">{stats.failedPayments}</div>
+              <div className="text-2xl font-bold text-neutral-800">{stats.failedPayments}</div>
               <div className="text-sm text-gray-600">Failed</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-purple-600">95.2%</div>
+              <div className="text-2xl font-bold text-primary-700">95.2%</div>
               <div className="text-sm text-gray-600">Success Rate</div>
             </CardContent>
           </Card>

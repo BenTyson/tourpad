@@ -166,3 +166,32 @@ html {
   border: 2px solid var(--color-mist) !important;
   box-shadow: 0 8px 32px rgba(52, 76, 61, 0.12) !important;
 }
+
+/* Fix for map loading issues */
+.leaflet-container {
+  font-family: inherit !important;
+  font-size: 12px !important;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 8px !important;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.leaflet-popup-close-button {
+  display: none !important;
+}
+
+/* Ensure map tiles load properly */
+.leaflet-tile-container {
+  opacity: 1 !important;
+}
+
+.leaflet-tile {
+  opacity: 1 !important;
+  transition: opacity 0.3s ease !important;
+}

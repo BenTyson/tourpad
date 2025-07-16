@@ -173,17 +173,17 @@ export default function SecurityPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'investigating':
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200">Investigating</Badge>;
+        return <Badge variant="secondary" className="bg-secondary-100 text-secondary-800 border-secondary-200">Investigating</Badge>;
       case 'resolved':
-        return <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">Resolved</Badge>;
+        return <Badge variant="secondary" className="bg-secondary-200 text-secondary-900 border-secondary-300">Resolved</Badge>;
       case 'escalated':
-        return <Badge variant="secondary" className="bg-red-100 text-red-800 border-red-200">Escalated</Badge>;
+        return <Badge variant="secondary" className="bg-neutral-200 text-neutral-800 border-neutral-300">Escalated</Badge>;
       case 'pending':
-        return <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-200">Pending</Badge>;
+        return <Badge variant="secondary" className="bg-primary-100 text-primary-800 border-primary-200">Pending</Badge>;
       case 'in_progress':
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200">In Progress</Badge>;
+        return <Badge variant="secondary" className="bg-secondary-100 text-secondary-800 border-secondary-200">In Progress</Badge>;
       case 'completed':
-        return <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">Completed</Badge>;
+        return <Badge variant="secondary" className="bg-secondary-200 text-secondary-900 border-secondary-300">Completed</Badge>;
       default:
         return <Badge variant="secondary">Unknown</Badge>;
     }
@@ -194,9 +194,9 @@ export default function SecurityPage() {
       case 'high':
         return <Badge variant="error">High</Badge>;
       case 'medium':
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200">Medium</Badge>;
+        return <Badge variant="secondary" className="bg-secondary-100 text-secondary-800 border-secondary-200">Medium</Badge>;
       case 'low':
-        return <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">Low</Badge>;
+        return <Badge variant="secondary" className="bg-secondary-200 text-secondary-900 border-secondary-300">Low</Badge>;
       default:
         return <Badge variant="secondary">Unknown</Badge>;
     }
@@ -233,8 +233,6 @@ export default function SecurityPage() {
               </Button>
             </Link>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Security & Compliance</h1>
-          <p className="text-gray-600">Monitor security threats and manage compliance requirements</p>
         </div>
 
         {/* Security Status Overview */}
@@ -263,25 +261,25 @@ export default function SecurityPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-6 text-center">
-              <div className="text-2xl font-bold text-red-600">{securityMetrics.activeIncidents}</div>
+              <div className="text-2xl font-bold text-neutral-700">{securityMetrics.activeIncidents}</div>
               <div className="text-sm text-gray-600">Active Incidents</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-6 text-center">
-              <div className="text-2xl font-bold text-orange-600">{securityMetrics.blockedIPs}</div>
+              <div className="text-2xl font-bold text-neutral-800">{securityMetrics.blockedIPs}</div>
               <div className="text-sm text-gray-600">Blocked IPs</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-6 text-center">
-              <div className="text-2xl font-bold text-yellow-600">{securityMetrics.failedLogins}</div>
+              <div className="text-2xl font-bold text-secondary-600">{securityMetrics.failedLogins}</div>
               <div className="text-sm text-gray-600">Failed Logins (24h)</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-6 text-center">
-              <div className="text-2xl font-bold text-blue-600">{securityMetrics.dataRequests}</div>
+              <div className="text-2xl font-bold text-primary-600">{securityMetrics.dataRequests}</div>
               <div className="text-sm text-gray-600">Data Requests</div>
             </CardContent>
           </Card>
@@ -404,8 +402,8 @@ export default function SecurityPage() {
               {auditLogs.map((log) => (
                 <div key={log.id} className="flex items-center justify-between p-3 hover:bg-neutral-50 rounded-lg">
                   <div className="flex items-center space-x-4">
-                    <div className="p-2 bg-blue-100 rounded-full">
-                      <KeyIcon className="w-4 h-4 text-blue-600" />
+                    <div className="p-2 bg-primary-100 rounded-full">
+                      <KeyIcon className="w-4 h-4 text-primary-600" />
                     </div>
                     <div>
                       <div className="font-medium text-gray-900 capitalize">

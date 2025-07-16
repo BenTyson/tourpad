@@ -138,38 +138,15 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Modern Header with Welcome Message */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-neutral-900 mb-2">
-                TourPad Admin Dashboard
-              </h1>
-              <p className="text-neutral-600 text-lg">
-                Platform oversight and management center
-              </p>
-            </div>
-            <div className="text-right">
-              <div className="text-sm text-neutral-500">
-                {new Date().toLocaleDateString('en-US', { 
-                  weekday: 'long', 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Platform Health Alert */}
-        <Card className="mb-8 border-l-4 border-l-green-500 bg-green-50">
+        <Card className="mb-8 border-l-4 border-l-secondary-600 bg-secondary-50">
           <CardContent className="p-4">
             <div className="flex items-center">
-              <CheckIcon className="w-6 h-6 text-green-600 mr-3" />
+              <CheckIcon className="w-6 h-6 text-secondary-600 mr-3" />
               <div>
-                <h3 className="font-semibold text-green-900">Platform Status: Operational</h3>
-                <p className="text-green-800 text-sm">All systems running normally • Last updated: 2 minutes ago</p>
+                <h3 className="font-semibold text-secondary-900">Platform Status: Operational</h3>
+                <p className="text-secondary-800 text-sm">All systems running normally • Last updated: 2 minutes ago</p>
               </div>
             </div>
           </CardContent>

@@ -168,13 +168,13 @@ export default function SupportPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'open':
-        return <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-200">Open</Badge>;
+        return <Badge variant="secondary" className="bg-primary-100 text-primary-800 border-primary-200">Open</Badge>;
       case 'in_progress':
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200">In Progress</Badge>;
+        return <Badge variant="secondary" className="bg-secondary-100 text-secondary-800 border-secondary-200">In Progress</Badge>;
       case 'escalated':
-        return <Badge variant="secondary" className="bg-red-100 text-red-800 border-red-200">Escalated</Badge>;
+        return <Badge variant="secondary" className="bg-neutral-200 text-neutral-800 border-neutral-300">Escalated</Badge>;
       case 'resolved':
-        return <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">Resolved</Badge>;
+        return <Badge variant="secondary" className="bg-secondary-200 text-secondary-900 border-secondary-300">Resolved</Badge>;
       default:
         return <Badge variant="secondary">Unknown</Badge>;
     }
@@ -185,11 +185,11 @@ export default function SupportPage() {
       case 'urgent':
         return <Badge variant="error">Urgent</Badge>;
       case 'high':
-        return <Badge variant="secondary" className="bg-orange-100 text-orange-800 border-orange-200">High</Badge>;
+        return <Badge variant="secondary" className="bg-secondary-200 text-secondary-900 border-secondary-300">High</Badge>;
       case 'medium':
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200">Medium</Badge>;
+        return <Badge variant="secondary" className="bg-secondary-100 text-secondary-800 border-secondary-200">Medium</Badge>;
       case 'low':
-        return <Badge variant="secondary" className="bg-gray-100 text-gray-800 border-gray-200">Low</Badge>;
+        return <Badge variant="secondary" className="bg-neutral-200 text-neutral-800 border-neutral-300">Low</Badge>;
       default:
         return <Badge variant="secondary">Unknown</Badge>;
     }
@@ -244,45 +244,43 @@ export default function SupportPage() {
               </Button>
             </Link>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Support Center</h1>
-          <p className="text-gray-600">Manage support tickets and user communications</p>
         </div>
 
         {/* Stats Overview */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-blue-600">{stats.total}</div>
+              <div className="text-2xl font-bold text-primary-600">{stats.total}</div>
               <div className="text-sm text-gray-600">Total Tickets</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-green-600">{stats.open}</div>
+              <div className="text-2xl font-bold text-secondary-600">{stats.open}</div>
               <div className="text-sm text-gray-600">Open</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-yellow-600">{stats.inProgress}</div>
+              <div className="text-2xl font-bold text-secondary-700">{stats.inProgress}</div>
               <div className="text-sm text-gray-600">In Progress</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-red-600">{stats.escalated}</div>
+              <div className="text-2xl font-bold text-neutral-700">{stats.escalated}</div>
               <div className="text-sm text-gray-600">Escalated</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-orange-600">{stats.urgent}</div>
+              <div className="text-2xl font-bold text-neutral-800">{stats.urgent}</div>
               <div className="text-sm text-gray-600">Urgent</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-purple-600">{stats.unassigned}</div>
+              <div className="text-2xl font-bold text-primary-700">{stats.unassigned}</div>
               <div className="text-sm text-gray-600">Unassigned</div>
             </CardContent>
           </Card>

@@ -86,18 +86,14 @@ export default function ReportsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center space-x-4 mb-4">
-            <Link href="/admin">
-              <Button variant="outline" size="sm">
-                <ArrowLeftIcon className="w-4 h-4 mr-2" />
-                Back to Admin
-              </Button>
-            </Link>
-          </div>
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Reports & Analytics</h1>
-              <p className="text-gray-600">Business intelligence and performance insights</p>
+            <div className="flex items-center space-x-4">
+              <Link href="/admin">
+                <Button variant="outline" size="sm">
+                  <ArrowLeftIcon className="w-4 h-4 mr-2" />
+                  Back to Admin
+                </Button>
+              </Link>
             </div>
             <div className="flex items-center space-x-2">
               <Button variant="outline">
@@ -154,8 +150,8 @@ export default function ReportsPage() {
                     +{platformMetrics.growthRate}% this month
                   </p>
                 </div>
-                <div className="p-3 bg-blue-100 rounded-full">
-                  <UsersIcon className="w-8 h-8 text-blue-600" />
+                <div className="p-3 bg-primary-100 rounded-full">
+                  <UsersIcon className="w-8 h-8 text-primary-600" />
                 </div>
               </div>
             </CardContent>
@@ -172,8 +168,8 @@ export default function ReportsPage() {
                     +8.2% vs last month
                   </p>
                 </div>
-                <div className="p-3 bg-green-100 rounded-full">
-                  <CurrencyDollarIcon className="w-8 h-8 text-green-600" />
+                <div className="p-3 bg-secondary-100 rounded-full">
+                  <CurrencyDollarIcon className="w-8 h-8 text-secondary-600" />
                 </div>
               </div>
             </CardContent>
@@ -190,8 +186,8 @@ export default function ReportsPage() {
                     +15.3% this month
                   </p>
                 </div>
-                <div className="p-3 bg-purple-100 rounded-full">
-                  <CalendarIcon className="w-8 h-8 text-purple-600" />
+                <div className="p-3 bg-primary-100 rounded-full">
+                  <CalendarIcon className="w-8 h-8 text-primary-600" />
                 </div>
               </div>
             </CardContent>
@@ -208,8 +204,8 @@ export default function ReportsPage() {
                     -0.4% this month
                   </p>
                 </div>
-                <div className="p-3 bg-yellow-100 rounded-full">
-                  <ChartBarIcon className="w-8 h-8 text-yellow-600" />
+                <div className="p-3 bg-secondary-100 rounded-full">
+                  <ChartBarIcon className="w-8 h-8 text-secondary-600" />
                 </div>
               </div>
             </CardContent>
@@ -364,7 +360,7 @@ export default function ReportsPage() {
                     <div className="flex items-center space-x-2">
                       <div className="flex-1 bg-gray-200 rounded-full h-2">
                         <div 
-                          className="bg-green-600 h-2 rounded-full transition-all duration-300"
+                          className="bg-secondary-600 h-2 rounded-full transition-all duration-300"
                           style={{ width: `${item.percentage}%` }}
                         ></div>
                       </div>
@@ -376,7 +372,7 @@ export default function ReportsPage() {
               <div className="mt-6 pt-4 border-t">
                 <div className="flex items-center justify-between">
                   <span className="text-lg font-semibold text-gray-900">Total Revenue</span>
-                  <span className="text-2xl font-bold text-green-600">
+                  <span className="text-2xl font-bold text-secondary-600">
                     {formatCurrency(revenueBreakdown.reduce((sum, item) => sum + item.amount, 0))}
                   </span>
                 </div>
@@ -394,17 +390,17 @@ export default function ReportsPage() {
           <CardContent>
             <div className="grid md:grid-cols-3 gap-4">
               <Button variant="outline" className="h-24 flex flex-col items-center justify-center">
-                <DocumentArrowDownIcon className="w-8 h-8 mb-2 text-blue-600" />
+                <DocumentArrowDownIcon className="w-8 h-8 mb-2 text-primary-600" />
                 <span className="font-medium">User Report</span>
                 <span className="text-xs text-gray-500">Artists & Hosts Data</span>
               </Button>
               <Button variant="outline" className="h-24 flex flex-col items-center justify-center">
-                <DocumentArrowDownIcon className="w-8 h-8 mb-2 text-green-600" />
+                <DocumentArrowDownIcon className="w-8 h-8 mb-2 text-secondary-600" />
                 <span className="font-medium">Financial Report</span>
                 <span className="text-xs text-gray-500">Revenue & Payments</span>
               </Button>
               <Button variant="outline" className="h-24 flex flex-col items-center justify-center">
-                <DocumentArrowDownIcon className="w-8 h-8 mb-2 text-purple-600" />
+                <DocumentArrowDownIcon className="w-8 h-8 mb-2 text-primary-600" />
                 <span className="font-medium">Booking Report</span>
                 <span className="text-xs text-gray-500">Event Analytics</span>
               </Button>

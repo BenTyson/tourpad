@@ -113,7 +113,7 @@ export default function MapPage() {
 
       {/* Main Content */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
-        <div className="grid lg:grid-cols-4 gap-6 h-[600px]">
+        <div className="grid lg:grid-cols-4 gap-6 min-h-[600px]">
           {/* Filters Sidebar */}
           {showFilters && (
             <div className="lg:col-span-1">
@@ -127,9 +127,9 @@ export default function MapPage() {
           {/* Map/List Content */}
           <div className={`${showFilters ? 'lg:col-span-3' : 'lg:col-span-4'}`}>
             {viewMode === 'map' ? (
-              <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden h-full">
+              <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden h-[600px]">
                 <TourPadMapContainer 
-                  className="h-full"
+                  className="w-full h-full"
                   initialCenter={[39.8283, -98.5795]}
                   initialZoom={5}
                   hosts={filteredHosts}
