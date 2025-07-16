@@ -1983,3 +1983,24 @@ Import trace for requested module:
  GET /api/auth/session 200 in 2518ms
  GET / 200 in 172ms
  GET /artists 200 in 36ms
+ ✓ Compiled in 2.2s (1601 modules)
+ GET /artists 200 in 113ms
+ ✓ Compiled in 286ms (1601 modules)
+ GET /artists 200 in 49ms
+ ✓ Compiled in 1608ms (1603 modules)
+ GET /artists 200 in 45ms
+ ✓ Compiled /api/auth/[...nextauth] in 300ms (960 modules)
+ GET /api/auth/session 200 in 441ms
+ GET /hosts 200 in 69ms
+ ✓ Compiled in 1241ms (1603 modules)
+ GET /hosts 200 in 101ms
+ ✓ Compiled /api/auth/[...nextauth] in 437ms (960 modules)
+ GET /api/auth/session 200 in 574ms
+ GET /api/auth/session 200 in 31ms
+ GET /artists 200 in 69ms
+ ✓ Compiled in 2.4s (1840 modules)
+ GET /artists 200 in 72ms
+ ✓ Compiled in 301ms (1840 modules)
+ GET /artists 200 in 41ms
+ ✓ Compiled in 1584ms (1603 modules)
+ GET /artists 200 in 141ms

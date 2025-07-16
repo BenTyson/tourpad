@@ -1,11 +1,14 @@
 import Link from 'next/link';
+import { useState } from 'react';
 import { 
   Star, 
   Users,
   Music,
   Globe,
   CheckCircle,
-  Play
+  Play,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -75,6 +78,8 @@ interface ArtistCardProps {
 }
 
 export function ArtistCard({ artist, showBookingButton = false }: ArtistCardProps) {
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  
   const getGenreFromBio = () => {
     // Simple genre extraction - in real app, you'd have a proper genre field
     const genres = ['folk', 'rock', 'indie', 'country', 'blues', 'jazz', 'experimental'];
@@ -85,23 +90,89 @@ export function ArtistCard({ artist, showBookingButton = false }: ArtistCardProp
 
   const allPhotos = [...(artist.performancePhotos || []), ...(artist.bandPhotos || [])];
   const hasVideo = !!artist.livePerformanceVideo;
+  
+  const nextPhoto = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentPhotoIndex((prev) => (prev + 1) % allPhotos.length);
+  };
+  
+  const prevPhoto = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentPhotoIndex((prev) => (prev - 1 + allPhotos.length) % allPhotos.length);
+  };
 
   return (
     <Card hover clickable className="overflow-hidden group">
       <div className="relative">
         <div className="aspect-video relative bg-gray-200 overflow-hidden">
           {allPhotos.length > 0 ? (
-            <img
-              src={allPhotos[0].url}
-              alt={`${artist.name} performance`}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-            />
+            <div className="relative w-full h-full">
+              {/* Photo carousel container */}
+              <div 
+                className="flex w-full h-full transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${currentPhotoIndex * 100}%)` }}
+              >
+                {allPhotos.map((photo, index) => (
+                  <div key={photo.id} className="w-full h-full flex-shrink-0">
+                    <img
+                      src={photo.url}
+                      alt={`${artist.name} - ${photo.alt}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
           ) : (
             <div className="flex items-center justify-center h-full bg-gradient-to-br from-primary-500 to-secondary-600 transition-all duration-500 group-hover:from-primary-600 group-hover:to-secondary-700">
               <Music className="w-12 h-12 text-white transition-transform duration-500 group-hover:scale-110" />
             </div>
           )}
         </div>
+        
+        {/* Photo navigation arrows */}
+        {allPhotos.length > 1 && (
+          <>
+            <button
+              onClick={prevPhoto}
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100 z-10"
+              aria-label="Previous photo"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button
+              onClick={nextPhoto}
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100 z-10"
+              aria-label="Next photo"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </>
+        )}
+        
+        {/* Photo indicators */}
+        {allPhotos.length > 1 && (
+          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            {allPhotos.map((_, index) => (
+              <button
+                key={index}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setCurrentPhotoIndex(index);
+                }}
+                className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                  index === currentPhotoIndex
+                    ? 'bg-white shadow-lg'
+                    : 'bg-white/50 hover:bg-white/70'
+                }`}
+                aria-label={`Go to photo ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
         
         {/* Approval status */}
         {artist.approved && (
@@ -119,10 +190,10 @@ export function ArtistCard({ artist, showBookingButton = false }: ArtistCardProp
           </div>
         )}
 
-        {/* Photo count indicator */}
+        {/* Photo count badge */}
         {allPhotos.length > 1 && (
-          <div className="absolute bottom-3 right-3 bg-black/70 text-white px-2 py-1 rounded text-xs transition-all duration-300 group-hover:bg-black/80">
-            {allPhotos.length} photos
+          <div className="absolute top-3 left-3 bg-black/50 backdrop-blur-sm rounded-lg px-2 py-1 text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            {currentPhotoIndex + 1} / {allPhotos.length}
           </div>
         )}
       </div>
