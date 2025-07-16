@@ -1084,3 +1084,38 @@ Import trace for requested module:
  GET /artists/1 200 in 20ms
  ✓ Compiled in 502ms (1505 modules)
  GET /artists/1 200 in 49ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 1082ms (942 modules)
+ GET /api/auth/session 200 in 1206ms
+ GET /artists/2 200 in 35ms
+ ✓ Compiled in 746ms (1728 modules)
+ GET /artists/2 200 in 560ms
+ GET /artists/2 200 in 20ms
+ GET /dashboard 200 in 44ms
+ ○ Compiling /calendar ...
+ ✓ Compiled /calendar in 602ms (1508 modules)
+ GET /calendar 200 in 707ms
+ GET /dashboard 200 in 49ms
+ GET /calendar 200 in 21ms
+ ✓ Compiled /api/auth/[...nextauth] in 219ms (943 modules)
+ GET /api/auth/csrf 200 in 328ms
+ POST /api/auth/signout 200 in 17ms
+ GET /calendar 200 in 165ms
+ GET /api/auth/session 200 in 6ms
+ GET /login 200 in 39ms
+ GET /api/auth/providers 200 in 24ms
+ GET /api/auth/csrf 200 in 8ms
+ POST /api/auth/callback/credentials 200 in 10ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 5ms
+ GET /dashboard 200 in 14ms
+ GET /dashboard 200 in 21ms
+ GET /calendar 200 in 16ms
+ ✓ Compiled in 474ms (1513 modules)
+ GET /calendar 200 in 144ms
+ ✓ Compiled in 233ms (1513 modules)
+ GET /calendar 200 in 44ms
+ ✓ Compiled in 224ms (1513 modules)
+ GET /calendar 200 in 34ms
+ ✓ Compiled in 218ms (1513 modules)
+ GET /calendar 200 in 36ms
