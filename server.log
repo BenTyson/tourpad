@@ -1254,3 +1254,6 @@ Import trace for requested module:
  GET /api/auth/session 200 in 8ms
  GET /map 200 in 80ms
  GET /api/auth/session 200 in 14ms
+ ✓ Compiled in 771ms (1852 modules)
+ GET /map 200 in 88ms
+ GET /api/auth/session 200 in 25ms
