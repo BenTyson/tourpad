@@ -3,7 +3,22 @@
     "name": "TourPad",
     "version": "1.0.0",
     "description": "Where Music Feels Like Home - Connect artists with intimate venues",
-    "tech_stack": ["Next.js 15.3.5", "React 19", "TypeScript", "Tailwind CSS", "NextAuth.js", "Stripe"]
+    "tech_stack": ["Next.js 15.3.5", "React 19", "TypeScript", "Tailwind CSS v4", "React Hook Form + Zod", "NextAuth.js", "Stripe", "Leaflet"],
+    "user_types": ["artist", "host", "fan", "admin"],
+    "status_types": ["pending", "approved", "suspended", "rejected", "active", "payment_expired"],
+    "current_stage": "frontend_complete_awaiting_backend",
+    "design_system": {
+      "primary_colors": {
+        "french_blue": "#8ea58c",
+        "sage": "#738a6e"
+      },
+      "coastal_accents": {
+        "mist": "#ebebe9",
+        "sand": "#d4c4a8", 
+        "evergreen": "#344c3d"
+      },
+      "typography": "Lucide icons"
+    }
   },
   "defaults": {
     "max_tokens_per_session": 50000,

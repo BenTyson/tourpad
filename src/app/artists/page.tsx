@@ -15,7 +15,8 @@ import {
   Home,
   Suitcase,
   Volume2,
-  Calendar
+  Calendar,
+  X
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -29,6 +30,9 @@ export default function ArtistsPage() {
   const { data: session, status } = useSession();
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+  const [showRSVPModal, setShowRSVPModal] = useState(false);
+  const [selectedConcert, setSelectedConcert] = useState(null);
+  const [guestCount, setGuestCount] = useState(1);
   const [filters, setFilters] = useState({
     minYearsActive: '',
     maxTourMonths: '',
@@ -264,7 +268,7 @@ export default function ArtistsPage() {
         const matchesSearch = searchQuery === '' || 
           concert.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
           concert.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          concert.artist.name.toLowerCase().includes(searchQuery.toLowerCase());
+          concert.artistName.toLowerCase().includes(searchQuery.toLowerCase());
         
         return matchesSearch;
       })
@@ -304,6 +308,29 @@ export default function ArtistsPage() {
         [requirement]: value
       }
     });
+  };
+
+  const handleRSVPClick = (concert: any) => {
+    setSelectedConcert(concert);
+    setGuestCount(1);
+    setShowRSVPModal(true);
+  };
+
+  const handleRSVPSubmit = () => {
+    // TODO: Send RSVP to backend
+    console.log('RSVP submitted:', {
+      concertId: selectedConcert?.id,
+      fanId: session?.user?.id,
+      guestCount: guestCount
+    });
+    
+    // Close modal
+    setShowRSVPModal(false);
+    setSelectedConcert(null);
+    setGuestCount(1);
+    
+    // TODO: Update UI to show RSVP status
+    alert(`RSVP submitted for ${guestCount} guest${guestCount > 1 ? 's' : ''}!`);
   };
 
   return (
@@ -430,18 +457,33 @@ export default function ArtistsPage() {
           filteredConcerts.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredConcerts.map((concert) => (
-                <Card key={concert.id} className="hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <h3 className="font-semibold text-lg text-gray-900 mb-1">
-                          {concert.title}
-                        </h3>
-                        <p className="text-sm text-gray-600">by {concert.artist.name}</p>
+                <Card key={concert.id} className="hover:shadow-lg transition-shadow overflow-hidden">
+                  {/* Concert Image */}
+                  <div className="relative h-48 bg-gradient-to-br from-sage/20 to-french-blue/20">
+                    {concert.imageUrl ? (
+                      <img 
+                        src={concert.imageUrl} 
+                        alt={`${concert.artistName} concert`}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Music className="w-12 h-12 text-sage/60" />
                       </div>
-                      <Badge variant="outline" className="ml-2">
+                    )}
+                    <div className="absolute top-3 right-3">
+                      <Badge variant="outline" className="bg-white/90 backdrop-blur-sm">
                         ${concert.ticketPrice}
                       </Badge>
+                    </div>
+                  </div>
+                  
+                  <CardContent className="p-6">
+                    <div className="mb-4">
+                      <h3 className="font-semibold text-lg text-gray-900 mb-1">
+                        {concert.title}
+                      </h3>
+                      <p className="text-sm text-gray-600">by {concert.artistName}</p>
                     </div>
                     
                     <p className="text-gray-600 text-sm mb-4 line-clamp-2">
@@ -465,16 +507,19 @@ export default function ArtistsPage() {
                     </div>
                     
                     <div className="flex flex-wrap gap-1 mb-4">
-                      {concert.genres.slice(0, 3).map((genre) => (
+                      {concert.genre.slice(0, 3).map((genre) => (
                         <Badge key={genre} variant="secondary" className="text-xs">
                           {genre}
                         </Badge>
                       ))}
                     </div>
                     
-                    <Button className="w-full">
+                    <Button 
+                      className="w-full"
+                      onClick={() => handleRSVPClick(concert)}
+                    >
                       <Heart className="w-4 h-4 mr-2" />
-                      Reserve Ticket
+                      RSVP
                     </Button>
                   </CardContent>
                 </Card>
@@ -526,6 +571,86 @@ export default function ArtistsPage() {
           )
         )}
       </div>
+
+      {/* RSVP Modal */}
+      {showRSVPModal && selectedConcert && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <Card className="w-full max-w-md">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  RSVP for Concert
+                </h3>
+                <button
+                  onClick={() => setShowRSVPModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <div className="mb-4">
+                <h4 className="font-medium text-gray-900 mb-1">
+                  {selectedConcert.title}
+                </h4>
+                <p className="text-sm text-gray-600">
+                  by {selectedConcert.artistName}
+                </p>
+                <p className="text-sm text-gray-600">
+                  {new Date(selectedConcert.date).toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })} at {selectedConcert.startTime}
+                </p>
+              </div>
+              
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  How many guests? (including yourself)
+                </label>
+                <div className="flex items-center space-x-3">
+                  <button
+                    onClick={() => setGuestCount(Math.max(1, guestCount - 1))}
+                    className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-300"
+                  >
+                    -
+                  </button>
+                  <span className="text-lg font-medium text-gray-900 min-w-[2rem] text-center">
+                    {guestCount}
+                  </span>
+                  <button
+                    onClick={() => setGuestCount(Math.min(selectedConcert.capacity - selectedConcert.attendees.length, guestCount + 1))}
+                    className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-300"
+                  >
+                    +
+                  </button>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">
+                  {selectedConcert.capacity - selectedConcert.attendees.length} spots available
+                </p>
+              </div>
+              
+              <div className="flex space-x-3">
+                <Button
+                  onClick={() => setShowRSVPModal(false)}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleRSVPSubmit}
+                  className="flex-1 bg-sage hover:bg-sage/90 text-white"
+                >
+                  Submit RSVP
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 }

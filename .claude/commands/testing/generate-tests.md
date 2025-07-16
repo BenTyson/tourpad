@@ -69,22 +69,27 @@
 
 ### Test Structure
 ```javascript
-// Example test structure
+// Example test structure for TourPad components
 describe('MapContainer', () => {
   beforeEach(() => {
-    // Setup
+    // Setup with TourPad coastal theme
   });
   
   it('renders map with correct initial state', () => {
-    // Test implementation
+    // Test TourPad-specific map rendering
   });
   
   it('handles user interactions correctly', () => {
-    // Test implementation
+    // Test coastal-themed UI interactions
   });
   
   it('displays error states appropriately', () => {
-    // Test implementation
+    // Test error states with coastal color scheme
+  });
+  
+  it('follows TourPad design system', () => {
+    // Test French Blue (#8ea58c) and Sage (#738a6e) colors
+    // Test Mist (#ebebe9), Sand (#d4c4a8), Evergreen (#344c3d) accents
   });
 });
 ```

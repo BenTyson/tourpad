@@ -72,5 +72,8 @@
 - Check data consistency between mockData and realTestData
 - Verify authentication state and user roles
 - Test different user types (artist, host, fan, admin)
-- Check coastal color scheme rendering
+- Check coastal color scheme rendering:
+  - Primary: French Blue (#8ea58c), Sage (#738a6e)
+  - Accents: Mist (#ebebe9), Sand (#d4c4a8), Evergreen (#344c3d)
 - Validate mobile-first responsive behavior
+- Test Lucide icons rendering correctly

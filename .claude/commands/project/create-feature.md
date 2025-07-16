@@ -54,31 +54,65 @@
 
 ## TourPad Feature Development Guidelines
 
-### Component Structure
-- Follow existing patterns in src/components/
-- Use TypeScript for all new components
-- Implement responsive design with Tailwind CSS
-- Include proper error handling and loading states
+### Current Project Status (Key Context)
+- **Frontend Foundation Complete**: Comprehensive UI components, routing, layouts
+- **Interactive Map Component**: Complete with Leaflet integration and privacy-focused coordinates
+- **Gated Access System**: Gateway pages protecting artist/host directories
+- **All User Types**: Artists, hosts, fans, admin with role-based access
+- **Enhanced Profile Pages**: Professional layouts with social links, photo galleries
+- **Mock Data Infrastructure**: Rich data models for testing and development
+- **Backend Integration**: TBD - all features currently use mock data
 
-### Page Structure
-- Use Next.js App Router (src/app)
-- Implement proper SEO with metadata
-- Add authentication checks where needed
-- Follow existing layout patterns
+### User Types & Access Control
+- **Artists**: Touring musicians ($400/year membership after approval)
+- **Hosts**: Venue owners (free membership after approval)  
+- **Fans**: Concert attendees (direct paid membership - no approval needed)
+- **Admin**: Platform administrators with full access
+- **Status Types**: 'pending' | 'approved' | 'suspended' | 'rejected' | 'active' | 'payment_expired'
 
-### Data Integration
-- Use mockData.ts for UI development
-- Use realTestData.ts for authentication features
-- Maintain ID mapping consistency (mockData uses '1', '2', '3'; realTestData uses 'artist1', 'host1', 'fan1')
+### Component Architecture
+```
+/src/components/
+├── common/          # Shared components (Button, Card, Badge)
+├── dashboard/       # Dashboard-specific components
+├── forms/           # Form components with validation
+├── layout/          # Navigation, Footer, Layout wrappers
+├── media/           # Media upload and display components
+├── map/             # Interactive map components (Leaflet)
+├── reviews/         # Review system components
+└── bookings/        # Booking workflow components
+```
 
-### Design System
-- Use TourPad coastal color palette
-- Maintain consistent typography and spacing
-- Follow existing button and form patterns
-- Ensure accessibility compliance
+### Data Integration (CRITICAL)
+- **mockData.ts**: Basic UI display data, artist/host profiles, simple structures
+  - IDs: Simple numeric strings ('1', '2', '3')
+  - Use for: UI development, listings, core features
+- **realTestData.ts**: Authentication system, advanced features, complex structures
+  - IDs: Prefixed strings ('artist1', 'host1', 'fan1')
+  - Use for: Authentication, lodging system, detailed capabilities
+- **ID Mapping**: Dashboard maps between them: `mockArtists.find(a => a.userId === 'artist1')`
 
-### Testing
-- Create basic component tests
-- Test authentication flows
-- Verify responsive behavior
-- Test error conditions
+### Design System (Coastal Color Scheme)
+- **Primary Colors**: French Blue (#8ea58c) - coastal waters
+- **Secondary Colors**: Sage (#738a6e) - calming green
+- **Coastal Accents**: 
+  - Mist (#ebebe9) - light neutral
+  - Sand (#d4c4a8) - warm accent
+  - Evergreen (#344c3d) - deep green
+- **Typography**: Modern with Lucide icons
+- **Mobile-First**: Responsive design with touch interactions
+- **Form Validation**: React Hook Form + Zod schemas for all forms
+
+### Current Priorities
+1. **Backend Integration Foundation**: API setup and database design
+2. **Map Component Enhancements**: Tour planning integration
+3. **Review System**: Public/private feedback with dashboard integration
+4. **Enhanced Search**: Needs reimplementation after server issues
+
+### Testing Requirements
+- Test all user types and access levels
+- Verify gated access functionality
+- Test responsive behavior on mobile
+- Validate form submissions with Zod
+- Test map component interactions
+- Verify ID mapping consistency between data sources

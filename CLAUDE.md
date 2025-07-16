@@ -56,7 +56,7 @@ Do not introduce other libraries unless specified in the plan or approved by use
 - Read `DEVELOPMENT_ROADMAP.md` for current priorities
 - **Data Sources** (see Data Architecture section below)
 - All forms must have Zod validation schemas
-- Use the established color system (Rose, Sage, Neutral tones)
+- Use the established coastal color system (French Blue, Sage, Mist, Sand, Evergreen)
 
 ## Data Architecture - CRITICAL
 We maintain TWO data files with specific purposes:

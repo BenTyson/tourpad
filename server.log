@@ -1376,3 +1376,207 @@ Import trace for requested module:
  GET /dashboard 200 in 25ms
  ✓ Compiled in 1078ms (868 modules)
  GET /dashboard 200 in 28ms
+ ✓ Compiled in 1354ms (868 modules)
+ GET /dashboard 200 in 19ms
+ ✓ Compiled in 422ms (868 modules)
+ GET /dashboard 200 in 23ms
+ ✓ Compiled in 383ms (868 modules)
+ GET /dashboard 200 in 73ms
+ ✓ Compiled in 169ms (868 modules)
+ GET /dashboard 200 in 21ms
+ ✓ Compiled in 1348ms (868 modules)
+ GET /dashboard 200 in 61ms
+ ✓ Compiled in 349ms (868 modules)
+ GET /dashboard 200 in 27ms
+ ✓ Compiled in 172ms (868 modules)
+ GET /dashboard 200 in 18ms
+ ✓ Compiled in 338ms (868 modules)
+ GET /dashboard 200 in 28ms
+ ✓ Compiled in 202ms (868 modules)
+ GET /dashboard 200 in 24ms
+ ✓ Compiled in 184ms (868 modules)
+ GET /dashboard 200 in 27ms
+ ✓ Compiled in 958ms (868 modules)
+ GET /dashboard 200 in 21ms
+ ✓ Compiled in 677ms (868 modules)
+ GET /dashboard 200 in 20ms
+ ✓ Compiled in 1081ms (1611 modules)
+ GET /dashboard 200 in 961ms
+ GET /dashboard 200 in 54ms
+ ✓ Compiled in 1250ms (1625 modules)
+ GET /dashboard 200 in 85ms
+ ✓ Compiled in 1014ms (868 modules)
+ GET /dashboard 200 in 21ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 933ms (994 modules)
+ GET /api/auth/session 200 in 1051ms
+ GET /api/auth/session 200 in 12ms
+ GET /api/auth/csrf 200 in 15ms
+ POST /api/auth/signout 200 in 12ms
+ GET /dashboard 200 in 139ms
+ GET /api/auth/session 200 in 6ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 634ms (1004 modules)
+ GET /login 200 in 701ms
+ GET /login 200 in 40ms
+ GET /api/auth/providers 200 in 72ms
+ GET /api/auth/csrf 200 in 5ms
+ POST /api/auth/callback/credentials 200 in 7ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 4ms
+ GET /dashboard 200 in 10ms
+ ○ Compiling /dashboard/concert-reviews ...
+ ✓ Compiled /dashboard/concert-reviews in 1132ms (1865 modules)
+ GET /dashboard/concert-reviews 200 in 1294ms
+ GET /api/auth/session 200 in 27ms
+ GET /dashboard 200 in 28ms
+ GET /dashboard 200 in 115ms
+ ○ Compiling /artists ...
+ ✓ Compiled /artists in 1075ms (746 modules)
+ GET /artists 200 in 1216ms
+ ✓ Compiled in 1220ms (1610 modules)
+ GET /artists 200 in 89ms
+ ✓ Compiled in 299ms (1610 modules)
+ GET /artists 200 in 38ms
+ ✓ Compiled in 251ms (1610 modules)
+ GET /artists 200 in 36ms
+ ⨯ ./src/data/realTestData.ts
+Module parse failed: Identifier 'testConcerts' has already been declared (1107:13)
+| ];
+| // Test Concerts
+> export const testConcerts = [
+|     {
+|         id: 'concert1',
+
+Import trace for requested module:
+./src/data/realTestData.ts
+./src/app/dashboard/page.tsx
+ ⨯ ./src/data/realTestData.ts
+Module parse failed: Identifier 'testConcerts' has already been declared (1107:13)
+| ];
+| // Test Concerts
+> export const testConcerts = [
+|     {
+|         id: 'concert1',
+
+Import trace for requested module:
+./src/data/realTestData.ts
+./src/app/dashboard/page.tsx
+ ○ Compiling /api/auth/[...nextauth] ...
+ ⨯ ./src/data/realTestData.ts
+Module parse failed: Identifier 'testConcerts' has already been declared (1107:13)
+| ];
+| // Test Concerts
+> export const testConcerts = [
+|     {
+|         id: 'concert1',
+
+Import trace for requested module:
+./src/data/realTestData.ts
+./src/app/dashboard/page.tsx
+ ⨯ ./src/data/realTestData.ts
+Module parse failed: Identifier 'testConcerts' has already been declared (1107:13)
+| ];
+| // Test Concerts
+> export const testConcerts = [
+|     {
+|         id: 'concert1',
+
+Import trace for requested module:
+./src/data/realTestData.ts
+./src/app/dashboard/page.tsx
+ GET /api/auth/session 500 in 1269ms
+ POST /api/auth/_log 500 in 9ms
+ ✓ Compiled /_not-found in 356ms (1851 modules)
+ GET /artists 200 in 134ms
+ ✓ Compiled in 316ms (1851 modules)
+ GET /artists 200 in 51ms
+ GET /login 200 in 35ms
+ GET /api/auth/providers 200 in 108ms
+ GET /api/auth/csrf 200 in 6ms
+ POST /api/auth/callback/credentials 200 in 15ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 12ms
+ GET /dashboard 200 in 27ms
+ GET /artists 200 in 22ms
+ GET /dashboard 200 in 234ms
+ GET /api/auth/session 200 in 12ms
+ GET /artists 200 in 39ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 1882ms (1610 modules)
+ GET /artists 200 in 660ms
+ ✓ Compiled /api/auth/[...nextauth] in 104ms (972 modules)
+ GET /api/auth/session 200 in 201ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 275ms (1847 modules)
+ GET /artists 200 in 295ms
+ GET /api/auth/session 200 in 31ms
+ GET /artists 200 in 94ms
+ GET /api/auth/session 200 in 14ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 974ms (1847 modules)
+ GET /artists 200 in 861ms
+ GET /api/auth/session 200 in 61ms
+ ✓ Compiled in 456ms (1847 modules)
+ GET /artists 200 in 50ms
+ GET /dashboard 200 in 37ms
+ ○ Compiling /calendar ...
+ ✓ Compiled /calendar in 1331ms (981 modules)
+ GET /calendar 200 in 1387ms
+ GET /calendar 200 in 23ms
+ GET /dashboard 200 in 135ms
+ GET /api/auth/session 200 in 24ms
+ GET /artists 200 in 36ms
+ GET /api/auth/session 200 in 44ms
+ ✓ Compiled in 1558ms (1610 modules)
+ GET /artists 200 in 147ms
+ ✓ Compiled in 284ms (1610 modules)
+ GET /artists 200 in 51ms
+ ✓ Compiled in 298ms (1610 modules)
+ GET /artists 200 in 39ms
+ ✓ Compiled in 325ms (1610 modules)
+ GET /artists 200 in 38ms
+ ✓ Compiled in 1513ms (1610 modules)
+ GET /artists 200 in 41ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 693ms (972 modules)
+ GET /api/auth/csrf 200 in 805ms
+ POST /api/auth/signout 200 in 8ms
+ GET /artists 200 in 103ms
+ GET /api/auth/session 200 in 6ms
+ GET /login 200 in 28ms
+ GET /api/auth/providers 200 in 11ms
+ GET /api/auth/csrf 200 in 9ms
+ POST /api/auth/callback/credentials 200 in 17ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 6ms
+ GET /dashboard 200 in 21ms
+ ○ Compiling /bookings/[id] ...
+ ✓ Compiled /bookings/[id] in 1007ms (981 modules)
+ GET /bookings/1 200 in 1170ms
+ ✓ Compiled in 1190ms (1795 modules)
+ GET /bookings/1 200 in 98ms
+ ✓ Compiled in 1001ms (875 modules)
+ GET /bookings/1 200 in 20ms
+ ✓ Compiled in 252ms (875 modules)
+ GET /bookings/1 200 in 23ms
+ GET /dashboard 200 in 48ms
+ GET /bookings/1 200 in 28ms
+ GET /dashboard 200 in 19ms
+ ○ Compiling /dashboard/lodging/setup ...
+ ✓ Compiled /dashboard/lodging/setup in 1536ms (1562 modules)
+ GET /dashboard/lodging/setup 200 in 1672ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 834ms (933 modules)
+ GET /api/auth/session 200 in 1144ms
+ GET /api/auth/session 200 in 37ms
+ GET /api/auth/session 200 in 54ms
+ GET /dashboard 200 in 120ms
+ GET /bookings/1 200 in 63ms
+ GET /dashboard 200 in 37ms
+ GET /bookings/1 200 in 50ms
+ GET /dashboard 200 in 48ms
+ GET /api/auth/session 200 in 40ms
+ GET /bookings/1 200 in 49ms
+ GET /dashboard 200 in 42ms
+ GET /api/auth/session 200 in 51ms

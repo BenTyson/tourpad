@@ -749,7 +749,7 @@ export const testFans: Fan[] = [
     subscriptionExpiry: '2025-12-15',
     attendanceHistory: [
       {
-        concertId: 'concert1',
+        concertId: '1',
         artistName: 'Sarah & The Wanderers',
         venueName: 'The Garden House',
         date: '2024-11-15',
@@ -757,15 +757,15 @@ export const testFans: Fan[] = [
         review: 'Absolutely magical evening! Sarah\'s voice filled the room beautifully.'
       },
       {
-        concertId: 'concert2',
-        artistName: 'Marcus Rivers',
+        concertId: '2',
+        artistName: 'Sarah & The Wanderers',
         venueName: 'Riverside Barn',
         date: '2024-10-22',
         rating: 4,
         review: 'Great energy and the barn setting was perfect for his folk style.'
       }
     ],
-    upcomingReservations: ['concert3', 'concert4'],
+    upcomingReservations: ['3', '4'],
     favoriteArtists: ['1', '3'], // Sarah & The Wanderers, Marcus Rivers
     favoriteVenues: ['1', '2'], // The Garden House, Riverside Barn
     communicationPreferences: {
@@ -947,6 +947,209 @@ export const testBookings: Booking[] = [
   }
 ];
 
+// Concert data for fan discovery
+export interface Concert {
+  id: string;
+  title: string;
+  artistId: string;
+  artistName: string;
+  hostId: string;
+  hostName: string;
+  venueName: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  genre: string[];
+  description: string;
+  capacity: number;
+  currentReservations: number;
+  ticketPrice: number;
+  status: 'upcoming' | 'past' | 'cancelled';
+  attendees: string[]; // fan IDs
+  location: {
+    city: string;
+    state: string;
+    address: string;
+  };
+  requirements: string[];
+  accessibility: boolean;
+  ageRestriction: string;
+  venueType: string;
+  imageUrl?: string;
+}
+
+export const testConcerts: Concert[] = [
+  {
+    id: 'concert1',
+    title: 'An Evening with Sarah & The Wanderers',
+    artistId: 'artist1',
+    artistName: 'Sarah & The Wanderers',
+    hostId: 'host1',
+    hostName: 'The Garden House',
+    venueName: 'The Garden House',
+    date: '2025-08-15',
+    startTime: '19:00',
+    endTime: '21:00',
+    genre: ['Folk', 'Indie', 'Acoustic'],
+    description: 'Intimate acoustic evening with harmonious vocals and storytelling',
+    capacity: 30,
+    currentReservations: 25,
+    ticketPrice: 15,
+    status: 'upcoming',
+    attendees: ['fan1'],
+    location: {
+      city: 'Austin',
+      state: 'TX',
+      address: '123 Garden St'
+    },
+    requirements: ['No recording devices', 'Arrive 15 minutes early'],
+    accessibility: true,
+    ageRestriction: 'All ages welcome',
+    venueType: 'Home/Living Room',
+    imageUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800'
+  },
+  {
+    id: 'concert2',
+    title: 'Tommy Blue: Blues & Country Night',
+    artistId: 'artist2',
+    artistName: 'Tommy Blue',
+    hostId: 'host1',
+    hostName: 'The Garden House',
+    venueName: 'The Garden House',
+    date: '2025-08-22',
+    startTime: '20:00',
+    endTime: '22:00',
+    genre: ['Blues', 'Country', 'Rock'],
+    description: 'Powerful blues and country with masterful guitar work',
+    capacity: 30,
+    currentReservations: 18,
+    ticketPrice: 20,
+    status: 'upcoming',
+    attendees: [],
+    location: {
+      city: 'Austin',
+      state: 'TX',
+      address: '123 Garden St'
+    },
+    requirements: ['21+ only', 'Cash bar available'],
+    accessibility: true,
+    ageRestriction: '21+',
+    venueType: 'Home/Living Room'
+  },
+  {
+    id: 'concert3',
+    title: 'Echo & Iris: Experimental Folk',
+    artistId: 'artist3',
+    artistName: 'Echo & Iris',
+    hostId: 'host2',
+    hostName: 'Riverside Barn',
+    venueName: 'Riverside Barn',
+    date: '2025-09-05',
+    startTime: '19:30',
+    endTime: '21:30',
+    genre: ['Experimental', 'Electronic', 'Folk'],
+    description: 'Genre-bending music combining traditional instruments with electronic elements',
+    capacity: 60,
+    currentReservations: 35,
+    ticketPrice: 25,
+    status: 'upcoming',
+    attendees: ['fan1'],
+    location: {
+      city: 'Nashville',
+      state: 'TN',
+      address: '456 River Road'
+    },
+    requirements: ['Bring cushions for floor seating'],
+    accessibility: false,
+    ageRestriction: 'All ages welcome',
+    venueType: 'Barn'
+  },
+  {
+    id: 'concert4',
+    title: 'Past Concert: Sarah & The Wanderers',
+    artistId: 'artist1',
+    artistName: 'Sarah & The Wanderers',
+    hostId: 'host1',
+    hostName: 'The Garden House',
+    venueName: 'The Garden House',
+    date: '2025-01-15',
+    startTime: '19:00',
+    endTime: '21:00',
+    genre: ['Folk', 'Indie', 'Acoustic'],
+    description: 'Past concert for review testing',
+    capacity: 30,
+    currentReservations: 25,
+    ticketPrice: 15,
+    status: 'past',
+    attendees: ['fan1'],
+    location: {
+      city: 'Austin',
+      state: 'TX',
+      address: '123 Garden St'
+    },
+    requirements: [],
+    accessibility: true,
+    ageRestriction: 'All ages welcome',
+    venueType: 'Home/Living Room'
+  },
+  {
+    id: 'concert5',
+    title: 'Past Concert: Tommy Blue Blues Night',
+    artistId: 'artist2',
+    artistName: 'Tommy Blue',
+    hostId: 'host2',
+    hostName: 'Riverside Barn',
+    venueName: 'Riverside Barn',
+    date: '2025-01-10',
+    startTime: '20:00',
+    endTime: '22:00',
+    genre: ['Blues', 'Country'],
+    description: 'Past concert for review testing',
+    capacity: 60,
+    currentReservations: 45,
+    ticketPrice: 20,
+    status: 'past',
+    attendees: ['fan1'],
+    location: {
+      city: 'Nashville',
+      state: 'TN',
+      address: '456 River Road'
+    },
+    requirements: [],
+    accessibility: true,
+    ageRestriction: '21+',
+    venueType: 'Barn'
+  },
+  {
+    id: 'concert6',
+    title: 'Past Concert: Echo & Iris Experimental',
+    artistId: 'artist3',
+    artistName: 'Echo & Iris',
+    hostId: 'host3',
+    hostName: 'Urban Loft Sessions',
+    venueName: 'Urban Loft Sessions',
+    date: '2025-01-05',
+    startTime: '19:30',
+    endTime: '21:30',
+    genre: ['Experimental', 'Folk'],
+    description: 'Past concert for review testing',
+    capacity: 20,
+    currentReservations: 15,
+    ticketPrice: 12,
+    status: 'past',
+    attendees: ['fan1'],
+    location: {
+      city: 'Portland',
+      state: 'OR',
+      address: '789 Loft Ave'
+    },
+    requirements: [],
+    accessibility: true,
+    ageRestriction: 'All ages welcome',
+    venueType: 'Loft/Warehouse'
+  }
+];
+
 // Sample Applications
 export const testApplications: Application[] = [
   {
@@ -965,49 +1168,6 @@ export const testApplications: Application[] = [
   }
 ];
 
-// Test Concerts
-export const testConcerts: Concert[] = [
-  {
-    id: 'concert1',
-    artistId: '1',
-    hostId: '1',
-    artist: testArtists[0],
-    host: testHosts[0],
-    title: 'An Evening with Sarah & The Wanderers',
-    description: 'Intimate acoustic performance featuring songs from their latest album plus fan favorites.',
-    date: '2025-02-15',
-    startTime: '19:30',
-    duration: 90,
-    genres: ['Folk', 'Indie', 'Acoustic'],
-    capacity: 25,
-    ticketPrice: 15,
-    status: 'upcoming',
-    attendees: ['fan1'],
-    waitlist: [],
-    createdAt: '2025-01-10',
-    updatedAt: '2025-01-12'
-  },
-  {
-    id: 'concert2',
-    artistId: '3',
-    hostId: '2',
-    artist: testArtists[2],
-    host: testHosts[1],
-    title: 'Marcus Rivers: Stories & Songs',
-    description: 'Join Marcus for an evening of storytelling through song in the beautiful riverside barn setting.',
-    date: '2025-02-22',
-    startTime: '20:00',
-    duration: 120,
-    genres: ['Folk', 'Americana', 'Singer-Songwriter'],
-    capacity: 45,
-    ticketPrice: 20,
-    status: 'upcoming',
-    attendees: ['fan1', 'fan2'],
-    waitlist: [],
-    createdAt: '2025-01-08',
-    updatedAt: '2025-01-10'
-  }
-];
 
 // Helper functions for real-time data
 export function getCurrentUser(email: string) {

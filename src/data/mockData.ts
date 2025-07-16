@@ -553,6 +553,98 @@ export const mockBookings = [
       city: 'Portland',
       state: 'OR'
     }
+  },
+  // Additional concerts for fan discovery
+  {
+    id: '5',
+    artistId: 'artist2',
+    hostId: 'host1',
+    eventDate: new Date('2025-08-22T20:00:00'),
+    status: 'approved' as const,
+    guestCount: 30,
+    createdAt: new Date('2025-07-10'),
+    artist: {
+      name: 'Tommy Blue',
+      members: 1
+    },
+    host: {
+      name: 'The Garden House',
+      city: 'Austin',
+      state: 'TX'
+    }
+  },
+  {
+    id: '6',
+    artistId: 'artist3',
+    hostId: 'host2',
+    eventDate: new Date('2025-09-05T19:30:00'),
+    status: 'approved' as const,
+    guestCount: 50,
+    createdAt: new Date('2025-07-08'),
+    artist: {
+      name: 'Echo & Iris',
+      members: 2
+    },
+    host: {
+      name: 'Riverside Barn',
+      city: 'Nashville',
+      state: 'TN'
+    }
+  },
+  {
+    id: '7',
+    artistId: 'artist1',
+    hostId: 'host2',
+    eventDate: new Date('2025-07-30T19:00:00'),
+    status: 'approved' as const,
+    guestCount: 45,
+    createdAt: new Date('2025-07-12'),
+    artist: {
+      name: 'Sarah & The Wanderers',
+      members: 3
+    },
+    host: {
+      name: 'Riverside Barn',
+      city: 'Nashville',
+      state: 'TN'
+    }
+  },
+  // Past concerts for fan review testing
+  {
+    id: '8',
+    artistId: 'artist2',
+    hostId: 'host2',
+    eventDate: new Date('2025-01-10T20:00:00'),
+    status: 'approved' as const,
+    guestCount: 55,
+    createdAt: new Date('2024-12-15'),
+    artist: {
+      name: 'Tommy Blue',
+      members: 1
+    },
+    host: {
+      name: 'Riverside Barn',
+      city: 'Nashville',
+      state: 'TN'
+    }
+  },
+  {
+    id: '9',
+    artistId: 'artist3',
+    hostId: 'host3',
+    eventDate: new Date('2025-01-05T19:30:00'),
+    status: 'approved' as const,
+    guestCount: 15,
+    createdAt: new Date('2024-12-20'),
+    artist: {
+      name: 'Echo & Iris',
+      members: 2
+    },
+    host: {
+      name: 'Urban Loft Sessions',
+      city: 'Portland',
+      state: 'OR'
+    }
   }
 ];
 
@@ -616,5 +708,91 @@ export const mockNotifications = [
     message: 'Tommy Blue wants to book Jan 25th',
     timestamp: new Date('2025-01-08T11:20:00'),
     read: true
+  }
+];
+
+// Fan RSVPs
+export const mockRSVPs = [
+  {
+    id: 'rsvp-1',
+    concertId: 'concert1',
+    fanId: 'fan1',
+    fanName: 'Jessica Chen',
+    guestCount: 2,
+    submittedAt: '2025-07-14T10:30:00Z',
+    status: 'confirmed' as const
+  },
+  {
+    id: 'rsvp-2',
+    concertId: 'concert2',
+    fanId: 'fan2',
+    fanName: 'David Rodriguez',
+    guestCount: 1,
+    submittedAt: '2025-07-13T14:20:00Z',
+    status: 'confirmed' as const
+  },
+  {
+    id: 'rsvp-3',
+    concertId: 'concert1',
+    fanId: 'fan3',
+    fanName: 'Emma Thompson',
+    guestCount: 3,
+    submittedAt: '2025-07-12T09:15:00Z',
+    status: 'confirmed' as const
+  }
+];
+
+// Fan Concert Reviews
+export const mockFanConcertReviews = [
+  {
+    id: 'review-1',
+    concertId: '1',
+    fanId: 'fan1',
+    artistId: 'artist1',
+    hostId: 'host1',
+    artistRating: 5,
+    hostRating: 4,
+    overallRating: 5,
+    artistFeedback: 'Sarah & The Wanderers delivered an absolutely magical performance! Their harmonies were perfect and the acoustic arrangements were beautiful. The setlist was well-curated and Sarah\'s storytelling between songs really connected with the audience.',
+    hostFeedback: 'The Garden House was the perfect venue for this intimate show. The living room setting made it feel like a private concert with friends. The hosts were incredibly welcoming and the atmosphere was cozy and warm.',
+    overallFeedback: 'This was one of the best concert experiences I\'ve had. The combination of incredible music in such an intimate setting created something truly special. You could feel the connection between the artists and the audience throughout the entire show. I left feeling inspired and grateful for discovering this amazing community.',
+    isPublic: true,
+    attendedDate: '2025-01-15T19:00:00',
+    wouldRecommend: true,
+    createdAt: '2025-01-16T10:30:00'
+  },
+  {
+    id: 'review-2',
+    concertId: '2',
+    fanId: 'fan1',
+    artistId: 'artist2',
+    hostId: 'host2',
+    artistRating: 4,
+    hostRating: 5,
+    overallRating: 4,
+    artistFeedback: 'Tommy Blue brought such great energy to the barn! His folk-rock sound was perfect for the space and the crowd was really into it. A few technical hiccups with the sound system but overall a solid performance.',
+    hostFeedback: 'Jake\'s barn is an incredible venue for live music. The acoustics are fantastic and the rustic atmosphere adds so much to the experience. The host was super friendly and made sure everyone felt welcome.',
+    overallFeedback: 'Had a wonderful time at this show. The barn setting was unique and the music was great. There\'s something special about hearing live music in these intimate spaces that you just can\'t get at bigger venues. Will definitely be back for more shows here.',
+    isPublic: true,
+    attendedDate: '2025-01-10T20:00:00',
+    wouldRecommend: true,
+    createdAt: '2025-01-11T09:15:00'
+  },
+  {
+    id: 'review-3',
+    concertId: '3',
+    fanId: 'fan1',
+    artistId: 'artist3',
+    hostId: 'host3',
+    artistRating: 3,
+    hostRating: 4,
+    overallRating: 3,
+    artistFeedback: 'The performance was decent but felt a bit rushed. The artist seemed nervous and didn\'t interact much with the audience. The music itself was good though.',
+    hostFeedback: '',
+    overallFeedback: 'It was okay. Not the best show I\'ve been to but still glad I went. The venue was nice and the other attendees were friendly. Sometimes these intimate shows are hit or miss.',
+    isPublic: false,
+    attendedDate: '2025-01-05T19:30:00',
+    wouldRecommend: false,
+    createdAt: '2025-01-06T14:20:00'
   }
 ];
