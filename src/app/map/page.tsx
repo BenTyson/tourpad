@@ -60,7 +60,7 @@ export default function MapPage() {
   const userRole = session.user.type as 'host' | 'artist' | 'admin' | 'fan';
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
       {/* Header */}
       <div className="bg-white border-b border-neutral-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
@@ -121,8 +121,8 @@ export default function MapPage() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
-        <div className="grid lg:grid-cols-4 gap-6 h-full">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+        <div className="grid lg:grid-cols-4 gap-6 h-[600px]">
           {/* Filters Sidebar */}
           {showFilters && (
             <div className="lg:col-span-1">

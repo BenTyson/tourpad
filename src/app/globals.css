@@ -124,3 +124,45 @@ a:focus {
 html {
   scroll-behavior: smooth;
 }
+
+/* TourPad Map Styling */
+.tourpad-map .leaflet-control-zoom a {
+  background-color: var(--color-neutral-50) !important;
+  border: 1px solid var(--color-neutral-200) !important;
+  color: var(--color-evergreen) !important;
+  border-radius: 8px !important;
+}
+
+.tourpad-map .leaflet-control-zoom a:hover {
+  background-color: var(--color-french-blue) !important;
+  color: white !important;
+  transform: scale(1.05);
+  transition: all 0.2s ease;
+}
+
+.tourpad-map .leaflet-control-attribution {
+  background-color: rgba(248, 249, 249, 0.95) !important;
+  border: 1px solid var(--color-neutral-200) !important;
+  border-radius: 8px !important;
+  color: var(--color-neutral-700) !important;
+  backdrop-filter: blur(8px);
+}
+
+.tourpad-map .leaflet-control-attribution a {
+  color: var(--color-primary-600) !important;
+}
+
+.tourpad-map .leaflet-control-attribution a:hover {
+  color: var(--color-primary-700) !important;
+}
+
+/* Custom map tile styling with TourPad colors */
+.tourpad-map .leaflet-tile-pane {
+  /* filter: sepia(0.08) saturate(0.85) hue-rotate(150deg) brightness(1.08) contrast(0.96); */
+}
+
+/* Map container border with coastal theme */
+.tourpad-map {
+  border: 2px solid var(--color-mist) !important;
+  box-shadow: 0 8px 32px rgba(52, 76, 61, 0.12) !important;
+}

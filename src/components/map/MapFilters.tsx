@@ -120,7 +120,7 @@ export default function MapFilters({ onFiltersChange, className = '' }: MapFilte
     filters.amenities.length;
 
   return (
-    <div className={`bg-white rounded-xl shadow-sm border border-neutral-200 p-6 h-full ${className}`}>
+    <div className={`bg-white rounded-xl shadow-sm border border-neutral-200 p-6 h-full max-h-[600px] overflow-y-auto ${className}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-neutral-900">Filters</h2>

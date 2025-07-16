@@ -19,12 +19,13 @@ const createCustomIcon = (venueType: string, rating: number) => {
   const size = rating >= 4.5 ? 32 : rating >= 4.0 ? 28 : 24;
   const color = getMarkerColor(venueType);
 
-  // Create SVG marker with TourPad styling
+  // Create SVG marker with TourPad styling and french blue accent
   const svgIcon = `
     <svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="12" cy="12" r="10" fill="${color}" stroke="white" stroke-width="2"/>
-      <circle cx="12" cy="12" r="6" fill="white" opacity="0.9"/>
-      <path d="M12 6l-3 6h2v4h2v-4h2z" fill="${color}"/>
+      <circle cx="12" cy="12" r="10" fill="${color}" stroke="#8ea58c" stroke-width="2"/>
+      <circle cx="12" cy="12" r="6" fill="white" opacity="0.95"/>
+      <circle cx="12" cy="12" r="3" fill="${color}" opacity="0.8"/>
+      <circle cx="12" cy="12" r="1.5" fill="#8ea58c"/>
     </svg>
   `;
 

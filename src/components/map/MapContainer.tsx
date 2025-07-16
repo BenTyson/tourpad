@@ -46,18 +46,19 @@ export default function TourPadMapContainer({
   }
 
   return (
-    <div className={`relative w-full h-full ${className}`}>
+    <div className={`relative w-full h-full ${className}`} style={{ minHeight: '400px' }}>
       <MapContainer
         center={initialCenter}
         zoom={initialZoom}
-        className="w-full h-full rounded-xl"
+        className="w-full h-full rounded-xl tourpad-map"
         zoomControl={true}
         scrollWheelZoom={true}
-        style={{ height: '100%', width: '100%' }}
+        style={{ height: '100%', width: '100%', minHeight: '400px' }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          className="custom-map-tiles"
         />
         
         {hostsWithLocation.map((host) => (
@@ -68,8 +69,9 @@ export default function TourPadMapContainer({
       </MapContainer>
       
       {/* Map overlay with venue count */}
-      <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg">
-        <p className="text-sm font-medium text-neutral-700">
+      <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm rounded-xl px-4 py-2 shadow-lg border border-neutral-200">
+        <p className="text-sm font-medium text-evergreen flex items-center">
+          <span className="w-2 h-2 bg-french-blue rounded-full mr-2 animate-pulse"></span>
           {hostsWithLocation.length} venues
         </p>
       </div>
