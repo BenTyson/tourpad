@@ -299,6 +299,16 @@ TourPad is a Next.js-based platform connecting touring musicians with hosts for 
   - [x] Create compelling value propositions and CTAs
   - [x] Implement gateway pages for /artists and /hosts routes (protected content access)
 
+- [ ] **🗺️ Interactive Map Component** 🔥 **NEW HIGH PRIORITY**
+  - [ ] Install and configure Leaflet mapping library (free, lightweight alternative to Mapbox)
+  - [ ] Create core MapContainer component with privacy-focused host discovery
+  - [ ] Build HostMarker and HostPopup components for venue discovery
+  - [ ] Implement MapFilters sidebar for venue type, capacity, and genre filtering
+  - [ ] Create /map page with mobile-first responsive design
+  - [ ] Add tour planning mode for multi-city route optimization
+  - [ ] Integrate with existing booking system and host profiles
+  - [ ] Add map navigation to main site header/dashboard
+
 - [ ] **Enhanced Search & Filtering (Airbnb-style)** ⚠️ *REVERTED DUE TO SERVER ISSUES*
   - [ ] Build advanced search interface with location radius
   - [ ] Add filters: capacity, venue type, equipment, lodging, genres
@@ -309,7 +319,6 @@ TourPad is a Next.js-based platform connecting touring musicians with hosts for 
   - [ ] Create reusable search components (AdvancedSearchFilter, SearchResults)
   - [x] Update mock data with additional fields for enhanced filtering (preserved in stash)
   - [ ] Implement enhanced search pages at /artists/enhanced and /hosts/enhanced
-  - [ ] Implement map integration with address privacy (Mapbox recommended)
 
 - [x] **Design System Overhaul**
   - [x] Update color palette from blue/purple to warm earth tones

@@ -13,6 +13,14 @@ export const mockHosts = [
     state: 'TX',
     zip: '78701',
     venueType: 'Home/Living Room',
+    mapLocation: {
+      displayLat: 30.2711286,  // Offset from real location for privacy
+      displayLng: -97.7436995,
+      city: 'Austin',
+      state: 'TX',
+      priceRange: '$10-20',
+      searchKeywords: ['austin', 'texas', 'living room', 'acoustic', 'intimate']
+    },
     showSpecs: {
       avgAttendance: 25,
       avgDoorFee: 15,
@@ -91,6 +99,14 @@ export const mockHosts = [
     state: 'TN',
     zip: '37201',
     venueType: 'Other',
+    mapLocation: {
+      displayLat: 36.1622767,  // Offset from real location for privacy
+      displayLng: -86.7743531,
+      city: 'Nashville',
+      state: 'TN',
+      priceRange: '$15-25',
+      searchKeywords: ['nashville', 'tennessee', 'barn', 'concert', 'sound system', 'country']
+    },
     showSpecs: {
       avgAttendance: 45,
       avgDoorFee: 20,
@@ -176,6 +192,14 @@ export const mockHosts = [
     state: 'OR',
     zip: '97201',
     venueType: 'Loft/Warehouse',
+    mapLocation: {
+      displayLat: 45.5122308,  // Offset from real location for privacy
+      displayLng: -122.6587185,
+      city: 'Portland',
+      state: 'OR',
+      priceRange: '$8-15',
+      searchKeywords: ['portland', 'oregon', 'loft', 'indie', 'experimental', 'listening room']
+    },
     showSpecs: {
       avgAttendance: 18,
       avgDoorFee: 12,
