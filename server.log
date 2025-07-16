@@ -2444,3 +2444,45 @@ Import trace for requested module:
  ✓ Compiled /favicon.ico in 2.5s (1000 modules)
  GET /favicon.ico 200 in 2695ms
  GET /api/auth/session 200 in 1561ms
+ GET /api/auth/session 200 in 70ms
+ GET /api/auth/session 200 in 90ms
+ GET /api/auth/session 200 in 22ms
+ ⨯ ./src/components/map/HostPopup.tsx
+Error:   [31mx[0m Unexpected token `Popup`. Expected jsx identifier
+    ,-[[36;1;4m/Users/bentyson/pad/src/components/map/HostPopup.tsx[0m:57:1]
+ [2m54[0m |   const hasLodging = host.hostingCapabilities?.lodgingHosting?.enabled || false;
+ [2m55[0m | 
+ [2m56[0m |   return (
+ [2m57[0m |     <Popup className="tourpad-popup" minWidth={280} maxWidth={320}>
+    : [35;1m     ^^^^^[0m
+ [2m58[0m |       <div className="overflow-hidden">
+ [2m59[0m |         {/* Photo Carousel - stretches to edge */}
+ [2m60[0m |         {allPhotos.length > 0 && (
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/map/HostPopup.tsx
+./src/components/map/MapContainer.tsx
+./src/app/map/page.tsx
+ ✓ Compiled in 2.8s (1904 modules)
+ GET /map 200 in 106ms
+ GET /api/auth/session 200 in 121ms
+ GET /map 200 in 169ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 1306ms (1000 modules)
+ GET /favicon.ico 200 in 1490ms
+ GET /api/auth/session 200 in 1511ms
+ GET /api/auth/session 200 in 12ms
+ ✓ Compiled in 3.6s (1903 modules)
+ GET /map 200 in 127ms
+ ✓ Compiled in 372ms (1903 modules)
+ GET /map 200 in 56ms
+ GET /api/auth/session 200 in 90ms
+ GET /map 200 in 231ms
+ ✓ Compiled /favicon.ico in 166ms (999 modules)
+ GET /favicon.ico 200 in 411ms
+ GET /api/auth/session 200 in 494ms
+ GET /api/auth/session 200 in 32ms

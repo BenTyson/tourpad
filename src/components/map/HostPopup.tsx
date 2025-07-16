@@ -55,10 +55,10 @@ export default function HostPopup({ host, onViewProfile, onBookNow }: HostPopupP
 
   return (
     <Popup className="tourpad-popup" minWidth={280} maxWidth={320}>
-      <div className="p-1">
-        {/* Photo Carousel */}
+      <div className="overflow-hidden">
+        {/* Photo Carousel - stretches to edge */}
         {allPhotos.length > 0 && (
-          <div className="relative mb-3 rounded-lg overflow-hidden bg-neutral-100">
+          <div className="relative bg-neutral-100 -m-1 mb-3">
             <div className="aspect-video relative">
               <img
                 src={allPhotos[currentPhotoIndex]?.url}
@@ -94,73 +94,35 @@ export default function HostPopup({ host, onViewProfile, onBookNow }: HostPopupP
           </div>
         )}
 
-        {/* Header */}
-        <div className="mb-3">
-          <div className="flex items-start justify-between mb-2">
-            <h3 className="font-bold text-neutral-900 text-lg leading-tight">
-              {host.name}
-            </h3>
-            <div className="flex items-center space-x-1 ml-2">
-              <Badge 
-                className={`${getVenueTypeColor(host.venueType)} border-0 text-xs px-2 py-1`}
-              >
-                {host.venueType}
-              </Badge>
+        {/* Content with padding */}
+        <div className="px-3 pb-3">
+          {/* Header */}
+          <div className="mb-3">
+            <div className="flex items-start justify-between mb-2">
+              <h3 className="font-bold text-neutral-900 text-lg leading-tight">
+                {host.name}
+              </h3>
               {hasLodging && (
-                <Badge className="bg-primary-100 text-primary-800 border-0 text-xs px-2 py-1">
+                <Badge className="bg-primary-100 text-primary-800 border-0 text-xs px-2 py-1 ml-2">
                   <Bed className="w-3 h-3 mr-1" />
                   Lodging
                 </Badge>
               )}
             </div>
-          </div>
-          
-          {/* Rating & Location */}
-          <div className="flex items-center space-x-4 text-sm text-neutral-600">
-            <div className="flex items-center">
-              <Star className="w-4 h-4 text-yellow-500 fill-current mr-1" />
-              <span className="font-medium">{host.rating.toFixed(1)}</span>
-              <span className="ml-1">({host.reviewCount} reviews)</span>
+            
+            {/* Rating & Location */}
+            <div className="flex items-center space-x-4 text-sm text-neutral-600">
+              <div className="flex items-center">
+                <Star className="w-4 h-4 text-yellow-500 fill-current mr-1" />
+                <span className="font-medium">{host.rating.toFixed(1)}</span>
+                <span className="ml-1">({host.reviewCount} reviews)</span>
+              </div>
+              <div className="flex items-center">
+                <MapPin className="w-4 h-4 mr-1" />
+                <span>{host.city}, {host.state}</span>
+              </div>
             </div>
-            <div className="flex items-center">
-              <MapPin className="w-4 h-4 mr-1" />
-              <span>{host.city}, {host.state}</span>
-            </div>
           </div>
-        </div>
-
-        {/* Key Details */}
-        <div className="space-y-2 mb-4">
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center text-neutral-600">
-              <Users className="w-4 h-4 mr-2" />
-              <span>Capacity</span>
-            </div>
-            <span className="font-medium text-neutral-900">
-              Up to {host.showSpecs.indoorAttendanceMax} people
-            </span>
-          </div>
-          
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center text-neutral-600">
-              <DollarSign className="w-4 h-4 mr-2" />
-              <span>Avg Door Fee</span>
-            </div>
-            <span className="font-medium text-neutral-900">
-              {host.mapLocation?.priceRange || '$15-25'}
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center text-neutral-600">
-              <Calendar className="w-4 h-4 mr-2" />
-              <span>Available</span>
-            </div>
-            <span className="font-medium text-neutral-900">
-              {host.showSpecs.daysAvailable.join(', ')}
-            </span>
-          </div>
-        </div>
 
         {/* Description */}
         <div className="mb-4">
@@ -169,23 +131,16 @@ export default function HostPopup({ host, onViewProfile, onBookNow }: HostPopupP
           </p>
         </div>
 
-        {/* Action Buttons */}
-        <div className="space-y-2">
-          <Button
-            onClick={handleViewProfile}
-            className="w-full bg-primary-600 hover:bg-primary-700 text-white text-sm py-2"
-          >
-            <span>View Full Profile</span>
-            <ArrowRight className="w-4 h-4 ml-2" />
-          </Button>
-          
-          <Button
-            onClick={handleBookNow}
-            variant="outline"
-            className="w-full border-[#738a6e] text-[#738a6e] hover:bg-[#738a6e] hover:text-white text-sm py-2"
-          >
-            Request Booking
-          </Button>
+          {/* Action Button */}
+          <div>
+            <Button
+              onClick={handleViewProfile}
+              className="w-full bg-primary-600 hover:bg-primary-700 text-white text-sm py-2"
+            >
+              <span>View Full Profile</span>
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </div>
         </div>
       </div>
     </Popup>
