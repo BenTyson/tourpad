@@ -287,22 +287,19 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 </div>
-                <div className="p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="p-4">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                     {/* Primary Action */}
                     <Link href={userRole === 'fan' ? '/artists' : userRole === 'host' ? '/artists' : '/hosts'}>
-                      <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 p-6 text-white transition-all duration-300 hover:from-primary-600 hover:to-primary-700 hover:shadow-lg">
+                      <div className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-primary-500 to-primary-600 p-4 text-white transition-all duration-300 hover:from-primary-600 hover:to-primary-700 hover:shadow-lg">
                         <div className="flex items-center">
                           <div className="flex-shrink-0">
-                            <Plus className="w-8 h-8" />
+                            <Plus className="w-5 h-5" />
                           </div>
-                          <div className="ml-4">
-                            <h3 className="text-lg font-semibold">
+                          <div className="ml-3">
+                            <h3 className="text-sm font-semibold">
                               {userRole === 'fan' ? 'Browse Concerts' : userRole === 'host' ? 'Find Artists' : 'Find Venues'}
                             </h3>
-                            <p className="text-sm text-primary-100">
-                              {userRole === 'fan' ? 'Discover upcoming shows' : userRole === 'host' ? 'Book touring musicians' : 'Book your next show'}
-                            </p>
                           </div>
                         </div>
                       </div>
@@ -310,67 +307,59 @@ export default function DashboardPage() {
 
                     {/* Secondary Actions */}
                     <Link href={userRole === 'fan' ? '/dashboard/profile' : `/${userRole}s/${profileId}`}>
-                      <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                      <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
                         <div className="flex items-center">
                           <div className="flex-shrink-0">
-                            <Eye className="w-6 h-6 text-neutral-600 group-hover:text-primary-600" />
+                            <Eye className="w-5 h-5 text-neutral-600 group-hover:text-primary-600" />
                           </div>
-                          <div className="ml-4">
-                            <h3 className="text-base font-semibold text-neutral-900">View Profile</h3>
-                            <p className="text-sm text-neutral-600">See how others see you</p>
+                          <div className="ml-3">
+                            <h3 className="text-sm font-semibold text-neutral-900">View Profile</h3>
                           </div>
                         </div>
                       </div>
                     </Link>
 
                     <Link href="/messages">
-                      <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                      <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
                         <div className="flex items-center">
                           <div className="flex-shrink-0">
                             <div className="relative">
-                              <Mail className="w-6 h-6 text-neutral-600 group-hover:text-primary-600" />
+                              <Mail className="w-5 h-5 text-neutral-600 group-hover:text-primary-600" />
                               {unreadMessages.length > 0 && (
-                                <div className="absolute -top-2 -right-2 w-5 h-5 bg-primary-500 rounded-full flex items-center justify-center">
+                                <div className="absolute -top-2 -right-2 w-4 h-4 bg-primary-500 rounded-full flex items-center justify-center">
                                   <span className="text-xs font-medium text-white">{unreadMessages.length}</span>
                                 </div>
                               )}
                             </div>
                           </div>
-                          <div className="ml-4">
-                            <h3 className="text-base font-semibold text-neutral-900">Messages</h3>
-                            <p className="text-sm text-neutral-600">
-                              {unreadMessages.length > 0 ? `${unreadMessages.length} unread` : 'No new messages'}
-                            </p>
+                          <div className="ml-3">
+                            <h3 className="text-sm font-semibold text-neutral-900">Messages</h3>
                           </div>
                         </div>
                       </div>
                     </Link>
 
                     <Link href="/calendar">
-                      <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                      <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
                         <div className="flex items-center">
                           <div className="flex-shrink-0">
-                            <Calendar className="w-6 h-6 text-neutral-600 group-hover:text-primary-600" />
+                            <Calendar className="w-5 h-5 text-neutral-600 group-hover:text-primary-600" />
                           </div>
-                          <div className="ml-4">
-                            <h3 className="text-base font-semibold text-neutral-900">Calendar</h3>
-                            <p className="text-sm text-neutral-600">
-                              {userRole === 'fan' ? 'Concert schedule' : 'Show schedule'}
-                            </p>
+                          <div className="ml-3">
+                            <h3 className="text-sm font-semibold text-neutral-900">Calendar</h3>
                           </div>
                         </div>
                       </div>
                     </Link>
 
                     <Link href="/dashboard/profile">
-                      <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                      <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
                         <div className="flex items-center">
                           <div className="flex-shrink-0">
-                            <Edit className="w-6 h-6 text-neutral-600 group-hover:text-primary-600" />
+                            <Edit className="w-5 h-5 text-neutral-600 group-hover:text-primary-600" />
                           </div>
-                          <div className="ml-4">
-                            <h3 className="text-base font-semibold text-neutral-900">Edit Profile</h3>
-                            <p className="text-sm text-neutral-600">Update info & media</p>
+                          <div className="ml-3">
+                            <h3 className="text-sm font-semibold text-neutral-900">Edit Profile</h3>
                           </div>
                         </div>
                       </div>
@@ -380,28 +369,26 @@ export default function DashboardPage() {
                     {userRole === 'host' && (
                       <>
                         <Link href="/dashboard/sound-system">
-                          <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                          <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
                             <div className="flex items-center">
                               <div className="flex-shrink-0">
-                                <Volume2 className="w-6 h-6 text-neutral-600 group-hover:text-primary-600" />
+                                <Volume2 className="w-5 h-5 text-neutral-600 group-hover:text-primary-600" />
                               </div>
-                              <div className="ml-4">
-                                <h3 className="text-base font-semibold text-neutral-900">Sound System</h3>
-                                <p className="text-sm text-neutral-600">Setup audio equipment</p>
+                              <div className="ml-3">
+                                <h3 className="text-sm font-semibold text-neutral-900">Sound System</h3>
                               </div>
                             </div>
                           </div>
                         </Link>
                         
                         <Link href="/dashboard/lodging/setup">
-                          <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                          <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
                             <div className="flex items-center">
                               <div className="flex-shrink-0">
-                                <Home className="w-6 h-6 text-neutral-600 group-hover:text-primary-600" />
+                                <Home className="w-5 h-5 text-neutral-600 group-hover:text-primary-600" />
                               </div>
-                              <div className="ml-4">
-                                <h3 className="text-base font-semibold text-neutral-900">Lodging Setup</h3>
-                                <p className="text-sm text-neutral-600">Configure guest accommodations</p>
+                              <div className="ml-3">
+                                <h3 className="text-sm font-semibold text-neutral-900">Lodging Setup</h3>
                               </div>
                             </div>
                           </div>
@@ -413,28 +400,26 @@ export default function DashboardPage() {
                     {userRole === 'fan' && (
                       <>
                         <Link href="/hosts">
-                          <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                          <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
                             <div className="flex items-center">
                               <div className="flex-shrink-0">
-                                <Home className="w-6 h-6 text-neutral-600 group-hover:text-primary-600" />
+                                <Home className="w-5 h-5 text-neutral-600 group-hover:text-primary-600" />
                               </div>
-                              <div className="ml-4">
-                                <h3 className="text-base font-semibold text-neutral-900">Browse Venues</h3>
-                                <p className="text-sm text-neutral-600">Discover amazing concert venues</p>
+                              <div className="ml-3">
+                                <h3 className="text-sm font-semibold text-neutral-900">Browse Venues</h3>
                               </div>
                             </div>
                           </div>
                         </Link>
                         
                         <Link href="/payment/fan">
-                          <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                          <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
                             <div className="flex items-center">
                               <div className="flex-shrink-0">
-                                <Star className="w-6 h-6 text-neutral-600 group-hover:text-primary-600" />
+                                <Star className="w-5 h-5 text-neutral-600 group-hover:text-primary-600" />
                               </div>
-                              <div className="ml-4">
-                                <h3 className="text-base font-semibold text-neutral-900">Manage Membership</h3>
-                                <p className="text-sm text-neutral-600">View billing and subscription</p>
+                              <div className="ml-3">
+                                <h3 className="text-sm font-semibold text-neutral-900">Manage Membership</h3>
                               </div>
                             </div>
                           </div>
@@ -446,28 +431,26 @@ export default function DashboardPage() {
                     {userRole === 'admin' && (
                       <>
                         <Link href="/admin/applications">
-                          <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                          <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
                             <div className="flex items-center">
                               <div className="flex-shrink-0">
-                                <UserCheck className="w-6 h-6 text-neutral-600 group-hover:text-primary-600" />
+                                <UserCheck className="w-5 h-5 text-neutral-600 group-hover:text-primary-600" />
                               </div>
-                              <div className="ml-4">
-                                <h3 className="text-base font-semibold text-neutral-900">Review Applications</h3>
-                                <p className="text-sm text-neutral-600">Approve artists and hosts</p>
+                              <div className="ml-3">
+                                <h3 className="text-sm font-semibold text-neutral-900">Review Applications</h3>
                               </div>
                             </div>
                           </div>
                         </Link>
                         
                         <Link href="/admin/platform">
-                          <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                          <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
                             <div className="flex items-center">
                               <div className="flex-shrink-0">
-                                <Shield className="w-6 h-6 text-neutral-600 group-hover:text-primary-600" />
+                                <Shield className="w-5 h-5 text-neutral-600 group-hover:text-primary-600" />
                               </div>
-                              <div className="ml-4">
-                                <h3 className="text-base font-semibold text-neutral-900">Platform Management</h3>
-                                <p className="text-sm text-neutral-600">System settings and monitoring</p>
+                              <div className="ml-3">
+                                <h3 className="text-sm font-semibold text-neutral-900">Platform Management</h3>
                               </div>
                             </div>
                           </div>
