@@ -1203,3 +1203,54 @@ Import trace for requested module:
  ○ Compiling /map ...
  ✓ Compiled /map in 1201ms (1636 modules)
  GET /map 200 in 1284ms
+ ✓ Compiled in 308ms (863 modules)
+ GET /map 200 in 48ms
+ ✓ Compiled in 197ms (863 modules)
+ GET /map 200 in 21ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ✓ Compiled in 339ms (1604 modules)
+ GET /map 200 in 392ms
+ GET /map 200 in 590ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 558ms (978 modules)
+ GET /api/auth/session 200 in 652ms
+ ✓ Compiled in 218ms (1841 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /map 200 in 111ms
+ GET /api/auth/session 200 in 41ms
+ ✓ Compiled in 821ms (1848 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /map 200 in 187ms
+ GET /api/auth/session 200 in 27ms
+ ✓ Compiled in 230ms (866 modules)
+ GET /map 200 in 20ms
+ ✓ Compiled in 267ms (1848 modules)
+ GET /map 200 in 35ms
+ ✓ Compiled in 242ms (1848 modules)
+ GET /map 200 in 83ms
+ GET /api/auth/session 200 in 25ms
+ ✓ Compiled in 1254ms (1852 modules)
+ GET /map 200 in 41ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 425ms (1852 modules)
+ GET /api/auth/session 200 in 604ms
+ GET /map 200 in 611ms
+ POST /api/auth/_log 200 in 5ms
+ GET /api/auth/session 200 in 5ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 248ms (1852 modules)
+ GET /map 200 in 129ms
+ GET /api/auth/session 200 in 19ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 261ms (1852 modules)
+ GET /map 200 in 238ms
+ GET /api/auth/session 200 in 23ms
+ ✓ Compiled in 920ms (1852 modules)
+ GET /api/auth/session 200 in 375ms
+ GET /map 200 in 106ms
+ ✓ Compiled in 166ms (868 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /map 200 in 63ms
+ GET /api/auth/session 200 in 8ms
+ GET /map 200 in 80ms
+ GET /api/auth/session 200 in 14ms

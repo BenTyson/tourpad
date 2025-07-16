@@ -1,33 +1,30 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { Icon, LatLngTuple } from 'leaflet';
+import { MapContainer, TileLayer } from 'react-leaflet';
+import { LatLngTuple } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { mockHosts } from '@/data/mockData';
+import HostMarker from './HostMarker';
+import HostPopup from './HostPopup';
 
-// Fix for default markers in React Leaflet
-delete (Icon.Default.prototype as any)._getIconUrl;
-Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
+// Custom marker styles will be handled by HostMarker component
 
 interface MapContainerProps {
   className?: string;
   initialCenter?: LatLngTuple;
   initialZoom?: number;
   showFilters?: boolean;
+  hosts?: typeof mockHosts;
 }
 
 export default function TourPadMapContainer({ 
   className = '',
   initialCenter = [39.8283, -98.5795], // Center of USA
   initialZoom = 5,
-  showFilters = true 
+  showFilters = true,
+  hosts = mockHosts
 }: MapContainerProps) {
   const [isClient, setIsClient] = useState(false);
-  const [filteredHosts, setFilteredHosts] = useState(mockHosts);
 
   // Handle client-side rendering for Leaflet
   useEffect(() => {
@@ -35,7 +32,7 @@ export default function TourPadMapContainer({
   }, []);
 
   // Filter hosts that have map location data
-  const hostsWithLocation = filteredHosts.filter(host => host.mapLocation);
+  const hostsWithLocation = hosts.filter(host => host.mapLocation);
 
   if (!isClient) {
     return (
@@ -62,38 +59,11 @@ export default function TourPadMapContainer({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         
-        {hostsWithLocation.map((host) => {
-          if (!host.mapLocation) return null;
-          
-          const position: LatLngTuple = [
-            host.mapLocation.displayLat,
-            host.mapLocation.displayLng
-          ];
-
-          return (
-            <Marker key={host.id} position={position}>
-              <Popup>
-                <div className="p-2 min-w-[200px]">
-                  <h3 className="font-semibold text-neutral-900 mb-2">{host.name}</h3>
-                  <div className="space-y-1 text-sm text-neutral-600">
-                    <p><strong>Type:</strong> {host.venueType}</p>
-                    <p><strong>Capacity:</strong> Up to {host.showSpecs.indoorAttendanceMax} people</p>
-                    <p><strong>Location:</strong> {host.city}, {host.state}</p>
-                    <p><strong>Price Range:</strong> {host.mapLocation.priceRange}</p>
-                  </div>
-                  <div className="mt-3 pt-2 border-t border-neutral-200">
-                    <button 
-                      onClick={() => window.open(`/hosts/${host.id}`, '_blank')}
-                      className="w-full bg-primary-600 hover:bg-primary-700 text-white text-sm px-3 py-2 rounded-lg transition-colors"
-                    >
-                      View Profile
-                    </button>
-                  </div>
-                </div>
-              </Popup>
-            </Marker>
-          );
-        })}
+        {hostsWithLocation.map((host) => (
+          <HostMarker key={host.id} host={host}>
+            <HostPopup host={host} />
+          </HostMarker>
+        ))}
       </MapContainer>
       
       {/* Map overlay with venue count */}
