@@ -164,44 +164,15 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-        {/* Modern Header with Welcome Message */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-neutral-900 mb-2">
-                Welcome back, {session?.user?.name || 'Artist'}
-              </h1>
-              <p className="text-neutral-600 text-lg">
-                {userRole === 'admin' ? 'Platform overview and management' :
-                 userRole === 'host' 
-                  ? 'Manage your venue and upcoming shows' 
-                  : userRole === 'artist'
-                  ? 'Track your tour and upcoming performances'
-                  : 'Discover and attend exclusive house concerts'
-                }
-              </p>
-            </div>
-            <div className="text-right">
-              <div className="text-sm text-neutral-500">
-                {new Date().toLocaleDateString('en-US', { 
-                  weekday: 'long', 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Status-based restrictions */}
         {!hasFullAccess && (
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 mb-6">
+          <div className="bg-secondary-50 border border-secondary-200 rounded-lg p-6 mb-6">
             <div className="flex items-start">
-              <AlertTriangle className="w-6 h-6 text-amber-600 mr-3 flex-shrink-0 mt-0.5" />
+              <AlertTriangle className="w-6 h-6 text-secondary-600 mr-3 flex-shrink-0 mt-0.5" />
               <div className="flex-1">
-                <h3 className="font-medium text-amber-900 mb-2">Limited Dashboard Access</h3>
-                <p className="text-amber-800 mb-4">
+                <h3 className="font-medium text-secondary-900 mb-2">Limited Dashboard Access</h3>
+                <p className="text-secondary-800 mb-4">
                   {userRole === 'fan' && session.user.paymentStatus !== 'active' && 'Your membership has expired. Renew to continue accessing exclusive house concerts.'}
                   {userRole !== 'fan' && userStatus === 'pending' && 'Your application is under review. Full dashboard functionality will be available once approved.'}
                   {userRole !== 'fan' && userStatus === 'rejected' && 'Your application was not approved. Please review your application status for next steps.'}
@@ -211,14 +182,14 @@ export default function DashboardPage() {
                   {userRole === 'fan' && session.user.paymentStatus !== 'active' ? (
                     <Link
                       href="/payment/fan"
-                      className="bg-amber-100 text-amber-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-200 transition-colors"
+                      className="bg-secondary-100 text-secondary-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-secondary-200 transition-colors"
                     >
                       Renew Membership
                     </Link>
                   ) : (
                     <Link
                       href="/account/status"
-                      className="bg-amber-100 text-amber-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-200 transition-colors"
+                      className="bg-secondary-100 text-secondary-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-secondary-200 transition-colors"
                     >
                       Check Status
                     </Link>
@@ -226,7 +197,7 @@ export default function DashboardPage() {
                   {userRole !== 'fan' && userStatus === 'rejected' && (
                     <Link
                       href="/register"
-                      className="bg-white text-amber-800 px-4 py-2 rounded-lg text-sm font-medium border border-amber-300 hover:bg-amber-50 transition-colors"
+                      className="bg-white text-secondary-800 px-4 py-2 rounded-lg text-sm font-medium border border-secondary-300 hover:bg-secondary-50 transition-colors"
                     >
                       Reapply
                     </Link>
@@ -259,12 +230,12 @@ export default function DashboardPage() {
 
         {/* Alert Bar - Action Items */}
         {hasFullAccess && (pendingActions.length > 0 || unreadMessages.length > 0) && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <div className="bg-primary-50 border border-primary-200 rounded-lg p-4 mb-6">
             <div className="flex items-center">
-              <AlertTriangle className="w-5 h-5 text-blue-600 mr-3" />
+              <AlertTriangle className="w-5 h-5 text-primary-600 mr-3" />
               <div className="flex-1">
-                <h3 className="font-medium text-blue-900">You have items that need attention</h3>
-                <div className="text-sm text-blue-800 mt-1">
+                <h3 className="font-medium text-primary-900">You have items that need attention</h3>
+                <div className="text-sm text-primary-800 mt-1">
                   {pendingActions.length > 0 && (
                     <span className="mr-4">
                       {pendingActions.length} booking {pendingActions.length === 1 ? 'request' : 'requests'} pending
@@ -290,9 +261,31 @@ export default function DashboardPage() {
             {/* Quick Actions - Prominent Section */}
             <div className="mb-8">
               <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
-                <div className="px-6 py-4 border-b border-neutral-200">
-                  <h2 className="text-lg font-semibold text-neutral-900">Quick Actions</h2>
-                  <p className="text-sm text-neutral-600 mt-1">Common tasks and navigation shortcuts</p>
+                <div className="px-6 py-4 border-b border-neutral-200 flex items-center justify-between">
+                  <div>
+                    <h2 className="text-xl font-bold text-neutral-900">
+                      Welcome back, {session?.user?.name || 'User'}
+                    </h2>
+                    <p className="text-sm text-neutral-600 mt-1">
+                      {userRole === 'admin' ? 'Platform overview and management' :
+                       userRole === 'host' 
+                        ? 'Manage your venue and upcoming shows' 
+                        : userRole === 'artist'
+                        ? 'Track your tour and upcoming performances'
+                        : 'Discover and attend exclusive house concerts'
+                      }
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm text-neutral-500">
+                      {new Date().toLocaleDateString('en-US', { 
+                        weekday: 'long', 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                      })}
+                    </div>
+                  </div>
                 </div>
                 <div className="p-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

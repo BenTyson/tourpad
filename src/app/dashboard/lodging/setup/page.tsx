@@ -81,52 +81,54 @@ export default function LodgingSetupPage() {
 
   if (!session?.user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
-          <p className="text-gray-600">Please sign in to access lodging setup.</p>
+      <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100 flex items-center justify-center">
+        <div className="text-center bg-white rounded-xl shadow-sm border border-neutral-200 p-8">
+          <h1 className="text-2xl font-bold text-neutral-900 mb-4">Access Denied</h1>
+          <p className="text-neutral-600">Please sign in to access lodging setup.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center mb-4">
+          <div className="flex items-center mb-6">
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={() => router.push('/dashboard')}
-              className="mr-4"
+              className="hover:bg-neutral-100 text-neutral-700"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Dashboard
             </Button>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Lodging Setup
-          </h1>
-          <p className="text-gray-600">
-            Configure your overnight accommodation options for touring artists
-          </p>
+          <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6">
+            <h1 className="text-2xl font-bold text-neutral-900 mb-2">
+              Lodging Setup
+            </h1>
+            <p className="text-neutral-600">
+              Configure your overnight accommodation options for touring artists
+            </p>
+          </div>
         </div>
 
         {/* Progress Bar */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-700">
+        <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6 mb-8">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm font-medium text-neutral-900">
               Step {currentStep} of 5
             </span>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-neutral-600">
               {Math.round((currentStep / 5) * 100)}% Complete
             </span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-neutral-200 rounded-full h-3">
             <div 
-              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+              className="bg-primary-600 h-3 rounded-full transition-all duration-300"
               style={{ width: `${(currentStep / 5) * 100}%` }}
             />
           </div>
@@ -134,73 +136,73 @@ export default function LodgingSetupPage() {
 
         {/* Step 1: Lodging Toggle */}
         {currentStep === 1 && (
-          <Card>
-            <CardHeader>
-              <h2 className="text-xl font-semibold flex items-center">
-                <Home className="w-5 h-5 mr-2" />
+          <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
+            <div className="px-6 py-4 border-b border-neutral-200">
+              <h2 className="text-xl font-semibold flex items-center text-neutral-900">
+                <Home className="w-5 h-5 mr-2 text-primary-600" />
                 Offer Overnight Accommodation
               </h2>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600 mb-6">
+            </div>
+            <div className="p-6">
+              <p className="text-neutral-600 mb-6">
                 Would you like to offer overnight accommodation to touring artists? This can help artists save money and creates deeper connections with the local music community.
               </p>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div 
-                  className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
-                    lodgingData.offerLodging ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
+                  className={`p-6 border-2 rounded-xl cursor-pointer transition-all ${
+                    lodgingData.offerLodging ? 'border-primary-500 bg-primary-50' : 'border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50'
                   }`}
                   onClick={() => handleToggleLodging(true)}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-semibold text-gray-900">Yes, I'll offer lodging</h3>
-                    {lodgingData.offerLodging && <Check className="w-5 h-5 text-blue-600" />}
+                    <h3 className="font-semibold text-neutral-900">Yes, I'll offer lodging</h3>
+                    {lodgingData.offerLodging && <Check className="w-5 h-5 text-primary-600" />}
                   </div>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-neutral-600">
                     Provide overnight accommodation for artists performing at your venue or nearby
                   </p>
                 </div>
                 
                 <div 
-                  className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
-                    !lodgingData.offerLodging ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
+                  className={`p-6 border-2 rounded-xl cursor-pointer transition-all ${
+                    !lodgingData.offerLodging ? 'border-primary-500 bg-primary-50' : 'border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50'
                   }`}
                   onClick={() => handleToggleLodging(false)}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-semibold text-gray-900">No lodging</h3>
-                    {!lodgingData.offerLodging && <Check className="w-5 h-5 text-blue-600" />}
+                    <h3 className="font-semibold text-neutral-900">No lodging</h3>
+                    {!lodgingData.offerLodging && <Check className="w-5 h-5 text-primary-600" />}
                   </div>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-neutral-600">
                     Focus on hosting shows only. Artists will find their own accommodation
                   </p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         )}
 
         {/* Step 2: Room Configuration */}
         {currentStep === 2 && lodgingData.offerLodging && (
-          <Card>
-            <CardHeader>
-              <h2 className="text-xl font-semibold flex items-center">
-                <Bed className="w-5 h-5 mr-2" />
+          <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
+            <div className="px-6 py-4 border-b border-neutral-200">
+              <h2 className="text-xl font-semibold flex items-center text-neutral-900">
+                <Bed className="w-5 h-5 mr-2 text-primary-600" />
                 Room Configuration
               </h2>
-            </CardHeader>
-            <CardContent>
+            </div>
+            <div className="p-6">
               <div className="space-y-6">
                 {/* Room Type */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
                     Room Type
                   </label>
                   <select
                     value={lodgingData.roomType}
                     onChange={(e) => setLodgingData(prev => ({ ...prev, roomType: e.target.value }))}
-                    className="w-full p-3 border border-gray-300 rounded-lg"
+                    className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   >
                     <option value="private_bedroom">Private Bedroom</option>
                     <option value="guest_room">Guest Room</option>
@@ -211,13 +213,13 @@ export default function LodgingSetupPage() {
 
                 {/* Bathroom Type */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
                     Bathroom Access
                   </label>
                   <select
                     value={lodgingData.bathroomType}
                     onChange={(e) => setLodgingData(prev => ({ ...prev, bathroomType: e.target.value }))}
-                    className="w-full p-3 border border-gray-300 rounded-lg"
+                    className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   >
                     <option value="private">Private Bathroom</option>
                     <option value="guest_bathroom">Guest Bathroom</option>
@@ -227,7 +229,7 @@ export default function LodgingSetupPage() {
 
                 {/* Bed Configuration */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
                     Bed Configuration
                   </label>
                   <div className="grid grid-cols-2 gap-4">
@@ -237,7 +239,7 @@ export default function LodgingSetupPage() {
                         ...prev,
                         beds: [{ ...prev.beds[0], type: e.target.value }]
                       }))}
-                      className="p-3 border border-gray-300 rounded-lg"
+                      className="p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     >
                       <option value="queen">Queen Bed</option>
                       <option value="king">King Bed</option>
@@ -255,7 +257,7 @@ export default function LodgingSetupPage() {
                         ...prev,
                         beds: [{ ...prev.beds[0], quantity: parseInt(e.target.value) }]
                       }))}
-                      className="p-3 border border-gray-300 rounded-lg"
+                      className="p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                       placeholder="Quantity"
                     />
                   </div>
@@ -263,7 +265,7 @@ export default function LodgingSetupPage() {
 
                 {/* Max Occupancy */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
                     Maximum Guests
                   </label>
                   <input
@@ -272,30 +274,30 @@ export default function LodgingSetupPage() {
                     max="20"
                     value={lodgingData.maxOccupancy}
                     onChange={(e) => setLodgingData(prev => ({ ...prev, maxOccupancy: parseInt(e.target.value) }))}
-                    className="w-full p-3 border border-gray-300 rounded-lg"
+                    className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         )}
 
         {/* Step 3: Amenities */}
         {currentStep === 3 && lodgingData.offerLodging && (
-          <Card>
-            <CardHeader>
-              <h2 className="text-xl font-semibold flex items-center">
-                <Coffee className="w-5 h-5 mr-2" />
+          <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
+            <div className="px-6 py-4 border-b border-neutral-200">
+              <h2 className="text-xl font-semibold flex items-center text-neutral-900">
+                <Coffee className="w-5 h-5 mr-2 text-primary-600" />
                 Amenities & Services
               </h2>
-            </CardHeader>
-            <CardContent>
+            </div>
+            <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Breakfast */}
-                <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                <div className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors">
                   <div className="flex items-center">
-                    <Coffee className="w-5 h-5 text-gray-500 mr-3" />
-                    <span className="font-medium">Breakfast</span>
+                    <Coffee className="w-5 h-5 text-primary-600 mr-3" />
+                    <span className="font-medium text-neutral-900">Breakfast</span>
                   </div>
                   <input
                     type="checkbox"
@@ -309,10 +311,10 @@ export default function LodgingSetupPage() {
                 </div>
 
                 {/* WiFi */}
-                <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                <div className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors">
                   <div className="flex items-center">
-                    <Wifi className="w-5 h-5 text-gray-500 mr-3" />
-                    <span className="font-medium">WiFi</span>
+                    <Wifi className="w-5 h-5 text-primary-600 mr-3" />
+                    <span className="font-medium text-neutral-900">WiFi</span>
                   </div>
                   <input
                     type="checkbox"
@@ -326,10 +328,10 @@ export default function LodgingSetupPage() {
                 </div>
 
                 {/* Parking */}
-                <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                <div className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors">
                   <div className="flex items-center">
-                    <Car className="w-5 h-5 text-gray-500 mr-3" />
-                    <span className="font-medium">Parking</span>
+                    <Car className="w-5 h-5 text-primary-600 mr-3" />
+                    <span className="font-medium text-neutral-900">Parking</span>
                   </div>
                   <input
                     type="checkbox"
@@ -343,10 +345,10 @@ export default function LodgingSetupPage() {
                 </div>
 
                 {/* Kitchen Access */}
-                <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                <div className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors">
                   <div className="flex items-center">
-                    <Utensils className="w-5 h-5 text-gray-500 mr-3" />
-                    <span className="font-medium">Kitchen Access</span>
+                    <Utensils className="w-5 h-5 text-primary-600 mr-3" />
+                    <span className="font-medium text-neutral-900">Kitchen Access</span>
                   </div>
                   <input
                     type="checkbox"
@@ -360,10 +362,10 @@ export default function LodgingSetupPage() {
                 </div>
 
                 {/* Workspace */}
-                <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                <div className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors">
                   <div className="flex items-center">
-                    <Briefcase className="w-5 h-5 text-gray-500 mr-3" />
-                    <span className="font-medium">Workspace</span>
+                    <Briefcase className="w-5 h-5 text-primary-600 mr-3" />
+                    <span className="font-medium text-neutral-900">Workspace</span>
                   </div>
                   <input
                     type="checkbox"
@@ -377,10 +379,10 @@ export default function LodgingSetupPage() {
                 </div>
 
                 {/* Laundry */}
-                <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                <div className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors">
                   <div className="flex items-center">
-                    <Users className="w-5 h-5 text-gray-500 mr-3" />
-                    <span className="font-medium">Laundry</span>
+                    <Users className="w-5 h-5 text-primary-600 mr-3" />
+                    <span className="font-medium text-neutral-900">Laundry</span>
                   </div>
                   <input
                     type="checkbox"
@@ -393,23 +395,23 @@ export default function LodgingSetupPage() {
                   />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         )}
 
         {/* Step 4: Pricing */}
         {currentStep === 4 && lodgingData.offerLodging && (
-          <Card>
-            <CardHeader>
-              <h2 className="text-xl font-semibold flex items-center">
-                <DollarSign className="w-5 h-5 mr-2" />
+          <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
+            <div className="px-6 py-4 border-b border-neutral-200">
+              <h2 className="text-xl font-semibold flex items-center text-neutral-900">
+                <DollarSign className="w-5 h-5 mr-2 text-primary-600" />
                 Pricing
               </h2>
-            </CardHeader>
-            <CardContent>
+            </div>
+            <div className="p-6">
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
                     Base Rate (per night)
                   </label>
                   <input
@@ -421,13 +423,13 @@ export default function LodgingSetupPage() {
                       ...prev,
                       pricing: { ...prev.pricing, baseRate: parseInt(e.target.value) }
                     }))}
-                    className="w-full p-3 border border-gray-300 rounded-lg"
+                    className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     placeholder="50"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
                     Additional Guest Fee (per person, per night)
                   </label>
                   <input
@@ -439,13 +441,13 @@ export default function LodgingSetupPage() {
                       ...prev,
                       pricing: { ...prev.pricing, additionalGuestFee: parseInt(e.target.value) }
                     }))}
-                    className="w-full p-3 border border-gray-300 rounded-lg"
+                    className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     placeholder="15"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
                     Cleaning Fee (one-time)
                   </label>
                   <input
@@ -457,28 +459,28 @@ export default function LodgingSetupPage() {
                       ...prev,
                       pricing: { ...prev.pricing, cleaningFee: parseInt(e.target.value) }
                     }))}
-                    className="w-full p-3 border border-gray-300 rounded-lg"
+                    className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     placeholder="20"
                   />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         )}
 
         {/* Step 5: Final Details */}
         {currentStep === 5 && lodgingData.offerLodging && (
-          <Card>
-            <CardHeader>
-              <h2 className="text-xl font-semibold flex items-center">
-                <Shield className="w-5 h-5 mr-2" />
+          <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
+            <div className="px-6 py-4 border-b border-neutral-200">
+              <h2 className="text-xl font-semibold flex items-center text-neutral-900">
+                <Shield className="w-5 h-5 mr-2 text-primary-600" />
                 Final Details
               </h2>
-            </CardHeader>
-            <CardContent>
+            </div>
+            <div className="p-6">
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
                     Special Considerations
                   </label>
                   <textarea
@@ -490,7 +492,7 @@ export default function LodgingSetupPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
                     Local Recommendations
                   </label>
                   <textarea
@@ -501,8 +503,8 @@ export default function LodgingSetupPage() {
                   />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         )}
 
         {/* Navigation */}

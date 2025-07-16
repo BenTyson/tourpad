@@ -1580,3 +1580,319 @@ Import trace for requested module:
  GET /bookings/1 200 in 49ms
  GET /dashboard 200 in 42ms
  GET /api/auth/session 200 in 51ms
+ GET /api/auth/session 200 in 109ms
+ ✓ Compiled in 2s (1791 modules)
+ GET /dashboard 200 in 57ms
+ ✓ Compiled in 396ms (1791 modules)
+ GET /dashboard 200 in 38ms
+ ✓ Compiled in 412ms (1554 modules)
+ GET /dashboard 200 in 104ms
+ ✓ Compiled in 1015ms (1554 modules)
+ GET /dashboard 200 in 94ms
+ ✓ Compiled in 360ms (1554 modules)
+ GET /dashboard 200 in 40ms
+ ✓ Compiled in 1186ms (1554 modules)
+ GET /dashboard 200 in 122ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 1174ms (911 modules)
+ GET /api/auth/csrf 200 in 1281ms
+ POST /api/auth/signout 200 in 5ms
+ GET /dashboard 200 in 117ms
+ GET /api/auth/session 200 in 12ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 1179ms (933 modules)
+ GET /login 200 in 1284ms
+ GET /api/auth/providers 200 in 84ms
+ GET /api/auth/csrf 200 in 13ms
+ POST /api/auth/callback/credentials 200 in 8ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 6ms
+ GET /dashboard 200 in 11ms
+ GET /api/auth/session 200 in 29ms
+ GET /api/auth/session 200 in 16ms
+ GET /api/auth/csrf 200 in 75ms
+ POST /api/auth/signout 200 in 11ms
+ GET /dashboard 200 in 133ms
+ GET /api/auth/session 200 in 8ms
+ GET /login 200 in 10ms
+ GET /api/auth/providers 200 in 7ms
+ GET /api/auth/csrf 200 in 11ms
+ POST /api/auth/callback/credentials 200 in 14ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/auth/session 200 in 5ms
+ GET /dashboard 200 in 11ms
+ GET /dashboard/lodging/setup 200 in 19ms
+ ✓ Compiled in 2.1s (1803 modules)
+ GET /dashboard/lodging/setup 200 in 124ms
+ ✓ Compiled in 332ms (1803 modules)
+ GET /dashboard/lodging/setup 200 in 37ms
+ ✓ Compiled in 355ms (1803 modules)
+ GET /dashboard/lodging/setup 200 in 40ms
+ ✓ Compiled in 314ms (1803 modules)
+ GET /dashboard/lodging/setup 200 in 38ms
+ ✓ Compiled in 256ms (1803 modules)
+ GET /dashboard/lodging/setup 200 in 35ms
+ ✓ Compiled in 282ms (1566 modules)
+ GET /dashboard/lodging/setup 200 in 90ms
+ ✓ Compiled in 957ms (1566 modules)
+ GET /dashboard/lodging/setup 200 in 71ms
+ ✓ Compiled in 269ms (1566 modules)
+ GET /dashboard/lodging/setup 200 in 44ms
+ ✓ Compiled in 257ms (1566 modules)
+ GET /dashboard/lodging/setup 200 in 36ms
+ ✓ Compiled in 246ms (1566 modules)
+ GET /dashboard/lodging/setup 200 in 35ms
+ ✓ Compiled in 237ms (1566 modules)
+ GET /dashboard/lodging/setup 200 in 34ms
+ ✓ Compiled in 252ms (1566 modules)
+ GET /dashboard/lodging/setup 200 in 36ms
+ ✓ Compiled in 281ms (1566 modules)
+ GET /dashboard/lodging/setup 200 in 45ms
+ ⨯ ./src/app/dashboard/lodging/setup/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/Users/bentyson/pad/src/app/dashboard/lodging/setup/page.tsx[0m:94:1]
+ [2m91[0m |   }
+ [2m92[0m | 
+ [2m93[0m |   return (
+ [2m94[0m |     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
+    : [35;1m     ^^^[0m
+ [2m95[0m |       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+ [2m96[0m |         {/* Header */}
+ [2m97[0m |         <div className="mb-8">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/dashboard/lodging/setup/page.tsx
+ GET /dashboard/lodging/setup 500 in 8ms
+ GET /dashboard/lodging/setup 500 in 7ms
+ ○ Compiling /_not-found ...
+ ⨯ ./src/app/dashboard/lodging/setup/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/Users/bentyson/pad/src/app/dashboard/lodging/setup/page.tsx[0m:94:1]
+ [2m91[0m |   }
+ [2m92[0m | 
+ [2m93[0m |   return (
+ [2m94[0m |     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
+    : [35;1m     ^^^[0m
+ [2m95[0m |       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+ [2m96[0m |         {/* Header */}
+ [2m97[0m |         <div className="mb-8">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/dashboard/lodging/setup/page.tsx
+ GET /_next/static/webpack/b233bf5622693d12.webpack.hot-update.json 500 in 928ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /dashboard/lodging/setup 500 in 28ms
+ GET /_next/static/webpack/b233bf5622693d12.webpack.hot-update.json 500 in 10ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⨯ ./src/app/dashboard/lodging/setup/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/Users/bentyson/pad/src/app/dashboard/lodging/setup/page.tsx[0m:94:1]
+ [2m91[0m |   }
+ [2m92[0m | 
+ [2m93[0m |   return (
+ [2m94[0m |     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
+    : [35;1m     ^^^[0m
+ [2m95[0m |       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+ [2m96[0m |         {/* Header */}
+ [2m97[0m |         <div className="mb-8">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/dashboard/lodging/setup/page.tsx
+ GET /dashboard/lodging/setup 500 in 310ms
+ GET /dashboard/lodging/setup 500 in 8ms
+ ⨯ ./src/app/dashboard/lodging/setup/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/Users/bentyson/pad/src/app/dashboard/lodging/setup/page.tsx[0m:94:1]
+ [2m91[0m |   }
+ [2m92[0m | 
+ [2m93[0m |   return (
+ [2m94[0m |     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
+    : [35;1m     ^^^[0m
+ [2m95[0m |       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+ [2m96[0m |         {/* Header */}
+ [2m97[0m |         <div className="mb-8">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/dashboard/lodging/setup/page.tsx
+ GET /_next/static/webpack/b233bf5622693d12.webpack.hot-update.json 500 in 269ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /dashboard/lodging/setup 500 in 10ms
+ GET /_next/static/webpack/b233bf5622693d12.webpack.hot-update.json 500 in 8ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⨯ ./src/app/dashboard/lodging/setup/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/Users/bentyson/pad/src/app/dashboard/lodging/setup/page.tsx[0m:94:1]
+ [2m91[0m |   }
+ [2m92[0m | 
+ [2m93[0m |   return (
+ [2m94[0m |     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
+    : [35;1m     ^^^[0m
+ [2m95[0m |       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+ [2m96[0m |         {/* Header */}
+ [2m97[0m |         <div className="mb-8">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/dashboard/lodging/setup/page.tsx
+ GET /dashboard/lodging/setup 500 in 266ms
+ GET /dashboard/lodging/setup 500 in 12ms
+ ⨯ ./src/app/dashboard/lodging/setup/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/Users/bentyson/pad/src/app/dashboard/lodging/setup/page.tsx[0m:94:1]
+ [2m91[0m |   }
+ [2m92[0m | 
+ [2m93[0m |   return (
+ [2m94[0m |     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
+    : [35;1m     ^^^[0m
+ [2m95[0m |       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+ [2m96[0m |         {/* Header */}
+ [2m97[0m |         <div className="mb-8">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/dashboard/lodging/setup/page.tsx
+ GET /_next/static/webpack/b233bf5622693d12.webpack.hot-update.json 500 in 364ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /dashboard/lodging/setup 200 in 3ms
+ GET /dashboard/lodging/setup 500 in 6ms
+ ⨯ ./src/app/dashboard/lodging/setup/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/Users/bentyson/pad/src/app/dashboard/lodging/setup/page.tsx[0m:94:1]
+ [2m91[0m |   }
+ [2m92[0m | 
+ [2m93[0m |   return (
+ [2m94[0m |     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
+    : [35;1m     ^^^[0m
+ [2m95[0m |       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+ [2m96[0m |         {/* Header */}
+ [2m97[0m |         <div className="mb-8">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/dashboard/lodging/setup/page.tsx
+ GET /_next/static/webpack/b233bf5622693d12.webpack.hot-update.json 500 in 285ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /dashboard/lodging/setup 500 in 11ms
+ GET /dashboard/lodging/setup 500 in 5ms
+ GET /_next/static/webpack/b233bf5622693d12.webpack.hot-update.json 500 in 8ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⨯ ./src/app/dashboard/lodging/setup/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/Users/bentyson/pad/src/app/dashboard/lodging/setup/page.tsx[0m:94:1]
+ [2m91[0m |   }
+ [2m92[0m | 
+ [2m93[0m |   return (
+ [2m94[0m |     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
+    : [35;1m     ^^^[0m
+ [2m95[0m |       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+ [2m96[0m |         {/* Header */}
+ [2m97[0m |         <div className="mb-8">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/dashboard/lodging/setup/page.tsx
+ GET /dashboard/lodging/setup 500 in 316ms
+ GET /dashboard/lodging/setup 500 in 6ms
+ GET /_next/static/webpack/b233bf5622693d12.webpack.hot-update.json 500 in 9ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⨯ ./src/app/dashboard/lodging/setup/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/Users/bentyson/pad/src/app/dashboard/lodging/setup/page.tsx[0m:94:1]
+ [2m91[0m |   }
+ [2m92[0m | 
+ [2m93[0m |   return (
+ [2m94[0m |     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
+    : [35;1m     ^^^[0m
+ [2m95[0m |       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+ [2m96[0m |         {/* Header */}
+ [2m97[0m |         <div className="mb-8">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/dashboard/lodging/setup/page.tsx
+ GET /dashboard/lodging/setup 500 in 335ms
+ GET /dashboard/lodging/setup 500 in 6ms
+ ⨯ ./src/app/dashboard/lodging/setup/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/Users/bentyson/pad/src/app/dashboard/lodging/setup/page.tsx[0m:94:1]
+ [2m91[0m |   }
+ [2m92[0m | 
+ [2m93[0m |   return (
+ [2m94[0m |     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
+    : [35;1m     ^^^[0m
+ [2m95[0m |       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+ [2m96[0m |         {/* Header */}
+ [2m97[0m |         <div className="mb-8">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/dashboard/lodging/setup/page.tsx
+ GET /_next/static/webpack/b233bf5622693d12.webpack.hot-update.json 500 in 304ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /dashboard/lodging/setup 500 in 6ms
+ GET /dashboard/lodging/setup 500 in 5ms
+ ⨯ ./src/app/dashboard/lodging/setup/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/Users/bentyson/pad/src/app/dashboard/lodging/setup/page.tsx[0m:94:1]
+ [2m91[0m |   }
+ [2m92[0m | 
+ [2m93[0m |   return (
+ [2m94[0m |     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
+    : [35;1m     ^^^[0m
+ [2m95[0m |       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+ [2m96[0m |         {/* Header */}
+ [2m97[0m |         <div className="mb-8">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/dashboard/lodging/setup/page.tsx
+ GET /_next/static/webpack/b233bf5622693d12.webpack.hot-update.json 500 in 312ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /dashboard/lodging/setup 500 in 9ms
+ GET /dashboard/lodging/setup 500 in 11ms
+ ✓ Compiled /_not-found in 1973ms (1570 modules)
+ ✓ Compiled (1556 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /dashboard/lodging/setup 200 in 334ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 655ms (924 modules)
+ GET /api/auth/session 200 in 761ms
+ ✓ Compiled in 327ms (1807 modules)
+ GET /dashboard/lodging/setup 200 in 54ms
