@@ -860,6 +860,266 @@ export const testFans: Fan[] = [
     },
     joinedDate: '2024-06-12',
     lastActive: '2025-01-02'
+  },
+  {
+    id: 'fan4',
+    name: 'Michael Harrison',
+    email: 'michael.harrison@email.com',
+    type: 'fan',
+    status: 'active',
+    bio: 'Retired music teacher who appreciates quality performances. I love supporting local artists and the house concert community.',
+    location: {
+      city: 'Denver',
+      state: 'CO',
+      coordinates: { lat: 39.7392, lng: -104.9903 }
+    },
+    musicPreferences: {
+      favoriteGenres: ['Classical', 'Jazz', 'Folk', 'World Music'],
+      concertFrequency: 'monthly',
+      preferredVenueSize: 'intimate',
+      willingToTravel: 30
+    },
+    paymentStatus: 'active',
+    subscriptionExpiry: '2026-01-10',
+    attendanceHistory: [
+      {
+        concertId: 'concert8',
+        artistName: 'Classical Crossroads',
+        venueName: 'Mountain View Lodge',
+        date: '2024-12-20',
+        rating: 5,
+        review: 'Beautiful classical performance in a stunning mountain setting.'
+      },
+      {
+        concertId: 'concert9',
+        artistName: 'Celtic Storm',
+        venueName: 'Mountain View Lodge',
+        date: '2024-11-25',
+        rating: 5,
+        review: 'The energy of Celtic music in an intimate setting was unforgettable!'
+      }
+    ],
+    upcomingReservations: ['concert10', 'concert11'],
+    favoriteArtists: ['artist8'],
+    favoriteVenues: ['host6'],
+    communicationPreferences: {
+      emailNotifications: true,
+      smsNotifications: false,
+      newConcertAlerts: true,
+      favoriteArtistAlerts: true
+    },
+    joinedDate: '2024-03-15',
+    lastActive: '2025-01-16'
+  },
+  {
+    id: 'fan5',
+    name: 'Sarah Martinez',
+    email: 'sarah.m.concerts@email.com',
+    type: 'fan',
+    status: 'active',
+    bio: 'Social media influencer and live music enthusiast. I love sharing my concert experiences and discovering hidden gems in the music scene.',
+    location: {
+      city: 'Los Angeles',
+      state: 'CA',
+      coordinates: { lat: 34.0522, lng: -118.2437 }
+    },
+    musicPreferences: {
+      favoriteGenres: ['Pop', 'R&B', 'Soul', 'Electronic'],
+      concertFrequency: 'weekly',
+      preferredVenueSize: 'any',
+      willingToTravel: 75
+    },
+    paymentStatus: 'active',
+    subscriptionExpiry: '2025-09-20',
+    attendanceHistory: [
+      {
+        concertId: 'concert12',
+        artistName: 'Mia & The Moonlight Jazz Quartet',
+        venueName: 'Sunset Terrace',
+        date: '2024-12-31',
+        rating: 5,
+        review: 'NYE jazz under the stars was absolutely perfect!'
+      }
+    ],
+    upcomingReservations: ['concert13', 'concert14', 'concert15'],
+    favoriteArtists: ['artist7', 'artist5'],
+    favoriteVenues: ['host4'],
+    communicationPreferences: {
+      emailNotifications: true,
+      smsNotifications: true,
+      newConcertAlerts: true,
+      favoriteArtistAlerts: true
+    },
+    joinedDate: '2024-07-01',
+    lastActive: '2025-01-16'
+  },
+  {
+    id: 'fan6',
+    name: 'Robert Kim',
+    email: 'robert.kim.music@email.com',
+    type: 'fan',
+    status: 'active',
+    bio: 'Tech entrepreneur and audiophile. I appreciate the sound quality and artist connection you get at house concerts.',
+    location: {
+      city: 'Seattle',
+      state: 'WA',
+      coordinates: { lat: 47.6062, lng: -122.3321 }
+    },
+    musicPreferences: {
+      favoriteGenres: ['Alternative', 'Indie Rock', 'Electronic', 'Experimental'],
+      concertFrequency: 'few-times-year',
+      preferredVenueSize: 'small',
+      willingToTravel: 40
+    },
+    paymentStatus: 'active',
+    subscriptionExpiry: '2025-11-05',
+    attendanceHistory: [
+      {
+        concertId: 'concert16',
+        artistName: 'The River Stones',
+        venueName: 'Seattle Sound House',
+        date: '2024-12-15',
+        rating: 4,
+        review: 'Great rock energy in a controlled setting. Loved it!'
+      }
+    ],
+    upcomingReservations: ['concert17'],
+    favoriteArtists: ['artist4', 'artist9'],
+    favoriteVenues: [],
+    communicationPreferences: {
+      emailNotifications: true,
+      smsNotifications: false,
+      newConcertAlerts: false,
+      favoriteArtistAlerts: true
+    },
+    joinedDate: '2024-09-10',
+    lastActive: '2025-01-15'
+  },
+  {
+    id: 'fan7',
+    name: 'Lisa Wong',
+    email: 'lisa.wong@email.com',
+    type: 'fan',
+    status: 'active',
+    bio: 'Yoga instructor and world music lover. House concerts provide the perfect setting for mindful music experiences.',
+    location: {
+      city: 'Santa Barbara',
+      state: 'CA',
+      coordinates: { lat: 34.4208, lng: -119.6982 }
+    },
+    musicPreferences: {
+      favoriteGenres: ['World Music', 'Folk', 'Acoustic', 'New Age'],
+      concertFrequency: 'monthly',
+      preferredVenueSize: 'intimate',
+      willingToTravel: 20
+    },
+    paymentStatus: 'active',
+    subscriptionExpiry: '2025-10-15',
+    attendanceHistory: [
+      {
+        concertId: 'concert18',
+        artistName: 'Desert Highway',
+        venueName: 'Coastal Sound House',
+        date: '2024-11-20',
+        rating: 5,
+        review: 'The ocean backdrop and americana music created pure magic.'
+      }
+    ],
+    upcomingReservations: ['concert19', 'concert20'],
+    favoriteArtists: ['artist6'],
+    favoriteVenues: ['host7'],
+    communicationPreferences: {
+      emailNotifications: true,
+      smsNotifications: false,
+      newConcertAlerts: true,
+      favoriteArtistAlerts: true
+    },
+    joinedDate: '2024-05-20',
+    lastActive: '2025-01-14'
+  },
+  {
+    id: 'fan8',
+    name: 'James Anderson',
+    email: 'james.anderson.concerts@email.com',
+    type: 'fan',
+    status: 'payment_expired',
+    bio: 'Music blogger and concert reviewer. I document the house concert scene and share stories about intimate musical experiences.',
+    location: {
+      city: 'Charleston',
+      state: 'SC',
+      coordinates: { lat: 32.7765, lng: -79.9311 }
+    },
+    musicPreferences: {
+      favoriteGenres: ['Singer-Songwriter', 'Folk', 'Blues', 'Country'],
+      concertFrequency: 'weekly',
+      preferredVenueSize: 'intimate',
+      willingToTravel: 100
+    },
+    paymentStatus: 'expired',
+    subscriptionExpiry: '2024-12-01',
+    attendanceHistory: [
+      {
+        concertId: 'concert21',
+        artistName: 'Tommy Blue',
+        venueName: 'The Historic Parlor',
+        date: '2024-10-15',
+        rating: 5,
+        review: 'Tommy\'s blues in this historic setting was absolutely transcendent.'
+      }
+    ],
+    upcomingReservations: [],
+    favoriteArtists: ['artist2'],
+    favoriteVenues: ['host8'],
+    communicationPreferences: {
+      emailNotifications: true,
+      smsNotifications: true,
+      newConcertAlerts: true,
+      favoriteArtistAlerts: true
+    },
+    joinedDate: '2024-02-01',
+    lastActive: '2024-12-15'
+  },
+  {
+    id: 'fan9',
+    name: 'Maria Gonzalez',
+    email: 'maria.g.music@email.com',
+    type: 'fan',
+    status: 'active',
+    bio: 'Arts patron and cultural advocate. I believe house concerts are essential for keeping live music culture alive and thriving.',
+    location: {
+      city: 'Sedona',
+      state: 'AZ',
+      coordinates: { lat: 34.8697, lng: -111.7610 }
+    },
+    musicPreferences: {
+      favoriteGenres: ['World Music', 'Jazz', 'Classical', 'Experimental'],
+      concertFrequency: 'monthly',
+      preferredVenueSize: 'any',
+      willingToTravel: 60
+    },
+    paymentStatus: 'active',
+    subscriptionExpiry: '2026-03-01',
+    attendanceHistory: [
+      {
+        concertId: 'concert22',
+        artistName: 'Luna Sonata',
+        venueName: 'Desert Oasis Venue',
+        date: '2024-12-10',
+        rating: 5,
+        review: 'Classical piano under the desert stars - absolutely breathtaking!'
+      }
+    ],
+    upcomingReservations: ['concert23', 'concert24', 'concert25'],
+    favoriteArtists: ['artist5', 'artist7'],
+    favoriteVenues: ['host9'],
+    communicationPreferences: {
+      emailNotifications: true,
+      smsNotifications: false,
+      newConcertAlerts: true,
+      favoriteArtistAlerts: true
+    },
+    joinedDate: '2024-04-10',
+    lastActive: '2025-01-16'
   }
 ];
 
@@ -1147,6 +1407,342 @@ export const testConcerts: Concert[] = [
     accessibility: true,
     ageRestriction: 'All ages welcome',
     venueType: 'Loft/Warehouse'
+  },
+  {
+    id: 'concert7',
+    title: 'The River Stones: Acoustic Rock Night',
+    artistId: 'artist4',
+    artistName: 'The River Stones',
+    hostId: 'host4',
+    hostName: 'Sunset Terrace',
+    venueName: 'Sunset Terrace',
+    date: '2025-08-28',
+    startTime: '20:00',
+    endTime: '22:30',
+    genre: ['Rock', 'Alternative', 'Indie Rock'],
+    description: 'High-energy rock performance in an intimate rooftop setting',
+    capacity: 40,
+    currentReservations: 32,
+    ticketPrice: 22,
+    status: 'upcoming',
+    attendees: ['fan5', 'fan6'],
+    location: {
+      city: 'Los Angeles',
+      state: 'CA',
+      address: '321 Sunset Blvd'
+    },
+    requirements: ['No flash photography', 'Dress code: smart casual'],
+    accessibility: true,
+    ageRestriction: '18+',
+    venueType: 'Rooftop Terrace'
+  },
+  {
+    id: 'concert8',
+    title: 'Luna Sonata: Classical Under the Stars',
+    artistId: 'artist5',
+    artistName: 'Luna Sonata',
+    hostId: 'host9',
+    hostName: 'Desert Oasis Venue',
+    venueName: 'Desert Oasis Venue',
+    date: '2025-09-12',
+    startTime: '19:30',
+    endTime: '21:00',
+    genre: ['Classical', 'Contemporary Classical', 'Crossover'],
+    description: 'Classical piano performance in a desert amphitheater under the stars',
+    capacity: 60,
+    currentReservations: 45,
+    ticketPrice: 35,
+    status: 'upcoming',
+    attendees: ['fan4', 'fan9'],
+    location: {
+      city: 'Sedona',
+      state: 'AZ',
+      address: '789 Red Rock Way'
+    },
+    requirements: ['Bring cushions or blankets', 'Weather dependent'],
+    accessibility: true,
+    ageRestriction: 'All ages welcome',
+    venueType: 'Outdoor Amphitheater'
+  },
+  {
+    id: 'concert9',
+    title: 'Desert Highway: Americana Journey',
+    artistId: 'artist6',
+    artistName: 'Desert Highway',
+    hostId: 'host7',
+    hostName: 'Coastal Sound House',
+    venueName: 'Coastal Sound House',
+    date: '2025-09-20',
+    startTime: '18:00',
+    endTime: '20:30',
+    genre: ['Americana', 'Country Rock', 'Folk Rock'],
+    description: 'Sunset concert with desert-inspired Americana music by the ocean',
+    capacity: 30,
+    currentReservations: 22,
+    ticketPrice: 18,
+    status: 'upcoming',
+    attendees: ['fan7'],
+    location: {
+      city: 'Santa Barbara',
+      state: 'CA',
+      address: '456 Ocean View Dr'
+    },
+    requirements: ['Beach parking available', 'Bring layers for evening'],
+    accessibility: false,
+    ageRestriction: 'All ages welcome',
+    venueType: 'Beachfront House'
+  },
+  {
+    id: 'concert10',
+    title: 'Mia & The Moonlight Jazz Quartet',
+    artistId: 'artist7',
+    artistName: 'Mia & The Moonlight Jazz Quartet',
+    hostId: 'host5',
+    hostName: 'The Workshop Space',
+    venueName: 'The Workshop Space',
+    date: '2025-10-03',
+    startTime: '20:30',
+    endTime: '23:00',
+    genre: ['Jazz', 'Soul', 'R&B'],
+    description: 'Sultry jazz night in Brooklyn industrial loft',
+    capacity: 40,
+    currentReservations: 35,
+    ticketPrice: 28,
+    status: 'upcoming',
+    attendees: ['fan2', 'fan5'],
+    location: {
+      city: 'Brooklyn',
+      state: 'NY',
+      address: '123 Industrial Way'
+    },
+    requirements: ['21+ only', 'Cocktail bar available'],
+    accessibility: true,
+    ageRestriction: '21+',
+    venueType: 'Loft/Warehouse'
+  },
+  {
+    id: 'concert11',
+    title: 'Celtic Storm: Traditional Meets Modern',
+    artistId: 'artist8',
+    artistName: 'Celtic Storm',
+    hostId: 'host6',
+    hostName: 'Mountain View Lodge',
+    venueName: 'Mountain View Lodge',
+    date: '2025-10-15',
+    startTime: '19:00',
+    endTime: '21:30',
+    genre: ['Celtic', 'Folk', 'World Music'],
+    description: 'High-energy Celtic music in a cozy mountain cabin setting',
+    capacity: 25,
+    currentReservations: 20,
+    ticketPrice: 20,
+    status: 'upcoming',
+    attendees: ['fan4'],
+    location: {
+      city: 'Boulder',
+      state: 'CO',
+      address: '789 Mountain Rd'
+    },
+    requirements: ['4WD recommended', 'Lodge accommodations available'],
+    accessibility: false,
+    ageRestriction: 'All ages welcome',
+    venueType: 'Mountain Lodge'
+  },
+  {
+    id: 'concert12',
+    title: 'The Velvet Underground Revival: Psychedelic Experience',
+    artistId: 'artist9',
+    artistName: 'The Velvet Underground Revival',
+    hostId: 'host3',
+    hostName: 'Urban Loft Sessions',
+    venueName: 'Urban Loft Sessions',
+    date: '2025-10-25',
+    startTime: '21:00',
+    endTime: '23:30',
+    genre: ['Psychedelic Rock', 'Indie', 'Alternative'],
+    description: 'Immersive psychedelic rock experience with visual projections',
+    capacity: 20,
+    currentReservations: 18,
+    ticketPrice: 15,
+    status: 'upcoming',
+    attendees: ['fan6', 'fan3'],
+    location: {
+      city: 'Portland',
+      state: 'OR',
+      address: '789 Loft Ave'
+    },
+    requirements: ['Visual effects warning', 'Limited capacity'],
+    accessibility: true,
+    ageRestriction: '18+',
+    venueType: 'Loft/Warehouse'
+  },
+  {
+    id: 'concert13',
+    title: 'Sarah & The Wanderers: Holiday Special',
+    artistId: 'artist1',
+    artistName: 'Sarah & The Wanderers',
+    hostId: 'host8',
+    hostName: 'The Historic Parlor',
+    venueName: 'The Historic Parlor',
+    date: '2025-12-15',
+    startTime: '19:00',
+    endTime: '21:00',
+    genre: ['Folk', 'Holiday', 'Acoustic'],
+    description: 'Special holiday concert with folk renditions of classic songs',
+    capacity: 30,
+    currentReservations: 28,
+    ticketPrice: 25,
+    status: 'upcoming',
+    attendees: ['fan8'],
+    location: {
+      city: 'Charleston',
+      state: 'SC',
+      address: '123 Historic Ave'
+    },
+    requirements: ['Festive attire encouraged'],
+    accessibility: false,
+    ageRestriction: 'All ages welcome',
+    venueType: 'Historic Home'
+  },
+  {
+    id: 'concert14',
+    title: 'Luna Sonata: Winter Solstice Concert',
+    artistId: 'artist5',
+    artistName: 'Luna Sonata',
+    hostId: 'host1',
+    hostName: 'The Garden House',
+    venueName: 'The Garden House',
+    date: '2025-12-21',
+    startTime: '19:30',
+    endTime: '21:00',
+    genre: ['Classical', 'Contemporary Classical'],
+    description: 'Intimate piano concert celebrating the winter solstice',
+    capacity: 30,
+    currentReservations: 25,
+    ticketPrice: 30,
+    status: 'upcoming',
+    attendees: ['fan1', 'fan9'],
+    location: {
+      city: 'Austin',
+      state: 'TX',
+      address: '123 Garden St'
+    },
+    requirements: ['Formal attire requested'],
+    accessibility: true,
+    ageRestriction: 'All ages welcome',
+    venueType: 'Home/Living Room'
+  },
+  {
+    id: 'concert15',
+    title: 'New Years Eve Jazz Spectacular',
+    artistId: 'artist7',
+    artistName: 'Mia & The Moonlight Jazz Quartet',
+    hostId: 'host4',
+    hostName: 'Sunset Terrace',
+    venueName: 'Sunset Terrace',
+    date: '2025-12-31',
+    startTime: '21:00',
+    endTime: '01:00',
+    genre: ['Jazz', 'Soul', 'R&B'],
+    description: 'Ring in the new year with sophisticated jazz on a rooftop terrace',
+    capacity: 40,
+    currentReservations: 40,
+    ticketPrice: 75,
+    status: 'upcoming',
+    attendees: ['fan5', 'fan2', 'fan7'],
+    location: {
+      city: 'Los Angeles',
+      state: 'CA',
+      address: '321 Sunset Blvd'
+    },
+    requirements: ['Black tie optional', 'Champagne at midnight'],
+    accessibility: true,
+    ageRestriction: '21+',
+    venueType: 'Rooftop Terrace'
+  },
+  {
+    id: 'concert16',
+    title: 'Past Concert: Desert Highway Sunset',
+    artistId: 'artist6',
+    artistName: 'Desert Highway',
+    hostId: 'host9',
+    hostName: 'Desert Oasis Venue',
+    venueName: 'Desert Oasis Venue',
+    date: '2024-11-20',
+    startTime: '18:00',
+    endTime: '20:00',
+    genre: ['Americana', 'Country Rock'],
+    description: 'Past concert for review testing',
+    capacity: 60,
+    currentReservations: 50,
+    ticketPrice: 25,
+    status: 'past',
+    attendees: ['fan7', 'fan9'],
+    location: {
+      city: 'Sedona',
+      state: 'AZ',
+      address: '789 Red Rock Way'
+    },
+    requirements: [],
+    accessibility: true,
+    ageRestriction: 'All ages welcome',
+    venueType: 'Outdoor Amphitheater'
+  },
+  {
+    id: 'concert17',
+    title: 'Past Concert: River Stones Rock Night',
+    artistId: 'artist4',
+    artistName: 'The River Stones',
+    hostId: 'host2',
+    hostName: 'Riverside Barn',
+    venueName: 'Riverside Barn',
+    date: '2024-12-15',
+    startTime: '20:00',
+    endTime: '22:30',
+    genre: ['Rock', 'Alternative'],
+    description: 'Past concert for review testing',
+    capacity: 60,
+    currentReservations: 55,
+    ticketPrice: 20,
+    status: 'past',
+    attendees: ['fan6'],
+    location: {
+      city: 'Nashville',
+      state: 'TN',
+      address: '456 River Road'
+    },
+    requirements: [],
+    accessibility: true,
+    ageRestriction: '18+',
+    venueType: 'Barn'
+  },
+  {
+    id: 'concert18',
+    title: 'Past Concert: Celtic Christmas',
+    artistId: 'artist8',
+    artistName: 'Celtic Storm',
+    hostId: 'host8',
+    hostName: 'The Historic Parlor',
+    venueName: 'The Historic Parlor',
+    date: '2024-12-22',
+    startTime: '19:00',
+    endTime: '21:00',
+    genre: ['Celtic', 'Holiday'],
+    description: 'Past holiday concert for review testing',
+    capacity: 30,
+    currentReservations: 30,
+    ticketPrice: 25,
+    status: 'past',
+    attendees: ['fan4', 'fan8'],
+    location: {
+      city: 'Charleston',
+      state: 'SC',
+      address: '123 Historic Ave'
+    },
+    requirements: [],
+    accessibility: false,
+    ageRestriction: 'All ages welcome',
+    venueType: 'Historic Home'
   }
 ];
 

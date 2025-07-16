@@ -1945,3 +1945,41 @@ Import trace for requested module:
  GET /map 200 in 492ms
  POST /api/auth/_log 200 in 7ms
  GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 25ms
+ GET /hosts 200 in 109ms
+ ✓ Compiled in 2.3s (1620 modules)
+ GET /hosts 200 in 124ms
+ ✓ Compiled /api/auth/[...nextauth] in 318ms (977 modules)
+ GET /api/auth/session 200 in 486ms
+ GET /api/auth/session 200 in 68ms
+ GET /artists 200 in 192ms
+ GET /hosts 200 in 56ms
+ GET /map 200 in 47ms
+ GET /api/auth/session 200 in 57ms
+ GET /dashboard 200 in 53ms
+ GET /api/auth/session 200 in 25ms
+ GET /api/auth/session 200 in 34ms
+ GET /api/auth/session 200 in 30ms
+ ○ Compiling / ...
+ ✓ Compiled / in 2.1s (983 modules)
+ GET / 200 in 2213ms
+ GET / 200 in 14ms
+ GET /api/auth/session 200 in 319ms
+ GET /api/auth/session 200 in 20ms
+ GET /api/auth/session 200 in 39ms
+ GET /api/auth/session 200 in 21ms
+ ✓ Compiled in 1699ms (1601 modules)
+ GET / 200 in 138ms
+ ✓ Compiled in 2.1s (1601 modules)
+ GET / 200 in 153ms
+ ✓ Compiled in 1933ms (1601 modules)
+ GET / 200 in 68ms
+ ✓ Compiled in 516ms (1601 modules)
+ GET / 200 in 45ms
+ ✓ Compiled in 299ms (1601 modules)
+ GET / 200 in 33ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 2.2s (958 modules)
+ GET /api/auth/session 200 in 2518ms
+ GET / 200 in 172ms
+ GET /artists 200 in 36ms
