@@ -49,6 +49,15 @@ export function Header() {
         { name: findHostsText, href: '/hosts', requiresAuth: false },
         { name: browseArtistsText, href: '/artists', requiresAuth: false }
       );
+      
+      // Add Map link for approved users or fans with active payment
+      if (session && 
+          ((session.user.status === 'approved') ||
+           (session.user.type === 'fan' && session.user.paymentStatus === 'active'))) {
+        baseNavigation.push(
+          { name: 'Map', href: '/map', requiresAuth: true }
+        );
+      }
     }
 
     // Add conditional navigation items for authenticated users

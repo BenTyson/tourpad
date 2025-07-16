@@ -1183,3 +1183,23 @@ Import trace for requested module:
  GET /dashboard 200 in 17ms
  ✓ Compiled in 141ms (808 modules)
  GET /dashboard 200 in 17ms
+ ✓ Compiled in 687ms (1511 modules)
+ GET /dashboard 200 in 38ms
+ ✓ Compiled in 259ms (1511 modules)
+ GET /dashboard 200 in 31ms
+ ✓ Compiled in 124ms (808 modules)
+ GET /dashboard 200 in 16ms
+ ✓ Compiled in 142ms (808 modules)
+ GET /dashboard 200 in 16ms
+ ✓ Compiled in 189ms (808 modules)
+ GET /dashboard 200 in 43ms
+ ✓ Compiled in 461ms (1497 modules)
+ ✓ Compiled in 828ms (1511 modules)
+ ✓ Compiled /messages in 397ms (713 modules)
+ GET /messages 200 in 510ms
+ GET /messages 200 in 60ms
+ GET /messages 200 in 19ms
+ GET /messages 200 in 15ms
+ ○ Compiling /map ...
+ ✓ Compiled /map in 1201ms (1636 modules)
+ GET /map 200 in 1284ms
