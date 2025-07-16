@@ -200,7 +200,7 @@ export default function ArtistProfilePage() {
       </section>
 
       {/* Music & Website Links Section */}
-      {(artist.socialLinks?.website || artist.socialLinks?.spotify || artist.socialLinks?.youtube || artist.socialLinks?.instagram) && (
+      {artist.socialLinks && (artist.socialLinks.website || artist.socialLinks.spotify || artist.socialLinks.youtube || artist.socialLinks.instagram) && (
         <section className="bg-neutral-50 border-b border-neutral-200">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
             <div className="text-center mb-8">
@@ -406,7 +406,7 @@ export default function ArtistProfilePage() {
                     <div className="text-sm text-neutral-600">Travel method</div>
                   </div>
                 </div>
-                <div className="text-lg font-bold text-secondary-700">{artist.transportType || 'Van'}</div>
+                <div className="text-lg font-bold text-secondary-700">{artist.tourVehicle || 'Van'}</div>
                 <div className="text-sm text-neutral-600 mt-1">Professional setup</div>
               </div>
               
@@ -476,7 +476,7 @@ export default function ArtistProfilePage() {
                   </li>
                   <li className="flex items-start">
                     <span className="text-blue-600 mr-2">•</span>
-                    Parking space for {(artist.transportType || 'Van') === 'Van' ? 'van' : 'vehicle'}
+                    Parking space for {(artist.tourVehicle || 'Van') === 'van' ? 'van' : 'vehicle'}
                   </li>
                 </ul>
               </div>

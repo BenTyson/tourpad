@@ -25,7 +25,7 @@ import {
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
-import { mockBookings, mockMessages, mockNotifications } from '@/data/mockData';
+import { mockBookings, mockMessages, mockNotifications, mockArtists, mockHosts } from '@/data/mockData';
 import { testConcerts } from '@/data/realTestData';
 import { useRouter } from 'next/navigation';
 import { PastShowsSection } from '@/components/reviews/PastShowsSection';
@@ -68,6 +68,18 @@ export default function DashboardPage() {
   const userRole = session.user.type as 'host' | 'artist' | 'admin' | 'fan';
   const userStatus = session.user.status;
   const selectedUserId = session.user.id;
+  
+  // CRITICAL: ID Mapping between data sources
+  // Session uses realTestData IDs ('artist1'), but profile pages use mockData IDs ('1')
+  // This mapping bridges the gap between authentication and display data
+  let profileId = selectedUserId;
+  if (userRole === 'artist') {
+    const artist = mockArtists.find(a => a.userId === selectedUserId);
+    profileId = artist?.id || selectedUserId;
+  } else if (userRole === 'host') {
+    const host = mockHosts.find(h => h.userId === selectedUserId);
+    profileId = host?.id || selectedUserId;
+  }
 
   // Check if user has access to full dashboard functionality
   // Fans have access if payment is active, others need approval
@@ -304,7 +316,7 @@ export default function DashboardPage() {
                     </Link>
 
                     {/* Secondary Actions */}
-                    <Link href={userRole === 'fan' ? '/dashboard/profile' : `/${userRole}s/${selectedUserId}`}>
+                    <Link href={userRole === 'fan' ? '/dashboard/profile' : `/${userRole}s/${profileId}`}>
                       <div className="group rounded-xl bg-white border border-neutral-200 p-6 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
                         <div className="flex items-center">
                           <div className="flex-shrink-0">

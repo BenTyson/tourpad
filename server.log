@@ -888,3 +888,199 @@ Import trace for requested module:
  ✓ Compiled /api/auth/[...nextauth] in 527ms (915 modules)
  GET /api/auth/session 200 in 627ms
  GET /dashboard/profile 200 in 103ms
+ ✓ Compiled / in 463ms (684 modules)
+ GET / 200 in 531ms
+ GET / 200 in 20ms
+ GET /dashboard 200 in 63ms
+ ○ Compiling /messages ...
+ ✓ Compiled /messages in 840ms (686 modules)
+ GET /messages 200 in 901ms
+ GET /messages 200 in 40ms
+ GET /dashboard 200 in 44ms
+ GET /artists 200 in 100ms
+ ○ Compiling /hosts ...
+ ✓ Compiled /hosts in 697ms (683 modules)
+ GET /hosts 200 in 767ms
+ GET / 200 in 27ms
+ GET /dashboard 200 in 63ms
+ ○ Compiling /artists/[id] ...
+ ✓ Compiled /artists/[id] in 864ms (692 modules)
+ GET /artists/artist1 200 in 935ms
+ GET /artists/artist1 200 in 109ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 733ms (1473 modules)
+ GET /how-it-works 404 in 784ms
+ GET /how-it-works 404 in 100ms
+ ✓ Compiled /api/auth/[...nextauth] in 472ms (921 modules)
+ GET /api/auth/session 200 in 583ms
+ GET /dashboard 200 in 170ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/auth/session 200 in 45ms
+ GET /api/auth/session 200 in 80ms
+ GET /dashboard 200 in 64ms
+ GET /dashboard 200 in 17ms
+ GET /how-it-works 404 in 35ms
+ GET /how-it-works 404 in 68ms
+ GET /api/auth/session 200 in 8ms
+ GET /hosts 200 in 35ms
+ GET /dashboard 200 in 24ms
+ GET /artists/artist1 200 in 36ms
+ GET /artists/artist1 200 in 29ms
+ GET /calendar 404 in 22ms
+ GET /calendar 404 in 49ms
+ GET /api/auth/session 200 in 5ms
+ GET /dashboard 200 in 71ms
+ GET /api/auth/session 200 in 7ms
+ ✓ Compiled in 898ms (1483 modules)
+ GET /dashboard 200 in 122ms
+ ✓ Compiled in 565ms (1483 modules)
+ GET /dashboard 200 in 78ms
+ ✓ Compiled in 245ms (1483 modules)
+ GET /dashboard 200 in 44ms
+ GET /artists/artist1 200 in 57ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 581ms (1483 modules)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'length')
+    at ArtistProfilePage (src/app/artists/[id]/page.tsx:328:34)
+  326 |               <div>
+  327 |                 <h2 className="text-2xl font-bold text-neutral-900 mb-2">
+> 328 |                   {artist.members.length === 1 ? 'Solo Artist' : 'Meet the Band'}
+      |                                  ^
+  329 |                 </h2>
+  330 |                 <p className="text-neutral-600">
+  331 |                   {artist.members.length === 1 ? 'Individual performer' : `${artist.members.length} talented musicians`} {
+  digest: '1629591993'
+}
+ GET /artists/artist1 500 in 491ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 297ms (1483 modules)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'length')
+    at ArtistProfilePage (src/app/artists/[id]/page.tsx:308:34)
+  306 |               <div>
+  307 |                 <h2 className="text-2xl font-bold text-neutral-900 mb-2">
+> 308 |                   {artist.members.length === 1 ? 'Solo Artist' : 'Meet the Band'}
+      |                                  ^
+  309 |                 </h2>
+  310 |                 <p className="text-neutral-600">
+  311 |                   {artist.members.length === 1 ? 'Individual performer' : `${artist.members.length} talented musicians`} {
+  digest: '1629591993'
+}
+ ⨯ TypeError: Cannot read properties of undefined (reading 'length')
+    at ArtistProfilePage (src/app/artists/[id]/page.tsx:308:34)
+  306 |               <div>
+  307 |                 <h2 className="text-2xl font-bold text-neutral-900 mb-2">
+> 308 |                   {artist.members.length === 1 ? 'Solo Artist' : 'Meet the Band'}
+      |                                  ^
+  309 |                 </h2>
+  310 |                 <p className="text-neutral-600">
+  311 |                   {artist.members.length === 1 ? 'Individual performer' : `${artist.members.length} talented musicians`} {
+  digest: '1629591993'
+}
+ GET /artists/artist1 500 in 241ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 699ms (1483 modules)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'length')
+    at eval (src/app/artists/[id]/page.tsx:507:53)
+    at Array.map (<anonymous>)
+    at ArtistProfilePage (src/app/artists/[id]/page.tsx:487:30)
+  505 |                         <span className="font-medium">{relatedArtist.rating}</span>
+  506 |                         <span className="mx-2">•</span>
+> 507 |                         <span>{relatedArtist.members.length} member{relatedArtist.members.length > 1 ? 's' : ''}</span>
+      |                                                     ^
+  508 |                       </div>
+  509 |                     </CardContent>
+  510 |                   </Card> {
+  digest: '1629591993'
+}
+ ⨯ TypeError: Cannot read properties of undefined (reading 'length')
+    at eval (src/app/artists/[id]/page.tsx:507:53)
+    at Array.map (<anonymous>)
+    at ArtistProfilePage (src/app/artists/[id]/page.tsx:487:30)
+  505 |                         <span className="font-medium">{relatedArtist.rating}</span>
+  506 |                         <span className="mx-2">•</span>
+> 507 |                         <span>{relatedArtist.members.length} member{relatedArtist.members.length > 1 ? 's' : ''}</span>
+      |                                                     ^
+  508 |                       </div>
+  509 |                     </CardContent>
+  510 |                   </Card> {
+  digest: '1629591993'
+}
+ GET /artists/artist1 500 in 242ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 258ms (1483 modules)
+ GET /artists/artist1 200 in 259ms
+ ✓ Compiled /api/auth/[...nextauth] in 498ms (920 modules)
+ GET /api/auth/session 200 in 628ms
+ GET /api/auth/csrf 200 in 20ms
+ POST /api/auth/signout 200 in 22ms
+ GET /artists/artist1 200 in 177ms
+ GET /api/auth/session 200 in 5ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 554ms (942 modules)
+ GET /login 200 in 627ms
+ GET /api/auth/providers 200 in 73ms
+ GET /api/auth/csrf 200 in 6ms
+ POST /api/auth/callback/credentials 200 in 11ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 5ms
+ GET /dashboard 200 in 18ms
+ ✓ Compiled /hosts/[id] in 222ms (953 modules)
+ GET /hosts/host1 200 in 283ms
+ GET /dashboard 200 in 120ms
+ GET /api/auth/session 200 in 25ms
+ GET /hosts 200 in 29ms
+ GET /hosts/1 200 in 22ms
+ ✓ Compiled /artists in 271ms (951 modules)
+ GET /artists 200 in 334ms
+ GET /artists/1 200 in 26ms
+ ✓ Compiled in 745ms (1494 modules)
+ GET /artists 200 in 128ms
+ ✓ Compiled in 237ms (1494 modules)
+ GET /artists 200 in 47ms
+ ✓ Compiled in 243ms (1494 modules)
+ GET /artists 200 in 38ms
+ ✓ Compiled in 224ms (1494 modules)
+ GET /artists 200 in 31ms
+ ✓ Compiled /api/auth/[...nextauth] in 369ms (931 modules)
+ GET /api/auth/csrf 200 in 501ms
+ POST /api/auth/signout 200 in 4ms
+ GET /artists 200 in 102ms
+ GET /api/auth/session 200 in 5ms
+ GET /login 200 in 26ms
+ GET /api/auth/providers 200 in 8ms
+ GET /api/auth/csrf 200 in 6ms
+ POST /api/auth/callback/credentials 200 in 8ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 6ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 530ms (951 modules)
+ GET /dashboard 200 in 572ms
+ GET /artists/artist1 200 in 26ms
+ ✓ Compiled in 333ms (1742 modules)
+ GET /artists/artist1 200 in 40ms
+ ✓ Compiled in 478ms (1742 modules)
+ GET /artists/artist1 200 in 127ms
+ GET /artists/artist1 200 in 118ms
+ GET /api/auth/session 200 in 49ms
+ GET /dashboard 200 in 30ms
+ GET /artists/artist1 200 in 23ms
+ GET /artists/artist1 200 in 28ms
+ ✓ Compiled in 622ms (1505 modules)
+ GET /artists/artist1 200 in 92ms
+ ✓ Compiled in 284ms (1505 modules)
+ GET /artists/artist1 200 in 34ms
+ ✓ Compiled in 262ms (1505 modules)
+ GET /dashboard 200 in 39ms
+ GET /artists/1 200 in 29ms
+ ✓ Compiled in 645ms (1505 modules)
+ GET /artists/1 200 in 37ms
+ ✓ Compiled in 264ms (1505 modules)
+ GET /artists/1 200 in 37ms
+ ✓ Compiled in 221ms (800 modules)
+ GET /artists/1 200 in 41ms
+ ✓ Compiled in 145ms (800 modules)
+ GET /artists/1 200 in 22ms
+ ✓ Compiled in 131ms (800 modules)
+ GET /artists/1 200 in 20ms
+ ✓ Compiled in 502ms (1505 modules)
+ GET /artists/1 200 in 49ms

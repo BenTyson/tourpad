@@ -37,8 +37,9 @@
 - **Node.js**: Compatible with Next.js 15.3.5
 
 ## Data Layer (Current)
-- **Mock Data**: `/src/data/mockData.ts`
-- **Test Data**: `/src/data/realTestData.ts`
+- **Mock Data**: `/src/data/mockData.ts` (Basic UI display, simple structures, IDs: '1','2','3')
+- **Real Test Data**: `/src/data/realTestData.ts` (Authentication, advanced features, IDs: 'artist1','host1')
+- **ID Mapping**: Dashboard maps realTestData sessions to mockData profiles
 - **Status**: Frontend-only, no backend yet
 
 ## Planned Backend Stack (TBD)

@@ -65,9 +65,11 @@ try {
 }
 ```
 
-### 4. Mock Data Strategy
-- Centralized mock data in `/src/data/mockData.ts`
-- Realistic test data in `/src/data/realTestData.ts`
+### 4. Dual Data Strategy
+- **mockData.ts**: Basic UI display, artist/host profiles, simple IDs ('1', '2', '3')
+- **realTestData.ts**: Authentication system, advanced features, complex IDs ('artist1', 'host1')
+- **ID Mapping**: Dashboard bridges the gap between data sources
+- **Rule**: Profile pages use mockData, auth uses realTestData, advanced features use realTestData
 - TODO comments mark future API integration points
 
 ### 5. Media Management Pattern

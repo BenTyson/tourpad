@@ -32,9 +32,37 @@ Do not introduce other libraries unless specified in the plan or approved by use
 ## Critical Patterns
 - Check `/memory-bank/` folder for project context and patterns
 - Read `DEVELOPMENT_ROADMAP.md` for current priorities
-- Mock data lives in `/src/data/mockData.ts` and `/src/data/realTestData.ts`
+- **Data Sources** (see Data Architecture section below)
 - All forms must have Zod validation schemas
 - Use the established color system (Rose, Sage, Neutral tones)
+
+## Data Architecture - CRITICAL
+We maintain TWO data files with specific purposes:
+
+### `/src/data/mockData.ts` - Use for:
+- **Basic UI display data** (artist profiles, host profiles)
+- **Artist/host listings and cards**
+- **Simple data structures**
+- **Core features** (bookings, messages, notifications)
+- **IDs**: Simple numeric strings ('1', '2', '3')
+
+### `/src/data/realTestData.ts` - Use for:
+- **Authentication system** (`getCurrentUser` function)
+- **Advanced features** (lodging system, concerts, detailed capabilities)
+- **Complex data structures** with extended properties
+- **IDs**: Prefixed strings ('artist1', 'host1', 'fan1')
+
+### ID Mapping Pattern:
+- Session uses realTestData IDs ('artist1')
+- UI components use mockData IDs ('1') 
+- Dashboard maps between them: `mockArtists.find(a => a.userId === 'artist1')`
+- **NEVER** change this mapping without updating both files consistently
+
+### When in doubt:
+- **Profile pages** → mockData (richer display data)
+- **Authentication** → realTestData (getCurrentUser)
+- **Lodging features** → realTestData (detailed host capabilities)
+- **Basic listings** → mockData (simpler structures)
 
 ## Server & Testing
 - Run `npm run dev` to start development server (localhost:3000)
