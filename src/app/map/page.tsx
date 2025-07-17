@@ -29,6 +29,7 @@ export default function MapPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('map');
   const [showFilters, setShowFilters] = useState(true);
   const [filteredHosts, setFilteredHosts] = useState(mockHosts.filter(host => host.mapLocation));
+  const [searchLocation, setSearchLocation] = useState('');
 
   // Loading state
   if (status === 'loading') {
@@ -113,12 +114,46 @@ export default function MapPage() {
 
       {/* Main Content */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+        {/* Full-width Search Bar */}
+        <div className="mb-6">
+          <div className="flex gap-3">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-neutral-400" />
+              <input
+                type="text"
+                value={searchLocation}
+                onChange={(e) => setSearchLocation(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                  }
+                }}
+                placeholder="Search venues by location (e.g., Austin, Nashville, Denver)"
+                className="w-full pl-10 pr-4 py-3 bg-white border border-neutral-200 rounded-xl shadow-sm text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:outline-none"
+              />
+            </div>
+            <Button
+              onClick={() => setSearchLocation('')}
+              variant="outline"
+              className="px-4 py-3"
+            >
+              Clear
+            </Button>
+          </div>
+          {searchLocation && (
+            <p className="text-sm text-neutral-600 mt-2">
+              Showing {filteredHosts.length} venues {searchLocation ? `matching "${searchLocation}"` : ''}
+            </p>
+          )}
+        </div>
+
         <div className="grid lg:grid-cols-4 gap-6 min-h-[600px]">
           {/* Filters Sidebar */}
           {showFilters && (
             <div className="lg:col-span-1">
               <MapFilters 
                 onFiltersChange={setFilteredHosts}
+                searchLocation={searchLocation}
                 className="h-full"
               />
             </div>
@@ -130,8 +165,8 @@ export default function MapPage() {
               <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden h-[600px]">
                 <TourPadMapContainer 
                   className="w-full h-full"
-                  initialCenter={[39.8283, -98.5795]}
-                  initialZoom={5}
+                  initialCenter={[39.7392, -104.9903]}
+                  initialZoom={10}
                   hosts={filteredHosts}
                 />
               </div>

@@ -17,8 +17,8 @@ interface MapContainerProps {
 
 export default function TourPadMapContainer({ 
   className = '',
-  initialCenter = [39.8283, -98.5795], // Center of USA
-  initialZoom = 5,
+  initialCenter = [39.7392, -104.9903], // Denver, Colorado
+  initialZoom = 10,
   showFilters = true,
   hosts = mockHosts
 }: MapContainerProps) {
@@ -63,10 +63,10 @@ export default function TourPadMapContainer({
         preferCanvas={false}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://carto.com/attributions">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
           maxZoom={19}
-          subdomains={['a', 'b', 'c']}
+          subdomains={['a', 'b', 'c', 'd']}
         />
         
         {hostsWithLocation.map((host) => (

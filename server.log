@@ -2486,3 +2486,110 @@ Import trace for requested module:
  GET /favicon.ico 200 in 411ms
  GET /api/auth/session 200 in 494ms
  GET /api/auth/session 200 in 32ms
+ ✓ Compiled in 3.6s (1917 modules)
+ GET /map 200 in 355ms
+ GET /favicon.ico 200 in 10ms
+ GET /api/auth/session 200 in 54ms
+ ✓ Compiled in 408ms (1917 modules)
+ GET /map 200 in 45ms
+ GET /api/auth/session 200 in 45ms
+ GET /map 200 in 147ms
+ GET /favicon.ico 200 in 12ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/auth/session 200 in 24ms
+ ✓ Compiled in 1719ms (1917 modules)
+ GET /map 200 in 44ms
+ GET /api/auth/session 200 in 126ms
+ ✓ Compiled in 3.9s (1903 modules)
+ GET /map 200 in 111ms
+ ✓ Compiled in 1002ms (1903 modules)
+ GET /map 200 in 75ms
+ ✓ Compiled in 300ms (1903 modules)
+ GET /map 200 in 35ms
+ ✓ Compiled in 505ms (1903 modules)
+ GET /map 200 in 42ms
+ ✓ Compiled in 287ms (1903 modules)
+ GET /map 200 in 37ms
+ ✓ Compiled in 290ms (1903 modules)
+ GET /map 200 in 33ms
+ ✓ Compiled in 314ms (1666 modules)
+ GET /map 200 in 88ms
+ ✓ Compiled in 271ms (1666 modules)
+ GET /map 200 in 59ms
+ ✓ Compiled /api/auth/[...nextauth] in 147ms (985 modules)
+ GET /api/auth/session 200 in 266ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 1984ms (1893 modules)
+ GET /map 404 in 2112ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/bentyson/pad/.next/server/app/map/page.js'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/bentyson/pad/.next/server/app/map/page.js',
+  page: '/map'
+}
+ ⨯ [Error: Cannot find module '/Users/bentyson/pad/.next/server/pages/_document.js'
+Require stack:
+- /Users/bentyson/pad/node_modules/next/dist/server/require.js
+- /Users/bentyson/pad/node_modules/next/dist/server/load-components.js
+- /Users/bentyson/pad/node_modules/next/dist/build/utils.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/options.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/index.js
+- /Users/bentyson/pad/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/next.js
+- /Users/bentyson/pad/node_modules/next/dist/server/lib/start-server.js] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}
+ GET /map 500 in 165ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/bentyson/pad/.next/server/app/map/page.js'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/bentyson/pad/.next/server/app/map/page.js',
+  page: '/map'
+}
+ ⨯ [Error: Cannot find module '/Users/bentyson/pad/.next/server/pages/_document.js'
+Require stack:
+- /Users/bentyson/pad/node_modules/next/dist/server/require.js
+- /Users/bentyson/pad/node_modules/next/dist/server/load-components.js
+- /Users/bentyson/pad/node_modules/next/dist/build/utils.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/options.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/index.js
+- /Users/bentyson/pad/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/next.js
+- /Users/bentyson/pad/node_modules/next/dist/server/lib/start-server.js] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}
+ GET /map 500 in 45ms
+ GET /_next/static/chunks/fallback/main.js 404 in 160ms
+ GET /_next/static/chunks/fallback/webpack.js 404 in 168ms
+ GET /_next/static/chunks/fallback/pages/_app.js 404 in 160ms
+ GET /_next/static/chunks/fallback/react-refresh.js 404 in 161ms
+ GET /_next/static/chunks/fallback/pages/_error.js 404 in 160ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/bentyson/pad/.next/server/app/map/page.js'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/bentyson/pad/.next/server/app/map/page.js',
+  page: '/map'
+}
+ ⨯ [Error: Cannot find module '/Users/bentyson/pad/.next/server/pages/_document.js'
+Require stack:
+- /Users/bentyson/pad/node_modules/next/dist/server/require.js
+- /Users/bentyson/pad/node_modules/next/dist/server/load-components.js
+- /Users/bentyson/pad/node_modules/next/dist/build/utils.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/options.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/index.js
+- /Users/bentyson/pad/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/next.js
+- /Users/bentyson/pad/node_modules/next/dist/server/lib/start-server.js] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}
+ GET /map 500 in 97ms
+[?25h

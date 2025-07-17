@@ -702,6 +702,142 @@ export const mockHosts = [
     reviewCount: 31,
     createdAt: new Date('2023-04-05'),
     updatedAt: new Date('2024-12-03')
+  },
+  {
+    id: '10',
+    userId: 'host10',
+    name: 'Denver Arts Collective',
+    bio: 'Urban arts space in RiNo district. Industrial aesthetic with great acoustics for indie and experimental shows.',
+    hostInfo: {
+      hostName: 'Marcus Chen',
+      aboutMe: 'Local artist and venue curator. I believe in supporting underground music and creating unique performance experiences in our industrial space.',
+      profilePhoto: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=faces'
+    },
+    city: 'Denver',
+    state: 'CO',
+    zip: '80205',
+    venueType: 'Loft/Warehouse',
+    mapLocation: {
+      displayLat: 39.7589,
+      displayLng: -104.9847,
+      city: 'Denver',
+      state: 'CO',
+      priceRange: '$15-25',
+      searchKeywords: ['denver', 'colorado', 'rino', 'arts district', 'indie', 'experimental', 'urban']
+    },
+    showSpecs: {
+      avgAttendance: 35,
+      avgDoorFee: 20,
+      indoorAttendanceMax: 45,
+      outdoorAttendanceMax: 0,
+      showDurationMins: 90,
+      showFormat: 'Industrial space',
+      estimatedShowsPerYear: 48,
+      hostingHistory: '3 years',
+      daysAvailable: ['Thu', 'Fri', 'Sat'],
+      performanceLocation: 'separate'
+    },
+    amenities: {
+      powerAccess: true,
+      airConditioning: true,
+      wifi: true,
+      kidFriendly: false,
+      adultsOnly: false,
+      parking: true,
+      petFriendly: true,
+      soundSystem: true,
+      outdoorSpace: false,
+      accessible: true,
+      bnbOffered: false
+    },
+    housePhotos: [
+      {
+        id: 'denver10_1',
+        url: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800',
+        alt: 'Industrial loft exterior',
+        category: 'house' as const
+      }
+    ],
+    performanceSpacePhotos: [
+      {
+        id: 'denver10_2',
+        url: 'https://images.unsplash.com/photo-1524634126442-357e0eac3c14?w=800',
+        alt: 'Performance space with exposed brick',
+        category: 'performance' as const
+      }
+    ],
+    rating: 4.8,
+    reviewCount: 95,
+    createdAt: new Date('2021-06-15'),
+    updatedAt: new Date('2024-12-10')
+  },
+  {
+    id: '11',
+    userId: 'host11',
+    name: 'Capitol Hill Haven',
+    bio: 'Cozy home venue in historic Capitol Hill. Perfect for singer-songwriters and intimate acoustic sets.',
+    hostInfo: {
+      hostName: 'Rachel & Tom Martinez',
+      aboutMe: 'Music-loving couple with a beautiful Victorian home. We host monthly shows and also offer lodging for traveling artists.',
+      profilePhoto: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=faces'
+    },
+    city: 'Denver',
+    state: 'CO',
+    zip: '80218',
+    venueType: 'Home/Living Room',
+    mapLocation: {
+      displayLat: 39.7336,
+      displayLng: -104.9785,
+      city: 'Denver',
+      state: 'CO',
+      priceRange: '$10-15',
+      searchKeywords: ['denver', 'colorado', 'capitol hill', 'living room', 'acoustic', 'intimate', 'lodging']
+    },
+    showSpecs: {
+      avgAttendance: 20,
+      avgDoorFee: 12,
+      indoorAttendanceMax: 25,
+      outdoorAttendanceMax: 20,
+      showDurationMins: 75,
+      showFormat: 'Living room',
+      estimatedShowsPerYear: 12,
+      hostingHistory: '2 years',
+      daysAvailable: ['Fri', 'Sat', 'Sun'],
+      performanceLocation: 'home'
+    },
+    amenities: {
+      powerAccess: true,
+      airConditioning: true,
+      wifi: true,
+      kidFriendly: true,
+      adultsOnly: false,
+      parking: true,
+      petFriendly: false,
+      soundSystem: false,
+      outdoorSpace: true,
+      accessible: false,
+      bnbOffered: true
+    },
+    housePhotos: [
+      {
+        id: 'denver11_1',
+        url: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800',
+        alt: 'Victorian home exterior',
+        category: 'house' as const
+      }
+    ],
+    performanceSpacePhotos: [
+      {
+        id: 'denver11_2',
+        url: 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=800',
+        alt: 'Living room performance space',
+        category: 'performance' as const
+      }
+    ],
+    rating: 4.9,
+    reviewCount: 67,
+    createdAt: new Date('2022-09-20'),
+    updatedAt: new Date('2024-12-08')
   }
 ];
 

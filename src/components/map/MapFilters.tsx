@@ -1,11 +1,12 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, X, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { mockHosts } from '@/data/mockData';
 
 interface MapFiltersProps {
   onFiltersChange: (filteredHosts: typeof mockHosts) => void;
+  searchLocation?: string;
   className?: string;
 }
 
@@ -17,29 +18,43 @@ interface FilterState {
   amenities: string[];
 }
 
-export default function MapFilters({ onFiltersChange, className = '' }: MapFiltersProps) {
+export default function MapFilters({ onFiltersChange, searchLocation = '', className = '' }: MapFiltersProps) {
   const [filters, setFilters] = useState<FilterState>({
-    searchLocation: '',
+    searchLocation: searchLocation,
     venueTypes: [],
     capacityRange: '',
     priceRange: '',
     amenities: []
   });
 
+  // Update filters when external search location changes
+  useEffect(() => {
+    const updatedFilters = { ...filters, searchLocation };
+    setFilters(updatedFilters);
+    applyFilters(updatedFilters);
+  }, [searchLocation]);
+
+  // Apply initial filters on mount
+  useEffect(() => {
+    applyFilters(filters);
+  }, []);
+
   // Apply filters to hosts
   const applyFilters = (newFilters: FilterState) => {
     let filtered = mockHosts.filter(host => host.mapLocation);
 
-    // Location search
-    if (newFilters.searchLocation.trim()) {
-      const searchTerm = newFilters.searchLocation.toLowerCase();
-      filtered = filtered.filter(host => 
-        host.city.toLowerCase().includes(searchTerm) ||
-        host.state.toLowerCase().includes(searchTerm) ||
-        host.mapLocation?.searchKeywords.some(keyword => 
-          keyword.toLowerCase().includes(searchTerm)
-        )
-      );
+    // Use external search location if provided, otherwise use internal filter
+    const searchTerm = searchLocation.trim() || newFilters.searchLocation.trim();
+    if (searchTerm) {
+      const searchLower = searchTerm.toLowerCase();
+      filtered = filtered.filter(host => {
+        const cityMatch = host.city.toLowerCase().includes(searchLower);
+        const stateMatch = host.state.toLowerCase().includes(searchLower);
+        const keywordMatch = host.mapLocation?.searchKeywords.some(keyword => 
+          keyword.toLowerCase().includes(searchLower)
+        );
+        return cityMatch || stateMatch || keywordMatch;
+      });
     }
 
     // Venue type filter
@@ -114,7 +129,7 @@ export default function MapFilters({ onFiltersChange, className = '' }: MapFilte
   };
 
   const activeFiltersCount = 
-    (filters.searchLocation.trim() ? 1 : 0) +
+    (searchLocation.trim() || filters.searchLocation.trim() ? 1 : 0) +
     filters.venueTypes.length +
     (filters.capacityRange ? 1 : 0) +
     filters.amenities.length;
@@ -137,22 +152,24 @@ export default function MapFilters({ onFiltersChange, className = '' }: MapFilte
         )}
       </div>
       
-      {/* Search Location */}
-      <div className="mb-6">
-        <label className="block text-sm font-medium text-neutral-700 mb-2">
-          Search Location
-        </label>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-neutral-400" />
-          <input
-            type="text"
-            value={filters.searchLocation}
-            onChange={(e) => updateFilters({ searchLocation: e.target.value })}
-            placeholder="Austin, TX"
-            className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-          />
+      {/* Search Location - only show if no external search is provided */}
+      {!searchLocation && (
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-neutral-700 mb-2">
+            Search Location
+          </label>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-neutral-400" />
+            <input
+              type="text"
+              value={filters.searchLocation}
+              onChange={(e) => updateFilters({ searchLocation: e.target.value })}
+              placeholder="Austin, TX"
+              className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Venue Type */}
       <div className="mb-6">

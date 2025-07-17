@@ -55,11 +55,11 @@ export default function HostPopup({ host, onViewProfile, onBookNow }: HostPopupP
 
   return (
     <Popup className="tourpad-popup" minWidth={280} maxWidth={320}>
-      <div className="overflow-hidden">
+      <div className="overflow-hidden rounded-lg">
         {/* Photo Carousel - stretches to edge */}
         {allPhotos.length > 0 && (
-          <div className="relative bg-neutral-100 -m-1 mb-3">
-            <div className="aspect-video relative">
+          <div className="relative bg-neutral-100 mb-3">
+            <div className="aspect-video relative overflow-hidden rounded-t-lg">
               <img
                 src={allPhotos[currentPhotoIndex]?.url}
                 alt={allPhotos[currentPhotoIndex]?.alt}
