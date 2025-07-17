@@ -1,11 +1,25 @@
 'use client';
 import { useEffect, useState, useRef } from 'react';
-import { MapContainer, TileLayer } from 'react-leaflet';
+import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import { LatLngTuple } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { mockHosts } from '@/data/mockData';
 import HostMarker from './HostMarker';
 import HostPopup from './HostPopup';
+
+// Component to handle map updates
+function MapUpdater({ center, zoom }: { center: LatLngTuple; zoom: number }) {
+  const map = useMap();
+  
+  useEffect(() => {
+    map.flyTo(center, zoom, {
+      duration: 1.2,
+      easeLinearity: 0.1
+    });
+  }, [map, center, zoom]);
+
+  return null;
+}
 
 interface MapContainerProps {
   className?: string;
@@ -62,6 +76,7 @@ export default function TourPadMapContainer({
         attributionControl={true}
         preferCanvas={false}
       >
+        <MapUpdater center={initialCenter} zoom={initialZoom} />
         <TileLayer
           attribution='&copy; <a href="https://carto.com/attributions">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
