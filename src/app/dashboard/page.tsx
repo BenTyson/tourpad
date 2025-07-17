@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { 
@@ -37,6 +37,28 @@ export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [userStats, setUserStats] = useState({
+    responseRate: 95,
+    averageRating: 4.8,
+    totalShows: 0,
+    profileViews: 0
+  });
+  
+  // Fetch user stats
+  useEffect(() => {
+    if (session?.user) {
+      fetch('/api/stats')
+        .then(res => res.json())
+        .then(data => {
+          if (!data.error) {
+            setUserStats(data);
+          }
+        })
+        .catch(err => {
+          console.error('Error fetching stats:', err);
+        });
+    }
+  }, [session?.user]);
   
   // If not authenticated, redirect to login
   if (status === 'loading') {
@@ -522,7 +544,9 @@ export default function DashboardPage() {
                     </div>
                   </div>
                   <div className="ml-4">
-                    <div className="text-2xl font-bold text-neutral-900">4.8</div>
+                    <div className="text-2xl font-bold text-neutral-900">
+                      {userStats.averageRating > 0 ? userStats.averageRating.toFixed(1) : 'N/A'}
+                    </div>
                     <div className="text-sm text-neutral-600">Average Rating</div>
                   </div>
                 </div>
@@ -750,13 +774,15 @@ export default function DashboardPage() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-neutral-600">Response Rate</span>
-                    <span className="text-sm font-medium text-neutral-900">95%</span>
+                    <span className="text-sm font-medium text-neutral-900">{userStats.responseRate}%</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-neutral-600">Average Rating</span>
                     <div className="flex items-center">
                       <Star className="w-4 h-4 text-primary-500 fill-current mr-1" />
-                      <span className="text-sm font-medium text-neutral-900">4.8</span>
+                      <span className="text-sm font-medium text-neutral-900">
+                        {userStats.averageRating > 0 ? userStats.averageRating.toFixed(1) : 'N/A'}
+                      </span>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
@@ -765,12 +791,12 @@ export default function DashboardPage() {
                        userRole === 'host' ? 'Shows Hosted' : 'Shows Played'}
                     </span>
                     <span className="text-sm font-medium text-neutral-900">
-                      {userRole === 'fan' ? '8' : userRole === 'host' ? '12' : '24'} this year
+                      {userStats.totalShows} this year
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-neutral-600">Profile Views</span>
-                    <span className="text-sm font-medium text-neutral-900">156 this month</span>
+                    <span className="text-sm font-medium text-neutral-900">{userStats.profileViews} this month</span>
                   </div>
                 </div>
               </div>
