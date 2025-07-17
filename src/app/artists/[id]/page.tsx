@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { 
@@ -27,22 +27,75 @@ import { VideoPlayer } from '@/components/media/VideoPlayer';
 import { PublicReviewsSection } from '@/components/reviews/PublicReviewsSection';
 import { mockArtists } from '@/data/mockData';
 
+interface ArtistData {
+  id: string;
+  name: string;
+  bio: string;
+  location: string;
+  genres: string[];
+  instruments: string[];
+  yearsActive: number;
+  experienceLevel: string;
+  profileImageUrl: string;
+  website: string;
+  socialLinks: any;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export default function ArtistProfilePage() {
   const params = useParams();
   const artistId = params.id as string;
   
-  const artist = mockArtists.find(a => a.id === artistId);
+  const [artistData, setArtistData] = useState<ArtistData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
+
+  // Fetch artist data from API
+  useEffect(() => {
+    const fetchArtistData = async () => {
+      try {
+        const response = await fetch(`/api/artists/${artistId}`);
+        if (!response.ok) {
+          throw new Error('Artist not found');
+        }
+        const data = await response.json();
+        setArtistData(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching artist data:', error);
+        setError(true);
+        setLoading(false);
+      }
+    };
+
+    fetchArtistData();
+  }, [artistId]);
+  
+  // Fallback to mock data for sections not yet converted
+  const mockArtist = mockArtists.find(a => a.id === artistId || a.userId === artistId);
   
   // Get related artists (similar genre/region)
   const relatedArtists = mockArtists
     .filter(a => a.id !== artistId && a.approved)
     .slice(0, 3);
 
-  if (!artist) {
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading artist profile...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !artistData) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -55,12 +108,15 @@ export default function ArtistProfilePage() {
     );
   }
 
-  // Combine all photos for gallery
-  const allPhotos = [...(artist.performancePhotos || []), ...(artist.bandPhotos || [])];
+  // Combine all photos for gallery - using mock data for now
+  const allPhotos = [...(mockArtist?.performancePhotos || []), ...(mockArtist?.bandPhotos || [])];
   
   const getGenre = () => {
+    if (artistData.genres && artistData.genres.length > 0) {
+      return artistData.genres[0];
+    }
     const genres = ['folk', 'rock', 'indie', 'country', 'blues', 'jazz', 'experimental'];
-    const bio = artist.bio.toLowerCase();
+    const bio = artistData.bio.toLowerCase();
     const foundGenre = genres.find(genre => bio.includes(genre));
     return foundGenre || 'music';
   };
@@ -131,31 +187,33 @@ export default function ArtistProfilePage() {
             <div>
               <div className="flex items-center space-x-3 mb-6">
                 <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">
-                  {artist.approved ? 'Verified Artist' : 'Pending'}
+                  Verified Artist
                 </Badge>
-                <Badge variant="secondary" className="bg-neutral-100 text-neutral-700 border-neutral-200">
-                  <MapPin className="w-4 h-4 mr-1" />
-                  {artist.location}
-                </Badge>
+                {artistData.location && (
+                  <Badge variant="secondary" className="bg-neutral-100 text-neutral-700 border-neutral-200">
+                    <MapPin className="w-4 h-4 mr-1" />
+                    {artistData.location}
+                  </Badge>
+                )}
               </div>
               
               <h1 className="text-5xl font-bold mb-4 text-neutral-900">
-                {artist.name}
+                {artistData.name}
               </h1>
               
               <p className="text-xl mb-8 text-neutral-600 leading-relaxed">
-                {artist.bio}
+                {artistData.bio || 'No bio available yet.'}
               </p>
               
               <div className="flex flex-wrap gap-4 mb-8">
                 <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
                   <Star className="w-5 h-5 mr-2 text-yellow-500" />
-                  <span className="font-semibold text-neutral-900">{artist.rating}</span>
-                  <span className="ml-1 text-neutral-600">({artist.reviewCount} reviews)</span>
+                  <span className="font-semibold text-neutral-900">{mockArtist?.rating || 'N/A'}</span>
+                  <span className="ml-1 text-neutral-600">({mockArtist?.reviewCount || 0} reviews)</span>
                 </div>
                 <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
                   <Users className="w-5 h-5 mr-2 text-neutral-600" />
-                  <span className="text-neutral-900">{artist.members.length} member{artist.members.length > 1 ? 's' : ''}</span>
+                  <span className="text-neutral-900">{mockArtist?.members?.length || 1} member{(mockArtist?.members?.length || 1) > 1 ? 's' : ''}</span>
                 </div>
                 <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
                   <Music className="w-5 h-5 mr-2 text-neutral-600" />
@@ -164,12 +222,12 @@ export default function ArtistProfilePage() {
               </div>
               
               <div className="flex flex-wrap gap-4">
-                <Link href={`/bookings/new?artistId=${artist.id}`}>
+                <Link href={`/bookings/new?artistId=${artistData.id}`}>
                   <Button size="lg" className="bg-primary-600 hover:bg-primary-700 text-white shadow-lg">
                     Request Booking
                   </Button>
                 </Link>
-                <Link href={`/messages?artistId=${artist.id}`}>
+                <Link href={`/messages?artistId=${artistData.id}`}>
                   <Button size="lg" variant="outline" className="border-neutral-300 text-neutral-700 hover:bg-neutral-50">
                     Send Message
                   </Button>
@@ -178,12 +236,12 @@ export default function ArtistProfilePage() {
             </div>
             
             {/* Featured Video with Mock Data */}
-            {artist.livePerformanceVideo && (
+            {mockArtist?.livePerformanceVideo && (
               <div className="lg:pl-8">
                 <div className="relative rounded-2xl overflow-hidden shadow-xl bg-black">
                   <div className="relative aspect-video">
                     <iframe
-                      src={artist.livePerformanceVideo.replace('watch?v=', 'embed/')}
+                      src={mockArtist.livePerformanceVideo.replace('watch?v=', 'embed/')}
                       title="Live Performance Video"
                       className="w-full h-full"
                       allowFullScreen
@@ -191,7 +249,7 @@ export default function ArtistProfilePage() {
                   </div>
                 </div>
                 <p className="mt-4 text-center text-neutral-600 text-sm">
-                  Watch {artist.name} perform live
+                  Watch {artistData.name} perform live
                 </p>
               </div>
             )}
@@ -200,18 +258,18 @@ export default function ArtistProfilePage() {
       </section>
 
       {/* Music & Website Links Section */}
-      {artist.socialLinks && (artist.socialLinks.website || artist.socialLinks.spotify || artist.socialLinks.youtube || artist.socialLinks.instagram) && (
+      {(artistData.website || artistData.socialLinks) && (
         <section className="bg-neutral-50 border-b border-neutral-200">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-neutral-900 mb-2">Listen & Connect</h2>
-              <p className="text-neutral-600">Find {artist.name} on your favorite platforms</p>
+              <p className="text-neutral-600">Find {artistData.name} on your favorite platforms</p>
             </div>
             
             <div className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
-              {artist.socialLinks?.website && (
+              {artistData.website && (
                 <a 
-                  href={artist.socialLinks.website} 
+                  href={artistData.website} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex items-center bg-white hover:bg-neutral-50 border border-neutral-200 rounded-lg px-6 py-3 transition-colors group"
@@ -221,9 +279,9 @@ export default function ArtistProfilePage() {
                 </a>
               )}
               
-              {artist.socialLinks?.spotify && (
+              {artistData.socialLinks?.spotify && (
                 <a 
-                  href={artist.socialLinks.spotify} 
+                  href={artistData.socialLinks.spotify} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex items-center bg-white hover:bg-green-50 border border-neutral-200 rounded-lg px-6 py-3 transition-colors group"
@@ -235,9 +293,9 @@ export default function ArtistProfilePage() {
                 </a>
               )}
               
-              {artist.socialLinks?.youtube && (
+              {artistData.socialLinks?.youtube && (
                 <a 
-                  href={artist.socialLinks.youtube} 
+                  href={artistData.socialLinks.youtube} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex items-center bg-white hover:bg-red-50 border border-neutral-200 rounded-lg px-6 py-3 transition-colors group"
@@ -249,9 +307,9 @@ export default function ArtistProfilePage() {
                 </a>
               )}
               
-              {artist.socialLinks?.instagram && (
+              {artistData.socialLinks?.instagram && (
                 <a 
-                  href={`https://instagram.com/${artist.socialLinks.instagram.replace('@', '')}`} 
+                  href={`https://instagram.com/${artistData.socialLinks.instagram.replace('@', '')}`} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex items-center bg-white hover:bg-pink-50 border border-neutral-200 rounded-lg px-6 py-3 transition-colors group"
@@ -263,9 +321,9 @@ export default function ArtistProfilePage() {
                 </a>
               )}
               
-              {artist.socialLinks?.facebook && (
+              {artistData.socialLinks?.facebook && (
                 <a 
-                  href={artist.socialLinks.facebook} 
+                  href={artistData.socialLinks.facebook} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex items-center bg-white hover:bg-blue-50 border border-neutral-200 rounded-lg px-6 py-3 transition-colors group"
@@ -325,18 +383,18 @@ export default function ArtistProfilePage() {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-2xl font-bold text-neutral-900 mb-2">
-                  {artist.members.length === 1 ? 'Solo Artist' : 'Meet the Band'}
+                  {mockArtist?.members?.length === 1 ? 'Solo Artist' : 'Meet the Band'}
                 </h2>
                 <p className="text-neutral-600">
-                  {artist.members.length === 1 ? 'Individual performer' : `${artist.members.length} talented musicians`}
+                  {mockArtist?.members?.length === 1 ? 'Individual performer' : `${mockArtist?.members?.length || 1} talented musicians`}
                 </p>
               </div>
               <Badge variant="default" className="bg-primary-100 text-primary-800">
-                {artist.members.length} {artist.members.length === 1 ? 'Member' : 'Members'}
+                {mockArtist?.members?.length || 1} {(mockArtist?.members?.length || 1) === 1 ? 'Member' : 'Members'}
               </Badge>
             </div>
             <div className="grid md:grid-cols-2 gap-6">
-              {artist.members.map((member, index) => {
+              {(mockArtist?.members || []).map((member, index) => {
                 // Generate consistent profile photo URLs for band members
                 const profilePhotos = [
                   'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=face',
@@ -392,7 +450,7 @@ export default function ArtistProfilePage() {
                     <div className="text-sm text-neutral-600">Annual touring</div>
                   </div>
                 </div>
-                <div className="text-lg font-bold text-primary-700">{artist.tourMonthsPerYear} months/year</div>
+                <div className="text-lg font-bold text-primary-700">{mockArtist?.tourMonthsPerYear || 0} months/year</div>
                 <div className="text-sm text-neutral-600 mt-1">Active on the road</div>
               </div>
               
@@ -406,7 +464,7 @@ export default function ArtistProfilePage() {
                     <div className="text-sm text-neutral-600">Travel method</div>
                   </div>
                 </div>
-                <div className="text-lg font-bold text-secondary-700">{artist.tourVehicle || 'Van'}</div>
+                <div className="text-lg font-bold text-secondary-700">{mockArtist?.tourVehicle || 'Van'}</div>
                 <div className="text-sm text-neutral-600 mt-1">Professional setup</div>
               </div>
               
@@ -420,7 +478,7 @@ export default function ArtistProfilePage() {
                     <div className="text-sm text-neutral-600">From home base</div>
                   </div>
                 </div>
-                <div className="text-lg font-bold text-neutral-700">{artist.willingToTravel || 500} miles</div>
+                <div className="text-lg font-bold text-neutral-700">{mockArtist?.willingToTravel || 500} miles</div>
                 <div className="text-sm text-neutral-600 mt-1">Touring range</div>
               </div>
             </div>
@@ -476,7 +534,7 @@ export default function ArtistProfilePage() {
                   </li>
                   <li className="flex items-start">
                     <span className="text-blue-600 mr-2">•</span>
-                    Parking space for {(artist.tourVehicle || 'Van') === 'van' ? 'van' : 'vehicle'}
+                    Parking space for {(mockArtist?.tourVehicle || 'Van') === 'van' ? 'van' : 'vehicle'}
                   </li>
                 </ul>
               </div>
@@ -486,9 +544,9 @@ export default function ArtistProfilePage() {
 
         {/* Reviews Section */}
         <PublicReviewsSection 
-          userId={artist.id}
+          userId={artistData.id}
           userType="artist"
-          userName={artist.name}
+          userName={artistData.name}
         />
 
         {/* Related Artists */}
