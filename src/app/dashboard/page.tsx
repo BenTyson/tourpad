@@ -82,9 +82,10 @@ export default function DashboardPage() {
   }
 
   // Check if user has access to full dashboard functionality
-  // Fans have access if payment is active, others need approval
+  // Fans have access if payment is active, others need approval or active status
   const hasFullAccess = userRole === 'admin' || 
                        userStatus === 'approved' || 
+                       userStatus === 'active' ||
                        (userRole === 'fan' && session.user.paymentStatus === 'active');
   const needsPayment = userRole === 'artist' && userStatus === 'approved' && !session.user.paymentStatus;
 
