@@ -60,7 +60,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             id: user.id,
             email: user.email,
             name: user.name,
-            image: user.profileImageUrl,
+            image: user.profileImageUrl || undefined,
             type: user.userType.toLowerCase(),
             status: user.status.toLowerCase(),
             emailVerified: user.emailVerified,
@@ -85,6 +85,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           email: profile.email,
           name: profile.name,
           image: profile.picture,
+          type: 'fan',
+          status: 'active',
           emailVerified: profile.email_verified
         };
       }
@@ -96,7 +98,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         token.type = user.type;
         token.status = user.status;
-        token.emailVerified = user.emailVerified;
+        token.emailVerified = Boolean(user.emailVerified);
         token.profile = user.profile;
         token.artist = user.artist;
         token.host = user.host;
@@ -119,7 +121,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.id = token.sub!;
         session.user.type = token.type as string;
         session.user.status = token.status as string;
-        session.user.emailVerified = token.emailVerified as boolean;
+        session.user.emailVerified = Boolean(token.emailVerified) || false;
         session.user.profile = token.profile as any;
         session.user.artist = token.artist as any;
         session.user.host = token.host as any;
@@ -176,7 +178,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   pages: {
     signIn: '/login',
-    signUp: '/register',
     error: '/auth/error'
   },
   session: {

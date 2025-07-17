@@ -6,8 +6,14 @@ declare module 'next-auth' {
       id: string;
       email: string;
       name: string;
-      type: 'artist' | 'host' | 'admin';
-      status: 'pending' | 'approved' | 'suspended' | 'rejected';
+      image?: string;
+      type: string;
+      status: string;
+      emailVerified: boolean;
+      profile?: any;
+      artist?: any;
+      host?: any;
+      fan?: any;
     };
   }
 
@@ -15,14 +21,25 @@ declare module 'next-auth' {
     id: string;
     email: string;
     name: string;
-    type: 'artist' | 'host' | 'admin';
-    status: 'pending' | 'approved' | 'suspended' | 'rejected';
+    image?: string;
+    type: string;
+    status: string;
+    emailVerified: boolean;
+    profile?: any;
+    artist?: any;
+    host?: any;
+    fan?: any;
   }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT {
-    type: 'artist' | 'host' | 'admin';
-    status: 'pending' | 'approved' | 'suspended' | 'rejected';
+    type: string;
+    status: string;
+    emailVerified: boolean;
+    profile?: any;
+    artist?: any;
+    host?: any;
+    fan?: any;
   }
 }

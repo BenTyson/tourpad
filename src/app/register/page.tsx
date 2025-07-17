@@ -29,6 +29,7 @@ function RegisterForm() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    password: '',
     type: userType || 'host',
     // Artist specific
     bandName: '',
@@ -81,6 +82,9 @@ function RegisterForm() {
         if (!formData.email || !formData.email.includes('@')) {
           errors.email = 'Please enter a valid email address';
         }
+        if (!formData.password || formData.password.length < 8) {
+          errors.password = 'Password must be at least 8 characters';
+        }
         if (!formData.fanCity) {
           errors.fanCity = 'City is required';
         }
@@ -113,8 +117,43 @@ function RegisterForm() {
         }
       }
       
-      // TODO: Submit to backend API
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate API call
+      // Submit to backend API
+      const requestData = {
+        email: formData.email,
+        password: formData.password,
+        name: formData.name,
+        userType: userType,
+        profile: {
+          bio: formData.bio,
+          location: userType === 'fan' ? `${formData.fanCity}, ${formData.fanState}` : `${formData.city}, ${formData.state}`,
+          // Type-specific fields
+          ...(userType === 'artist' && {
+            genres: formData.genre.split(',').map(g => g.trim()).filter(Boolean)
+          }),
+          ...(userType === 'host' && {
+            city: formData.city,
+            state: formData.state,
+            venueType: 'HOME' // Default venue type
+          }),
+          ...(userType === 'fan' && {
+            favoriteGenres: formData.favoriteGenres
+          })
+        }
+      };
+
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+      });
+
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.error || 'Registration failed');
+      }
       
       if (userType === 'fan') {
         // For fans, redirect to payment page
@@ -197,6 +236,24 @@ function RegisterForm() {
                 />
                 {errors.email && (
                   <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                )}
+              </div>
+
+              <div>
+                <Input
+                  label="Password *"
+                  type="password"
+                  value={formData.password}
+                  onChange={(e) => {
+                    setFormData({ ...formData, password: e.target.value });
+                    if (errors.password) setErrors(prev => ({ ...prev, password: '' }));
+                  }}
+                  required
+                  placeholder="Create a strong password"
+                />
+                <p className="mt-1 text-xs text-neutral-500">Must be at least 8 characters long</p>
+                {errors.password && (
+                  <p className="mt-1 text-sm text-red-600">{errors.password}</p>
                 )}
               </div>
 
