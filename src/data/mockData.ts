@@ -848,7 +848,7 @@ export const mockHosts = [
 export const mockArtists = [
   {
     id: '1',
-    userId: 'artist1',
+    userId: 'cmd7j6xr10002lu1fqxf46mw1', // Sarah Johnson's database user ID
     name: 'Sarah & The Wanderers',
     bio: 'Indie folk trio from Colorado with harmonious vocals and acoustic storytelling. We create intimate, emotional performances that connect deeply with audiences in living room settings.',
     yearsActive: 5,
