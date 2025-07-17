@@ -1,93 +1,127 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { hashPassword } from '@/lib/auth';
+import bcrypt from 'bcryptjs';
+import { prisma } from '@/lib/prisma';
+import { registrationSchema } from '@/lib/validation';
 
-// POST /api/auth/register - Register new user
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, password, name, type } = body;
-
-    // Validate required fields
-    if (!email || !password || !name || !type) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      );
-    }
-
-    // Validate user type
-    if (!['artist', 'host'].includes(type)) {
-      return NextResponse.json(
-        { error: 'Invalid user type' },
-        { status: 400 }
-      );
-    }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
-      );
-    }
-
-    // Validate password strength
-    if (password.length < 8) {
-      return NextResponse.json(
-        { error: 'Password must be at least 8 characters long' },
-        { status: 400 }
-      );
-    }
-
-    // TODO: Check if user already exists
-    // const existingUser = await db.users.findUnique({
-    //   where: { email }
-    // });
     
-    // if (existingUser) {
-    //   return NextResponse.json(
-    //     { error: 'User with this email already exists' },
-    //     { status: 409 }
-    //   );
-    // }
+    // Validate input
+    const validation = registrationSchema.safeParse(body);
+    if (!validation.success) {
+      return NextResponse.json(
+        { error: 'Invalid input', details: validation.error.errors },
+        { status: 400 }
+      );
+    }
 
-    // TODO: Hash password and create user
-    // const hashedPassword = await hashPassword(password);
-    // const user = await db.users.create({
-    //   data: {
-    //     email,
-    //     name,
-    //     type,
-    //     password: hashedPassword,
-    //     status: 'pending'
-    //   }
-    // });
+    const { email, password, name, userType, profile } = validation.data;
 
-    // Mock response - don't return password
-    const mockUser = {
-      id: 'new-user-id',
-      email,
-      name,
-      type,
-      status: 'pending',
-      createdAt: new Date()
+    // Check if user already exists
+    const existingUser = await prisma.user.findUnique({
+      where: { email: email.toLowerCase() }
+    });
+
+    if (existingUser) {
+      return NextResponse.json(
+        { error: 'User already exists' },
+        { status: 400 }
+      );
+    }
+
+    // Hash password
+    const passwordHash = await bcrypt.hash(password, 12);
+
+    // Create user with profile
+    const user = await prisma.user.create({
+      data: {
+        email: email.toLowerCase(),
+        passwordHash,
+        name,
+        userType: userType.toUpperCase() as any,
+        status: userType === 'fan' ? 'ACTIVE' : 'PENDING', // Fans are active immediately
+        termsAcceptedAt: new Date(),
+        privacyPolicyAcceptedAt: new Date(),
+        profile: {
+          create: {
+            bio: profile?.bio || '',
+            location: profile?.location || '',
+            phone: profile?.phone || '',
+            socialLinks: profile?.socialLinks || {},
+            preferences: {
+              notifications: { email: true, push: false },
+              privacy: { profileVisibility: 'public' }
+            }
+          }
+        },
+        // Create type-specific records
+        ...(userType === 'artist' && {
+          artist: {
+            create: {
+              genres: profile?.genres || [],
+              applicationSubmittedAt: new Date()
+            }
+          }
+        }),
+        ...(userType === 'host' && {
+          host: {
+            create: {
+              city: profile?.city || '',
+              state: profile?.state || '',
+              venueType: profile?.venueType || 'OTHER',
+              applicationSubmittedAt: new Date()
+            }
+          }
+        }),
+        ...(userType === 'fan' && {
+          fan: {
+            create: {
+              favoriteGenres: profile?.favoriteGenres || [],
+              subscriptionStatus: 'ACTIVE',
+              subscriptionStartDate: new Date(),
+              subscriptionEndDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 1 year
+            }
+          }
+        })
+      },
+      include: {
+        profile: true,
+        artist: true,
+        host: true,
+        fan: true
+      }
+    });
+
+    // Return response based on user type
+    const response = {
+      success: true,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        type: user.userType.toLowerCase(),
+        status: user.status.toLowerCase()
+      },
+      nextStep: getNextStep(user.userType.toLowerCase(), user.status.toLowerCase())
     };
 
-    return NextResponse.json(
-      { 
-        message: 'User registered successfully',
-        user: mockUser
-      },
-      { status: 201 }
-    );
+    return NextResponse.json(response, { status: 201 });
 
   } catch (error) {
-    console.error('Error registering user:', error);
+    console.error('Registration error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Registration failed' },
       { status: 500 }
     );
   }
+}
+
+function getNextStep(userType: string, status: string) {
+  if (userType === 'fan') {
+    return 'complete'; // Fans are immediately active
+  } else if (userType === 'artist' || userType === 'host') {
+    return 'approval_pending'; // Artists and hosts need approval
+  }
+  return 'complete';
 }

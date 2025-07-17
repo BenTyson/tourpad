@@ -1,177 +1,220 @@
-// Authentication utilities and types
-import { getServerSession } from 'next-auth';
+import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
+import { PrismaAdapter } from '@auth/prisma-adapter';
 import bcrypt from 'bcryptjs';
-import { User } from './db';
+import { prisma } from './prisma';
+import { loginSchema } from './validation';
 
-// Import NextAuth options
-const authOptions = {
-  providers: [],
-  session: { strategy: 'jwt' as const },
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    CredentialsProvider({
+      name: 'credentials',
+      credentials: {
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' }
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          return null;
+        }
+
+        // Validate input
+        const validation = loginSchema.safeParse(credentials);
+        if (!validation.success) {
+          return null;
+        }
+
+        const { email, password } = validation.data;
+
+        try {
+          // Find user with profile
+          const user = await prisma.user.findUnique({
+            where: { email: email.toLowerCase() },
+            include: {
+              profile: true,
+              artist: true,
+              host: true,
+              fan: true
+            }
+          });
+
+          if (!user || !user.passwordHash) {
+            return null;
+          }
+
+          // Verify password
+          const isValidPassword = await bcrypt.compare(password, user.passwordHash);
+          if (!isValidPassword) {
+            return null;
+          }
+
+          // Update last login
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { lastLogin: new Date() }
+          });
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            image: user.profileImageUrl,
+            type: user.userType.toLowerCase(),
+            status: user.status.toLowerCase(),
+            emailVerified: user.emailVerified,
+            profile: user.profile,
+            artist: user.artist,
+            host: user.host,
+            fan: user.fan
+          };
+        } catch (error) {
+          console.error('Authentication error:', error);
+          return null;
+        }
+      }
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      async profile(profile) {
+        // Handle Google OAuth profile
+        return {
+          id: profile.sub,
+          email: profile.email,
+          name: profile.name,
+          image: profile.picture,
+          emailVerified: profile.email_verified
+        };
+      }
+    })
+  ],
   callbacks: {
-    async jwt({ token, user }: any) {
+    async jwt({ token, user, trigger, session }) {
+      // Include user data in JWT token
       if (user) {
         token.type = user.type;
         token.status = user.status;
+        token.emailVerified = user.emailVerified;
+        token.profile = user.profile;
+        token.artist = user.artist;
+        token.host = user.host;
+        token.fan = user.fan;
       }
+
+      // Handle session updates
+      if (trigger === 'update' && session) {
+        // Update token with new session data
+        token.name = session.user.name;
+        token.email = session.user.email;
+        token.picture = session.user.image;
+      }
+
       return token;
     },
-    async session({ session, token }: any) {
+    async session({ session, token }) {
+      // Include user data in session
       if (token) {
         session.user.id = token.sub!;
-        session.user.type = token.type;
-        session.user.status = token.status;
+        session.user.type = token.type as string;
+        session.user.status = token.status as string;
+        session.user.emailVerified = token.emailVerified as boolean;
+        session.user.profile = token.profile as any;
+        session.user.artist = token.artist as any;
+        session.user.host = token.host as any;
+        session.user.fan = token.fan as any;
       }
+
       return session;
+    },
+    async signIn({ user, account, profile }) {
+      // Handle OAuth sign in
+      if (account?.provider === 'google') {
+        try {
+          // Check if user exists
+          const existingUser = await prisma.user.findUnique({
+            where: { email: user.email! }
+          });
+
+          if (!existingUser) {
+            // Create new user for OAuth
+            await prisma.user.create({
+              data: {
+                email: user.email!,
+                name: user.name!,
+                profileImageUrl: user.image,
+                userType: 'FAN', // Default to fan for OAuth users
+                status: 'ACTIVE',
+                emailVerified: true,
+                oauthProvider: account.provider,
+                oauthId: account.providerAccountId,
+                termsAcceptedAt: new Date(),
+                privacyPolicyAcceptedAt: new Date(),
+                profile: {
+                  create: {
+                    bio: 'House concert enthusiast',
+                    preferences: {
+                      notifications: { email: true, push: false },
+                      privacy: { profileVisibility: 'public' }
+                    }
+                  }
+                }
+              }
+            });
+          }
+
+          return true;
+        } catch (error) {
+          console.error('OAuth sign in error:', error);
+          return false;
+        }
+      }
+
+      return true;
     }
+  },
+  pages: {
+    signIn: '/login',
+    signUp: '/register',
+    error: '/auth/error'
+  },
+  session: {
+    strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60 // 30 days
+  },
+  debug: process.env.NODE_ENV === 'development'
+});
+
+// Helper function to get current user
+export async function getCurrentUser() {
+  const session = await auth();
+  return session?.user;
+}
+
+// Helper function to require authentication
+export async function requireAuth() {
+  const user = await getCurrentUser();
+  if (!user) {
+    throw new Error('Authentication required');
   }
-};
-
-export interface ExtendedUser extends User {
-  type: 'artist' | 'host' | 'admin';
-  status: 'pending' | 'approved' | 'suspended' | 'rejected';
+  return user;
 }
 
-export interface AuthSession {
-  user: ExtendedUser;
-  expires: string;
-}
-
-// Get current session
-export async function getSession(): Promise<AuthSession | null> {
-  try {
-    const session = await getServerSession(authOptions);
-    return session as AuthSession | null;
-  } catch (error) {
-    console.error('Error getting session:', error);
-    return null;
+// Helper function to require specific user type
+export async function requireUserType(allowedTypes: string[]) {
+  const user = await requireAuth();
+  if (!allowedTypes.includes(user.type)) {
+    throw new Error(`Access denied. Required user type: ${allowedTypes.join(' or ')}`);
   }
+  return user;
 }
 
-// Check if user is authenticated
-export async function isAuthenticated(): Promise<boolean> {
-  const session = await getSession();
-  return !!session?.user;
-}
-
-// Check if user has specific role
-export async function hasRole(role: 'artist' | 'host' | 'admin'): Promise<boolean> {
-  const session = await getSession();
-  return session?.user.type === role;
-}
-
-// Check if user is admin
-export async function isAdmin(): Promise<boolean> {
-  return hasRole('admin');
-}
-
-// Check if user account is approved
-export async function isApproved(): Promise<boolean> {
-  const session = await getSession();
-  return session?.user.status === 'approved';
-}
-
-// Password utilities
-export async function hashPassword(password: string): Promise<string> {
-  const saltRounds = 12;
-  return bcrypt.hash(password, saltRounds);
-}
-
-export async function verifyPassword(password: string, hash: string): Promise<boolean> {
-  return bcrypt.compare(password, hash);
-}
-
-// Generate secure random token
-export function generateToken(): string {
-  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-}
-
-// Middleware helpers for API routes
-export function withAuth(handler: Function, options: {
-  requireApproved?: boolean;
-  requireRole?: 'artist' | 'host' | 'admin';
-} = {}) {
-  return async (req: any, res: any) => {
-    const session = await getSession();
-    
-    if (!session?.user) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
-    
-    if (options.requireApproved && session.user.status !== 'approved') {
-      return res.status(403).json({ error: 'Account not approved' });
-    }
-    
-    if (options.requireRole && session.user.type !== options.requireRole) {
-      return res.status(403).json({ error: 'Insufficient permissions' });
-    }
-    
-    // Add user to request object
-    req.user = session.user;
-    
-    return handler(req, res);
-  };
-}
-
-// Admin-only middleware
-export function withAdminAuth(handler: Function) {
-  return withAuth(handler, { requireRole: 'admin', requireApproved: true });
-}
-
-// User validation utilities
-export function validateUserPermissions(
-  currentUser: ExtendedUser,
-  targetUserId: string,
-  requireAdmin: boolean = false
-): boolean {
-  // Admin can access anything
-  if (currentUser.type === 'admin') {
-    return true;
+// Helper function to require approval status
+export async function requireApproval() {
+  const user = await requireAuth();
+  if (user.status !== 'active' && user.status !== 'approved') {
+    throw new Error('User approval required');
   }
-  
-  // If admin is required and user is not admin
-  if (requireAdmin) {
-    return false;
-  }
-  
-  // User can only access their own data
-  return currentUser.id === targetUserId;
-}
-
-// Check if user can access booking
-export function canAccessBooking(
-  currentUser: ExtendedUser,
-  booking: { artistId: string; hostId: string }
-): boolean {
-  return (
-    currentUser.type === 'admin' ||
-    currentUser.id === booking.artistId ||
-    currentUser.id === booking.hostId
-  );
-}
-
-// Rate limiting utilities
-const rateLimitMap = new Map();
-
-export function rateLimit(key: string, limit: number = 5, windowMs: number = 15 * 60 * 1000): boolean {
-  const now = Date.now();
-  const windowStart = now - windowMs;
-  
-  if (!rateLimitMap.has(key)) {
-    rateLimitMap.set(key, []);
-  }
-  
-  const requests = rateLimitMap.get(key);
-  
-  // Remove old requests outside the window
-  const validRequests = requests.filter((time: number) => time > windowStart);
-  
-  if (validRequests.length >= limit) {
-    return false; // Rate limit exceeded
-  }
-  
-  // Add current request
-  validRequests.push(now);
-  rateLimitMap.set(key, validRequests);
-  
-  return true; // Request allowed
+  return user;
 }

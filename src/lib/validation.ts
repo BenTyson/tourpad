@@ -41,6 +41,30 @@ export const loginSchema = z.object({
   password: z.string().min(1, 'Password is required')
 });
 
+// New registration validation (for database backend)
+export const registrationSchema = z.object({
+  email: z.string().email('Invalid email format'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+  name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name cannot exceed 100 characters'),
+  userType: z.enum(['artist', 'host', 'fan'], {
+    errorMap: () => ({ message: 'Please select a valid user type' })
+  }),
+  profile: z.object({
+    bio: z.string().optional(),
+    location: z.string().optional(),
+    phone: z.string().optional(),
+    socialLinks: z.record(z.string()).optional(),
+    // Artist-specific fields
+    genres: z.array(z.string()).optional(),
+    // Host-specific fields
+    city: z.string().optional(),
+    state: z.string().optional(),
+    venueType: z.enum(['HOME', 'LOFT', 'WAREHOUSE', 'OTHER']).optional(),
+    // Fan-specific fields
+    favoriteGenres: z.array(z.string()).optional()
+  }).optional()
+});
+
 // Artist onboarding/application validation (comprehensive 4-step form)
 export const artistOnboardingSchema = z.object({
   // Step 1: About Artist/Band

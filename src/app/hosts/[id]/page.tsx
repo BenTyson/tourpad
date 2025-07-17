@@ -221,7 +221,7 @@ export default function HostProfilePage() {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-2xl font-bold text-neutral-900 mb-2">
-                  Venue Details
+                  Venue Details Tim
                 </h2>
                 <p className="text-neutral-600">Everything you need to know about performing here</p>
               </div>
