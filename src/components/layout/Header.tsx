@@ -37,9 +37,9 @@ export function Header() {
       { name: 'How It Works', href: '/how-it-works', requiresAuth: false },
     ];
 
-    // Only show browse links to approved users, fans with active payment, or non-authenticated users (as teasers)
+    // Only show browse links to approved/active users, fans with active payment, or non-authenticated users (as teasers)
     if (!session || 
-        (session && session.user.status === 'approved') ||
+        (session && (session.user.status === 'approved' || session.user.status === 'active')) ||
         (session && session.user.type === 'fan' && session.user.paymentStatus === 'active')) {
       // Customize link text based on user type
       const browseArtistsText = (session && session.user.type === 'fan') ? 'Find Concerts' : 'Browse Artists';
@@ -50,9 +50,9 @@ export function Header() {
         { name: browseArtistsText, href: '/artists', requiresAuth: false }
       );
       
-      // Add Map link for approved users or fans with active payment
+      // Add Map link for approved/active users or fans with active payment
       if (session && 
-          ((session.user.status === 'approved') ||
+          ((session.user.status === 'approved' || session.user.status === 'active') ||
            (session.user.type === 'fan' && session.user.paymentStatus === 'active'))) {
         baseNavigation.push(
           { name: 'Map', href: '/map', requiresAuth: true }
@@ -70,8 +70,8 @@ export function Header() {
         baseNavigation.push(
           { name: 'Application Status', href: '/account/status', requiresAuth: true, highlight: true }
         );
-      } else if (userStatus === 'approved') {
-        // Full access for approved users
+      } else if (userStatus === 'approved' || userStatus === 'active') {
+        // Full access for approved/active users
         if (userType === 'artist') {
           baseNavigation.push(
             { name: 'My Bookings', href: '/dashboard', requiresAuth: true }
@@ -158,7 +158,7 @@ export function Header() {
                           <div className="text-xs text-gray-600">{session.user?.email}</div>
                           <div className="text-xs text-blue-600 mt-1 capitalize">{session.user?.type}</div>
                         </div>
-                        {session.user?.status === 'approved' ? (
+                        {(session.user?.status === 'approved' || session.user?.status === 'active') ? (
                           <Link 
                             href="/dashboard"
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
@@ -256,7 +256,7 @@ export function Header() {
               ))}
               {session && (
                 <>
-                  {session.user?.status === 'approved' ? (
+                  {(session.user?.status === 'approved' || session.user?.status === 'active') ? (
                     <Link
                       href="/dashboard"
                       className="block px-3 py-2 text-gray-700 hover:text-primary-600"

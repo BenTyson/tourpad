@@ -50,7 +50,7 @@ export default function HostsPage() {
   // Check if user has access to browse hosts
   const hasAccess = session?.user && (
     session.user.type === 'admin' || 
-    (session.user.status === 'approved' && (session.user.type === 'artist' || session.user.type === 'host'))
+    (session.user.status === 'active' && (session.user.type === 'artist' || session.user.type === 'host'))
   );
 
   // If user doesn't have access, show gateway page
