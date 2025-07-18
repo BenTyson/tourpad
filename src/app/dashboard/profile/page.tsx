@@ -740,25 +740,27 @@ export default function ProfilePage() {
                       <div className="grid md:grid-cols-2 gap-6">
                         {/* Equipment Provided */}
                         <div>
-                          <label className="block text-sm font-medium text-neutral-700 mb-3">Equipment You Provide</label>
-                          <div className="space-y-2">
-                            {artistProfile.equipmentProvided.map(equipment => (
-                              <div key={equipment} className="flex items-center justify-between bg-green-50 rounded-lg px-3 py-2 border border-green-200">
-                                <span className="text-sm text-green-800">{equipment}</span>
-                                <button
-                                  onClick={() => removeEquipment(equipment)}
-                                  className="text-xs text-green-600 hover:text-red-600 transition-colors"
-                                >
-                                  <X className="w-4 h-4" />
-                                </button>
-                              </div>
-                            ))}
-                            <div className="space-y-1">
+                          <label className="block text-sm font-medium text-neutral-700 mb-2">Equipment You Provide</label>
+                          <div className="space-y-3">
+                            <div className="flex flex-wrap gap-2">
+                              {artistProfile.equipmentProvided.map(equipment => (
+                                <Badge key={equipment} variant="secondary" className="bg-green-50 text-green-800 border-green-200 flex items-center">
+                                  {equipment}
+                                  <button
+                                    onClick={() => removeEquipment(equipment)}
+                                    className="ml-1 text-xs hover:text-red-600"
+                                  >
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </Badge>
+                              ))}
+                            </div>
+                            <div className="flex flex-wrap gap-2">
                               {EQUIPMENT_OPTIONS.filter(e => !artistProfile.equipmentProvided.includes(e)).map(equipment => (
                                 <button
                                   key={equipment}
                                   onClick={() => addEquipment(equipment)}
-                                  className="block w-full text-left px-3 py-2 text-xs bg-neutral-50 hover:bg-green-50 rounded border transition-colors"
+                                  className="px-3 py-1 text-xs bg-neutral-100 hover:bg-green-100 rounded-full transition-colors"
                                 >
                                   + {equipment}
                                 </button>
@@ -769,25 +771,27 @@ export default function ProfilePage() {
 
                         {/* Venue Requirements */}
                         <div>
-                          <label className="block text-sm font-medium text-neutral-700 mb-3">Venue Requirements</label>
-                          <div className="space-y-2">
-                            {artistProfile.venueRequirements.map(requirement => (
-                              <div key={requirement} className="flex items-center justify-between bg-blue-50 rounded-lg px-3 py-2 border border-blue-200">
-                                <span className="text-sm text-blue-800">{requirement}</span>
-                                <button
-                                  onClick={() => removeVenueRequirement(requirement)}
-                                  className="text-xs text-blue-600 hover:text-red-600 transition-colors"
-                                >
-                                  <X className="w-4 h-4" />
-                                </button>
-                              </div>
-                            ))}
-                            <div className="space-y-1">
+                          <label className="block text-sm font-medium text-neutral-700 mb-2">Venue Requirements</label>
+                          <div className="space-y-3">
+                            <div className="flex flex-wrap gap-2">
+                              {artistProfile.venueRequirements.map(requirement => (
+                                <Badge key={requirement} variant="secondary" className="bg-blue-50 text-blue-800 border-blue-200 flex items-center">
+                                  {requirement}
+                                  <button
+                                    onClick={() => removeVenueRequirement(requirement)}
+                                    className="ml-1 text-xs hover:text-red-600"
+                                  >
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </Badge>
+                              ))}
+                            </div>
+                            <div className="flex flex-wrap gap-2">
                               {VENUE_REQUIREMENT_OPTIONS.filter(r => !artistProfile.venueRequirements.includes(r)).map(requirement => (
                                 <button
                                   key={requirement}
                                   onClick={() => addVenueRequirement(requirement)}
-                                  className="block w-full text-left px-3 py-2 text-xs bg-neutral-50 hover:bg-blue-50 rounded border transition-colors"
+                                  className="px-3 py-1 text-xs bg-neutral-100 hover:bg-blue-100 rounded-full transition-colors"
                                 >
                                   + {requirement}
                                 </button>
