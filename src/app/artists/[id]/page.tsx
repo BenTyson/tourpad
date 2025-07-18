@@ -213,87 +213,91 @@ export default function ArtistProfilePage() {
         </div>
       </div>
 
-      {/* Hero Section - Clean White Design */}
-      <section className="bg-white border-b border-neutral-200">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
-            <div>
-              {/* Profile Photo and Name Section */}
-              <div className="flex items-start gap-6 mb-6">
-                {artistData.profileImageUrl && (
-                  <div className="w-24 h-24 rounded-full overflow-hidden bg-neutral-100 flex-shrink-0">
-                    <img 
-                      src={artistData.profileImageUrl} 
-                      alt={`${artistData.name} profile photo`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                )}
-                <div className="flex-1">
-                  <div className="flex items-center space-x-3 mb-4">
-                    <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">
-                      Verified Artist
-                    </Badge>
-                    {artistData.location && (
-                      <Badge variant="secondary" className="bg-neutral-100 text-neutral-700 border-neutral-200">
-                        <MapPin className="w-4 h-4 mr-1" />
-                        {artistData.location}
-                      </Badge>
-                    )}
-                  </div>
-                  
-                  <h1 className="text-5xl font-bold mb-2 text-neutral-900">
-                    {artistData.name}
-                  </h1>
-                </div>
+      {/* Hero Section - Full Image Background */}
+      <section className="relative h-[70vh] min-h-[500px] bg-neutral-900 overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          {artistData.profileImageUrl ? (
+            <img 
+              src={artistData.profileImageUrl} 
+              alt={`${artistData.name} background`}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-primary-600 to-primary-800"></div>
+          )}
+        </div>
+        
+        {/* Overlay Mask */}
+        <div className="absolute inset-0 bg-black/50"></div>
+        
+        {/* Content Overlay */}
+        <div className="relative z-10 flex items-center justify-center h-full">
+          <div className="text-center text-white px-4 sm:px-6 lg:px-8">
+            {/* Artist Name */}
+            <h1 className="text-7xl md:text-8xl font-bold mb-6 text-white drop-shadow-2xl">
+              {artistData.name}
+            </h1>
+            
+            {/* Location */}
+            {artistData.location && (
+              <div className="flex items-center justify-center text-white/90 mb-8">
+                <MapPin className="w-5 h-5 mr-2" />
+                <span className="font-medium text-lg">{artistData.location}</span>
               </div>
+            )}
+            
+            {/* Action Buttons */}
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link href={`/bookings/new?artistId=${artistData.id}`}>
+                <Button size="lg" className="bg-white text-neutral-900 hover:bg-neutral-100 shadow-lg px-8 py-3 font-semibold">
+                  Request Booking
+                </Button>
+              </Link>
+              <Link href={`/messages?artistId=${artistData.id}`}>
+                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 px-8 py-3 font-semibold">
+                  Send Message
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Content Section - Bio, Stats, Video */}
+      <section className="bg-white py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          
+          
+          {/* Bio & Video Side by Side */}
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            {/* Bio Section */}
+            <div>
+              <h2 className="text-3xl font-bold text-neutral-900 mb-6">About {artistData.name}</h2>
               
-              <p className="text-xl mb-8 text-neutral-600 leading-relaxed">
+              {/* Genre Tags */}
+              {artistData.genres && artistData.genres.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {artistData.genres.map((genre, index) => (
+                    <span key={index} className="inline-block bg-primary-100 text-primary-800 text-sm font-medium px-3 py-1 rounded-full">
+                      {genre}
+                    </span>
+                  ))}
+                </div>
+              )}
+              
+              <p className="text-xl text-neutral-600 leading-relaxed">
                 {artistData.bio || 'No bio available yet.'}
               </p>
-              
-              <div className="flex flex-wrap gap-4 mb-8">
-                <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
-                  <Star className="w-5 h-5 mr-2 text-yellow-500" />
-                  <span className="font-semibold text-neutral-900">{artistData.rating || 'N/A'}</span>
-                  <span className="ml-1 text-neutral-600">({artistData.reviewCount || 0} reviews)</span>
-                </div>
-                <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
-                  <Users className="w-5 h-5 mr-2 text-neutral-600" />
-                  <span className="text-neutral-900">{artistData.bandMembers?.length || 1} member{(artistData.bandMembers?.length || 1) > 1 ? 's' : ''}</span>
-                </div>
-                {/* Genre Tags */}
-                {artistData.genres && artistData.genres.length > 0 && (
-                  artistData.genres.map((genre, index) => (
-                    <div key={index} className="flex items-center bg-primary-50 rounded-lg px-4 py-2 border border-primary-200">
-                      <Music className="w-5 h-5 mr-2 text-primary-600" />
-                      <span className="text-primary-900 font-medium">{genre}</span>
-                    </div>
-                  ))
-                )}
-              </div>
-              
-              <div className="flex flex-wrap gap-4">
-                <Link href={`/bookings/new?artistId=${artistData.id}`}>
-                  <Button size="lg" className="bg-primary-600 hover:bg-primary-700 text-white shadow-lg">
-                    Request Booking
-                  </Button>
-                </Link>
-                <Link href={`/messages?artistId=${artistData.id}`}>
-                  <Button size="lg" variant="outline" className="border-neutral-300 text-neutral-700 hover:bg-neutral-50">
-                    Send Message
-                  </Button>
-                </Link>
-              </div>
             </div>
             
-            {/* Featured Video from Database */}
+            {/* Featured Video Section */}
             {(() => {
               const featuredVideo = artistData.videoLinks?.find(video => video.isLivePerformance);
               if (featuredVideo) {
                 return (
-                  <div className="lg:pl-8">
-                    <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-black ring-1 ring-neutral-900/5">
+                  <div>
+                    <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-black ring-1 ring-neutral-900/5 mb-4">
                       <div className="relative aspect-video">
                         <iframe
                           src={featuredVideo.url.replace('watch?v=', 'embed/')}
@@ -302,21 +306,36 @@ export default function ArtistProfilePage() {
                           allowFullScreen
                         />
                       </div>
-                      {/* Video Title Overlay */}
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-                        <p className="text-white font-semibold text-lg">
-                          {featuredVideo.title}
-                        </p>
-                        <p className="text-white/80 text-sm mt-1">
-                          Featured Performance
-                        </p>
-                      </div>
                     </div>
+                    <p className="text-sm text-neutral-600 text-center">{featuredVideo.title}</p>
                   </div>
                 );
               }
               return null;
             })()}
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="bg-neutral-50 border-b border-neutral-200">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-center gap-12">
+            <div className="text-center">
+              <div className="flex items-center justify-center mb-2">
+                <Star className="w-6 h-6 mr-2 text-yellow-500" />
+                <span className="text-3xl font-bold text-neutral-900">{artistData.rating || 'N/A'}</span>
+              </div>
+              <p className="text-neutral-600">Rating ({artistData.reviewCount || 0} reviews)</p>
+            </div>
+            <div className="w-px h-16 bg-neutral-200"></div>
+            <div className="text-center">
+              <div className="flex items-center justify-center mb-2">
+                <Users className="w-6 h-6 mr-2 text-neutral-600" />
+                <span className="text-3xl font-bold text-neutral-900">{artistData.bandMembers?.length || 1}</span>
+              </div>
+              <p className="text-neutral-600">Band Member{(artistData.bandMembers?.length || 1) > 1 ? 's' : ''}</p>
+            </div>
           </div>
         </div>
       </section>
