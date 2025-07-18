@@ -52,6 +52,21 @@ interface ArtistData {
     instrument: string;
     photo?: string;
   }>;
+  videoLinks?: Array<{
+    id: string;
+    title: string;
+    url: string;
+    platform: string;
+    category: string;
+    isLivePerformance: boolean;
+    description: string;
+  }>;
+  musicSamples?: Array<{
+    id: string;
+    title: string;
+    url: string;
+    platform: string;
+  }>;
   createdAt: string;
   updatedAt: string;
 }
@@ -257,24 +272,35 @@ export default function ArtistProfilePage() {
               </div>
             </div>
             
-            {/* Featured Video with Mock Data */}
-            {mockArtist?.livePerformanceVideo && (
-              <div className="lg:pl-8">
-                <div className="relative rounded-2xl overflow-hidden shadow-xl bg-black">
-                  <div className="relative aspect-video">
-                    <iframe
-                      src={mockArtist.livePerformanceVideo.replace('watch?v=', 'embed/')}
-                      title="Live Performance Video"
-                      className="w-full h-full"
-                      allowFullScreen
-                    />
+            {/* Featured Video from Database */}
+            {(() => {
+              const featuredVideo = artistData.videoLinks?.find(video => video.isLivePerformance);
+              if (featuredVideo) {
+                return (
+                  <div className="lg:pl-8">
+                    <div className="relative rounded-2xl overflow-hidden shadow-xl bg-black">
+                      <div className="relative aspect-video">
+                        <iframe
+                          src={featuredVideo.url.replace('watch?v=', 'embed/')}
+                          title={featuredVideo.title}
+                          className="w-full h-full"
+                          allowFullScreen
+                        />
+                      </div>
+                    </div>
+                    <div className="mt-4 text-center">
+                      <p className="text-neutral-900 font-medium text-sm">
+                        {featuredVideo.title}
+                      </p>
+                      <p className="text-neutral-600 text-sm">
+                        {featuredVideo.description}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <p className="mt-4 text-center text-neutral-600 text-sm">
-                  Watch {artistData.name} perform live
-                </p>
-              </div>
-            )}
+                );
+              }
+              return null;
+            })()}
           </div>
         </div>
       </section>

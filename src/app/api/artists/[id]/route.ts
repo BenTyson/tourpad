@@ -83,6 +83,8 @@ export async function GET(
         instrument: member.instrument || '',
         photo: member.photoUrl || ''
       })) || [],
+      videoLinks: artist.videoLinks ? (artist.videoLinks as any[]) : [],
+      musicSamples: artist.musicSamples ? (artist.musicSamples as any[]) : [],
       createdAt: artist.createdAt,
       updatedAt: artist.updatedAt
     });
