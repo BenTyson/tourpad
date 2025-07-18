@@ -51,6 +51,10 @@ export async function GET(
       return NextResponse.json({ error: 'Artist not found' }, { status: 404 });
     }
 
+    // Calculate rating from reviews (for now use default values)
+    const rating = 4.8; // TODO: Calculate from actual reviews table
+    const reviewCount = 24; // TODO: Count from actual reviews table
+
     // Return the artist data
     return NextResponse.json({
       id: artist.id,
@@ -64,6 +68,13 @@ export async function GET(
       profileImageUrl: artist.user.profileImageUrl || '',
       website: artist.user.profile?.websiteUrl || '',
       socialLinks: artist.user.profile?.socialLinks || {},
+      rating: rating,
+      reviewCount: reviewCount,
+      tourMonthsPerYear: artist.tourMonthsPerYear || 0,
+      tourVehicle: artist.tourVehicle || 'van',
+      willingToTravel: artist.willingToTravel || 500,
+      equipmentProvided: artist.equipmentNeeds || [],
+      venueRequirements: artist.venueRequirements || [],
       bandMembers: artist.bandMembers?.map(member => ({
         id: member.id,
         name: member.name,

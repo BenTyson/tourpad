@@ -39,6 +39,13 @@ interface ArtistData {
   profileImageUrl: string;
   website: string;
   socialLinks: any;
+  rating: number;
+  reviewCount: number;
+  tourMonthsPerYear: number;
+  tourVehicle: string;
+  willingToTravel: number;
+  equipmentProvided: string[];
+  venueRequirements: string[];
   bandMembers?: Array<{
     id: string;
     name: string;
@@ -204,8 +211,8 @@ export default function ArtistProfilePage() {
               <div className="flex flex-wrap gap-4 mb-8">
                 <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
                   <Star className="w-5 h-5 mr-2 text-yellow-500" />
-                  <span className="font-semibold text-neutral-900">{mockArtist?.rating || 'N/A'}</span>
-                  <span className="ml-1 text-neutral-600">({mockArtist?.reviewCount || 0} reviews)</span>
+                  <span className="font-semibold text-neutral-900">{artistData.rating || 'N/A'}</span>
+                  <span className="ml-1 text-neutral-600">({artistData.reviewCount || 0} reviews)</span>
                 </div>
                 <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
                   <Users className="w-5 h-5 mr-2 text-neutral-600" />
@@ -427,60 +434,32 @@ export default function ArtistProfilePage() {
 
         {/* Tour & Logistics Section */}
         <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
-          <div className="p-8">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="text-2xl font-bold text-neutral-900 mb-2">
-                  Tour & Logistics
-                </h2>
-                <p className="text-neutral-600">Everything you need to know about hosting this artist</p>
-              </div>
-              <Badge variant="default" className="bg-secondary-100 text-secondary-800">
-                Tour Info
-              </Badge>
-            </div>
+          <div className="p-6">
+            <h2 className="text-xl font-bold text-neutral-900 mb-4">Tour & Logistics</h2>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="group bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl p-6 border border-primary-200 hover:shadow-md transition-all duration-300">
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-primary-500 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
-                    <Clock className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-neutral-900">Tour Schedule</div>
-                    <div className="text-sm text-neutral-600">Annual touring</div>
-                  </div>
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="flex items-center bg-primary-50 rounded-lg p-4 border border-primary-200">
+                <Clock className="w-5 h-5 text-primary-600 mr-3 flex-shrink-0" />
+                <div>
+                  <div className="font-medium text-neutral-900">{artistData.tourMonthsPerYear || 0} months/year</div>
+                  <div className="text-sm text-neutral-600">Touring</div>
                 </div>
-                <div className="text-lg font-bold text-primary-700">{mockArtist?.tourMonthsPerYear || 0} months/year</div>
-                <div className="text-sm text-neutral-600 mt-1">Active on the road</div>
               </div>
               
-              <div className="group bg-gradient-to-br from-secondary-50 to-secondary-100 rounded-xl p-6 border border-secondary-200 hover:shadow-md transition-all duration-300">
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-secondary-500 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
-                    <Truck className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-neutral-900">Transport</div>
-                    <div className="text-sm text-neutral-600">Travel method</div>
-                  </div>
+              <div className="flex items-center bg-secondary-50 rounded-lg p-4 border border-secondary-200">
+                <Truck className="w-5 h-5 text-secondary-600 mr-3 flex-shrink-0" />
+                <div>
+                  <div className="font-medium text-neutral-900 capitalize">{artistData.tourVehicle || 'Van'}</div>
+                  <div className="text-sm text-neutral-600">Transport</div>
                 </div>
-                <div className="text-lg font-bold text-secondary-700">{mockArtist?.tourVehicle || 'Van'}</div>
-                <div className="text-sm text-neutral-600 mt-1">Professional setup</div>
               </div>
               
-              <div className="group bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-xl p-6 border border-neutral-200 hover:shadow-md transition-all duration-300">
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-neutral-600 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
-                    <Globe className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-neutral-900">Tour Radius</div>
-                    <div className="text-sm text-neutral-600">From home base</div>
-                  </div>
+              <div className="flex items-center bg-neutral-50 rounded-lg p-4 border border-neutral-200">
+                <Globe className="w-5 h-5 text-neutral-600 mr-3 flex-shrink-0" />
+                <div>
+                  <div className="font-medium text-neutral-900">{artistData.willingToTravel || 500} miles</div>
+                  <div className="text-sm text-neutral-600">Travel radius</div>
                 </div>
-                <div className="text-lg font-bold text-neutral-700">{mockArtist?.willingToTravel || 500} miles</div>
-                <div className="text-sm text-neutral-600 mt-1">Touring range</div>
               </div>
             </div>
           </div>
@@ -497,22 +476,19 @@ export default function ArtistProfilePage() {
                   Equipment Provided by Artist
                 </h3>
                 <ul className="space-y-2 text-neutral-700">
-                  <li className="flex items-start">
-                    <span className="text-green-600 mr-2">•</span>
-                    All instruments and personal gear
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-600 mr-2">•</span>
-                    Professional sound equipment
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-600 mr-2">•</span>
-                    Microphones and stands
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-600 mr-2">•</span>
-                    Basic lighting setup if needed
-                  </li>
+                  {artistData.equipmentProvided.length > 0 ? (
+                    artistData.equipmentProvided.map((equipment, index) => (
+                      <li key={index} className="flex items-start">
+                        <span className="text-green-600 mr-2">•</span>
+                        {equipment}
+                      </li>
+                    ))
+                  ) : (
+                    <li className="flex items-start text-neutral-500 italic">
+                      <span className="text-neutral-400 mr-2">•</span>
+                      No equipment information provided
+                    </li>
+                  )}
                 </ul>
               </div>
               <div>
@@ -521,21 +497,23 @@ export default function ArtistProfilePage() {
                   Venue Requirements
                 </h3>
                 <ul className="space-y-2 text-neutral-700">
+                  {artistData.venueRequirements.length > 0 ? (
+                    artistData.venueRequirements.map((requirement, index) => (
+                      <li key={index} className="flex items-start">
+                        <span className="text-blue-600 mr-2">•</span>
+                        {requirement}
+                      </li>
+                    ))
+                  ) : (
+                    <li className="flex items-start text-neutral-500 italic">
+                      <span className="text-neutral-400 mr-2">•</span>
+                      No venue requirements specified
+                    </li>
+                  )}
+                  {/* Always show parking requirement based on tour vehicle */}
                   <li className="flex items-start">
                     <span className="text-blue-600 mr-2">•</span>
-                    Performance space: Min 12x10 feet
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-blue-600 mr-2">•</span>
-                    Power outlets: 2-3 standard outlets
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-blue-600 mr-2">•</span>
-                    Seating for audience
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-blue-600 mr-2">•</span>
-                    Parking space for {(mockArtist?.tourVehicle || 'Van') === 'van' ? 'van' : 'vehicle'}
+                    Parking space for {(artistData.tourVehicle || 'van').toLowerCase() === 'van' ? 'van' : 'vehicle'}
                   </li>
                 </ul>
               </div>

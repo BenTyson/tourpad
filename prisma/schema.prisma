@@ -182,8 +182,14 @@ model Artist {
   
   // Performance details
   typicalSetLength          Int?      // minutes
-  equipmentNeeds            String[]
+  equipmentNeeds            String[]  // Equipment artist provides
+  venueRequirements         String[]  // What artist needs from venue
   travelRadius              Int?      // miles
+  
+  // Tour logistics
+  tourMonthsPerYear         Int?      // number of months per year actively touring
+  tourVehicle               String?   // 'van', 'car', 'bus', 'fly', etc.
+  willingToTravel           Int?      // miles from home base
   
   // Media
   pressPhotoUrl             String?

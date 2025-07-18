@@ -51,6 +51,11 @@ export async function GET() {
         socialLinks: user.profile?.socialLinks || {},
         experienceLevel: 'intermediate', // Will need to add this field to schema later
         yearsActive: 1, // Will need to add this field to schema later
+        tourMonthsPerYear: user.artist.tourMonthsPerYear || 3,
+        tourVehicle: user.artist.tourVehicle || 'van',
+        willingToTravel: user.artist.willingToTravel || 500,
+        equipmentProvided: user.artist.equipmentNeeds || [],
+        venueRequirements: user.artist.venueRequirements || [],
         bandMembers: user.artist.bandMembers?.map(member => ({
           id: member.id,
           name: member.name,
@@ -173,6 +178,11 @@ export async function PUT(request: NextRequest) {
           data: {
             stageName: data.bandName || undefined,
             genres: data.genres || [],
+            tourMonthsPerYear: data.tourMonthsPerYear || null,
+            tourVehicle: data.tourVehicle || null,
+            willingToTravel: data.willingToTravel || null,
+            equipmentNeeds: data.equipmentProvided || [],
+            venueRequirements: data.venueRequirements || [],
           }
         });
 

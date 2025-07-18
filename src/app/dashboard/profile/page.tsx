@@ -41,6 +41,28 @@ const AMENITY_OPTIONS = [
   'Wheelchair Accessible', 'B&B Offered', 'Refreshments Provided'
 ];
 
+const EQUIPMENT_OPTIONS = [
+  'All instruments and personal gear',
+  'Professional sound equipment',
+  'Microphones and stands',
+  'Basic lighting setup',
+  'PA system',
+  'Amplifiers',
+  'Cables and adapters',
+  'Stage monitors'
+];
+
+const VENUE_REQUIREMENT_OPTIONS = [
+  'Performance space (min 12x10 feet)',
+  '2-3 power outlets',
+  'Seating for audience',
+  'Parking space',
+  'Load-in access',
+  'Green room/prep space',
+  'Piano/keyboard',
+  'Sound system hookup'
+];
+
 const US_STATES = [
   { value: 'AL', label: 'Alabama' },
   { value: 'AK', label: 'Alaska' },
@@ -113,6 +135,10 @@ export default function ProfilePage() {
     experienceLevel: 'intermediate' as 'beginner' | 'intermediate' | 'professional',
     yearsActive: 1,
     tourMonthsPerYear: 3,
+    tourVehicle: 'van' as string,
+    willingToTravel: 500,
+    equipmentProvided: [] as string[],
+    venueRequirements: [] as string[],
     cancellationPolicy: 'flexible' as 'flexible' | 'moderate' | 'strict',
     performanceRadius: 50,
     website: '',
@@ -170,7 +196,11 @@ export default function ProfilePage() {
                 instruments: data.instruments || [],
                 experienceLevel: data.experienceLevel || 'intermediate',
                 yearsActive: data.yearsActive || 1,
-                tourMonthsPerYear: 3,
+                tourMonthsPerYear: data.tourMonthsPerYear || 3,
+                tourVehicle: data.tourVehicle || 'van',
+                willingToTravel: data.willingToTravel || 500,
+                equipmentProvided: data.equipmentProvided || [],
+                venueRequirements: data.venueRequirements || [],
                 cancellationPolicy: 'flexible',
                 performanceRadius: 50,
                 website: data.website || '',
@@ -286,6 +316,26 @@ export default function ProfilePage() {
 
   const removeAmenity = (amenity: string) => {
     updateHostProfile({ amenities: hostProfile.amenities.filter(a => a !== amenity) });
+  };
+
+  const addEquipment = (equipment: string) => {
+    if (!artistProfile.equipmentProvided.includes(equipment)) {
+      updateArtistProfile({ equipmentProvided: [...artistProfile.equipmentProvided, equipment] });
+    }
+  };
+
+  const removeEquipment = (equipment: string) => {
+    updateArtistProfile({ equipmentProvided: artistProfile.equipmentProvided.filter(e => e !== equipment) });
+  };
+
+  const addVenueRequirement = (requirement: string) => {
+    if (!artistProfile.venueRequirements.includes(requirement)) {
+      updateArtistProfile({ venueRequirements: [...artistProfile.venueRequirements, requirement] });
+    }
+  };
+
+  const removeVenueRequirement = (requirement: string) => {
+    updateArtistProfile({ venueRequirements: artistProfile.venueRequirements.filter(r => r !== requirement) });
   };
 
   const addBandMember = () => {
@@ -660,7 +710,7 @@ export default function ProfilePage() {
                       </div>
 
                       {/* Tour Info */}
-                      <div className="grid md:grid-cols-2 gap-4">
+                      <div className="grid md:grid-cols-3 gap-4">
                         <Input
                           label="Months Touring Per Year"
                           type="number"
@@ -669,14 +719,89 @@ export default function ProfilePage() {
                           min="0"
                           max="12"
                         />
+                        <div>
+                          <label className="block text-sm font-medium text-neutral-700 mb-2">Tour Vehicle</label>
+                          <select
+                            value={artistProfile.tourVehicle}
+                            onChange={(e) => updateArtistProfile({ tourVehicle: e.target.value })}
+                            className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                          >
+                            <option value="van">Van</option>
+                            <option value="car">Car</option>
+                            <option value="bus">Bus</option>
+                            <option value="fly">Fly/Rent</option>
+                            <option value="other">Other</option>
+                          </select>
+                        </div>
                         <Input
-                          label="Performance Radius (miles)"
+                          label="Willing to Travel (miles)"
                           type="number"
-                          value={artistProfile.performanceRadius}
-                          onChange={(e) => updateArtistProfile({ performanceRadius: parseInt(e.target.value) || 50 })}
-                          min="10"
-                          max="500"
+                          value={artistProfile.willingToTravel}
+                          onChange={(e) => updateArtistProfile({ willingToTravel: parseInt(e.target.value) || 500 })}
+                          min="50"
+                          max="3000"
                         />
+                      </div>
+
+                      {/* Technical Requirements */}
+                      <div className="grid md:grid-cols-2 gap-6">
+                        {/* Equipment Provided */}
+                        <div>
+                          <label className="block text-sm font-medium text-neutral-700 mb-3">Equipment You Provide</label>
+                          <div className="space-y-2">
+                            {artistProfile.equipmentProvided.map(equipment => (
+                              <div key={equipment} className="flex items-center justify-between bg-green-50 rounded-lg px-3 py-2 border border-green-200">
+                                <span className="text-sm text-green-800">{equipment}</span>
+                                <button
+                                  onClick={() => removeEquipment(equipment)}
+                                  className="text-xs text-green-600 hover:text-red-600 transition-colors"
+                                >
+                                  <X className="w-4 h-4" />
+                                </button>
+                              </div>
+                            ))}
+                            <div className="space-y-1">
+                              {EQUIPMENT_OPTIONS.filter(e => !artistProfile.equipmentProvided.includes(e)).map(equipment => (
+                                <button
+                                  key={equipment}
+                                  onClick={() => addEquipment(equipment)}
+                                  className="block w-full text-left px-3 py-2 text-xs bg-neutral-50 hover:bg-green-50 rounded border transition-colors"
+                                >
+                                  + {equipment}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Venue Requirements */}
+                        <div>
+                          <label className="block text-sm font-medium text-neutral-700 mb-3">Venue Requirements</label>
+                          <div className="space-y-2">
+                            {artistProfile.venueRequirements.map(requirement => (
+                              <div key={requirement} className="flex items-center justify-between bg-blue-50 rounded-lg px-3 py-2 border border-blue-200">
+                                <span className="text-sm text-blue-800">{requirement}</span>
+                                <button
+                                  onClick={() => removeVenueRequirement(requirement)}
+                                  className="text-xs text-blue-600 hover:text-red-600 transition-colors"
+                                >
+                                  <X className="w-4 h-4" />
+                                </button>
+                              </div>
+                            ))}
+                            <div className="space-y-1">
+                              {VENUE_REQUIREMENT_OPTIONS.filter(r => !artistProfile.venueRequirements.includes(r)).map(requirement => (
+                                <button
+                                  key={requirement}
+                                  onClick={() => addVenueRequirement(requirement)}
+                                  className="block w-full text-left px-3 py-2 text-xs bg-neutral-50 hover:bg-blue-50 rounded border transition-colors"
+                                >
+                                  + {requirement}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
                       </div>
 
                       {/* Cancellation Policy */}
