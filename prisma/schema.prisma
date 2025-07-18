@@ -127,6 +127,7 @@ model Host {
   id                     String      @id @default(cuid())
   userId                 String      @unique
   venueName              String?
+  venueDescription       String?
   venueType              VenueType
   city                   String
   state                  String

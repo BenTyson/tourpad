@@ -215,8 +215,8 @@ export default function ProfilePage() {
   });
 
   const [hostProfile, setHostProfile] = useState({
-    hostName: '',
-    bio: '',
+    venueName: '', // This is the venue name like "Mike's Overlook"
+    venueDescription: '', // This describes the venue/house itself
     city: '',
     state: '',
     zip: '',
@@ -225,8 +225,8 @@ export default function ProfilePage() {
     capacity: 20,
     amenities: [] as string[],
     hostInfo: {
-      hostName: '',
-      aboutMe: '',
+      hostName: '', // This is the personal host name like "Mike Chen"
+      aboutMe: '', // This is about the host as a person
       profilePhoto: ''
     },
     website: '',
@@ -281,8 +281,8 @@ export default function ProfilePage() {
               });
             } else if (session.user.type === 'host') {
               setHostProfile({
-                hostName: data.hostName || '',
-                bio: data.bio || '',
+                venueName: data.venueName || data.hostName || '',
+                venueDescription: data.venueDescription || data.bio || '',
                 city: data.city || '',
                 state: data.state || '',
                 zip: '',
@@ -291,9 +291,9 @@ export default function ProfilePage() {
                 capacity: 20,
                 amenities: [],
                 hostInfo: {
-                  hostName: '',
-                  aboutMe: '',
-                  profilePhoto: ''
+                  hostName: data.hostInfo?.hostName || '',
+                  aboutMe: data.hostInfo?.aboutMe || '',
+                  profilePhoto: data.hostInfo?.profilePhoto || data.profilePhoto || ''
                 },
                 website: data.website || '',
                 socialLinks: {
@@ -718,22 +718,22 @@ export default function ProfilePage() {
                 <CardContent className="space-y-4">
                   <Input
                     label={isArtist ? "Artist/Band Name" : "Venue Name"}
-                    value={isArtist ? artistProfile.bandName : hostProfile.hostName}
+                    value={isArtist ? artistProfile.bandName : hostProfile.venueName}
                     onChange={(e) => {
                       if (isArtist) updateArtistProfile({ bandName: e.target.value });
-                      else updateHostProfile({ hostName: e.target.value });
+                      else updateHostProfile({ venueName: e.target.value });
                     }}
-                    placeholder={isArtist ? "Your stage name or band name" : "Your venue name"}
+                    placeholder={isArtist ? "Your stage name or band name" : "Your venue name (e.g., 'Mike's Overlook')"}
                   />
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 mb-1">
                       {isArtist ? "Artist Bio" : "Venue Description"}
                     </label>
                     <textarea
-                      value={isArtist ? artistProfile.bio : hostProfile.bio}
+                      value={isArtist ? artistProfile.bio : hostProfile.venueDescription}
                       onChange={(e) => {
                         if (isArtist) updateArtistProfile({ bio: e.target.value });
-                        else updateHostProfile({ bio: e.target.value });
+                        else updateHostProfile({ venueDescription: e.target.value });
                       }}
                       className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                       rows={4}

@@ -66,12 +66,13 @@ export async function GET(
     const transformedHost = {
       id: host.id,
       userId: host.userId,
-      name: host.user.name,
+      name: host.venueName || host.user.name, // Use venue name for the main name
       email: host.user.email,
       profileImageUrl: host.user.profileImageUrl,
-      bio: host.user.profile?.bio || '',
+      bio: host.venueDescription || '', // Use venue description for main bio
       status: host.user.status,
       venueName: host.venueName,
+      venueDescription: host.venueDescription,
       venueType: host.venueType,
       city: host.city,
       state: host.state,
@@ -109,7 +110,7 @@ export async function GET(
       hostInfo: {
         hostName: host.user.name,
         profilePhoto: host.user.profileImageUrl,
-        aboutMe: host.user.profile?.bio || ''
+        aboutMe: host.user.profile?.bio || 'Passionate about bringing live music into intimate settings. I love creating memorable experiences where artists and audiences can connect in a personal, meaningful way.'
       },
       // Stats from mockData format
       rating: 4.9, // TODO: Calculate from reviews

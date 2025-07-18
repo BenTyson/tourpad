@@ -98,6 +98,7 @@ export async function GET() {
         ...profileData,
         hostName: user.host.venueName || user.name,
         venueName: user.host.venueName || '',
+        venueDescription: user.host.venueDescription || '',
         city: user.host.city || profileData.city || '',
         state: user.host.state || profileData.state || '',
         venueType: user.host.venueType?.toLowerCase() || 'home',
@@ -112,6 +113,12 @@ export async function GET() {
         website: user.profile?.websiteUrl || user.profile?.socialLinks?.website || '',
         socialLinks: user.profile?.socialLinks || {},
         profilePhoto: user.profile?.profileImageUrl || '',
+        // Include hostInfo for the personal host information
+        hostInfo: {
+          hostName: user.name,
+          aboutMe: user.profile?.bio || '',
+          profilePhoto: user.profile?.profileImageUrl || ''
+        },
         // Map amenities from preferred genres temporarily (TODO: add amenities field to schema)
         amenities: ['Sound System', 'Parking', 'WiFi'],
         photos: hostMedia.map(media => ({
@@ -180,7 +187,7 @@ export async function PUT(request: NextRequest) {
     await prisma.user.update({
       where: { id: userId },
       data: {
-        name: data.bandName || data.hostName || session.user.name,
+        name: data.bandName || data.hostInfo?.hostName || data.hostName || session.user.name,
       }
     });
 
@@ -200,7 +207,7 @@ export async function PUT(request: NextRequest) {
 
     // Build update data
     const profileUpdateData: any = {
-      bio: data.bio || '',
+      bio: data.hostInfo?.aboutMe || data.bio || '',
       location: location,
       websiteUrl: normalizedWebsite,
       socialLinks: normalizedSocialLinks,
@@ -327,7 +334,8 @@ export async function PUT(request: NextRequest) {
         await prisma.host.update({
           where: { id: host.id },
           data: {
-            venueName: data.hostName || data.venueName || undefined,
+            venueName: data.venueName || undefined,
+            venueDescription: data.venueDescription || undefined,
             venueType: data.venueType ? 
               (venueTypeMap[data.venueType.toLowerCase()] || data.venueType.toUpperCase()) : 
               undefined,
