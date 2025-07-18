@@ -8,16 +8,22 @@
    - Environments: .env.local, .env
 
  ✓ Starting...
- ✓ Ready in 1347ms
- ✓ Compiled /middleware in 299ms (265 modules)
- ○ Compiling / ...
-<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (128kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
- ✓ Compiled / in 1531ms (847 modules)
- GET / 200 in 1998ms
- ✓ Compiled /api/auth/[...nextauth] in 196ms (500 modules)
- ✓ Compiled in 460ms (364 modules)
- GET /favicon.ico 200 in 1314ms
- GET / 200 in 49ms
+ ✓ Ready in 1041ms
+ ✓ Compiled /api/auth/[...nextauth] in 471ms (523 modules)
 [33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 1665ms
- GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 907ms
+ ✓ Compiled /api/profile in 150ms (525 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/profile 401 in 217ms
+ ✓ Compiled /middleware in 200ms (265 modules)
+ ✓ Compiled /dashboard/profile in 367ms (1006 modules)
+ GET /dashboard/profile 200 in 540ms
+ ✓ Compiled /favicon.ico in 106ms (658 modules)
+ GET /favicon.ico 200 in 181ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (128kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+ GET /api/auth/session 200 in 246ms
+ GET /api/auth/session 200 in 30ms
+ GET /api/profile 200 in 69ms
+ GET /api/profile 200 in 8ms
+[?25h

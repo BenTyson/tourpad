@@ -80,8 +80,8 @@ model Artist {
   tourVehicle             String?
   venueRequirements       String[]
   willingToTravel         Int?
-  needsLodging            Boolean       @default(false)
   videoLinks              Json?
+  needsLodging            Boolean       @default(false)
   media                   ArtistMedia[]
   user                    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   bandMembers             BandMember[]
@@ -127,7 +127,6 @@ model Host {
   id                     String      @id @default(cuid())
   userId                 String      @unique
   venueName              String?
-  venueDescription       String?
   venueType              VenueType
   city                   String
   state                  String
@@ -147,6 +146,7 @@ model Host {
   approvedByUserId       String?
   createdAt              DateTime    @default(now())
   updatedAt              DateTime    @updatedAt
+  venueDescription       String?
   bookings               Booking[]
   media                  HostMedia[]
   user                   User        @relation(fields: [userId], references: [id], onDelete: Cascade)

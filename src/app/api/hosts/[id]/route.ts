@@ -121,7 +121,7 @@ export async function GET(
         indoorAttendanceMax: host.indoorCapacity || 0,
         outdoorAttendanceMax: host.outdoorCapacity || 0,
         showDurationMins: host.typicalShowLength || 120,
-        showFormat: host.venueType === 'home' ? 'Intimate house concert' : 'Venue performance',
+        showFormat: host.venueType === 'HOME' ? 'Intimate house concert' : 'Venue performance',
         daysAvailable: ['Friday', 'Saturday'], // TODO: Store in database
         estimatedShowsPerYear: host.hostingExperience || 10,
         avgDoorFee: 20, // TODO: Calculate from past events

@@ -213,14 +213,15 @@ export async function PUT(request: NextRequest) {
       socialLinks: normalizedSocialLinks,
     };
     
-    // Only handle profile photo if explicitly provided
-    if (data.profilePhoto !== undefined) {
-      if (data.profilePhoto === '' || data.profilePhoto === null) {
+    // Handle profile photo from either profilePhoto or hostInfo.profilePhoto
+    const photoUrl = data.hostInfo?.profilePhoto || data.profilePhoto;
+    if (photoUrl !== undefined) {
+      if (photoUrl === '' || photoUrl === null) {
         // User is removing the photo - don't include in update
         // The field will remain unchanged
-      } else if (typeof data.profilePhoto === 'string' && data.profilePhoto.length > 0) {
+      } else if (typeof photoUrl === 'string' && photoUrl.length > 0) {
         // Valid URL provided
-        profileUpdateData.profileImageUrl = data.profilePhoto;
+        profileUpdateData.profileImageUrl = photoUrl;
       }
     }
 
@@ -387,7 +388,6 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error updating profile:', error);
-    console.error('Profile data being saved:', JSON.stringify(data, null, 2));
     
     // More detailed error handling
     if (error instanceof Error) {

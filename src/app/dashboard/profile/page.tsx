@@ -830,10 +830,60 @@ export default function ProfilePage() {
                           )}
                         </div>
                         <div className="flex-1">
-                          <Button variant="outline" size="sm" className="mb-2">
-                            <Camera className="w-4 h-4 mr-2" />
-                            {hostProfile.hostInfo.profilePhoto ? 'Change Photo' : 'Upload Photo'}
-                          </Button>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={async (e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                // Check file size (max 5MB)
+                                if (file.size > 5 * 1024 * 1024) {
+                                  alert('Image file is too large. Please choose an image under 5MB.');
+                                  return;
+                                }
+                                
+                                try {
+                                  // Create FormData
+                                  const formData = new FormData();
+                                  formData.append('file', file);
+                                  formData.append('type', 'profile');
+                                  
+                                  // Upload file
+                                  const response = await fetch('/api/upload', {
+                                    method: 'POST',
+                                    body: formData
+                                  });
+                                  
+                                  if (!response.ok) {
+                                    const error = await response.json();
+                                    alert(error.error || 'Failed to upload image');
+                                    return;
+                                  }
+                                  
+                                  const data = await response.json();
+                                  
+                                  // Update host profile with the new image URL
+                                  updateHostProfile({ 
+                                    hostInfo: { ...hostProfile.hostInfo, profilePhoto: data.url } 
+                                  });
+                                  
+                                  alert('Host photo uploaded successfully!');
+                                  
+                                } catch (error) {
+                                  console.error('Upload error:', error);
+                                  alert('Failed to upload image. Please try again.');
+                                }
+                              }
+                            }}
+                            className="hidden"
+                            id="hostProfilePhotoInput"
+                          />
+                          <label htmlFor="hostProfilePhotoInput" className="cursor-pointer">
+                            <Button variant="outline" size="sm" className="mb-2">
+                              <Camera className="w-4 h-4 mr-2" />
+                              {hostProfile.hostInfo.profilePhoto ? 'Change Photo' : 'Upload Photo'}
+                            </Button>
+                          </label>
                           <p className="text-xs text-neutral-500">
                             A friendly photo of yourself or yourselves as hosts
                           </p>
@@ -1289,7 +1339,9 @@ export default function ProfilePage() {
                                 if (isArtist) {
                                   updateArtistProfile({ profilePhoto: data.url });
                                 } else {
-                                  updateHostProfile({ profilePhoto: data.url });
+                                  updateHostProfile({ 
+                                    hostInfo: { ...hostProfile.hostInfo, profilePhoto: data.url } 
+                                  });
                                 }
                                 
                                 alert('Image uploaded successfully!');
@@ -1303,17 +1355,13 @@ export default function ProfilePage() {
                           className="hidden"
                           id="profilePhotoInput"
                         />
-                        <label htmlFor="profilePhotoInput" className="cursor-pointer">
-                          <span className="inline-block">
-                            <Button variant="outline" type="button" onClick={(e) => {
-                              e.preventDefault();
-                              document.getElementById('profilePhotoInput')?.click();
-                            }}>
-                              <Camera className="w-4 h-4 mr-2" />
-                              {(isArtist ? artistProfile.profilePhoto : hostProfile.profilePhoto) ? 'Change Photo' : 'Upload Photo'}
-                            </Button>
-                          </span>
-                        </label>
+                        <Button variant="outline" type="button" onClick={(e) => {
+                          e.preventDefault();
+                          document.getElementById('profilePhotoInput')?.click();
+                        }}>
+                          <Camera className="w-4 h-4 mr-2" />
+                          {(isArtist ? artistProfile.profilePhoto : hostProfile.profilePhoto) ? 'Change Photo' : 'Upload Photo'}
+                        </Button>
                         {(isArtist ? artistProfile.profilePhoto : hostProfile.profilePhoto) && (
                           <Button 
                             variant="outline" 
@@ -1442,16 +1490,12 @@ export default function ProfilePage() {
                                 className="hidden"
                                 id={`bandMemberPhoto-${member.id}`}
                               />
-                              <label htmlFor={`bandMemberPhoto-${member.id}`} className="cursor-pointer">
-                                <span className="inline-block">
-                                  <Button variant="outline" size="sm" type="button" onClick={(e) => {
-                                    e.preventDefault();
-                                    document.getElementById(`bandMemberPhoto-${member.id}`)?.click();
-                                  }} title={member.photo ? 'Change Photo' : 'Upload Photo'}>
-                                    <Camera className="w-4 h-4" />
-                                  </Button>
-                                </span>
-                              </label>
+                              <Button variant="outline" size="sm" type="button" onClick={(e) => {
+                                e.preventDefault();
+                                document.getElementById(`bandMemberPhoto-${member.id}`)?.click();
+                              }} title={member.photo ? 'Change Photo' : 'Upload Photo'}>
+                                <Camera className="w-4 h-4" />
+                              </Button>
                               <Button
                                 variant="outline"
                                 size="sm"
