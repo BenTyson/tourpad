@@ -503,12 +503,19 @@ TourPad is a Next.js-based platform connecting touring musicians with hosts for 
   - [ ] Implement conditional UI rendering based on access levels
 
 ### ☁️ File Storage & Media
-- [ ] **Cloud Storage Integration**
-  - [ ] Set up cloud storage (AWS S3, Cloudinary, or Vercel Blob)
-  - [ ] Implement real file upload processing
+- [x] **Image Upload Architecture** ✅ **COMPLETED**
+  - [x] Implemented working local file upload system (`/api/upload`)
+  - [x] Added file validation (JPEG, PNG, WebP, 5MB limit)
+  - [x] Created profile photo upload integration
+  - [x] Documented architecture to prevent server crashes
+  - [x] Built foundation for S3 migration (ready in `/lib/storage.ts`)
+- [ ] **Cloud Storage Integration** (Future)
+  - [ ] Migrate to AWS S3 with CloudFront CDN
   - [ ] Add image optimization and resizing
-  - [ ] Create CDN integration for fast media delivery
-  - [ ] Add file validation and security
+  - [ ] Implement advanced media management
+  - [ ] Add video upload capabilities
+
+**⚠️ CRITICAL**: Only use `/api/upload` route - duplicate routes cause server crashes
 
 ---
 

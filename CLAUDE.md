@@ -91,6 +91,13 @@ We maintain TWO data files with specific purposes:
 - Test all UI changes in the browser before marking complete
 - Add TODO comments for future backend integration points
 
+## Image Upload Architecture
+- **CRITICAL**: Only use `/api/upload/route.ts` for file uploads
+- **NEVER** create `/api/media/upload/` or similar competing routes
+- Local storage: `public/uploads/` directory (dev), S3 ready (prod)
+- File validation: JPEG/PNG/WebP, 5MB limit, authentication required
+- See `/memory-bank/IMAGE_UPLOAD_ARCHITECTURE.md` for full details
+
 ## Security & Privacy
 - Never expose real user data in public views
 - Implement proper input validation on all forms
