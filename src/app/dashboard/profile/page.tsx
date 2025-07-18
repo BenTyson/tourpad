@@ -1265,9 +1265,62 @@ export default function ProfilePage() {
                               />
                             </div>
                             <div className="flex items-center space-x-2">
-                              <Button variant="outline" size="sm">
-                                <Camera className="w-4 h-4" />
-                              </Button>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={async (e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) {
+                                    // Check file size (max 5MB)
+                                    if (file.size > 5 * 1024 * 1024) {
+                                      alert('Image file is too large. Please choose an image under 5MB.');
+                                      return;
+                                    }
+                                    
+                                    try {
+                                      // Create FormData
+                                      const formData = new FormData();
+                                      formData.append('file', file);
+                                      formData.append('type', 'band-member');
+                                      
+                                      // Upload file
+                                      const response = await fetch('/api/upload', {
+                                        method: 'POST',
+                                        body: formData
+                                      });
+                                      
+                                      if (!response.ok) {
+                                        const error = await response.json();
+                                        alert(error.error || 'Failed to upload image');
+                                        return;
+                                      }
+                                      
+                                      const data = await response.json();
+                                      
+                                      // Update band member with the new image URL
+                                      updateBandMember(member.id, 'photo', data.url);
+                                      
+                                      alert('Band member photo uploaded successfully!');
+                                      
+                                    } catch (error) {
+                                      console.error('Upload error:', error);
+                                      alert('Failed to upload image. Please try again.');
+                                    }
+                                  }
+                                }}
+                                className="hidden"
+                                id={`bandMemberPhoto-${member.id}`}
+                              />
+                              <label htmlFor={`bandMemberPhoto-${member.id}`} className="cursor-pointer">
+                                <span className="inline-block">
+                                  <Button variant="outline" size="sm" type="button" onClick={(e) => {
+                                    e.preventDefault();
+                                    document.getElementById(`bandMemberPhoto-${member.id}`)?.click();
+                                  }} title={member.photo ? 'Change Photo' : 'Upload Photo'}>
+                                    <Camera className="w-4 h-4" />
+                                  </Button>
+                                </span>
+                              </label>
                               <Button
                                 variant="outline"
                                 size="sm"
