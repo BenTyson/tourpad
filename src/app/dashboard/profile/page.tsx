@@ -1088,53 +1088,119 @@ export default function ProfilePage() {
           {/* Media Tab */}
           {activeTab === 'media' && (
             <div className="space-y-6">
-              <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                <CardHeader>
-                  <h2 className="text-xl font-semibold text-neutral-900">
-                    {isArtist ? 'Music & Media Management' : 'Venue Photo Gallery'}
-                  </h2>
-                  <p className="text-sm text-neutral-600">
-                    {isArtist 
-                      ? 'Upload your music, videos, and media to showcase your talent'
-                      : 'Upload photos of your venue space, both interior and exterior'
-                    }
-                  </p>
-                </CardHeader>
-                <CardContent>
-                  <div className="bg-neutral-50 border-2 border-dashed border-neutral-300 rounded-lg p-8 text-center">
-                    <div className="space-y-4">
-                      {isArtist ? (
-                        <Video className="w-12 h-12 text-neutral-400 mx-auto" />
-                      ) : (
-                        <Camera className="w-12 h-12 text-neutral-400 mx-auto" />
-                      )}
-                      <div>
-                        <h3 className="text-lg font-medium text-neutral-900 mb-2">
-                          {isArtist ? 'Media Management' : 'Photo Gallery'}
-                        </h3>
-                        <p className="text-neutral-600 mb-4">
-                          {isArtist 
-                            ? 'Upload audio tracks, videos, and other media to showcase your music'
-                            : 'Add photos of your venue to help artists visualize the space'
-                          }
-                        </p>
-                        <div className="flex justify-center space-x-3">
-                          <Link href={isArtist ? "/dashboard/artist-media" : "/dashboard/media"}>
-                            <Button>
-                              {isArtist ? (
-                                <Video className="w-4 h-4 mr-2" />
-                              ) : (
-                                <Camera className="w-4 h-4 mr-2" />
-                              )}
-                              {isArtist ? 'Manage Music & Media' : 'Manage Photos'}
-                            </Button>
-                          </Link>
+              {isArtist ? (
+                <>
+                  {/* Performance Videos */}
+                  <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
+                    <CardHeader>
+                      <h2 className="text-xl font-semibold text-neutral-900">Performance Videos</h2>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <Input
+                          label="YouTube/Vimeo URL"
+                          placeholder="https://youtube.com/watch?v=..."
+                          value=""
+                          onChange={() => {}}
+                        />
+                        <Input
+                          label="Video Title"
+                          placeholder="Live performance at..."
+                          value=""
+                          onChange={() => {}}
+                        />
+                      </div>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-neutral-700 mb-2">Category</label>
+                          <select className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                            <option value="">Select category</option>
+                            <option value="live">Live Performance</option>
+                            <option value="studio">Studio Recording</option>
+                            <option value="promo">Promotional</option>
+                          </select>
+                        </div>
+                        <div className="flex items-end">
+                          <Button className="w-full">
+                            <Plus className="w-4 h-4 mr-2" />
+                            Add Video
+                          </Button>
                         </div>
                       </div>
+                      
+                      {/* Video List Placeholder */}
+                      <div className="border-t pt-4">
+                        <p className="text-sm text-neutral-500 text-center py-8">
+                          No videos added yet. Add your first performance video above.
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Music Samples */}
+                  <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
+                    <CardHeader>
+                      <h2 className="text-xl font-semibold text-neutral-900">Music Samples</h2>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <Input
+                          label="Streaming Platform URL"
+                          placeholder="https://spotify.com/track/..."
+                          value=""
+                          onChange={() => {}}
+                        />
+                        <Input
+                          label="Track Title"
+                          placeholder="Song name"
+                          value=""
+                          onChange={() => {}}
+                        />
+                      </div>
+                      <div className="flex items-end">
+                        <Button className="w-full">
+                          <Music className="w-4 h-4 mr-2" />
+                          Add Track
+                        </Button>
+                      </div>
+                      
+                      {/* Audio List Placeholder */}
+                      <div className="border-t pt-4">
+                        <p className="text-sm text-neutral-500 text-center py-8">
+                          No music samples added yet. Add your first track above.
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </>
+              ) : (
+                /* Host Media Section */
+                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
+                  <CardHeader>
+                    <h2 className="text-xl font-semibold text-neutral-900">Venue Photos</h2>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="border-2 border-dashed border-neutral-300 rounded-lg p-8 text-center">
+                      <Camera className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-medium text-neutral-900 mb-2">Upload Venue Photos</h3>
+                      <p className="text-neutral-600 mb-4">
+                        Show artists your performance space, exterior, and amenities
+                      </p>
+                      <Button>
+                        <Plus className="w-4 h-4 mr-2" />
+                        Upload Photos
+                      </Button>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                    
+                    {/* Photo Grid Placeholder */}
+                    <div className="border-t pt-4">
+                      <p className="text-sm text-neutral-500 text-center py-8">
+                        No photos uploaded yet. Add your first venue photo above.
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           )}
         </div>
