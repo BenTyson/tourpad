@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,7 +7,389 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Enums
+model User {
+  id                      String         @id @default(cuid())
+  email                   String         @unique
+  passwordHash            String?
+  name                    String
+  profileImageUrl         String?
+  userType                UserType
+  status                  UserStatus     @default(PENDING)
+  oauthProvider           String?
+  oauthId                 String?
+  emailVerified           Boolean        @default(false)
+  verificationToken       String?
+  referralSource          String?
+  termsAcceptedAt         DateTime?
+  privacyPolicyAcceptedAt DateTime?
+  lastLogin               DateTime?
+  createdAt               DateTime       @default(now())
+  updatedAt               DateTime       @updatedAt
+  accounts                Account[]
+  adminActions            AdminAction[]
+  artist                  Artist?
+  fan                     Fan?
+  host                    Host?
+  sentMessages            Message[]
+  notifications           Notification[]
+  payments                Payment[]
+  reviewsReceived         Review[]       @relation("RevieweeUser")
+  reviews                 Review[]       @relation("ReviewerUser")
+  sessions                Session[]
+  profile                 UserProfile?
+
+  @@map("users")
+}
+
+model UserProfile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  bio             String?
+  location        String?
+  phone           String?
+  websiteUrl      String?
+  socialLinks     Json?
+  preferences     Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  profileImageUrl String?
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_profiles")
+}
+
+model Artist {
+  id                      String        @id @default(cuid())
+  userId                  String        @unique
+  stageName               String?
+  genres                  String[]
+  typicalSetLength        Int?
+  equipmentNeeds          String[]
+  travelRadius            Int?
+  pressPhotoUrl           String?
+  performanceVideoUrl     String?
+  musicSamples            Json?
+  minGuarantee            Int?
+  preferredBookingAdvance Int?
+  applicationSubmittedAt  DateTime?
+  approvedAt              DateTime?
+  approvedByUserId        String?
+  createdAt               DateTime      @default(now())
+  updatedAt               DateTime      @updatedAt
+  tourMonthsPerYear       Int?
+  tourVehicle             String?
+  venueRequirements       String[]
+  willingToTravel         Int?
+  videoLinks              Json?
+  media                   ArtistMedia[]
+  user                    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bandMembers             BandMember[]
+  bookings                Booking[]
+
+  @@map("artists")
+}
+
+model ArtistMedia {
+  id          String    @id @default(cuid())
+  artistId    String
+  mediaType   MediaType
+  category    String?
+  fileUrl     String
+  fileSize    Int?
+  mimeType    String?
+  title       String?
+  description String?
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  artist      Artist    @relation(fields: [artistId], references: [id], onDelete: Cascade)
+
+  @@map("artist_media")
+}
+
+model BandMember {
+  id         String   @id @default(cuid())
+  artistId   String
+  name       String
+  instrument String?
+  role       String?
+  photoUrl   String?
+  bio        String?
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  artist     Artist   @relation(fields: [artistId], references: [id], onDelete: Cascade)
+
+  @@map("band_members")
+}
+
+model Host {
+  id                     String      @id @default(cuid())
+  userId                 String      @unique
+  venueName              String?
+  venueType              VenueType
+  city                   String
+  state                  String
+  country                String      @default("USA")
+  displayCoordinates     String?
+  actualAddress          String?
+  indoorCapacity         Int?
+  outdoorCapacity        Int?
+  preferredGenres        String[]
+  hostingExperience      Int?
+  typicalShowLength      Int?
+  houseRules             String?
+  offersLodging          Boolean     @default(false)
+  lodgingDetails         Json?
+  applicationSubmittedAt DateTime?
+  approvedAt             DateTime?
+  approvedByUserId       String?
+  createdAt              DateTime    @default(now())
+  updatedAt              DateTime    @updatedAt
+  bookings               Booking[]
+  media                  HostMedia[]
+  user                   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("hosts")
+}
+
+model HostMedia {
+  id          String    @id @default(cuid())
+  hostId      String
+  mediaType   MediaType
+  category    String?
+  fileUrl     String
+  fileSize    Int?
+  mimeType    String?
+  title       String?
+  description String?
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  host        Host      @relation(fields: [hostId], references: [id], onDelete: Cascade)
+
+  @@map("host_media")
+}
+
+model Fan {
+  id                    String             @id @default(cuid())
+  userId                String             @unique
+  favoriteGenres        String[]
+  travelRadius          Int?
+  subscriptionStatus    SubscriptionStatus
+  subscriptionStartDate DateTime?
+  subscriptionEndDate   DateTime?
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+  rsvps                 FanRSVP[]
+  user                  User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("fans")
+}
+
+model Booking {
+  id                 String         @id @default(cuid())
+  artistId           String
+  hostId             String
+  requestedDate      DateTime
+  requestedTime      DateTime?
+  estimatedDuration  Int?
+  expectedAttendance Int?
+  status             BookingStatus  @default(PENDING)
+  artistFee          Int?
+  doorFee            Int?
+  artistMessage      String?
+  hostResponse       String?
+  lodgingRequested   Boolean        @default(false)
+  lodgingDetails     Json?
+  requestedAt        DateTime       @default(now())
+  respondedAt        DateTime?
+  confirmedAt        DateTime?
+  completedAt        DateTime?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  artist             Artist         @relation(fields: [artistId], references: [id])
+  host               Host           @relation(fields: [hostId], references: [id])
+  concert            Concert?
+  conversations      Conversation[]
+  payments           Payment[]
+  reviews            Review[]
+
+  @@map("bookings")
+}
+
+model Concert {
+  id                      String        @id @default(cuid())
+  bookingId               String        @unique
+  title                   String?
+  description             String?
+  date                    DateTime
+  startTime               DateTime
+  endTime                 DateTime?
+  maxCapacity             Int
+  doorFee                 Int?
+  advanceTicketsAvailable Boolean       @default(false)
+  status                  ConcertStatus @default(SCHEDULED)
+  isPrivate               Boolean       @default(false)
+  requiresApproval        Boolean       @default(true)
+  createdAt               DateTime      @default(now())
+  updatedAt               DateTime      @updatedAt
+  booking                 Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  rsvps                   FanRSVP[]
+
+  @@map("concerts")
+}
+
+model FanRSVP {
+  id              String     @id @default(cuid())
+  fanId           String
+  concertId       String
+  status          RSVPStatus @default(PENDING)
+  guestsCount     Int        @default(1)
+  specialRequests String?
+  rsvpDate        DateTime   @default(now())
+  statusUpdatedAt DateTime   @default(now())
+  concert         Concert    @relation(fields: [concertId], references: [id])
+  fan             Fan        @relation(fields: [fanId], references: [id])
+
+  @@unique([fanId, concertId])
+  @@map("fan_rsvps")
+}
+
+model Review {
+  id           String    @id @default(cuid())
+  bookingId    String
+  reviewerId   String
+  revieweeId   String
+  rating       Int
+  reviewText   String?
+  isPublic     Boolean   @default(true)
+  responseText String?
+  responseDate DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  booking      Booking   @relation(fields: [bookingId], references: [id])
+  reviewee     User      @relation("RevieweeUser", fields: [revieweeId], references: [id])
+  reviewer     User      @relation("ReviewerUser", fields: [reviewerId], references: [id])
+
+  @@unique([bookingId, reviewerId])
+  @@map("reviews")
+}
+
+model Payment {
+  id                    String        @id @default(cuid())
+  stripePaymentIntentId String?
+  amount                Int
+  currency              String        @default("USD")
+  userId                String
+  bookingId             String?
+  paymentType           PaymentType
+  status                PaymentStatus @default(PENDING)
+  metadata              Json?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+  booking               Booking?      @relation(fields: [bookingId], references: [id])
+  user                  User          @relation(fields: [userId], references: [id])
+
+  @@map("payments")
+}
+
+model Conversation {
+  id             String    @id @default(cuid())
+  bookingId      String?
+  participantIds String[]
+  subject        String?
+  lastMessageAt  DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  booking        Booking?  @relation(fields: [bookingId], references: [id])
+  messages       Message[]
+
+  @@map("conversations")
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  senderId       String
+  content        String
+  messageType    MessageType  @default(TEXT)
+  readBy         String[]
+  createdAt      DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User         @relation(fields: [senderId], references: [id])
+
+  @@map("messages")
+}
+
+model Notification {
+  id          String           @id @default(cuid())
+  userId      String
+  type        NotificationType
+  title       String
+  message     String?
+  relatedId   String?
+  relatedType String?
+  isRead      Boolean          @default(false)
+  readAt      DateTime?
+  actionUrl   String?
+  actionText  String?
+  createdAt   DateTime         @default(now())
+  user        User             @relation(fields: [userId], references: [id])
+
+  @@map("notifications")
+}
+
+model AdminAction {
+  id         String          @id @default(cuid())
+  adminId    String
+  actionType AdminActionType
+  targetId   String
+  targetType String
+  reason     String?
+  notes      String?
+  createdAt  DateTime        @default(now())
+  admin      User            @relation(fields: [adminId], references: [id])
+
+  @@map("admin_actions")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
 enum UserType {
   ARTIST
   HOST
@@ -100,530 +479,4 @@ enum AdminActionType {
   REJECT_USER
   SUSPEND_USER
   APPROVE_BOOKING
-}
-
-// User Management Models
-model User {
-  id                        String    @id @default(cuid())
-  email                     String    @unique
-  passwordHash              String?
-  name                      String
-  profileImageUrl           String?
-  userType                  UserType
-  status                    UserStatus @default(PENDING)
-  
-  // OAuth fields
-  oauthProvider             String?
-  oauthId                   String?
-  
-  // Verification
-  emailVerified             Boolean   @default(false)
-  verificationToken         String?
-  
-  // Metadata
-  referralSource            String?
-  termsAcceptedAt           DateTime?
-  privacyPolicyAcceptedAt   DateTime?
-  lastLogin                 DateTime?
-  
-  // Timestamps
-  createdAt                 DateTime  @default(now())
-  updatedAt                 DateTime  @updatedAt
-  
-  // Relations
-  profile                   UserProfile?
-  artist                    Artist?
-  host                      Host?
-  fan                       Fan?
-  
-  // Activity relations
-  sentMessages              Message[]
-  notifications             Notification[]
-  payments                  Payment[]
-  reviews                   Review[] @relation("ReviewerUser")
-  reviewsReceived           Review[] @relation("RevieweeUser")
-  adminActions              AdminAction[]
-  
-  // Auth relations (NextAuth)
-  accounts                  Account[]
-  sessions                  Session[]
-  
-  @@map("users")
-}
-
-model UserProfile {
-  id            String    @id @default(cuid())
-  userId        String    @unique
-  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  bio           String?
-  location      String?
-  phone         String?
-  websiteUrl    String?
-  profileImageUrl String?  // Profile photo URL
-  
-  // JSON fields
-  socialLinks   Json?     // {instagram, facebook, twitter, youtube, spotify}
-  preferences   Json?     // {notifications, privacy, etc}
-  
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  
-  @@map("user_profiles")
-}
-
-// Artist Models
-model Artist {
-  id                        String    @id @default(cuid())
-  userId                    String    @unique
-  user                      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  stageName                 String?
-  genres                    String[]
-  
-  // Performance details
-  typicalSetLength          Int?      // minutes
-  equipmentNeeds            String[]  // Equipment artist provides
-  venueRequirements         String[]  // What artist needs from venue
-  travelRadius              Int?      // miles
-  
-  // Tour logistics
-  tourMonthsPerYear         Int?      // number of months per year actively touring
-  tourVehicle               String?   // 'van', 'car', 'bus', 'fly', etc.
-  willingToTravel           Int?      // miles from home base
-  
-  // Media
-  pressPhotoUrl             String?
-  performanceVideoUrl       String?
-  musicSamples              Json?     // Array of {title, url, platform}
-  videoLinks                Json?     // Array of {id, title, url, platform, category, isLivePerformance, description}
-  
-  // Booking preferences
-  minGuarantee              Int?      // dollars
-  preferredBookingAdvance   Int?      // days
-  
-  // Verification
-  applicationSubmittedAt    DateTime?
-  approvedAt                DateTime?
-  approvedByUserId          String?
-  
-  createdAt                 DateTime  @default(now())
-  updatedAt                 DateTime  @updatedAt
-  
-  // Relations
-  media                     ArtistMedia[]
-  bandMembers               BandMember[]
-  bookings                  Booking[]
-  
-  @@map("artists")
-}
-
-model ArtistMedia {
-  id          String    @id @default(cuid())
-  artistId    String
-  artist      Artist    @relation(fields: [artistId], references: [id], onDelete: Cascade)
-  
-  mediaType   MediaType
-  category    String?   // 'performance', 'promo', 'band', 'press'
-  fileUrl     String
-  fileSize    Int?
-  mimeType    String?
-  title       String?
-  description String?
-  sortOrder   Int       @default(0)
-  
-  createdAt   DateTime  @default(now())
-  
-  @@map("artist_media")
-}
-
-model BandMember {
-  id          String    @id @default(cuid())
-  artistId    String
-  artist      Artist    @relation(fields: [artistId], references: [id], onDelete: Cascade)
-  
-  name        String
-  instrument  String?
-  role        String?
-  photoUrl    String?
-  bio         String?
-  sortOrder   Int       @default(0)
-  
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  
-  @@map("band_members")
-}
-
-// Host Models
-model Host {
-  id                      String    @id @default(cuid())
-  userId                  String    @unique
-  user                    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  venueName               String?
-  venueType               VenueType
-  
-  // Location (privacy-focused)
-  city                    String
-  state                   String
-  country                 String    @default("USA")
-  displayCoordinates      String?   // "lat,lng" for approximate location
-  actualAddress           String?   // Full address (private)
-  
-  // Venue specs
-  indoorCapacity          Int?
-  outdoorCapacity         Int?
-  preferredGenres         String[]
-  
-  // Hosting details
-  hostingExperience       Int?      // years
-  typicalShowLength       Int?      // minutes
-  houseRules              String?
-  
-  // Lodging capabilities
-  offersLodging           Boolean   @default(false)
-  lodgingDetails          Json?     // {beds, bathroom, amenities, rules, pricing}
-  
-  // Verification
-  applicationSubmittedAt  DateTime?
-  approvedAt              DateTime?
-  approvedByUserId        String?
-  
-  createdAt               DateTime  @default(now())
-  updatedAt               DateTime  @updatedAt
-  
-  // Relations
-  media                   HostMedia[]
-  bookings                Booking[]
-  
-  @@map("hosts")
-}
-
-model HostMedia {
-  id          String    @id @default(cuid())
-  hostId      String
-  host        Host      @relation(fields: [hostId], references: [id], onDelete: Cascade)
-  
-  mediaType   MediaType
-  category    String?   // 'exterior', 'performance_space', 'amenities', 'lodging'
-  fileUrl     String
-  fileSize    Int?
-  mimeType    String?
-  title       String?
-  description String?
-  sortOrder   Int       @default(0)
-  
-  createdAt   DateTime  @default(now())
-  
-  @@map("host_media")
-}
-
-// Fan Models
-model Fan {
-  id                      String              @id @default(cuid())
-  userId                  String              @unique
-  user                    User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  // Preferences
-  favoriteGenres          String[]
-  travelRadius            Int?                // miles for concert discovery
-  
-  // Membership
-  subscriptionStatus      SubscriptionStatus
-  subscriptionStartDate   DateTime?
-  subscriptionEndDate     DateTime?
-  
-  createdAt               DateTime            @default(now())
-  updatedAt               DateTime            @updatedAt
-  
-  // Relations
-  rsvps                   FanRSVP[]
-  
-  @@map("fans")
-}
-
-// Booking System Models
-model Booking {
-  id                  String        @id @default(cuid())
-  artistId            String
-  artist              Artist        @relation(fields: [artistId], references: [id])
-  hostId              String
-  host                Host          @relation(fields: [hostId], references: [id])
-  
-  // Booking details
-  requestedDate       DateTime
-  requestedTime       DateTime?
-  estimatedDuration   Int?          // minutes
-  expectedAttendance  Int?
-  
-  // Status management
-  status              BookingStatus @default(PENDING)
-  
-  // Financial
-  artistFee           Int?          // dollars
-  doorFee             Int?          // dollars per person
-  
-  // Communication
-  artistMessage       String?
-  hostResponse        String?
-  
-  // Lodging
-  lodgingRequested    Boolean       @default(false)
-  lodgingDetails      Json?         // {guests, nights, special_requests}
-  
-  // Timestamps
-  requestedAt         DateTime      @default(now())
-  respondedAt         DateTime?
-  confirmedAt         DateTime?
-  completedAt         DateTime?
-  
-  createdAt           DateTime      @default(now())
-  updatedAt           DateTime      @updatedAt
-  
-  // Relations
-  concert             Concert?
-  conversations       Conversation[]
-  reviews             Review[]
-  payments            Payment[]
-  
-  @@map("bookings")
-}
-
-model Concert {
-  id                      String        @id @default(cuid())
-  bookingId               String        @unique
-  booking                 Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
-  
-  // Concert details
-  title                   String?
-  description             String?
-  date                    DateTime
-  startTime               DateTime
-  endTime                 DateTime?
-  
-  // Capacity and pricing
-  maxCapacity             Int
-  doorFee                 Int?          // dollars
-  advanceTicketsAvailable Boolean       @default(false)
-  
-  // Status
-  status                  ConcertStatus @default(SCHEDULED)
-  
-  // Metadata
-  isPrivate               Boolean       @default(false)
-  requiresApproval        Boolean       @default(true)
-  
-  createdAt               DateTime      @default(now())
-  updatedAt               DateTime      @updatedAt
-  
-  // Relations
-  rsvps                   FanRSVP[]
-  
-  @@map("concerts")
-}
-
-// Fan Engagement Models
-model FanRSVP {
-  id              String      @id @default(cuid())
-  fanId           String
-  fan             Fan         @relation(fields: [fanId], references: [id])
-  concertId       String
-  concert         Concert     @relation(fields: [concertId], references: [id])
-  
-  status          RSVPStatus  @default(PENDING)
-  guestsCount     Int         @default(1)
-  specialRequests String?
-  
-  // Timestamps
-  rsvpDate        DateTime    @default(now())
-  statusUpdatedAt DateTime    @default(now())
-  
-  @@unique([fanId, concertId])
-  @@map("fan_rsvps")
-}
-
-// Review System Models
-model Review {
-  id            String    @id @default(cuid())
-  bookingId     String
-  booking       Booking   @relation(fields: [bookingId], references: [id])
-  reviewerId    String
-  reviewer      User      @relation("ReviewerUser", fields: [reviewerId], references: [id])
-  revieweeId    String
-  reviewee      User      @relation("RevieweeUser", fields: [revieweeId], references: [id])
-  
-  // Review content
-  rating        Int       // 1-5
-  reviewText    String?
-  
-  // Visibility
-  isPublic      Boolean   @default(true)
-  
-  // Response
-  responseText  String?
-  responseDate  DateTime?
-  
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  
-  @@unique([bookingId, reviewerId])
-  @@map("reviews")
-}
-
-// Payment System Models
-model Payment {
-  id                    String        @id @default(cuid())
-  
-  // Payment details
-  stripePaymentIntentId String?
-  amount                Int           // cents
-  currency              String        @default("USD")
-  
-  // Associations
-  userId                String
-  user                  User          @relation(fields: [userId], references: [id])
-  bookingId             String?
-  booking               Booking?      @relation(fields: [bookingId], references: [id])
-  
-  // Payment type
-  paymentType           PaymentType
-  
-  // Status
-  status                PaymentStatus @default(PENDING)
-  
-  // Metadata
-  metadata              Json?
-  
-  createdAt             DateTime      @default(now())
-  updatedAt             DateTime      @updatedAt
-  
-  @@map("payments")
-}
-
-// Messaging System Models
-model Conversation {
-  id              String    @id @default(cuid())
-  bookingId       String?
-  booking         Booking?  @relation(fields: [bookingId], references: [id])
-  
-  // Participants
-  participantIds  String[]
-  
-  // Metadata
-  subject         String?
-  lastMessageAt   DateTime?
-  
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  
-  // Relations
-  messages        Message[]
-  
-  @@map("conversations")
-}
-
-model Message {
-  id             String        @id @default(cuid())
-  conversationId String
-  conversation   Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  senderId       String
-  sender         User          @relation(fields: [senderId], references: [id])
-  
-  // Message content
-  content        String
-  messageType    MessageType   @default(TEXT)
-  
-  // Metadata
-  readBy         String[]      // Array of user IDs who have read this message
-  
-  createdAt      DateTime      @default(now())
-  
-  @@map("messages")
-}
-
-// Notification System Models
-model Notification {
-  id           String           @id @default(cuid())
-  userId       String
-  user         User             @relation(fields: [userId], references: [id])
-  
-  // Notification details
-  type         NotificationType
-  title        String
-  message      String?
-  
-  // Associations
-  relatedId    String?
-  relatedType  String?
-  
-  // Status
-  isRead       Boolean          @default(false)
-  readAt       DateTime?
-  
-  // Actions
-  actionUrl    String?
-  actionText   String?
-  
-  createdAt    DateTime         @default(now())
-  
-  @@map("notifications")
-}
-
-// Admin Models
-model AdminAction {
-  id          String          @id @default(cuid())
-  adminId     String
-  admin       User            @relation(fields: [adminId], references: [id])
-  actionType  AdminActionType
-  targetId    String
-  targetType  String
-  
-  // Action details
-  reason      String?
-  notes       String?
-  
-  createdAt   DateTime        @default(now())
-  
-  @@map("admin_actions")
-}
-
-// NextAuth Models
-model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-  @@map("accounts")
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("sessions")
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
-  @@map("verification_tokens")
 }

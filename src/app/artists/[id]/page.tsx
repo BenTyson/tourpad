@@ -108,16 +108,27 @@ export default function ArtistProfilePage() {
       }
     };
 
+    const fetchRelatedArtists = async () => {
+      try {
+        const response = await fetch(`/api/artists?exclude=${artistId}&limit=3`);
+        if (response.ok) {
+          const data = await response.json();
+          setRelatedArtists(data);
+        }
+      } catch (error) {
+        console.error('Error fetching related artists:', error);
+      }
+    };
+
     fetchArtistData();
+    fetchRelatedArtists();
   }, [artistId]);
   
   // Fallback to mock data for sections not yet converted
   const mockArtist = mockArtists.find(a => a.id === artistId || a.userId === artistId);
   
-  // Get related artists (similar genre/region)
-  const relatedArtists = mockArtists
-    .filter(a => a.id !== artistId && a.approved)
-    .slice(0, 3);
+  // Related artists state
+  const [relatedArtists, setRelatedArtists] = useState<any[]>([]);
 
   if (loading) {
     return (
@@ -255,7 +266,7 @@ export default function ArtistProfilePage() {
                 </Button>
               </Link>
               <Link href={`/messages?artistId=${artistData.id}`}>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 px-8 py-3 font-semibold">
+                <Button size="lg" variant="outline" className="border-white text-white bg-transparent hover:bg-white hover:text-neutral-900 px-8 py-3 font-semibold">
                   Send Message
                 </Button>
               </Link>
@@ -460,15 +471,12 @@ export default function ArtistProfilePage() {
                 <h2 className="text-2xl font-bold text-neutral-900 mb-2">
                   {artistData.bandMembers?.length === 1 ? 'Solo Artist' : 'Meet the Band'}
                 </h2>
-                <p className="text-neutral-600">
-                  {artistData.bandMembers?.length === 1 ? 'Individual performer' : `${artistData.bandMembers?.length || 1} talented musicians`}
-                </p>
               </div>
               <Badge variant="default" className="bg-primary-100 text-primary-800">
                 {artistData.bandMembers?.length || 1} {(artistData.bandMembers?.length || 1) === 1 ? 'Member' : 'Members'}
               </Badge>
             </div>
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-3 gap-6">
               {(artistData.bandMembers || []).map((member, index) => {
                 // Fallback photos if no photo provided
                 const fallbackPhotos = [
@@ -615,12 +623,12 @@ export default function ArtistProfilePage() {
                           <p className="text-sm text-neutral-600">{relatedArtist.location}</p>
                         </div>
                       </div>
-                      <p className="text-sm text-neutral-700 line-clamp-2">{relatedArtist.bio}</p>
+                      <p className="text-sm text-neutral-700 line-clamp-2">{relatedArtist.bio || 'Professional musician'}</p>
                       <div className="flex items-center mt-4 text-sm text-neutral-600">
                         <Star className="w-4 h-4 text-yellow-400 mr-1" />
-                        <span className="font-medium">{relatedArtist.rating}</span>
+                        <span className="font-medium">{relatedArtist.rating || 'N/A'}</span>
                         <span className="mx-2">•</span>
-                        <span>{relatedArtist.members.length} member{relatedArtist.members.length > 1 ? 's' : ''}</span>
+                        <span>{relatedArtist.bandMembers?.length || 1} member{(relatedArtist.bandMembers?.length || 1) > 1 ? 's' : ''}</span>
                       </div>
                     </CardContent>
                   </Card>

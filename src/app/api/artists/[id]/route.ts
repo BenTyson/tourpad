@@ -8,54 +8,26 @@ export async function GET(
   try {
     const { id: artistId } = await params;
 
-    // Handle both mock ID ('1') and database ID ('cmd7j6xr10002lu1fqxf46mw1')
-    let artist;
-    
-    if (artistId === '1') {
-      // For mock ID '1', find Sarah Johnson's artist record
-      artist = await prisma.artist.findFirst({
-        where: { 
-          user: {
-            id: 'cmd7j6xr10002lu1fqxf46mw1'
+    // Find artist by userId (the ID passed is the user ID)
+    const artist = await prisma.artist.findFirst({
+      where: { 
+        userId: artistId 
+      },
+      include: {
+        user: {
+          include: {
+            profile: true
           }
         },
-        include: {
-          user: {
-            include: {
-              profile: true
-            }
-          },
-          bandMembers: {
-            orderBy: { sortOrder: 'asc' }
-          },
-          media: {
-            where: { mediaType: 'PHOTO' },
-            orderBy: { sortOrder: 'asc' }
-          }
-        }
-      });
-    } else {
-      // For database ID, find by userId (the ID passed is actually the user ID)
-      artist = await prisma.artist.findFirst({
-        where: { 
-          userId: artistId 
+        bandMembers: {
+          orderBy: { sortOrder: 'asc' }
         },
-        include: {
-          user: {
-            include: {
-              profile: true
-            }
-          },
-          bandMembers: {
-            orderBy: { sortOrder: 'asc' }
-          },
-          media: {
-            where: { mediaType: 'PHOTO' },
-            orderBy: { sortOrder: 'asc' }
-          }
+        media: {
+          where: { mediaType: 'PHOTO' },
+          orderBy: { sortOrder: 'asc' }
         }
-      });
-    }
+      }
+    });
 
     if (!artist) {
       return NextResponse.json({ error: 'Artist not found' }, { status: 404 });
