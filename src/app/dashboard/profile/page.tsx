@@ -155,6 +155,7 @@ export default function ProfilePage() {
     tourMonthsPerYear: 3,
     tourVehicle: 'van' as string,
     willingToTravel: 500,
+    needsLodging: false,
     equipmentProvided: [] as string[],
     venueRequirements: [] as string[],
     cancellationPolicy: 'flexible' as 'flexible' | 'moderate' | 'strict',
@@ -258,6 +259,7 @@ export default function ProfilePage() {
                 tourMonthsPerYear: data.tourMonthsPerYear || 3,
                 tourVehicle: data.tourVehicle || 'van',
                 willingToTravel: data.willingToTravel || 500,
+                needsLodging: data.needsLodging || false,
                 equipmentProvided: data.equipmentProvided || [],
                 venueRequirements: data.venueRequirements || [],
                 profilePhoto: data.profilePhoto || '',
@@ -961,6 +963,23 @@ export default function ProfilePage() {
                           min="50"
                           max="3000"
                         />
+                      </div>
+
+                      {/* Lodging Requirements */}
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Lodging Requirements</label>
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            id="needsLodging"
+                            checked={artistProfile.needsLodging}
+                            onChange={(e) => updateArtistProfile({ needsLodging: e.target.checked })}
+                            className="mr-3 h-4 w-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
+                          />
+                          <label htmlFor="needsLodging" className="text-sm text-neutral-700">
+                            I need lodging when traveling for performances
+                          </label>
+                        </div>
                       </div>
 
                       {/* Technical Requirements */}

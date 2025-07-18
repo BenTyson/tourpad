@@ -58,6 +58,7 @@ export async function GET() {
         tourMonthsPerYear: user.artist.tourMonthsPerYear || 3,
         tourVehicle: user.artist.tourVehicle || 'van',
         willingToTravel: user.artist.willingToTravel || 500,
+        needsLodging: user.artist.needsLodging || false,
         equipmentProvided: user.artist.equipmentNeeds || [],
         venueRequirements: user.artist.venueRequirements || [],
         profilePhoto: user.profile?.profileImageUrl || '',
@@ -216,6 +217,7 @@ export async function PUT(request: NextRequest) {
             tourMonthsPerYear: data.tourMonthsPerYear || null,
             tourVehicle: data.tourVehicle || null,
             willingToTravel: data.willingToTravel || null,
+            needsLodging: data.needsLodging !== undefined ? data.needsLodging : false,
             equipmentNeeds: data.equipmentProvided || [],
             venueRequirements: data.venueRequirements || [],
             videoLinks: data.videoLinks || [],
@@ -297,6 +299,7 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error updating profile:', error);
+    console.error('Profile data being saved:', JSON.stringify(data, null, 2));
     
     // More detailed error handling
     if (error instanceof Error) {

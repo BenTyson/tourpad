@@ -80,6 +80,7 @@ model Artist {
   tourVehicle             String?
   venueRequirements       String[]
   willingToTravel         Int?
+  needsLodging            Boolean       @default(false)
   videoLinks              Json?
   media                   ArtistMedia[]
   user                    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
