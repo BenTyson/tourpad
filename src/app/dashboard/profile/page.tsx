@@ -176,7 +176,6 @@ export default function ProfilePage() {
       platform: string;
       category: string;
       isLivePerformance: boolean;
-      description?: string;
     }>,
     musicSamples: [] as Array<{
       id: string;
@@ -205,7 +204,6 @@ export default function ProfilePage() {
     title: '',
     url: '',
     category: '',
-    description: '',
     isLivePerformance: false
   });
 
@@ -437,8 +435,7 @@ export default function ProfilePage() {
       url: videoForm.url,
       platform: detectPlatform(videoForm.url),
       category: videoForm.category,
-      isLivePerformance: videoForm.isLivePerformance,
-      description: videoForm.description
+      isLivePerformance: videoForm.isLivePerformance
     };
     
     updateArtistProfile({ videoLinks: [...(artistProfile.videoLinks || []), newVideo] });
@@ -461,7 +458,6 @@ export default function ProfilePage() {
       title: video.title,
       url: video.url,
       category: video.category,
-      description: video.description,
       isLivePerformance: video.isLivePerformance
     });
     setEditingVideoId(video.id);
@@ -479,14 +475,13 @@ export default function ProfilePage() {
             url: videoForm.url,
             platform: detectPlatform(videoForm.url),
             category: videoForm.category,
-            isLivePerformance: videoForm.isLivePerformance,
-            description: videoForm.description
+            isLivePerformance: videoForm.isLivePerformance
           }
         : video
     );
     
     updateArtistProfile({ videoLinks: updatedVideos });
-    setVideoForm({ title: '', url: '', category: '', description: '', isLivePerformance: false });
+    setVideoForm({ title: '', url: '', category: '', isLivePerformance: false });
     setEditingVideoId(null);
     setShowVideoForm(false);
   };
@@ -1623,18 +1618,6 @@ export default function ProfilePage() {
                                 </label>
                               </div>
                             </div>
-                            <div>
-                              <label className="block text-sm font-medium text-neutral-700 mb-2">
-                                Description (optional)
-                              </label>
-                              <textarea
-                                value={videoForm.description}
-                                onChange={(e) => setVideoForm({...videoForm, description: e.target.value})}
-                                className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                                rows={2}
-                                placeholder="Describe this performance or video..."
-                              />
-                            </div>
                             <div className="flex space-x-3">
                               <Button onClick={editingVideoId ? updateVideoLink : addVideoLink}>
                                 {editingVideoId ? 'Update Video' : 'Add Video'}
@@ -1644,7 +1627,7 @@ export default function ProfilePage() {
                                 onClick={() => {
                                   setShowVideoForm(false);
                                   setEditingVideoId(null);
-                                  setVideoForm({ title: '', url: '', category: '', description: '', isLivePerformance: false });
+                                  setVideoForm({ title: '', url: '', category: '', isLivePerformance: false });
                                 }}
                               >
                                 Cancel
@@ -1689,9 +1672,6 @@ export default function ProfilePage() {
                                 </div>
                               </div>
                               <p className="text-xs text-neutral-500 truncate">{video.url}</p>
-                              {video.description && (
-                                <p className="text-sm text-neutral-600 mt-2">{video.description}</p>
-                              )}
                             </div>
                           ))}
                         </div>

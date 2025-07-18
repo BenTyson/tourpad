@@ -59,7 +59,6 @@ interface ArtistData {
     platform: string;
     category: string;
     isLivePerformance: boolean;
-    description: string;
   }>;
   musicSamples?: Array<{
     id: string;
@@ -294,7 +293,7 @@ export default function ArtistProfilePage() {
               if (featuredVideo) {
                 return (
                   <div className="lg:pl-8">
-                    <div className="relative rounded-2xl overflow-hidden shadow-xl bg-black">
+                    <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-black ring-1 ring-neutral-900/5">
                       <div className="relative aspect-video">
                         <iframe
                           src={featuredVideo.url.replace('watch?v=', 'embed/')}
@@ -303,14 +302,15 @@ export default function ArtistProfilePage() {
                           allowFullScreen
                         />
                       </div>
-                    </div>
-                    <div className="mt-4 text-center">
-                      <p className="text-neutral-900 font-medium text-sm">
-                        {featuredVideo.title}
-                      </p>
-                      <p className="text-neutral-600 text-sm">
-                        {featuredVideo.description}
-                      </p>
+                      {/* Video Title Overlay */}
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+                        <p className="text-white font-semibold text-lg">
+                          {featuredVideo.title}
+                        </p>
+                        <p className="text-white/80 text-sm mt-1">
+                          Featured Performance
+                        </p>
+                      </div>
                     </div>
                   </div>
                 );
@@ -324,22 +324,17 @@ export default function ArtistProfilePage() {
       {/* Music & Website Links Section */}
       {(artistData.website || artistData.socialLinks) && (
         <section className="bg-neutral-50 border-b border-neutral-200">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-neutral-900 mb-2">Listen & Connect</h2>
-              <p className="text-neutral-600">Find {artistData.name} on your favorite platforms</p>
-            </div>
-            
-            <div className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex flex-wrap justify-center gap-3">
               {artistData.website && (
                 <a 
                   href={artistData.website} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center bg-white hover:bg-neutral-50 border border-neutral-200 rounded-lg px-6 py-3 transition-colors group"
+                  className="flex items-center bg-white hover:bg-primary-50 border border-neutral-300 hover:border-primary-300 rounded-full px-5 py-2.5 transition-all duration-200 group shadow-sm hover:shadow-md"
                 >
-                  <Globe className="w-5 h-5 mr-3 text-neutral-600 group-hover:text-primary-600" />
-                  <span className="font-medium text-neutral-900">Official Website</span>
+                  <Globe className="w-4 h-4 mr-2 text-neutral-600 group-hover:text-primary-600" />
+                  <span className="text-sm font-medium text-neutral-900 group-hover:text-primary-700">Website</span>
                 </a>
               )}
               
@@ -348,12 +343,12 @@ export default function ArtistProfilePage() {
                   href={artistData.socialLinks.spotify} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center bg-white hover:bg-green-50 border border-neutral-200 rounded-lg px-6 py-3 transition-colors group"
+                  className="flex items-center bg-white hover:bg-green-50 border border-neutral-300 hover:border-green-300 rounded-full px-5 py-2.5 transition-all duration-200 group shadow-sm hover:shadow-md"
                 >
-                  <div className="w-5 h-5 mr-3 bg-green-500 rounded-full flex items-center justify-center">
+                  <div className="w-4 h-4 mr-2 bg-green-500 rounded-full flex items-center justify-center">
                     <span className="text-white text-xs font-bold">S</span>
                   </div>
-                  <span className="font-medium text-neutral-900 group-hover:text-green-700">Spotify</span>
+                  <span className="text-sm font-medium text-neutral-900 group-hover:text-green-700">Spotify</span>
                 </a>
               )}
               
@@ -362,12 +357,12 @@ export default function ArtistProfilePage() {
                   href={artistData.socialLinks.youtube} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center bg-white hover:bg-red-50 border border-neutral-200 rounded-lg px-6 py-3 transition-colors group"
+                  className="flex items-center bg-white hover:bg-red-50 border border-neutral-300 hover:border-red-300 rounded-full px-5 py-2.5 transition-all duration-200 group shadow-sm hover:shadow-md"
                 >
-                  <div className="w-5 h-5 mr-3 bg-red-600 rounded flex items-center justify-center">
+                  <div className="w-4 h-4 mr-2 bg-red-600 rounded flex items-center justify-center">
                     <span className="text-white text-xs font-bold">▶</span>
                   </div>
-                  <span className="font-medium text-neutral-900 group-hover:text-red-700">YouTube</span>
+                  <span className="text-sm font-medium text-neutral-900 group-hover:text-red-700">YouTube</span>
                 </a>
               )}
               
@@ -376,12 +371,12 @@ export default function ArtistProfilePage() {
                   href={`https://instagram.com/${artistData.socialLinks.instagram.replace('@', '')}`} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center bg-white hover:bg-pink-50 border border-neutral-200 rounded-lg px-6 py-3 transition-colors group"
+                  className="flex items-center bg-white hover:bg-pink-50 border border-neutral-300 hover:border-pink-300 rounded-full px-5 py-2.5 transition-all duration-200 group shadow-sm hover:shadow-md"
                 >
-                  <div className="w-5 h-5 mr-3 bg-gradient-to-br from-purple-500 to-pink-500 rounded flex items-center justify-center">
+                  <div className="w-4 h-4 mr-2 bg-gradient-to-br from-purple-500 to-pink-500 rounded flex items-center justify-center">
                     <span className="text-white text-xs font-bold">@</span>
                   </div>
-                  <span className="font-medium text-neutral-900 group-hover:text-pink-700">Instagram</span>
+                  <span className="text-sm font-medium text-neutral-900 group-hover:text-pink-700">Instagram</span>
                 </a>
               )}
               
@@ -390,12 +385,12 @@ export default function ArtistProfilePage() {
                   href={artistData.socialLinks.facebook} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center bg-white hover:bg-blue-50 border border-neutral-200 rounded-lg px-6 py-3 transition-colors group"
+                  className="flex items-center bg-white hover:bg-blue-50 border border-neutral-300 hover:border-blue-300 rounded-full px-5 py-2.5 transition-all duration-200 group shadow-sm hover:shadow-md"
                 >
-                  <div className="w-5 h-5 mr-3 bg-blue-600 rounded flex items-center justify-center">
+                  <div className="w-4 h-4 mr-2 bg-blue-600 rounded flex items-center justify-center">
                     <span className="text-white text-xs font-bold">f</span>
                   </div>
-                  <span className="font-medium text-neutral-900 group-hover:text-blue-700">Facebook</span>
+                  <span className="text-sm font-medium text-neutral-900 group-hover:text-blue-700">Facebook</span>
                 </a>
               )}
             </div>
