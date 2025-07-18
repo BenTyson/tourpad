@@ -24,7 +24,6 @@ import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Badge } from '@/components/ui/Badge';
-import { getCurrentUser } from '@/data/realTestData';
 
 const GENRE_OPTIONS = [
   'Folk', 'Rock', 'Pop', 'Jazz', 'Blues', 'Country', 'Classical', 'Electronic',
@@ -104,7 +103,7 @@ export default function ProfilePage() {
 
   // Profile state
   const [artistProfile, setArtistProfile] = useState({
-    name: '',
+    bandName: '',
     bio: '',
     city: '',
     state: '',
@@ -116,6 +115,7 @@ export default function ProfilePage() {
     tourMonthsPerYear: 3,
     cancellationPolicy: 'flexible' as 'flexible' | 'moderate' | 'strict',
     performanceRadius: 50,
+    website: '',
     socialLinks: {
       website: '',
       instagram: '',
@@ -128,7 +128,7 @@ export default function ProfilePage() {
   });
 
   const [hostProfile, setHostProfile] = useState({
-    name: '',
+    hostName: '',
     bio: '',
     city: '',
     state: '',
@@ -142,6 +142,7 @@ export default function ProfilePage() {
       aboutMe: '',
       profilePhoto: ''
     },
+    website: '',
     socialLinks: {
       website: '',
       instagram: '',
@@ -151,49 +152,71 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
-    if (session?.user) {
-      const userData = getCurrentUser(session.user.email);
-      if (userData && userData.type === 'artist') {
-        setArtistProfile({
-          name: userData.name || '',
-          bio: userData.bio || '',
-          city: userData.city || '',
-          state: userData.state || '',
-          profilePhoto: userData.profilePhoto || '',
-          genres: userData.genres || [],
-          instruments: userData.instruments || [],
-          experienceLevel: userData.experienceLevel || 'intermediate',
-          yearsActive: userData.yearsActive || 1,
-          tourMonthsPerYear: userData.tourMonthsPerYear || 3,
-          cancellationPolicy: userData.cancellationPolicy || 'flexible',
-          performanceRadius: userData.performanceRadius || 50,
-          socialLinks: userData.socialLinks || {
-            website: '', instagram: '', youtube: '', spotify: '', bandcamp: '', facebook: ''
-          },
-          bandMembers: userData.bandMembers || []
-        });
-      } else if (userData && userData.type === 'host') {
-        setHostProfile({
-          name: userData.name || '',
-          bio: userData.bio || '',
-          city: userData.city || '',
-          state: userData.state || '',
-          zip: userData.zip || '',
-          profilePhoto: userData.profilePhoto || '',
-          venueType: userData.venueType || 'home',
-          capacity: userData.capacity || 20,
-          amenities: userData.amenities || [],
-          hostInfo: {
-            hostName: userData.hostInfo?.hostName || '',
-            aboutMe: userData.hostInfo?.aboutMe || '',
-            profilePhoto: userData.hostInfo?.profilePhoto || ''
-          },
-          socialLinks: userData.socialLinks || {
-            website: '', instagram: '', youtube: '', facebook: ''
+    const fetchProfile = async () => {
+      if (session?.user) {
+        try {
+          const response = await fetch('/api/profile');
+          if (response.ok) {
+            const data = await response.json();
+            
+            if (session.user.type === 'artist') {
+              setArtistProfile({
+                bandName: data.bandName || '',
+                bio: data.bio || '',
+                city: data.city || '',
+                state: data.state || '',
+                profilePhoto: '',
+                genres: data.genres || [],
+                instruments: data.instruments || [],
+                experienceLevel: data.experienceLevel || 'intermediate',
+                yearsActive: data.yearsActive || 1,
+                tourMonthsPerYear: 3,
+                cancellationPolicy: 'flexible',
+                performanceRadius: 50,
+                website: data.website || '',
+                socialLinks: {
+                  website: data.socialLinks?.website || data.website || '',
+                  instagram: data.socialLinks?.instagram || '',
+                  youtube: data.socialLinks?.youtube || '',
+                  spotify: data.socialLinks?.spotify || '',
+                  bandcamp: data.socialLinks?.bandcamp || '',
+                  facebook: data.socialLinks?.facebook || ''
+                },
+                bandMembers: []
+              });
+            } else if (session.user.type === 'host') {
+              setHostProfile({
+                hostName: data.hostName || '',
+                bio: data.bio || '',
+                city: data.city || '',
+                state: data.state || '',
+                zip: '',
+                profilePhoto: '',
+                venueType: data.venueType || 'home',
+                capacity: 20,
+                amenities: [],
+                hostInfo: {
+                  hostName: '',
+                  aboutMe: '',
+                  profilePhoto: ''
+                },
+                website: data.website || '',
+                socialLinks: {
+                  website: data.socialLinks?.website || data.website || '',
+                  instagram: data.socialLinks?.instagram || '',
+                  youtube: data.socialLinks?.youtube || '',
+                  facebook: data.socialLinks?.facebook || ''
+                }
+              });
+            }
           }
-        });
+        } catch (error) {
+          console.error('Error fetching profile:', error);
+        }
       }
-    }
+    };
+    
+    fetchProfile();
   }, [session]);
 
   if (status === 'loading') {
@@ -292,12 +315,24 @@ export default function ProfilePage() {
   const handleSave = async () => {
     setLoading(true);
     try {
-      // TODO: Save to backend
-      console.log('Saving profile:', isArtist ? artistProfile : hostProfile);
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const profileData = isArtist ? artistProfile : hostProfile;
+      
+      const response = await fetch('/api/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(profileData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save profile');
+      }
+
       setHasChanges(false);
       alert('Profile updated successfully!');
     } catch (error) {
+      console.error('Error saving profile:', error);
       alert('Failed to save profile. Please try again.');
     } finally {
       setLoading(false);
@@ -403,10 +438,10 @@ export default function ProfilePage() {
                 <CardContent className="space-y-4">
                   <Input
                     label={isArtist ? "Artist/Band Name" : "Venue Name"}
-                    value={isArtist ? artistProfile.name : hostProfile.name}
+                    value={isArtist ? artistProfile.bandName : hostProfile.hostName}
                     onChange={(e) => {
-                      if (isArtist) updateArtistProfile({ name: e.target.value });
-                      else updateHostProfile({ name: e.target.value });
+                      if (isArtist) updateArtistProfile({ bandName: e.target.value });
+                      else updateHostProfile({ hostName: e.target.value });
                     }}
                     placeholder={isArtist ? "Your stage name or band name" : "Your venue name"}
                   />

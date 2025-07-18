@@ -3,10 +3,10 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const artistId = params.id;
+    const { id: artistId } = await params;
 
     // Handle both mock ID ('1') and database ID ('cmd7j6xr10002lu1fqxf46mw1')
     let artist;
@@ -49,15 +49,15 @@ export async function GET(
     return NextResponse.json({
       id: artist.id,
       name: artist.user.name,
-      bio: artist.bio || artist.user.profile?.bio || '',
+      bio: artist.user.profile?.bio || '',
       location: artist.user.profile?.location || '',
       genres: artist.genres || [],
-      instruments: artist.instruments || [],
-      yearsActive: artist.yearsActive || 0,
-      experienceLevel: artist.experienceLevel || 'beginner',
+      instruments: [], // Not in schema yet
+      yearsActive: 0, // Not in schema yet
+      experienceLevel: 'beginner', // Not in schema yet
       profileImageUrl: artist.user.profileImageUrl || '',
-      website: artist.website || '',
-      socialLinks: artist.socialLinks || {},
+      website: artist.user.profile?.websiteUrl || '',
+      socialLinks: artist.user.profile?.socialLinks || {},
       createdAt: artist.createdAt,
       updatedAt: artist.updatedAt
     });
