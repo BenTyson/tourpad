@@ -1,0 +1,256 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { auth } from '@/lib/auth';
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const hostId = params.id;
+
+    // Fetch host with all related data
+    const host = await prisma.host.findUnique({
+      where: { id: hostId },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            profileImageUrl: true,
+            status: true,
+            userType: true,
+            profile: true
+          }
+        },
+        media: {
+          orderBy: { sortOrder: 'asc' }
+        },
+        bookings: {
+          where: {
+            status: 'CONFIRMED',
+            concert: {
+              date: {
+                gte: new Date()
+              }
+            }
+          },
+          include: {
+            concert: true,
+            artist: {
+              include: {
+                user: {
+                  select: {
+                    name: true
+                  }
+                }
+              }
+            }
+          },
+          orderBy: {
+            requestedDate: 'asc'
+          }
+        }
+      }
+    });
+
+    if (!host) {
+      return NextResponse.json(
+        { error: 'Host not found' },
+        { status: 404 }
+      );
+    }
+
+    // Transform data to match frontend expectations
+    const transformedHost = {
+      id: host.id,
+      userId: host.userId,
+      name: host.user.name,
+      email: host.user.email,
+      profileImageUrl: host.user.profileImageUrl,
+      bio: host.user.profile?.bio || '',
+      status: host.user.status,
+      venueName: host.venueName,
+      venueType: host.venueType,
+      city: host.city,
+      state: host.state,
+      country: host.country,
+      displayCoordinates: host.displayCoordinates,
+      actualAddress: host.actualAddress,
+      indoorCapacity: host.indoorCapacity,
+      outdoorCapacity: host.outdoorCapacity,
+      preferredGenres: host.preferredGenres,
+      hostingExperience: host.hostingExperience,
+      typicalShowLength: host.typicalShowLength,
+      houseRules: host.houseRules,
+      offersLodging: host.offersLodging,
+      lodgingDetails: host.lodgingDetails,
+      // Media organized by category
+      housePhotos: host.media
+        .filter(m => m.category === 'house' || m.category === 'venue')
+        .map(m => ({
+          id: m.id,
+          url: m.fileUrl,
+          alt: m.title || 'House photo',
+          title: m.title,
+          description: m.description
+        })),
+      performanceSpacePhotos: host.media
+        .filter(m => m.category === 'performance_space')
+        .map(m => ({
+          id: m.id,
+          url: m.fileUrl,
+          alt: m.title || 'Performance space photo',
+          title: m.title,
+          description: m.description
+        })),
+      // Host profile info
+      hostInfo: {
+        hostName: host.user.name,
+        profilePhoto: host.user.profileImageUrl,
+        aboutMe: host.user.profile?.bio || ''
+      },
+      // Stats from mockData format
+      rating: 4.9, // TODO: Calculate from reviews
+      reviewCount: 0, // TODO: Count actual reviews
+      // Show specs - derived from database fields
+      showSpecs: {
+        avgAttendance: Math.floor((host.indoorCapacity || 0) * 0.8),
+        indoorAttendanceMax: host.indoorCapacity || 0,
+        outdoorAttendanceMax: host.outdoorCapacity || 0,
+        showDurationMins: host.typicalShowLength || 120,
+        showFormat: host.venueType === 'home' ? 'Intimate house concert' : 'Venue performance',
+        daysAvailable: ['Friday', 'Saturday'], // TODO: Store in database
+        estimatedShowsPerYear: host.hostingExperience || 10,
+        avgDoorFee: 20, // TODO: Calculate from past events
+        hostingHistory: `${host.hostingExperience || 0} years`
+      },
+      // Amenities - TODO: Store as separate fields or JSON
+      amenities: {
+        powerAccess: true,
+        airConditioning: true,
+        wifi: true,
+        kidFriendly: false,
+        parking: true,
+        petFriendly: false,
+        soundSystem: true,
+        outdoorSpace: host.outdoorCapacity ? true : false,
+        accessible: true,
+        bnbOffered: host.offersLodging
+      },
+      // Sound system - TODO: Store in database
+      soundSystem: {
+        available: true,
+        description: 'Professional PA system with mixing board suitable for acoustic and amplified performances.',
+        equipment: {
+          speakers: '2x QSC K12.2 powered speakers',
+          microphones: '4x Shure SM58, 2x Shure SM57',
+          mixingBoard: 'Behringer X32 Compact digital mixer',
+          instruments: 'Yamaha upright piano'
+        }
+      },
+      // Hosting capabilities - transform lodging details
+      hostingCapabilities: host.offersLodging && host.lodgingDetails ? {
+        lodgingHosting: {
+          enabled: true,
+          lodgingDetails: host.lodgingDetails
+        }
+      } : null,
+      // Upcoming concerts
+      upcomingConcerts: host.bookings.map(booking => ({
+        id: booking.concert?.id,
+        title: `${booking.artist.user.name} Live`,
+        artistName: booking.artist.user.name,
+        date: booking.concert?.date,
+        startTime: booking.concert?.startTime,
+        capacity: booking.concert?.maxCapacity,
+        ticketPrice: booking.concert?.doorFee || 0,
+        status: 'upcoming'
+      })).filter(c => c.id)
+    };
+
+    return NextResponse.json(transformedHost);
+  } catch (error) {
+    console.error('Error fetching host:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch host data' },
+      { status: 500 }
+    );
+  }
+}
+
+// Update host profile
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const session = await auth();
+    if (!session) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    const hostId = params.id;
+    const data = await request.json();
+
+    // Verify ownership
+    const host = await prisma.host.findUnique({
+      where: { id: hostId },
+      select: { userId: true }
+    });
+
+    if (!host || host.userId !== session.user.id) {
+      return NextResponse.json(
+        { error: 'Access denied' },
+        { status: 403 }
+      );
+    }
+
+    // Update host profile
+    const updatedHost = await prisma.host.update({
+      where: { id: hostId },
+      data: {
+        venueName: data.venueName,
+        venueType: data.venueType,
+        city: data.city,
+        state: data.state,
+        actualAddress: data.actualAddress,
+        indoorCapacity: data.indoorCapacity,
+        outdoorCapacity: data.outdoorCapacity,
+        preferredGenres: data.preferredGenres,
+        hostingExperience: data.hostingExperience,
+        typicalShowLength: data.typicalShowLength,
+        houseRules: data.houseRules,
+        offersLodging: data.offersLodging,
+        lodgingDetails: data.lodgingDetails
+      }
+    });
+
+    // Update user profile if provided
+    if (data.bio || data.name) {
+      await prisma.user.update({
+        where: { id: session.user.id },
+        data: {
+          name: data.name,
+          profile: {
+            update: {
+              bio: data.bio
+            }
+          }
+        }
+      });
+    }
+
+    return NextResponse.json({ success: true, host: updatedHost });
+  } catch (error) {
+    console.error('Error updating host:', error);
+    return NextResponse.json(
+      { error: 'Failed to update host profile' },
+      { status: 500 }
+    );
+  }
+}

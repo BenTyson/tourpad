@@ -96,10 +96,10 @@ export default function DashboardPage() {
   // This mapping bridges the gap between authentication and display data
   let profileId = selectedUserId;
   if (userRole === 'artist') {
-    const artist = mockArtists.find(a => a.userId === selectedUserId);
+    const artist = mockArtists?.find(a => a.userId === selectedUserId);
     profileId = artist?.id || selectedUserId;
   } else if (userRole === 'host') {
-    const host = mockHosts.find(h => h.userId === selectedUserId);
+    const host = mockHosts?.find(h => h.userId === selectedUserId);
     profileId = host?.id || selectedUserId;
   }
 
@@ -113,34 +113,34 @@ export default function DashboardPage() {
 
   // Filter data based on user role
   const userBookings = userRole === 'admin' 
-    ? mockBookings // Admin sees all bookings
+    ? mockBookings || [] // Admin sees all bookings
     : userRole === 'fan'
     ? [] // Fans don't have bookings, they have concert reservations
-    : mockBookings.filter(booking => 
+    : (mockBookings || []).filter(booking => 
         userRole === 'host' ? booking.hostId === selectedUserId : booking.artistId === selectedUserId
       );
 
   // Fan-specific data
   const fanConcerts = userRole === 'fan' 
-    ? testConcerts.filter(concert => concert.status === 'upcoming')
+    ? (testConcerts || []).filter(concert => concert.status === 'upcoming')
     : [];
   
   const fanUpcomingConcerts = userRole === 'fan'
-    ? testConcerts.filter(concert => 
+    ? (testConcerts || []).filter(concert => 
         concert.status === 'upcoming' && 
-        concert.attendees.includes(selectedUserId)
+        concert.attendees?.includes(selectedUserId)
       )
     : [];
 
   const userMessages = userRole === 'admin'
-    ? mockMessages // Admin sees all messages
-    : mockMessages.filter(msg => 
+    ? mockMessages || [] // Admin sees all messages
+    : (mockMessages || []).filter(msg => 
         msg.senderId === selectedUserId || msg.recipientId === selectedUserId
       );
 
   const userNotifications = userRole === 'admin'
-    ? mockNotifications // Admin sees all notifications  
-    : mockNotifications.filter(notif => 
+    ? mockNotifications || [] // Admin sees all notifications  
+    : (mockNotifications || []).filter(notif => 
         notif.userId === selectedUserId
       );
 
@@ -329,7 +329,7 @@ export default function DashboardPage() {
                     </Link>
 
                     {/* Secondary Actions */}
-                    <Link href={userRole === 'fan' ? '/dashboard/profile' : `/${userRole}s/${selectedUserId}`}>
+                    <Link href={userRole === 'fan' ? '/dashboard/profile' : userRole === 'host' ? '/hosts/cmd8zfdyf000aluf9h4l2k90w' : `/${userRole}s/${selectedUserId}`} target="_blank">
                       <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
                         <div className="flex items-center">
                           <div className="flex-shrink-0">

@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { 
@@ -41,20 +41,163 @@ import { Badge } from '@/components/ui/Badge';
 import { PhotoGallery } from '@/components/media/PhotoGallery';
 import { PhotoLightbox } from '@/components/media/PhotoLightbox';
 import { PublicReviewsSection } from '@/components/reviews/PublicReviewsSection';
-import { mockHosts, mockRSVPs } from '@/data/mockData';
-import { testHosts, testConcerts } from '@/data/realTestData';
+import { mockRSVPs } from '@/data/mockData';
+import { testHosts } from '@/data/realTestData';
+
+interface HostData {
+  id: string;
+  name: string;
+  bio: string;
+  city: string;
+  state: string;
+  venueName: string;
+  venueType: string;
+  rating: number;
+  reviewCount: number;
+  housePhotos: Array<{
+    id: string;
+    url: string;
+    alt: string;
+    title?: string;
+    description?: string;
+  }>;
+  performanceSpacePhotos: Array<{
+    id: string;
+    url: string;
+    alt: string;
+    title?: string;
+    description?: string;
+  }>;
+  showSpecs: {
+    avgAttendance: number;
+    indoorAttendanceMax: number;
+    outdoorAttendanceMax: number;
+    showDurationMins: number;
+    showFormat: string;
+    daysAvailable: string[];
+    estimatedShowsPerYear: number;
+    avgDoorFee: number;
+    hostingHistory: string;
+  };
+  amenities: {
+    powerAccess: boolean;
+    airConditioning: boolean;
+    wifi: boolean;
+    kidFriendly: boolean;
+    parking: boolean;
+    petFriendly: boolean;
+    soundSystem: boolean;
+    outdoorSpace: boolean;
+    accessible: boolean;
+    bnbOffered: boolean;
+  };
+  hostInfo?: {
+    hostName: string;
+    profilePhoto?: string;
+    aboutMe?: string;
+  };
+  soundSystem?: {
+    available: boolean;
+    description: string;
+    equipment: {
+      speakers: string;
+      microphones: string;
+      mixingBoard?: string;
+      instruments?: string;
+      additional?: string;
+    };
+    limitations?: string;
+    setupNotes?: string;
+  };
+  hostingCapabilities?: {
+    lodgingHosting?: {
+      enabled: boolean;
+      lodgingDetails?: any;
+    };
+  };
+  upcomingConcerts?: Array<{
+    id: string;
+    title: string;
+    artistName: string;
+    date: string;
+    startTime: string;
+    capacity: number;
+    ticketPrice: number;
+    status: string;
+  }>;
+}
 
 export default function HostProfilePage() {
   const params = useParams();
   const hostId = params.id as string;
   
-  const host = testHosts.find(h => h.id === hostId) || mockHosts.find(h => h.id === hostId);
+  const [hostData, setHostData] = useState<HostData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
 
-  if (!host) {
+  // Fetch host data from API
+  useEffect(() => {
+    const fetchHostData = async () => {
+      try {
+        const response = await fetch(`/api/hosts/${hostId}`);
+        if (!response.ok) {
+          // Try to find in test data
+          const testHost = testHosts.find(h => h.id === hostId);
+          if (testHost) {
+            // Transform test data to match API format
+            const transformedHost: HostData = {
+              id: testHost.id,
+              name: testHost.name,
+              bio: testHost.bio,
+              city: testHost.location.city,
+              state: testHost.location.state,
+              venueName: testHost.venueName,
+              venueType: testHost.venueType,
+              rating: testHost.rating,
+              reviewCount: testHost.reviewCount,
+              housePhotos: testHost.housePhotos,
+              performanceSpacePhotos: testHost.performanceSpacePhotos,
+              showSpecs: testHost.showSpecs,
+              amenities: testHost.amenities,
+              hostInfo: testHost.hostInfo,
+              soundSystem: testHost.soundSystem,
+              hostingCapabilities: testHost.hostingCapabilities,
+              upcomingConcerts: []
+            };
+            setHostData(transformedHost);
+            setLoading(false);
+            return;
+          }
+          throw new Error('Host not found');
+        }
+        const data = await response.json();
+        setHostData(data);
+      } catch (err) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHostData();
+  }, [hostId]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading host profile...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !hostData) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -66,6 +209,8 @@ export default function HostProfilePage() {
       </div>
     );
   }
+
+  const host = hostData;
 
   // Combine all photos for gallery
   const allPhotos = [...host.housePhotos, ...host.performanceSpacePhotos];
@@ -221,7 +366,7 @@ export default function HostProfilePage() {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-2xl font-bold text-neutral-900 mb-2">
-                  Venue Details Tim
+                  Venue Details
                 </h2>
                 <p className="text-neutral-600">Everything you need to know about performing here</p>
               </div>
@@ -549,10 +694,10 @@ export default function HostProfilePage() {
                     </div>
                   </div>
                   <div className="text-lg font-bold text-blue-700">
-                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.roomType.replace('_', ' ')}
+                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.roomType?.replace('_', ' ') || 'Private room'}
                   </div>
                   <div className="text-sm text-neutral-600 mt-1">
-                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.bathroomType.replace('_', ' ')} bathroom
+                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.bathroomType?.replace('_', ' ') || 'Shared'} bathroom
                   </div>
                 </div>
                 
@@ -567,12 +712,12 @@ export default function HostProfilePage() {
                     </div>
                   </div>
                   <div className="text-lg font-bold text-green-700">
-                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.bedConfiguration.maxOccupancy} guests
+                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.bedConfiguration?.maxOccupancy || 2} guests
                   </div>
                   <div className="text-sm text-neutral-600 mt-1">
-                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.bedConfiguration.beds.map(bed => 
-                      `${bed.quantity} ${bed.type.replace('_', ' ')}`
-                    ).join(', ')}
+                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.bedConfiguration?.beds?.map(bed => 
+                      `${bed.quantity} ${bed.type?.replace('_', ' ') || 'bed'}`
+                    ).join(', ') || '1 bed'}
                   </div>
                 </div>
                 
@@ -587,10 +732,10 @@ export default function HostProfilePage() {
                     </div>
                   </div>
                   <div className="text-lg font-bold text-purple-700">
-                    ${host.hostingCapabilities.lodgingHosting.lodgingDetails.pricing.baseRate}
+                    ${host.hostingCapabilities.lodgingHosting.lodgingDetails.pricing?.baseRate || 40}
                   </div>
                   <div className="text-sm text-neutral-600 mt-1">
-                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.pricing.additionalGuestFee && 
+                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.pricing?.additionalGuestFee && 
                       `+$${host.hostingCapabilities.lodgingHosting.lodgingDetails.pricing.additionalGuestFee} per extra guest`
                     }
                   </div>
@@ -638,22 +783,22 @@ export default function HostProfilePage() {
                 <h3 className="text-lg font-semibold text-neutral-900 mb-4">House Rules</h3>
                 <div className="grid md:grid-cols-2 gap-4 text-sm">
                   <div>
-                    <strong>Check-in:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules.checkInTime}
+                    <strong>Check-in:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.checkInTime || '3:00 PM'}
                   </div>
                   <div>
-                    <strong>Check-out:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules.checkOutTime}
+                    <strong>Check-out:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.checkOutTime || '11:00 AM'}
                   </div>
                   <div>
-                    <strong>Quiet hours:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules.quietHours.start} - {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules.quietHours.end}
+                    <strong>Quiet hours:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.quietHours?.start || '10:00 PM'} - {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.quietHours?.end || '8:00 AM'}
                   </div>
                   <div>
-                    <strong>Smoking:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules.smokingPolicy.replace('_', ' ')}
+                    <strong>Smoking:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.smokingPolicy?.replace('_', ' ') || 'No smoking'}
                   </div>
                   <div>
-                    <strong>Pets:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules.petPolicy.replace('_', ' ')}
+                    <strong>Pets:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.petPolicy?.replace('_', ' ') || 'No pets'}
                   </div>
                   <div>
-                    <strong>Alcohol:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules.alcoholPolicy.replace('_', ' ')}
+                    <strong>Alcohol:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.alcoholPolicy?.replace('_', ' ') || 'Allowed'}
                   </div>
                 </div>
               </div>
@@ -734,14 +879,13 @@ export default function HostProfilePage() {
                 <p className="text-neutral-600">Concerts scheduled at this venue</p>
               </div>
               <Badge variant="outline" className="bg-sage/10 text-sage">
-                {testConcerts.filter(c => c.hostId === hostId && c.status === 'upcoming').length} Shows
+                {host.upcomingConcerts?.length || 0} Shows
               </Badge>
             </div>
 
             <div className="space-y-4">
-              {testConcerts
-                .filter(concert => concert.hostId === hostId && concert.status === 'upcoming')
-                .map((concert) => {
+              {host.upcomingConcerts && host.upcomingConcerts.length > 0 ? (
+                host.upcomingConcerts.map((concert) => {
                   const concertRSVPs = mockRSVPs.filter(rsvp => rsvp.concertId === concert.id);
                   const totalGuests = concertRSVPs.reduce((sum, rsvp) => sum + rsvp.guestCount, 0);
                   
@@ -837,9 +981,8 @@ export default function HostProfilePage() {
                       )}
                     </div>
                   );
-                })}
-              
-              {testConcerts.filter(c => c.hostId === hostId && c.status === 'upcoming').length === 0 && (
+                })
+              ) : (
                 <div className="text-center py-12">
                   <Calendar className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-neutral-900 mb-2">No Upcoming Shows</h3>

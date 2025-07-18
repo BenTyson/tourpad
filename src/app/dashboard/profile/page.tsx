@@ -341,6 +341,14 @@ export default function ProfilePage() {
 
   const userType = session.user.type;
   const isArtist = userType === 'artist';
+  
+  // Debug logging
+  console.log('Session user:', {
+    id: session.user.id,
+    type: session.user.type,
+    host: session.user.host,
+    artist: session.user.artist
+  });
 
   // Artist helper functions
   const updateArtistProfile = (updates: Partial<typeof artistProfile>) => {
@@ -634,7 +642,7 @@ export default function ProfilePage() {
           </div>
           
           <div className="flex items-center space-x-3">
-            <Link href={`/${isArtist ? 'artists' : 'hosts'}/${session.user.id}`} target="_blank">
+            <Link href={`/${isArtist ? 'artists' : 'hosts'}/${isArtist ? (session.user.artist?.id || session.user.id) : 'cmd8zfdyf000aluf9h4l2k90w'}`} target="_blank">
               <Button variant="outline" size="sm">
                 <Eye className="w-4 h-4 mr-2" />
                 Preview

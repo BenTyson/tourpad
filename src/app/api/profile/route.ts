@@ -85,13 +85,43 @@ export async function GET() {
     }
 
     if (user.host) {
+      // Fetch host media
+      const hostMedia = await prisma.hostMedia.findMany({
+        where: { 
+          hostId: user.host.id,
+          mediaType: 'PHOTO'
+        },
+        orderBy: { sortOrder: 'asc' }
+      });
+
       profileData = {
         ...profileData,
         hostName: user.host.venueName || user.name,
+        venueName: user.host.venueName || '',
+        city: user.host.city || profileData.city || '',
+        state: user.host.state || profileData.state || '',
         venueType: user.host.venueType?.toLowerCase() || 'home',
+        indoorCapacity: user.host.indoorCapacity || 0,
+        outdoorCapacity: user.host.outdoorCapacity || 0,
+        preferredGenres: user.host.preferredGenres || [],
+        hostingExperience: user.host.hostingExperience || 0,
+        typicalShowLength: user.host.typicalShowLength || 0,
+        houseRules: user.host.houseRules || '',
+        offersLodging: user.host.offersLodging || false,
+        lodgingDetails: user.host.lodgingDetails || null,
         website: user.profile?.websiteUrl || user.profile?.socialLinks?.website || '',
         socialLinks: user.profile?.socialLinks || {},
         profilePhoto: user.profile?.profileImageUrl || '',
+        // Map amenities from preferred genres temporarily (TODO: add amenities field to schema)
+        amenities: ['Sound System', 'Parking', 'WiFi'],
+        photos: hostMedia.map(media => ({
+          id: media.id,
+          fileUrl: media.fileUrl,
+          title: media.title || '',
+          description: media.description || '',
+          category: media.category || 'venue',
+          sortOrder: media.sortOrder
+        }))
       };
     }
 
@@ -285,14 +315,64 @@ export async function PUT(request: NextRequest) {
       });
 
       if (host) {
+        // Prepare venue type (convert to uppercase enum value)
+        const venueTypeMap: Record<string, string> = {
+          'home': 'HOME',
+          'studio': 'STUDIO',
+          'backyard': 'BACKYARD',
+          'loft': 'LOFT',
+          'other': 'OTHER'
+        };
+
         await prisma.host.update({
           where: { id: host.id },
           data: {
-            venueName: data.hostName || undefined,
-            // Note: venueType would need to match the enum values in schema
-            // venueType: data.venueType ? data.venueType.toUpperCase() : undefined,
+            venueName: data.hostName || data.venueName || undefined,
+            venueType: data.venueType ? 
+              (venueTypeMap[data.venueType.toLowerCase()] || data.venueType.toUpperCase()) : 
+              undefined,
+            city: data.city || undefined,
+            state: data.state || undefined,
+            indoorCapacity: data.indoorCapacity ? parseInt(data.indoorCapacity) : undefined,
+            outdoorCapacity: data.outdoorCapacity ? parseInt(data.outdoorCapacity) : undefined,
+            preferredGenres: data.preferredGenres || [],
+            hostingExperience: data.hostingExperience ? parseInt(data.hostingExperience) : undefined,
+            typicalShowLength: data.typicalShowLength ? parseInt(data.typicalShowLength) : undefined,
+            houseRules: data.houseRules || undefined,
+            offersLodging: data.offersLodging !== undefined ? data.offersLodging : undefined,
+            lodgingDetails: data.lodgingDetails || undefined,
           }
         });
+
+        // Handle host photos if provided
+        if (data.photos && Array.isArray(data.photos)) {
+          console.log('Processing host photos:', data.photos);
+          
+          // Delete existing photos
+          await prisma.hostMedia.deleteMany({
+            where: { 
+              hostId: host.id,
+              mediaType: 'PHOTO'
+            }
+          });
+
+          // Create new photos
+          if (data.photos.length > 0) {
+            console.log('Creating photos for host:', host.id);
+            await prisma.hostMedia.createMany({
+              data: data.photos.map((photo, index) => ({
+                hostId: host.id,
+                mediaType: 'PHOTO',
+                fileUrl: photo.fileUrl,
+                title: photo.title || '',
+                description: photo.description || '',
+                category: photo.category || 'venue',
+                sortOrder: photo.sortOrder || index
+              }))
+            });
+            console.log('Host photos created successfully');
+          }
+        }
       }
     }
 
