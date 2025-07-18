@@ -392,43 +392,36 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
-        {/* Modern Header */}
-        <div className="mb-8">
-          <div className="flex items-center mb-4">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center space-x-4">
             <Link href="/dashboard">
               <Button variant="outline" size="sm">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Dashboard
+                Back
               </Button>
             </Link>
+            <h1 className="text-2xl font-bold text-neutral-900">Edit Profile</h1>
           </div>
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-neutral-900 mb-2">Profile Manager</h1>
-              <p className="text-neutral-600">
-                {isArtist ? 'Manage your artist profile, photos, and media' : 'Manage your venue profile and photos'}
-              </p>
-            </div>
-            
-            <div className="flex items-center space-x-3">
-              <Link href={`/${isArtist ? 'artists' : 'hosts'}/${session.user.id}`} target="_blank">
-                <Button variant="outline" size="sm">
-                  <Eye className="w-4 h-4 mr-2" />
-                  Preview Live Profile
+          
+          <div className="flex items-center space-x-3">
+            <Link href={`/${isArtist ? 'artists' : 'hosts'}/${session.user.id}`} target="_blank">
+              <Button variant="outline" size="sm">
+                <Eye className="w-4 h-4 mr-2" />
+                Preview
+              </Button>
+            </Link>
+            {hasChanges && (
+              <>
+                <Badge variant="warning" className="bg-yellow-100 text-yellow-800">
+                  <AlertTriangle className="w-3 h-3 mr-1" />
+                  Unsaved
+                </Badge>
+                <Button onClick={handleSave} disabled={loading}>
+                  {loading ? 'Saving...' : 'Save Changes'}
                 </Button>
-              </Link>
-              {hasChanges && (
-                <>
-                  <Badge variant="warning" className="bg-yellow-100 text-yellow-800">
-                    <AlertTriangle className="w-3 h-3 mr-1" />
-                    Unsaved Changes
-                  </Badge>
-                  <Button onClick={handleSave} disabled={loading}>
-                    {loading ? 'Saving...' : 'Save Changes'}
-                  </Button>
-                </>
-              )}
-            </div>
+              </>
+            )}
           </div>
         </div>
 
