@@ -116,16 +116,6 @@ export default function ArtistProfilePage() {
 
   // Combine all photos for gallery - using mock data for now
   const allPhotos = [...(mockArtist?.performancePhotos || []), ...(mockArtist?.bandPhotos || [])];
-  
-  const getGenre = () => {
-    if (artistData.genres && artistData.genres.length > 0) {
-      return artistData.genres[0];
-    }
-    const genres = ['folk', 'rock', 'indie', 'country', 'blues', 'jazz', 'experimental'];
-    const bio = artistData.bio.toLowerCase();
-    const foundGenre = genres.find(genre => bio.includes(genre));
-    return foundGenre || 'music';
-  };
 
   const handlePhotoClick = (index: number) => {
     setLightboxIndex(index);
@@ -219,12 +209,17 @@ export default function ArtistProfilePage() {
                 </div>
                 <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
                   <Users className="w-5 h-5 mr-2 text-neutral-600" />
-                  <span className="text-neutral-900">{mockArtist?.members?.length || 1} member{(mockArtist?.members?.length || 1) > 1 ? 's' : ''}</span>
+                  <span className="text-neutral-900">{artistData.bandMembers?.length || 1} member{(artistData.bandMembers?.length || 1) > 1 ? 's' : ''}</span>
                 </div>
-                <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
-                  <Music className="w-5 h-5 mr-2 text-neutral-600" />
-                  <span className="capitalize text-neutral-900">{getGenre()}</span>
-                </div>
+                {/* Genre Tags */}
+                {artistData.genres && artistData.genres.length > 0 && (
+                  artistData.genres.map((genre, index) => (
+                    <div key={index} className="flex items-center bg-primary-50 rounded-lg px-4 py-2 border border-primary-200">
+                      <Music className="w-5 h-5 mr-2 text-primary-600" />
+                      <span className="text-primary-900 font-medium">{genre}</span>
+                    </div>
+                  ))
+                )}
               </div>
               
               <div className="flex flex-wrap gap-4">
