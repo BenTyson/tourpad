@@ -423,14 +423,11 @@ export default function ArtistProfilePage() {
           <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
             <div className="p-8">
               <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h2 className="text-2xl font-bold text-neutral-900 mb-2">
-                    Performance Gallery
-                  </h2>
-                  <p className="text-neutral-600">{allPhotos.length} professional photos</p>
-                </div>
-                <Badge variant="default" className="bg-secondary-100 text-secondary-800">
-                  {allPhotos.length} Photos
+                <h2 className="text-2xl font-bold text-neutral-900">
+                  Photo Gallery
+                </h2>
+                <Badge variant="default" className="bg-neutral-100 text-neutral-700 border-neutral-200">
+                  {allPhotos.length} {allPhotos.length === 1 ? 'Photo' : 'Photos'}
                 </Badge>
               </div>
               <ArtistPhotoGallery 
