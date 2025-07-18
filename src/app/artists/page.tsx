@@ -47,7 +47,7 @@ export default function ArtistsPage() {
   // Check if user has access to browse artists
   const hasAccess = session?.user && (
     session.user.type === 'admin' || 
-    (session.user.status === 'approved' && (session.user.type === 'artist' || session.user.type === 'host')) ||
+    ((session.user.status === 'approved' || session.user.status === 'active' || session.user.status === 'pending') && (session.user.type === 'artist' || session.user.type === 'host')) ||
     (session.user.type === 'fan' && session.user.paymentStatus === 'active')
   );
 
