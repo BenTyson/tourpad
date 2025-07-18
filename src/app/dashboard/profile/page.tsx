@@ -63,6 +63,24 @@ const VENUE_REQUIREMENT_OPTIONS = [
   'Sound system hookup'
 ];
 
+const VIDEO_CATEGORIES = [
+  { value: 'live_performance', label: '🎵 Live Performance' },
+  { value: 'music_video', label: '🎬 Music Video' },
+  { value: 'studio', label: '🎙️ Studio Session' },
+  { value: 'backstage', label: '🎭 Behind the Scenes' },
+  { value: 'interview', label: '💬 Interview' },
+  { value: 'promo', label: '📢 Promotional' }
+];
+
+const MUSIC_PLATFORMS = [
+  { value: 'spotify', label: 'Spotify' },
+  { value: 'apple_music', label: 'Apple Music' },
+  { value: 'bandcamp', label: 'Bandcamp' },
+  { value: 'soundcloud', label: 'SoundCloud' },
+  { value: 'youtube', label: 'YouTube Music' },
+  { value: 'other', label: 'Other' }
+];
+
 const US_STATES = [
   { value: 'AL', label: 'Alabama' },
   { value: 'AK', label: 'Alaska' },
@@ -153,6 +171,41 @@ export default function ProfilePage() {
     bandMembers: [] as Array<{id: string, name: string, instrument: string, photo?: string}>
   });
 
+  // Media state
+  const [videoLinks, setVideoLinks] = useState<Array<{
+    id: string;
+    title: string;
+    url: string;
+    platform: string;
+    category: string;
+    isLivePerformance: boolean;
+    description?: string;
+  }>>([]);
+
+  const [musicSamples, setMusicSamples] = useState<Array<{
+    id: string;
+    title: string;
+    url: string;
+    platform: string;
+  }>>([]);
+
+  const [showVideoForm, setShowVideoForm] = useState(false);
+  const [showMusicForm, setShowMusicForm] = useState(false);
+  
+  const [videoForm, setVideoForm] = useState({
+    title: '',
+    url: '',
+    category: '',
+    description: '',
+    isLivePerformance: false
+  });
+
+  const [musicForm, setMusicForm] = useState({
+    title: '',
+    url: '',
+    platform: 'spotify'
+  });
+
   const [hostProfile, setHostProfile] = useState({
     hostName: '',
     bio: '',
@@ -191,7 +244,6 @@ export default function ProfilePage() {
                 bio: data.bio || '',
                 city: data.city || '',
                 state: data.state || '',
-                profilePhoto: '',
                 genres: data.genres || [],
                 instruments: data.instruments || [],
                 experienceLevel: data.experienceLevel || 'intermediate',
@@ -201,6 +253,7 @@ export default function ProfilePage() {
                 willingToTravel: data.willingToTravel || 500,
                 equipmentProvided: data.equipmentProvided || [],
                 venueRequirements: data.venueRequirements || [],
+                profilePhoto: data.profilePhoto || '',
                 cancellationPolicy: 'flexible',
                 performanceRadius: 50,
                 website: data.website || '',
@@ -221,7 +274,7 @@ export default function ProfilePage() {
                 city: data.city || '',
                 state: data.state || '',
                 zip: '',
-                profilePhoto: '',
+                profilePhoto: data.profilePhoto || '',
                 venueType: data.venueType || 'home',
                 capacity: 20,
                 amenities: [],
@@ -362,6 +415,71 @@ export default function ProfilePage() {
     });
   };
 
+  // Media helper functions
+  const addVideoLink = () => {
+    if (!videoForm.title || !videoForm.url || !videoForm.category) return;
+    
+    const newVideo = {
+      id: Date.now().toString(),
+      title: videoForm.title,
+      url: videoForm.url,
+      platform: detectPlatform(videoForm.url),
+      category: videoForm.category,
+      isLivePerformance: videoForm.isLivePerformance,
+      description: videoForm.description
+    };
+    
+    setVideoLinks(prev => [...prev, newVideo]);
+    setVideoForm({
+      title: '',
+      url: '',
+      category: '',
+      description: '',
+      isLivePerformance: false
+    });
+    setShowVideoForm(false);
+    setHasChanges(true);
+  };
+
+  const removeVideoLink = (id: string) => {
+    setVideoLinks(prev => prev.filter(video => video.id !== id));
+    setHasChanges(true);
+  };
+
+  const addMusicSample = () => {
+    if (!musicForm.title || !musicForm.url) return;
+    
+    const newSample = {
+      id: Date.now().toString(),
+      title: musicForm.title,
+      url: musicForm.url,
+      platform: detectPlatform(musicForm.url)
+    };
+    
+    setMusicSamples(prev => [...prev, newSample]);
+    setMusicForm({
+      title: '',
+      url: '',
+      platform: 'spotify'
+    });
+    setShowMusicForm(false);
+    setHasChanges(true);
+  };
+
+  const removeMusicSample = (id: string) => {
+    setMusicSamples(prev => prev.filter(sample => sample.id !== id));
+    setHasChanges(true);
+  };
+
+  const detectPlatform = (url: string) => {
+    if (url.includes('youtube.com') || url.includes('youtu.be')) return 'youtube';
+    if (url.includes('vimeo.com')) return 'vimeo';
+    if (url.includes('spotify.com')) return 'spotify';
+    if (url.includes('bandcamp.com')) return 'bandcamp';
+    if (url.includes('soundcloud.com')) return 'soundcloud';
+    return 'other';
+  };
+
   const handleSave = async () => {
     setLoading(true);
     try {
@@ -376,14 +494,19 @@ export default function ProfilePage() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to save profile');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to save profile');
       }
 
       setHasChanges(false);
       alert('Profile updated successfully!');
     } catch (error) {
       console.error('Error saving profile:', error);
-      alert('Failed to save profile. Please try again.');
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('Failed to save profile. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -986,22 +1109,97 @@ export default function ProfilePage() {
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center space-x-6">
-                    <div className="w-32 h-32 bg-neutral-100 rounded-lg flex items-center justify-center">
+                    <div className="w-32 h-32 bg-neutral-100 rounded-lg flex items-center justify-center overflow-hidden">
                       {(isArtist ? artistProfile.profilePhoto : hostProfile.profilePhoto) ? (
                         <img 
                           src={isArtist ? artistProfile.profilePhoto : hostProfile.profilePhoto} 
                           alt="Profile" 
-                          className="w-32 h-32 rounded-lg object-cover"
+                          className="w-32 h-32 object-cover"
                         />
                       ) : (
                         <Camera className="w-12 h-12 text-neutral-400" />
                       )}
                     </div>
                     <div className="flex-1">
-                      <Button variant="outline" className="mb-2">
-                        <Camera className="w-4 h-4 mr-2" />
-                        {(isArtist ? artistProfile.profilePhoto : hostProfile.profilePhoto) ? 'Change Photo' : 'Upload Photo'}
-                      </Button>
+                      <div className="flex items-center space-x-2 mb-2">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              // Check file size (max 5MB)
+                              if (file.size > 5 * 1024 * 1024) {
+                                alert('Image file is too large. Please choose an image under 5MB.');
+                                return;
+                              }
+                              
+                              try {
+                                // Create FormData
+                                const formData = new FormData();
+                                formData.append('file', file);
+                                formData.append('type', 'profile');
+                                
+                                // Upload file
+                                const response = await fetch('/api/upload', {
+                                  method: 'POST',
+                                  body: formData
+                                });
+                                
+                                if (!response.ok) {
+                                  const error = await response.json();
+                                  alert(error.error || 'Failed to upload image');
+                                  return;
+                                }
+                                
+                                const data = await response.json();
+                                
+                                // Update profile with the new image URL
+                                if (isArtist) {
+                                  updateArtistProfile({ profilePhoto: data.url });
+                                } else {
+                                  updateHostProfile({ profilePhoto: data.url });
+                                }
+                                
+                                alert('Image uploaded successfully!');
+                                
+                              } catch (error) {
+                                console.error('Upload error:', error);
+                                alert('Failed to upload image. Please try again.');
+                              }
+                            }
+                          }}
+                          className="hidden"
+                          id="profilePhotoInput"
+                        />
+                        <label htmlFor="profilePhotoInput" className="cursor-pointer">
+                          <span className="inline-block">
+                            <Button variant="outline" type="button" onClick={(e) => {
+                              e.preventDefault();
+                              document.getElementById('profilePhotoInput')?.click();
+                            }}>
+                              <Camera className="w-4 h-4 mr-2" />
+                              {(isArtist ? artistProfile.profilePhoto : hostProfile.profilePhoto) ? 'Change Photo' : 'Upload Photo'}
+                            </Button>
+                          </span>
+                        </label>
+                        {(isArtist ? artistProfile.profilePhoto : hostProfile.profilePhoto) && (
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => {
+                              if (isArtist) {
+                                updateArtistProfile({ profilePhoto: '' });
+                              } else {
+                                updateHostProfile({ profilePhoto: '' });
+                              }
+                            }}
+                            className="text-red-600 hover:text-red-700"
+                          >
+                            <X className="w-4 h-4" />
+                          </Button>
+                        )}
+                      </div>
                       <p className="text-xs text-neutral-500">
                         Recommended: High-quality photo, 1000x1000px minimum, JPG or PNG
                       </p>
@@ -1097,83 +1295,211 @@ export default function ProfilePage() {
                   {/* Performance Videos */}
                   <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
                     <CardHeader>
-                      <h2 className="text-xl font-semibold text-neutral-900">Performance Videos</h2>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h2 className="text-xl font-semibold text-neutral-900">Performance Videos</h2>
+                          <p className="text-sm text-neutral-600">Add YouTube, Vimeo, or other video platform links</p>
+                        </div>
+                        <Button onClick={() => setShowVideoForm(true)}>
+                          <Plus className="w-4 h-4 mr-2" />
+                          Add Video
+                        </Button>
+                      </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <Input
-                          label="YouTube/Vimeo URL"
-                          placeholder="https://youtube.com/watch?v=..."
-                          value=""
-                          onChange={() => {}}
-                        />
-                        <Input
-                          label="Video Title"
-                          placeholder="Live performance at..."
-                          value=""
-                          onChange={() => {}}
-                        />
-                      </div>
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium text-neutral-700 mb-2">Category</label>
-                          <select className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                            <option value="">Select category</option>
-                            <option value="live">Live Performance</option>
-                            <option value="studio">Studio Recording</option>
-                            <option value="promo">Promotional</option>
-                          </select>
+                      {/* Video Form */}
+                      {showVideoForm && (
+                        <div className="border border-neutral-200 rounded-lg p-4 bg-neutral-50">
+                          <h3 className="font-medium text-neutral-900 mb-4">Add Video Link</h3>
+                          <div className="space-y-4">
+                            <div className="grid md:grid-cols-2 gap-4">
+                              <Input
+                                label="Video Title"
+                                placeholder="e.g., Live at Coffee House - Full Set"
+                                value={videoForm.title}
+                                onChange={(e) => setVideoForm({...videoForm, title: e.target.value})}
+                              />
+                              <Input
+                                label="Video URL"
+                                placeholder="https://youtube.com/watch?v=..."
+                                value={videoForm.url}
+                                onChange={(e) => setVideoForm({...videoForm, url: e.target.value})}
+                              />
+                            </div>
+                            <div className="grid md:grid-cols-2 gap-4">
+                              <div>
+                                <label className="block text-sm font-medium text-neutral-700 mb-2">Category</label>
+                                <select
+                                  value={videoForm.category}
+                                  onChange={(e) => setVideoForm({...videoForm, category: e.target.value})}
+                                  className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                >
+                                  <option value="">Select category</option>
+                                  {VIDEO_CATEGORIES.map(cat => (
+                                    <option key={cat.value} value={cat.value}>
+                                      {cat.label}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                              <div className="flex items-center mt-6">
+                                <input
+                                  type="checkbox"
+                                  id="isLivePerformance"
+                                  checked={videoForm.isLivePerformance}
+                                  onChange={(e) => setVideoForm({...videoForm, isLivePerformance: e.target.checked})}
+                                  className="mr-2"
+                                />
+                                <label htmlFor="isLivePerformance" className="text-sm text-neutral-700">
+                                  ⭐ Featured Live Performance
+                                </label>
+                              </div>
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-neutral-700 mb-2">
+                                Description (optional)
+                              </label>
+                              <textarea
+                                value={videoForm.description}
+                                onChange={(e) => setVideoForm({...videoForm, description: e.target.value})}
+                                className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                rows={2}
+                                placeholder="Describe this performance or video..."
+                              />
+                            </div>
+                            <div className="flex space-x-3">
+                              <Button onClick={addVideoLink}>Add Video</Button>
+                              <Button 
+                                variant="outline" 
+                                onClick={() => setShowVideoForm(false)}
+                              >
+                                Cancel
+                              </Button>
+                            </div>
+                          </div>
                         </div>
-                        <div className="flex items-end">
-                          <Button className="w-full">
-                            <Plus className="w-4 h-4 mr-2" />
-                            Add Video
-                          </Button>
-                        </div>
-                      </div>
+                      )}
                       
-                      {/* Video List Placeholder */}
-                      <div className="border-t pt-4">
-                        <p className="text-sm text-neutral-500 text-center py-8">
-                          No videos added yet. Add your first performance video above.
-                        </p>
-                      </div>
+                      {/* Video List */}
+                      {videoLinks.length > 0 ? (
+                        <div className="grid md:grid-cols-2 gap-4">
+                          {videoLinks.map((video) => (
+                            <div key={video.id} className="border border-neutral-200 rounded-lg p-4 bg-white">
+                              <div className="flex items-start justify-between mb-2">
+                                <div className="flex-1">
+                                  <h4 className="font-medium text-neutral-900">{video.title}</h4>
+                                  <p className="text-sm text-neutral-600">{VIDEO_CATEGORIES.find(c => c.value === video.category)?.label}</p>
+                                  {video.isLivePerformance && (
+                                    <Badge variant="warning" className="mt-1">
+                                      Featured
+                                    </Badge>
+                                  )}
+                                </div>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => removeVideoLink(video.id)}
+                                  className="text-red-600 hover:text-red-700"
+                                >
+                                  <X className="w-4 h-4" />
+                                </Button>
+                              </div>
+                              <p className="text-xs text-neutral-500 truncate">{video.url}</p>
+                              {video.description && (
+                                <p className="text-sm text-neutral-600 mt-2">{video.description}</p>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="border-t pt-4">
+                          <p className="text-sm text-neutral-500 text-center py-8">
+                            No videos added yet. Add your first performance video above.
+                          </p>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
 
                   {/* Music Samples */}
                   <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
                     <CardHeader>
-                      <h2 className="text-xl font-semibold text-neutral-900">Music Samples</h2>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <Input
-                          label="Streaming Platform URL"
-                          placeholder="https://spotify.com/track/..."
-                          value=""
-                          onChange={() => {}}
-                        />
-                        <Input
-                          label="Track Title"
-                          placeholder="Song name"
-                          value=""
-                          onChange={() => {}}
-                        />
-                      </div>
-                      <div className="flex items-end">
-                        <Button className="w-full">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h2 className="text-xl font-semibold text-neutral-900">Music Samples</h2>
+                          <p className="text-sm text-neutral-600">Add links to your music on streaming platforms</p>
+                        </div>
+                        <Button onClick={() => setShowMusicForm(true)}>
                           <Music className="w-4 h-4 mr-2" />
                           Add Track
                         </Button>
                       </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {/* Music Form */}
+                      {showMusicForm && (
+                        <div className="border border-neutral-200 rounded-lg p-4 bg-neutral-50">
+                          <h3 className="font-medium text-neutral-900 mb-4">Add Music Sample</h3>
+                          <div className="space-y-4">
+                            <div className="grid md:grid-cols-2 gap-4">
+                              <Input
+                                label="Track Title"
+                                placeholder="Song name"
+                                value={musicForm.title}
+                                onChange={(e) => setMusicForm({...musicForm, title: e.target.value})}
+                              />
+                              <Input
+                                label="Streaming Platform URL"
+                                placeholder="https://spotify.com/track/..."
+                                value={musicForm.url}
+                                onChange={(e) => setMusicForm({...musicForm, url: e.target.value})}
+                              />
+                            </div>
+                            <div className="flex space-x-3">
+                              <Button onClick={addMusicSample}>Add Track</Button>
+                              <Button 
+                                variant="outline" 
+                                onClick={() => setShowMusicForm(false)}
+                              >
+                                Cancel
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                       
-                      {/* Audio List Placeholder */}
-                      <div className="border-t pt-4">
-                        <p className="text-sm text-neutral-500 text-center py-8">
-                          No music samples added yet. Add your first track above.
-                        </p>
-                      </div>
+                      {/* Music List */}
+                      {musicSamples.length > 0 ? (
+                        <div className="grid md:grid-cols-2 gap-4">
+                          {musicSamples.map((sample) => (
+                            <div key={sample.id} className="border border-neutral-200 rounded-lg p-4 bg-white">
+                              <div className="flex items-start justify-between mb-2">
+                                <div className="flex-1">
+                                  <h4 className="font-medium text-neutral-900">{sample.title}</h4>
+                                  <Badge variant="secondary" className="mt-1">
+                                    {sample.platform}
+                                  </Badge>
+                                </div>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => removeMusicSample(sample.id)}
+                                  className="text-red-600 hover:text-red-700"
+                                >
+                                  <X className="w-4 h-4" />
+                                </Button>
+                              </div>
+                              <p className="text-xs text-neutral-500 truncate">{sample.url}</p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="border-t pt-4">
+                          <p className="text-sm text-neutral-500 text-center py-8">
+                            No music samples added yet. Add your first track above.
+                          </p>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 </>
@@ -1182,6 +1508,7 @@ export default function ProfilePage() {
                 <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
                   <CardHeader>
                     <h2 className="text-xl font-semibold text-neutral-900">Venue Photos</h2>
+                    <p className="text-sm text-neutral-600">Upload photos of your performance space, exterior, and amenities</p>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="border-2 border-dashed border-neutral-300 rounded-lg p-8 text-center">
@@ -1190,7 +1517,28 @@ export default function ProfilePage() {
                       <p className="text-neutral-600 mb-4">
                         Show artists your performance space, exterior, and amenities
                       </p>
-                      <Button>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={(e) => {
+                          // Handle multiple file uploads
+                          const files = Array.from(e.target.files || []);
+                          files.forEach(file => {
+                            const reader = new FileReader();
+                            reader.onload = (e) => {
+                              // Handle venue photo upload
+                              console.log('Venue photo uploaded:', e.target?.result);
+                            };
+                            reader.readAsDataURL(file);
+                          });
+                        }}
+                        className="hidden"
+                        id="venuePhotoInput"
+                      />
+                      <Button type="button" onClick={() => {
+                        document.getElementById('venuePhotoInput')?.click();
+                      }}>
                         <Plus className="w-4 h-4 mr-2" />
                         Upload Photos
                       </Button>

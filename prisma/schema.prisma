@@ -160,6 +160,7 @@ model UserProfile {
   location      String?
   phone         String?
   websiteUrl    String?
+  profileImageUrl String?  // Profile photo URL
   
   // JSON fields
   socialLinks   Json?     // {instagram, facebook, twitter, youtube, spotify}

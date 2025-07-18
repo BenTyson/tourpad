@@ -31,9 +31,11 @@ export async function GET(
         }
       });
     } else {
-      // For database ID, find directly
-      artist = await prisma.artist.findUnique({
-        where: { id: artistId },
+      // For database ID, find by userId (the ID passed is actually the user ID)
+      artist = await prisma.artist.findFirst({
+        where: { 
+          userId: artistId 
+        },
         include: {
           user: {
             include: {
@@ -65,7 +67,7 @@ export async function GET(
       instruments: [], // Not in schema yet
       yearsActive: 0, // Not in schema yet
       experienceLevel: 'beginner', // Not in schema yet
-      profileImageUrl: artist.user.profileImageUrl || '',
+      profileImageUrl: artist.user.profile?.profileImageUrl || '',
       website: artist.user.profile?.websiteUrl || '',
       socialLinks: artist.user.profile?.socialLinks || {},
       rating: rating,

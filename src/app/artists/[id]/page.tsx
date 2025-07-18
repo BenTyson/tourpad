@@ -188,21 +188,35 @@ export default function ArtistProfilePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             <div>
-              <div className="flex items-center space-x-3 mb-6">
-                <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">
-                  Verified Artist
-                </Badge>
-                {artistData.location && (
-                  <Badge variant="secondary" className="bg-neutral-100 text-neutral-700 border-neutral-200">
-                    <MapPin className="w-4 h-4 mr-1" />
-                    {artistData.location}
-                  </Badge>
+              {/* Profile Photo and Name Section */}
+              <div className="flex items-start gap-6 mb-6">
+                {artistData.profileImageUrl && (
+                  <div className="w-24 h-24 rounded-full overflow-hidden bg-neutral-100 flex-shrink-0">
+                    <img 
+                      src={artistData.profileImageUrl} 
+                      alt={`${artistData.name} profile photo`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                 )}
+                <div className="flex-1">
+                  <div className="flex items-center space-x-3 mb-4">
+                    <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">
+                      Verified Artist
+                    </Badge>
+                    {artistData.location && (
+                      <Badge variant="secondary" className="bg-neutral-100 text-neutral-700 border-neutral-200">
+                        <MapPin className="w-4 h-4 mr-1" />
+                        {artistData.location}
+                      </Badge>
+                    )}
+                  </div>
+                  
+                  <h1 className="text-5xl font-bold mb-2 text-neutral-900">
+                    {artistData.name}
+                  </h1>
+                </div>
               </div>
-              
-              <h1 className="text-5xl font-bold mb-4 text-neutral-900">
-                {artistData.name}
-              </h1>
               
               <p className="text-xl mb-8 text-neutral-600 leading-relaxed">
                 {artistData.bio || 'No bio available yet.'}

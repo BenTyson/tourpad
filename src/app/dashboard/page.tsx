@@ -329,7 +329,7 @@ export default function DashboardPage() {
                     </Link>
 
                     {/* Secondary Actions */}
-                    <Link href={userRole === 'fan' ? '/dashboard/profile' : `/${userRole}s/${profileId}`}>
+                    <Link href={userRole === 'fan' ? '/dashboard/profile' : `/${userRole}s/${selectedUserId}`}>
                       <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
                         <div className="flex items-center">
                           <div className="flex-shrink-0">

@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { 
@@ -25,7 +25,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Input } from '@/components/ui/Input';
 import { testHosts } from '@/data/realTestData';
 
-export default function LodgingBookPage() {
+function LodgingBookPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const hostId = searchParams.get('hostId');
@@ -421,5 +421,13 @@ export default function LodgingBookPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LodgingBookPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center">Loading...</div>}>
+      <LodgingBookPageContent />
+    </Suspense>
   );
 }

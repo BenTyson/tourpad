@@ -56,6 +56,7 @@ export async function GET() {
         willingToTravel: user.artist.willingToTravel || 500,
         equipmentProvided: user.artist.equipmentNeeds || [],
         venueRequirements: user.artist.venueRequirements || [],
+        profilePhoto: user.profile?.profileImageUrl || '',
         bandMembers: user.artist.bandMembers?.map(member => ({
           id: member.id,
           name: member.name,
@@ -72,6 +73,7 @@ export async function GET() {
         venueType: user.host.venueType?.toLowerCase() || 'home',
         website: user.profile?.websiteUrl || user.profile?.socialLinks?.website || '',
         socialLinks: user.profile?.socialLinks || {},
+        profilePhoto: user.profile?.profileImageUrl || '',
       };
     }
 
@@ -148,23 +150,39 @@ export async function PUT(request: NextRequest) {
       spotify: ensureProtocol(data.socialLinks?.spotify || ''),
     };
 
-    // Update profile
-    await prisma.userProfile.upsert({
-      where: { userId },
-      create: {
-        userId,
-        bio: data.bio || '',
-        location: location,
-        websiteUrl: normalizedWebsite,
-        socialLinks: normalizedSocialLinks,
-      },
-      update: {
-        bio: data.bio || '',
-        location: location,
-        websiteUrl: normalizedWebsite,
-        socialLinks: normalizedSocialLinks,
+    // Build update data
+    const profileUpdateData: any = {
+      bio: data.bio || '',
+      location: location,
+      websiteUrl: normalizedWebsite,
+      socialLinks: normalizedSocialLinks,
+    };
+    
+    // Only handle profile photo if explicitly provided
+    if (data.profilePhoto !== undefined) {
+      if (data.profilePhoto === '' || data.profilePhoto === null) {
+        // User is removing the photo - don't include in update
+        // The field will remain unchanged
+      } else if (typeof data.profilePhoto === 'string' && data.profilePhoto.length > 0) {
+        // Valid URL provided
+        profileUpdateData.profileImageUrl = data.profilePhoto;
       }
-    });
+    }
+
+    // Update profile
+    try {
+      await prisma.userProfile.upsert({
+        where: { userId },
+        create: {
+          userId,
+          ...profileUpdateData,
+        },
+        update: profileUpdateData
+      });
+    } catch (profileError) {
+      console.error('Profile update error:', profileError);
+      throw profileError;
+    }
 
     // Update artist-specific data
     if (session.user.type === 'artist') {
@@ -230,6 +248,24 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error updating profile:', error);
+    
+    // More detailed error handling
+    if (error instanceof Error) {
+      console.error('Error details:', error.message);
+      
+      if (error.message.includes('value too long')) {
+        return NextResponse.json({ 
+          error: 'Image file is too large. Please use a smaller image.' 
+        }, { status: 413 });
+      }
+      
+      if (error.message.includes('prisma') || error.message.includes('database')) {
+        return NextResponse.json({ 
+          error: 'Database error. Please try again.' 
+        }, { status: 500 });
+      }
+    }
+    
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
