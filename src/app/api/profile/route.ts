@@ -41,7 +41,7 @@ export async function GET() {
         ...profileData,
         genres: user.artist.genres || [],
         instruments: [], // Will need to add this field to schema later
-        website: user.profile?.websiteUrl || '',
+        website: user.profile?.websiteUrl || user.profile?.socialLinks?.website || '',
         socialLinks: user.profile?.socialLinks || {},
         experienceLevel: 'intermediate', // Will need to add this field to schema later
         yearsActive: 1, // Will need to add this field to schema later
@@ -53,7 +53,7 @@ export async function GET() {
         ...profileData,
         hostName: user.host.venueName || user.name,
         venueType: user.host.venueType?.toLowerCase() || 'home',
-        website: user.profile?.websiteUrl || '',
+        website: user.profile?.websiteUrl || user.profile?.socialLinks?.website || '',
         socialLinks: user.profile?.socialLinks || {},
       };
     }
@@ -63,6 +63,39 @@ export async function GET() {
     console.error('Error fetching profile:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
+}
+
+// Helper function to ensure URLs have proper protocol
+function ensureProtocol(url: string): string {
+  if (!url) return '';
+  const trimmed = url.trim();
+  if (!trimmed) return '';
+  
+  // If it already has a protocol, return as is
+  if (trimmed.match(/^https?:\/\//i)) {
+    return trimmed;
+  }
+  
+  // Add https:// prefix
+  return `https://${trimmed}`;
+}
+
+// Helper function to normalize Instagram input
+function normalizeInstagram(input: string): string {
+  if (!input) return '';
+  const trimmed = input.trim();
+  if (!trimmed) return '';
+  
+  // If it's already a URL, return as is
+  if (trimmed.match(/^https?:\/\//i)) {
+    return trimmed;
+  }
+  
+  // If it starts with @, remove it for consistency
+  const username = trimmed.replace(/^@/, '');
+  
+  // Return just the username (not a full URL)
+  return username;
 }
 
 export async function PUT(request: NextRequest) {
@@ -87,6 +120,17 @@ export async function PUT(request: NextRequest) {
     // Build location from city and state
     const location = data.city && data.state ? `${data.city}, ${data.state}` : (data.location || '');
 
+    // Normalize URLs
+    const normalizedWebsite = ensureProtocol(data.website || '');
+    const normalizedSocialLinks = {
+      ...data.socialLinks,
+      website: ensureProtocol(data.website || data.socialLinks?.website || ''),
+      facebook: ensureProtocol(data.socialLinks?.facebook || ''),
+      instagram: normalizeInstagram(data.socialLinks?.instagram || ''),
+      youtube: ensureProtocol(data.socialLinks?.youtube || ''),
+      spotify: ensureProtocol(data.socialLinks?.spotify || ''),
+    };
+
     // Update profile
     await prisma.userProfile.upsert({
       where: { userId },
@@ -94,14 +138,14 @@ export async function PUT(request: NextRequest) {
         userId,
         bio: data.bio || '',
         location: location,
-        websiteUrl: data.website || '',
-        socialLinks: data.socialLinks || {},
+        websiteUrl: normalizedWebsite,
+        socialLinks: normalizedSocialLinks,
       },
       update: {
         bio: data.bio || '',
         location: location,
-        websiteUrl: data.website || '',
-        socialLinks: data.socialLinks || {},
+        websiteUrl: normalizedWebsite,
+        socialLinks: normalizedSocialLinks,
       }
     });
 

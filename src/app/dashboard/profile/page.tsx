@@ -773,11 +773,20 @@ export default function ProfilePage() {
                   <div className="grid md:grid-cols-2 gap-4">
                     <Input
                       label="Website"
-                      value={isArtist ? artistProfile.socialLinks.website : hostProfile.socialLinks.website}
+                      value={isArtist ? artistProfile.website : hostProfile.website}
                       onChange={(e) => {
                         const socialLinks = isArtist ? artistProfile.socialLinks : hostProfile.socialLinks;
-                        if (isArtist) updateArtistProfile({ socialLinks: { ...socialLinks, website: e.target.value } });
-                        else updateHostProfile({ socialLinks: { ...socialLinks, website: e.target.value } });
+                        if (isArtist) {
+                          updateArtistProfile({ 
+                            website: e.target.value,
+                            socialLinks: { ...socialLinks, website: e.target.value } 
+                          });
+                        } else {
+                          updateHostProfile({ 
+                            website: e.target.value,
+                            socialLinks: { ...socialLinks, website: e.target.value } 
+                          });
+                        }
                       }}
                       placeholder="https://yourwebsite.com"
                     />
