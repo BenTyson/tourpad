@@ -21,6 +21,10 @@ export async function GET() {
           include: {
             bandMembers: {
               orderBy: { sortOrder: 'asc' }
+            },
+            media: {
+              where: { mediaType: 'PHOTO' },
+              orderBy: { sortOrder: 'asc' }
             }
           }
         },
@@ -65,6 +69,17 @@ export async function GET() {
         })) || [],
         videoLinks: user.artist.videoLinks ? (user.artist.videoLinks as any[]) : [],
         musicSamples: user.artist.musicSamples ? (user.artist.musicSamples as any[]) : [],
+        photos: user.artist.media?.map(media => {
+          console.log('Found media:', media);
+          return {
+            id: media.id,
+            fileUrl: media.fileUrl,
+            title: media.title,
+            description: media.description,
+            sortOrder: media.sortOrder,
+            category: media.category
+          };
+        }) || [],
       };
     }
 
@@ -226,6 +241,36 @@ export async function PUT(request: NextRequest) {
                 sortOrder: index
               }))
             });
+          }
+        }
+
+        // Handle photos if provided
+        if (data.photos && Array.isArray(data.photos)) {
+          console.log('Processing photos:', data.photos);
+          
+          // Delete existing photos
+          await prisma.artistMedia.deleteMany({
+            where: { 
+              artistId: artist.id,
+              mediaType: 'PHOTO'
+            }
+          });
+
+          // Create new photos
+          if (data.photos.length > 0) {
+            console.log('Creating photos for artist:', artist.id);
+            await prisma.artistMedia.createMany({
+              data: data.photos.map((photo, index) => ({
+                artistId: artist.id,
+                mediaType: 'PHOTO',
+                fileUrl: photo.fileUrl,
+                title: photo.title || '',
+                description: photo.description || '',
+                category: photo.category || 'performance',
+                sortOrder: photo.sortOrder || index
+              }))
+            });
+            console.log('Photos created successfully');
           }
         }
       }

@@ -67,6 +67,14 @@ interface ArtistData {
     url: string;
     platform: string;
   }>;
+  photos?: Array<{
+    id: string;
+    fileUrl: string;
+    title: string;
+    description: string;
+    sortOrder: number;
+    category: string;
+  }>;
   createdAt: string;
   updatedAt: string;
 }
@@ -136,8 +144,16 @@ export default function ArtistProfilePage() {
     );
   }
 
-  // Combine all photos for gallery - using mock data for now
-  const allPhotos = [...(mockArtist?.performancePhotos || []), ...(mockArtist?.bandPhotos || [])];
+  // Combine all photos for gallery - using database data if available, fallback to mock data
+  const allPhotos = artistData?.photos?.length > 0 
+    ? artistData.photos.map(photo => ({
+        id: photo.id,
+        url: photo.fileUrl,
+        title: photo.title,
+        description: photo.description,
+        category: photo.category
+      }))
+    : [...(mockArtist?.performancePhotos || []), ...(mockArtist?.bandPhotos || [])];
 
   const handlePhotoClick = (index: number) => {
     setLightboxIndex(index);

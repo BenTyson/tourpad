@@ -27,6 +27,10 @@ export async function GET(
           },
           bandMembers: {
             orderBy: { sortOrder: 'asc' }
+          },
+          media: {
+            where: { mediaType: 'PHOTO' },
+            orderBy: { sortOrder: 'asc' }
           }
         }
       });
@@ -43,6 +47,10 @@ export async function GET(
             }
           },
           bandMembers: {
+            orderBy: { sortOrder: 'asc' }
+          },
+          media: {
+            where: { mediaType: 'PHOTO' },
             orderBy: { sortOrder: 'asc' }
           }
         }
@@ -85,6 +93,14 @@ export async function GET(
       })) || [],
       videoLinks: artist.videoLinks ? (artist.videoLinks as any[]) : [],
       musicSamples: artist.musicSamples ? (artist.musicSamples as any[]) : [],
+      photos: artist.media?.map(media => ({
+        id: media.id,
+        fileUrl: media.fileUrl,
+        title: media.title,
+        description: media.description,
+        sortOrder: media.sortOrder,
+        category: media.category
+      })) || [],
       createdAt: artist.createdAt,
       updatedAt: artist.updatedAt
     });

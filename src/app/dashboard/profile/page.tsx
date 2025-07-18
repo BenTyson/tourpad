@@ -183,6 +183,14 @@ export default function ProfilePage() {
       title: string;
       url: string;
       platform: string;
+    }>,
+    photos: [] as Array<{
+      id: string;
+      fileUrl: string;
+      title?: string;
+      description?: string;
+      sortOrder: number;
+      category?: string;
     }>
   });
 
@@ -191,6 +199,7 @@ export default function ProfilePage() {
   const [showVideoForm, setShowVideoForm] = useState(false);
   const [showMusicForm, setShowMusicForm] = useState(false);
   const [editingVideoId, setEditingVideoId] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
   
   const [videoForm, setVideoForm] = useState({
     title: '',
@@ -267,7 +276,8 @@ export default function ProfilePage() {
                 },
                 bandMembers: data.bandMembers || [],
                 videoLinks: data.videoLinks || [],
-                musicSamples: data.musicSamples || []
+                musicSamples: data.musicSamples || [],
+                photos: data.photos || []
               });
             } else if (session.user.type === 'host') {
               setHostProfile({
@@ -498,6 +508,72 @@ export default function ProfilePage() {
       platform: 'spotify'
     });
     setShowMusicForm(false);
+  };
+
+  const handlePhotoUpload = async (files: FileList) => {
+    if (!files.length) return;
+    
+    setUploading(true);
+    try {
+      const uploadedPhotos = [];
+      
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('type', 'performance-photo');
+        
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          uploadedPhotos.push({
+            id: Date.now().toString() + i,
+            fileUrl: data.url,
+            title: '',
+            description: '',
+            sortOrder: (artistProfile.photos || []).length + i,
+            category: 'performance'
+          });
+        }
+      }
+      
+      if (uploadedPhotos.length > 0) {
+        console.log('Uploading photos to state:', uploadedPhotos);
+        updateArtistProfile({ 
+          photos: [...(artistProfile.photos || []), ...uploadedPhotos] 
+        });
+        console.log('Photos added to state');
+      }
+    } catch (error) {
+      console.error('Photo upload failed:', error);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removePhoto = (photoId: string) => {
+    updateArtistProfile({ 
+      photos: (artistProfile.photos || []).filter(photo => photo.id !== photoId) 
+    });
+  };
+
+  const reorderPhotos = (dragIndex: number, hoverIndex: number) => {
+    const photos = [...(artistProfile.photos || [])];
+    const draggedPhoto = photos[dragIndex];
+    photos.splice(dragIndex, 1);
+    photos.splice(hoverIndex, 0, draggedPhoto);
+    
+    // Update sort order
+    const reorderedPhotos = photos.map((photo, index) => ({
+      ...photo,
+      sortOrder: index
+    }));
+    
+    updateArtistProfile({ photos: reorderedPhotos });
   };
 
   const removeMusicSample = (id: string) => {
@@ -1378,6 +1454,110 @@ export default function ProfilePage() {
             <div className="space-y-6">
               {isArtist ? (
                 <>
+                  {/* Photo Management */}
+                  <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h2 className="text-xl font-semibold text-neutral-900">Performance Photos</h2>
+                          <p className="text-sm text-neutral-600">Upload photos from your performances, band photos, and promotional images</p>
+                        </div>
+                        <Button onClick={() => {
+                          document.getElementById('photoUpload')?.click();
+                        }} disabled={uploading}>
+                          <Camera className="w-4 h-4 mr-2" />
+                          {uploading ? 'Uploading...' : 'Upload Photos'}
+                        </Button>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {/* Hidden file input */}
+                      <input
+                        type="file"
+                        id="photoUpload"
+                        accept="image/*"
+                        multiple
+                        onChange={(e) => {
+                          if (e.target.files) {
+                            handlePhotoUpload(e.target.files);
+                          }
+                        }}
+                        className="hidden"
+                      />
+
+                      {/* Photo Management Controls */}
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-4">
+                          <h3 className="font-medium text-neutral-900">Photo Gallery</h3>
+                          <Badge variant="secondary" className="text-xs">
+                            {artistProfile.photos?.length || 0} photos
+                          </Badge>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-sm text-neutral-600">Sort:</span>
+                          <Button variant="outline" size="sm">
+                            Manual Order
+                          </Button>
+                          <Button variant="outline" size="sm">
+                            Upload Date
+                          </Button>
+                        </div>
+                      </div>
+
+                      {/* Photo Grid */}
+                      {artistProfile.photos && artistProfile.photos.length > 0 ? (
+                        <div className="space-y-4">
+                          <div className="text-sm text-neutral-600 bg-neutral-50 p-3 rounded-lg">
+                            <span className="font-medium">💡 Pro tip:</span> Drag and drop photos to reorder them. The first photo will be your featured image.
+                          </div>
+                          
+                          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {artistProfile.photos.map((photo, index) => (
+                              <div key={photo.id} className="relative group">
+                                <div className="aspect-square bg-neutral-100 rounded-lg overflow-hidden">
+                                  <img 
+                                    src={photo.fileUrl} 
+                                    alt={photo.title || `Photo ${index + 1}`}
+                                    className="w-full h-full object-cover"
+                                  />
+                                </div>
+                                <div className="absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => removePhoto(photo.id)}
+                                    className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 bg-white"
+                                  >
+                                    <X className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                                {index === 0 && (
+                                  <div className="absolute top-2 left-2">
+                                    <Badge variant="warning" className="text-xs">
+                                      Featured
+                                    </Badge>
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="border-2 border-dashed border-neutral-300 rounded-lg p-12 text-center">
+                          <Camera className="w-16 h-16 text-neutral-400 mx-auto mb-4" />
+                          <h3 className="text-lg font-medium text-neutral-900 mb-2">No photos uploaded yet</h3>
+                          <p className="text-neutral-600 mb-4">
+                            Upload your first photos to showcase your performances and band. You can drag and drop to reorder them.
+                          </p>
+                          <Button onClick={() => document.getElementById('photoUpload')?.click()}>
+                            <Camera className="w-4 h-4 mr-2" />
+                            Upload Your First Photos
+                          </Button>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+
                   {/* Performance Videos */}
                   <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
                     <CardHeader>
