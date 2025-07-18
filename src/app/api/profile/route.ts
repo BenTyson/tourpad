@@ -63,6 +63,8 @@ export async function GET() {
           instrument: member.instrument || '',
           photo: member.photoUrl || ''
         })) || [],
+        videoLinks: user.artist.videoLinks ? (user.artist.videoLinks as any[]) : [],
+        musicSamples: user.artist.musicSamples ? (user.artist.musicSamples as any[]) : [],
       };
     }
 
@@ -201,6 +203,8 @@ export async function PUT(request: NextRequest) {
             willingToTravel: data.willingToTravel || null,
             equipmentNeeds: data.equipmentProvided || [],
             venueRequirements: data.venueRequirements || [],
+            videoLinks: data.videoLinks || [],
+            musicSamples: data.musicSamples || [],
           }
         });
 

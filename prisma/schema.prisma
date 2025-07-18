@@ -196,6 +196,7 @@ model Artist {
   pressPhotoUrl             String?
   performanceVideoUrl       String?
   musicSamples              Json?     // Array of {title, url, platform}
+  videoLinks                Json?     // Array of {id, title, url, platform, category, isLivePerformance, description}
   
   // Booking preferences
   minGuarantee              Int?      // dollars

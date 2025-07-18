@@ -168,26 +168,25 @@ export default function ProfilePage() {
       bandcamp: '',
       facebook: ''
     },
-    bandMembers: [] as Array<{id: string, name: string, instrument: string, photo?: string}>
+    bandMembers: [] as Array<{id: string, name: string, instrument: string, photo?: string}>,
+    videoLinks: [] as Array<{
+      id: string;
+      title: string;
+      url: string;
+      platform: string;
+      category: string;
+      isLivePerformance: boolean;
+      description?: string;
+    }>,
+    musicSamples: [] as Array<{
+      id: string;
+      title: string;
+      url: string;
+      platform: string;
+    }>
   });
 
-  // Media state
-  const [videoLinks, setVideoLinks] = useState<Array<{
-    id: string;
-    title: string;
-    url: string;
-    platform: string;
-    category: string;
-    isLivePerformance: boolean;
-    description?: string;
-  }>>([]);
-
-  const [musicSamples, setMusicSamples] = useState<Array<{
-    id: string;
-    title: string;
-    url: string;
-    platform: string;
-  }>>([]);
+  // Media state - now part of artistProfile
 
   const [showVideoForm, setShowVideoForm] = useState(false);
   const [showMusicForm, setShowMusicForm] = useState(false);
@@ -265,7 +264,9 @@ export default function ProfilePage() {
                   bandcamp: data.socialLinks?.bandcamp || '',
                   facebook: data.socialLinks?.facebook || ''
                 },
-                bandMembers: data.bandMembers || []
+                bandMembers: data.bandMembers || [],
+                videoLinks: data.videoLinks || [],
+                musicSamples: data.musicSamples || []
               });
             } else if (session.user.type === 'host') {
               setHostProfile({
@@ -429,7 +430,7 @@ export default function ProfilePage() {
       description: videoForm.description
     };
     
-    setVideoLinks(prev => [...prev, newVideo]);
+    updateArtistProfile({ videoLinks: [...(artistProfile.videoLinks || []), newVideo] });
     setVideoForm({
       title: '',
       url: '',
@@ -438,12 +439,10 @@ export default function ProfilePage() {
       isLivePerformance: false
     });
     setShowVideoForm(false);
-    setHasChanges(true);
   };
 
   const removeVideoLink = (id: string) => {
-    setVideoLinks(prev => prev.filter(video => video.id !== id));
-    setHasChanges(true);
+    updateArtistProfile({ videoLinks: (artistProfile.videoLinks || []).filter(video => video.id !== id) });
   };
 
   const addMusicSample = () => {
@@ -456,19 +455,17 @@ export default function ProfilePage() {
       platform: detectPlatform(musicForm.url)
     };
     
-    setMusicSamples(prev => [...prev, newSample]);
+    updateArtistProfile({ musicSamples: [...(artistProfile.musicSamples || []), newSample] });
     setMusicForm({
       title: '',
       url: '',
       platform: 'spotify'
     });
     setShowMusicForm(false);
-    setHasChanges(true);
   };
 
   const removeMusicSample = (id: string) => {
-    setMusicSamples(prev => prev.filter(sample => sample.id !== id));
-    setHasChanges(true);
+    updateArtistProfile({ musicSamples: (artistProfile.musicSamples || []).filter(sample => sample.id !== id) });
   };
 
   const detectPlatform = (url: string) => {
@@ -548,43 +545,43 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Tab Navigation */}
+        {/* Tab Navigation - Sleek Modern Design */}
         <div className="mb-8">
-          <nav className="flex space-x-8 border-b border-neutral-200">
+          <nav className="flex space-x-2 bg-neutral-50 rounded-lg p-1">
             <button
               onClick={() => setActiveTab('info')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`flex items-center px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 ${
                 activeTab === 'info'
-                  ? 'border-primary-500 text-primary-600'
-                  : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300'
+                  ? 'bg-white text-primary-600 shadow-sm'
+                  : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
               }`}
             >
-              <FileText className="w-4 h-4 mr-2 inline" />
+              <FileText className="w-4 h-4 mr-2" />
               Profile Information
             </button>
             <button
               onClick={() => setActiveTab('photos')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`flex items-center px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 ${
                 activeTab === 'photos'
-                  ? 'border-primary-500 text-primary-600'
-                  : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300'
+                  ? 'bg-white text-primary-600 shadow-sm'
+                  : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
               }`}
             >
-              <UserCircle className="w-4 h-4 mr-2 inline" />
+              <UserCircle className="w-4 h-4 mr-2" />
               {isArtist ? 'Press Photos & Band' : 'Venue Photos'}
             </button>
             <button
               onClick={() => setActiveTab('media')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`flex items-center px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 ${
                 activeTab === 'media'
-                  ? 'border-primary-500 text-primary-600'
-                  : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300'
+                  ? 'bg-white text-primary-600 shadow-sm'
+                  : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
               }`}
             >
               {isArtist ? (
-                <Video className="w-4 h-4 mr-2 inline" />
+                <Video className="w-4 h-4 mr-2" />
               ) : (
-                <Camera className="w-4 h-4 mr-2 inline" />
+                <Camera className="w-4 h-4 mr-2" />
               )}
               {isArtist ? 'Music & Media' : 'Gallery'}
             </button>
@@ -1434,9 +1431,9 @@ export default function ProfilePage() {
                       )}
                       
                       {/* Video List */}
-                      {videoLinks.length > 0 ? (
+                      {artistProfile.videoLinks && artistProfile.videoLinks.length > 0 ? (
                         <div className="grid md:grid-cols-2 gap-4">
-                          {videoLinks.map((video) => (
+                          {artistProfile.videoLinks.map((video) => (
                             <div key={video.id} className="border border-neutral-200 rounded-lg p-4 bg-white">
                               <div className="flex items-start justify-between mb-2">
                                 <div className="flex-1">
@@ -1522,9 +1519,9 @@ export default function ProfilePage() {
                       )}
                       
                       {/* Music List */}
-                      {musicSamples.length > 0 ? (
+                      {artistProfile.musicSamples && artistProfile.musicSamples.length > 0 ? (
                         <div className="grid md:grid-cols-2 gap-4">
-                          {musicSamples.map((sample) => (
+                          {artistProfile.musicSamples.map((sample) => (
                             <div key={sample.id} className="border border-neutral-200 rounded-lg p-4 bg-white">
                               <div className="flex items-start justify-between mb-2">
                                 <div className="flex-1">
