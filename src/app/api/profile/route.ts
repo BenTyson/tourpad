@@ -17,7 +17,13 @@ export async function GET() {
       where: { id: userId },
       include: {
         profile: true,
-        artist: true,
+        artist: {
+          include: {
+            bandMembers: {
+              orderBy: { sortOrder: 'asc' }
+            }
+          }
+        },
         host: true,
       }
     });
@@ -45,6 +51,12 @@ export async function GET() {
         socialLinks: user.profile?.socialLinks || {},
         experienceLevel: 'intermediate', // Will need to add this field to schema later
         yearsActive: 1, // Will need to add this field to schema later
+        bandMembers: user.artist.bandMembers?.map(member => ({
+          id: member.id,
+          name: member.name,
+          instrument: member.instrument || '',
+          photo: member.photoUrl || ''
+        })) || [],
       };
     }
 
@@ -163,6 +175,27 @@ export async function PUT(request: NextRequest) {
             genres: data.genres || [],
           }
         });
+
+        // Handle band members if provided
+        if (data.bandMembers && Array.isArray(data.bandMembers)) {
+          // Delete existing band members
+          await prisma.bandMember.deleteMany({
+            where: { artistId: artist.id }
+          });
+
+          // Create new band members
+          if (data.bandMembers.length > 0) {
+            await prisma.bandMember.createMany({
+              data: data.bandMembers.map((member, index) => ({
+                artistId: artist.id,
+                name: member.name || '',
+                instrument: member.instrument || '',
+                photoUrl: member.photo || '',
+                sortOrder: index
+              }))
+            });
+          }
+        }
       }
     }
 

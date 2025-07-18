@@ -182,7 +182,7 @@ export default function ProfilePage() {
                   bandcamp: data.socialLinks?.bandcamp || '',
                   facebook: data.socialLinks?.facebook || ''
                 },
-                bandMembers: []
+                bandMembers: data.bandMembers || []
               });
             } else if (session.user.type === 'host') {
               setHostProfile({

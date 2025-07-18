@@ -24,6 +24,9 @@ export async function GET(
             include: {
               profile: true
             }
+          },
+          bandMembers: {
+            orderBy: { sortOrder: 'asc' }
           }
         }
       });
@@ -36,6 +39,9 @@ export async function GET(
             include: {
               profile: true
             }
+          },
+          bandMembers: {
+            orderBy: { sortOrder: 'asc' }
           }
         }
       });
@@ -58,6 +64,12 @@ export async function GET(
       profileImageUrl: artist.user.profileImageUrl || '',
       website: artist.user.profile?.websiteUrl || '',
       socialLinks: artist.user.profile?.socialLinks || {},
+      bandMembers: artist.bandMembers?.map(member => ({
+        id: member.id,
+        name: member.name,
+        instrument: member.instrument || '',
+        photo: member.photoUrl || ''
+      })) || [],
       createdAt: artist.createdAt,
       updatedAt: artist.updatedAt
     });

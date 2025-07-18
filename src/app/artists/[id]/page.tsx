@@ -39,6 +39,12 @@ interface ArtistData {
   profileImageUrl: string;
   website: string;
   socialLinks: any;
+  bandMembers?: Array<{
+    id: string;
+    name: string;
+    instrument: string;
+    photo?: string;
+  }>;
   createdAt: string;
   updatedAt: string;
 }
@@ -383,20 +389,20 @@ export default function ArtistProfilePage() {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-2xl font-bold text-neutral-900 mb-2">
-                  {mockArtist?.members?.length === 1 ? 'Solo Artist' : 'Meet the Band'}
+                  {artistData.bandMembers?.length === 1 ? 'Solo Artist' : 'Meet the Band'}
                 </h2>
                 <p className="text-neutral-600">
-                  {mockArtist?.members?.length === 1 ? 'Individual performer' : `${mockArtist?.members?.length || 1} talented musicians`}
+                  {artistData.bandMembers?.length === 1 ? 'Individual performer' : `${artistData.bandMembers?.length || 1} talented musicians`}
                 </p>
               </div>
               <Badge variant="default" className="bg-primary-100 text-primary-800">
-                {mockArtist?.members?.length || 1} {(mockArtist?.members?.length || 1) === 1 ? 'Member' : 'Members'}
+                {artistData.bandMembers?.length || 1} {(artistData.bandMembers?.length || 1) === 1 ? 'Member' : 'Members'}
               </Badge>
             </div>
             <div className="grid md:grid-cols-2 gap-6">
-              {(mockArtist?.members || []).map((member, index) => {
-                // Generate consistent profile photo URLs for band members
-                const profilePhotos = [
+              {(artistData.bandMembers || []).map((member, index) => {
+                // Fallback photos if no photo provided
+                const fallbackPhotos = [
                   'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=face',
                   'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
                   'https://images.unsplash.com/photo-1494790108755-2616b9a8af3c?w=400&h=400&fit=crop&crop=face',
@@ -405,10 +411,10 @@ export default function ArtistProfilePage() {
                 ];
                 
                 return (
-                  <div key={index} className="group flex items-center p-6 bg-white rounded-xl border border-neutral-200 hover:shadow-md transition-all duration-300">
+                  <div key={member.id} className="group flex items-center p-6 bg-white rounded-xl border border-neutral-200 hover:shadow-md transition-all duration-300">
                     <div className="w-16 h-16 rounded-full overflow-hidden mr-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
                       <img 
-                        src={profilePhotos[index % profilePhotos.length]} 
+                        src={member.photo || fallbackPhotos[index % fallbackPhotos.length]} 
                         alt={`${member.name} profile photo`}
                         className="w-full h-full object-cover"
                       />

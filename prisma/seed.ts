@@ -73,13 +73,45 @@ async function main() {
           preferredBookingAdvance: 14,
           applicationSubmittedAt: new Date(),
           approvedAt: new Date(),
-          approvedByUserId: adminUser.id
+          approvedByUserId: adminUser.id,
+          bandMembers: {
+            create: [
+              {
+                name: 'Sarah Johnson',
+                instrument: 'Vocals, Guitar',
+                role: 'Lead Vocalist',
+                photoUrl: 'https://images.unsplash.com/photo-1494790108755-2616b9a8af3c?w=400&h=400&fit=crop&crop=face',
+                bio: 'Lead vocalist and songwriter with 8 years of folk music experience',
+                sortOrder: 0
+              },
+              {
+                name: 'Mike Chen',
+                instrument: 'Bass Guitar',
+                role: 'Bassist',
+                photoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
+                bio: 'Jazz-trained bassist bringing depth to indie folk arrangements',
+                sortOrder: 1
+              },
+              {
+                name: 'Alex Rivera',
+                instrument: 'Violin, Mandolin',
+                role: 'String Instrumentalist',
+                photoUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face',
+                bio: 'Classical violinist with a passion for folk and indie music',
+                sortOrder: 2
+              }
+            ]
+          }
         }
       }
     },
     include: {
       profile: true,
-      artist: true
+      artist: {
+        include: {
+          bandMembers: true
+        }
+      }
     }
   });
 

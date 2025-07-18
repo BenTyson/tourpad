@@ -204,6 +204,7 @@ model Artist {
   
   // Relations
   media                     ArtistMedia[]
+  bandMembers               BandMember[]
   bookings                  Booking[]
   
   @@map("artists")
@@ -226,6 +227,24 @@ model ArtistMedia {
   createdAt   DateTime  @default(now())
   
   @@map("artist_media")
+}
+
+model BandMember {
+  id          String    @id @default(cuid())
+  artistId    String
+  artist      Artist    @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  
+  name        String
+  instrument  String?
+  role        String?
+  photoUrl    String?
+  bio         String?
+  sortOrder   Int       @default(0)
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  @@map("band_members")
 }
 
 // Host Models
