@@ -190,6 +190,7 @@ export default function ProfilePage() {
 
   const [showVideoForm, setShowVideoForm] = useState(false);
   const [showMusicForm, setShowMusicForm] = useState(false);
+  const [editingVideoId, setEditingVideoId] = useState<string | null>(null);
   
   const [videoForm, setVideoForm] = useState({
     title: '',
@@ -443,6 +444,41 @@ export default function ProfilePage() {
 
   const removeVideoLink = (id: string) => {
     updateArtistProfile({ videoLinks: (artistProfile.videoLinks || []).filter(video => video.id !== id) });
+  };
+
+  const editVideoLink = (video: any) => {
+    setVideoForm({
+      title: video.title,
+      url: video.url,
+      category: video.category,
+      description: video.description,
+      isLivePerformance: video.isLivePerformance
+    });
+    setEditingVideoId(video.id);
+    setShowVideoForm(true);
+  };
+
+  const updateVideoLink = () => {
+    if (!videoForm.title || !videoForm.url || !videoForm.category || !editingVideoId) return;
+    
+    const updatedVideos = (artistProfile.videoLinks || []).map(video => 
+      video.id === editingVideoId 
+        ? {
+            ...video,
+            title: videoForm.title,
+            url: videoForm.url,
+            platform: detectPlatform(videoForm.url),
+            category: videoForm.category,
+            isLivePerformance: videoForm.isLivePerformance,
+            description: videoForm.description
+          }
+        : video
+    );
+    
+    updateArtistProfile({ videoLinks: updatedVideos });
+    setVideoForm({ title: '', url: '', category: '', description: '', isLivePerformance: false });
+    setEditingVideoId(null);
+    setShowVideoForm(false);
   };
 
   const addMusicSample = () => {
@@ -1360,7 +1396,9 @@ export default function ProfilePage() {
                       {/* Video Form */}
                       {showVideoForm && (
                         <div className="border border-neutral-200 rounded-lg p-4 bg-neutral-50">
-                          <h3 className="font-medium text-neutral-900 mb-4">Add Video Link</h3>
+                          <h3 className="font-medium text-neutral-900 mb-4">
+                            {editingVideoId ? 'Edit Video Link' : 'Add Video Link'}
+                          </h3>
                           <div className="space-y-4">
                             <div className="grid md:grid-cols-2 gap-4">
                               <Input
@@ -1418,10 +1456,16 @@ export default function ProfilePage() {
                               />
                             </div>
                             <div className="flex space-x-3">
-                              <Button onClick={addVideoLink}>Add Video</Button>
+                              <Button onClick={editingVideoId ? updateVideoLink : addVideoLink}>
+                                {editingVideoId ? 'Update Video' : 'Add Video'}
+                              </Button>
                               <Button 
                                 variant="outline" 
-                                onClick={() => setShowVideoForm(false)}
+                                onClick={() => {
+                                  setShowVideoForm(false);
+                                  setEditingVideoId(null);
+                                  setVideoForm({ title: '', url: '', category: '', description: '', isLivePerformance: false });
+                                }}
                               >
                                 Cancel
                               </Button>
@@ -1445,14 +1489,24 @@ export default function ProfilePage() {
                                     </Badge>
                                   )}
                                 </div>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => removeVideoLink(video.id)}
-                                  className="text-red-600 hover:text-red-700"
-                                >
-                                  <X className="w-4 h-4" />
-                                </Button>
+                                <div className="flex space-x-2">
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => editVideoLink(video)}
+                                    className="text-primary-600 hover:text-primary-700 hover:bg-primary-50 border-primary-200"
+                                  >
+                                    <Edit className="w-4 h-4" />
+                                  </Button>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => removeVideoLink(video.id)}
+                                    className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+                                  >
+                                    <X className="w-4 h-4" />
+                                  </Button>
+                                </div>
                               </div>
                               <p className="text-xs text-neutral-500 truncate">{video.url}</p>
                               {video.description && (
