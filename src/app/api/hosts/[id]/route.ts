@@ -140,12 +140,9 @@ export async function GET(
         equipment: {
           speakers: '',
           microphones: '',
-          mixingBoard: '',
           instruments: '',
           additional: ''
-        },
-        limitations: '',
-        setupNotes: ''
+        }
       },
       // Hosting capabilities - transform lodging details
       hostingCapabilities: host.offersLodging && host.lodgingDetails ? {

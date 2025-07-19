@@ -242,12 +242,9 @@ export default function ProfilePage() {
       equipment: {
         speakers: '',
         microphones: '',
-        mixingBoard: '',
         instruments: '',
         additional: ''
-      },
-      limitations: '',
-      setupNotes: ''
+      }
     },
     hostInfo: {
       hostName: '', // This is the personal host name like "Mike Chen"
@@ -2091,40 +2088,6 @@ export default function ProfilePage() {
           )}
         </div>
 
-        {/* Save Section */}
-        {hasChanges && (
-          <Card className="bg-white rounded-xl shadow-sm border border-neutral-200 mt-8">
-            <CardContent className="py-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-medium text-neutral-900">Save Your Changes</h3>
-                  <p className="text-sm text-neutral-600">
-                    You have unsaved changes that will be lost if you navigate away.
-                  </p>
-                </div>
-                <div className="flex space-x-3">
-                  <Button 
-                    onClick={handleSave} 
-                    disabled={loading}
-                    className="min-w-32"
-                  >
-                    {loading ? (
-                      <div className="flex items-center">
-                        <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>
-                        Saving...
-                      </div>
-                    ) : (
-                      <>
-                        <CheckCircle className="w-4 h-4 mr-2" />
-                        Save Changes
-                      </>
-                    )}
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
 
         {/* Sound System Tab - Only for hosts */}
         {activeTab === 'sound-system' && !isArtist && (
@@ -2208,15 +2171,17 @@ export default function ProfilePage() {
                 <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
                   <CardHeader>
                     <h2 className="text-xl font-semibold text-neutral-900">Equipment Details</h2>
+                    <p className="text-sm text-neutral-600 mt-1">Knowing what specific equipment you have is very helpful for the artists.</p>
                   </CardHeader>
                   <CardContent>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label htmlFor="speakers" className="block text-sm font-medium text-neutral-700 mb-2">
-                          Speakers *
+                          Speakers
                         </label>
-                        <Input
+                        <textarea
                           id="speakers"
+                          rows={3}
                           placeholder="e.g., JBL EON615, Yamaha HS8 monitors..."
                           value={hostProfile.soundSystem.equipment.speakers}
                           onChange={(e) => updateHostProfile({ 
@@ -2225,15 +2190,17 @@ export default function ProfilePage() {
                               equipment: { ...hostProfile.soundSystem.equipment, speakers: e.target.value }
                             }
                           })}
+                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                         />
                       </div>
 
                       <div>
                         <label htmlFor="microphones" className="block text-sm font-medium text-neutral-700 mb-2">
-                          Microphones *
+                          Microphones
                         </label>
-                        <Input
+                        <textarea
                           id="microphones"
+                          rows={3}
                           placeholder="e.g., Shure SM58, Audio-Technica AT2020..."
                           value={hostProfile.soundSystem.equipment.microphones}
                           onChange={(e) => updateHostProfile({ 
@@ -2242,23 +2209,7 @@ export default function ProfilePage() {
                               equipment: { ...hostProfile.soundSystem.equipment, microphones: e.target.value }
                             }
                           })}
-                        />
-                      </div>
-
-                      <div>
-                        <label htmlFor="mixingBoard" className="block text-sm font-medium text-neutral-700 mb-2">
-                          Mixing Board / Audio Interface
-                        </label>
-                        <Input
-                          id="mixingBoard"
-                          placeholder="e.g., Yamaha MG10XU, Focusrite Scarlett..."
-                          value={hostProfile.soundSystem.equipment.mixingBoard}
-                          onChange={(e) => updateHostProfile({ 
-                            soundSystem: { 
-                              ...hostProfile.soundSystem, 
-                              equipment: { ...hostProfile.soundSystem.equipment, mixingBoard: e.target.value }
-                            }
-                          })}
+                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                         />
                       </div>
 
@@ -2266,8 +2217,9 @@ export default function ProfilePage() {
                         <label htmlFor="instruments" className="block text-sm font-medium text-neutral-700 mb-2">
                           Available Instruments
                         </label>
-                        <Input
+                        <textarea
                           id="instruments"
+                          rows={3}
                           placeholder="e.g., Piano, keyboard, guitar amp..."
                           value={hostProfile.soundSystem.equipment.instruments}
                           onChange={(e) => updateHostProfile({ 
@@ -2276,15 +2228,17 @@ export default function ProfilePage() {
                               equipment: { ...hostProfile.soundSystem.equipment, instruments: e.target.value }
                             }
                           })}
+                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                         />
                       </div>
 
-                      <div className="md:col-span-2">
+                      <div>
                         <label htmlFor="additional" className="block text-sm font-medium text-neutral-700 mb-2">
                           Additional Equipment
                         </label>
-                        <Input
+                        <textarea
                           id="additional"
+                          rows={3}
                           placeholder="e.g., Cables, stands, lighting..."
                           value={hostProfile.soundSystem.equipment.additional}
                           onChange={(e) => updateHostProfile({ 
@@ -2292,47 +2246,6 @@ export default function ProfilePage() {
                               ...hostProfile.soundSystem, 
                               equipment: { ...hostProfile.soundSystem.equipment, additional: e.target.value }
                             }
-                          })}
-                        />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Limitations & Setup Notes */}
-                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                  <CardHeader>
-                    <h2 className="text-xl font-semibold text-neutral-900">Limitations & Setup</h2>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div>
-                        <label htmlFor="limitations" className="block text-sm font-medium text-neutral-700 mb-2">
-                          System Limitations
-                        </label>
-                        <textarea
-                          id="limitations"
-                          rows={3}
-                          placeholder="Any limitations artists should know about (volume, instruments, etc.)..."
-                          value={hostProfile.soundSystem.limitations}
-                          onChange={(e) => updateHostProfile({ 
-                            soundSystem: { ...hostProfile.soundSystem, limitations: e.target.value }
-                          })}
-                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                        />
-                      </div>
-
-                      <div>
-                        <label htmlFor="setupNotes" className="block text-sm font-medium text-neutral-700 mb-2">
-                          Setup Notes for Artists
-                        </label>
-                        <textarea
-                          id="setupNotes"
-                          rows={3}
-                          placeholder="Instructions for soundcheck, mixing responsibilities, what artists should bring..."
-                          value={hostProfile.soundSystem.setupNotes}
-                          onChange={(e) => updateHostProfile({ 
-                            soundSystem: { ...hostProfile.soundSystem, setupNotes: e.target.value }
                           })}
                           className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                         />

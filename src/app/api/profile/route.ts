@@ -128,12 +128,9 @@ export async function GET() {
           equipment: {
             speakers: '',
             microphones: '',
-            mixingBoard: '',
             instruments: '',
             additional: ''
-          },
-          limitations: '',
-          setupNotes: ''
+          }
         },
         photos: hostMedia.map(media => ({
           id: media.id,
