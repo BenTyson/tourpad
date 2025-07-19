@@ -322,12 +322,9 @@ export default function ProfilePage() {
                   equipment: {
                     speakers: '',
                     microphones: '',
-                    mixingBoard: '',
                     instruments: '',
                     additional: ''
-                  },
-                  limitations: '',
-                  setupNotes: ''
+                  }
                 },
                 hostInfo: {
                   hostName: data.hostInfo?.hostName || '',

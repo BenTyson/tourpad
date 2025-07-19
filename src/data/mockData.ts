@@ -168,12 +168,9 @@ export const mockHosts = [
       equipment: {
         speakers: 'JBL PRX815W powered speakers (4 units), JBL PRX818S subwoofers (2 units)',
         microphones: '8x Shure SM58 dynamic mics, 4x Shure SM57 instrument mics, 2x AKG C214 condenser mics',
-        mixingBoard: 'Behringer X32 digital mixer with 32 channels and built-in effects',
         instruments: 'Full drum kit (Pearl Export), bass amp (Ampeg BA-210), guitar amps (Fender Twin, Marshall JCM800)',
         additional: 'DI boxes, monitor wedges, all necessary cables and stands, basic stage lighting'
-      },
-      limitations: 'System can handle full rock bands. No volume restrictions due to rural location. Shows must end by midnight on weekends, 10 PM on weeknights.',
-      setupNotes: 'Load-in through barn doors with easy vehicle access. Sound engineer available for additional fee. Artists arrive 3 hours before showtime for load-in and soundcheck.'
+      }
     },
     createdAt: new Date('2022-03-10'),
     updatedAt: new Date('2024-11-20')
@@ -691,12 +688,9 @@ export const mockHosts = [
       equipment: {
         speakers: 'Bose L1 Pro32 portable systems (2 units), natural rock acoustics',
         microphones: '4x Shure SM58 wireless mics, 2x AKG acoustics mics',
-        mixingBoard: 'Behringer X18 digital mixer with tablet control',
         instruments: 'Basic acoustic setup, artists bring own instruments',
         additional: 'Wireless monitoring, desert-resistant equipment, battery backup systems'
-      },
-      limitations: 'Weather dependent. Shows cancelled for high winds or storms. No volume restrictions due to remote location.',
-      setupNotes: 'Load-in via 4WD access road. Artists arrive 2 hours before sunset for setup. Natural lighting transitions to stars.'
+      }
     },
     rating: 4.7,
     reviewCount: 31,

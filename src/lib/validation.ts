@@ -310,23 +310,18 @@ export const soundSystemSchema = z.object({
   available: z.boolean(),
   description: z.string().min(20, 'Description must be at least 20 characters').max(500, 'Description cannot exceed 500 characters').optional(),
   equipment: z.object({
-    speakers: z.string().min(5, 'Please describe your speakers').max(200, 'Speakers description cannot exceed 200 characters').optional(),
-    microphones: z.string().min(5, 'Please describe your microphones').max(200, 'Microphones description cannot exceed 200 characters').optional(),
-    mixingBoard: z.string().max(200, 'Mixing board description cannot exceed 200 characters').optional(),
+    speakers: z.string().max(200, 'Speakers description cannot exceed 200 characters').optional(),
+    microphones: z.string().max(200, 'Microphones description cannot exceed 200 characters').optional(),
     instruments: z.string().max(200, 'Instruments description cannot exceed 200 characters').optional(),
     additional: z.string().max(300, 'Additional equipment description cannot exceed 300 characters').optional()
-  }).optional(),
-  limitations: z.string().max(300, 'Limitations description cannot exceed 300 characters').optional(),
-  setupNotes: z.string().max(500, 'Setup notes cannot exceed 500 characters').optional()
+  }).optional()
 }).refine((data) => {
-  // If sound system is available, require description and key equipment
+  // If sound system is available, require description
   if (data.available) {
-    return data.description && data.description.length >= 20 &&
-           data.equipment?.speakers && data.equipment.speakers.length >= 5 &&
-           data.equipment?.microphones && data.equipment.microphones.length >= 5;
+    return data.description && data.description.length >= 20;
   }
   return true;
 }, {
-  message: 'When sound system is available, description, speakers, and microphones are required',
+  message: 'When sound system is available, description is required',
   path: ['available']
 });
