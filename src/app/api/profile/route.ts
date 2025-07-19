@@ -120,8 +120,7 @@ export async function GET() {
           aboutMe: user.profile?.bio || '',
           profilePhoto: user.profile?.profileImageUrl || ''
         },
-        // Map amenities from preferred genres temporarily (TODO: add amenities field to schema)
-        amenities: ['Sound System', 'Parking', 'WiFi'],
+        amenities: user.host.amenities || [],
         photos: hostMedia.map(media => ({
           id: media.id,
           fileUrl: media.fileUrl,
@@ -330,6 +329,7 @@ export async function PUT(request: NextRequest) {
           'studio': 'STUDIO',
           'backyard': 'BACKYARD',
           'loft': 'LOFT',
+          'warehouse': 'WAREHOUSE',
           'other': 'OTHER'
         };
 
@@ -352,6 +352,7 @@ export async function PUT(request: NextRequest) {
             offersLodging: data.offersLodging !== undefined ? data.offersLodging : undefined,
             lodgingDetails: data.lodgingDetails || undefined,
             venuePhotoUrl: data.venuePhoto || undefined,
+            amenities: data.amenities || [],
           }
         });
 

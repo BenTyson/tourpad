@@ -37,9 +37,15 @@ const INSTRUMENT_OPTIONS = [
 ];
 
 const AMENITY_OPTIONS = [
-  'Sound System', 'Piano/Keyboard', 'Microphones', 'WiFi', 'Parking',
-  'Air Conditioning', 'Outdoor Space', 'Kid Friendly', 'Pet Friendly',
-  'Wheelchair Accessible', 'B&B Offered', 'Refreshments Provided'
+  'Power access for equipment',
+  'Kid friendly environment',
+  'Sound system provided',
+  'Overnight accommodation',
+  'Air conditioning / Heating',
+  'Free parking on premises',
+  'WiFi available',
+  'Step-free access',
+  'Food & Refreshments'
 ];
 
 const EQUIPMENT_OPTIONS = [
@@ -223,8 +229,9 @@ export default function ProfilePage() {
     zip: '',
     profilePhoto: '',
     venuePhoto: '', // Main venue photo
-    venueType: 'home' as 'home' | 'studio' | 'backyard' | 'loft' | 'other',
-    capacity: 20,
+    venueType: 'home' as 'home' | 'studio' | 'backyard' | 'loft' | 'warehouse' | 'other',
+    indoorCapacity: 20,
+    outdoorCapacity: 0,
     amenities: [] as string[],
     hostInfo: {
       hostName: '', // This is the personal host name like "Mike Chen"
@@ -291,8 +298,9 @@ export default function ProfilePage() {
                 profilePhoto: data.profilePhoto || '',
                 venuePhoto: data.venuePhoto || '',
                 venueType: data.venueType || 'home',
-                capacity: 20,
-                amenities: [],
+                indoorCapacity: data.indoorCapacity || 20,
+                outdoorCapacity: data.outdoorCapacity || 0,
+                amenities: data.amenities || [],
                 hostInfo: {
                   hostName: data.hostInfo?.hostName || '',
                   aboutMe: data.hostInfo?.aboutMe || '',
@@ -1209,7 +1217,7 @@ export default function ProfilePage() {
                   </CardHeader>
                   <CardContent className="space-y-6">
                     {/* Venue Type & Capacity */}
-                    <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-4">
                       <div>
                         <label className="block text-sm font-medium text-neutral-700 mb-2">Venue Type</label>
                         <select
@@ -1220,18 +1228,29 @@ export default function ProfilePage() {
                           <option value="home">Home/Living Room</option>
                           <option value="studio">Studio Space</option>
                           <option value="backyard">Backyard/Garden</option>
-                          <option value="loft">Loft/Warehouse</option>
+                          <option value="loft">Loft</option>
+                          <option value="warehouse">Warehouse</option>
                           <option value="other">Other</option>
                         </select>
                       </div>
-                      <Input
-                        label="Maximum Capacity"
-                        type="number"
-                        value={hostProfile.capacity}
-                        onChange={(e) => updateHostProfile({ capacity: parseInt(e.target.value) || 1 })}
-                        min="1"
-                        max="200"
-                      />
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <Input
+                          label="Indoor Capacity"
+                          type="number"
+                          value={hostProfile.indoorCapacity}
+                          onChange={(e) => updateHostProfile({ indoorCapacity: parseInt(e.target.value) || 0 })}
+                          min="0"
+                          max="200"
+                        />
+                        <Input
+                          label="Outdoor Capacity"
+                          type="number"
+                          value={hostProfile.outdoorCapacity}
+                          onChange={(e) => updateHostProfile({ outdoorCapacity: parseInt(e.target.value) || 0 })}
+                          min="0"
+                          max="500"
+                        />
+                      </div>
                     </div>
 
                     {/* Amenities */}

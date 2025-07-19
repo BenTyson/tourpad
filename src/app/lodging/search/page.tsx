@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { 
@@ -25,7 +25,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Input } from '@/components/ui/Input';
 import { testHosts } from '@/data/realTestData';
 
-export default function LodgingSearchPage() {
+function LodgingSearchContent() {
   const searchParams = useSearchParams();
   const showDate = searchParams.get('showDate');
   const showLocation = searchParams.get('showLocation');
@@ -355,5 +355,13 @@ export default function LodgingSearchPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function LodgingSearchPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LodgingSearchContent />
+    </Suspense>
   );
 }

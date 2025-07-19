@@ -142,6 +142,7 @@ model Host {
   offersLodging          Boolean     @default(false)
   lodgingDetails         Json?
   venuePhotoUrl          String?
+  amenities              String[]
   applicationSubmittedAt DateTime?
   approvedAt             DateTime?
   approvedByUserId       String?
@@ -411,6 +412,8 @@ enum UserStatus {
 
 enum VenueType {
   HOME
+  STUDIO
+  BACKYARD
   LOFT
   WAREHOUSE
   OTHER

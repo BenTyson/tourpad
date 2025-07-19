@@ -128,19 +128,8 @@ export async function GET(
         avgDoorFee: 20, // TODO: Calculate from past events
         hostingHistory: `${host.hostingExperience || 0} years`
       },
-      // Amenities - TODO: Store as separate fields or JSON
-      amenities: {
-        powerAccess: true,
-        airConditioning: true,
-        wifi: true,
-        kidFriendly: false,
-        parking: true,
-        petFriendly: false,
-        soundSystem: true,
-        outdoorSpace: host.outdoorCapacity ? true : false,
-        accessible: true,
-        bnbOffered: host.offersLodging
-      },
+      // Amenities from database
+      amenities: host.amenities || [],
       // Sound system - TODO: Store in database
       soundSystem: {
         available: true,

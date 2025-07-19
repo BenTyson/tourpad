@@ -30,10 +30,10 @@ import {
   Trees,
   Accessibility,
   Bed,
+  Coffee,
   Copy,
   Mail,
-  Twitter,
-  Coffee
+  Twitter
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -52,6 +52,8 @@ interface HostData {
   state: string;
   venueName: string;
   venueType: string;
+  indoorCapacity?: number;
+  outdoorCapacity?: number;
   rating: number;
   reviewCount: number;
   housePhotos: Array<{
@@ -79,18 +81,7 @@ interface HostData {
     avgDoorFee: number;
     hostingHistory: string;
   };
-  amenities: {
-    powerAccess: boolean;
-    airConditioning: boolean;
-    wifi: boolean;
-    kidFriendly: boolean;
-    parking: boolean;
-    petFriendly: boolean;
-    soundSystem: boolean;
-    outdoorSpace: boolean;
-    accessible: boolean;
-    bnbOffered: boolean;
-  };
+  amenities: string[];
   hostInfo?: {
     hostName: string;
     profilePhoto?: string;
@@ -371,7 +362,13 @@ export default function HostProfilePage() {
                 <p className="text-neutral-600">Everything you need to know about performing here</p>
               </div>
               <Badge variant="default" className="bg-primary-100 text-primary-800">
-                {host.venueType}
+                {host.venueType === 'home' ? 'Home/Living Room' :
+                 host.venueType === 'studio' ? 'Studio Space' :
+                 host.venueType === 'backyard' ? 'Backyard/Garden' :
+                 host.venueType === 'loft' ? 'Loft' :
+                 host.venueType === 'warehouse' ? 'Warehouse' :
+                 host.venueType === 'other' ? 'Other' :
+                 host.venueType?.charAt(0).toUpperCase() + host.venueType?.slice(1).toLowerCase()}
               </Badge>
             </div>
             
@@ -386,8 +383,17 @@ export default function HostProfilePage() {
                     <div className="text-sm text-neutral-600">Typical attendance</div>
                   </div>
                 </div>
-                <div className="text-lg font-bold text-primary-700">{host.showSpecs.avgAttendance} guests</div>
-                <div className="text-sm text-neutral-600 mt-1">Max {host.showSpecs.indoorAttendanceMax} indoors</div>
+                <div className="space-y-2">
+                  {host.indoorCapacity && host.indoorCapacity > 0 && (
+                    <div className="text-lg font-bold text-primary-700">{host.indoorCapacity} indoor</div>
+                  )}
+                  {host.outdoorCapacity && host.outdoorCapacity > 0 && (
+                    <div className="text-sm text-neutral-600">{host.outdoorCapacity} outdoor</div>
+                  )}
+                  {(!host.indoorCapacity || host.indoorCapacity === 0) && (!host.outdoorCapacity || host.outdoorCapacity === 0) && (
+                    <div className="text-lg font-bold text-primary-700">{host.showSpecs.avgAttendance} guests</div>
+                  )}
+                </div>
               </div>
               
               <div className="group bg-gradient-to-br from-secondary-50 to-secondary-100 rounded-xl p-6 border border-secondary-200 hover:shadow-md transition-all duration-300">
@@ -425,44 +431,34 @@ export default function HostProfilePage() {
         <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
           <div className="p-8">
             <h2 className="text-2xl font-bold text-neutral-900 mb-6">What This Venue Offers</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {Object.entries({
-                powerAccess: { label: 'Power access for equipment', icon: Zap },
-                airConditioning: { label: 'Air conditioning', icon: Snowflake },
-                wifi: { label: 'WiFi available', icon: Wifi },
-                kidFriendly: { label: 'Kid friendly environment', icon: Baby },
-                parking: { label: 'Free parking on premises', icon: Car },
-                petFriendly: { label: 'Pets allowed', icon: Dog },
-                soundSystem: { label: 'Sound system provided', icon: Volume2 },
-                outdoorSpace: { label: 'Private outdoor space', icon: Trees },
-                accessible: { label: 'Step-free access', icon: Accessibility },
-                bnbOffered: { label: 'Overnight accommodation', icon: Bed }
-              }).map(([key, {label, icon: IconComponent}]) => (
-                <div key={key} className={`flex items-center p-4 rounded-lg border ${
-                  host.amenities[key as keyof typeof host.amenities] 
-                    ? 'bg-primary-50 border-primary-200' 
-                    : 'bg-gray-50 border-gray-200'
-                }`}>
-                  <IconComponent className={`w-5 h-5 mr-3 ${
-                    host.amenities[key as keyof typeof host.amenities] 
-                      ? 'text-primary-600' 
-                      : 'text-gray-400'
-                  }`} />
-                  <div className="flex-1">
-                    <span className={`font-medium ${
-                      host.amenities[key as keyof typeof host.amenities] 
-                        ? 'text-primary-900' 
-                        : 'text-gray-500 line-through'
-                    }`}>
-                      {label}
-                    </span>
-                  </div>
-                  {host.amenities[key as keyof typeof host.amenities] && (
-                    <CheckCircle className="w-5 h-5 text-primary-600" />
-                  )}
-                </div>
-              ))}
-            </div>
+            {host.amenities && host.amenities.length > 0 ? (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {[
+                  { label: 'Power access for equipment', icon: Zap },
+                  { label: 'Kid friendly environment', icon: Baby },
+                  { label: 'Sound system provided', icon: Volume2 },
+                  { label: 'Overnight accommodation', icon: Bed },
+                  { label: 'Air conditioning / Heating', icon: Snowflake },
+                  { label: 'Free parking on premises', icon: Car },
+                  { label: 'WiFi available', icon: Wifi },
+                  { label: 'Step-free access', icon: Accessibility },
+                  { label: 'Food & Refreshments', icon: Coffee }
+                ].filter(({label}) => host.amenities.includes(label))
+                 .map(({label, icon: IconComponent}) => (
+                    <div key={label} className="flex items-center p-4 rounded-lg border bg-primary-50 border-primary-200">
+                      <IconComponent className="w-5 h-5 mr-3 text-primary-600" />
+                      <div className="flex-1">
+                        <span className="font-medium text-primary-900">
+                          {label}
+                        </span>
+                      </div>
+                      <CheckCircle className="w-5 h-5 text-primary-600" />
+                    </div>
+                  ))}
+              </div>
+            ) : (
+              <p className="text-gray-500 text-center py-8">No amenities listed</p>
+            )}
           </div>
         </section>
 
