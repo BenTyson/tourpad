@@ -2581,6 +2581,122 @@ export default function ProfilePage() {
                             </select>
                           </div>
                         </div>
+                        
+                        {/* Bed Configuration */}
+                        <div className="mt-4">
+                          <h4 className="text-md font-medium text-neutral-900 mb-3">Bed Configuration</h4>
+                          <div className="space-y-3">
+                            {room.beds && room.beds.map((bed, bedIndex) => (
+                              <div key={bedIndex} className="flex items-center space-x-4 p-3 bg-neutral-50 rounded-lg">
+                                <div className="flex-1">
+                                  <label className="block text-sm font-medium text-neutral-700 mb-1">
+                                    Bed Type
+                                  </label>
+                                  <select
+                                    value={bed.type}
+                                    onChange={(e) => {
+                                      const updatedRooms = hostProfile.lodgingDetails.rooms.map(r =>
+                                        r.id === room.id ? {
+                                          ...r,
+                                          beds: r.beds.map((b, i) => 
+                                            i === bedIndex ? { ...b, type: e.target.value as any } : b
+                                          )
+                                        } : r
+                                      );
+                                      updateHostProfile({
+                                        lodgingDetails: {
+                                          ...hostProfile.lodgingDetails,
+                                          rooms: updatedRooms
+                                        }
+                                      });
+                                    }}
+                                    className="w-full px-2 py-1 border border-neutral-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-primary-500"
+                                  >
+                                    <option value="twin">Twin</option>
+                                    <option value="full">Full</option>
+                                    <option value="queen">Queen</option>
+                                    <option value="king">King</option>
+                                    <option value="couch">Couch/Sofa</option>
+                                    <option value="air_mattress">Air Mattress</option>
+                                  </select>
+                                </div>
+                                <div className="w-20">
+                                  <label className="block text-sm font-medium text-neutral-700 mb-1">
+                                    Quantity
+                                  </label>
+                                  <input
+                                    type="number"
+                                    min="1"
+                                    max="4"
+                                    value={bed.quantity}
+                                    onChange={(e) => {
+                                      const updatedRooms = hostProfile.lodgingDetails.rooms.map(r =>
+                                        r.id === room.id ? {
+                                          ...r,
+                                          beds: r.beds.map((b, i) => 
+                                            i === bedIndex ? { ...b, quantity: parseInt(e.target.value) || 1 } : b
+                                          )
+                                        } : r
+                                      );
+                                      updateHostProfile({
+                                        lodgingDetails: {
+                                          ...hostProfile.lodgingDetails,
+                                          rooms: updatedRooms
+                                        }
+                                      });
+                                    }}
+                                    className="w-full px-2 py-1 border border-neutral-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-primary-500 text-center"
+                                  />
+                                </div>
+                                {room.beds.length > 1 && (
+                                  <button
+                                    onClick={() => {
+                                      const updatedRooms = hostProfile.lodgingDetails.rooms.map(r =>
+                                        r.id === room.id ? {
+                                          ...r,
+                                          beds: r.beds.filter((_, i) => i !== bedIndex)
+                                        } : r
+                                      );
+                                      updateHostProfile({
+                                        lodgingDetails: {
+                                          ...hostProfile.lodgingDetails,
+                                          rooms: updatedRooms
+                                        }
+                                      });
+                                    }}
+                                    className="p-1 text-red-600 hover:text-red-700 hover:bg-red-50 rounded"
+                                  >
+                                    <X className="w-4 h-4" />
+                                  </button>
+                                )}
+                              </div>
+                            ))}
+                            
+                            {/* Add Bed Button */}
+                            {(!room.beds || room.beds.length < 3) && (
+                              <button
+                                onClick={() => {
+                                  const updatedRooms = hostProfile.lodgingDetails.rooms.map(r =>
+                                    r.id === room.id ? {
+                                      ...r,
+                                      beds: [...(r.beds || []), { type: 'twin', quantity: 1 }]
+                                    } : r
+                                  );
+                                  updateHostProfile({
+                                    lodgingDetails: {
+                                      ...hostProfile.lodgingDetails,
+                                      rooms: updatedRooms
+                                    }
+                                  });
+                                }}
+                                className="flex items-center text-sm text-primary-600 hover:text-primary-700 font-medium"
+                              >
+                                <Plus className="w-4 h-4 mr-1" />
+                                Add Another Bed
+                              </button>
+                            )}
+                          </div>
+                        </div>
                       </div>
                     ))}
                   </CardContent>
@@ -2626,54 +2742,6 @@ export default function ProfilePage() {
                   </CardContent>
                 </Card>
 
-                {/* House Rules */}
-                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                  <CardHeader>
-                    <h2 className="text-xl font-semibold text-neutral-900">House Rules</h2>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-2">
-                          Check-in Time
-                        </label>
-                        <Input
-                          type="text"
-                          value={hostProfile.lodgingDetails?.houseRules?.checkInTime || '3:00 PM'}
-                          onChange={(e) => updateHostProfile({
-                            lodgingDetails: {
-                              ...hostProfile.lodgingDetails,
-                              houseRules: {
-                                ...hostProfile.lodgingDetails.houseRules,
-                                checkInTime: e.target.value
-                              }
-                            }
-                          })}
-                          placeholder="3:00 PM"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-2">
-                          Check-out Time
-                        </label>
-                        <Input
-                          type="text"
-                          value={hostProfile.lodgingDetails?.houseRules?.checkOutTime || '11:00 AM'}
-                          onChange={(e) => updateHostProfile({
-                            lodgingDetails: {
-                              ...hostProfile.lodgingDetails,
-                              houseRules: {
-                                ...hostProfile.lodgingDetails.houseRules,
-                                checkOutTime: e.target.value
-                              }
-                            }
-                          })}
-                          placeholder="11:00 AM"
-                        />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
               </>
             )}
           </div>
