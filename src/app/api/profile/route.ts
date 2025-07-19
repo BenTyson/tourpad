@@ -122,6 +122,19 @@ export async function GET() {
           profilePhoto: user.profile?.profileImageUrl || ''
         },
         amenities: user.host.amenities || [],
+        soundSystem: user.host.soundSystem || {
+          available: false,
+          description: '',
+          equipment: {
+            speakers: '',
+            microphones: '',
+            mixingBoard: '',
+            instruments: '',
+            additional: ''
+          },
+          limitations: '',
+          setupNotes: ''
+        },
         photos: hostMedia.map(media => ({
           id: media.id,
           fileUrl: media.fileUrl,
@@ -355,6 +368,7 @@ export async function PUT(request: NextRequest) {
             lodgingDetails: data.lodgingDetails || undefined,
             venuePhotoUrl: data.venuePhoto || undefined,
             amenities: data.amenities || [],
+            soundSystem: data.soundSystem || undefined,
           }
         });
 

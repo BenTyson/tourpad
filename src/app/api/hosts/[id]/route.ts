@@ -133,16 +133,19 @@ export async function GET(
       },
       // Amenities from database
       amenities: host.amenities || [],
-      // Sound system - TODO: Store in database
-      soundSystem: {
-        available: true,
-        description: 'Professional PA system with mixing board suitable for acoustic and amplified performances.',
+      // Sound system from database
+      soundSystem: host.soundSystem || {
+        available: false,
+        description: '',
         equipment: {
-          speakers: '2x QSC K12.2 powered speakers',
-          microphones: '4x Shure SM58, 2x Shure SM57',
-          mixingBoard: 'Behringer X32 Compact digital mixer',
-          instruments: 'Yamaha upright piano'
-        }
+          speakers: '',
+          microphones: '',
+          mixingBoard: '',
+          instruments: '',
+          additional: ''
+        },
+        limitations: '',
+        setupNotes: ''
       },
       // Hosting capabilities - transform lodging details
       hostingCapabilities: host.offersLodging && host.lodgingDetails ? {

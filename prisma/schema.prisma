@@ -143,6 +143,7 @@ model Host {
   lodgingDetails         Json?
   venuePhotoUrl          String?
   amenities              String[]
+  soundSystem            Json?
   applicationSubmittedAt DateTime?
   approvedAt             DateTime?
   approvedByUserId       String?

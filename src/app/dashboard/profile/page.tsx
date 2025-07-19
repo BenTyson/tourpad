@@ -19,7 +19,8 @@ import {
   Eye,
   Edit,
   Home,
-  Users
+  Users,
+  Volume2
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
@@ -144,7 +145,7 @@ const US_STATES = [
 
 export default function ProfilePage() {
   const { data: session, status } = useSession();
-  const [activeTab, setActiveTab] = useState<'info' | 'photos' | 'media'>('info');
+  const [activeTab, setActiveTab] = useState<'info' | 'photos' | 'media' | 'sound-system'>('info');
   const [loading, setLoading] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -235,6 +236,19 @@ export default function ProfilePage() {
     amenities: [] as string[],
     typicalShowLength: 90, // minutes
     preferredDays: [] as string[], // days of week
+    soundSystem: {
+      available: true,
+      description: '',
+      equipment: {
+        speakers: '',
+        microphones: '',
+        mixingBoard: '',
+        instruments: '',
+        additional: ''
+      },
+      limitations: '',
+      setupNotes: ''
+    },
     hostInfo: {
       hostName: '', // This is the personal host name like "Mike Chen"
       aboutMe: '', // This is about the host as a person
@@ -305,6 +319,19 @@ export default function ProfilePage() {
                 amenities: data.amenities || [],
                 typicalShowLength: data.typicalShowLength || 90,
                 preferredDays: data.preferredDays || data.preferredGenres || [],
+                soundSystem: data.soundSystem || {
+                  available: true,
+                  description: '',
+                  equipment: {
+                    speakers: '',
+                    microphones: '',
+                    mixingBoard: '',
+                    instruments: '',
+                    additional: ''
+                  },
+                  limitations: '',
+                  setupNotes: ''
+                },
                 hostInfo: {
                   hostName: data.hostInfo?.hostName || '',
                   aboutMe: data.hostInfo?.aboutMe || '',
@@ -717,6 +744,19 @@ export default function ProfilePage() {
               )}
               {isArtist ? 'Music & Media' : 'Gallery'}
             </button>
+            {!isArtist && (
+              <button
+                onClick={() => setActiveTab('sound-system')}
+                className={`flex items-center px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 ${
+                  activeTab === 'sound-system'
+                    ? 'bg-white text-primary-600 shadow-sm'
+                    : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
+                }`}
+              >
+                <Volume2 className="w-4 h-4 mr-2" />
+                Sound System & Equipment
+              </button>
+            )}
           </nav>
         </div>
 
@@ -2084,6 +2124,225 @@ export default function ProfilePage() {
               </div>
             </CardContent>
           </Card>
+        )}
+
+        {/* Sound System Tab - Only for hosts */}
+        {activeTab === 'sound-system' && !isArtist && (
+          <div className="space-y-6">
+            {/* Sound System Availability */}
+            <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
+              <CardHeader>
+                <div className="flex items-center">
+                  <Volume2 className="w-5 h-5 text-neutral-600 mr-3" />
+                  <h2 className="text-xl font-semibold text-neutral-900">Sound System Availability</h2>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="soundSystemAvailable"
+                        checked={hostProfile.soundSystem.available}
+                        onChange={() => updateHostProfile({ 
+                          soundSystem: { ...hostProfile.soundSystem, available: true }
+                        })}
+                        className="w-4 h-4 text-primary-600 border-neutral-300 focus:ring-primary-500"
+                      />
+                      <span className="ml-2 text-sm font-medium text-neutral-900">
+                        Yes, I have a sound system available for artists
+                      </span>
+                    </label>
+                  </div>
+                  <div>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="soundSystemAvailable"
+                        checked={!hostProfile.soundSystem.available}
+                        onChange={() => updateHostProfile({ 
+                          soundSystem: { ...hostProfile.soundSystem, available: false }
+                        })}
+                        className="w-4 h-4 text-primary-600 border-neutral-300 focus:ring-primary-500"
+                      />
+                      <span className="ml-2 text-sm font-medium text-neutral-900">
+                        No, artists should bring their own sound equipment
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Sound System Details - Only show if available */}
+            {hostProfile.soundSystem.available && (
+              <>
+                {/* System Description */}
+                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
+                  <CardHeader>
+                    <h2 className="text-xl font-semibold text-neutral-900">System Description</h2>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div>
+                        <label htmlFor="soundSystemDescription" className="block text-sm font-medium text-neutral-700 mb-2">
+                          General Description *
+                        </label>
+                        <textarea
+                          id="soundSystemDescription"
+                          rows={3}
+                          placeholder="Describe your sound system setup, its quality, and what makes it special..."
+                          value={hostProfile.soundSystem.description}
+                          onChange={(e) => updateHostProfile({ 
+                            soundSystem: { ...hostProfile.soundSystem, description: e.target.value }
+                          })}
+                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Equipment Details */}
+                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
+                  <CardHeader>
+                    <h2 className="text-xl font-semibold text-neutral-900">Equipment Details</h2>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label htmlFor="speakers" className="block text-sm font-medium text-neutral-700 mb-2">
+                          Speakers *
+                        </label>
+                        <Input
+                          id="speakers"
+                          placeholder="e.g., JBL EON615, Yamaha HS8 monitors..."
+                          value={hostProfile.soundSystem.equipment.speakers}
+                          onChange={(e) => updateHostProfile({ 
+                            soundSystem: { 
+                              ...hostProfile.soundSystem, 
+                              equipment: { ...hostProfile.soundSystem.equipment, speakers: e.target.value }
+                            }
+                          })}
+                        />
+                      </div>
+
+                      <div>
+                        <label htmlFor="microphones" className="block text-sm font-medium text-neutral-700 mb-2">
+                          Microphones *
+                        </label>
+                        <Input
+                          id="microphones"
+                          placeholder="e.g., Shure SM58, Audio-Technica AT2020..."
+                          value={hostProfile.soundSystem.equipment.microphones}
+                          onChange={(e) => updateHostProfile({ 
+                            soundSystem: { 
+                              ...hostProfile.soundSystem, 
+                              equipment: { ...hostProfile.soundSystem.equipment, microphones: e.target.value }
+                            }
+                          })}
+                        />
+                      </div>
+
+                      <div>
+                        <label htmlFor="mixingBoard" className="block text-sm font-medium text-neutral-700 mb-2">
+                          Mixing Board / Audio Interface
+                        </label>
+                        <Input
+                          id="mixingBoard"
+                          placeholder="e.g., Yamaha MG10XU, Focusrite Scarlett..."
+                          value={hostProfile.soundSystem.equipment.mixingBoard}
+                          onChange={(e) => updateHostProfile({ 
+                            soundSystem: { 
+                              ...hostProfile.soundSystem, 
+                              equipment: { ...hostProfile.soundSystem.equipment, mixingBoard: e.target.value }
+                            }
+                          })}
+                        />
+                      </div>
+
+                      <div>
+                        <label htmlFor="instruments" className="block text-sm font-medium text-neutral-700 mb-2">
+                          Available Instruments
+                        </label>
+                        <Input
+                          id="instruments"
+                          placeholder="e.g., Piano, keyboard, guitar amp..."
+                          value={hostProfile.soundSystem.equipment.instruments}
+                          onChange={(e) => updateHostProfile({ 
+                            soundSystem: { 
+                              ...hostProfile.soundSystem, 
+                              equipment: { ...hostProfile.soundSystem.equipment, instruments: e.target.value }
+                            }
+                          })}
+                        />
+                      </div>
+
+                      <div className="md:col-span-2">
+                        <label htmlFor="additional" className="block text-sm font-medium text-neutral-700 mb-2">
+                          Additional Equipment
+                        </label>
+                        <Input
+                          id="additional"
+                          placeholder="e.g., Cables, stands, lighting..."
+                          value={hostProfile.soundSystem.equipment.additional}
+                          onChange={(e) => updateHostProfile({ 
+                            soundSystem: { 
+                              ...hostProfile.soundSystem, 
+                              equipment: { ...hostProfile.soundSystem.equipment, additional: e.target.value }
+                            }
+                          })}
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Limitations & Setup Notes */}
+                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
+                  <CardHeader>
+                    <h2 className="text-xl font-semibold text-neutral-900">Limitations & Setup</h2>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div>
+                        <label htmlFor="limitations" className="block text-sm font-medium text-neutral-700 mb-2">
+                          System Limitations
+                        </label>
+                        <textarea
+                          id="limitations"
+                          rows={3}
+                          placeholder="Any limitations artists should know about (volume, instruments, etc.)..."
+                          value={hostProfile.soundSystem.limitations}
+                          onChange={(e) => updateHostProfile({ 
+                            soundSystem: { ...hostProfile.soundSystem, limitations: e.target.value }
+                          })}
+                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        />
+                      </div>
+
+                      <div>
+                        <label htmlFor="setupNotes" className="block text-sm font-medium text-neutral-700 mb-2">
+                          Setup Notes for Artists
+                        </label>
+                        <textarea
+                          id="setupNotes"
+                          rows={3}
+                          placeholder="Instructions for soundcheck, mixing responsibilities, what artists should bring..."
+                          value={hostProfile.soundSystem.setupNotes}
+                          onChange={(e) => updateHostProfile({ 
+                            soundSystem: { ...hostProfile.soundSystem, setupNotes: e.target.value }
+                          })}
+                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </>
+            )}
+          </div>
         )}
 
         {/* Preview Notice */}
