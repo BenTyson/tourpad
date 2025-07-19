@@ -109,7 +109,7 @@ export async function GET(
       // Host profile info
       hostInfo: {
         hostName: host.user.name,
-        profilePhoto: host.user.profileImageUrl,
+        profilePhoto: host.user.profile?.profileImageUrl || host.user.profileImageUrl,
         aboutMe: host.user.profile?.bio || 'Passionate about bringing live music into intimate settings. I love creating memorable experiences where artists and audiences can connect in a personal, meaningful way.'
       },
       // Stats from mockData format

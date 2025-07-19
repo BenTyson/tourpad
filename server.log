@@ -52,3 +52,501 @@
 [33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
  GET /api/profile 200 in 227ms
  GET /api/profile 200 in 7ms
+ GET /dashboard/profile 200 in 120ms
+ ✓ Compiled in 832ms (933 modules)
+ GET /dashboard/profile 200 in 83ms
+ GET /dashboard/profile 200 in 92ms
+ GET /dashboard/profile 200 in 87ms
+ ✓ Compiled /_not-found in 152ms (923 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 238ms
+ ✓ Compiled /api/auth/[...nextauth] in 70ms (530 modules)
+ ✓ Compiled (686 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /favicon.ico 200 in 304ms
+ GET /api/auth/session 200 in 279ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 8ms
+ ✓ Compiled /api/profile in 186ms (688 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/profile 200 in 243ms
+ GET /api/profile 200 in 6ms
+ ✓ Compiled /api/upload in 124ms (1100 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ POST /api/upload 200 in 163ms
+ PUT /api/profile 200 in 37ms
+ GET /api/auth/session 200 in 23ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/profile 200 in 8ms
+ GET /api/auth/session 200 in 17ms
+ GET /api/auth/session 200 in 10ms
+ GET /api/profile 200 in 13ms
+ GET /api/profile 200 in 8ms
+ GET /dashboard 200 in 60ms
+ ✓ Compiled /api/stats in 142ms (694 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/stats 200 in 176ms
+ GET /api/stats 200 in 7ms
+ ○ Compiling /hosts/[id] ...
+ ✓ Compiled /hosts/[id] in 610ms (1161 modules)
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 973ms
+ ✓ Compiled /api/hosts/[id] in 209ms (1163 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 244ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/stats 200 in 9ms
+Error: Route "/api/hosts/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (src/app/api/hosts/[id]/route.ts:10:26)
+   8 | ) {
+   9 |   try {
+> 10 |     const hostId = params.id;
+     |                          ^
+  11 |
+  12 |     // Fetch host with all related data
+  13 |     const host = await prisma.host.findUnique({
+ GET /api/hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 582ms
+ ✓ Compiled in 593ms (1171 modules)
+ GET /dashboard 200 in 84ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 83ms
+ GET /dashboard/profile 200 in 104ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 53ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 12ms
+ GET /api/stats 200 in 20ms
+ GET /api/stats 200 in 6ms
+ GET /dashboard 200 in 91ms
+ ✓ Compiled /_not-found in 246ms (1154 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 376ms
+ ✓ Compiled /favicon.ico in 99ms (723 modules)
+ GET /favicon.ico 200 in 202ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 210ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/stats 200 in 11ms
+ GET /api/stats 200 in 7ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 125ms
+ ✓ Compiled /api/hosts/[id] in 153ms (725 modules)
+Error: Route "/api/hosts/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (src/app/api/hosts/[id]/route.ts:10:26)
+   8 | ) {
+   9 |   try {
+> 10 |     const hostId = params.id;
+     |                          ^
+  11 |
+  12 |     // Fetch host with all related data
+  13 |     const host = await prisma.host.findUnique({
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 290ms
+ GET /api/hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 292ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/stats 200 in 8ms
+ GET /api/auth/session 200 in 18ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/stats 200 in 12ms
+ GET /api/stats 200 in 7ms
+ GET /dashboard/profile 200 in 37ms
+ ✓ Compiled /api/profile in 206ms (727 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/profile 200 in 242ms
+ GET /api/profile 200 in 6ms
+ ✓ Compiled /api/upload in 116ms (730 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ POST /api/upload 200 in 153ms
+ PUT /api/profile 200 in 35ms
+ GET /api/auth/session 200 in 13ms
+ GET /api/auth/session 200 in 13ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/profile 200 in 7ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 125ms
+ GET /favicon.ico 200 in 12ms
+Error: Route "/api/hosts/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (src/app/api/hosts/[id]/route.ts:10:26)
+   8 | ) {
+   9 |   try {
+> 10 |     const hostId = params.id;
+     |                          ^
+  11 |
+  12 |     // Fetch host with all related data
+  13 |     const host = await prisma.host.findUnique({
+ GET /api/hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 47ms
+ GET /api/auth/session 200 in 49ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/profile 200 in 6ms
+ GET /api/auth/session 200 in 23ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/profile 200 in 12ms
+ GET /api/profile 200 in 7ms
+ ✓ Compiled / in 229ms (728 modules)
+ GET / 200 in 411ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 64ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 71ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/profile 200 in 16ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 81ms
+ ✓ Compiled /api/hosts/[id] in 132ms (721 modules)
+ ✓ Compiled (723 modules)
+ GET /favicon.ico 200 in 261ms
+Error: Route "/api/hosts/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (src/app/api/hosts/[id]/route.ts:10:26)
+   8 | ) {
+   9 |   try {
+> 10 |     const hostId = params.id;
+     |                          ^
+  11 |
+  12 |     // Fetch host with all related data
+  13 |     const host = await prisma.host.findUnique({
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 309ms
+ GET /api/auth/session 200 in 311ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/profile 200 in 21ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 141ms
+ GET /favicon.ico 200 in 5ms
+Error: Route "/api/hosts/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (src/app/api/hosts/[id]/route.ts:10:26)
+   8 | ) {
+   9 |   try {
+> 10 |     const hostId = params.id;
+     |                          ^
+  11 |
+  12 |     // Fetch host with all related data
+  13 |     const host = await prisma.host.findUnique({
+ GET /api/hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 34ms
+ GET /api/auth/session 200 in 35ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/profile 200 in 7ms
+ GET /api/auth/session 200 in 12ms
+ GET /api/auth/session 200 in 10ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/profile 200 in 9ms
+ GET /api/profile 200 in 6ms
+ GET /api/auth/session 200 in 19ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/profile 200 in 6ms
+Error: Route "/api/hosts/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (src/app/api/hosts/[id]/route.ts:10:26)
+   8 | ) {
+   9 |   try {
+> 10 |     const hostId = params.id;
+     |                          ^
+  11 |
+  12 |     // Fetch host with all related data
+  13 |     const host = await prisma.host.findUnique({
+ GET /api/hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 30ms
+Error: Route "/api/hosts/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (src/app/api/hosts/[id]/route.ts:10:26)
+   8 | ) {
+   9 |   try {
+> 10 |     const hostId = params.id;
+     |                          ^
+  11 |
+  12 |     // Fetch host with all related data
+  13 |     const host = await prisma.host.findUnique({
+ GET /api/hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 29ms
+ ✓ Compiled / in 129ms (732 modules)
+ GET / 200 in 262ms
+ ✓ Compiled in 451ms (1174 modules)
+ GET /dashboard/profile 200 in 75ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 74ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 28ms
+ GET /dashboard/profile 200 in 74ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 46ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 10ms
+ GET /api/profile 200 in 13ms
+ GET /api/profile 200 in 15ms
+ GET /dashboard/profile 200 in 74ms
+ ✓ Compiled /_not-found in 335ms (1164 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 421ms
+ ✓ Compiled /favicon.ico in 114ms (733 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /favicon.ico 200 in 247ms
+ GET /api/auth/session 200 in 217ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 10ms
+ GET /api/profile 200 in 13ms
+ GET /api/profile 200 in 7ms
+ ✓ Compiled /api/upload in 148ms (734 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ POST /api/upload 200 in 202ms
+Profile API - Processing photo: {
+  hostInfo: '/uploads/cmd8zfdye0008luf9sq770if5-profile-1752886352401.png',
+  profilePhoto: '/uploads/cmd8zfdye0008luf9sq770if5-profile-1752885939687.png',
+  photoUrl: '/uploads/cmd8zfdye0008luf9sq770if5-profile-1752886352401.png'
+}
+ PUT /api/profile 200 in 30ms
+ GET /api/auth/session 200 in 14ms
+ GET /api/auth/session 200 in 11ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/profile 200 in 6ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 121ms
+ GET /favicon.ico 200 in 4ms
+ ✓ Compiled /api/hosts/[id] in 148ms (736 modules)
+Error: Route "/api/hosts/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (src/app/api/hosts/[id]/route.ts:10:26)
+   8 | ) {
+   9 |   try {
+> 10 |     const hostId = params.id;
+     |                          ^
+  11 |
+  12 |     // Fetch host with all related data
+  13 |     const host = await prisma.host.findUnique({
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 323ms
+ GET /api/auth/session 200 in 324ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/profile 200 in 8ms
+Error: Route "/api/hosts/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (src/app/api/hosts/[id]/route.ts:10:26)
+   8 | ) {
+   9 |   try {
+> 10 |     const hostId = params.id;
+     |                          ^
+  11 |
+  12 |     // Fetch host with all related data
+  13 |     const host = await prisma.host.findUnique({
+ GET /api/hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 49ms
+Error: Route "/api/hosts/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (src/app/api/hosts/[id]/route.ts:10:26)
+   8 | ) {
+   9 |   try {
+> 10 |     const hostId = params.id;
+     |                          ^
+  11 |
+  12 |     // Fetch host with all related data
+  13 |     const host = await prisma.host.findUnique({
+ GET /api/hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 29ms
+Error: Route "/api/hosts/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (src/app/api/hosts/[id]/route.ts:10:26)
+   8 | ) {
+   9 |   try {
+> 10 |     const hostId = params.id;
+     |                          ^
+  11 |
+  12 |     // Fetch host with all related data
+  13 |     const host = await prisma.host.findUnique({
+ GET /api/hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 37ms
+ ✓ Compiled in 357ms (1173 modules)
+ GET /dashboard/profile 200 in 69ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 73ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 36ms
+ GET /dashboard/profile 200 in 60ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 49ms
+ GET /api/auth/session 200 in 11ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/profile 200 in 12ms
+ GET /api/profile 200 in 8ms
+ GET /dashboard/profile 200 in 63ms
+ ✓ Compiled /_not-found in 105ms (1155 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 184ms
+ ✓ Compiled /favicon.ico in 94ms (724 modules)
+ GET /favicon.ico 200 in 219ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 213ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/auth/session 200 in 24ms
+ GET /api/auth/session 200 in 13ms
+ GET /api/profile 200 in 21ms
+ GET /api/profile 200 in 6ms
+ ✓ Compiled /api/upload in 118ms (727 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ POST /api/upload 200 in 155ms
+Profile API - Processing photo: {
+  hostInfo: '/uploads/cmd8zfdye0008luf9sq770if5-profile-1752886442419.jpeg',
+  profilePhoto: '/uploads/cmd8zfdye0008luf9sq770if5-profile-1752886352401.png',
+  photoUrl: '/uploads/cmd8zfdye0008luf9sq770if5-profile-1752886442419.jpeg'
+}
+Profile API - Saving to database: {
+  bio: 'I like to host awesoem shows. ',
+  location: 'Denver, CA',
+  websiteUrl: '',
+  socialLinks: {
+    website: '',
+    instagram: 'mikesmusichome',
+    youtube: '',
+    facebook: '',
+    spotify: ''
+  },
+  profileImageUrl: '/uploads/cmd8zfdye0008luf9sq770if5-profile-1752886442419.jpeg'
+}
+Profile API - Database save result: {
+  id: 'cmd8zfdye0009luf9q5bfwczp',
+  userId: 'cmd8zfdye0008luf9sq770if5',
+  bio: 'I like to host awesoem shows. ',
+  location: 'Denver, CA',
+  phone: '(555) 987-6543',
+  websiteUrl: '',
+  socialLinks: {
+    spotify: '',
+    website: '',
+    youtube: '',
+    facebook: '',
+    instagram: 'mikesmusichome'
+  },
+  preferences: null,
+  createdAt: 2025-07-18T15:36:54.375Z,
+  updatedAt: 2025-07-19T00:54:04.982Z,
+  profileImageUrl: '/uploads/cmd8zfdye0008luf9sq770if5-profile-1752886442419.jpeg'
+}
+ PUT /api/profile 200 in 30ms
+Error: Route "/api/hosts/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (src/app/api/hosts/[id]/route.ts:10:26)
+   8 | ) {
+   9 |   try {
+> 10 |     const hostId = params.id;
+     |                          ^
+  11 |
+  12 |     // Fetch host with all related data
+  13 |     const host = await prisma.host.findUnique({
+ GET /api/hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 48ms
+Error: Route "/api/hosts/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (src/app/api/hosts/[id]/route.ts:10:26)
+   8 | ) {
+   9 |   try {
+> 10 |     const hostId = params.id;
+     |                          ^
+  11 |
+  12 |     // Fetch host with all related data
+  13 |     const host = await prisma.host.findUnique({
+ GET /api/hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 29ms
+Error: Route "/api/hosts/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (src/app/api/hosts/[id]/route.ts:10:26)
+   8 | ) {
+   9 |   try {
+> 10 |     const hostId = params.id;
+     |                          ^
+  11 |
+  12 |     // Fetch host with all related data
+  13 |     const host = await prisma.host.findUnique({
+ GET /api/hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 31ms
+ GET /api/auth/session 200 in 11ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/profile 200 in 6ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 99ms
+ GET /favicon.ico 200 in 6ms
+Error: Route "/api/hosts/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (src/app/api/hosts/[id]/route.ts:10:26)
+   8 | ) {
+   9 |   try {
+> 10 |     const hostId = params.id;
+     |                          ^
+  11 |
+  12 |     // Fetch host with all related data
+  13 |     const host = await prisma.host.findUnique({
+ GET /api/hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 38ms
+ GET /api/auth/session 200 in 39ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/profile 200 in 7ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/profile 200 in 8ms
+ GET /api/profile 200 in 6ms
+ ✓ Compiled in 325ms (1174 modules)
+ GET /dashboard/profile 200 in 61ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 61ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 27ms
+ ✓ Compiled in 230ms (1174 modules)
+ GET /dashboard/profile 200 in 70ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 70ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 24ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 35ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/profile 200 in 8ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 97ms
+ GET /favicon.ico 200 in 5ms
+Error: Route "/api/hosts/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (src/app/api/hosts/[id]/route.ts:10:26)
+   8 | ) {
+   9 |   try {
+> 10 |     const hostId = params.id;
+     |                          ^
+  11 |
+  12 |     // Fetch host with all related data
+  13 |     const host = await prisma.host.findUnique({
+ GET /api/hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 37ms
+ GET /api/auth/session 200 in 40ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/profile 200 in 6ms
+ ✓ Compiled / in 237ms (556 modules)
+ GET / 200 in 409ms
+ ✓ Compiled in 159ms (444 modules)
+ GET /dashboard/profile 200 in 111ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 104ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 26ms
+ ✓ Compiled /api/hosts/[id] in 177ms (726 modules)
+Error: Route "/api/hosts/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (src/app/api/hosts/[id]/route.ts:10:26)
+   8 | ) {
+   9 |   try {
+> 10 |     const hostId = params.id;
+     |                          ^
+  11 |
+  12 |     // Fetch host with all related data
+  13 |     const host = await prisma.host.findUnique({
+ GET /api/hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 320ms
+ GET /dashboard/profile 200 in 61ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 61ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 28ms
+ GET /hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 103ms
+ ✓ Compiled /api/auth/[...nextauth] in 74ms (728 modules)
+ ✓ Compiled (730 modules)
+ GET /favicon.ico 200 in 190ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+Error: Route "/api/hosts/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (src/app/api/hosts/[id]/route.ts:10:26)
+   8 | ) {
+   9 |   try {
+> 10 |     const hostId = params.id;
+     |                          ^
+  11 |
+  12 |     // Fetch host with all related data
+  13 |     const host = await prisma.host.findUnique({
+ GET /api/auth/session 200 in 238ms
+ GET /api/hosts/cmd8zfdyf000aluf9h4l2k90w 200 in 240ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 6ms
+ ✓ Compiled /api/profile in 143ms (732 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/profile 200 in 192ms

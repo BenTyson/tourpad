@@ -879,10 +879,10 @@ export default function ProfilePage() {
                             id="hostProfilePhotoInput"
                           />
                           <label htmlFor="hostProfilePhotoInput" className="cursor-pointer">
-                            <Button variant="outline" size="sm" className="mb-2">
+                            <div className="inline-flex items-center px-3 py-1.5 text-sm border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 rounded-md mb-2">
                               <Camera className="w-4 h-4 mr-2" />
                               {hostProfile.hostInfo.profilePhoto ? 'Change Photo' : 'Upload Photo'}
-                            </Button>
+                            </div>
                           </label>
                           <p className="text-xs text-neutral-500">
                             A friendly photo of yourself or yourselves as hosts
@@ -1356,13 +1356,12 @@ export default function ProfilePage() {
                           className="hidden"
                           id="profilePhotoInput"
                         />
-                        <Button variant="outline" type="button" onClick={(e) => {
-                          e.preventDefault();
-                          document.getElementById('profilePhotoInput')?.click();
-                        }}>
-                          <Camera className="w-4 h-4 mr-2" />
-                          {(isArtist ? artistProfile.profilePhoto : hostProfile.hostInfo.profilePhoto) ? 'Change Photo' : 'Upload Photo'}
-                        </Button>
+                        <label htmlFor="profilePhotoInput" className="cursor-pointer">
+                          <div className="inline-flex items-center px-4 py-2 text-sm border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 rounded-md">
+                            <Camera className="w-4 h-4 mr-2" />
+                            {(isArtist ? artistProfile.profilePhoto : hostProfile.hostInfo.profilePhoto) ? 'Change Photo' : 'Upload Photo'}
+                          </div>
+                        </label>
                         {(isArtist ? artistProfile.profilePhoto : hostProfile.hostInfo.profilePhoto) && (
                           <Button 
                             variant="outline" 
