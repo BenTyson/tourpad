@@ -41,7 +41,9 @@ import {
   Instagram,
   Youtube,
   Globe,
-  Facebook
+  Facebook,
+  Utensils,
+  Briefcase
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -715,7 +717,7 @@ export default function HostProfilePage() {
         )}
 
         {/* Lodging Information */}
-        {host.hostingCapabilities?.lodgingHosting?.enabled && host.hostingCapabilities?.lodgingHosting?.lodgingDetails && (
+        {host.offersLodging && host.lodgingDetails && (
           <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
             <div className="p-8">
               <div className="flex items-center justify-between mb-6">
@@ -723,178 +725,150 @@ export default function HostProfilePage() {
                   <h2 className="text-2xl font-bold text-neutral-900">
                     Overnight Accommodation
                   </h2>
+                  <p className="text-neutral-600">
+                    {host.lodgingDetails.numberOfRooms || 1} room{(host.lodgingDetails.numberOfRooms || 1) > 1 ? 's' : ''} available for artists with comfortable sleeping arrangements
+                  </p>
                 </div>
                 <Badge variant="default" className="bg-primary-100 text-primary-800">
                   Available
                 </Badge>
               </div>
               
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl p-6 border border-primary-200">
-                  <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-primary-500 rounded-lg flex items-center justify-center mr-4">
-                      <Bed className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <div className="font-semibold text-neutral-900">Room Type</div>
-                      <div className="text-sm text-neutral-600">Sleeping arrangement</div>
-                    </div>
+              {/* Room Details */}
+              {host.lodgingDetails.rooms?.map((room, index) => (
+                <div key={room.id || index} className="mb-8 last:mb-0">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-xl font-semibold text-neutral-900">
+                      Room {index + 1}
+                    </h3>
+                    <Badge variant="outline" className="bg-secondary-50 text-secondary-700">
+                      {room.roomType?.replace('_', ' ') || 'Private room'}
+                    </Badge>
                   </div>
-                  <div className="text-lg font-bold text-primary-700">
-                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.roomType?.replace('_', ' ') || 'Private room'}
-                  </div>
-                  <div className="text-sm text-neutral-600 mt-1">
-                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.bathroomType?.replace('_', ' ') || 'Shared'} bathroom
+                  
+                  <div className="grid md:grid-cols-2 gap-6 mb-6">
+                    <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl p-6 border border-primary-200">
+                      <div className="flex items-center mb-4">
+                        <div className="w-12 h-12 bg-primary-500 rounded-lg flex items-center justify-center mr-4">
+                          <Bed className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <div className="font-semibold text-neutral-900">Room Type & Bathroom</div>
+                          <div className="text-sm text-neutral-600">Sleeping arrangement</div>
+                        </div>
+                      </div>
+                      <div className="text-lg font-bold text-primary-700">
+                        {room.roomType === 'private_bedroom' ? 'Private Bedroom' :
+                         room.roomType === 'shared_room' ? 'Shared Room' :
+                         room.roomType === 'entire_space' ? 'Entire Space' :
+                         'Private room'}
+                      </div>
+                      <div className="text-sm text-neutral-600 mt-1">
+                        {room.bathroomType === 'private' ? 'Private' : 'Shared'} bathroom
+                      </div>
+                    </div>
+                    
+                    <div className="bg-gradient-to-br from-accent-50 to-accent-100 rounded-xl p-6 border border-accent-200">
+                      <div className="flex items-center mb-4">
+                        <div className="w-12 h-12 bg-accent-500 rounded-lg flex items-center justify-center mr-4">
+                          <Bed className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <div className="font-semibold text-neutral-900">Bed Configuration</div>
+                          <div className="text-sm text-neutral-600">Sleeping capacity: {room.maxOccupancy || 2} guest{(room.maxOccupancy || 2) > 1 ? 's' : ''}</div>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        {room.beds?.map((bed, bedIndex) => (
+                          <div key={bedIndex} className="flex items-center justify-between bg-white/50 rounded-lg p-2">
+                            <span className="text-sm font-medium text-accent-900">
+                              {bed.type === 'air_mattress' ? 'Air Mattress' : 
+                               bed.type === 'queen' ? 'Queen Bed' :
+                               bed.type === 'king' ? 'King Bed' :
+                               bed.type === 'full' ? 'Full Bed' :
+                               bed.type === 'twin' ? 'Twin Bed' :
+                               bed.type === 'single' ? 'Single Bed' :
+                               bed.type === 'sofa_bed' ? 'Sofa Bed' :
+                               bed.type?.charAt(0).toUpperCase() + bed.type?.slice(1) || 'Bed'}
+                            </span>
+                            <span className="text-lg font-bold text-accent-700">×{bed.quantity}</span>
+                          </div>
+                        )) || (
+                          <div className="flex items-center justify-between bg-white/50 rounded-lg p-2">
+                            <span className="text-sm font-medium text-accent-900">Queen Bed</span>
+                            <span className="text-lg font-bold text-accent-700">×1</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
-                
-                <div className="bg-gradient-to-br from-secondary-50 to-secondary-100 rounded-xl p-6 border border-secondary-200">
-                  <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-secondary-500 rounded-lg flex items-center justify-center mr-4">
-                      <Users className="w-6 h-6 text-white" />
+              )) || (
+                // Fallback for single room configuration
+                <div className="grid md:grid-cols-2 gap-6 mb-8">
+                  <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl p-6 border border-primary-200">
+                    <div className="flex items-center mb-4">
+                      <div className="w-12 h-12 bg-primary-500 rounded-lg flex items-center justify-center mr-4">
+                        <Bed className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <div className="font-semibold text-neutral-900">Room Type & Bathroom</div>
+                        <div className="text-sm text-neutral-600">Sleeping arrangement</div>
+                      </div>
                     </div>
-                    <div>
-                      <div className="font-semibold text-neutral-900">Capacity</div>
-                      <div className="text-sm text-neutral-600">Maximum guests</div>
+                    <div className="text-lg font-bold text-primary-700">
+                      Private room
+                    </div>
+                    <div className="text-sm text-neutral-600 mt-1">
+                      Shared bathroom
                     </div>
                   </div>
-                  <div className="text-lg font-bold text-secondary-700">
-                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.bedConfiguration?.maxOccupancy || 2} guests
-                  </div>
-                  <div className="text-sm text-neutral-600 mt-1">
-                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.bedConfiguration?.beds?.map(bed => 
-                      `${bed.quantity} ${bed.type?.replace('_', ' ') || 'bed'}`
-                    ).join(', ') || '1 bed'}
+                  
+                  <div className="bg-gradient-to-br from-accent-50 to-accent-100 rounded-xl p-6 border border-accent-200">
+                    <div className="flex items-center mb-4">
+                      <div className="w-12 h-12 bg-accent-500 rounded-lg flex items-center justify-center mr-4">
+                        <Bed className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <div className="font-semibold text-neutral-900">Bed Configuration</div>
+                        <div className="text-sm text-neutral-600">Sleeping capacity: 2 guests</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between bg-white/50 rounded-lg p-2">
+                      <span className="text-sm font-medium text-accent-900">Queen Bed</span>
+                      <span className="text-lg font-bold text-accent-700">×1</span>
+                    </div>
                   </div>
                 </div>
-                
-                <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl p-6 border border-primary-200">
-                  <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-primary-500 rounded-lg flex items-center justify-center mr-4">
-                      <Home className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <div className="font-semibold text-neutral-900">Bathroom</div>
-                      <div className="text-sm text-neutral-600">Bathroom details</div>
-                    </div>
-                  </div>
-                  <div className="text-lg font-bold text-primary-700">
-                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.bathroomType?.replace('_', ' ') || 'Shared'}
-                  </div>
-                  <div className="text-sm text-neutral-600 mt-1">
-                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.bathroomType === 'private' 
-                      ? 'Private bathroom for guests'
-                      : 'Shared with host family'
-                    }
-                  </div>
-                </div>
-              </div>
+              )}
               
               {/* Lodging Amenities */}
               <div className="mb-8">
                 <h3 className="text-lg font-semibold text-neutral-900 mb-4">Lodging Amenities</h3>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {Object.entries({
-                    breakfast: { label: 'Breakfast included', icon: Coffee },
-                    wifi: { label: 'WiFi access', icon: Wifi },
-                    parking: { label: 'Free parking', icon: Car },
-                    laundry: { label: 'Laundry access', icon: Sparkles },
-                    kitchenAccess: { label: 'Kitchen access', icon: Home },
-                    workspace: { label: 'Workspace available', icon: Zap },
-                    linensProvided: { label: 'Linens provided', icon: Bed },
-                    towelsProvided: { label: 'Towels provided', icon: Shield },
-                  }).map(([key, {label, icon: IconComponent}]) => (
-                    <div key={key} className={`flex items-center p-3 rounded-lg border ${
-                      host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities[key as keyof typeof host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities] 
-                        ? 'bg-primary-50 border-primary-200' 
-                        : 'bg-gray-50 border-gray-200'
-                    }`}>
-                      <IconComponent className={`w-5 h-5 mr-3 ${
-                        host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities[key as keyof typeof host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities] 
-                          ? 'text-primary-600' 
-                          : 'text-gray-400'
-                      }`} />
-                      <span className={`text-sm font-medium ${
-                        host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities[key as keyof typeof host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities] 
-                          ? 'text-primary-900' 
-                          : 'text-gray-500'
-                      }`}>
-                        {label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              {/* House Rules */}
-              <div className="mb-8">
-                <h3 className="text-lg font-semibold text-neutral-900 mb-4">House Rules</h3>
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div className={`flex items-center p-4 rounded-lg border ${
-                    host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities?.petFriendly 
-                      ? 'bg-primary-50 border-primary-200' 
-                      : 'bg-red-50 border-red-200'
-                  }`}>
-                    <Heart className={`w-6 h-6 mr-3 ${
-                      host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities?.petFriendly 
-                        ? 'text-primary-600' 
-                        : 'text-red-600'
-                    }`} />
-                    <div>
-                      <div className="font-semibold text-neutral-900">Pets</div>
-                      <div className={`text-sm ${
-                        host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities?.petFriendly 
-                          ? 'text-primary-700' 
-                          : 'text-red-700'
-                      }`}>
-                        {host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities?.petFriendly ? 'Allowed' : 'Not allowed'}
+                  {[
+                    { key: 'breakfast', label: 'Breakfast included', icon: Coffee },
+                    { key: 'wifi', label: 'WiFi available', icon: Wifi },
+                    { key: 'parking', label: 'Free parking', icon: Car },
+                    { key: 'laundry', label: 'Laundry access', icon: Home },
+                    { key: 'kitchenAccess', label: 'Kitchen access', icon: Utensils },
+                    { key: 'workspace', label: 'Workspace available', icon: Briefcase },
+                    { key: 'linensProvided', label: 'Linens provided', icon: Bed },
+                    { key: 'towelsProvided', label: 'Towels provided', icon: Shield },
+                  ].filter(({ key }) => {
+                    const isAvailable = host.lodgingDetails?.amenities?.[key as keyof typeof host.lodgingDetails.amenities] || false;
+                    return isAvailable;
+                  }).map(({ key, label, icon: IconComponent }) => {
+                    return (
+                      <div key={key} className="flex items-center p-3 rounded-lg border bg-primary-50 border-primary-200">
+                        <IconComponent className="w-5 h-5 mr-3 text-primary-600" />
+                        <span className="text-sm font-medium text-primary-900">
+                          {label}
+                        </span>
+                        <CheckCircle className="w-4 h-4 ml-auto text-primary-600" />
                       </div>
-                    </div>
-                  </div>
-                  
-                  <div className={`flex items-center p-4 rounded-lg border ${
-                    host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.smokingPolicy !== 'no_smoking' 
-                      ? 'bg-primary-50 border-primary-200' 
-                      : 'bg-red-50 border-red-200'
-                  }`}>
-                    <Zap className={`w-6 h-6 mr-3 ${
-                      host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.smokingPolicy !== 'no_smoking' 
-                        ? 'text-primary-600' 
-                        : 'text-red-600'
-                    }`} />
-                    <div>
-                      <div className="font-semibold text-neutral-900">Smoking</div>
-                      <div className={`text-sm ${
-                        host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.smokingPolicy !== 'no_smoking' 
-                          ? 'text-primary-700' 
-                          : 'text-red-700'
-                      }`}>
-                        {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.smokingPolicy !== 'no_smoking' ? 'Allowed' : 'Not allowed'}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className={`flex items-center p-4 rounded-lg border ${
-                    host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.alcoholPolicy !== 'no_alcohol' 
-                      ? 'bg-primary-50 border-primary-200' 
-                      : 'bg-red-50 border-red-200'
-                  }`}>
-                    <Coffee className={`w-6 h-6 mr-3 ${
-                      host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.alcoholPolicy !== 'no_alcohol' 
-                        ? 'text-primary-600' 
-                        : 'text-red-600'
-                    }`} />
-                    <div>
-                      <div className="font-semibold text-neutral-900">Alcohol</div>
-                      <div className={`text-sm ${
-                        host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.alcoholPolicy !== 'no_alcohol' 
-                          ? 'text-primary-700' 
-                          : 'text-red-700'
-                      }`}>
-                        {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.alcoholPolicy !== 'no_alcohol' ? 'Allowed' : 'Not allowed'}
-                      </div>
-                    </div>
-                  </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>

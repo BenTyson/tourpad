@@ -23,7 +23,7 @@ This project uses the Claude Code modular framework for optimized development wo
 
 ## Methodology
 - Development must follow the TDD (Test-Driven Development) methodology.
-- All implementation must strictly follow the steps outlined in PLAN.md.
+- All implementation must strictly follow the steps outlined in PROJECT_STATUS.md.
 - Use modular commands for consistent workflows and token optimization.
 
 ## Tech Stack Constraints

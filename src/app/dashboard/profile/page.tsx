@@ -2715,7 +2715,9 @@ export default function ProfilePage() {
                         { key: 'parking', label: 'Free parking', icon: Car },
                         { key: 'laundry', label: 'Laundry access', icon: Home },
                         { key: 'kitchenAccess', label: 'Kitchen access', icon: Utensils },
-                        { key: 'workspace', label: 'Workspace available', icon: Briefcase }
+                        { key: 'workspace', label: 'Workspace available', icon: Briefcase },
+                        { key: 'linensProvided', label: 'Linens provided', icon: Home },
+                        { key: 'towelsProvided', label: 'Towels provided', icon: Home }
                       ].map(({ key, label, icon: Icon }) => (
                         <label key={key} className="flex items-center">
                           <input
