@@ -54,6 +54,8 @@ interface HostData {
   venueType: string;
   indoorCapacity?: number;
   outdoorCapacity?: number;
+  typicalShowLength?: number;
+  preferredDays?: string[];
   rating: number;
   reviewCount: number;
   housePhotos: Array<{
@@ -406,8 +408,10 @@ export default function HostProfilePage() {
                     <div className="text-sm text-neutral-600">Typical duration</div>
                   </div>
                 </div>
-                <div className="text-lg font-bold text-secondary-700">{host.showSpecs.showDurationMins} minutes</div>
-                <div className="text-sm text-neutral-600 mt-1">{host.showSpecs.showFormat}</div>
+                <div className="text-lg font-bold text-secondary-700">
+                  {host.typicalShowLength || host.showSpecs.showDurationMins} minutes
+                </div>
+                <div className="text-sm text-neutral-600 mt-1">Typical performance length</div>
               </div>
               
               <div className="group bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-xl p-6 border border-neutral-200 hover:shadow-md transition-all duration-300">
@@ -420,8 +424,13 @@ export default function HostProfilePage() {
                     <div className="text-sm text-neutral-600">Preferred days</div>
                   </div>
                 </div>
-                <div className="text-lg font-bold text-neutral-700">{host.showSpecs.daysAvailable.join(', ')}</div>
-                <div className="text-sm text-neutral-600 mt-1">{host.showSpecs.estimatedShowsPerYear} shows/year</div>
+                <div className="text-lg font-bold text-neutral-700">
+                  {host.preferredDays && host.preferredDays.length > 0 
+                    ? host.preferredDays.join(', ')
+                    : host.showSpecs.daysAvailable.join(', ')
+                  }
+                </div>
+                <div className="text-sm text-neutral-600 mt-1">Best days for concerts</div>
               </div>
             </div>
           </div>

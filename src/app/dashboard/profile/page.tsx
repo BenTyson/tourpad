@@ -233,6 +233,8 @@ export default function ProfilePage() {
     indoorCapacity: 20,
     outdoorCapacity: 0,
     amenities: [] as string[],
+    typicalShowLength: 90, // minutes
+    preferredDays: [] as string[], // days of week
     hostInfo: {
       hostName: '', // This is the personal host name like "Mike Chen"
       aboutMe: '', // This is about the host as a person
@@ -301,6 +303,8 @@ export default function ProfilePage() {
                 indoorCapacity: data.indoorCapacity || 20,
                 outdoorCapacity: data.outdoorCapacity || 0,
                 amenities: data.amenities || [],
+                typicalShowLength: data.typicalShowLength || 90,
+                preferredDays: data.preferredDays || data.preferredGenres || [],
                 hostInfo: {
                   hostName: data.hostInfo?.hostName || '',
                   aboutMe: data.hostInfo?.aboutMe || '',
@@ -1251,6 +1255,61 @@ export default function ProfilePage() {
                           max="500"
                         />
                       </div>
+                    </div>
+
+                    {/* Show Length */}
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">Typical Show Length</label>
+                      <div className="flex items-center space-x-2">
+                        <Input
+                          type="number"
+                          value={hostProfile.typicalShowLength}
+                          onChange={(e) => updateHostProfile({ typicalShowLength: parseInt(e.target.value) || 90 })}
+                          min="30"
+                          max="300"
+                          className="w-24"
+                        />
+                        <span className="text-sm text-neutral-600">minutes</span>
+                      </div>
+                      <p className="text-xs text-neutral-500 mt-1">How long do shows typically last at your venue?</p>
+                    </div>
+
+                    {/* Preferred Days */}
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">Preferred Days for Concerts</label>
+                      <div className="space-y-3">
+                        <div className="flex flex-wrap gap-2">
+                          {hostProfile.preferredDays.map(day => (
+                            <Badge key={day} variant="default" className="flex items-center">
+                              {day}
+                              <button
+                                onClick={() => updateHostProfile({ 
+                                  preferredDays: hostProfile.preferredDays.filter(d => d !== day) 
+                                })}
+                                className="ml-1 text-xs hover:text-red-600"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </Badge>
+                          ))}
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+                            .filter(day => !hostProfile.preferredDays.includes(day))
+                            .map(day => (
+                              <button
+                                key={day}
+                                onClick={() => updateHostProfile({ 
+                                  preferredDays: [...hostProfile.preferredDays, day] 
+                                })}
+                                className="px-3 py-1 text-xs bg-neutral-100 hover:bg-neutral-200 rounded-full transition-colors"
+                              >
+                                + {day}
+                              </button>
+                            ))}
+                        </div>
+                      </div>
+                      <p className="text-xs text-neutral-500 mt-1">Which days of the week work best for hosting concerts?</p>
                     </div>
 
                     {/* Amenities */}
