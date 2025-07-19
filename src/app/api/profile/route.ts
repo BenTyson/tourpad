@@ -40,7 +40,7 @@ export async function GET() {
     let profileData: any = {
       bandName: user.name,
       hostName: user.name,
-      bio: user.profile?.bio || user.artist?.bio || user.host?.bio || '',
+      bio: user.profile?.bio || user.artist?.stageName || user.host?.venueDescription || '',
       location: user.profile?.location || '',
       city: user.profile?.location?.split(',')[0]?.trim() || '',
       state: user.profile?.location?.split(',')[1]?.trim() || '',
@@ -51,7 +51,7 @@ export async function GET() {
         ...profileData,
         genres: user.artist.genres || [],
         instruments: [], // Will need to add this field to schema later
-        website: user.profile?.websiteUrl || user.profile?.socialLinks?.website || '',
+        website: user.profile?.websiteUrl || (user.profile?.socialLinks as any)?.website || '',
         socialLinks: user.profile?.socialLinks || {},
         experienceLevel: 'intermediate', // Will need to add this field to schema later
         yearsActive: 1, // Will need to add this field to schema later
@@ -110,7 +110,7 @@ export async function GET() {
         houseRules: user.host.houseRules || '',
         offersLodging: user.host.offersLodging || false,
         lodgingDetails: user.host.lodgingDetails || null,
-        website: user.profile?.websiteUrl || user.profile?.socialLinks?.website || '',
+        website: user.profile?.websiteUrl || (user.profile?.socialLinks as any)?.website || '',
         socialLinks: user.profile?.socialLinks || {},
         profilePhoto: user.profile?.profileImageUrl || '',
         // Include hostInfo for the personal host information
@@ -273,7 +273,7 @@ export async function PUT(request: NextRequest) {
           // Create new band members
           if (data.bandMembers.length > 0) {
             await prisma.bandMember.createMany({
-              data: data.bandMembers.map((member, index) => ({
+              data: data.bandMembers.map((member: any, index: number) => ({
                 artistId: artist.id,
                 name: member.name || '',
                 instrument: member.instrument || '',
@@ -300,7 +300,7 @@ export async function PUT(request: NextRequest) {
           if (data.photos.length > 0) {
             console.log('Creating photos for artist:', artist.id);
             await prisma.artistMedia.createMany({
-              data: data.photos.map((photo, index) => ({
+              data: data.photos.map((photo: any, index: number) => ({
                 artistId: artist.id,
                 mediaType: 'PHOTO',
                 fileUrl: photo.fileUrl,
@@ -369,7 +369,7 @@ export async function PUT(request: NextRequest) {
           if (data.photos.length > 0) {
             console.log('Creating photos for host:', host.id);
             await prisma.hostMedia.createMany({
-              data: data.photos.map((photo, index) => ({
+              data: data.photos.map((photo: any, index: number) => ({
                 hostId: host.id,
                 mediaType: 'PHOTO',
                 fileUrl: photo.fileUrl,

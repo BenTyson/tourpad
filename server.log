@@ -8,22 +8,47 @@
    - Environments: .env.local, .env
 
  ✓ Starting...
- ✓ Ready in 1041ms
- ✓ Compiled /api/auth/[...nextauth] in 471ms (523 modules)
+ ✓ Ready in 1373ms
+ ✓ Compiled /middleware in 192ms (265 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 586ms (833 modules)
+ GET / 200 in 829ms
+ ✓ Compiled /dashboard in 280ms (888 modules)
+ GET /dashboard 200 in 439ms
+ GET /dashboard 200 in 86ms
+ ✓ Compiled /_not-found in 195ms (892 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 281ms
+ ✓ Compiled /api/auth/[...nextauth] in 132ms (530 modules)
+ ✓ Compiled in 125ms (379 modules)
+ GET /favicon.ico 200 in 452ms
 [33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 907ms
- ✓ Compiled /api/profile in 150ms (525 modules)
+ GET /api/auth/session 200 in 855ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 13ms
+ ✓ Compiled /api/stats in 158ms (1068 modules)
 [33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/profile 401 in 217ms
- ✓ Compiled /middleware in 200ms (265 modules)
- ✓ Compiled /dashboard/profile in 367ms (1006 modules)
- GET /dashboard/profile 200 in 540ms
- ✓ Compiled /favicon.ico in 106ms (658 modules)
- GET /favicon.ico 200 in 181ms
+ GET /api/stats 200 in 261ms
+ GET /api/stats 200 in 8ms
+ ✓ Compiled /artists in 470ms (1095 modules)
+ GET /artists 200 in 528ms
+ ✓ Compiled /hosts in 220ms (1120 modules)
+ GET /hosts 200 in 266ms
+ GET /artists 200 in 26ms
+ GET /dashboard 200 in 27ms
 [33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (128kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
- GET /api/auth/session 200 in 246ms
- GET /api/auth/session 200 in 30ms
- GET /api/profile 200 in 69ms
- GET /api/profile 200 in 8ms
-[?25h
+ GET /api/stats 200 in 74ms
+ GET /api/stats 200 in 7ms
+ GET /dashboard 200 in 130ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 35ms
+ GET /favicon.ico 200 in 22ms
+ GET /api/auth/session 200 in 16ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/auth/session 200 in 12ms
+ GET /api/stats 200 in 14ms
+ GET /api/stats 200 in 6ms
+ ✓ Compiled /dashboard/profile in 283ms (1137 modules)
+ GET /dashboard/profile 200 in 320ms
+ ✓ Compiled /api/profile in 189ms (1139 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/profile 200 in 227ms
+ GET /api/profile 200 in 7ms

@@ -1291,9 +1291,9 @@ export default function ProfilePage() {
                 <CardContent>
                   <div className="flex items-center space-x-6">
                     <div className="w-32 h-32 bg-neutral-100 rounded-lg flex items-center justify-center overflow-hidden">
-                      {(isArtist ? artistProfile.profilePhoto : hostProfile.profilePhoto) ? (
+                      {(isArtist ? artistProfile.profilePhoto : hostProfile.hostInfo.profilePhoto) ? (
                         <img 
-                          src={isArtist ? artistProfile.profilePhoto : hostProfile.profilePhoto} 
+                          src={isArtist ? artistProfile.profilePhoto : hostProfile.hostInfo.profilePhoto} 
                           alt="Profile" 
                           className="w-32 h-32 object-cover"
                         />
@@ -1340,6 +1340,7 @@ export default function ProfilePage() {
                                   updateArtistProfile({ profilePhoto: data.url });
                                 } else {
                                   updateHostProfile({ 
+                                    profilePhoto: data.url,
                                     hostInfo: { ...hostProfile.hostInfo, profilePhoto: data.url } 
                                   });
                                 }
@@ -1360,9 +1361,9 @@ export default function ProfilePage() {
                           document.getElementById('profilePhotoInput')?.click();
                         }}>
                           <Camera className="w-4 h-4 mr-2" />
-                          {(isArtist ? artistProfile.profilePhoto : hostProfile.profilePhoto) ? 'Change Photo' : 'Upload Photo'}
+                          {(isArtist ? artistProfile.profilePhoto : hostProfile.hostInfo.profilePhoto) ? 'Change Photo' : 'Upload Photo'}
                         </Button>
-                        {(isArtist ? artistProfile.profilePhoto : hostProfile.profilePhoto) && (
+                        {(isArtist ? artistProfile.profilePhoto : hostProfile.hostInfo.profilePhoto) && (
                           <Button 
                             variant="outline" 
                             size="sm"
@@ -1370,7 +1371,10 @@ export default function ProfilePage() {
                               if (isArtist) {
                                 updateArtistProfile({ profilePhoto: '' });
                               } else {
-                                updateHostProfile({ profilePhoto: '' });
+                                updateHostProfile({ 
+                                  profilePhoto: '',
+                                  hostInfo: { ...hostProfile.hostInfo, profilePhoto: '' }
+                                });
                               }
                             }}
                             className="text-red-600 hover:text-red-700"
