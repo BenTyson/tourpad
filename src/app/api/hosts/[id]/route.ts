@@ -4,9 +4,10 @@ import { auth } from '@/lib/auth';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     const hostId = params.id;
 
     // Fetch host with all related data
@@ -184,7 +185,7 @@ export async function GET(
 // Update host profile
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
@@ -195,6 +196,7 @@ export async function PUT(
       );
     }
 
+    const params = await context.params;
     const hostId = params.id;
     const data = await request.json();
 

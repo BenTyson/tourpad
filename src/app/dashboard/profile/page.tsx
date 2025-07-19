@@ -18,6 +18,7 @@ import {
   Star,
   Eye,
   Edit,
+  Home,
   Users
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -221,6 +222,7 @@ export default function ProfilePage() {
     state: '',
     zip: '',
     profilePhoto: '',
+    venuePhoto: '', // Main venue photo
     venueType: 'home' as 'home' | 'studio' | 'backyard' | 'loft' | 'other',
     capacity: 20,
     amenities: [] as string[],
@@ -287,6 +289,7 @@ export default function ProfilePage() {
                 state: data.state || '',
                 zip: '',
                 profilePhoto: data.profilePhoto || '',
+                venuePhoto: data.venuePhoto || '',
                 venueType: data.venueType || 'home',
                 capacity: 20,
                 amenities: [],
@@ -713,7 +716,7 @@ export default function ProfilePage() {
               {/* Basic Information */}
               <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
                 <CardHeader>
-                  <h2 className="text-xl font-semibold text-neutral-900">Basic Information</h2>
+                  <h2 className="text-xl font-semibold text-neutral-900">Venue Basics</h2>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <Input
@@ -778,6 +781,81 @@ export default function ProfilePage() {
                       />
                     )}
                   </div>
+                  
+                  {/* Venue Profile Photo */}
+                  {!isArtist && (
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">Venue Profile Photo</label>
+                      <div className="flex items-center space-x-4">
+                        <div className="w-20 h-20 bg-neutral-100 rounded-lg overflow-hidden flex items-center justify-center">
+                          {hostProfile.venuePhoto ? (
+                            <img 
+                              src={hostProfile.venuePhoto} 
+                              alt="Venue profile" 
+                              className="w-20 h-20 object-cover"
+                            />
+                          ) : (
+                            <Home className="w-10 h-10 text-neutral-400" />
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={async (e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                // Check file size (max 5MB)
+                                if (file.size > 5 * 1024 * 1024) {
+                                  alert('Image file is too large. Please choose an image under 5MB.');
+                                  return;
+                                }
+                                
+                                try {
+                                  // Create FormData
+                                  const formData = new FormData();
+                                  formData.append('file', file);
+                                  formData.append('type', 'venue');
+                                  
+                                  // Upload file
+                                  const response = await fetch('/api/upload', {
+                                    method: 'POST',
+                                    body: formData
+                                  });
+                                  
+                                  if (!response.ok) {
+                                    const error = await response.json();
+                                    alert(error.error || 'Failed to upload image');
+                                    return;
+                                  }
+                                  
+                                  const result = await response.json();
+                                  
+                                  // Update profile with new photo URL
+                                  updateHostProfile({ venuePhoto: result.url });
+                                  
+                                } catch (error) {
+                                  console.error('Upload error:', error);
+                                  alert('Failed to upload image. Please try again.');
+                                }
+                              }
+                            }}
+                            id="venuePhotoInput"
+                            className="hidden"
+                          />
+                          <label htmlFor="venuePhotoInput" className="cursor-pointer">
+                            <div className="inline-flex items-center px-3 py-1.5 text-sm border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 rounded-md mb-2">
+                              <Camera className="w-4 h-4 mr-2" />
+                              {hostProfile.venuePhoto ? 'Change Photo' : 'Upload Photo'}
+                            </div>
+                          </label>
+                          <p className="text-xs text-neutral-500">
+                            A main photo of your venue space (JPG, PNG up to 5MB)
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 

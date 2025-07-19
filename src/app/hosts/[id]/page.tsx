@@ -440,25 +440,25 @@ export default function HostProfilePage() {
               }).map(([key, {label, icon: IconComponent}]) => (
                 <div key={key} className={`flex items-center p-4 rounded-lg border ${
                   host.amenities[key as keyof typeof host.amenities] 
-                    ? 'bg-green-50 border-green-200' 
+                    ? 'bg-primary-50 border-primary-200' 
                     : 'bg-gray-50 border-gray-200'
                 }`}>
                   <IconComponent className={`w-5 h-5 mr-3 ${
                     host.amenities[key as keyof typeof host.amenities] 
-                      ? 'text-green-600' 
+                      ? 'text-primary-600' 
                       : 'text-gray-400'
                   }`} />
                   <div className="flex-1">
                     <span className={`font-medium ${
                       host.amenities[key as keyof typeof host.amenities] 
-                        ? 'text-green-900' 
+                        ? 'text-primary-900' 
                         : 'text-gray-500 line-through'
                     }`}>
                       {label}
                     </span>
                   </div>
                   {host.amenities[key as keyof typeof host.amenities] && (
-                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <CheckCircle className="w-5 h-5 text-primary-600" />
                   )}
                 </div>
               ))}
@@ -546,27 +546,22 @@ export default function HostProfilePage() {
             <div className="p-8">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-neutral-900 mb-2">
-                    Sound System
+                  <h2 className="text-2xl font-bold text-neutral-900 mb-1">
+                    Sound System & Equipment
                   </h2>
-                  <p className="text-neutral-600">Professional audio equipment available</p>
+                  <p className="text-neutral-600">available to performers</p>
                 </div>
-                <Badge variant="success" className="bg-green-100 text-green-800">
+                <Badge variant="default" className="bg-primary-100 text-primary-800">
                   Available
                 </Badge>
               </div>
               
-              <div className="mb-6">
-                <p className="text-neutral-700 leading-relaxed">
-                  {host.soundSystem.description}
-                </p>
-              </div>
               
               <div className="grid md:grid-cols-2 gap-6 mb-8">
                 <div className="space-y-6">
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
+                  <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl p-6 border border-primary-200">
                     <div className="flex items-center mb-4">
-                      <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mr-4">
+                      <div className="w-12 h-12 bg-primary-500 rounded-lg flex items-center justify-center mr-4">
                         <Volume2 className="w-6 h-6 text-white" />
                       </div>
                       <div>
@@ -579,9 +574,9 @@ export default function HostProfilePage() {
                     </div>
                   </div>
                   
-                  <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
+                  <div className="bg-gradient-to-br from-secondary-50 to-secondary-100 rounded-xl p-6 border border-secondary-200">
                     <div className="flex items-center mb-4">
-                      <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mr-4">
+                      <div className="w-12 h-12 bg-secondary-500 rounded-lg flex items-center justify-center mr-4">
                         <Volume2 className="w-6 h-6 text-white" />
                       </div>
                       <div>
@@ -596,9 +591,9 @@ export default function HostProfilePage() {
                 </div>
                 
                 <div className="space-y-6">
-                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-200">
+                  <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl p-6 border border-primary-200">
                     <div className="flex items-center mb-4">
-                      <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mr-4">
+                      <div className="w-12 h-12 bg-primary-500 rounded-lg flex items-center justify-center mr-4">
                         <Volume2 className="w-6 h-6 text-white" />
                       </div>
                       <div>
@@ -612,9 +607,9 @@ export default function HostProfilePage() {
                   </div>
                   
                   {host.soundSystem.equipment.instruments && (
-                    <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl p-6 border border-amber-200">
+                    <div className="bg-gradient-to-br from-secondary-50 to-secondary-100 rounded-xl p-6 border border-secondary-200">
                       <div className="flex items-center mb-4">
-                        <div className="w-12 h-12 bg-amber-500 rounded-lg flex items-center justify-center mr-4">
+                        <div className="w-12 h-12 bg-secondary-500 rounded-lg flex items-center justify-center mr-4">
                           <Volume2 className="w-6 h-6 text-white" />
                         </div>
                         <div>
@@ -672,20 +667,19 @@ export default function HostProfilePage() {
             <div className="p-8">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-neutral-900 mb-2">
+                  <h2 className="text-2xl font-bold text-neutral-900">
                     Overnight Accommodation
                   </h2>
-                  <p className="text-neutral-600">Stay comfortably during your visit</p>
                 </div>
-                <Badge variant="success" className="bg-green-100 text-green-800">
+                <Badge variant="default" className="bg-primary-100 text-primary-800">
                   Available
                 </Badge>
               </div>
               
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
+                <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl p-6 border border-primary-200">
                   <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mr-4">
+                    <div className="w-12 h-12 bg-primary-500 rounded-lg flex items-center justify-center mr-4">
                       <Bed className="w-6 h-6 text-white" />
                     </div>
                     <div>
@@ -693,7 +687,7 @@ export default function HostProfilePage() {
                       <div className="text-sm text-neutral-600">Sleeping arrangement</div>
                     </div>
                   </div>
-                  <div className="text-lg font-bold text-blue-700">
+                  <div className="text-lg font-bold text-primary-700">
                     {host.hostingCapabilities.lodgingHosting.lodgingDetails.roomType?.replace('_', ' ') || 'Private room'}
                   </div>
                   <div className="text-sm text-neutral-600 mt-1">
@@ -701,9 +695,9 @@ export default function HostProfilePage() {
                   </div>
                 </div>
                 
-                <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-200">
+                <div className="bg-gradient-to-br from-secondary-50 to-secondary-100 rounded-xl p-6 border border-secondary-200">
                   <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mr-4">
+                    <div className="w-12 h-12 bg-secondary-500 rounded-lg flex items-center justify-center mr-4">
                       <Users className="w-6 h-6 text-white" />
                     </div>
                     <div>
@@ -711,7 +705,7 @@ export default function HostProfilePage() {
                       <div className="text-sm text-neutral-600">Maximum guests</div>
                     </div>
                   </div>
-                  <div className="text-lg font-bold text-green-700">
+                  <div className="text-lg font-bold text-secondary-700">
                     {host.hostingCapabilities.lodgingHosting.lodgingDetails.bedConfiguration?.maxOccupancy || 2} guests
                   </div>
                   <div className="text-sm text-neutral-600 mt-1">
@@ -721,22 +715,23 @@ export default function HostProfilePage() {
                   </div>
                 </div>
                 
-                <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
+                <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl p-6 border border-primary-200">
                   <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mr-4">
-                      <DollarSign className="w-6 h-6 text-white" />
+                    <div className="w-12 h-12 bg-primary-500 rounded-lg flex items-center justify-center mr-4">
+                      <Home className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <div className="font-semibold text-neutral-900">Pricing</div>
-                      <div className="text-sm text-neutral-600">Per night</div>
+                      <div className="font-semibold text-neutral-900">Bathroom</div>
+                      <div className="text-sm text-neutral-600">Bathroom details</div>
                     </div>
                   </div>
-                  <div className="text-lg font-bold text-purple-700">
-                    ${host.hostingCapabilities.lodgingHosting.lodgingDetails.pricing?.baseRate || 40}
+                  <div className="text-lg font-bold text-primary-700">
+                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.bathroomType?.replace('_', ' ') || 'Shared'}
                   </div>
                   <div className="text-sm text-neutral-600 mt-1">
-                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.pricing?.additionalGuestFee && 
-                      `+$${host.hostingCapabilities.lodgingHosting.lodgingDetails.pricing.additionalGuestFee} per extra guest`
+                    {host.hostingCapabilities.lodgingHosting.lodgingDetails.bathroomType === 'private' 
+                      ? 'Private bathroom for guests'
+                      : 'Shared with host family'
                     }
                   </div>
                 </div>
@@ -754,21 +749,21 @@ export default function HostProfilePage() {
                     kitchenAccess: { label: 'Kitchen access', icon: Home },
                     workspace: { label: 'Workspace available', icon: Zap },
                     linensProvided: { label: 'Linens provided', icon: Bed },
-                    towelsProvided: { label: 'Towels provided', icon: Shield }
+                    towelsProvided: { label: 'Towels provided', icon: Shield },
                   }).map(([key, {label, icon: IconComponent}]) => (
                     <div key={key} className={`flex items-center p-3 rounded-lg border ${
                       host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities[key as keyof typeof host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities] 
-                        ? 'bg-green-50 border-green-200' 
+                        ? 'bg-primary-50 border-primary-200' 
                         : 'bg-gray-50 border-gray-200'
                     }`}>
                       <IconComponent className={`w-5 h-5 mr-3 ${
                         host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities[key as keyof typeof host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities] 
-                          ? 'text-green-600' 
+                          ? 'text-primary-600' 
                           : 'text-gray-400'
                       }`} />
                       <span className={`text-sm font-medium ${
                         host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities[key as keyof typeof host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities] 
-                          ? 'text-green-900' 
+                          ? 'text-primary-900' 
                           : 'text-gray-500'
                       }`}>
                         {label}
@@ -779,26 +774,73 @@ export default function HostProfilePage() {
               </div>
               
               {/* House Rules */}
-              <div className="bg-gray-50 rounded-xl p-6">
+              <div className="mb-8">
                 <h3 className="text-lg font-semibold text-neutral-900 mb-4">House Rules</h3>
-                <div className="grid md:grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <strong>Check-in:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.checkInTime || '3:00 PM'}
+                <div className="grid md:grid-cols-3 gap-4">
+                  <div className={`flex items-center p-4 rounded-lg border ${
+                    host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities?.petFriendly 
+                      ? 'bg-primary-50 border-primary-200' 
+                      : 'bg-red-50 border-red-200'
+                  }`}>
+                    <Heart className={`w-6 h-6 mr-3 ${
+                      host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities?.petFriendly 
+                        ? 'text-primary-600' 
+                        : 'text-red-600'
+                    }`} />
+                    <div>
+                      <div className="font-semibold text-neutral-900">Pets</div>
+                      <div className={`text-sm ${
+                        host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities?.petFriendly 
+                          ? 'text-primary-700' 
+                          : 'text-red-700'
+                      }`}>
+                        {host.hostingCapabilities.lodgingHosting.lodgingDetails.amenities?.petFriendly ? 'Allowed' : 'Not allowed'}
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <strong>Check-out:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.checkOutTime || '11:00 AM'}
+                  
+                  <div className={`flex items-center p-4 rounded-lg border ${
+                    host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.smokingPolicy !== 'no_smoking' 
+                      ? 'bg-primary-50 border-primary-200' 
+                      : 'bg-red-50 border-red-200'
+                  }`}>
+                    <Zap className={`w-6 h-6 mr-3 ${
+                      host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.smokingPolicy !== 'no_smoking' 
+                        ? 'text-primary-600' 
+                        : 'text-red-600'
+                    }`} />
+                    <div>
+                      <div className="font-semibold text-neutral-900">Smoking</div>
+                      <div className={`text-sm ${
+                        host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.smokingPolicy !== 'no_smoking' 
+                          ? 'text-primary-700' 
+                          : 'text-red-700'
+                      }`}>
+                        {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.smokingPolicy !== 'no_smoking' ? 'Allowed' : 'Not allowed'}
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <strong>Quiet hours:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.quietHours?.start || '10:00 PM'} - {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.quietHours?.end || '8:00 AM'}
-                  </div>
-                  <div>
-                    <strong>Smoking:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.smokingPolicy?.replace('_', ' ') || 'No smoking'}
-                  </div>
-                  <div>
-                    <strong>Pets:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.petPolicy?.replace('_', ' ') || 'No pets'}
-                  </div>
-                  <div>
-                    <strong>Alcohol:</strong> {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.alcoholPolicy?.replace('_', ' ') || 'Allowed'}
+                  
+                  <div className={`flex items-center p-4 rounded-lg border ${
+                    host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.alcoholPolicy !== 'no_alcohol' 
+                      ? 'bg-primary-50 border-primary-200' 
+                      : 'bg-red-50 border-red-200'
+                  }`}>
+                    <Coffee className={`w-6 h-6 mr-3 ${
+                      host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.alcoholPolicy !== 'no_alcohol' 
+                        ? 'text-primary-600' 
+                        : 'text-red-600'
+                    }`} />
+                    <div>
+                      <div className="font-semibold text-neutral-900">Alcohol</div>
+                      <div className={`text-sm ${
+                        host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.alcoholPolicy !== 'no_alcohol' 
+                          ? 'text-primary-700' 
+                          : 'text-red-700'
+                      }`}>
+                        {host.hostingCapabilities.lodgingHosting.lodgingDetails.houseRules?.alcoholPolicy !== 'no_alcohol' ? 'Allowed' : 'Not allowed'}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

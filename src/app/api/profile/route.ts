@@ -113,6 +113,7 @@ export async function GET() {
         website: user.profile?.websiteUrl || (user.profile?.socialLinks as any)?.website || '',
         socialLinks: user.profile?.socialLinks || {},
         profilePhoto: user.profile?.profileImageUrl || '',
+        venuePhoto: user.host.venuePhotoUrl || '',
         // Include hostInfo for the personal host information
         hostInfo: {
           hostName: user.name,
@@ -350,6 +351,7 @@ export async function PUT(request: NextRequest) {
             houseRules: data.houseRules || undefined,
             offersLodging: data.offersLodging !== undefined ? data.offersLodging : undefined,
             lodgingDetails: data.lodgingDetails || undefined,
+            venuePhotoUrl: data.venuePhoto || undefined,
           }
         });
 

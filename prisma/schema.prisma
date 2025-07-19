@@ -141,6 +141,7 @@ model Host {
   houseRules             String?
   offersLodging          Boolean     @default(false)
   lodgingDetails         Json?
+  venuePhotoUrl          String?
   applicationSubmittedAt DateTime?
   approvedAt             DateTime?
   approvedByUserId       String?

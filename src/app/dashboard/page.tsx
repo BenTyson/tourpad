@@ -43,6 +43,7 @@ export default function DashboardPage() {
     totalShows: 0,
     profileViews: 0
   });
+  const [userProfileId, setUserProfileId] = useState<string | null>(null);
   
   // Fetch user stats
   useEffect(() => {
@@ -56,6 +57,22 @@ export default function DashboardPage() {
         })
         .catch(err => {
           console.error('Error fetching stats:', err);
+        });
+    }
+  }, [session?.user]);
+
+  // Fetch user profile ID (host ID or artist ID)
+  useEffect(() => {
+    if (session?.user) {
+      fetch('/api/user/profile-id')
+        .then(res => res.json())
+        .then(data => {
+          if (data.profileId) {
+            setUserProfileId(data.profileId);
+          }
+        })
+        .catch(err => {
+          console.error('Error fetching profile ID:', err);
         });
     }
   }, [session?.user]);
@@ -329,7 +346,7 @@ export default function DashboardPage() {
                     </Link>
 
                     {/* Secondary Actions */}
-                    <Link href={userRole === 'fan' ? '/dashboard/profile' : userRole === 'host' ? '/hosts/cmd8zfdyf000aluf9h4l2k90w' : `/${userRole}s/${selectedUserId}`} target="_blank">
+                    <Link href={userRole === 'fan' ? '/dashboard/profile' : userRole === 'host' ? `/hosts/${userProfileId}` : `/${userRole}s/${userProfileId}`} target="_blank">
                       <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
                         <div className="flex items-center">
                           <div className="flex-shrink-0">
