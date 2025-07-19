@@ -99,7 +99,7 @@ export default function BookingDetailPage() {
       alert('Please provide a reason for declining');
       return;
     }
-    setCurrentStatus('declined');
+    setCurrentStatus('requested');
     setShowDeclineModal(false);
     // TODO: Send to backend, notify artist with reason
     console.log('Booking declined:', bookingId, 'Reason:', declineReason);
@@ -115,7 +115,7 @@ export default function BookingDetailPage() {
       alert('Please provide a reason for requesting cancellation');
       return;
     }
-    setCurrentStatus('cancellation_requested');
+    setCurrentStatus('pending');
     setShowCancellationModal(false);
     // TODO: Send to backend, notify other party
     console.log('Cancellation requested:', bookingId, 'Reason:', cancellationReason);

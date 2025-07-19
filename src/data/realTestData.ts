@@ -1331,7 +1331,7 @@ export const testConcerts: Concert[] = [
     capacity: 30,
     currentReservations: 25,
     ticketPrice: 15,
-    status: 'past',
+    status: 'completed',
     attendees: ['fan1'],
     location: {
       city: 'Austin',
@@ -1359,7 +1359,7 @@ export const testConcerts: Concert[] = [
     capacity: 60,
     currentReservations: 45,
     ticketPrice: 20,
-    status: 'past',
+    status: 'completed',
     attendees: ['fan1'],
     location: {
       city: 'Nashville',
@@ -1387,7 +1387,7 @@ export const testConcerts: Concert[] = [
     capacity: 20,
     currentReservations: 15,
     ticketPrice: 12,
-    status: 'past',
+    status: 'completed',
     attendees: ['fan1'],
     location: {
       city: 'Portland',
@@ -1667,7 +1667,7 @@ export const testConcerts: Concert[] = [
     capacity: 60,
     currentReservations: 50,
     ticketPrice: 25,
-    status: 'past',
+    status: 'completed',
     attendees: ['fan7', 'fan9'],
     location: {
       city: 'Sedona',
@@ -1695,7 +1695,7 @@ export const testConcerts: Concert[] = [
     capacity: 60,
     currentReservations: 55,
     ticketPrice: 20,
-    status: 'past',
+    status: 'completed',
     attendees: ['fan6'],
     location: {
       city: 'Nashville',
@@ -1723,7 +1723,7 @@ export const testConcerts: Concert[] = [
     capacity: 30,
     currentReservations: 30,
     ticketPrice: 25,
-    status: 'past',
+    status: 'completed',
     attendees: ['fan4', 'fan8'],
     location: {
       city: 'Charleston',

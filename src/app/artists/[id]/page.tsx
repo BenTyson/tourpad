@@ -155,13 +155,14 @@ export default function ArtistProfilePage() {
   }
 
   // Combine all photos for gallery - using database data if available, fallback to mock data
-  const allPhotos = artistData?.photos?.length > 0 
+  const allPhotos = artistData?.photos && artistData.photos.length > 0 
     ? artistData.photos.map(photo => ({
         id: photo.id,
         url: photo.fileUrl,
         title: photo.title,
         description: photo.description,
-        category: photo.category
+        category: (photo.category as "performance" | "band") || "performance",
+        alt: photo.title || photo.description || 'Artist photo'
       }))
     : [...(mockArtist?.performancePhotos || []), ...(mockArtist?.bandPhotos || [])];
 

@@ -257,7 +257,15 @@ export default function ProfilePage() {
       instagram: '',
       youtube: '',
       facebook: ''
-    }
+    },
+    photos: [] as Array<{
+      id: string;
+      fileUrl: string;
+      title: string;
+      description: string;
+      category: string;
+      sortOrder: number;
+    }>
   });
 
   useEffect(() => {
@@ -337,7 +345,8 @@ export default function ProfilePage() {
                   instagram: data.socialLinks?.instagram || '',
                   youtube: data.socialLinks?.youtube || '',
                   facebook: data.socialLinks?.facebook || ''
-                }
+                },
+                photos: data.photos || []
               });
             }
           }
@@ -2049,17 +2058,63 @@ export default function ProfilePage() {
                         type="file"
                         accept="image/*"
                         multiple
-                        onChange={(e) => {
-                          // Handle multiple file uploads
+                        onChange={async (e) => {
+                          // Handle multiple file uploads with proper error handling
                           const files = Array.from(e.target.files || []);
-                          files.forEach(file => {
-                            const reader = new FileReader();
-                            reader.onload = (e) => {
-                              // Handle venue photo upload
-                              console.log('Venue photo uploaded:', e.target?.result);
-                            };
-                            reader.readAsDataURL(file);
-                          });
+                          if (files.length === 0) return;
+                          
+                          setUploading(true);
+                          const uploadedPhotos = [];
+                          
+                          try {
+                            for (const file of files) {
+                              // Validate file type and size
+                              if (!file.type.startsWith('image/')) {
+                                console.error('Invalid file type:', file.type);
+                                continue;
+                              }
+                              if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                                console.error('File too large:', file.size);
+                                continue;
+                              }
+                              
+                              const formData = new FormData();
+                              formData.append('file', file);
+                              formData.append('category', 'venue');
+                              
+                              const response = await fetch('/api/upload', {
+                                method: 'POST',
+                                body: formData,
+                              });
+                              
+                              if (response.ok) {
+                                const result = await response.json();
+                                uploadedPhotos.push({
+                                  id: result.id || `temp-${Date.now()}-${Math.random()}`,
+                                  fileUrl: result.url,
+                                  title: file.name.replace(/\.[^/.]+$/, ""), // Remove extension
+                                  description: '',
+                                  category: 'venue',
+                                  sortOrder: (hostProfile.photos?.length || 0) + uploadedPhotos.length
+                                });
+                              } else {
+                                console.error('Upload failed for:', file.name);
+                              }
+                            }
+                            
+                            // Add uploaded photos to state
+                            if (uploadedPhotos.length > 0) {
+                              updateHostProfile({
+                                photos: [...(hostProfile.photos || []), ...uploadedPhotos]
+                              });
+                            }
+                          } catch (error) {
+                            console.error('Upload error:', error);
+                          } finally {
+                            setUploading(false);
+                            // Clear the input
+                            e.target.value = '';
+                          }
                         }}
                         className="hidden"
                         id="venuePhotoInput"
@@ -2068,16 +2123,47 @@ export default function ProfilePage() {
                         document.getElementById('venuePhotoInput')?.click();
                       }}>
                         <Plus className="w-4 h-4 mr-2" />
-                        Upload Photos
+                        {uploading ? 'Uploading...' : 'Upload Photos'}
                       </Button>
                     </div>
                     
-                    {/* Photo Grid Placeholder */}
-                    <div className="border-t pt-4">
-                      <p className="text-sm text-neutral-500 text-center py-8">
-                        No photos uploaded yet. Add your first venue photo above.
-                      </p>
-                    </div>
+                    {/* Photo Grid */}
+                    {hostProfile.photos && hostProfile.photos.length > 0 ? (
+                      <div className="border-t pt-4">
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                          {hostProfile.photos.map((photo, index) => (
+                            <div key={photo.id} className="relative group">
+                              <img
+                                src={photo.fileUrl}
+                                alt={photo.title || 'Venue photo'}
+                                className="w-full h-32 object-cover rounded-lg"
+                              />
+                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-200 rounded-lg flex items-center justify-center">
+                                <button
+                                  onClick={() => {
+                                    updateHostProfile({
+                                      photos: hostProfile.photos.filter(p => p.id !== photo.id)
+                                    });
+                                  }}
+                                  className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-red-600 text-white rounded-full p-2 hover:bg-red-700"
+                                >
+                                  <X className="w-4 h-4" />
+                                </button>
+                              </div>
+                              {photo.title && (
+                                <p className="text-xs text-neutral-600 mt-1 truncate">{photo.title}</p>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="border-t pt-4">
+                        <p className="text-sm text-neutral-500 text-center py-8">
+                          No photos uploaded yet. Add your first venue photo above.
+                        </p>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               )}

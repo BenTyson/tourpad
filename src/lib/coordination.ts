@@ -20,3 +20,22 @@ export async function updateCoordinationStatus(userId: string, status: string): 
   // Mock implementation
   console.log(`Updating coordination status for ${userId} to ${status}`);
 }
+
+export async function sendCoordinationNotification(
+  userId: string,
+  recipients: string[],
+  message: string,
+  type: string,
+  bookingIds: string[],
+  metadata: any
+): Promise<void> {
+  // Mock implementation
+  console.log('Sending coordination notification:', {
+    userId,
+    recipients,
+    message,
+    type,
+    bookingIds,
+    metadata
+  });
+}

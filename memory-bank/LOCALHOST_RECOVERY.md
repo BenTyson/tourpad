@@ -2,6 +2,15 @@
 
 ## Quick Recovery (When localhost crashes after database changes)
 
+### Step 0: Light Reset (Try this FIRST)
+
+```bash
+# Kill processes and clean build cache only
+killall node 2>/dev/null ; rm -rf .next ; npm run dev
+```
+
+### Step 1: Nuclear Reset (If Step 0 doesn't work)
+
 Run these **3 commands in exact order**:
 
 ```bash
@@ -73,6 +82,21 @@ npm run dev
 2. **Before starting work**: If localhost was down last session, run recovery
 3. **Never run**: `npx prisma migrate reset --force` (this DOES wipe data)
 4. **Keep this file handy**: Reference for quick recovery
+
+## Critical Discovery (July 2025)
+
+**Pattern identified**: Localhost crashes EVERY TIME code changes are made to certain files, especially:
+- `/src/app/api/profile/route.ts` (API routes)
+- `/src/app/dashboard/profile/page.tsx` (Large React components)
+- Any file with complex state management
+
+**Root cause**: Likely hot reload/webpack compilation issues with:
+- Large file sizes
+- Complex state logic
+- API route modifications
+- Console.log debugging added to components
+
+**Immediate solution**: Run Step 0 reset after ANY code change to these sensitive files
 
 ## Last Resort (Nuclear Option with Data Loss)
 

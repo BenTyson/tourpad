@@ -13,7 +13,6 @@ import {
   Search,
   Filter,
   Home,
-  Suitcase,
   Volume2,
   Calendar,
   X
@@ -31,7 +30,7 @@ export default function ArtistsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [showRSVPModal, setShowRSVPModal] = useState(false);
-  const [selectedConcert, setSelectedConcert] = useState(null);
+  const [selectedConcert, setSelectedConcert] = useState<any>(null);
   const [guestCount, setGuestCount] = useState(1);
   const [filters, setFilters] = useState({
     minYearsActive: '',
@@ -48,7 +47,7 @@ export default function ArtistsPage() {
   const hasAccess = session?.user && (
     session.user.type === 'admin' || 
     ((session.user.status === 'approved' || session.user.status === 'active' || session.user.status === 'pending') && (session.user.type === 'artist' || session.user.type === 'host')) ||
-    (session.user.type === 'fan' && session.user.paymentStatus === 'active')
+    (session.user.type === 'fan' && (session.user as any).paymentStatus === 'active')
   );
 
   // If user doesn't have access, show gateway page
@@ -106,7 +105,7 @@ export default function ArtistsPage() {
           </div>
           
           <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-            <Badge variant="outline" className="mb-6 border-white/30 text-white bg-white/10 backdrop-blur-sm">
+            <Badge variant="secondary" className="mb-6 border-white/30 text-white bg-white/10 backdrop-blur-sm">
               Exclusive Network Access
             </Badge>
             
@@ -665,7 +664,7 @@ export default function ArtistsPage() {
                       </div>
                     )}
                     <div className="absolute top-3 right-3">
-                      <Badge variant="outline" className="bg-white/90 backdrop-blur-sm">
+                      <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm">
                         ${concert.ticketPrice}
                       </Badge>
                     </div>
@@ -784,18 +783,18 @@ export default function ArtistsPage() {
               
               <div className="mb-4">
                 <h4 className="font-medium text-gray-900 mb-1">
-                  {selectedConcert.title}
+                  {selectedConcert?.title}
                 </h4>
                 <p className="text-sm text-gray-600">
-                  by {selectedConcert.artistName}
+                  by {selectedConcert?.artistName}
                 </p>
                 <p className="text-sm text-gray-600">
-                  {new Date(selectedConcert.date).toLocaleDateString('en-US', {
+                  {selectedConcert?.date && new Date(selectedConcert.date).toLocaleDateString('en-US', {
                     weekday: 'long',
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'
-                  })} at {selectedConcert.startTime}
+                  })} at {selectedConcert?.startTime}
                 </p>
               </div>
               
@@ -814,14 +813,14 @@ export default function ArtistsPage() {
                     {guestCount}
                   </span>
                   <button
-                    onClick={() => setGuestCount(Math.min(selectedConcert.capacity - selectedConcert.attendees.length, guestCount + 1))}
+                    onClick={() => setGuestCount(Math.min((selectedConcert?.capacity || 0) - (selectedConcert?.attendees?.length || 0), guestCount + 1))}
                     className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-300"
                   >
                     +
                   </button>
                 </div>
                 <p className="text-xs text-gray-500 mt-1">
-                  {selectedConcert.capacity - selectedConcert.attendees.length} spots available
+                  {(selectedConcert?.capacity || 0) - (selectedConcert?.attendees?.length || 0)} spots available
                 </p>
               </div>
               

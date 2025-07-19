@@ -99,7 +99,7 @@ function NewBookingForm() {
       }
       
       // Submit to API
-      const response = await apiClient.createBooking(validation.data);
+      const response = await apiClient.createBooking(validation.data!);
       
       await handleApiResponse(
         response,
