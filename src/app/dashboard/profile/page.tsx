@@ -20,7 +20,16 @@ import {
   Edit,
   Home,
   Users,
-  Volume2
+  Volume2,
+  Coffee,
+  Wifi,
+  Car,
+  Utensils,
+  Briefcase,
+  Bed,
+  Bath,
+  Calendar,
+  Shield
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
@@ -145,7 +154,7 @@ const US_STATES = [
 
 export default function ProfilePage() {
   const { data: session, status } = useSession();
-  const [activeTab, setActiveTab] = useState<'info' | 'photos' | 'media' | 'sound-system'>('info');
+  const [activeTab, setActiveTab] = useState<'info' | 'photos' | 'media' | 'sound-system' | 'lodging'>('info');
   const [loading, setLoading] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -265,7 +274,41 @@ export default function ProfilePage() {
       description: string;
       category: string;
       sortOrder: number;
-    }>
+    }>,
+    // Lodging data
+    offersLodging: false,
+    lodgingDetails: {
+      numberOfRooms: 1,
+      rooms: [{
+        id: 1,
+        roomType: 'private_bedroom' as 'private_bedroom' | 'shared_room' | 'entire_space',
+        bathroomType: 'private' as 'private' | 'shared',
+        beds: [{ type: 'queen' as 'queen' | 'king' | 'twin' | 'full' | 'couch' | 'air_mattress', quantity: 1 }],
+        maxOccupancy: 2
+      }],
+      amenities: {
+        breakfast: false,
+        wifi: true,
+        parking: false,
+        laundry: false,
+        kitchenAccess: false,
+        workspace: false,
+        linensProvided: true,
+        towelsProvided: true,
+        transportation: 'none' as 'none' | 'pickup' | 'nearby_transit'
+      },
+      houseRules: {
+        checkInTime: '3:00 PM',
+        checkOutTime: '11:00 AM',
+        quietHours: { start: '10:00 PM', end: '8:00 AM' },
+        smokingPolicy: 'no_smoking' as 'no_smoking' | 'outside_only' | 'allowed',
+        petPolicy: 'no_pets' as 'no_pets' | 'cats_ok' | 'dogs_ok' | 'all_pets_ok',
+        alcoholPolicy: 'allowed' as 'allowed' | 'not_allowed' | 'byob'
+      },
+      specialConsiderations: '',
+      localRecommendations: '',
+      safetyFeatures: ['smoke_detectors', 'first_aid_kit'] as string[]
+    }
   });
 
   useEffect(() => {
@@ -346,7 +389,40 @@ export default function ProfilePage() {
                   youtube: data.socialLinks?.youtube || '',
                   facebook: data.socialLinks?.facebook || ''
                 },
-                photos: data.photos || []
+                photos: data.photos || [],
+                offersLodging: data.offersLodging || false,
+                lodgingDetails: data.lodgingDetails || {
+                  numberOfRooms: 1,
+                  rooms: [{
+                    id: 1,
+                    roomType: 'private_bedroom',
+                    bathroomType: 'private',
+                    beds: [{ type: 'queen', quantity: 1 }],
+                    maxOccupancy: 2
+                  }],
+                  amenities: {
+                    breakfast: false,
+                    wifi: true,
+                    parking: false,
+                    laundry: false,
+                    kitchenAccess: false,
+                    workspace: false,
+                    linensProvided: true,
+                    towelsProvided: true,
+                    transportation: 'none'
+                  },
+                  houseRules: {
+                    checkInTime: '3:00 PM',
+                    checkOutTime: '11:00 AM',
+                    quietHours: { start: '10:00 PM', end: '8:00 AM' },
+                    smokingPolicy: 'no_smoking',
+                    petPolicy: 'no_pets',
+                    alcoholPolicy: 'allowed'
+                  },
+                  specialConsiderations: '',
+                  localRecommendations: '',
+                  safetyFeatures: ['smoke_detectors', 'first_aid_kit']
+                }
               });
             }
           }
@@ -750,17 +826,30 @@ export default function ProfilePage() {
               {isArtist ? 'Music & Media' : 'Gallery'}
             </button>
             {!isArtist && (
-              <button
-                onClick={() => setActiveTab('sound-system')}
-                className={`flex items-center px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 ${
-                  activeTab === 'sound-system'
-                    ? 'bg-white text-primary-600 shadow-sm'
-                    : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
-                }`}
-              >
-                <Volume2 className="w-4 h-4 mr-2" />
-                Sound System & Equipment
-              </button>
+              <>
+                <button
+                  onClick={() => setActiveTab('sound-system')}
+                  className={`flex items-center px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 ${
+                    activeTab === 'sound-system'
+                      ? 'bg-white text-primary-600 shadow-sm'
+                      : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
+                  }`}
+                >
+                  <Volume2 className="w-4 h-4 mr-2" />
+                  Sound System & Equipment
+                </button>
+                <button
+                  onClick={() => setActiveTab('lodging')}
+                  className={`flex items-center px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 ${
+                    activeTab === 'lodging'
+                      ? 'bg-white text-primary-600 shadow-sm'
+                      : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
+                  }`}
+                >
+                  <Home className="w-4 h-4 mr-2" />
+                  Lodging
+                </button>
+              </>
             )}
           </nav>
         </div>
@@ -2333,6 +2422,253 @@ export default function ProfilePage() {
                             }
                           })}
                           className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </>
+            )}
+          </div>
+        )}
+
+        {/* Lodging Tab - Only for hosts */}
+        {activeTab === 'lodging' && !isArtist && (
+          <div className="space-y-6">
+            {/* Lodging Availability */}
+            <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
+              <CardHeader>
+                <div className="flex items-center">
+                  <Home className="w-5 h-5 text-neutral-600 mr-3" />
+                  <h2 className="text-xl font-semibold text-neutral-900">Lodging for Artists</h2>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="offersLodging"
+                        checked={hostProfile.offersLodging}
+                        onChange={() => updateHostProfile({ offersLodging: true })}
+                        className="w-4 h-4 text-primary-600 border-neutral-300 focus:ring-primary-500"
+                      />
+                      <span className="ml-2 text-sm font-medium text-neutral-900">
+                        Yes, I can offer lodging to traveling artists
+                      </span>
+                    </label>
+                  </div>
+                  <div>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="offersLodging"
+                        checked={!hostProfile.offersLodging}
+                        onChange={() => updateHostProfile({ offersLodging: false })}
+                        className="w-4 h-4 text-primary-600 border-neutral-300 focus:ring-primary-500"
+                      />
+                      <span className="ml-2 text-sm font-medium text-neutral-900">
+                        No, I cannot offer lodging
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Lodging Details - Only show if offering */}
+            {hostProfile.offersLodging && (
+              <>
+                {/* Room Configuration */}
+                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
+                  <CardHeader>
+                    <h2 className="text-xl font-semibold text-neutral-900">Room Configuration</h2>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">
+                        Number of Rooms Available
+                      </label>
+                      <select
+                        value={hostProfile.lodgingDetails?.numberOfRooms || 1}
+                        onChange={(e) => {
+                          const numRooms = parseInt(e.target.value);
+                          const newRooms = [...(hostProfile.lodgingDetails?.rooms || [])];
+                          
+                          if (numRooms > (hostProfile.lodgingDetails?.rooms?.length || 0)) {
+                            // Add new rooms
+                            for (let i = (hostProfile.lodgingDetails?.rooms?.length || 0); i < numRooms; i++) {
+                              newRooms.push({
+                                id: i + 1,
+                                roomType: 'private_bedroom',
+                                bathroomType: 'private',
+                                beds: [{ type: 'queen', quantity: 1 }],
+                                maxOccupancy: 2
+                              });
+                            }
+                          } else if (numRooms < (hostProfile.lodgingDetails?.rooms?.length || 0)) {
+                            // Remove rooms
+                            newRooms.splice(numRooms);
+                          }
+                          
+                          updateHostProfile({
+                            lodgingDetails: {
+                              ...hostProfile.lodgingDetails,
+                              numberOfRooms: numRooms,
+                              rooms: newRooms
+                            }
+                          });
+                        }}
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      >
+                        {[1, 2, 3, 4, 5].map(num => (
+                          <option key={num} value={num}>{num} {num === 1 ? 'Room' : 'Rooms'}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Room Details */}
+                    {hostProfile.lodgingDetails.rooms && hostProfile.lodgingDetails.rooms.map((room, index) => (
+                      <div key={room.id} className="border border-neutral-200 rounded-lg p-4">
+                        <h3 className="text-lg font-medium text-neutral-900 mb-4">Room {index + 1}</h3>
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium text-neutral-700 mb-2">
+                              Room Type
+                            </label>
+                            <select
+                              value={room.roomType}
+                              onChange={(e) => {
+                                const updatedRooms = hostProfile.lodgingDetails.rooms.map(r =>
+                                  r.id === room.id ? { ...r, roomType: e.target.value as any } : r
+                                );
+                                updateHostProfile({
+                                  lodgingDetails: {
+                                    ...hostProfile.lodgingDetails,
+                                    rooms: updatedRooms
+                                  }
+                                });
+                              }}
+                              className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                            >
+                              <option value="private_bedroom">Private Bedroom</option>
+                              <option value="shared_room">Shared Room</option>
+                              <option value="entire_space">Entire Space/Apartment</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-neutral-700 mb-2">
+                              Bathroom
+                            </label>
+                            <select
+                              value={room.bathroomType}
+                              onChange={(e) => {
+                                const updatedRooms = hostProfile.lodgingDetails.rooms.map(r =>
+                                  r.id === room.id ? { ...r, bathroomType: e.target.value as any } : r
+                                );
+                                updateHostProfile({
+                                  lodgingDetails: {
+                                    ...hostProfile.lodgingDetails,
+                                    rooms: updatedRooms
+                                  }
+                                });
+                              }}
+                              className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                            >
+                              <option value="private">Private Bathroom</option>
+                              <option value="shared">Shared Bathroom</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                {/* Amenities */}
+                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
+                  <CardHeader>
+                    <h2 className="text-xl font-semibold text-neutral-900">Amenities</h2>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {[
+                        { key: 'breakfast', label: 'Breakfast included', icon: Coffee },
+                        { key: 'wifi', label: 'WiFi available', icon: Wifi },
+                        { key: 'parking', label: 'Free parking', icon: Car },
+                        { key: 'laundry', label: 'Laundry access', icon: Home },
+                        { key: 'kitchenAccess', label: 'Kitchen access', icon: Utensils },
+                        { key: 'workspace', label: 'Workspace available', icon: Briefcase }
+                      ].map(({ key, label, icon: Icon }) => (
+                        <label key={key} className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={(hostProfile.lodgingDetails?.amenities?.[key as keyof typeof hostProfile.lodgingDetails.amenities] as boolean) || false}
+                            onChange={(e) => {
+                              updateHostProfile({
+                                lodgingDetails: {
+                                  ...hostProfile.lodgingDetails,
+                                  amenities: {
+                                    ...hostProfile.lodgingDetails.amenities,
+                                    [key]: e.target.checked
+                                  }
+                                }
+                              });
+                            }}
+                            className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
+                          />
+                          <Icon className="w-4 h-4 text-neutral-500 ml-2 mr-2" />
+                          <span className="text-sm text-neutral-700">{label}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* House Rules */}
+                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
+                  <CardHeader>
+                    <h2 className="text-xl font-semibold text-neutral-900">House Rules</h2>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">
+                          Check-in Time
+                        </label>
+                        <Input
+                          type="text"
+                          value={hostProfile.lodgingDetails?.houseRules?.checkInTime || '3:00 PM'}
+                          onChange={(e) => updateHostProfile({
+                            lodgingDetails: {
+                              ...hostProfile.lodgingDetails,
+                              houseRules: {
+                                ...hostProfile.lodgingDetails.houseRules,
+                                checkInTime: e.target.value
+                              }
+                            }
+                          })}
+                          placeholder="3:00 PM"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">
+                          Check-out Time
+                        </label>
+                        <Input
+                          type="text"
+                          value={hostProfile.lodgingDetails?.houseRules?.checkOutTime || '11:00 AM'}
+                          onChange={(e) => updateHostProfile({
+                            lodgingDetails: {
+                              ...hostProfile.lodgingDetails,
+                              houseRules: {
+                                ...hostProfile.lodgingDetails.houseRules,
+                                checkOutTime: e.target.value
+                              }
+                            }
+                          })}
+                          placeholder="11:00 AM"
                         />
                       </div>
                     </div>
