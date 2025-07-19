@@ -721,17 +721,19 @@ export default function ProfilePage() {
               <FileText className="w-4 h-4 mr-2" />
               Profile Information
             </button>
-            <button
-              onClick={() => setActiveTab('photos')}
-              className={`flex items-center px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 ${
-                activeTab === 'photos'
-                  ? 'bg-white text-primary-600 shadow-sm'
-                  : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
-              }`}
-            >
-              <UserCircle className="w-4 h-4 mr-2" />
-              {isArtist ? 'Press Photos & Band' : 'Venue Photos'}
-            </button>
+            {isArtist && (
+              <button
+                onClick={() => setActiveTab('photos')}
+                className={`flex items-center px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 ${
+                  activeTab === 'photos'
+                    ? 'bg-white text-primary-600 shadow-sm'
+                    : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
+                }`}
+              >
+                <UserCircle className="w-4 h-4 mr-2" />
+                Press Photos & Band
+              </button>
+            )}
             <button
               onClick={() => setActiveTab('media')}
               className={`flex items-center px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 ${
