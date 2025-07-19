@@ -88,6 +88,9 @@ export async function GET(
       houseRules: host.houseRules,
       offersLodging: host.offersLodging,
       lodgingDetails: host.lodgingDetails,
+      // Social links and website from UserProfile
+      website: host.user.profile?.websiteUrl || '',
+      socialLinks: host.user.profile?.socialLinks || {},
       // Media organized by category
       housePhotos: host.media
         .filter(m => m.category === 'house' || m.category === 'venue')

@@ -33,7 +33,11 @@ import {
   Coffee,
   Copy,
   Mail,
-  Twitter
+  Twitter,
+  Instagram,
+  Youtube,
+  Globe,
+  Facebook
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -56,6 +60,13 @@ interface HostData {
   outdoorCapacity?: number;
   typicalShowLength?: number;
   preferredDays?: string[];
+  website?: string;
+  socialLinks?: {
+    website?: string;
+    instagram?: string;
+    youtube?: string;
+    facebook?: string;
+  };
   rating: number;
   reviewCount: number;
   housePhotos: Array<{
@@ -159,6 +170,8 @@ export default function HostProfilePage() {
               hostInfo: testHost.hostInfo,
               soundSystem: testHost.soundSystem,
               hostingCapabilities: testHost.hostingCapabilities,
+              website: '',
+              socialLinks: {},
               upcomingConcerts: []
             };
             setHostData(transformedHost);
@@ -532,6 +545,57 @@ export default function HostProfilePage() {
                 <p className="text-neutral-700 leading-relaxed">
                   {host.hostInfo?.aboutMe || 'Passionate about bringing live music into intimate settings. I love creating memorable experiences where artists and audiences can connect in a personal, meaningful way.'}
                 </p>
+                
+                {/* Social Links */}
+                {(host.website || host.socialLinks?.instagram || host.socialLinks?.youtube || host.socialLinks?.facebook) && (
+                  <div className="mt-4 flex items-center space-x-4">
+                    {host.website && (
+                      <a 
+                        href={host.website} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-neutral-500 hover:text-primary-600 transition-colors"
+                        title="Website"
+                      >
+                        <Globe className="w-5 h-5" />
+                      </a>
+                    )}
+                    {host.socialLinks?.instagram && (
+                      <a 
+                        href={host.socialLinks.instagram} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-neutral-500 hover:text-pink-600 transition-colors"
+                        title="Instagram"
+                      >
+                        <Instagram className="w-5 h-5" />
+                      </a>
+                    )}
+                    {host.socialLinks?.youtube && (
+                      <a 
+                        href={host.socialLinks.youtube} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-neutral-500 hover:text-red-600 transition-colors"
+                        title="YouTube"
+                      >
+                        <Youtube className="w-5 h-5" />
+                      </a>
+                    )}
+                    {host.socialLinks?.facebook && (
+                      <a 
+                        href={host.socialLinks.facebook} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-neutral-500 hover:text-blue-600 transition-colors"
+                        title="Facebook"
+                      >
+                        <Facebook className="w-5 h-5" />
+                      </a>
+                    )}
+                  </div>
+                )}
+                
                 <div className="mt-4 flex space-x-3">
                   <Button variant="outline" size="sm">
                     Contact Host

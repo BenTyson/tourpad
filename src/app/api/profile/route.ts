@@ -204,6 +204,7 @@ export async function PUT(request: NextRequest) {
       instagram: normalizeInstagram(data.socialLinks?.instagram || ''),
       youtube: ensureProtocol(data.socialLinks?.youtube || ''),
       spotify: ensureProtocol(data.socialLinks?.spotify || ''),
+      bandcamp: ensureProtocol(data.socialLinks?.bandcamp || ''),
     };
 
     // Build update data
