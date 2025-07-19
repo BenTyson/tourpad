@@ -1,0 +1,709 @@
+# TourPad Development Patterns
+
+## Core Development Rules
+
+### Required Code Quality Standards
+
+#### Defensive Programming (MANDATORY)
+All new code must use defensive programming patterns to prevent runtime crashes:
+
+```typescript
+// ✅ ALWAYS use optional chaining with defaults
+const count = photos?.length || 0;
+const name = user?.profile?.name || '';
+const bio = artist?.bio || 'No bio available';
+
+// ✅ ALWAYS provide defaults for arrays
+{photos?.map((photo) => (
+  <div key={photo.id}>{photo.title}</div>
+)) || <div>No photos available</div>}
+
+// ✅ ALWAYS validate objects before iteration
+if (lodgingDetails?.rooms?.length) {
+  return lodgingDetails.rooms.map(room => renderRoom(room));
+}
+
+// ❌ NEVER access arrays/objects directly
+const count = photos.length;           // CRASHES!
+const name = user.profile.name;        // CRASHES!
+photos.map(photo => ...)              // CRASHES!
+```
+
+#### TypeScript Compilation (ZERO TOLERANCE)
+- **Always run** `npx tsc --noEmit` before implementing features
+- **Fix ALL compilation errors** immediately - do not let them accumulate
+- **Zero compilation errors** must be maintained at all times
+- Accumulated TypeScript errors destabilize the development server
+
+#### Error Handling Patterns
+```typescript
+// ✅ API calls with proper error handling
+try {
+  const response = await fetch('/api/profile', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+  
+  const result = await response.json();
+  return result;
+} catch (error) {
+  console.error('Profile update failed:', error);
+  setError('Failed to update profile. Please try again.');
+  return null;
+}
+
+// ✅ React component error boundaries
+const MyComponent = ({ data }) => {
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+
+  try {
+    return (
+      <div>
+        {data?.items?.map(item => (
+          <div key={item.id}>{item.name}</div>
+        )) || <div>No items</div>}
+      </div>
+    );
+  } catch (error) {
+    console.error('Component render error:', error);
+    return <div>Error displaying data</div>;
+  }
+};
+```
+
+---
+
+## File Upload Implementation Pattern
+
+### Using Existing Upload System (MANDATORY)
+**Always use** `/api/upload` endpoint - never create duplicate upload routes.
+
+```typescript
+// ✅ Standard file upload implementation
+const handleFileUpload = async (file: File, type: 'profile' | 'venue' | 'media') => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('type', type);
+  
+  try {
+    const response = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData
+    });
+    
+    if (response.ok) {
+      const { url } = await response.json();
+      
+      // Update profile with new image URL
+      await updateProfile({ [type + 'Photo']: url });
+      
+      // Update local state for immediate UI feedback
+      setImageUrl(url);
+      
+      return url;
+    } else {
+      throw new Error('Upload failed');
+    }
+  } catch (error) {
+    console.error('Upload error:', error);
+    setError('Upload failed. Please try again.');
+    return null;
+  }
+};
+
+// ✅ File input trigger pattern
+<label htmlFor="fileInput" className="cursor-pointer">
+  <div className="upload-button">
+    <Camera className="w-4 h-4 mr-2" />
+    {hasImage ? 'Change Photo' : 'Upload Photo'}
+  </div>
+</label>
+<input
+  id="fileInput"
+  type="file"
+  accept="image/*"
+  onChange={(e) => {
+    const file = e.target.files?.[0];
+    if (file) handleFileUpload(file, 'profile');
+  }}
+  className="hidden"
+/>
+```
+
+### File Upload Rules
+- **Single endpoint**: Always use `/api/upload/route.ts`
+- **Authentication required**: Session validation mandatory
+- **File validation**: Type (JPEG/PNG/WebP), size (5MB max)
+- **Storage location**: `public/uploads/` for development
+- **Database integration**: Update appropriate model after upload
+
+---
+
+## Database Interaction Patterns
+
+### Prisma Client Usage
+```typescript
+// ✅ Profile data with proper includes
+const getUserProfile = async (userId: string) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        profile: true,
+        artist: true,
+        host: {
+          include: {
+            media: {
+              orderBy: { sortOrder: 'asc' }
+            }
+          }
+        }
+      }
+    });
+    
+    return user;
+  } catch (error) {
+    console.error('Database error:', error);
+    throw new Error('Failed to fetch user profile');
+  }
+};
+
+// ✅ Safe upsert pattern
+const updateUserProfile = async (userId: string, profileData: any) => {
+  try {
+    const updatedProfile = await prisma.userProfile.upsert({
+      where: { userId },
+      create: {
+        userId,
+        ...profileData
+      },
+      update: profileData
+    });
+    
+    return updatedProfile;
+  } catch (error) {
+    console.error('Profile update error:', error);
+    throw new Error('Failed to update profile');
+  }
+};
+```
+
+### API Endpoint Pattern
+```typescript
+// ✅ Standard API route structure
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+
+export async function GET(request: NextRequest) {
+  try {
+    // 1. Authentication check
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // 2. Database operation
+    const data = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      include: { profile: true }
+    });
+
+    // 3. Success response
+    return NextResponse.json({ success: true, data });
+    
+  } catch (error) {
+    // 4. Error handling
+    console.error('API Error:', error);
+    return NextResponse.json({ 
+      error: 'Internal server error' 
+    }, { status: 500 });
+  }
+}
+
+export async function PUT(request: NextRequest) {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Parse and validate request body
+    const body = await request.json();
+    
+    // Database update operations
+    const result = await prisma.$transaction([
+      // Multiple operations in transaction for data consistency
+    ]);
+
+    return NextResponse.json({ success: true, data: result });
+    
+  } catch (error) {
+    console.error('Update error:', error);
+    return NextResponse.json({ 
+      error: 'Failed to update data' 
+    }, { status: 500 });
+  }
+}
+```
+
+---
+
+## React Component Patterns
+
+### State Management Pattern
+```typescript
+// ✅ Defensive state initialization
+const [hostProfile, setHostProfile] = useState({
+  // Always provide defaults to prevent undefined access
+  photos: [] as Array<{
+    id: string;
+    fileUrl: string;
+    title: string;
+    description: string;
+    category: string;
+    sortOrder: number;
+  }>,
+  lodgingDetails: {
+    numberOfRooms: 1,
+    rooms: [{
+      id: 1,
+      roomType: 'private_bedroom' as const,
+      bathroomType: 'private' as const,
+      beds: [{ type: 'queen' as const, quantity: 1 }],
+      maxOccupancy: 2
+    }],
+    amenities: {
+      breakfast: false,
+      wifi: true,
+      parking: false,
+      laundry: false,
+      kitchenAccess: false,
+      workspace: false,
+      linensProvided: true,
+      towelsProvided: true,
+      transportation: 'none' as const
+    }
+  },
+  // ... other fields with defaults
+});
+
+// ✅ Safe state updates
+const addPhoto = (newPhoto: PhotoType) => {
+  setHostProfile(prev => ({
+    ...prev,
+    photos: [...(prev.photos || []), newPhoto]
+  }));
+};
+
+const removePhoto = (photoId: string) => {
+  setHostProfile(prev => ({
+    ...prev,
+    photos: prev.photos?.filter(photo => photo.id !== photoId) || []
+  }));
+};
+```
+
+### Conditional Rendering Pattern
+```typescript
+// ✅ Safe conditional rendering
+const PhotoGallery = ({ photos }) => {
+  if (!photos || photos.length === 0) {
+    return (
+      <div className="text-center py-8">
+        <p>No photos uploaded yet</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      {photos.map((photo) => (
+        <div key={photo.id} className="relative">
+          <img 
+            src={photo.fileUrl} 
+            alt={photo.title || 'Venue photo'}
+            className="w-full h-32 object-cover rounded"
+          />
+          <button
+            onClick={() => handleDeletePhoto(photo.id)}
+            className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+};
+```
+
+### Form Handling Pattern
+```typescript
+// ✅ Safe form field access
+const handleInputChange = (field: string, value: any) => {
+  setFormData(prev => ({
+    ...prev,
+    [field]: value
+  }));
+};
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  
+  try {
+    // Validate required fields
+    if (!formData.name || !formData.email) {
+      setError('Please fill in all required fields');
+      return;
+    }
+
+    const response = await updateProfile(formData);
+    
+    if (response?.success) {
+      setSuccess('Profile updated successfully');
+      setError('');
+    } else {
+      throw new Error('Update failed');
+    }
+    
+  } catch (error) {
+    console.error('Form submission error:', error);
+    setError('Failed to update profile. Please try again.');
+    setSuccess('');
+  }
+};
+```
+
+---
+
+## File Organization Rules
+
+### Critical File Structure
+```
+/src/app/
+├── dashboard/
+│   └── profile/page.tsx          # Main profile editing (2,500+ lines)
+├── api/
+│   ├── profile/route.ts          # Profile GET/PUT endpoints
+│   ├── upload/route.ts           # File upload endpoint (SINGLE SOURCE)
+│   └── hosts/[id]/route.ts       # Public host profiles
+
+/src/lib/
+├── auth.ts                       # NextAuth configuration
+├── prisma.ts                     # Prisma client
+└── validation.ts                 # Zod schemas
+
+/src/data/
+├── mockData.ts                   # UI display data (transitioning)
+└── realTestData.ts               # Auth system data (transitioning)
+
+/memory-bank/
+├── PROJECT_STATUS.md             # Current state
+├── ARCHITECTURE.md               # Technical reference
+├── TROUBLESHOOTING.md            # Crisis prevention
+└── DEVELOPMENT_PATTERNS.md       # This file
+```
+
+### File Creation Rules
+- **NEVER** create duplicate upload routes (`/api/media/upload/` etc.)
+- **ALWAYS** prefer editing existing files over creating new ones
+- **NEVER** create documentation files unless explicitly requested
+- **ALWAYS** check for existing similar functionality before creating new files
+
+---
+
+## Development Workflow
+
+### Pre-Implementation Checklist
+```bash
+# 1. Always check TypeScript compilation first
+npx tsc --noEmit
+
+# 2. Fix any compilation errors before proceeding
+# (Don't implement features with existing TypeScript errors)
+
+# 3. Read relevant memory-bank files for context
+# - PROJECT_STATUS.md for current state
+# - ARCHITECTURE.md for technical details
+# - TROUBLESHOOTING.md if issues arise
+
+# 4. Test frequently during development
+npm run dev
+# Verify localhost:3000 works after each major change
+```
+
+### Feature Implementation Process
+1. **Plan**: Check PROJECT_STATUS.md for priorities and current state
+2. **Research**: Review ARCHITECTURE.md for existing patterns and APIs
+3. **Code**: Follow defensive programming patterns in this document
+4. **Test**: Verify functionality works end-to-end
+5. **Validate**: Run `npx tsc --noEmit` and fix any errors
+6. **Document**: Update PROJECT_STATUS.md with changes
+
+### Git Workflow
+```bash
+# Commit frequently with descriptive messages
+git add .
+git commit -m "Add venue photo gallery with delete functionality
+
+- Implement photo grid display in Gallery tab
+- Add delete functionality with confirmation
+- Update HostMedia model integration
+- Add defensive programming patterns"
+
+# User should push after major functionality complete
+# (Remind user to git push after conclusions)
+```
+
+---
+
+## Testing Patterns
+
+### Manual Testing Checklist
+When implementing new features, always test:
+
+#### File Upload Features
+- [ ] File selection works (drag-and-drop or click)
+- [ ] Upload progress provides feedback
+- [ ] Success displays new image immediately
+- [ ] Error handling shows user-friendly messages
+- [ ] File validation works (size, type limits)
+
+#### Profile Features
+- [ ] Data saves to database correctly
+- [ ] UI updates reflect saved changes
+- [ ] Page refresh maintains changes
+- [ ] Error states handled gracefully
+- [ ] Required fields validated
+
+#### Authentication Features
+- [ ] Login/logout flows work correctly
+- [ ] Protected routes redirect properly
+- [ ] Session persistence across page refreshes
+- [ ] User data displays correctly
+
+### Error Scenario Testing
+Always test these error conditions:
+- Network failures during API calls
+- Invalid file uploads (wrong type, too large)
+- Missing required form fields
+- Database connection issues
+- Authentication failures
+
+---
+
+## Performance Guidelines
+
+### Database Query Optimization
+```typescript
+// ✅ Efficient query with includes
+const hostWithPhotos = await prisma.host.findUnique({
+  where: { userId },
+  include: {
+    user: {
+      include: { profile: true }
+    },
+    media: {
+      where: { category: 'venue' },
+      orderBy: { sortOrder: 'asc' }
+    }
+  }
+});
+
+// ❌ Inefficient separate queries
+const host = await prisma.host.findUnique({ where: { userId } });
+const user = await prisma.user.findUnique({ where: { id: host.userId } });
+const photos = await prisma.hostMedia.findMany({ where: { hostId: host.id } });
+```
+
+### Frontend Performance
+```typescript
+// ✅ Efficient image loading
+<img 
+  src={photo.fileUrl} 
+  alt={photo.title || 'Photo'}
+  loading="lazy"
+  className="w-full h-32 object-cover"
+/>
+
+// ✅ Debounced search inputs
+const [searchTerm, setSearchTerm] = useState('');
+const debouncedSearch = useDebounce(searchTerm, 300);
+
+useEffect(() => {
+  if (debouncedSearch) {
+    performSearch(debouncedSearch);
+  }
+}, [debouncedSearch]);
+```
+
+---
+
+## Security Patterns
+
+### Authentication Checks
+```typescript
+// ✅ Always verify session in API routes
+const session = await auth();
+if (!session?.user?.id) {
+  return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+}
+
+// ✅ Verify user ownership for user-specific data
+const profile = await prisma.userProfile.findUnique({
+  where: { 
+    userId: session.user.id  // Only allow access to own data
+  }
+});
+```
+
+### Input Validation
+```typescript
+// ✅ Validate file uploads
+const isValidFileType = (file: File) => {
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+  return allowedTypes.includes(file.type);
+};
+
+const isValidFileSize = (file: File) => {
+  const maxSize = 5 * 1024 * 1024; // 5MB
+  return file.size <= maxSize;
+};
+
+// ✅ Sanitize URL inputs
+const ensureProtocol = (url: string): string => {
+  if (!url) return '';
+  const trimmed = url.trim();
+  if (!trimmed) return '';
+  
+  if (trimmed.match(/^https?:\/\//i)) {
+    return trimmed;
+  }
+  
+  return `https://${trimmed}`;
+};
+```
+
+---
+
+## Emergency Procedures
+
+### When Things Break During Development
+
+#### TypeScript Errors Accumulating
+```bash
+# Stop development immediately
+npx tsc --noEmit
+
+# Fix ALL errors before continuing
+# Common fixes:
+# - Add 'alt' props to images
+# - Add optional chaining to object access
+# - Provide default values for arrays
+
+# Only continue when zero errors
+```
+
+#### Server Crashes or Instability
+```bash
+# Nuclear reset pattern
+killall node 2>/dev/null
+rm -rf .next node_modules
+npm install
+npx prisma generate
+npm run dev
+```
+
+#### Database Issues
+```bash
+# Check connection
+npx prisma studio
+
+# Regenerate client
+npx prisma generate
+
+# Reset if corrupted (DANGER: loses data)
+npx prisma migrate reset --force
+```
+
+### Success Indicators
+- ✅ TypeScript: `npx tsc --noEmit` shows zero errors
+- ✅ Server: `curl -I http://localhost:3000` returns 200 OK
+- ✅ Database: Prisma Studio opens without errors
+- ✅ Features: All implemented functionality works end-to-end
+
+---
+
+## Common Patterns Reference
+
+### Data Fetching
+```typescript
+// ✅ Client-side data fetching with error handling
+const fetchUserProfile = async () => {
+  try {
+    setLoading(true);
+    const response = await fetch('/api/profile');
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch profile');
+    }
+    
+    const data = await response.json();
+    setProfile(data);
+  } catch (error) {
+    console.error('Fetch error:', error);
+    setError('Failed to load profile');
+  } finally {
+    setLoading(false);
+  }
+};
+```
+
+### Form Validation
+```typescript
+// ✅ Client-side validation before API call
+const validateForm = (data: FormData) => {
+  const errors: Record<string, string> = {};
+  
+  if (!data.name?.trim()) {
+    errors.name = 'Name is required';
+  }
+  
+  if (!data.email?.trim()) {
+    errors.email = 'Email is required';
+  } else if (!/\S+@\S+\.\S+/.test(data.email)) {
+    errors.email = 'Email is invalid';
+  }
+  
+  return errors;
+};
+```
+
+### Modal/Dialog Patterns
+```typescript
+// ✅ Safe modal state management
+const [isModalOpen, setIsModalOpen] = useState(false);
+const [modalData, setModalData] = useState(null);
+
+const openModal = (data?: any) => {
+  setModalData(data || null);
+  setIsModalOpen(true);
+};
+
+const closeModal = () => {
+  setIsModalOpen(false);
+  setModalData(null);
+};
+```
+
+---
+
+*These patterns are battle-tested and ensure stable, maintainable code. Follow them religiously to prevent development issues.*

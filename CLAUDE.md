@@ -47,13 +47,14 @@ Do not introduce other libraries unless specified in the plan or approved by use
 - **NEVER** create files unless explicitly required for the task
 - **ALWAYS** prefer editing existing files over creating new ones
 - **NEVER** proactively create documentation files (*.md) unless requested
+- **NEVER** create new .md files without explicit user approval - use existing optimized structure
 - Use TypeScript for all new code
 - Follow existing component patterns and naming conventions
 - Maintain mobile-first responsive design
 
 ## Critical Patterns
 - Check `/memory-bank/` folder for project context and patterns
-- Read `DEVELOPMENT_ROADMAP.md` for current priorities
+- Read `PROJECT_STATUS.md` for current priorities and state
 - **Data Sources** (see Data Architecture section below)
 - All forms must have Zod validation schemas
 - Use the established coastal color system (French Blue, Sage, Mist, Sand, Evergreen)
@@ -91,12 +92,20 @@ We maintain TWO data files with specific purposes:
 - Test all UI changes in the browser before marking complete
 - Add TODO comments for future backend integration points
 
+## Documentation Architecture
+- **Optimized Structure**: Only 4 .md files in `/memory-bank/`
+- **PROJECT_STATUS.md**: Current state, priorities, what's working
+- **ARCHITECTURE.md**: Complete technical reference (database, APIs, file storage)
+- **TROUBLESHOOTING.md**: Crisis prevention and debugging
+- **DEVELOPMENT_PATTERNS.md**: Code standards and required patterns
+- **NEVER** create additional .md files - update existing ones
+
 ## Image Upload Architecture
 - **CRITICAL**: Only use `/api/upload/route.ts` for file uploads
 - **NEVER** create `/api/media/upload/` or similar competing routes
 - Local storage: `public/uploads/` directory (dev), S3 ready (prod)
 - File validation: JPEG/PNG/WebP, 5MB limit, authentication required
-- See `/memory-bank/IMAGE_UPLOAD_ARCHITECTURE.md` for full details
+- See `/memory-bank/ARCHITECTURE.md` for full details
 
 ## Security & Privacy
 - Never expose real user data in public views
