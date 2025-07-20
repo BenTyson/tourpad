@@ -28,12 +28,13 @@ import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Input } from '@/components/ui/Input';
 import { HostCard } from '@/components/cards/HostCard';
-import { mockHosts } from '@/data/mockData';
 
 export default function HostsPage() {
   const { data: session, status } = useSession();
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+  const [hosts, setHosts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     minAttendance: '',
     maxDoorFee: '',
@@ -53,8 +54,34 @@ export default function HostsPage() {
     (session.user.status === 'active' && (session.user.type === 'artist' || session.user.type === 'host'))
   );
 
+  // Fetch hosts data from API
+  useEffect(() => {
+    const fetchHosts = async () => {
+      if (!hasAccess) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/hosts');
+        if (response.ok) {
+          const hostsData = await response.json();
+          setHosts(hostsData);
+        } else {
+          console.error('Failed to fetch hosts');
+        }
+      } catch (error) {
+        console.error('Error fetching hosts:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHosts();
+  }, [hasAccess]);
+
   // If user doesn't have access, show gateway page
-  if (status === 'loading') {
+  if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
@@ -493,7 +520,7 @@ export default function HostsPage() {
 
   // Browse functionality for authorized users
   // Filter hosts based on search and filters
-  const filteredHosts = mockHosts.filter(host => {
+  const filteredHosts = hosts.filter(host => {
     const matchesSearch = searchQuery === '' || 
       host.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       host.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -624,6 +651,11 @@ export default function HostsPage() {
             {filteredHosts.map((host) => (
               <HostCard key={host.id} host={host} showBookingButton={true} />
             ))}
+          </div>
+        ) : hosts.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">No hosts are currently available in the database.</p>
+            <p className="text-gray-400 text-sm mt-2">Hosts need to complete their profiles and be approved to appear here.</p>
           </div>
         ) : (
           <div className="text-center py-12">

@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { 
@@ -22,8 +22,6 @@ import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Input } from '@/components/ui/Input';
 import { ArtistCard } from '@/components/cards/ArtistCard';
-import { mockArtists } from '@/data/mockData';
-import { testConcerts } from '@/data/realTestData';
 
 export default function ArtistsPage() {
   const { data: session, status } = useSession();
@@ -32,6 +30,8 @@ export default function ArtistsPage() {
   const [showRSVPModal, setShowRSVPModal] = useState(false);
   const [selectedConcert, setSelectedConcert] = useState<any>(null);
   const [guestCount, setGuestCount] = useState(1);
+  const [artists, setArtists] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     minYearsActive: '',
     maxTourMonths: '',
@@ -50,8 +50,34 @@ export default function ArtistsPage() {
     (session.user.type === 'fan' && (session.user as any).paymentStatus === 'active')
   );
 
+  // Fetch artists data from API
+  useEffect(() => {
+    const fetchArtists = async () => {
+      if (!hasAccess) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/artists');
+        if (response.ok) {
+          const artistsData = await response.json();
+          setArtists(artistsData);
+        } else {
+          console.error('Failed to fetch artists');
+        }
+      } catch (error) {
+        console.error('Error fetching artists:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArtists();
+  }, [hasAccess]);
+
   // If user doesn't have access, show gateway page
-  if (status === 'loading') {
+  if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
@@ -459,10 +485,7 @@ export default function ArtistsPage() {
 
   // Browse functionality for authorized users
   // For fans, show concerts; for others, show artists
-  const upcomingConcerts = testConcerts.filter(concert => 
-    concert.status === 'upcoming' && 
-    new Date(concert.date) > new Date()
-  );
+  const upcomingConcerts: any[] = []; // TODO: Fetch from concerts API when implemented
 
   // Filter concerts for fans
   const filteredConcerts = session?.user?.type === 'fan' 
@@ -477,9 +500,7 @@ export default function ArtistsPage() {
     : [];
 
   // Filter artists based on search and filters
-  const filteredArtists = mockArtists.filter(artist => {
-    // Only show approved artists
-    if (!artist.approved) return false;
+  const filteredArtists = artists.filter(artist => {
 
     const matchesSearch = searchQuery === '' || 
       artist.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -736,6 +757,11 @@ export default function ArtistsPage() {
               {filteredArtists.map((artist) => (
                 <ArtistCard key={artist.id} artist={artist} />
               ))}
+            </div>
+          ) : artists.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">No artists are currently available in the database.</p>
+              <p className="text-gray-400 text-sm mt-2">Artists need to complete their profiles and be approved to appear here.</p>
             </div>
           ) : (
             <div className="text-center py-12">

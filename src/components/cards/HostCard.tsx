@@ -5,8 +5,6 @@ import {
   Star, 
   Users,
   Volume2,
-  Wifi,
-  Truck,
   Home,
   ChevronLeft,
   ChevronRight
@@ -81,10 +79,7 @@ export function HostCard({ host, showBookingButton = false }: HostCardProps) {
   
   const getAmenityIcons = () => {
     const icons = [];
-    if (host.amenities.parking) icons.push({ icon: Truck, label: 'Parking' });
-    if (host.amenities.wifi) icons.push({ icon: Wifi, label: 'WiFi' });
     if (host.amenities.soundSystem) icons.push({ icon: Volume2, label: 'Sound System' });
-    if (host.amenities.kidFriendly) icons.push({ icon: Home, label: 'Kid Friendly' });
     return icons.slice(0, 3); // Show max 3 icons
   };
 
@@ -217,9 +212,16 @@ export function HostCard({ host, showBookingButton = false }: HostCardProps) {
             <div>
               ${host.showSpecs.avgDoorFee} door
             </div>
-            <Badge variant="default" className="transition-all duration-300 group-hover:scale-105">
-              {host.showSpecs.performanceLocation}
-            </Badge>
+            <div className="flex items-center space-x-2">
+              <Badge variant="default" className="transition-all duration-300 group-hover:scale-105">
+                {host.showSpecs.performanceLocation}
+              </Badge>
+              {host.amenities.bnbOffered && (
+                <Badge variant="success" className="transition-all duration-300 group-hover:scale-105">
+                  BNB Available
+                </Badge>
+              )}
+            </div>
           </div>
 
           {/* Amenities */}
@@ -234,11 +236,6 @@ export function HostCard({ host, showBookingButton = false }: HostCardProps) {
                 <Icon className="w-4 h-4" />
               </div>
             ))}
-            {host.amenities.bnbOffered && (
-              <Badge variant="success" className="ml-2 transition-all duration-300 group-hover:scale-105">
-                BNB Available
-              </Badge>
-            )}
           </div>
 
           {/* Bio preview */}

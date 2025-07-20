@@ -55,18 +55,12 @@ interface ArtistProfile {
   cancellationGuarantee?: string;
   rating: number;
   reviewCount: number;
-  approved: boolean;
-  performancePhotos?: Array<{
+  verified: boolean;
+  photos?: Array<{
     id: string;
     url: string;
     alt: string;
-    category: 'performance' | 'band';
-  }>;
-  bandPhotos?: Array<{
-    id: string;
-    url: string;
-    alt: string;
-    category: 'performance' | 'band';
+    category: string;
   }>;
   createdAt: Date;
   updatedAt: Date;
@@ -88,7 +82,7 @@ export function ArtistCard({ artist, showBookingButton = false }: ArtistCardProp
     return foundGenre || 'music';
   };
 
-  const allPhotos = [...(artist.performancePhotos || []), ...(artist.bandPhotos || [])];
+  const allPhotos = artist.photos || [];
   const hasVideo = !!artist.livePerformanceVideo;
   
   const nextPhoto = (e: React.MouseEvent) => {
@@ -175,7 +169,7 @@ export function ArtistCard({ artist, showBookingButton = false }: ArtistCardProp
         )}
         
         {/* Approval status */}
-        {artist.approved && (
+        {artist.verified && (
           <div className="absolute top-3 right-3 bg-green-500 text-white rounded-full p-1 transition-all duration-300 group-hover:scale-110 group-hover:bg-green-600">
             <CheckCircle className="w-4 h-4" />
           </div>
@@ -276,7 +270,7 @@ export function ArtistCard({ artist, showBookingButton = false }: ArtistCardProp
                 View Profile
               </Button>
             </Link>
-            {showBookingButton && artist.approved && (
+            {showBookingButton && artist.verified && (
               <Link href={`/bookings/new?artistId=${artist.id}`}>
                 <Button size="sm" className="transition-all duration-300 hover:shadow-lg">
                   Book Artist
