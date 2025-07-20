@@ -109,6 +109,7 @@ export async function GET() {
         hostingExperience: user.host.hostingExperience || 0,
         typicalShowLength: user.host.typicalShowLength || 90,
         houseRules: user.host.houseRules || '',
+        suggestedDoorFee: user.host.suggestedDoorFee || 20,
         offersLodging: user.host.offersLodging || false,
         lodgingDetails: user.host.lodgingDetails || null,
         website: user.profile?.websiteUrl || (user.profile?.socialLinks as any)?.website || '',
@@ -192,6 +193,8 @@ export async function PUT(request: NextRequest) {
     }
 
     const data = await request.json();
+    console.log('Received profile data:', data);
+    console.log('suggestedDoorFee value:', data.suggestedDoorFee, 'type:', typeof data.suggestedDoorFee);
     const userId = session.user.id;
 
     // Update user basic info
@@ -361,6 +364,7 @@ export async function PUT(request: NextRequest) {
             hostingExperience: data.hostingExperience ? parseInt(data.hostingExperience) : undefined,
             typicalShowLength: data.typicalShowLength ? parseInt(data.typicalShowLength) : undefined,
             houseRules: data.houseRules || undefined,
+            suggestedDoorFee: data.suggestedDoorFee ? parseInt(data.suggestedDoorFee) : undefined,
             offersLodging: data.offersLodging !== undefined ? data.offersLodging : undefined,
             lodgingDetails: data.lodgingDetails || undefined,
             venuePhotoUrl: data.venuePhoto || undefined,
@@ -404,6 +408,7 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error updating profile:', error);
+    console.error('Full error details:', JSON.stringify(error, null, 2));
     
     // More detailed error handling
     if (error instanceof Error) {
@@ -416,6 +421,7 @@ export async function PUT(request: NextRequest) {
       }
       
       if (error.message.includes('prisma') || error.message.includes('database')) {
+        console.error('Database error details:', error);
         return NextResponse.json({ 
           error: 'Database error. Please try again.' 
         }, { status: 500 });

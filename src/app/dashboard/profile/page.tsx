@@ -245,6 +245,7 @@ export default function ProfilePage() {
     amenities: [] as string[],
     typicalShowLength: 90, // minutes
     preferredDays: [] as string[], // days of week
+    suggestedDoorFee: 20, // dollars
     soundSystem: {
       available: true,
       description: '',
@@ -367,6 +368,7 @@ export default function ProfilePage() {
                 amenities: data.amenities || [],
                 typicalShowLength: data.typicalShowLength || 90,
                 preferredDays: data.preferredDays || data.preferredGenres || [],
+                suggestedDoorFee: data.suggestedDoorFee || 20,
                 soundSystem: data.soundSystem || {
                   available: true,
                   description: '',
@@ -1406,6 +1408,23 @@ export default function ProfilePage() {
                         <span className="text-sm text-neutral-600">minutes</span>
                       </div>
                       <p className="text-xs text-neutral-500 mt-1">How long do shows typically last at your venue?</p>
+                    </div>
+
+                    {/* Suggested Door Fee */}
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">Suggested Door Fee</label>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-sm text-neutral-600">$</span>
+                        <Input
+                          type="number"
+                          value={hostProfile.suggestedDoorFee}
+                          onChange={(e) => updateHostProfile({ suggestedDoorFee: parseInt(e.target.value) || 20 })}
+                          min="0"
+                          max="100"
+                          className="w-24"
+                        />
+                      </div>
+                      <p className="text-xs text-neutral-500 mt-1">Typical door fee you suggest for concerts at your venue</p>
                     </div>
 
                     {/* Preferred Days */}

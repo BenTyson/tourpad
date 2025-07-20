@@ -88,6 +88,7 @@ export async function GET(
       houseRules: host.houseRules,
       offersLodging: host.offersLodging,
       lodgingDetails: host.lodgingDetails,
+      suggestedDoorFee: host.suggestedDoorFee,
       // Social links and website from UserProfile
       website: host.user.profile?.websiteUrl || '',
       socialLinks: host.user.profile?.socialLinks || {},
@@ -128,7 +129,7 @@ export async function GET(
         showFormat: host.venueType === 'HOME' ? 'Intimate house concert' : 'Venue performance',
         daysAvailable: ['Friday', 'Saturday'], // TODO: Store in database
         estimatedShowsPerYear: host.hostingExperience || 10,
-        avgDoorFee: 20, // TODO: Calculate from past events
+        avgDoorFee: host.suggestedDoorFee || 20, // Use suggested door fee with fallback
         hostingHistory: `${host.hostingExperience || 0} years`
       },
       // Amenities from database
@@ -221,7 +222,8 @@ export async function PUT(
         typicalShowLength: data.typicalShowLength,
         houseRules: data.houseRules,
         offersLodging: data.offersLodging,
-        lodgingDetails: data.lodgingDetails
+        lodgingDetails: data.lodgingDetails,
+        suggestedDoorFee: data.suggestedDoorFee
       }
     });
 

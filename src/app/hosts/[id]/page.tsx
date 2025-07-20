@@ -309,16 +309,16 @@ export default function HostProfilePage() {
               <div className="flex flex-wrap gap-4 mb-8">
                 <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
                   <Star className="w-5 h-5 mr-2 text-yellow-500" />
-                  <span className="font-semibold text-neutral-900">{host.rating}</span>
-                  <span className="ml-1 text-neutral-600">({host.reviewCount} reviews)</span>
+                  <span className="font-semibold text-neutral-900">{host.rating || 0}</span>
+                  <span className="ml-1 text-neutral-600">({host.reviewCount || 0} reviews)</span>
                 </div>
                 <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
                   <Users className="w-5 h-5 mr-2 text-neutral-600" />
-                  <span className="text-neutral-900">Up to {host.showSpecs.indoorAttendanceMax} guests</span>
+                  <span className="text-neutral-900">Up to {host.indoorCapacity || host.outdoorCapacity || 0} guests</span>
                 </div>
                 <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
                   <DollarSign className="w-5 h-5 mr-2 text-neutral-600" />
-                  <span className="text-neutral-900">${host.showSpecs.avgDoorFee} suggested door</span>
+                  <span className="text-neutral-900">${host.suggestedDoorFee || 20} suggested door</span>
                 </div>
               </div>
               
@@ -369,121 +369,155 @@ export default function HostProfilePage() {
       {/* Content Sections */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 space-y-8">
         
-        {/* Venue Details & Capacity */}
+        {/* About This Venue - Combined section with Apple-inspired design */}
         <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
           <div className="p-8">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-2xl font-bold text-neutral-900 mb-2">
-                  Venue Details
-                </h2>
-                <p className="text-neutral-600">Everything you need to know about performing here</p>
-              </div>
-              <Badge variant="default" className="bg-primary-100 text-primary-800">
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold text-neutral-900 mb-2">
+                About this venue
+              </h2>
+              <p className="text-neutral-600">
                 {host.venueType === 'home' ? 'Home/Living Room' :
                  host.venueType === 'studio' ? 'Studio Space' :
                  host.venueType === 'backyard' ? 'Backyard/Garden' :
                  host.venueType === 'loft' ? 'Loft' :
                  host.venueType === 'warehouse' ? 'Warehouse' :
                  host.venueType === 'other' ? 'Other' :
-                 host.venueType?.charAt(0).toUpperCase() + host.venueType?.slice(1).toLowerCase()}
-              </Badge>
+                 host.venueType?.charAt(0).toUpperCase() + host.venueType?.slice(1).toLowerCase() || 'Intimate venue'} 
+                for live performances
+              </p>
             </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="group bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl p-6 border border-primary-200 hover:shadow-md transition-all duration-300">
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-primary-500 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
-                    <Users className="w-6 h-6 text-white" />
+
+            {/* Venue Details Grid - Apple-style clean layout */}
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              {/* Capacity */}
+              <div className="bg-neutral-50 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 bg-neutral-200 rounded-lg flex items-center justify-center">
+                    <Users className="w-5 h-5 text-neutral-600" />
                   </div>
                   <div>
-                    <div className="font-semibold text-neutral-900">Capacity</div>
-                    <div className="text-sm text-neutral-600">Typical attendance</div>
+                    <h3 className="font-semibold text-neutral-900">Capacity</h3>
+                    <p className="text-xs text-neutral-500">Typical attendance</p>
                   </div>
                 </div>
-                <div className="space-y-2">
-                  {host.indoorCapacity && host.indoorCapacity > 0 && (
-                    <div className="text-lg font-bold text-primary-700">{host.indoorCapacity} indoor</div>
-                  )}
-                  {host.outdoorCapacity && host.outdoorCapacity > 0 && (
-                    <div className="text-sm text-neutral-600">{host.outdoorCapacity} outdoor</div>
-                  )}
-                  {(!host.indoorCapacity || host.indoorCapacity === 0) && (!host.outdoorCapacity || host.outdoorCapacity === 0) && (
-                    <div className="text-lg font-bold text-primary-700">{host.showSpecs.avgAttendance} guests</div>
+                <div className="text-2xl font-bold text-neutral-900 mb-1">
+                  {host.indoorCapacity && host.indoorCapacity > 0 ? (
+                    <>
+                      {host.indoorCapacity}
+                      {host.outdoorCapacity && host.outdoorCapacity > 0 && (
+                        <span className="text-lg text-neutral-600 ml-1">
+                          +{host.outdoorCapacity}
+                        </span>
+                      )}
+                    </>
+                  ) : host.outdoorCapacity && host.outdoorCapacity > 0 ? (
+                    host.outdoorCapacity
+                  ) : (
+                    host.showSpecs.avgAttendance
                   )}
                 </div>
+                <p className="text-sm text-neutral-600">
+                  {host.indoorCapacity && host.indoorCapacity > 0 ? (
+                    <>
+                      {host.indoorCapacity} indoor
+                      {host.outdoorCapacity && host.outdoorCapacity > 0 && `, ${host.outdoorCapacity} outdoor`}
+                    </>
+                  ) : host.outdoorCapacity && host.outdoorCapacity > 0 ? (
+                    'Outdoor space'
+                  ) : (
+                    'guests typically'
+                  )}
+                </p>
               </div>
-              
-              <div className="group bg-gradient-to-br from-secondary-50 to-secondary-100 rounded-xl p-6 border border-secondary-200 hover:shadow-md transition-all duration-300">
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-secondary-500 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
-                    <Clock className="w-6 h-6 text-white" />
+
+              {/* Show Length */}
+              <div className="bg-neutral-50 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 bg-neutral-200 rounded-lg flex items-center justify-center">
+                    <Clock className="w-5 h-5 text-neutral-600" />
                   </div>
                   <div>
-                    <div className="font-semibold text-neutral-900">Show Length</div>
-                    <div className="text-sm text-neutral-600">Typical duration</div>
+                    <h3 className="font-semibold text-neutral-900">Show length</h3>
+                    <p className="text-xs text-neutral-500">Typical duration</p>
                   </div>
                 </div>
-                <div className="text-lg font-bold text-secondary-700">
-                  {host.typicalShowLength || host.showSpecs.showDurationMins} minutes
+                <div className="text-2xl font-bold text-neutral-900 mb-1">
+                  {host.typicalShowLength || host.showSpecs.showDurationMins}
                 </div>
-                <div className="text-sm text-neutral-600 mt-1">Typical performance length</div>
+                <p className="text-sm text-neutral-600">minutes</p>
               </div>
-              
-              <div className="group bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-xl p-6 border border-neutral-200 hover:shadow-md transition-all duration-300">
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-neutral-600 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
-                    <Calendar className="w-6 h-6 text-white" />
+
+              {/* Availability */}
+              <div className="bg-neutral-50 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 bg-neutral-200 rounded-lg flex items-center justify-center">
+                    <Calendar className="w-5 h-5 text-neutral-600" />
                   </div>
                   <div>
-                    <div className="font-semibold text-neutral-900">Availability</div>
-                    <div className="text-sm text-neutral-600">Preferred days</div>
+                    <h3 className="font-semibold text-neutral-900">Available</h3>
+                    <p className="text-xs text-neutral-500">Preferred days</p>
                   </div>
                 </div>
-                <div className="text-lg font-bold text-neutral-700">
+                <div className="text-sm font-medium text-neutral-900">
                   {host.preferredDays && host.preferredDays.length > 0 
                     ? host.preferredDays.join(', ')
                     : host.showSpecs.daysAvailable.join(', ')
                   }
                 </div>
-                <div className="text-sm text-neutral-600 mt-1">Best days for concerts</div>
               </div>
             </div>
-          </div>
-        </section>
 
-        {/* Amenities & Features */}
-        <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
-          <div className="p-8">
-            <h2 className="text-2xl font-bold text-neutral-900 mb-6">What This Venue Offers</h2>
-            {host.amenities && host.amenities.length > 0 ? (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {[
-                  { label: 'Power access for equipment', icon: Zap },
-                  { label: 'Kid friendly environment', icon: Baby },
-                  { label: 'Sound system provided', icon: Volume2 },
-                  { label: 'Overnight accommodation', icon: Bed },
-                  { label: 'Air conditioning / Heating', icon: Snowflake },
-                  { label: 'Free parking on premises', icon: Car },
-                  { label: 'WiFi available', icon: Wifi },
-                  { label: 'Step-free access', icon: Accessibility },
-                  { label: 'Food & Refreshments', icon: Coffee }
-                ].filter(({label}) => host.amenities.includes(label))
-                 .map(({label, icon: IconComponent}) => (
-                    <div key={label} className="flex items-center p-4 rounded-lg border bg-primary-50 border-primary-200">
-                      <IconComponent className="w-5 h-5 mr-3 text-primary-600" />
-                      <div className="flex-1">
-                        <span className="font-medium text-primary-900">
-                          {label}
-                        </span>
+            {/* What's offered */}
+            <div>
+              <h3 className="text-lg font-semibold text-neutral-900 mb-6">What's offered</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-6">
+                {host.amenities && host.amenities.length > 0 ? (
+                  // Show actual amenities from database
+                  host.amenities.map((amenity) => {
+                    // Map amenity strings to icons
+                    const amenityConfig = {
+                      'Power access for equipment': { icon: Zap },
+                      'Kid friendly environment': { icon: Baby },
+                      'Sound system provided': { icon: Volume2 },
+                      'Overnight accommodation': { icon: Bed },
+                      'Air conditioning / Heating': { icon: Snowflake },
+                      'Free parking on premises': { icon: Car },
+                      'WiFi available': { icon: Wifi },
+                      'Step-free access': { icon: Accessibility },
+                      'Food & Refreshments': { icon: Coffee }
+                    };
+                    
+                    const config = amenityConfig[amenity as keyof typeof amenityConfig] || { icon: CheckCircle };
+                    const IconComponent = config.icon;
+                    
+                    return (
+                      <div key={amenity} className="flex items-center gap-3 text-neutral-700">
+                        <IconComponent className="w-5 h-5 text-neutral-500" />
+                        <span className="text-sm font-medium">{amenity}</span>
                       </div>
-                      <CheckCircle className="w-5 h-5 text-primary-600" />
+                    );
+                  })
+                ) : (
+                  // Fallback to show all possible amenities as available
+                  [
+                    { label: 'Power access', icon: Zap },
+                    { label: 'Kid friendly', icon: Baby },
+                    { label: 'Sound system', icon: Volume2 },
+                    { label: 'Overnight stay', icon: Bed },
+                    { label: 'Climate control', icon: Snowflake },
+                    { label: 'Free parking', icon: Car },
+                    { label: 'WiFi', icon: Wifi },
+                    { label: 'Accessible', icon: Accessibility }
+                  ].map(({label, icon: IconComponent}) => (
+                    <div key={label} className="flex items-center gap-3 text-neutral-700">
+                      <IconComponent className="w-5 h-5 text-neutral-500" />
+                      <span className="text-sm font-medium">{label}</span>
                     </div>
-                  ))}
+                  ))
+                )}
               </div>
-            ) : (
-              <p className="text-gray-500 text-center py-8">No amenities listed</p>
-            )}
+            </div>
           </div>
         </section>
 

@@ -82,7 +82,7 @@ export default function BookingCoordinationPage() {
       notification.recipients,
       notification.message,
       notification.type,
-      [showBooking.id, lodgingBooking?.id].filter(Boolean),
+      [showBooking.id, lodgingBooking?.id].filter(Boolean) as string[],
       {
         showDate: showBooking.date,
         showLocation: showBooking.location,
