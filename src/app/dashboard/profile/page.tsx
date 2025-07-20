@@ -2696,6 +2696,110 @@ export default function ProfilePage() {
                               </button>
                             )}
                           </div>
+
+                          {/* Room Photos */}
+                          <div className="col-span-2 mt-6">
+                            <div className="flex items-center justify-between mb-4">
+                              <h4 className="text-lg font-medium text-neutral-900">Room Photos</h4>
+                              <label htmlFor={`roomPhotoUpload-${room.id}`} className="cursor-pointer">
+                                <div className="flex items-center px-4 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50">
+                                  <Camera className="w-4 h-4 mr-2" />
+                                  Add Photos
+                                </div>
+                              </label>
+                              <input
+                                id={`roomPhotoUpload-${room.id}`}
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                onChange={async (e) => {
+                                  const files = Array.from(e.target.files || []);
+                                  if (files.length === 0) return;
+
+                                  for (const file of files) {
+                                    const formData = new FormData();
+                                    formData.append('file', file);
+                                    formData.append('type', 'lodging');
+
+                                    try {
+                                      const response = await fetch('/api/upload', {
+                                        method: 'POST',
+                                        body: formData
+                                      });
+
+                                      if (response.ok) {
+                                        const { url } = await response.json();
+                                        
+                                        const newPhoto = {
+                                          id: `temp-${Date.now()}-${Math.random()}`,
+                                          url: url,
+                                          title: file.name.replace(/\.[^/.]+$/, ""),
+                                          description: ''
+                                        };
+
+                                        const updatedRooms = hostProfile.lodgingDetails.rooms.map(r =>
+                                          r.id === room.id ? {
+                                            ...r,
+                                            photos: [...(r.photos || []), newPhoto]
+                                          } : r
+                                        );
+                                        
+                                        updateHostProfile({
+                                          lodgingDetails: {
+                                            ...hostProfile.lodgingDetails,
+                                            rooms: updatedRooms
+                                          }
+                                        });
+                                      }
+                                    } catch (error) {
+                                      console.error('Upload error:', error);
+                                    }
+                                  }
+                                  e.target.value = '';
+                                }}
+                                className="hidden"
+                              />
+                            </div>
+                            
+                            {room.photos && room.photos.length > 0 ? (
+                              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                {room.photos.map((photo, photoIndex) => (
+                                  <div key={photo.id || photoIndex} className="relative group">
+                                    <img
+                                      src={photo.url}
+                                      alt={photo.title || `Room ${index + 1} photo`}
+                                      className="w-full h-32 object-cover rounded-lg"
+                                    />
+                                    <button
+                                      onClick={() => {
+                                        const updatedRooms = hostProfile.lodgingDetails.rooms.map(r =>
+                                          r.id === room.id ? {
+                                            ...r,
+                                            photos: r.photos?.filter((_, i) => i !== photoIndex) || []
+                                          } : r
+                                        );
+                                        updateHostProfile({
+                                          lodgingDetails: {
+                                            ...hostProfile.lodgingDetails,
+                                            rooms: updatedRooms
+                                          }
+                                        });
+                                      }}
+                                      className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                                    >
+                                      <X className="w-4 h-4" />
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <div className="border-2 border-dashed border-neutral-300 rounded-lg p-8 text-center">
+                                <Camera className="w-12 h-12 text-neutral-400 mx-auto mb-3" />
+                                <p className="text-neutral-600 text-sm">No photos uploaded yet</p>
+                                <p className="text-neutral-500 text-xs mt-1">Click "Add Photos" to upload room images</p>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     ))}

@@ -720,155 +720,168 @@ export default function HostProfilePage() {
         {host.offersLodging && host.lodgingDetails && (
           <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
             <div className="p-8">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h2 className="text-2xl font-bold text-neutral-900">
-                    Overnight Accommodation
-                  </h2>
-                  <p className="text-neutral-600">
-                    {host.lodgingDetails.numberOfRooms || 1} room{(host.lodgingDetails.numberOfRooms || 1) > 1 ? 's' : ''} available for artists with comfortable sleeping arrangements
-                  </p>
-                </div>
-                <Badge variant="default" className="bg-primary-100 text-primary-800">
-                  Available
-                </Badge>
+              <div className="mb-8">
+                <h2 className="text-2xl font-bold text-neutral-900 mb-2">
+                  Where you'll sleep
+                </h2>
+                <p className="text-neutral-600">
+                  {host.lodgingDetails.numberOfRooms || 1} bedroom{(host.lodgingDetails.numberOfRooms || 1) > 1 ? 's' : ''} available
+                </p>
               </div>
               
-              {/* Room Details */}
-              {host.lodgingDetails.rooms?.map((room, index) => (
-                <div key={room.id || index} className="mb-8 last:mb-0">
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-xl font-semibold text-neutral-900">
-                      Room {index + 1}
-                    </h3>
-                    <Badge variant="outline" className="bg-secondary-50 text-secondary-700">
-                      {room.roomType?.replace('_', ' ') || 'Private room'}
-                    </Badge>
-                  </div>
+              {/* Room Cards - Apple-inspired design */}
+              <div className="space-y-6">
+                {host.lodgingDetails.rooms?.map((room, index) => {
+                  const mainPhoto = room.photos?.[0];
+                  const bedInfo = room.beds?.map(bed => 
+                    `${bed.quantity} ${bed.type === 'queen' ? 'Queen' : 
+                      bed.type === 'king' ? 'King' : 
+                      bed.type === 'full' ? 'Full' : 
+                      bed.type === 'twin' ? 'Twin' : 
+                      bed.type === 'single' ? 'Single' : 
+                      bed.type === 'sofa_bed' ? 'Sofa bed' : 
+                      bed.type === 'air_mattress' ? 'Air mattress' : 
+                      bed.type}`
+                  ).join(' + ') || '1 Queen';
                   
-                  <div className="grid md:grid-cols-2 gap-6 mb-6">
-                    <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl p-6 border border-primary-200">
-                      <div className="flex items-center mb-4">
-                        <div className="w-12 h-12 bg-primary-500 rounded-lg flex items-center justify-center mr-4">
-                          <Bed className="w-6 h-6 text-white" />
+                  return (
+                    <div key={room.id || index} className="group relative bg-neutral-50 rounded-2xl overflow-hidden transition-all hover:shadow-lg">
+                      <div className="flex flex-col md:flex-row">
+                        {/* Photo Section - Constrained height */}
+                        <div className="relative w-full md:w-1/3 h-48 md:h-48 lg:h-56">
+                          {mainPhoto ? (
+                            <>
+                              <img
+                                src={mainPhoto.url}
+                                alt={`Bedroom ${index + 1}`}
+                                className="w-full h-full object-cover"
+                              />
+                              {room.photos && room.photos.length > 1 && (
+                                <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white px-2.5 py-1 rounded-full text-xs font-medium">
+                                  +{room.photos.length - 1} photos
+                                </div>
+                              )}
+                            </>
+                          ) : (
+                            <div className="w-full h-full bg-gradient-to-br from-neutral-100 to-neutral-200 flex items-center justify-center">
+                              <Bed className="w-12 h-12 text-neutral-400" />
+                            </div>
+                          )}
                         </div>
-                        <div>
-                          <div className="font-semibold text-neutral-900">Room Type & Bathroom</div>
-                          <div className="text-sm text-neutral-600">Sleeping arrangement</div>
-                        </div>
-                      </div>
-                      <div className="text-lg font-bold text-primary-700">
-                        {room.roomType === 'private_bedroom' ? 'Private Bedroom' :
-                         room.roomType === 'shared_room' ? 'Shared Room' :
-                         room.roomType === 'entire_space' ? 'Entire Space' :
-                         'Private room'}
-                      </div>
-                      <div className="text-sm text-neutral-600 mt-1">
-                        {room.bathroomType === 'private' ? 'Private' : 'Shared'} bathroom
-                      </div>
-                    </div>
-                    
-                    <div className="bg-gradient-to-br from-accent-50 to-accent-100 rounded-xl p-6 border border-accent-200">
-                      <div className="flex items-center mb-4">
-                        <div className="w-12 h-12 bg-accent-500 rounded-lg flex items-center justify-center mr-4">
-                          <Bed className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                          <div className="font-semibold text-neutral-900">Bed Configuration</div>
-                          <div className="text-sm text-neutral-600">Sleeping capacity: {room.maxOccupancy || 2} guest{(room.maxOccupancy || 2) > 1 ? 's' : ''}</div>
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        {room.beds?.map((bed, bedIndex) => (
-                          <div key={bedIndex} className="flex items-center justify-between bg-white/50 rounded-lg p-2">
-                            <span className="text-sm font-medium text-accent-900">
-                              {bed.type === 'air_mattress' ? 'Air Mattress' : 
-                               bed.type === 'queen' ? 'Queen Bed' :
-                               bed.type === 'king' ? 'King Bed' :
-                               bed.type === 'full' ? 'Full Bed' :
-                               bed.type === 'twin' ? 'Twin Bed' :
-                               bed.type === 'single' ? 'Single Bed' :
-                               bed.type === 'sofa_bed' ? 'Sofa Bed' :
-                               bed.type?.charAt(0).toUpperCase() + bed.type?.slice(1) || 'Bed'}
-                            </span>
-                            <span className="text-lg font-bold text-accent-700">×{bed.quantity}</span>
+
+                        {/* Info Section */}
+                        <div className="flex-1 p-5 md:p-6">
+                          <div className="flex items-start justify-between mb-4">
+                            <div>
+                              <h3 className="text-xl font-semibold text-neutral-900 mb-1">
+                                {room.roomType === 'private_bedroom' ? 'Private Bedroom' :
+                                 room.roomType === 'shared_room' ? 'Shared Room' :
+                                 room.roomType === 'entire_space' ? 'Entire Space' :
+                                 `Bedroom ${index + 1}`}
+                              </h3>
+                              <p className="text-neutral-600">
+                                {bedInfo} · Sleeps {room.maxOccupancy || 2}
+                              </p>
+                            </div>
                           </div>
-                        )) || (
-                          <div className="flex items-center justify-between bg-white/50 rounded-lg p-2">
-                            <span className="text-sm font-medium text-accent-900">Queen Bed</span>
-                            <span className="text-lg font-bold text-accent-700">×1</span>
+
+                          {/* Key Features */}
+                          <div className="flex items-center gap-4 text-sm">
+                            <div className="flex items-center gap-2">
+                              <div className="w-8 h-8 bg-neutral-200 rounded-lg flex items-center justify-center">
+                                <Bed className="w-4 h-4 text-neutral-700" />
+                              </div>
+                              <span className="text-neutral-700">{bedInfo}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <div className="w-8 h-8 bg-neutral-200 rounded-lg flex items-center justify-center">
+                                <Home className="w-4 h-4 text-neutral-700" />
+                              </div>
+                              <span className="text-neutral-700">
+                                {room.bathroomType === 'private' ? 'Private' : 'Shared'} bath
+                              </span>
+                            </div>
                           </div>
-                        )}
+
+                          {/* View Photos Link */}
+                          {room.photos && room.photos.length > 0 && (
+                            <button className="mt-4 text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors">
+                              View all {room.photos.length} photos →
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              )) || (
-                // Fallback for single room configuration
-                <div className="grid md:grid-cols-2 gap-6 mb-8">
-                  <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl p-6 border border-primary-200">
-                    <div className="flex items-center mb-4">
-                      <div className="w-12 h-12 bg-primary-500 rounded-lg flex items-center justify-center mr-4">
-                        <Bed className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <div className="font-semibold text-neutral-900">Room Type & Bathroom</div>
-                        <div className="text-sm text-neutral-600">Sleeping arrangement</div>
-                      </div>
-                    </div>
-                    <div className="text-lg font-bold text-primary-700">
-                      Private room
-                    </div>
-                    <div className="text-sm text-neutral-600 mt-1">
-                      Shared bathroom
-                    </div>
-                  </div>
-                  
-                  <div className="bg-gradient-to-br from-accent-50 to-accent-100 rounded-xl p-6 border border-accent-200">
-                    <div className="flex items-center mb-4">
-                      <div className="w-12 h-12 bg-accent-500 rounded-lg flex items-center justify-center mr-4">
-                        <Bed className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <div className="font-semibold text-neutral-900">Bed Configuration</div>
-                        <div className="text-sm text-neutral-600">Sleeping capacity: 2 guests</div>
+                  );
+                })}
+              </div>
+
+              {/* Fallback for single room configuration */}
+              {(!host.lodgingDetails.rooms || host.lodgingDetails.rooms.length === 0) && (
+                <div className="group relative bg-neutral-50 rounded-2xl overflow-hidden transition-all hover:shadow-lg">
+                  <div className="flex flex-col md:flex-row">
+                    {/* Photo Section - Placeholder */}
+                    <div className="relative w-full md:w-1/3 h-48 md:h-48 lg:h-56">
+                      <div className="w-full h-full bg-gradient-to-br from-neutral-100 to-neutral-200 flex items-center justify-center">
+                        <Bed className="w-12 h-12 text-neutral-400" />
                       </div>
                     </div>
-                    <div className="flex items-center justify-between bg-white/50 rounded-lg p-2">
-                      <span className="text-sm font-medium text-accent-900">Queen Bed</span>
-                      <span className="text-lg font-bold text-accent-700">×1</span>
+
+                    {/* Info Section */}
+                    <div className="flex-1 p-5 md:p-6">
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <h3 className="text-xl font-semibold text-neutral-900 mb-1">
+                            Private Bedroom
+                          </h3>
+                          <p className="text-neutral-600">
+                            1 Queen bed · Sleeps 2
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Key Features */}
+                      <div className="flex items-center gap-4 text-sm">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 bg-neutral-200 rounded-lg flex items-center justify-center">
+                            <Bed className="w-4 h-4 text-neutral-700" />
+                          </div>
+                          <span className="text-neutral-700">1 Queen bed</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 bg-neutral-200 rounded-lg flex items-center justify-center">
+                            <Home className="w-4 h-4 text-neutral-700" />
+                          </div>
+                          <span className="text-neutral-700">Shared bath</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               )}
               
-              {/* Lodging Amenities */}
-              <div className="mb-8">
-                <h3 className="text-lg font-semibold text-neutral-900 mb-4">Lodging Amenities</h3>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* What's included - Apple-style minimal design */}
+              <div className="mt-12 pt-8 border-t border-neutral-200">
+                <h3 className="text-lg font-semibold text-neutral-900 mb-6">What's included</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-6">
                   {[
-                    { key: 'breakfast', label: 'Breakfast included', icon: Coffee },
-                    { key: 'wifi', label: 'WiFi available', icon: Wifi },
-                    { key: 'parking', label: 'Free parking', icon: Car },
-                    { key: 'laundry', label: 'Laundry access', icon: Home },
-                    { key: 'kitchenAccess', label: 'Kitchen access', icon: Utensils },
-                    { key: 'workspace', label: 'Workspace available', icon: Briefcase },
-                    { key: 'linensProvided', label: 'Linens provided', icon: Bed },
-                    { key: 'towelsProvided', label: 'Towels provided', icon: Shield },
+                    { key: 'wifi', label: 'WiFi', icon: Wifi },
+                    { key: 'breakfast', label: 'Breakfast', icon: Coffee },
+                    { key: 'parking', label: 'Parking', icon: Car },
+                    { key: 'laundry', label: 'Laundry', icon: Home },
+                    { key: 'kitchenAccess', label: 'Kitchen', icon: Utensils },
+                    { key: 'workspace', label: 'Workspace', icon: Briefcase },
+                    { key: 'linensProvided', label: 'Linens', icon: Bed },
+                    { key: 'towelsProvided', label: 'Towels', icon: Shield },
                   ].filter(({ key }) => {
                     const isAvailable = host.lodgingDetails?.amenities?.[key as keyof typeof host.lodgingDetails.amenities] || false;
                     return isAvailable;
-                  }).map(({ key, label, icon: IconComponent }) => {
-                    return (
-                      <div key={key} className="flex items-center p-3 rounded-lg border bg-primary-50 border-primary-200">
-                        <IconComponent className="w-5 h-5 mr-3 text-primary-600" />
-                        <span className="text-sm font-medium text-primary-900">
-                          {label}
-                        </span>
-                        <CheckCircle className="w-4 h-4 ml-auto text-primary-600" />
-                      </div>
-                    );
-                  })}
+                  }).map(({ key, label, icon: IconComponent }) => (
+                    <div key={key} className="flex items-center gap-3 text-neutral-700">
+                      <IconComponent className="w-5 h-5 text-neutral-500" />
+                      <span className="text-sm font-medium">{label}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
