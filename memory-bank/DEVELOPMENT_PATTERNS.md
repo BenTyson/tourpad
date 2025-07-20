@@ -146,7 +146,246 @@ const handleFileUpload = async (file: File, type: 'profile' | 'venue' | 'media')
 
 ---
 
-## Database Interaction Patterns
+## Database Integration Patterns
+
+### Browse Page Database Integration Pattern
+This pattern was established for converting mock data browse pages to real database integration:
+
+```typescript
+// ✅ API Endpoint for Browse Pages (/api/hosts, /api/artists)
+export async function GET(request: NextRequest) {
+  try {
+    // 1. Parse search params for filtering
+    const { searchParams } = new URL(request.url);
+    const search = searchParams.get('search') || '';
+    const genre = searchParams.get('genre');
+    
+    // 2. Build dynamic where clause
+    const whereClause: any = {
+      // Only show approved entities
+      approvedAt: { not: null }
+    };
+    
+    // Add search filters
+    if (search) {
+      whereClause.OR = [
+        { stageName: { contains: search, mode: 'insensitive' } },
+        { user: { name: { contains: search, mode: 'insensitive' } } }
+      ];
+    }
+
+    // 3. Fetch with comprehensive includes
+    const entities = await prisma.artist.findMany({
+      where: whereClause,
+      include: {
+        user: { include: { profile: true } },
+        bandMembers: { orderBy: { sortOrder: 'asc' } },
+        media: { orderBy: { sortOrder: 'asc' } }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    // 4. Transform to frontend expectations
+    const transformed = entities.map(entity => ({
+      id: entity.id,
+      name: entity.stageName || entity.user.name,
+      bio: entity.user.profile?.bio || 'Default bio text',
+      photos: entity.media
+        .filter(m => m.mediaType === 'PHOTO')
+        .map(m => ({
+          id: m.id,
+          url: m.fileUrl,
+          alt: m.title || 'Photo',
+          category: m.category || 'promotional'
+        })),
+      // ... other transformed fields
+    }));
+
+    return NextResponse.json(transformed);
+  } catch (error) {
+    console.error('Browse API error:', error);
+    return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
+  }
+}
+```
+
+```typescript
+// ✅ Frontend Browse Page Integration
+const [entities, setEntities] = useState([]);
+const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+  const fetchEntities = async () => {
+    if (!hasAccess) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/artists');
+      if (response.ok) {
+        const data = await response.json();
+        setEntities(data);
+      } else {
+        console.error('Failed to fetch entities');
+      }
+    } catch (error) {
+      console.error('Error fetching entities:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchEntities();
+}, [hasAccess]);
+
+// Safe filtering with database data
+const filteredEntities = entities.filter(entity => {
+  const matchesSearch = searchQuery === '' || 
+    entity.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    entity.bio?.toLowerCase().includes(searchQuery.toLowerCase());
+  return matchesSearch;
+});
+```
+
+### Component Data Structure Alignment Pattern
+When updating components to work with database data:
+
+```typescript
+// ✅ Update component interfaces to match API response
+interface ArtistProfile {
+  // Change from separate photo arrays to unified photos array
+  photos?: Array<{           // API returns this
+    id: string;
+    url: string;
+    alt: string;
+    category: string;
+  }>;
+  // Remove outdated fields
+  // performancePhotos?: Array<...>;  // Remove this
+  // bandPhotos?: Array<...>;         // Remove this
+  
+  // Align property names with API
+  verified: boolean;         // API returns 'verified'
+  // approved: boolean;      // Remove this, use 'verified'
+}
+
+// ✅ Update component logic to match new structure
+const allPhotos = artist.photos || [];  // Instead of [...performancePhotos, ...bandPhotos]
+```
+
+### Database Seeding Pattern
+For creating sample data with photos:
+
+```typescript
+// ✅ Comprehensive entity seeding script
+const sampleEntities = [
+  {
+    name: "Entity Name",
+    email: "entity@email.com",
+    stageName: "Stage Name",
+    genres: ["genre1", "genre2"],
+    bio: "Comprehensive bio text with details...",
+    // ... complete entity data
+    bandMembers: [
+      { name: "Member Name", instrument: "Instrument", role: "Role" }
+    ]
+  }
+];
+
+async function seedEntities() {
+  for (const entityData of sampleEntities) {
+    try {
+      // 1. Create user first
+      const user = await prisma.user.create({
+        data: {
+          email: entityData.email,
+          name: entityData.name,
+          userType: 'ARTIST',
+          status: 'ACTIVE',
+          emailVerified: true,
+          profile: {
+            create: {
+              bio: entityData.bio,
+              location: 'United States'
+            }
+          }
+        }
+      });
+
+      // 2. Create entity record
+      const entity = await prisma.artist.create({
+        data: {
+          userId: user.id,
+          stageName: entityData.stageName,
+          genres: entityData.genres,
+          // ... other fields
+          approvedAt: new Date(), // Pre-approve samples
+          applicationSubmittedAt: new Date()
+        }
+      });
+
+      // 3. Create related records (band members, etc.)
+      for (let i = 0; i < entityData.bandMembers.length; i++) {
+        await prisma.bandMember.create({
+          data: {
+            artistId: entity.id,
+            ...entityData.bandMembers[i],
+            sortOrder: i
+          }
+        });
+      }
+    } catch (error) {
+      console.error(`Error creating entity:`, error);
+    }
+  }
+}
+```
+
+### Photo Management Pattern
+For adding diverse photos to seeded entities:
+
+```typescript
+// ✅ Photo diversity script
+const diversePhotos = [
+  'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop',
+  'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800&h=600&fit=crop',
+  // ... 20+ different photo URLs
+];
+
+async function updateEntityPhotos() {
+  const entities = await prisma.artist.findMany({
+    include: { user: { include: { profile: true } } }
+  });
+
+  for (let i = 0; i < entities.length; i++) {
+    const entity = entities[i];
+    
+    // Update profile photo
+    const profilePhotoUrl = profilePhotos[i % profilePhotos.length];
+    await prisma.userProfile.update({
+      where: { id: entity.user.profile.id },
+      data: { profileImageUrl: profilePhotoUrl }
+    });
+
+    // Create 3-4 diverse promotional photos
+    const numPhotos = 3 + Math.floor(Math.random() * 2);
+    for (let j = 0; j < numPhotos; j++) {
+      const photoIndex = (i * 4 + j) % diversePhotos.length;
+      await prisma.artistMedia.create({
+        data: {
+          artistId: entity.id,
+          mediaType: 'PHOTO',
+          category: j === 0 ? 'profile' : 'promotional',
+          fileUrl: diversePhotos[photoIndex],
+          title: j === 0 ? 'Profile Photo' : `Performance Photo ${j}`,
+          sortOrder: j
+        }
+      });
+    }
+  }
+}
+```
 
 ### Prisma Client Usage
 ```typescript
@@ -394,7 +633,12 @@ const handleSubmit = async (e: React.FormEvent) => {
 ├── api/
 │   ├── profile/route.ts          # Profile GET/PUT endpoints
 │   ├── upload/route.ts           # File upload endpoint (SINGLE SOURCE)
-│   └── hosts/[id]/route.ts       # Public host profiles
+│   ├── hosts/
+│   │   ├── route.ts              # Browse hosts from database
+│   │   └── [id]/route.ts         # Individual host profiles
+│   └── artists/
+│       ├── route.ts              # Browse artists from database
+│       └── [id]/route.ts         # Individual artist profiles
 
 /src/lib/
 ├── auth.ts                       # NextAuth configuration
@@ -404,6 +648,12 @@ const handleSubmit = async (e: React.FormEvent) => {
 /src/data/
 ├── mockData.ts                   # UI display data (transitioning)
 └── realTestData.ts               # Auth system data (transitioning)
+
+/scripts/
+├── seed-hosts.js                 # Database seeding for hosts
+├── seed-artists.js               # Database seeding for artists
+├── update-host-photos.js         # Photo management for hosts
+└── update-artist-photos.js       # Photo management for artists
 
 /memory-bank/
 ├── PROJECT_STATUS.md             # Current state

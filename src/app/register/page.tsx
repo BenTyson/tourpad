@@ -126,19 +126,35 @@ function RegisterForm() {
         profile: {
           bio: formData.bio,
           location: userType === 'fan' ? `${formData.fanCity}, ${formData.fanState}` : `${formData.city}, ${formData.state}`,
-          // Type-specific fields
-          ...(userType === 'artist' && {
-            genres: formData.genre.split(',').map(g => g.trim()).filter(Boolean)
-          }),
-          ...(userType === 'host' && {
-            city: formData.city,
-            state: formData.state,
-            venueType: 'HOME' // Default venue type
-          }),
+          websiteUrl: formData.bandWebsite,
+          socialLinks: {
+            facebook: formData.socialFacebook,
+            instagram: formData.socialInstagram,
+            spotify: formData.musicProfileUrl, // Map musicProfileUrl to Spotify
+            website: formData.bandWebsite
+          },
+          // Fan-specific fields
           ...(userType === 'fan' && {
             favoriteGenres: formData.favoriteGenres
           })
-        }
+        },
+        // Artist-specific application data
+        ...(userType === 'artist' && {
+          artist: {
+            stageName: formData.bandName,
+            genres: formData.genre.split(',').map(g => g.trim()).filter(Boolean),
+            performanceVideoUrl: formData.performanceVideoUrl,
+            // performanceVideoFile will be handled separately via file upload
+          }
+        }),
+        // Host-specific application data
+        ...(userType === 'host' && {
+          host: {
+            city: formData.city,
+            state: formData.state,
+            venueType: 'HOME' // Default venue type, can be enhanced later
+          }
+        })
       };
 
       const response = await fetch('/api/auth/register', {

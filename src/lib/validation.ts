@@ -53,7 +53,13 @@ export const registrationSchema = z.object({
     bio: z.string().optional(),
     location: z.string().optional(),
     phone: z.string().optional(),
-    socialLinks: z.record(z.string()).optional(),
+    websiteUrl: z.string().optional(),
+    socialLinks: z.object({
+      facebook: z.string().optional(),
+      instagram: z.string().optional(),
+      spotify: z.string().optional(),
+      website: z.string().optional()
+    }).optional(),
     // Artist-specific fields
     genres: z.array(z.string()).optional(),
     // Host-specific fields
@@ -62,6 +68,21 @@ export const registrationSchema = z.object({
     venueType: z.enum(['HOME', 'LOFT', 'WAREHOUSE', 'OTHER']).optional(),
     // Fan-specific fields
     favoriteGenres: z.array(z.string()).optional()
+  }).optional(),
+  
+  // Artist application specific fields
+  artist: z.object({
+    stageName: z.string().optional(),
+    genres: z.array(z.string()).optional(),
+    performanceVideoUrl: z.string().optional(),
+    performanceVideoFile: z.string().optional() // File path after upload
+  }).optional(),
+  
+  // Host application specific fields
+  host: z.object({
+    city: z.string().optional(),
+    state: z.string().optional(),
+    venueType: z.enum(['HOME', 'LOFT', 'WAREHOUSE', 'OTHER']).optional()
   }).optional()
 });
 

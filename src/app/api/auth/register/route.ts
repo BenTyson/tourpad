@@ -6,17 +6,21 @@ import { registrationSchema } from '@/lib/validation';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    console.log('Registration request body:', JSON.stringify(body, null, 2));
     
     // Validate input
     const validation = registrationSchema.safeParse(body);
     if (!validation.success) {
+      console.log('Validation failed:', validation.error.errors);
       return NextResponse.json(
         { error: 'Invalid input', details: validation.error.errors },
         { status: 400 }
       );
     }
 
-    const { email, password, name, userType, profile } = validation.data;
+    console.log('Validation passed, creating user...');
+
+    const { email, password, name, userType, profile, artist, host } = validation.data;
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -33,14 +37,14 @@ export async function POST(request: NextRequest) {
     // Hash password
     const passwordHash = await bcrypt.hash(password, 12);
 
-    // Create user with profile
+    // Create user with comprehensive application data
     const user = await prisma.user.create({
       data: {
         email: email.toLowerCase(),
         passwordHash,
         name,
         userType: userType.toUpperCase() as any,
-        status: userType === 'fan' ? 'ACTIVE' : 'PENDING', // Fans are active immediately
+        status: userType === 'fan' ? 'ACTIVE' : 'PENDING', // Fans are active, artists/hosts need approval
         termsAcceptedAt: new Date(),
         privacyPolicyAcceptedAt: new Date(),
         profile: {
@@ -48,18 +52,27 @@ export async function POST(request: NextRequest) {
             bio: profile?.bio || '',
             location: profile?.location || '',
             phone: profile?.phone || '',
-            socialLinks: profile?.socialLinks || {},
+            websiteUrl: profile?.websiteUrl || '',
+            socialLinks: {
+              facebook: profile?.socialLinks?.facebook || '',
+              instagram: profile?.socialLinks?.instagram || '',
+              spotify: profile?.socialLinks?.spotify || '',
+              website: profile?.socialLinks?.website || ''
+            },
             preferences: {
               notifications: { email: true, push: false },
               privacy: { profileVisibility: 'public' }
             }
           }
         },
-        // Create type-specific records
+        // Create type-specific records with full application data
         ...(userType === 'artist' && {
           artist: {
             create: {
-              genres: profile?.genres || [],
+              stageName: artist?.stageName || '',
+              genres: artist?.genres || [],
+              performanceVideoUrl: artist?.performanceVideoUrl || '',
+              performanceVideoFile: artist?.performanceVideoFile || '',
               applicationSubmittedAt: new Date()
             }
           }
@@ -67,9 +80,9 @@ export async function POST(request: NextRequest) {
         ...(userType === 'host' && {
           host: {
             create: {
-              city: profile?.city || '',
-              state: profile?.state || '',
-              venueType: profile?.venueType || 'OTHER',
+              city: host?.city || profile?.city || '',
+              state: host?.state || profile?.state || '',
+              venueType: host?.venueType || profile?.venueType || 'OTHER',
               applicationSubmittedAt: new Date()
             }
           }

@@ -603,6 +603,14 @@ GET    /api/user/profile-id      // Get dynamic profile ID mapping
 GET    /api/hosts/[id]           // Public host profile display
 ```
 
+#### Browse & Discovery
+```typescript
+GET    /api/hosts                // Browse all approved hosts with database data
+GET    /api/artists              // Browse all approved artists with database data
+GET    /api/artists/[id]         // Individual artist profile with complete data
+// Supports: search, filters, pagination, photo galleries
+```
+
 #### File Upload
 ```typescript
 POST   /api/upload               // File upload with authentication
