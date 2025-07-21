@@ -8,6 +8,9 @@ export async function GET(
   { params }: { params: { path: string[] } }
 ) {
   try {
+    console.log('=== FILE SERVING API ===');
+    console.log('Requested path:', params.path);
+    
     // Optional: Add authentication check for private files
     // const session = await auth();
     // if (!session?.user) {
@@ -15,6 +18,7 @@ export async function GET(
     // }
 
     const filePath = params.path.join('/');
+    console.log('File path:', filePath);
     
     // Security: Prevent directory traversal
     if (filePath.includes('..') || filePath.includes('~')) {

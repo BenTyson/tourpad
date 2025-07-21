@@ -332,19 +332,22 @@ export default function AdminApplicationsPage() {
                               <p><span className="font-medium">Indoor Capacity:</span> {(application as Host).host?.indoorCapacity} people</p>
                             )}
                             {(application as Host).host?.venueDescription && (
-                              <p><span className="font-medium">Description:</span> {(application as Host).host?.venueDescription}</p>
+                              <p><span className="font-medium">Motivation to Host:</span> {(application as Host).host?.venueDescription}</p>
                             )}
-                            {(application as Host).host?.lodgingDetails && (
+                            {(application as Host).host?.lodgingDetails && typeof (application as Host).host?.lodgingDetails === 'object' && (
                               <>
-                                {((application as Host).host?.lodgingDetails as any)?.hostingMotivation && (
-                                  <p><span className="font-medium">What do you enjoy most about hosting:</span> {((application as Host).host?.lodgingDetails as any).hostingMotivation}</p>
-                                )}
+                                {/* Additional Information */}
                                 {((application as Host).host?.lodgingDetails as any)?.additionalInfo && (
                                   <p><span className="font-medium">Additional Information:</span> {((application as Host).host?.lodgingDetails as any).additionalInfo}</p>
                                 )}
+                                
+                                {/* First time hosting question */}
                                 {((application as Host).host?.lodgingDetails as any)?.newToHosting && (
-                                  <p><span className="font-medium">New to hosting:</span> {((application as Host).host?.lodgingDetails as any).newToHosting}</p>
+                                  <p><span className="font-medium">Is this your first time hosting?:</span> {((application as Host).host?.lodgingDetails as any).newToHosting}</p>
                                 )}
+                                
+                                {/* Debug info - remove after testing */}
+                                <p><span className="font-medium text-red-600">Debug - lodgingDetails keys:</span> {Object.keys((application as Host).host?.lodgingDetails || {}).join(', ')}</p>
                               </>
                             )}
                           </div>
@@ -384,25 +387,41 @@ export default function AdminApplicationsPage() {
                         <h5 className="font-medium text-gray-700 mb-3">Venue Photos</h5>
                         {(() => {
                           const host = (application as Host).host!;
-                          const venuePhotos = [];
+                          const venuePhotos: any[] = [];
                           
-                          // Add venue photo URL if exists
+                          // Add venue photo URL if exists (convert to Photo format)
                           if (host.venuePhotoUrl) {
-                            venuePhotos.push(host.venuePhotoUrl);
+                            venuePhotos.push({
+                              id: 'venue-main',
+                              url: host.venuePhotoUrl,
+                              alt: 'Main venue photo',
+                              category: 'house'
+                            });
                           }
                           
-                          // Add media items
-                          if (host.media) {
-                            venuePhotos.push(...host.media);
+                          // Add media items (convert HostMedia to Photo format)
+                          if (host.media && host.media.length > 0) {
+                            host.media.forEach((media: any, index: number) => {
+                              venuePhotos.push({
+                                id: media.id || `media-${index}`,
+                                url: media.fileUrl,
+                                alt: media.title || `Venue photo ${index + 1}`,
+                                category: media.category || 'house'
+                              });
+                            });
                           }
+                          
+                          console.log('Host media data:', host.media);
+                          console.log('Formatted venue photos:', venuePhotos);
                           
                           return venuePhotos.length > 0 ? (
-                            <PhotoGallery photos={venuePhotos} title="Venue Photos" />
+                            <PhotoGallery photos={venuePhotos} onPhotoClick={(index) => console.log('Photo clicked:', index)} />
                           ) : (
                             <div className="text-center py-8 text-gray-500">
                               <PhotoIcon className="w-12 h-12 mx-auto mb-3 text-gray-400" />
                               <p className="text-sm">No venue photos uploaded during application</p>
                               <p className="text-xs text-gray-400 mt-1">Host can add photos after approval via their dashboard</p>
+                              <p className="text-xs text-red-500 mt-1">Debug: host.media = {JSON.stringify(host.media)}</p>
                             </div>
                           );
                         })()}

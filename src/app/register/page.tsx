@@ -233,21 +233,6 @@ function RegisterForm() {
         throw new Error(result.error || 'Registration failed');
       }
 
-      // Upload photos if host and has photos
-      if (userType === 'host' && formData.concertSpacePhotos.length > 0 && result.user?.id) {
-        for (const photo of formData.concertSpacePhotos) {
-          const photoFormData = new FormData();
-          photoFormData.append('file', photo);
-          photoFormData.append('type', 'venue');
-          photoFormData.append('category', 'venue');
-          
-          await fetch('/api/upload', {
-            method: 'POST',
-            body: photoFormData
-          });
-        }
-      }
-      
       if (userType === 'fan') {
         // For fans, redirect to payment page
         router.push('/payment/fan');
@@ -255,7 +240,7 @@ function RegisterForm() {
         // Show success message first
         alert(`${userType === 'artist' ? 'Artist' : 'Host'} application submitted successfully! We'll review and get back to you within 48 hours.`);
         
-        // Auto-login and redirect to holding page
+        // Auto-login first
         const { signIn } = await import('next-auth/react');
         const signInResult = await signIn('credentials', {
           email: formData.email,
@@ -264,6 +249,35 @@ function RegisterForm() {
         });
 
         if (signInResult?.ok) {
+          // Wait a moment for session to be established
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          // Now upload photos after authentication
+          if (userType === 'host' && formData.concertSpacePhotos.length > 0) {
+            console.log(`Uploading ${formData.concertSpacePhotos.length} photos...`);
+            for (const [index, photo] of formData.concertSpacePhotos.entries()) {
+              const photoFormData = new FormData();
+              photoFormData.append('file', photo);
+              photoFormData.append('type', 'venue');
+              photoFormData.append('category', 'venue');
+              
+              try {
+                const uploadResponse = await fetch('/api/upload', {
+                  method: 'POST',
+                  body: photoFormData
+                });
+                const uploadResult = await uploadResponse.json();
+                console.log(`Photo ${index + 1} upload result:`, uploadResult);
+                
+                if (!uploadResponse.ok) {
+                  console.error(`Photo ${index + 1} upload failed:`, uploadResult);
+                }
+              } catch (uploadError) {
+                console.error(`Photo ${index + 1} upload error:`, uploadError);
+              }
+            }
+          }
+          
           // Redirect to dashboard which will show holding page for pending users
           router.push('/dashboard');
         } else {

@@ -91,7 +91,10 @@ export const registrationSchema = z.object({
     offersLodging: z.boolean().optional(),
     lodgingDetails: z.object({
       description: z.string().optional(),
-      motivation: z.string().optional()
+      motivation: z.string().optional(),
+      additionalInfo: z.string().optional(),
+      hostingMotivation: z.string().optional(),
+      newToHosting: z.string().optional()
     }).optional()
   }).optional()
 });

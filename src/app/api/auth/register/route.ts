@@ -88,7 +88,11 @@ export async function POST(request: NextRequest) {
               venueDescription: host?.venueDescription || '',
               hostingExperience: host?.hostingExperience || 0,
               offersLodging: host?.offersLodging || false,
-              lodgingDetails: host?.lodgingDetails || {},
+              lodgingDetails: (() => {
+                console.log('Raw host data from request:', host);
+                console.log('lodgingDetails being saved:', host?.lodgingDetails);
+                return host?.lodgingDetails || {};
+              })(),
               applicationSubmittedAt: new Date()
             }
           }
