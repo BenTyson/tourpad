@@ -35,12 +35,12 @@ export default function ArtistPaymentPage() {
   const features = [
     'Unlimited venue booking requests',
     'Direct messaging with hosts',
-    'Profile visibility to 500+ hosts',
+    'Profile visibility to our entire host and fan user base',
     'Show calendar management',
-    'Performance analytics & reviews',
+    'Rating & Review platform',
     'Marketing tools & event pages',
-    'Priority customer support',
-    'Mobile app access'
+    'Robust map display to plan tours',
+    'Priority customer support'
   ];
 
   const handlePayment = async (e: React.FormEvent) => {
@@ -88,16 +88,16 @@ export default function ArtistPaymentPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <Card className="max-w-md">
           <CardContent className="text-center p-8">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircleIcon className="w-10 h-10 text-green-600" />
+            <div className="w-16 h-16 bg-sage-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircleIcon className="w-10 h-10 text-sage-600" />
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome to TourPad!</h1>
             <p className="text-gray-600 mb-4">
               Your membership is active and your profile is now live.
             </p>
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-              <h3 className="font-medium text-green-900 mb-2">What's Next?</h3>
-              <ul className="text-sm text-green-800 space-y-1">
+            <div className="bg-sage-50 border border-sage-200 rounded-lg p-4 mb-6">
+              <h3 className="font-medium text-sage-900 mb-2">What's Next?</h3>
+              <ul className="text-sm text-sage-800 space-y-1">
                 <li>✓ Your profile is visible to hosts</li>
                 <li>✓ You can now book venues</li>
                 <li>✓ Start browsing available hosts</li>
@@ -123,7 +123,7 @@ export default function ArtistPaymentPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <Card className="max-w-md">
           <CardContent className="text-center p-8">
-            <div className="animate-spin w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+            <div className="animate-spin w-12 h-12 border-4 border-teal-600 border-t-transparent rounded-full mx-auto mb-4"></div>
             <h1 className="text-xl font-bold text-gray-900 mb-2">Processing Payment...</h1>
             <p className="text-gray-600">Please don't close this window</p>
           </CardContent>
@@ -133,7 +133,7 @@ export default function ArtistPaymentPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-stone-50">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Button */}
         <div className="mb-6">
@@ -145,18 +145,6 @@ export default function ArtistPaymentPage() {
           </Link>
         </div>
 
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <MusicalNoteIcon className="w-8 h-8 text-blue-600" />
-          </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Complete Your Artist Membership
-          </h1>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Join our network of touring musicians and start booking intimate venue experiences.
-          </p>
-        </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Payment Form */}
@@ -167,14 +155,14 @@ export default function ArtistPaymentPage() {
                   <h2 className="text-xl font-semibold">Artist Membership Plan</h2>
                 </CardHeader>
                 <CardContent>
-                  <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-6 border border-blue-200 mb-6">
+                  <div className="bg-gradient-to-br from-blue-50 to-teal-50 rounded-lg p-6 border border-blue-200 mb-6">
                     <div className="flex items-center justify-between mb-4">
                       <div>
                         <h3 className="text-2xl font-bold text-gray-900">Annual Membership</h3>
                         <p className="text-gray-600">Everything you need to tour successfully</p>
                       </div>
                       <div className="text-right">
-                        <div className="text-3xl font-bold text-blue-600">$400</div>
+                        <div className="text-3xl font-bold text-teal-600">$400</div>
                         <div className="text-sm text-gray-600">per year</div>
                       </div>
                     </div>
@@ -187,7 +175,7 @@ export default function ArtistPaymentPage() {
                     <h4 className="font-medium text-gray-900">What's Included:</h4>
                     {features.map((feature, index) => (
                       <div key={index} className="flex items-center">
-                        <CheckCircleIcon className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                        <CheckCircleIcon className="w-5 h-5 text-sage-600 mr-3 flex-shrink-0" />
                         <span className="text-gray-700">{feature}</span>
                       </div>
                     ))}
@@ -237,7 +225,7 @@ export default function ArtistPaymentPage() {
                           onClick={() => setPaymentMethod('card')}
                           className={`p-4 border rounded-lg flex items-center justify-center transition-colors ${
                             paymentMethod === 'card'
-                              ? 'border-blue-500 bg-blue-50 text-blue-700'
+                              ? 'border-teal-500 bg-teal-50 text-teal-700'
                               : 'border-gray-300 hover:bg-gray-50'
                           }`}
                         >
@@ -249,7 +237,7 @@ export default function ArtistPaymentPage() {
                           onClick={() => setPaymentMethod('bank')}
                           className={`p-4 border rounded-lg flex items-center justify-center transition-colors ${
                             paymentMethod === 'bank'
-                              ? 'border-blue-500 bg-blue-50 text-blue-700'
+                              ? 'border-teal-500 bg-teal-50 text-teal-700'
                               : 'border-gray-300 hover:bg-gray-50'
                           }`}
                         >
@@ -368,11 +356,11 @@ export default function ArtistPaymentPage() {
                             <input type="checkbox" className="mt-1 mr-3" required />
                             <span className="text-sm text-gray-700">
                               I agree to the{' '}
-                              <Link href="/terms" className="text-blue-600 hover:underline">
+                              <Link href="/terms" className="text-teal-600 hover:underline">
                                 Terms of Service
                               </Link>{' '}
                               and{' '}
-                              <Link href="/privacy" className="text-blue-600 hover:underline">
+                              <Link href="/privacy" className="text-teal-600 hover:underline">
                                 Privacy Policy
                               </Link>
                               . My membership will automatically renew annually.
@@ -401,7 +389,7 @@ export default function ArtistPaymentPage() {
               <CardContent>
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Artist Membership</span>
+                    <span className="text-gray-600">Membership</span>
                     <span className="font-medium">$400.00</span>
                   </div>
                   <div className="flex justify-between">
@@ -426,7 +414,7 @@ export default function ArtistPaymentPage() {
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center text-sm text-gray-600">
-                  <ShieldCheckIcon className="w-5 h-5 text-green-500 mr-2" />
+                  <ShieldCheckIcon className="w-5 h-5 text-sage-600 mr-2" />
                   <span>Secured by Stripe. Your payment information is encrypted and secure.</span>
                 </div>
               </CardContent>

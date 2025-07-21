@@ -36,6 +36,8 @@
 - **API endpoints**: `/api/admin/applications`, `/api/admin/metrics`
 - **Photo categorization**: Venue Photos for hosts, Artist Photos for artists
 - **Clean UI design**: Compact cards, improved readability, streamlined layout
+- **Artist application cards**: Stage name in header, social media links, embedded videos
+- **Artist photo upload**: Full integration with ArtistMedia database model
 
 ### Host Application Database Integration ✅ COMPLETED  
 - **Form submission**: Real database storage working
@@ -120,12 +122,12 @@
 ## 🔄 Recent Achievements
 
 ### This Session Completed ✅
-- **Photo display issue**: Fixed black square bug - lightbox gallery working
-- **Admin UI/UX redesign**: Compact layout, removed unnecessary headers/borders
-- **Filter button styling**: Clean gray theme replacing blue/green clash
-- **Space optimization**: Moved submission date to header, streamlined layout
-- **Lightbox functionality**: Multi-photo navigation with full-size viewing
-- **Database verification**: 6 applications total with proper photo storage
+- **Artist application cards**: Stage name in header, social media links display fixed
+- **Artist photo upload**: Complete implementation from registration to admin display
+- **Performance videos**: Embedded in admin cards with full aspect ratio
+- **Form refactor**: Artist registration reordered, updated labels, removed outdated fields
+- **Video requirements**: Performance video URL now required field
+- **UI polish**: Reduced margins, professional PhotoUploadSection interface
 
 ### Critical Issues Resolved ✅
 - **Browse Hosts crash**: Fixed unsafe code patterns
