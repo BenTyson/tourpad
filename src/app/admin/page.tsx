@@ -101,14 +101,6 @@ export default function AdminPage() {
       href: '/admin/bookings'
     },
     {
-      title: 'Financial Management',
-      description: 'Track payments, revenue, and financial reports',
-      icon: CurrencyDollarIcon,
-      color: 'bg-yellow-500',
-      count: `$${(platformMetrics.monthlyRevenue / 1000).toFixed(0)}k`,
-      href: '/admin/finance'
-    },
-    {
       title: 'Platform Operations',
       description: 'System health, content moderation, and maintenance',
       icon: Cog6ToothIcon,

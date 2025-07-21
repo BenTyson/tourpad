@@ -128,15 +128,15 @@ export default function UsersPage() {
   const getStatusBadge = (status: string) => {
     switch (status.toLowerCase()) {
       case 'active':
-        return <Badge variant="success" className="bg-green-100 text-green-800 border-green-200">Active</Badge>;
+        return <Badge variant="success" style={{backgroundColor: '#318CE7', color: 'white', border: 'none'}}>Active</Badge>;
       case 'pending':
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200">Pending</Badge>;
+        return <Badge variant="secondary" style={{backgroundColor: '#d4c4a8', color: '#344c3d', border: 'none'}}>Pending</Badge>;
       case 'approved':
-        return <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-200">Approved</Badge>;
+        return <Badge variant="secondary" style={{backgroundColor: '#318CE7', color: 'white', border: 'none'}}>Approved</Badge>;
       case 'suspended':
-        return <Badge variant="secondary" className="bg-red-100 text-red-800 border-red-200">Suspended</Badge>;
+        return <Badge variant="secondary" style={{backgroundColor: '#8ea58c', color: 'white', border: 'none'}}>Suspended</Badge>;
       case 'rejected':
-        return <Badge variant="secondary" className="bg-gray-100 text-gray-800 border-gray-200">Rejected</Badge>;
+        return <Badge variant="secondary" style={{backgroundColor: '#ebebe9', color: '#344c3d', border: 'none'}}>Rejected</Badge>;
       default:
         return <Badge variant="secondary">Unknown</Badge>;
     }
@@ -145,17 +145,17 @@ export default function UsersPage() {
   const getPaymentBadge = (status: string) => {
     switch (status) {
       case 'paid':
-        return <Badge variant="success" className="bg-green-100 text-green-800">Paid</Badge>;
+        return <Badge variant="success" style={{backgroundColor: '#738a6e', color: 'white', border: 'none'}}>Paid</Badge>;
       case 'overdue':
-        return <Badge variant="secondary" className="bg-red-100 text-red-800">Overdue</Badge>;
+        return <Badge variant="secondary" style={{backgroundColor: '#8ea58c', color: 'white', border: 'none'}}>Overdue</Badge>;
       case 'failed':
-        return <Badge variant="secondary" className="bg-red-100 text-red-800">Failed</Badge>;
+        return <Badge variant="secondary" style={{backgroundColor: '#344c3d', color: 'white', border: 'none'}}>Failed</Badge>;
       case 'canceled':
-        return <Badge variant="secondary" className="bg-gray-100 text-gray-800">Canceled</Badge>;
+        return <Badge variant="secondary" style={{backgroundColor: '#ebebe9', color: '#344c3d', border: 'none'}}>Canceled</Badge>;
       case 'pending':
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Pending</Badge>;
+        return <Badge variant="secondary" style={{backgroundColor: '#d4c4a8', color: '#344c3d', border: 'none'}}>Pending</Badge>;
       case 'n/a':
-        return <Badge variant="secondary" className="bg-gray-100 text-gray-600">N/A</Badge>;
+        return <Badge variant="secondary" style={{backgroundColor: '#ebebe9', color: '#5e7259', border: 'none'}}>N/A</Badge>;
       default:
         return <Badge variant="secondary">Unknown</Badge>;
     }
@@ -175,7 +175,7 @@ export default function UsersPage() {
   const stats = getUserStats();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-secondary-50 to-neutral-50 py-8">
+    <div className="min-h-screen py-8" style={{background: 'linear-gradient(135deg, #f8f9f9 0%, #ebebe9 100%)'}}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
@@ -327,15 +327,15 @@ export default function UsersPage() {
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className={`p-2 rounded-full ${
-                      user.userType === 'artist' 
-                        ? 'bg-purple-100 text-purple-600' 
-                        : user.userType === 'host'
-                        ? 'bg-blue-100 text-blue-600'
-                        : user.userType === 'fan'
-                        ? 'bg-green-100 text-green-600'
-                        : 'bg-gray-100 text-gray-600'
-                    }`}>
+                    <div 
+                      className="p-2 rounded-full"
+                      style={{
+                        backgroundColor: user.userType === 'ARTIST' ? '#318CE7' :
+                                        user.userType === 'HOST' ? '#738a6e' :
+                                        user.userType === 'FAN' ? '#d4c4a8' : '#ebebe9',
+                        color: user.userType === 'FAN' ? '#344c3d' : 'white'
+                      }}
+                    >
                       {user.userType === 'artist' ? (
                         <MusicalNoteIcon className="w-5 h-5" />
                       ) : user.userType === 'host' ? (
@@ -383,30 +383,6 @@ export default function UsersPage() {
                     <div className="font-semibold">${((user.totalRevenue || 0) / 100).toLocaleString()}</div>
                   </div>
                 </div>
-
-                {/* Payment Information */}
-                {(user.userType === 'artist' || user.userType === 'fan') && user.subscription && (
-                  <div className="bg-gray-50 rounded-lg p-3 text-sm">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-gray-600">Subscription</span>
-                      <Badge variant="secondary" className={
-                        user.subscription.status === 'ACTIVE' ? 'bg-green-100 text-green-800' :
-                        user.subscription.status === 'PAST_DUE' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                      }>
-                        {user.subscription.status}
-                      </Badge>
-                    </div>
-                    <div className="text-gray-900">
-                      ${(user.subscription.amount / 100).toLocaleString()}/{user.subscription.interval}
-                    </div>
-                    {user.subscription.currentPeriodEnd && (
-                      <div className="text-xs text-gray-600 mt-1">
-                        Next billing: {new Date(user.subscription.currentPeriodEnd).toLocaleDateString()}
-                      </div>
-                    )}
-                  </div>
-                )}
 
                 {/* Failed Payments Warning */}
                 {user.failedPayments > 0 && (
