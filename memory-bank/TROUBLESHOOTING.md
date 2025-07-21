@@ -20,7 +20,8 @@ npx tsc --noEmit
 # 2. Fix ALL compilation errors before proceeding
 # Common errors:
 # - Missing 'alt' properties in image components
-# - Type mismatches in component props  
+# - Type mismatches in component props (help prop on Input, variant="outline" on Badge)
+# - Missing imports (Input component, getStripe function)  
 # - Unsafe array/object access patterns
 
 # 3. Nuclear reset after fixing TypeScript errors

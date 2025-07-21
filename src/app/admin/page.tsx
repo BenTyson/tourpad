@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -24,19 +24,8 @@ import {
   MapPinIcon
 } from '@heroicons/react/24/outline';
 
-// Mock data for admin dashboard
-const platformMetrics = {
-  totalUsers: 1247,
-  activeArtists: 423,
-  activeHosts: 186,
-  pendingApplications: 23,
-  totalBookings: 892,
-  monthlyRevenue: 168800,
-  upcomingEvents: 47,
-  supportTickets: 12
-};
-
-const recentActivity = [
+// Static activity data (will be replaced with real data later)
+const recentActivityData = [
   { id: 1, type: 'application', message: 'New artist application from Sarah Johnson (Austin, TX)', time: '2 minutes ago', urgent: false },
   { id: 2, type: 'payment', message: 'Payment failed for artist Marcus Williams - $400 annual fee', time: '15 minutes ago', urgent: true },
   { id: 3, type: 'booking', message: 'Booking dispute reported between Emma Rodriguez and Mike Chen', time: '1 hour ago', urgent: true },
@@ -44,74 +33,107 @@ const recentActivity = [
   { id: 5, type: 'system', message: 'System maintenance scheduled for tonight 2-4 AM EST', time: '3 hours ago', urgent: false }
 ];
 
-const adminSections = [
-  {
-    title: 'Applications',
-    description: 'Review and approve new artists and hosts',
-    icon: UserIcon,
-    color: 'bg-blue-500',
-    count: platformMetrics.pendingApplications,
-    href: '/admin/applications'
-  },
-  {
-    title: 'User Management',
-    description: 'Manage all artists and hosts on the platform',
-    icon: UsersIcon,
-    color: 'bg-green-500',
-    count: platformMetrics.totalUsers,
-    href: '/admin/users'
-  },
-  {
-    title: 'Bookings & Events',
-    description: 'Monitor all platform bookings and events',
-    icon: CalendarIcon,
-    color: 'bg-purple-500',
-    count: platformMetrics.upcomingEvents,
-    href: '/admin/bookings'
-  },
-  {
-    title: 'Financial Management',
-    description: 'Track payments, revenue, and financial reports',
-    icon: CurrencyDollarIcon,
-    color: 'bg-yellow-500',
-    count: `$${(platformMetrics.monthlyRevenue / 1000).toFixed(0)}k`,
-    href: '/admin/finance'
-  },
-  {
-    title: 'Platform Operations',
-    description: 'System health, content moderation, and maintenance',
-    icon: Cog6ToothIcon,
-    color: 'bg-red-500',
-    count: 'Active',
-    href: '/admin/operations'
-  },
-  {
-    title: 'Support Center',
-    description: 'Manage support tickets and user communications',
-    icon: ChatBubbleLeftRightIcon,
-    color: 'bg-indigo-500',
-    count: platformMetrics.supportTickets,
-    href: '/admin/support'
-  },
-  {
-    title: 'Reports & Analytics',
-    description: 'Business intelligence and performance reports',
-    icon: ChartBarIcon,
-    color: 'bg-pink-500',
-    count: 'View',
-    href: '/admin/reports'
-  },
-  {
-    title: 'Security & Compliance',
-    description: 'Security monitoring and compliance management',
-    icon: ShieldCheckIcon,
-    color: 'bg-gray-500',
-    count: 'Secure',
-    href: '/admin/security'
-  }
-];
-
 export default function AdminPage() {
+  const [platformMetrics, setPlatformMetrics] = useState({
+    totalUsers: 0,
+    activeArtists: 0,
+    activeHosts: 0,
+    pendingApplications: 0,
+    totalBookings: 892,
+    monthlyRevenue: 168800,
+    upcomingEvents: 47,
+    supportTickets: 12
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchRealMetrics();
+  }, []);
+
+  const fetchRealMetrics = async () => {
+    try {
+      const response = await fetch('/api/admin/metrics');
+      if (response.ok) {
+        const data = await response.json();
+        setPlatformMetrics(prev => ({
+          ...prev,
+          ...data
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching metrics:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getAdminSections = () => [
+    {
+      title: 'Applications',
+      description: 'Review and approve new artists and hosts',
+      icon: UserIcon,
+      color: 'bg-blue-500',
+      count: platformMetrics.pendingApplications,
+      href: '/admin/applications'
+    },
+    {
+      title: 'User Management',
+      description: 'Manage all artists and hosts on the platform',
+      icon: UsersIcon,
+      color: 'bg-green-500',
+      count: platformMetrics.totalUsers,
+      href: '/admin/users'
+    },
+    {
+      title: 'Bookings & Events',
+      description: 'Monitor all platform bookings and events',
+      icon: CalendarIcon,
+      color: 'bg-purple-500',
+      count: platformMetrics.upcomingEvents,
+      href: '/admin/bookings'
+    },
+    {
+      title: 'Financial Management',
+      description: 'Track payments, revenue, and financial reports',
+      icon: CurrencyDollarIcon,
+      color: 'bg-yellow-500',
+      count: `$${(platformMetrics.monthlyRevenue / 1000).toFixed(0)}k`,
+      href: '/admin/finance'
+    },
+    {
+      title: 'Platform Operations',
+      description: 'System health, content moderation, and maintenance',
+      icon: Cog6ToothIcon,
+      color: 'bg-red-500',
+      count: 'Active',
+      href: '/admin/operations'
+    },
+    {
+      title: 'Support Center',
+      description: 'Manage support tickets and user communications',
+      icon: ChatBubbleLeftRightIcon,
+      color: 'bg-indigo-500',
+      count: platformMetrics.supportTickets,
+      href: '/admin/support'
+    },
+    {
+      title: 'Reports & Analytics',
+      description: 'Business intelligence and performance reports',
+      icon: ChartBarIcon,
+      color: 'bg-pink-500',
+      count: 'View',
+      href: '/admin/reports'
+    },
+    {
+      title: 'Security & Compliance',
+      description: 'Security monitoring and compliance management',
+      icon: ShieldCheckIcon,
+      color: 'bg-gray-500',
+      count: 'Secure',
+      href: '/admin/security'
+    }
+  ];
+
   const getActivityIcon = (type: string) => {
     switch (type) {
       case 'application': return UserIcon;
@@ -231,7 +253,7 @@ export default function AdminPage() {
               </div>
               <div className="p-6">
                 <div className="grid md:grid-cols-2 gap-4">
-                  {adminSections.map((section) => {
+                  {getAdminSections().map((section) => {
                     const Icon = section.icon;
                     return (
                       <Link key={section.title} href={section.href}>
@@ -268,7 +290,7 @@ export default function AdminPage() {
               </div>
               <div className="p-6">
                 <div className="space-y-4">
-                  {recentActivity.map((activity) => {
+                  {recentActivityData.map((activity) => {
                     const Icon = getActivityIcon(activity.type);
                     const colorClasses = getActivityColor(activity.type, activity.urgent);
                     
