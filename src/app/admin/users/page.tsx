@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -23,128 +23,120 @@ import {
   CurrencyDollarIcon
 } from '@heroicons/react/24/outline';
 
-// Mock user data
-const mockUsers = [
-  {
-    id: 'artist1',
-    name: 'Sarah Johnson',
-    email: 'sarah.johnson@email.com',
-    phone: '(555) 123-4567',
-    location: 'Austin, TX',
-    type: 'artist',
-    status: 'active',
-    paymentStatus: 'paid',
-    joinedDate: '2024-01-15T10:30:00Z',
-    lastActive: '2024-01-20T14:30:00Z',
-    profileCompletion: 95,
-    totalBookings: 12,
-    avgRating: 4.8,
-    genre: 'Folk/Indie',
-    nextPaymentDue: '2025-01-15T10:30:00Z'
-  },
-  {
-    id: 'host1',
-    name: 'Mike Chen',
-    email: 'mike.chen@email.com',
-    phone: '(555) 987-6543',
-    location: 'Portland, OR',
-    type: 'host',
-    status: 'active',
-    paymentStatus: 'n/a',
-    joinedDate: '2024-01-14T15:45:00Z',
-    lastActive: '2024-01-21T09:15:00Z',
-    profileCompletion: 88,
-    totalBookings: 8,
-    avgRating: 4.9,
-    venueCapacity: 35,
-    nextPaymentDue: null
-  },
-  {
-    id: 'artist2',
-    name: 'Emma Rodriguez',
-    email: 'emma.rodriguez@email.com',
-    phone: '(555) 555-0123',
-    location: 'Nashville, TN',
-    type: 'artist',
-    status: 'active',
-    paymentStatus: 'paid',
-    joinedDate: '2024-01-13T09:15:00Z',
-    lastActive: '2024-01-19T16:45:00Z',
-    profileCompletion: 100,
-    totalBookings: 24,
-    avgRating: 4.7,
-    genre: 'Country/Americana',
-    nextPaymentDue: '2025-01-13T09:15:00Z'
-  },
-  {
-    id: 'artist3',
-    name: 'Marcus Williams',
-    email: 'marcus.williams@email.com',
-    phone: '(555) 777-8888',
-    location: 'Chicago, IL',
-    type: 'artist',
-    status: 'suspended',
-    paymentStatus: 'overdue',
-    joinedDate: '2023-11-20T12:00:00Z',
-    lastActive: '2024-01-10T11:30:00Z',
-    profileCompletion: 75,
-    totalBookings: 6,
-    avgRating: 4.2,
-    genre: 'Jazz/Blues',
-    nextPaymentDue: '2024-11-20T12:00:00Z'
-  },
-  {
-    id: 'host2',
-    name: 'Lisa Thompson',
-    email: 'lisa.thompson@email.com',
-    phone: '(555) 333-2222',
-    location: 'Denver, CO',
-    type: 'host',
-    status: 'pending_verification',
-    paymentStatus: 'n/a',
-    joinedDate: '2024-01-11T11:00:00Z',
-    lastActive: '2024-01-18T13:20:00Z',
-    profileCompletion: 60,
-    totalBookings: 0,
-    avgRating: null,
-    venueCapacity: 20,
-    nextPaymentDue: null
-  }
-];
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  location: string;
+  userType: string;
+  status: string;
+  paymentStatus: string;
+  stripeCustomerId: string | null;
+  joinedDate: string;
+  lastActive: string;
+  emailVerified: boolean;
+  totalPayments: number;
+  totalRevenue: number;
+  lastPaymentDate: string | null;
+  failedPayments: number;
+  subscription: any;
+  recentPayments: any[];
+  [key: string]: any; // For role-specific data
+}
 
 export default function UsersPage() {
-  const [users, setUsers] = useState(mockUsers);
-  const [typeFilter, setTypeFilter] = useState<'all' | 'artist' | 'host'>('all');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'suspended' | 'pending_verification'>('all');
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [typeFilter, setTypeFilter] = useState<'all' | 'artist' | 'host' | 'fan'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'pending' | 'approved' | 'suspended' | 'rejected'>('all');
+  const [paymentFilter, setPaymentFilter] = useState<'all' | 'paid' | 'overdue' | 'failed'>('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedUser, setSelectedUser] = useState<typeof mockUsers[0] | null>(null);
-
-  const handleStatusChange = (userId: string, newStatus: string) => {
-    setUsers(prev => 
-      prev.map(user => 
-        user.id === userId ? { ...user, status: newStatus } : user
-      )
-    );
-    setSelectedUser(null);
-  };
-
-  const filteredUsers = users.filter(user => {
-    const matchesType = typeFilter === 'all' || user.type === typeFilter;
-    const matchesStatus = statusFilter === 'all' || user.status === statusFilter;
-    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.location.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesType && matchesStatus && matchesSearch;
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 20,
+    total: 0,
+    totalPages: 0
   });
 
+  // Fetch users from database
+  const fetchUsers = useCallback(async () => {
+    try {
+      setLoading(true);
+      const params = new URLSearchParams({
+        page: pagination.page.toString(),
+        limit: pagination.limit.toString()
+      });
+      
+      if (typeFilter !== 'all') params.append('type', typeFilter.toUpperCase());
+      if (statusFilter !== 'all') params.append('status', statusFilter.toUpperCase());
+      if (paymentFilter !== 'all') params.append('paymentStatus', paymentFilter);
+      if (searchTerm) params.append('search', searchTerm);
+
+      const response = await fetch(`/api/admin/users?${params}`);
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch users');
+      }
+
+      const data = await response.json();
+      
+      if (data.error) {
+        // Handle specific errors
+        if (response.status === 401) {
+          setError('Please log in as an admin to view this page');
+        } else if (response.status === 403) {
+          setError('Admin access required to view this page');
+        } else {
+          setError(data.error);
+        }
+        return;
+      }
+      
+      setUsers(data.users);
+      setPagination(data.pagination);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch users');
+      console.error('Error fetching users:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [pagination.page, pagination.limit, typeFilter, statusFilter, paymentFilter, searchTerm]);
+
+  // Fetch users on component mount and when filters change
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
+
+  const handleStatusChange = async (userId: string, newStatus: string) => {
+    try {
+      // This would typically call an admin API to update user status
+      // For now, we'll just refresh the data
+      await fetchUsers();
+      setSelectedUser(null);
+    } catch (error) {
+      console.error('Error updating user status:', error);
+    }
+  };
+
+  // Users are now pre-filtered by the API, so we just use them directly
+  const filteredUsers = users;
+
   const getStatusBadge = (status: string) => {
-    switch (status) {
+    switch (status.toLowerCase()) {
       case 'active':
-        return <Badge variant="secondary" className="bg-secondary-100 text-secondary-800 border-secondary-200">Active</Badge>;
+        return <Badge variant="success" className="bg-green-100 text-green-800 border-green-200">Active</Badge>;
+      case 'pending':
+        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200">Pending</Badge>;
+      case 'approved':
+        return <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-200">Approved</Badge>;
       case 'suspended':
-        return <Badge variant="secondary" className="bg-neutral-200 text-neutral-800 border-neutral-300">Suspended</Badge>;
-      case 'pending_verification':
-        return <Badge variant="secondary" className="bg-secondary-200 text-secondary-900 border-secondary-300">Pending Verification</Badge>;
+        return <Badge variant="secondary" className="bg-red-100 text-red-800 border-red-200">Suspended</Badge>;
+      case 'rejected':
+        return <Badge variant="secondary" className="bg-gray-100 text-gray-800 border-gray-200">Rejected</Badge>;
       default:
         return <Badge variant="secondary">Unknown</Badge>;
     }
@@ -153,24 +145,31 @@ export default function UsersPage() {
   const getPaymentBadge = (status: string) => {
     switch (status) {
       case 'paid':
-        return <Badge variant="success">Paid</Badge>;
+        return <Badge variant="success" className="bg-green-100 text-green-800">Paid</Badge>;
       case 'overdue':
-        return <Badge variant="error">Overdue</Badge>;
+        return <Badge variant="secondary" className="bg-red-100 text-red-800">Overdue</Badge>;
+      case 'failed':
+        return <Badge variant="secondary" className="bg-red-100 text-red-800">Failed</Badge>;
+      case 'canceled':
+        return <Badge variant="secondary" className="bg-gray-100 text-gray-800">Canceled</Badge>;
+      case 'pending':
+        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Pending</Badge>;
       case 'n/a':
-        return <Badge variant="secondary">N/A</Badge>;
+        return <Badge variant="secondary" className="bg-gray-100 text-gray-600">N/A</Badge>;
       default:
         return <Badge variant="secondary">Unknown</Badge>;
     }
   };
 
   const getUserStats = () => {
-    const total = users.length;
-    const activeArtists = users.filter(u => u.type === 'artist' && u.status === 'active').length;
-    const activeHosts = users.filter(u => u.type === 'host' && u.status === 'active').length;
-    const pendingVerification = users.filter(u => u.status === 'pending_verification').length;
+    const total = pagination.total;
+    const activeArtists = users.filter(u => u.userType === 'artist' && u.status === 'active').length;
+    const activeHosts = users.filter(u => u.userType === 'host' && u.status === 'active').length;
+    const activeFans = users.filter(u => u.userType === 'fan' && u.status === 'active').length;
+    const pendingVerification = users.filter(u => u.status === 'pending' || u.status === 'approved').length;
     const suspended = users.filter(u => u.status === 'suspended').length;
-    const overduePayments = users.filter(u => u.paymentStatus === 'overdue').length;
-    return { total, activeArtists, activeHosts, pendingVerification, suspended, overduePayments };
+    const overduePayments = users.filter(u => u.paymentStatus === 'overdue' || u.paymentStatus === 'failed').length;
+    return { total, activeArtists, activeHosts, activeFans, pendingVerification, suspended, overduePayments };
   };
 
   const stats = getUserStats();
@@ -201,30 +200,30 @@ export default function UsersPage() {
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
               <div className="text-2xl font-bold text-primary-600">{stats.activeArtists}</div>
-              <div className="text-sm text-neutral-600">Active Artists</div>
+              <div className="text-sm text-neutral-600">Artists</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
               <div className="text-2xl font-bold text-secondary-600">{stats.activeHosts}</div>
-              <div className="text-sm text-neutral-600">Active Hosts</div>
+              <div className="text-sm text-neutral-600">Hosts</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-secondary-700">{stats.pendingVerification}</div>
+              <div className="text-2xl font-bold text-green-600">{stats.activeFans}</div>
+              <div className="text-sm text-neutral-600">Fans</div>
+            </CardContent>
+          </Card>
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-4 text-center">
+              <div className="text-2xl font-bold text-yellow-600">{stats.pendingVerification}</div>
               <div className="text-sm text-neutral-600">Pending</div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-neutral-700">{stats.suspended}</div>
-              <div className="text-sm text-neutral-600">Suspended</div>
-            </CardContent>
-          </Card>
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-neutral-800">{stats.overduePayments}</div>
+              <div className="text-2xl font-bold text-red-600">{stats.overduePayments}</div>
               <div className="text-sm text-neutral-600">Overdue</div>
             </CardContent>
           </Card>
@@ -249,11 +248,11 @@ export default function UsersPage() {
 
               {/* Type Filter */}
               <div className="flex space-x-1 bg-neutral-100 p-1 rounded-lg">
-                {['all', 'artist', 'host'].map((typeOption) => (
+                {['all', 'artist', 'host', 'fan'].map((typeOption) => (
                   <button
                     key={typeOption}
                     onClick={() => setTypeFilter(typeOption as typeof typeFilter)}
-                    className={`px-4 py-2 rounded-md text-sm font-medium transition-colors capitalize ${
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors capitalize ${
                       typeFilter === typeOption
                         ? 'bg-white text-neutral-700 shadow-sm'
                         : 'text-neutral-600 hover:text-neutral-900'
@@ -266,18 +265,34 @@ export default function UsersPage() {
 
               {/* Status Filter */}
               <div className="flex space-x-1 bg-secondary-100 p-1 rounded-lg">
-                {['all', 'active', 'suspended', 'pending_verification'].map((statusOption) => (
+                {['all', 'active', 'pending', 'approved', 'suspended', 'rejected'].map((statusOption) => (
                   <button
                     key={statusOption}
                     onClick={() => setStatusFilter(statusOption as typeof statusFilter)}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    className={`px-2 py-2 rounded-md text-sm font-medium transition-colors ${
                       statusFilter === statusOption
                         ? 'bg-white text-primary-600 shadow-sm'
                         : 'text-secondary-700 hover:text-secondary-900'
                     }`}
                   >
-                    {statusOption === 'pending_verification' ? 'Pending' : 
-                     statusOption === 'all' ? 'All' : statusOption.charAt(0).toUpperCase() + statusOption.slice(1)}
+                    {statusOption.charAt(0).toUpperCase() + statusOption.slice(1)}
+                  </button>
+                ))}
+              </div>
+
+              {/* Payment Filter */}
+              <div className="flex space-x-1 bg-green-100 p-1 rounded-lg">
+                {['all', 'paid', 'overdue', 'failed'].map((paymentOption) => (
+                  <button
+                    key={paymentOption}
+                    onClick={() => setPaymentFilter(paymentOption as typeof paymentFilter)}
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                      paymentFilter === paymentOption
+                        ? 'bg-white text-green-700 shadow-sm'
+                        : 'text-green-700 hover:text-green-900'
+                    }`}
+                  >
+                    {paymentOption.charAt(0).toUpperCase() + paymentOption.slice(1)}
                   </button>
                 ))}
               </div>
@@ -285,33 +300,58 @@ export default function UsersPage() {
           </CardContent>
         </Card>
 
+        {/* Loading State */}
+        {loading && (
+          <div className="text-center py-12">
+            <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading users...</p>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="text-center py-12">
+            <ExclamationTriangleIcon className="w-16 h-16 text-red-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Error Loading Users</h3>
+            <p className="text-gray-600 mb-4">{error}</p>
+            <Button onClick={() => fetchUsers()}>Try Again</Button>
+          </div>
+        )}
+
         {/* Users Grid */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredUsers.map((user) => (
+        {!loading && !error && (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filteredUsers.map((user) => (
             <Card key={user.id} className="shadow-lg border-0 hover:shadow-xl transition-shadow cursor-pointer"
                   onClick={() => setSelectedUser(user)}>
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <div className={`p-2 rounded-full ${
-                      user.type === 'artist' 
+                      user.userType === 'artist' 
                         ? 'bg-purple-100 text-purple-600' 
-                        : 'bg-blue-100 text-blue-600'
+                        : user.userType === 'host'
+                        ? 'bg-blue-100 text-blue-600'
+                        : user.userType === 'fan'
+                        ? 'bg-green-100 text-green-600'
+                        : 'bg-gray-100 text-gray-600'
                     }`}>
-                      {user.type === 'artist' ? (
+                      {user.userType === 'artist' ? (
                         <MusicalNoteIcon className="w-5 h-5" />
-                      ) : (
+                      ) : user.userType === 'host' ? (
                         <HomeIcon className="w-5 h-5" />
+                      ) : (
+                        <UserIcon className="w-5 h-5" />
                       )}
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900">{user.name}</h3>
-                      <p className="text-sm text-gray-500 capitalize">{user.type}</p>
+                      <p className="text-sm text-gray-500 capitalize">{user.userType}</p>
                     </div>
                   </div>
                   <div className="flex flex-col items-end space-y-1">
                     {getStatusBadge(user.status)}
-                    {user.type === 'artist' && getPaymentBadge(user.paymentStatus)}
+                    {(user.userType === 'artist' || user.userType === 'fan') && getPaymentBadge(user.paymentStatus)}
                   </div>
                 </div>
               </CardHeader>
@@ -335,40 +375,48 @@ export default function UsersPage() {
                 {/* Key Metrics */}
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <div className="text-gray-600">Bookings</div>
-                    <div className="font-semibold">{user.totalBookings}</div>
+                    <div className="text-gray-600">Payments</div>
+                    <div className="font-semibold">{user.totalPayments || 0}</div>
                   </div>
                   <div>
-                    <div className="text-gray-600">Rating</div>
-                    <div className="flex items-center">
-                      {user.avgRating ? (
-                        <>
-                          <StarIcon className="w-4 h-4 text-yellow-500 fill-current mr-1" />
-                          <span className="font-semibold">{user.avgRating}</span>
-                        </>
-                      ) : (
-                        <span className="text-gray-400">No ratings</span>
-                      )}
-                    </div>
+                    <div className="text-gray-600">Revenue</div>
+                    <div className="font-semibold">${((user.totalRevenue || 0) / 100).toLocaleString()}</div>
                   </div>
                 </div>
 
-                {/* Profile Completion */}
-                <div>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span className="text-gray-600">Profile</span>
-                    <span className="font-medium">{user.profileCompletion}%</span>
+                {/* Payment Information */}
+                {(user.userType === 'artist' || user.userType === 'fan') && user.subscription && (
+                  <div className="bg-gray-50 rounded-lg p-3 text-sm">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-gray-600">Subscription</span>
+                      <Badge variant="secondary" className={
+                        user.subscription.status === 'ACTIVE' ? 'bg-green-100 text-green-800' :
+                        user.subscription.status === 'PAST_DUE' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }>
+                        {user.subscription.status}
+                      </Badge>
+                    </div>
+                    <div className="text-gray-900">
+                      ${(user.subscription.amount / 100).toLocaleString()}/{user.subscription.interval}
+                    </div>
+                    {user.subscription.currentPeriodEnd && (
+                      <div className="text-xs text-gray-600 mt-1">
+                        Next billing: {new Date(user.subscription.currentPeriodEnd).toLocaleDateString()}
+                      </div>
+                    )}
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className={`h-2 rounded-full ${
-                        user.profileCompletion >= 90 ? 'bg-green-500' :
-                        user.profileCompletion >= 70 ? 'bg-yellow-500' : 'bg-red-500'
-                      }`}
-                      style={{ width: `${user.profileCompletion}%` }}
-                    ></div>
+                )}
+
+                {/* Failed Payments Warning */}
+                {user.failedPayments > 0 && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm">
+                    <div className="flex items-center text-red-800">
+                      <ExclamationTriangleIcon className="w-4 h-4 mr-2" />
+                      <span className="font-medium">{user.failedPayments} failed payment{user.failedPayments !== 1 ? 's' : ''}</span>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <Button variant="outline" size="sm" className="w-full">
                   View Details
@@ -376,163 +424,14 @@ export default function UsersPage() {
               </CardContent>
             </Card>
           ))}
-        </div>
+          </div>
+        )}
 
-        {filteredUsers.length === 0 && (
+        {!loading && !error && filteredUsers.length === 0 && (
           <div className="text-center py-12">
             <UserIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">No users found</h3>
             <p className="text-gray-600">No users match your current filters</p>
-          </div>
-        )}
-
-        {/* User Detail Modal */}
-        {selectedUser && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <Card className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className={`p-3 rounded-full ${
-                      selectedUser.type === 'artist' 
-                        ? 'bg-purple-100 text-purple-600' 
-                        : 'bg-blue-100 text-blue-600'
-                    }`}>
-                      {selectedUser.type === 'artist' ? (
-                        <MusicalNoteIcon className="w-6 h-6" />
-                      ) : (
-                        <HomeIcon className="w-6 h-6" />
-                      )}
-                    </div>
-                    <div>
-                      <h2 className="text-xl font-semibold text-gray-900">{selectedUser.name}</h2>
-                      <p className="text-gray-600 capitalize">{selectedUser.type}</p>
-                    </div>
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setSelectedUser(null)}
-                  >
-                    ✕
-                  </Button>
-                </div>
-              </CardHeader>
-
-              <CardContent className="space-y-6">
-                {/* Status and Payment Info */}
-                <div className="flex space-x-4">
-                  {getStatusBadge(selectedUser.status)}
-                  {selectedUser.type === 'artist' && getPaymentBadge(selectedUser.paymentStatus)}
-                </div>
-
-                {/* Contact Information */}
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Contact Information</h3>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-medium text-gray-700">Email</label>
-                      <p className="text-gray-900">{selectedUser.email}</p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-700">Phone</label>
-                      <p className="text-gray-900">{selectedUser.phone}</p>
-                    </div>
-                    <div className="md:col-span-2">
-                      <label className="text-sm font-medium text-gray-700">Location</label>
-                      <p className="text-gray-900">{selectedUser.location}</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Account Information */}
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Account Information</h3>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-medium text-gray-700">Joined Date</label>
-                      <p className="text-gray-900">{new Date(selectedUser.joinedDate).toLocaleDateString()}</p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-700">Last Active</label>
-                      <p className="text-gray-900">{new Date(selectedUser.lastActive).toLocaleDateString()}</p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-700">Profile Completion</label>
-                      <p className="text-gray-900">{selectedUser.profileCompletion}%</p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-700">Total Bookings</label>
-                      <p className="text-gray-900">{selectedUser.totalBookings}</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Type-Specific Information */}
-                {selectedUser.type === 'artist' ? (
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-3">Artist Information</h3>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="text-sm font-medium text-gray-700">Genre</label>
-                        <p className="text-gray-900">{selectedUser.genre}</p>
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium text-gray-700">Next Payment Due</label>
-                        <p className="text-gray-900">
-                          {selectedUser.nextPaymentDue 
-                            ? new Date(selectedUser.nextPaymentDue).toLocaleDateString()
-                            : 'N/A'
-                          }
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-3">Host Information</h3>
-                    <div>
-                      <label className="text-sm font-medium text-gray-700">Venue Capacity</label>
-                      <p className="text-gray-900">{selectedUser.venueCapacity} people</p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Action Buttons */}
-                <div className="flex space-x-3 pt-4 border-t">
-                  {selectedUser.status === 'active' && (
-                    <Button
-                      variant="outline"
-                      onClick={() => handleStatusChange(selectedUser.id, 'suspended')}
-                      className="flex-1 border-red-300 text-red-600 hover:bg-red-50"
-                    >
-                      <ExclamationTriangleIcon className="w-4 h-4 mr-2" />
-                      Suspend User
-                    </Button>
-                  )}
-                  
-                  {selectedUser.status === 'suspended' && (
-                    <Button
-                      onClick={() => handleStatusChange(selectedUser.id, 'active')}
-                      className="flex-1 bg-green-600 hover:bg-green-700"
-                    >
-                      <CheckCircleIcon className="w-4 h-4 mr-2" />
-                      Reactivate User
-                    </Button>
-                  )}
-                  
-                  {selectedUser.status === 'pending_verification' && (
-                    <Button
-                      onClick={() => handleStatusChange(selectedUser.id, 'active')}
-                      className="flex-1 bg-green-600 hover:bg-green-700"
-                    >
-                      <CheckCircleIcon className="w-4 h-4 mr-2" />
-                      Approve Verification
-                    </Button>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
           </div>
         )}
       </div>
