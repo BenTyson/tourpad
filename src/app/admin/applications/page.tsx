@@ -76,6 +76,25 @@ interface Artist extends User {
 
 type Application = Host | Artist;
 
+// Helper function to convert video URLs to embed format
+const getVideoEmbedUrl = (url: string): string | null => {
+  if (!url) return null;
+  
+  // YouTube
+  const youtubeMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+  if (youtubeMatch) {
+    return `https://www.youtube.com/embed/${youtubeMatch[1]}`;
+  }
+  
+  // Vimeo
+  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+  if (vimeoMatch) {
+    return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+  }
+  
+  return null;
+};
+
 // Photo Gallery Component
 const PhotoGallery = ({ photos, title }: { photos: (MediaItem | string)[], title: string }) => {
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
@@ -315,7 +334,12 @@ export default function AdminApplicationsPage() {
                         <MusicalNoteIcon className="w-6 h-6 text-purple-600" />
                       )}
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-900">{application.name}</h3>
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          {application.userType.toLowerCase() === 'artist' && (application as Artist).artist?.stageName
+                            ? (application as Artist).artist?.stageName
+                            : application.name
+                          }
+                        </h3>
                         <div className="flex items-center space-x-3 text-sm text-gray-600">
                           <span>{application.email}</span>
                           <span>•</span>
@@ -415,26 +439,67 @@ export default function AdminApplicationsPage() {
                         <div>
                           <div className="grid md:grid-cols-2 gap-6">
                             <div className="space-y-3 text-sm">
-                              {(application as Artist).artist?.stageName && (
-                                <div>
-                                  <span className="font-medium text-gray-900">Stage Name:</span>
-                                  <p className="text-gray-600">{(application as Artist).artist?.stageName}</p>
-                                </div>
-                              )}
+                              <div>
+                                <span className="font-medium text-gray-900">Personal Name:</span>
+                                <p className="text-gray-600">{application.name}</p>
+                              </div>
                               {(application as Artist).artist?.genres && (application as Artist).artist?.genres?.length > 0 && (
                                 <div>
                                   <span className="font-medium text-gray-900">Genres:</span>
                                   <p className="text-gray-600">{(application as Artist).artist?.genres?.join(', ')}</p>
                                 </div>
                               )}
+                              {/* Social Media Links */}
+                              {application.profile?.socialLinks && (
+                                <div>
+                                  <span className="font-medium text-gray-900">Social Media:</span>
+                                  <div className="flex flex-col space-y-1 mt-1">
+                                    {typeof application.profile.socialLinks === 'object' && application.profile.socialLinks && (
+                                      <>
+                                        {(application.profile.socialLinks as any).facebook && (
+                                          <a href={(application.profile.socialLinks as any).facebook} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm">
+                                            Facebook
+                                          </a>
+                                        )}
+                                        {(application.profile.socialLinks as any).instagram && (
+                                          <a href={(application.profile.socialLinks as any).instagram} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm">
+                                            Instagram
+                                          </a>
+                                        )}
+                                        {(application.profile.socialLinks as any).spotify && (
+                                          <a href={(application.profile.socialLinks as any).spotify} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm">
+                                            Spotify
+                                          </a>
+                                        )}
+                                      </>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
                             </div>
-                            <div className="space-y-3 text-sm">
+                            <div className="space-y-3">
+                              {/* Performance Video */}
                               {(application as Artist).artist?.performanceVideoUrl && (
                                 <div>
-                                  <span className="font-medium text-gray-900">Performance Video:</span>
-                                  <a href={(application as Artist).artist?.performanceVideoUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline block">
-                                    View Video
-                                  </a>
+                                  <span className="font-medium text-gray-900 block mb-1">Performance Video:</span>
+                                  {(() => {
+                                    const embedUrl = getVideoEmbedUrl((application as Artist).artist?.performanceVideoUrl || '');
+                                    return embedUrl ? (
+                                      <div className="w-full aspect-video">
+                                        <iframe
+                                          src={embedUrl}
+                                          className="w-full h-full rounded-lg border border-gray-200"
+                                          frameBorder="0"
+                                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                          allowFullScreen
+                                        ></iframe>
+                                      </div>
+                                    ) : (
+                                      <a href={(application as Artist).artist?.performanceVideoUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm">
+                                        View Video (External Link)
+                                      </a>
+                                    );
+                                  })()}
                                 </div>
                               )}
                             </div>
@@ -483,51 +548,67 @@ export default function AdminApplicationsPage() {
                     {application.userType.toLowerCase() === 'artist' && (application as Artist).artist && (
                       <div>
                         <h5 className="font-medium text-gray-700 mb-3">Artist Photos</h5>
+                        {((application as Artist).artist?.media && (application as Artist).artist?.media.length > 0) ? (
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                            {(application as Artist).artist?.media.map((media: any, index: number) => (
+                              <div key={index} className="relative">
+                                <img 
+                                  src={media.fileUrl}
+                                  alt={media.title || `Artist photo ${index + 1}`}
+                                  className="w-full h-32 object-cover rounded-lg border border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all cursor-pointer"
+                                  onClick={() => {
+                                    console.log('Artist photo clicked, opening lightbox');
+                                    openLightbox((application as Artist).artist?.media || [], index);
+                                  }}
+                                />
+                                <div className="absolute bottom-2 right-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded pointer-events-none">
+                                  {index + 1} / {(application as Artist).artist?.media.length}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="text-center py-4 text-gray-500">
+                            <PhotoIcon className="w-6 h-6 mx-auto mb-2 text-gray-400" />
+                            <p className="text-sm">No artist photos uploaded</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Band Member Photos */}
+                    {(application as Artist).artist?.bandMembers && (application as Artist).artist?.bandMembers?.length > 0 && (
+                      <div className="mt-6">
+                        <h5 className="font-medium text-gray-700 mb-3">Band Member Photos</h5>
                         {(() => {
-                          const artist = (application as Artist).artist!;
-                          const artistPhotos = [];
+                          const bandMembersWithPhotos = (application as Artist).artist?.bandMembers?.filter(member => member.photoUrl) || [];
                           
-                          // Add press photo URL if exists
-                          if (artist.pressPhotoUrl) {
-                            artistPhotos.push(artist.pressPhotoUrl);
-                          }
-                          
-                          // Add media items (profile and promotional categories)
-                          if (artist.media) {
-                            artistPhotos.push(...artist.media);
-                          }
-                          
-                          return artistPhotos.length > 0 ? (
-                            <PhotoGallery photos={artistPhotos} title="Artist Photos" />
+                          return bandMembersWithPhotos.length > 0 ? (
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                              {bandMembersWithPhotos.map((member: any, index: number) => (
+                                <div key={index} className="relative">
+                                  <img 
+                                    src={member.photoUrl}
+                                    alt={`${member.name} - ${member.instrument || 'Band member'}`}
+                                    className="w-full h-32 object-cover rounded-lg border border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all cursor-pointer"
+                                    onClick={() => {
+                                      console.log('Band member photo clicked');
+                                      openLightbox(bandMembersWithPhotos.map(m => ({ fileUrl: m.photoUrl, title: `${m.name} - ${m.instrument || 'Band member'}` })), index);
+                                    }}
+                                  />
+                                  <div className="absolute bottom-2 left-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded pointer-events-none">
+                                    {member.name}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
                           ) : (
-                            <div className="text-center py-8 text-gray-500">
-                              <PhotoIcon className="w-12 h-12 mx-auto mb-3 text-gray-400" />
-                              <p className="text-sm">No artist photos uploaded during application</p>
-                              <p className="text-xs text-gray-400 mt-1">Artist can add photos after approval via their dashboard</p>
+                            <div className="text-center py-4 text-gray-500">
+                              <PhotoIcon className="w-6 h-6 mx-auto mb-2 text-gray-400" />
+                              <p className="text-sm">No band member photos uploaded</p>
                             </div>
                           );
                         })()}
-
-                        {/* Band Member Photos */}
-                        {(application as Artist).artist?.bandMembers && (application as Artist).artist?.bandMembers?.length > 0 && (
-                          <div className="mt-6">
-                            <h5 className="font-medium text-gray-700 mb-3">Band Member Photos</h5>
-                            {(() => {
-                              const bandMemberPhotos = (application as Artist).artist?.bandMembers
-                                ?.filter(member => member.photoUrl)
-                                .map(member => member.photoUrl!) || [];
-                              
-                              return bandMemberPhotos.length > 0 ? (
-                                <PhotoGallery photos={bandMemberPhotos} title="Band Member Photos" />
-                              ) : (
-                                <div className="text-center py-4 text-gray-500">
-                                  <PhotoIcon className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-                                  <p className="text-sm">No band member photos uploaded</p>
-                                </div>
-                              );
-                            })()}
-                          </div>
-                        )}
                       </div>
                     )}
                   </div>

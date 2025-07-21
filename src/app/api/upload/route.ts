@@ -84,6 +84,34 @@ export async function POST(request: NextRequest) {
       }
     }
     
+    // If it's an artist photo, create ArtistMedia record
+    if (type === 'artist' && category) {
+      console.log('Attempting to create artist photo for user:', session.user.id);
+      const artist = await prisma.artist.findUnique({
+        where: { userId: session.user.id }
+      });
+      
+      console.log('Found artist:', artist ? artist.id : 'NOT FOUND');
+      
+      if (artist) {
+        const mediaRecord = await prisma.artistMedia.create({
+          data: {
+            artistId: artist.id,
+            mediaType: 'PHOTO',
+            category: category,
+            fileUrl: publicUrl,
+            fileSize: buffer.length,
+            mimeType: file.type,
+            title: file.name,
+            sortOrder: 0
+          }
+        });
+        console.log('Created ArtistMedia record:', mediaRecord.id);
+      } else {
+        console.error('No artist found for user:', session.user.id);
+      }
+    }
+    
     return NextResponse.json({ 
       success: true,
       url: publicUrl,

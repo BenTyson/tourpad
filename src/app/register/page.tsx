@@ -41,6 +41,7 @@ function RegisterForm() {
     socialFacebook: '',
     socialInstagram: '',
     pressPhoto: [] as File[],
+    artistPhotos: [] as File[],
     genre: '',
     // Host specific
     address: '',
@@ -278,6 +279,32 @@ function RegisterForm() {
             }
           }
           
+          // Upload artist photos after authentication
+          if (userType === 'artist' && formData.artistPhotos.length > 0) {
+            console.log(`Uploading ${formData.artistPhotos.length} artist photos...`);
+            for (const [index, photo] of formData.artistPhotos.entries()) {
+              const photoFormData = new FormData();
+              photoFormData.append('file', photo);
+              photoFormData.append('type', 'artist');
+              photoFormData.append('category', 'promotional');
+              
+              try {
+                const uploadResponse = await fetch('/api/upload', {
+                  method: 'POST',
+                  body: photoFormData
+                });
+                const uploadResult = await uploadResponse.json();
+                console.log(`Artist photo ${index + 1} upload result:`, uploadResult);
+                
+                if (!uploadResponse.ok) {
+                  console.error(`Artist photo ${index + 1} upload failed:`, uploadResult);
+                }
+              } catch (uploadError) {
+                console.error(`Artist photo ${index + 1} upload error:`, uploadError);
+              }
+            }
+          }
+          
           // Redirect to dashboard which will show holding page for pending users
           router.push('/dashboard');
         } else {
@@ -329,60 +356,7 @@ function RegisterForm() {
             )}
             
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Common fields */}
-              <div>
-                <Input
-                  label="Your Name *"
-                  value={formData.name}
-                  onChange={(e) => {
-                    setFormData({ ...formData, name: e.target.value });
-                    if (errors.name) setErrors(prev => ({ ...prev, name: '' }));
-                  }}
-                  required
-                  placeholder="Your full name"
-                />
-                {errors.name && (
-                  <p className="mt-1 text-sm text-red-600">{errors.name}</p>
-                )}
-              </div>
-
-              <div>
-                <Input
-                  label="Email Address *"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => {
-                    setFormData({ ...formData, email: e.target.value });
-                    if (errors.email) setErrors(prev => ({ ...prev, email: '' }));
-                  }}
-                  required
-                  placeholder="your@email.com"
-                />
-                {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-                )}
-              </div>
-
-              <div>
-                <Input
-                  label="Password *"
-                  type="password"
-                  value={formData.password}
-                  onChange={(e) => {
-                    setFormData({ ...formData, password: e.target.value });
-                    if (errors.password) setErrors(prev => ({ ...prev, password: '' }));
-                  }}
-                  required
-                  placeholder="Create a strong password"
-                />
-                <p className="mt-1 text-xs text-neutral-500">Must be at least 8 characters long</p>
-                {errors.password && (
-                  <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-                )}
-              </div>
-
-
-              {/* Artist Application Fields */}
+              {/* Artist fields first */}
               {userType === 'artist' && (
                 <>
                   <div>
@@ -400,6 +374,119 @@ function RegisterForm() {
                       <p className="mt-1 text-sm text-red-600">{errors.bandName}</p>
                     )}
                   </div>
+
+                  <div>
+                    <Input
+                      label="Applicant (Personal) Name *"
+                      value={formData.name}
+                      onChange={(e) => {
+                        setFormData({ ...formData, name: e.target.value });
+                        if (errors.name) setErrors(prev => ({ ...prev, name: '' }));
+                      }}
+                      required
+                      placeholder="Your full name"
+                    />
+                    {errors.name && (
+                      <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <Input
+                      label="Email Address *"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => {
+                        setFormData({ ...formData, email: e.target.value });
+                        if (errors.email) setErrors(prev => ({ ...prev, email: '' }));
+                      }}
+                      required
+                      placeholder="your@email.com"
+                    />
+                    {errors.email && (
+                      <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <Input
+                      label="Password *"
+                      type="password"
+                      value={formData.password}
+                      onChange={(e) => {
+                        setFormData({ ...formData, password: e.target.value });
+                        if (errors.password) setErrors(prev => ({ ...prev, password: '' }));
+                      }}
+                      required
+                      placeholder="Create a strong password"
+                    />
+                    <p className="mt-1 text-xs text-neutral-500">Must be at least 8 characters long</p>
+                    {errors.password && (
+                      <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+                    )}
+                  </div>
+                </>
+              )}
+
+              {/* Non-artist fields (hosts, fans) */}
+              {userType !== 'artist' && (
+                <>
+                  <div>
+                    <Input
+                      label="Your Name *"
+                      value={formData.name}
+                      onChange={(e) => {
+                        setFormData({ ...formData, name: e.target.value });
+                        if (errors.name) setErrors(prev => ({ ...prev, name: '' }));
+                      }}
+                      required
+                      placeholder="Your full name"
+                    />
+                    {errors.name && (
+                      <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <Input
+                      label="Email Address *"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => {
+                        setFormData({ ...formData, email: e.target.value });
+                        if (errors.email) setErrors(prev => ({ ...prev, email: '' }));
+                      }}
+                      required
+                      placeholder="your@email.com"
+                    />
+                    {errors.email && (
+                      <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <Input
+                      label="Password *"
+                      type="password"
+                      value={formData.password}
+                      onChange={(e) => {
+                        setFormData({ ...formData, password: e.target.value });
+                        if (errors.password) setErrors(prev => ({ ...prev, password: '' }));
+                      }}
+                      required
+                      placeholder="Create a strong password"
+                    />
+                    <p className="mt-1 text-xs text-neutral-500">Must be at least 8 characters long</p>
+                    {errors.password && (
+                      <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+                    )}
+                  </div>
+                </>
+              )}
+
+              {/* Artist Application Fields */}
+              {userType === 'artist' && (
+                <>
                   <div className="space-y-1">
                     <label className="block text-sm font-medium text-neutral-700">
                       Artist Bio *
@@ -426,56 +513,42 @@ function RegisterForm() {
 
                   <div>
                     <Input
-                      label="Performance Video URL"
+                      label="Live Performance Video URL *"
                       value={formData.performanceVideoUrl}
                       onChange={(e) => {
                         setFormData({ ...formData, performanceVideoUrl: e.target.value });
                         if (errors.performanceVideoUrl) setErrors(prev => ({ ...prev, performanceVideoUrl: '' }));
                       }}
+                      required
                       placeholder="https://youtube.com/watch?v=... or https://vimeo.com/..."
                     />
-                    <p className="mt-1 text-xs text-neutral-500">Share a live performance video (preferred)</p>
                     {errors.performanceVideoUrl && (
                       <p className="mt-1 text-sm text-red-600">{errors.performanceVideoUrl}</p>
                     )}
                   </div>
 
-                  <div className="space-y-1">
-                    <label className="block text-sm font-medium text-neutral-700">
-                      Or Upload Performance Video (.mp4)
-                    </label>
-                    <input
-                      type="file"
-                      accept="video/mp4"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0] || null;
-                        if (file && file.size > 100 * 1024 * 1024) { // 100MB limit
-                          setErrors(prev => ({ ...prev, performanceVideoFile: 'File size must be under 100MB' }));
-                          return;
-                        }
-                        setFormData({ ...formData, performanceVideoFile: file });
-                        if (errors.performanceVideoFile) setErrors(prev => ({ ...prev, performanceVideoFile: '' }));
-                      }}
-                      className="block w-full text-sm text-neutral-900 border border-neutral-300 rounded-md cursor-pointer bg-neutral-50 focus:outline-none focus:border-primary-400"
-                    />
-                    <p className="mt-1 text-xs text-neutral-500">Upload a 3-6 minute performance video (max 100MB)</p>
-                    {errors.performanceVideoFile && (
-                      <p className="mt-1 text-sm text-red-600">{errors.performanceVideoFile}</p>
-                    )}
-                  </div>
-
+                  <PhotoUploadSection
+                    files={formData.artistPhotos}
+                    onChange={(files) => {
+                      setFormData({ ...formData, artistPhotos: files });
+                      if (errors.artistPhotos) setErrors(prev => ({ ...prev, artistPhotos: '' }));
+                    }}
+                    error={errors.artistPhotos}
+                    label="Artist & Band Photos"
+                    description="Upload 1-6 high-quality promotional photos"
+                    required
+                  />
                   <div>
                     <Input
-                      label="Primary Music Profile *"
+                      label="Spotify Profile *"
                       value={formData.musicProfileUrl}
                       onChange={(e) => {
                         setFormData({ ...formData, musicProfileUrl: e.target.value });
                         if (errors.musicProfileUrl) setErrors(prev => ({ ...prev, musicProfileUrl: '' }));
                       }}
                       required
-                      placeholder="https://open.spotify.com/artist/... or https://music.apple.com/..."
+                      placeholder="https://open.spotify.com/artist/..."
                     />
-                    <p className="mt-1 text-xs text-neutral-500">Link to your Spotify, Apple Music, Bandcamp, etc</p>
                     {errors.musicProfileUrl && (
                       <p className="mt-1 text-sm text-red-600">{errors.musicProfileUrl}</p>
                     )}
@@ -569,17 +642,6 @@ function RegisterForm() {
                     </div>
                   </div>
 
-                  <PhotoUploadSection
-                    files={formData.pressPhoto}
-                    onChange={(files) => {
-                      setFormData({ ...formData, pressPhoto: files });
-                      if (errors.pressPhoto) setErrors(prev => ({ ...prev, pressPhoto: '' }));
-                    }}
-                    error={errors.pressPhoto}
-                    label="Press Photos"
-                    description="Upload 1-5 high-quality promotional photos"
-                    required
-                  />
                 </>
               )}
 
