@@ -100,6 +100,7 @@ const PhotoGallery = ({ photos, title }: { photos: (MediaItem | string)[], title
           const photoUrl = typeof photo === 'string' ? photo : photo.fileUrl;
           const photoTitle = typeof photo === 'object' ? photo.title : undefined;
           
+          
           return (
             <div key={index} className="relative group">
               <img
@@ -346,8 +347,6 @@ export default function AdminApplicationsPage() {
                                   <p><span className="font-medium">Is this your first time hosting?:</span> {((application as Host).host?.lodgingDetails as any).newToHosting}</p>
                                 )}
                                 
-                                {/* Debug info - remove after testing */}
-                                <p><span className="font-medium text-red-600">Debug - lodgingDetails keys:</span> {Object.keys((application as Host).host?.lodgingDetails || {}).join(', ')}</p>
                               </>
                             )}
                           </div>
@@ -385,46 +384,32 @@ export default function AdminApplicationsPage() {
                     {application.userType.toLowerCase() === 'host' && (application as Host).host && (
                       <div>
                         <h5 className="font-medium text-gray-700 mb-3">Venue Photos</h5>
-                        {(() => {
-                          const host = (application as Host).host!;
-                          const venuePhotos: any[] = [];
-                          
-                          // Add venue photo URL if exists (convert to Photo format)
-                          if (host.venuePhotoUrl) {
-                            venuePhotos.push({
-                              id: 'venue-main',
-                              url: host.venuePhotoUrl,
-                              alt: 'Main venue photo',
-                              category: 'house'
-                            });
-                          }
-                          
-                          // Add media items (convert HostMedia to Photo format)
-                          if (host.media && host.media.length > 0) {
-                            host.media.forEach((media: any, index: number) => {
-                              venuePhotos.push({
-                                id: media.id || `media-${index}`,
-                                url: media.fileUrl,
-                                alt: media.title || `Venue photo ${index + 1}`,
-                                category: media.category || 'house'
-                              });
-                            });
-                          }
-                          
-                          console.log('Host media data:', host.media);
-                          console.log('Formatted venue photos:', venuePhotos);
-                          
-                          return venuePhotos.length > 0 ? (
-                            <PhotoGallery photos={venuePhotos} onPhotoClick={(index) => console.log('Photo clicked:', index)} />
-                          ) : (
-                            <div className="text-center py-8 text-gray-500">
-                              <PhotoIcon className="w-12 h-12 mx-auto mb-3 text-gray-400" />
-                              <p className="text-sm">No venue photos uploaded during application</p>
-                              <p className="text-xs text-gray-400 mt-1">Host can add photos after approval via their dashboard</p>
-                              <p className="text-xs text-red-500 mt-1">Debug: host.media = {JSON.stringify(host.media)}</p>
+                        {((application as Host).host?.media && (application as Host).host?.media.length > 0) ? (
+                          <div className="space-y-3">
+                            <p className="text-sm font-medium text-green-600">Found {(application as Host).host?.media.length} venue photo(s)</p>
+                            <div className="grid grid-cols-2 gap-4">
+                              {(application as Host).host?.media.map((media: any, index: number) => (
+                                <div key={index} className="border-2 border-red-500 p-2">
+                                  <p className="text-xs text-blue-600 mb-2">URL: {media.fileUrl}</p>
+                                  <img 
+                                    src={media.fileUrl}
+                                    alt={media.title || `Venue photo ${index + 1}`}
+                                    className="w-full h-32 object-cover border-4 border-green-500"
+                                    style={{ backgroundColor: 'yellow' }}
+                                  />
+                                  <p className="text-xs mt-1">Title: {media.title}</p>
+                                  <p className="text-xs">Category: {media.category}</p>
+                                </div>
+                              ))}
                             </div>
-                          );
-                        })()}
+                          </div>
+                        ) : (
+                          <div className="text-center py-8 text-gray-500">
+                            <PhotoIcon className="w-12 h-12 mx-auto mb-3 text-gray-400" />
+                            <p className="text-sm">No venue photos uploaded during application</p>
+                            <p className="text-xs text-gray-400 mt-1">Host can add photos after approval via their dashboard</p>
+                          </div>
+                        )}
                       </div>
                     )}
 
