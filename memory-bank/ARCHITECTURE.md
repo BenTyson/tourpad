@@ -213,7 +213,7 @@ model HostMedia {
   hostId      String
   mediaType   MediaType // PHOTO, VIDEO
   category    String?   // venue, exterior, performance_space
-  fileUrl     String
+  fileUrl     String    // Served via /api/files/[...path]/route.ts
   fileSize    Int?
   mimeType    String?
   title       String?
@@ -224,6 +224,12 @@ model HostMedia {
   createdAt   DateTime  @default(now())
 }
 ```
+
+**Current Implementation Status:**
+- ✅ Photos uploading during host registration to `storage/uploads/`
+- ✅ HostMedia records created with proper fileUrl paths
+- ✅ Admin applications page displays photos via lightbox gallery
+- ✅ File serving API handles image delivery with proper headers
 
 #### BandMember Model
 ```prisma
@@ -611,12 +617,16 @@ GET    /api/artists/[id]         // Individual artist profile with complete data
 // Supports: search, filters, pagination, photo galleries
 ```
 
-#### File Upload
+#### File Upload & Serving
 ```typescript
 POST   /api/upload               // File upload with authentication
 // Supports: profile photos, venue photos, media files
 // Storage: Local (dev), AWS S3 (prod ready)
 // Validation: File type, size, authentication
+
+GET    /api/files/[...path]      // File serving API (rewrites from /uploads/*)
+// Features: Proper content-type headers, caching, security
+// Storage: storage/uploads/ directory (outside public for performance)
 ```
 
 #### NextAuth Integration
@@ -654,12 +664,18 @@ GET    /api/payments/subscription     // Subscription status
 POST   /api/payments/cancel          // Cancel subscription
 ```
 
-#### Admin Tools
+#### Admin Tools ✅ IMPLEMENTED
 ```typescript
-GET    /api/admin/applications   // Pending user applications
-POST   /api/admin/applications/[id]/review // Approve/reject users
-GET    /api/admin/analytics      // Platform analytics
-GET    /api/admin/users          // User management
+GET    /api/admin/applications        // Pending user applications (WORKING)
+GET    /api/admin/metrics            // Real-time dashboard metrics (WORKING)
+POST   /api/admin/applications/[userId]/approve // Approve users (WORKING)
+POST   /api/admin/applications/[userId]/reject  // Reject users (WORKING)
+
+// Features implemented:
+// - Real-time pending count display
+// - Photo gallery viewing in applications
+// - Host/Artist application filtering
+// - Complete application review UI
 ```
 
 ### API Response Patterns

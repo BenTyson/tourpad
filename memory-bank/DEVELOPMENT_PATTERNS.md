@@ -2,6 +2,62 @@
 
 ## Core Development Rules
 
+## UI/UX Design Patterns ✅ ESTABLISHED
+
+### Admin Interface Standards
+Based on successful admin applications page implementation:
+
+```typescript
+// ✅ Lightbox Gallery Pattern for Photo Viewing
+const [selectedPhotos, setSelectedPhotos] = useState<any[]>([]);
+const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+const [showLightbox, setShowLightbox] = useState(false);
+
+const openLightbox = (photos: any[], startIndex: number) => {
+  setSelectedPhotos(photos);
+  setCurrentPhotoIndex(startIndex);
+  setShowLightbox(true);
+};
+
+// Modal with navigation arrows, photo counter, close button
+// Supports multi-photo navigation with keyboard controls ready
+
+// ✅ Compact Card Design Pattern
+// - Move metadata to header (submission date with email)
+// - Remove unnecessary section headers and borders
+// - Grid layouts instead of stacked columns
+// - Clean filter buttons with gray theme (not blue/green)
+```
+
+### Photo Management Patterns
+```typescript
+// ✅ Venue Photo Display in Admin Applications
+{((application as Host).host?.media && (application as Host).host?.media.length > 0) ? (
+  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+    {(application as Host).host?.media.map((media: any, index: number) => (
+      <div key={index} className="relative">
+        <img 
+          src={media.fileUrl}
+          alt={media.title || `Venue photo ${index + 1}`}
+          className="w-full h-32 object-cover rounded-lg border border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all cursor-pointer"
+          onClick={() => openLightbox((application as Host).host?.media || [], index)}
+        />
+        <div className="absolute bottom-2 right-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded pointer-events-none">
+          {index + 1} / {(application as Host).host?.media.length}
+        </div>
+      </div>
+    ))}
+  </div>
+) : (
+  <div className="text-center py-4 text-gray-500">
+    <PhotoIcon className="w-6 h-6 mx-auto mb-2 text-gray-400" />
+    <p className="text-sm">No venue photos uploaded</p>
+  </div>
+)}
+```
+
+## Core Development Rules
+
 ### Required Code Quality Standards
 
 #### Defensive Programming (MANDATORY)
