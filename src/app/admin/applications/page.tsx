@@ -149,6 +149,9 @@ export default function AdminApplicationsPage() {
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'host' | 'artist'>('all');
+  const [selectedPhotos, setSelectedPhotos] = useState<any[]>([]);
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const [showLightbox, setShowLightbox] = useState(false);
 
   useEffect(() => {
     fetchApplications();
@@ -168,6 +171,26 @@ export default function AdminApplicationsPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const openLightbox = (photos: any[], startIndex: number) => {
+    setSelectedPhotos(photos);
+    setCurrentPhotoIndex(startIndex);
+    setShowLightbox(true);
+  };
+
+  const closeLightbox = () => {
+    setShowLightbox(false);
+    setSelectedPhotos([]);
+    setCurrentPhotoIndex(0);
+  };
+
+  const nextPhoto = () => {
+    setCurrentPhotoIndex((prev) => (prev + 1) % selectedPhotos.length);
+  };
+
+  const prevPhoto = () => {
+    setCurrentPhotoIndex((prev) => (prev - 1 + selectedPhotos.length) % selectedPhotos.length);
   };
 
   const handleApprove = async (userId: string) => {
@@ -298,78 +321,120 @@ export default function AdminApplicationsPage() {
                 </CardHeader>
                 
                 <CardContent className="p-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    {/* Left Column - Basic Info */}
-                    <div className="space-y-4">
+                  <div className="space-y-6">
+                    {/* Top Section - Application Info */}
+                    <div className="grid md:grid-cols-4 gap-4 text-sm">
                       <div>
-                        <h4 className="font-medium text-gray-900 mb-2">Application Details</h4>
-                        <div className="space-y-2 text-sm text-gray-600">
-                          <p><span className="font-medium">Submitted:</span> {new Date(application.createdAt).toLocaleDateString()}</p>
-                          {application.profile?.phone && (
-                            <p><span className="font-medium">Phone:</span> {application.profile.phone}</p>
-                          )}
-                          {application.profile?.bio && (
-                            <p><span className="font-medium">Bio:</span> {application.profile.bio}</p>
-                          )}
-                        </div>
+                        <span className="font-medium text-gray-900">Submitted:</span>
+                        <p className="text-gray-600">{new Date(application.createdAt).toLocaleDateString()}</p>
                       </div>
+                      {application.profile?.phone && (
+                        <div>
+                          <span className="font-medium text-gray-900">Phone:</span>
+                          <p className="text-gray-600">{application.profile.phone}</p>
+                        </div>
+                      )}
+                      {application.profile?.bio && (
+                        <div className="md:col-span-2">
+                          <span className="font-medium text-gray-900">Bio:</span>
+                          <p className="text-gray-600 leading-relaxed">{application.profile.bio}</p>
+                        </div>
+                      )}
                     </div>
 
-                    {/* Right Column - Type-Specific Info */}
-                    <div className="space-y-4">
+                    {/* Type-Specific Info */}
+                    <div>
                       {application.userType.toLowerCase() === 'host' && (application as Host).host && (
                         <div>
-                          <h4 className="font-medium text-gray-900 mb-2">Venue Information</h4>
-                          <div className="space-y-2 text-sm text-gray-600">
-                            <p>
-                              <MapPinIcon className="w-4 h-4 inline mr-1" />
-                              <span className="font-medium">Location:</span> {(application as Host).host?.city}, {(application as Host).host?.state}
-                            </p>
-                            <p><span className="font-medium">Venue Type:</span> {(application as Host).host?.venueType}</p>
-                            {(application as Host).host?.venueName && (
-                              <p><span className="font-medium">Venue Name:</span> {(application as Host).host?.venueName}</p>
-                            )}
-                            {(application as Host).host?.indoorCapacity && (
-                              <p><span className="font-medium">Indoor Capacity:</span> {(application as Host).host?.indoorCapacity} people</p>
-                            )}
-                            {(application as Host).host?.venueDescription && (
-                              <p><span className="font-medium">Motivation to Host:</span> {(application as Host).host?.venueDescription}</p>
-                            )}
-                            {(application as Host).host?.lodgingDetails && typeof (application as Host).host?.lodgingDetails === 'object' && (
-                              <>
-                                {/* Additional Information */}
-                                {((application as Host).host?.lodgingDetails as any)?.additionalInfo && (
-                                  <p><span className="font-medium">Additional Information:</span> {((application as Host).host?.lodgingDetails as any).additionalInfo}</p>
-                                )}
-                                
-                                {/* First time hosting question */}
-                                {((application as Host).host?.lodgingDetails as any)?.newToHosting && (
-                                  <p><span className="font-medium">Is this your first time hosting?:</span> {((application as Host).host?.lodgingDetails as any).newToHosting}</p>
-                                )}
-                                
-                              </>
-                            )}
+                          <h4 className="font-medium text-gray-900 mb-3 flex items-center">
+                            <HomeIcon className="w-4 h-4 mr-2 text-gray-500" />
+                            Venue Information
+                          </h4>
+                          <div className="grid md:grid-cols-2 gap-6">
+                            <div className="space-y-3 text-sm">
+                              <div className="flex items-start">
+                                <MapPinIcon className="w-4 h-4 mr-2 text-gray-400 mt-0.5 flex-shrink-0" />
+                                <div>
+                                  <span className="font-medium text-gray-900">Location:</span>
+                                  <p className="text-gray-600">{(application as Host).host?.city}, {(application as Host).host?.state}</p>
+                                </div>
+                              </div>
+                              <div>
+                                <span className="font-medium text-gray-900">Venue Type:</span>
+                                <p className="text-gray-600">{(application as Host).host?.venueType}</p>
+                              </div>
+                              {(application as Host).host?.venueName && (
+                                <div>
+                                  <span className="font-medium text-gray-900">Venue Name:</span>
+                                  <p className="text-gray-600">{(application as Host).host?.venueName}</p>
+                                </div>
+                              )}
+                              {(application as Host).host?.indoorCapacity && (
+                                <div>
+                                  <span className="font-medium text-gray-900">Indoor Capacity:</span>
+                                  <p className="text-gray-600">{(application as Host).host?.indoorCapacity} people</p>
+                                </div>
+                              )}
+                            </div>
+                            <div className="space-y-3 text-sm">
+                              {(application as Host).host?.venueDescription && (
+                                <div>
+                                  <span className="font-medium text-gray-900">Motivation to Host:</span>
+                                  <p className="text-gray-600 leading-relaxed">{(application as Host).host?.venueDescription}</p>
+                                </div>
+                              )}
+                              {(application as Host).host?.lodgingDetails && typeof (application as Host).host?.lodgingDetails === 'object' && (
+                                <>
+                                  {((application as Host).host?.lodgingDetails as any)?.additionalInfo && (
+                                    <div>
+                                      <span className="font-medium text-gray-900">Additional Information:</span>
+                                      <p className="text-gray-600 leading-relaxed">{((application as Host).host?.lodgingDetails as any).additionalInfo}</p>
+                                    </div>
+                                  )}
+                                  {((application as Host).host?.lodgingDetails as any)?.newToHosting && (
+                                    <div>
+                                      <span className="font-medium text-gray-900">First time hosting?:</span>
+                                      <p className="text-gray-600">{((application as Host).host?.lodgingDetails as any).newToHosting}</p>
+                                    </div>
+                                  )}
+                                </>
+                              )}
+                            </div>
                           </div>
                         </div>
                       )}
 
                       {application.userType.toLowerCase() === 'artist' && (application as Artist).artist && (
                         <div>
-                          <h4 className="font-medium text-gray-900 mb-2">Artist Information</h4>
-                          <div className="space-y-2 text-sm text-gray-600">
-                            {(application as Artist).artist?.stageName && (
-                              <p><span className="font-medium">Stage Name:</span> {(application as Artist).artist?.stageName}</p>
-                            )}
-                            {(application as Artist).artist?.genres && (application as Artist).artist?.genres?.length > 0 && (
-                              <p><span className="font-medium">Genres:</span> {(application as Artist).artist?.genres?.join(', ')}</p>
-                            )}
-                            {(application as Artist).artist?.performanceVideoUrl && (
-                              <p><span className="font-medium">Performance Video:</span> 
-                                <a href={(application as Artist).artist?.performanceVideoUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline ml-1">
-                                  View Video
-                                </a>
-                              </p>
-                            )}
+                          <h4 className="font-medium text-gray-900 mb-3 flex items-center">
+                            <MusicalNoteIcon className="w-4 h-4 mr-2 text-gray-500" />
+                            Artist Information
+                          </h4>
+                          <div className="grid md:grid-cols-2 gap-6">
+                            <div className="space-y-3 text-sm">
+                              {(application as Artist).artist?.stageName && (
+                                <div>
+                                  <span className="font-medium text-gray-900">Stage Name:</span>
+                                  <p className="text-gray-600">{(application as Artist).artist?.stageName}</p>
+                                </div>
+                              )}
+                              {(application as Artist).artist?.genres && (application as Artist).artist?.genres?.length > 0 && (
+                                <div>
+                                  <span className="font-medium text-gray-900">Genres:</span>
+                                  <p className="text-gray-600">{(application as Artist).artist?.genres?.join(', ')}</p>
+                                </div>
+                              )}
+                            </div>
+                            <div className="space-y-3 text-sm">
+                              {(application as Artist).artist?.performanceVideoUrl && (
+                                <div>
+                                  <span className="font-medium text-gray-900">Performance Video:</span>
+                                  <a href={(application as Artist).artist?.performanceVideoUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline block">
+                                    View Video
+                                  </a>
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       )}
@@ -377,37 +442,39 @@ export default function AdminApplicationsPage() {
                   </div>
 
                   {/* Photos Section */}
-                  <div className="mt-6 pt-6 border-t border-gray-200">
-                    <h4 className="font-medium text-gray-900 mb-4">Submitted Photos</h4>
+                  <div className="pt-6 border-t border-gray-200">
+                    <h4 className="font-medium text-gray-900 mb-4 flex items-center">
+                      <PhotoIcon className="w-4 h-4 mr-2 text-gray-500" />
+                      Submitted Photos
+                    </h4>
                     
                     {/* Host Photos */}
                     {application.userType.toLowerCase() === 'host' && (application as Host).host && (
                       <div>
                         <h5 className="font-medium text-gray-700 mb-3">Venue Photos</h5>
                         {((application as Host).host?.media && (application as Host).host?.media.length > 0) ? (
-                          <div className="space-y-3">
-                            <p className="text-sm font-medium text-green-600">Found {(application as Host).host?.media.length} venue photo(s)</p>
-                            <div className="grid grid-cols-2 gap-4">
-                              {(application as Host).host?.media.map((media: any, index: number) => (
-                                <div key={index} className="border-2 border-red-500 p-2">
-                                  <p className="text-xs text-blue-600 mb-2">URL: {media.fileUrl}</p>
-                                  <img 
-                                    src={media.fileUrl}
-                                    alt={media.title || `Venue photo ${index + 1}`}
-                                    className="w-full h-32 object-cover border-4 border-green-500"
-                                    style={{ backgroundColor: 'yellow' }}
-                                  />
-                                  <p className="text-xs mt-1">Title: {media.title}</p>
-                                  <p className="text-xs">Category: {media.category}</p>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                            {(application as Host).host?.media.map((media: any, index: number) => (
+                              <div key={index} className="relative">
+                                <img 
+                                  src={media.fileUrl}
+                                  alt={media.title || `Venue photo ${index + 1}`}
+                                  className="w-full h-32 object-cover rounded-lg border border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all cursor-pointer"
+                                  onClick={() => {
+                                    console.log('Photo clicked, opening lightbox');
+                                    openLightbox((application as Host).host?.media || [], index);
+                                  }}
+                                />
+                                <div className="absolute bottom-2 right-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded pointer-events-none">
+                                  {index + 1} / {(application as Host).host?.media.length}
                                 </div>
-                              ))}
-                            </div>
+                              </div>
+                            ))}
                           </div>
                         ) : (
-                          <div className="text-center py-8 text-gray-500">
-                            <PhotoIcon className="w-12 h-12 mx-auto mb-3 text-gray-400" />
-                            <p className="text-sm">No venue photos uploaded during application</p>
-                            <p className="text-xs text-gray-400 mt-1">Host can add photos after approval via their dashboard</p>
+                          <div className="text-center py-4 text-gray-500">
+                            <PhotoIcon className="w-6 h-6 mx-auto mb-2 text-gray-400" />
+                            <p className="text-sm">No venue photos uploaded</p>
                           </div>
                         )}
                       </div>
@@ -488,6 +555,63 @@ export default function AdminApplicationsPage() {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        )}
+
+        {/* Lightbox Modal */}
+        {showLightbox && selectedPhotos.length > 0 && (
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50"
+            onClick={closeLightbox}
+          >
+            <div className="relative max-w-6xl max-h-full p-4" onClick={(e) => e.stopPropagation()}>
+              {/* Close Button */}
+              <button
+                onClick={closeLightbox}
+                className="absolute top-4 right-4 z-10 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-colors"
+              >
+                <XMarkIcon className="w-6 h-6" />
+              </button>
+
+              {/* Navigation Arrows */}
+              {selectedPhotos.length > 1 && (
+                <>
+                  <button
+                    onClick={prevPhoto}
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 transition-colors"
+                  >
+                    <ArrowLeftIcon className="w-6 h-6" />
+                  </button>
+                  <button
+                    onClick={nextPhoto}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 transition-colors"
+                  >
+                    <ArrowLeftIcon className="w-6 h-6 transform rotate-180" />
+                  </button>
+                </>
+              )}
+
+              {/* Main Image */}
+              <img
+                src={selectedPhotos[currentPhotoIndex]?.fileUrl}
+                alt={selectedPhotos[currentPhotoIndex]?.title || `Photo ${currentPhotoIndex + 1}`}
+                className="max-w-full max-h-full object-contain rounded-lg"
+              />
+
+              {/* Photo Counter */}
+              {selectedPhotos.length > 1 && (
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-60 text-white px-4 py-2 rounded-full">
+                  {currentPhotoIndex + 1} of {selectedPhotos.length}
+                </div>
+              )}
+
+              {/* Photo Info */}
+              {selectedPhotos[currentPhotoIndex]?.title && (
+                <div className="absolute bottom-4 left-4 bg-black bg-opacity-60 text-white px-3 py-2 rounded max-w-md">
+                  <p className="text-sm">{selectedPhotos[currentPhotoIndex].title}</p>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>
