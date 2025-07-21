@@ -12,7 +12,9 @@ import {
   ClockIcon,
   MapPinIcon,
   CalendarIcon,
-  ArrowLeftIcon
+  ArrowLeftIcon,
+  PhotoIcon,
+  EyeIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
@@ -29,6 +31,22 @@ interface User {
   };
 }
 
+interface MediaItem {
+  id: string;
+  fileUrl: string;
+  title?: string;
+  category?: string;
+  mediaType: string;
+}
+
+interface BandMember {
+  id: string;
+  name: string;
+  instrument?: string;
+  role?: string;
+  photoUrl?: string;
+}
+
 interface Host extends User {
   host?: {
     city: string;
@@ -38,7 +56,9 @@ interface Host extends User {
     venueDescription?: string;
     indoorCapacity?: number;
     outdoorCapacity?: number;
+    venuePhotoUrl?: string;
     applicationSubmittedAt?: string;
+    media?: MediaItem[];
   };
 }
 
@@ -47,11 +67,82 @@ interface Artist extends User {
     stageName?: string;
     genres: string[];
     performanceVideoUrl?: string;
+    pressPhotoUrl?: string;
     applicationSubmittedAt?: string;
+    media?: MediaItem[];
+    bandMembers?: BandMember[];
   };
 }
 
 type Application = Host | Artist;
+
+// Photo Gallery Component
+const PhotoGallery = ({ photos, title }: { photos: (MediaItem | string)[], title: string }) => {
+  const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
+  
+  if (!photos || photos.length === 0) {
+    return (
+      <div className="text-center py-4 text-gray-500">
+        <PhotoIcon className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+        <p className="text-sm">No {title.toLowerCase()} uploaded</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-3">
+      <h5 className="font-medium text-gray-900 flex items-center">
+        <PhotoIcon className="w-4 h-4 mr-2" />
+        {title} ({photos.length})
+      </h5>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+        {photos.map((photo, index) => {
+          const photoUrl = typeof photo === 'string' ? photo : photo.fileUrl;
+          const photoTitle = typeof photo === 'object' ? photo.title : undefined;
+          
+          return (
+            <div key={index} className="relative group">
+              <img
+                src={photoUrl}
+                alt={photoTitle || `${title} ${index + 1}`}
+                className="w-full h-20 object-cover rounded-lg border border-gray-200 cursor-pointer hover:border-blue-400 transition-colors"
+                onClick={() => setSelectedPhoto(photoUrl)}
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 rounded-lg transition-all duration-200 flex items-center justify-center">
+                <EyeIcon className="w-5 h-5 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+              {photoTitle && (
+                <p className="text-xs text-gray-600 mt-1 truncate">{photoTitle}</p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      
+      {/* Photo Modal */}
+      {selectedPhoto && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedPhoto(null)}
+        >
+          <div className="relative max-w-4xl max-h-full">
+            <img
+              src={selectedPhoto}
+              alt="Full size view"
+              className="max-w-full max-h-full object-contain rounded-lg"
+            />
+            <button
+              onClick={() => setSelectedPhoto(null)}
+              className="absolute top-4 right-4 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-colors"
+            >
+              <XMarkIcon className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default function AdminApplicationsPage() {
   const [applications, setApplications] = useState<Application[]>([]);
@@ -268,6 +359,94 @@ export default function AdminApplicationsPage() {
                         </div>
                       )}
                     </div>
+                  </div>
+
+                  {/* Photos Section */}
+                  <div className="mt-6 pt-6 border-t border-gray-200">
+                    <h4 className="font-medium text-gray-900 mb-4">Submitted Photos</h4>
+                    
+                    {/* Host Photos */}
+                    {application.userType.toLowerCase() === 'host' && (application as Host).host && (
+                      <div>
+                        <h5 className="font-medium text-gray-700 mb-3">Venue Photos</h5>
+                        {(() => {
+                          const host = (application as Host).host!;
+                          const venuePhotos = [];
+                          
+                          // Add venue photo URL if exists
+                          if (host.venuePhotoUrl) {
+                            venuePhotos.push(host.venuePhotoUrl);
+                          }
+                          
+                          // Add media items
+                          if (host.media) {
+                            venuePhotos.push(...host.media);
+                          }
+                          
+                          return venuePhotos.length > 0 ? (
+                            <PhotoGallery photos={venuePhotos} title="Venue Photos" />
+                          ) : (
+                            <div className="text-center py-8 text-gray-500">
+                              <PhotoIcon className="w-12 h-12 mx-auto mb-3 text-gray-400" />
+                              <p className="text-sm">No venue photos uploaded during application</p>
+                              <p className="text-xs text-gray-400 mt-1">Host can add photos after approval via their dashboard</p>
+                            </div>
+                          );
+                        })()}
+                      </div>
+                    )}
+
+                    {/* Artist Photos */}
+                    {application.userType.toLowerCase() === 'artist' && (application as Artist).artist && (
+                      <div>
+                        <h5 className="font-medium text-gray-700 mb-3">Artist Photos</h5>
+                        {(() => {
+                          const artist = (application as Artist).artist!;
+                          const artistPhotos = [];
+                          
+                          // Add press photo URL if exists
+                          if (artist.pressPhotoUrl) {
+                            artistPhotos.push(artist.pressPhotoUrl);
+                          }
+                          
+                          // Add media items (profile and promotional categories)
+                          if (artist.media) {
+                            artistPhotos.push(...artist.media);
+                          }
+                          
+                          return artistPhotos.length > 0 ? (
+                            <PhotoGallery photos={artistPhotos} title="Artist Photos" />
+                          ) : (
+                            <div className="text-center py-8 text-gray-500">
+                              <PhotoIcon className="w-12 h-12 mx-auto mb-3 text-gray-400" />
+                              <p className="text-sm">No artist photos uploaded during application</p>
+                              <p className="text-xs text-gray-400 mt-1">Artist can add photos after approval via their dashboard</p>
+                            </div>
+                          );
+                        })()}
+
+                        {/* Band Member Photos */}
+                        {(application as Artist).artist?.bandMembers && (application as Artist).artist.bandMembers.length > 0 && (
+                          <div className="mt-6">
+                            <h5 className="font-medium text-gray-700 mb-3">Band Member Photos</h5>
+                            {(() => {
+                              const bandMemberPhotos = (application as Artist).artist!.bandMembers!
+                                .filter(member => member.photoUrl)
+                                .map(member => member.photoUrl!);
+                              
+                              return bandMemberPhotos.length > 0 ? (
+                                <PhotoGallery photos={bandMemberPhotos} title="Band Member Photos" />
+                              ) : (
+                                <div className="text-center py-4 text-gray-500">
+                                  <PhotoIcon className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                                  <p className="text-sm">No band member photos uploaded</p>
+                                </div>
+                              );
+                            })()}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   {/* Actions */}

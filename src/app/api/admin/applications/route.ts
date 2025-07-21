@@ -10,8 +10,23 @@ export async function GET(request: NextRequest) {
       },
       include: {
         profile: true,
-        host: true,
-        artist: true
+        host: {
+          include: {
+            media: {
+              orderBy: { sortOrder: 'asc' }
+            }
+          }
+        },
+        artist: {
+          include: {
+            media: {
+              orderBy: { sortOrder: 'asc' }
+            },
+            bandMembers: {
+              orderBy: { sortOrder: 'asc' }
+            }
+          }
+        }
       },
       orderBy: {
         createdAt: 'desc'
