@@ -1,0 +1,48 @@
+{
+  "watch": [
+    "src/**/*",
+    "pages/**/*",
+    "app/**/*",
+    "next.config.*",
+    "package.json",
+    ".env*"
+  ],
+  "ignore": [
+    "node_modules/**/*",
+    ".next/**/*",
+    ".git/**/*",
+    "storage/uploads/**/*",
+    "public/uploads/**/*",
+    "dist/**/*",
+    "coverage/**/*",
+    "*.log",
+    "*.md",
+    "**/*.test.*",
+    "**/*.spec.*",
+    "**/__tests__/**",
+    ".env.local",
+    ".env.development.local",
+    ".env.production.local"
+  ],
+  "ext": "ts,tsx,js,jsx,json,css,scss,sass,less",
+  "env": {
+    "NODE_ENV": "development",
+    "NEXT_TELEMETRY_DISABLED": "1",
+    "FORCE_COLOR": "1"
+  },
+  "exec": "node scripts/dev-server.js",
+  "delay": 1000,
+  "verbose": true,
+  "colours": true,
+  "restartable": "rs",
+  "signal": "SIGUSR2",
+  "events": {
+    "start": "echo '🚀 Starting development server...'",
+    "restart": "echo '🔄 Restarting due to file changes...'",
+    "crash": "echo '💥 Development server crashed!'",
+    "exit": "echo '👋 Development server stopped'"
+  },
+  "legacyWatch": false,
+  "pollingInterval": 1000,
+  "stdin": false
+}

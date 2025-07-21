@@ -38,8 +38,8 @@ export async function POST(request: NextRequest) {
     const fileExtension = file.type.split('/')[1];
     const fileName = `${session.user.id}-${type}-${Date.now()}.${fileExtension}`;
     
-    // Save to public/uploads directory
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
+    // Save to storage/uploads directory (outside public for performance)
+    const uploadDir = path.join(process.cwd(), 'storage', 'uploads');
     const filePath = path.join(uploadDir, fileName);
     
     // Create directory if it doesn't exist

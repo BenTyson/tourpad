@@ -63,7 +63,7 @@ export function PublicReviewsSection({ userId, userType, userName }: PublicRevie
         <CardHeader>
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold">Reviews</h2>
-            <Badge variant="outline">No reviews yet</Badge>
+            <Badge variant="secondary">No reviews yet</Badge>
           </div>
         </CardHeader>
         <CardContent>
@@ -90,7 +90,7 @@ export function PublicReviewsSection({ userId, userType, userName }: PublicRevie
             </p>
           </div>
           <div className="flex items-center space-x-2">
-            <Badge variant="outline">
+            <Badge variant="secondary">
               {publicReviews.length} public review{publicReviews.length !== 1 ? 's' : ''}
             </Badge>
           </div>

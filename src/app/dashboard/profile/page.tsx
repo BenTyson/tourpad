@@ -399,7 +399,7 @@ export default function ProfilePage() {
                     id: 1,
                     roomType: 'private_bedroom',
                     bathroomType: 'private',
-                    beds: [{ type: 'queen', quantity: 1 }],
+                    beds: [{ type: 'queen' as 'queen' | 'king' | 'twin' | 'full' | 'couch' | 'air_mattress', quantity: 1 }],
                     maxOccupancy: 2
                   }],
                   amenities: {
@@ -576,7 +576,6 @@ export default function ProfilePage() {
       title: '',
       url: '',
       category: '',
-      description: '',
       isLivePerformance: false
     });
     setShowVideoForm(false);
@@ -1514,12 +1513,34 @@ export default function ProfilePage() {
                         if (isArtist) {
                           updateArtistProfile({ 
                             website: e.target.value,
-                            socialLinks: { ...socialLinks, website: e.target.value } 
+                            socialLinks: { 
+                              ...{
+                                instagram: '',
+                                youtube: '',
+                                spotify: '',
+                                bandcamp: '',
+                                facebook: '',
+                                website: ''
+                              },
+                              ...socialLinks, 
+                              website: e.target.value 
+                            } 
                           });
                         } else {
                           updateHostProfile({ 
                             website: e.target.value,
-                            socialLinks: { ...socialLinks, website: e.target.value } 
+                            socialLinks: { 
+                              ...{
+                                instagram: '',
+                                youtube: '',
+                                spotify: '',
+                                bandcamp: '',
+                                facebook: '',
+                                website: ''
+                              },
+                              ...socialLinks, 
+                              website: e.target.value 
+                            } 
                           });
                         }
                       }}
@@ -1530,8 +1551,30 @@ export default function ProfilePage() {
                       value={isArtist ? artistProfile.socialLinks.instagram : hostProfile.socialLinks.instagram}
                       onChange={(e) => {
                         const socialLinks = isArtist ? artistProfile.socialLinks : hostProfile.socialLinks;
-                        if (isArtist) updateArtistProfile({ socialLinks: { ...socialLinks, instagram: e.target.value } });
-                        else updateHostProfile({ socialLinks: { ...socialLinks, instagram: e.target.value } });
+                        if (isArtist) updateArtistProfile({ socialLinks: { 
+                          ...{
+                            instagram: '',
+                            youtube: '',
+                            spotify: '',
+                            bandcamp: '',
+                            facebook: '',
+                            website: ''
+                          },
+                          ...socialLinks, 
+                          instagram: e.target.value 
+                        } });
+                        else updateHostProfile({ socialLinks: { 
+                          ...{
+                            instagram: '',
+                            youtube: '',
+                            spotify: '',
+                            bandcamp: '',
+                            facebook: '',
+                            website: ''
+                          },
+                          ...socialLinks, 
+                          instagram: e.target.value 
+                        } });
                       }}
                       placeholder="https://instagram.com/username"
                     />
@@ -1540,8 +1583,30 @@ export default function ProfilePage() {
                       value={isArtist ? artistProfile.socialLinks.youtube : hostProfile.socialLinks.youtube}
                       onChange={(e) => {
                         const socialLinks = isArtist ? artistProfile.socialLinks : hostProfile.socialLinks;
-                        if (isArtist) updateArtistProfile({ socialLinks: { ...socialLinks, youtube: e.target.value } });
-                        else updateHostProfile({ socialLinks: { ...socialLinks, youtube: e.target.value } });
+                        if (isArtist) updateArtistProfile({ socialLinks: { 
+                          ...{
+                            instagram: '',
+                            youtube: '',
+                            spotify: '',
+                            bandcamp: '',
+                            facebook: '',
+                            website: ''
+                          },
+                          ...socialLinks, 
+                          youtube: e.target.value 
+                        } });
+                        else updateHostProfile({ socialLinks: { 
+                          ...{
+                            instagram: '',
+                            youtube: '',
+                            spotify: '',
+                            bandcamp: '',
+                            facebook: '',
+                            website: ''
+                          },
+                          ...socialLinks, 
+                          youtube: e.target.value 
+                        } });
                       }}
                       placeholder="https://youtube.com/channel/..."
                     />
@@ -1550,8 +1615,30 @@ export default function ProfilePage() {
                       value={isArtist ? artistProfile.socialLinks.facebook : hostProfile.socialLinks.facebook}
                       onChange={(e) => {
                         const socialLinks = isArtist ? artistProfile.socialLinks : hostProfile.socialLinks;
-                        if (isArtist) updateArtistProfile({ socialLinks: { ...socialLinks, facebook: e.target.value } });
-                        else updateHostProfile({ socialLinks: { ...socialLinks, facebook: e.target.value } });
+                        if (isArtist) updateArtistProfile({ socialLinks: { 
+                          ...{
+                            instagram: '',
+                            youtube: '',
+                            spotify: '',
+                            bandcamp: '',
+                            facebook: '',
+                            website: ''
+                          },
+                          ...socialLinks, 
+                          facebook: e.target.value 
+                        } });
+                        else updateHostProfile({ socialLinks: { 
+                          ...{
+                            instagram: '',
+                            youtube: '',
+                            spotify: '',
+                            bandcamp: '',
+                            facebook: '',
+                            website: ''
+                          },
+                          ...socialLinks, 
+                          facebook: e.target.value 
+                        } });
                       }}
                       placeholder="https://facebook.com/username"
                     />
@@ -2522,7 +2609,7 @@ export default function ProfilePage() {
                                 id: i + 1,
                                 roomType: 'private_bedroom',
                                 bathroomType: 'private',
-                                beds: [{ type: 'queen', quantity: 1 }],
+                                beds: [{ type: 'queen' as 'queen' | 'king' | 'twin' | 'full' | 'couch' | 'air_mattress', quantity: 1 }],
                                 maxOccupancy: 2
                               });
                             }
@@ -2618,7 +2705,7 @@ export default function ProfilePage() {
                                         r.id === room.id ? {
                                           ...r,
                                           beds: r.beds.map((b, i) => 
-                                            i === bedIndex ? { ...b, type: e.target.value as any } : b
+                                            i === bedIndex ? { ...b, type: e.target.value as 'queen' | 'king' | 'twin' | 'full' | 'couch' | 'air_mattress' } : b
                                           )
                                         } : r
                                       );
@@ -2698,7 +2785,7 @@ export default function ProfilePage() {
                                   const updatedRooms = hostProfile.lodgingDetails.rooms.map(r =>
                                     r.id === room.id ? {
                                       ...r,
-                                      beds: [...(r.beds || []), { type: 'twin', quantity: 1 }]
+                                      beds: [...(r.beds || []), { type: 'twin' as 'queen' | 'king' | 'twin' | 'full' | 'couch' | 'air_mattress', quantity: 1 }]
                                     } : r
                                   );
                                   updateHostProfile({
@@ -2759,7 +2846,7 @@ export default function ProfilePage() {
                                         const updatedRooms = hostProfile.lodgingDetails.rooms.map(r =>
                                           r.id === room.id ? {
                                             ...r,
-                                            photos: [...(r.photos || []), newPhoto]
+                                            photos: [...((r as any).photos || []), newPhoto]
                                           } : r
                                         );
                                         
@@ -2780,9 +2867,9 @@ export default function ProfilePage() {
                               />
                             </div>
                             
-                            {room.photos && room.photos.length > 0 ? (
+                            {(room as any).photos && (room as any).photos.length > 0 ? (
                               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                {room.photos.map((photo, photoIndex) => (
+                                {(room as any).photos.map((photo: any, photoIndex: number) => (
                                   <div key={photo.id || photoIndex} className="relative group">
                                     <img
                                       src={photo.url}
@@ -2794,7 +2881,7 @@ export default function ProfilePage() {
                                         const updatedRooms = hostProfile.lodgingDetails.rooms.map(r =>
                                           r.id === room.id ? {
                                             ...r,
-                                            photos: r.photos?.filter((_, i) => i !== photoIndex) || []
+                                            photos: (r as any).photos?.filter((_: any, i: number) => i !== photoIndex) || []
                                           } : r
                                         );
                                         updateHostProfile({

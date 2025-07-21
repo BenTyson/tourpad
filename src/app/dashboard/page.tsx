@@ -125,8 +125,8 @@ export default function DashboardPage() {
   const hasFullAccess = userRole === 'admin' || 
                        userStatus === 'approved' || 
                        userStatus === 'active' ||
-                       (userRole === 'fan' && session.user.paymentStatus === 'active');
-  const needsPayment = userRole === 'artist' && userStatus === 'approved' && !session.user.paymentStatus;
+                       (userRole === 'fan' && (session.user as any).paymentStatus === 'active');
+  const needsPayment = userRole === 'artist' && userStatus === 'approved' && !(session.user as any).paymentStatus;
 
   // Filter data based on user role
   const userBookings = userRole === 'admin' 
@@ -175,7 +175,7 @@ export default function DashboardPage() {
 
   const pendingActions = userBookings.filter(booking => 
     // Filter out completed bookings and show only actionable items
-    booking.status !== 'declined' && booking.status !== 'cancelled' && booking.status !== 'approved' &&
+    booking.status !== 'approved' &&
     (userRole === 'host' ? booking.status === 'requested' : booking.status === 'pending')
   );
 
@@ -213,13 +213,13 @@ export default function DashboardPage() {
               <div className="flex-1">
                 <h3 className="font-medium text-secondary-900 mb-2">Limited Dashboard Access</h3>
                 <p className="text-secondary-800 mb-4">
-                  {userRole === 'fan' && session.user.paymentStatus !== 'active' && 'Your membership has expired. Renew to continue accessing exclusive house concerts.'}
+                  {userRole === 'fan' && (session.user as any).paymentStatus !== 'active' && 'Your membership has expired. Renew to continue accessing exclusive house concerts.'}
                   {userRole !== 'fan' && userStatus === 'pending' && 'Your application is under review. Full dashboard functionality will be available once approved.'}
                   {userRole !== 'fan' && userStatus === 'rejected' && 'Your application was not approved. Please review your application status for next steps.'}
                   {userRole !== 'fan' && userStatus === 'suspended' && 'Your account has been suspended. Contact support for assistance.'}
                 </p>
                 <div className="flex space-x-3">
-                  {userRole === 'fan' && session.user.paymentStatus !== 'active' ? (
+                  {userRole === 'fan' && (session.user as any).paymentStatus !== 'active' ? (
                     <Link
                       href="/payment/fan"
                       className="bg-secondary-100 text-secondary-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-secondary-200 transition-colors"
@@ -579,19 +579,23 @@ export default function DashboardPage() {
                           </div>
                           <div>
                             <h3 className="font-medium text-neutral-900">
-                              {userRole === 'fan' ? booking.title :
+                              {userRole === 'fan' ? ('title' in booking ? booking.title : 'Concert') :
                                userRole === 'host' ? booking.artist.name : booking.host.name}
                             </h3>
                             <div className="flex items-center text-sm text-neutral-600 space-x-4">
-                              <span>{userRole === 'fan' ? formatDate(new Date(booking.date + 'T' + booking.startTime)) : formatDate(booking.eventDate)}</span>
+                              <span>{userRole === 'fan' ? 
+                                ('date' in booking && 'startTime' in booking ? formatDate(new Date(booking.date + 'T' + booking.startTime)) : 'TBD') : 
+                                ('eventDate' in booking ? formatDate(booking.eventDate) : formatDate(new Date()))}</span>
                               <div className="flex items-center">
                                 <Users className="w-4 h-4 mr-1" />
-                                {userRole === 'fan' ? booking.capacity : booking.guestCount} {userRole === 'fan' ? 'capacity' : 'guests'}
+                                {userRole === 'fan' ? 
+                                  ('capacity' in booking ? booking.capacity : 'TBD') : 
+                                  ('guestCount' in booking ? booking.guestCount : 'TBD')} {userRole === 'fan' ? 'capacity' : 'guests'}
                               </div>
                               {userRole === 'artist' && (
                                 <div className="flex items-center">
                                   <MapPin className="w-4 h-4 mr-1" />
-                                  {booking.host.city}, {booking.host.state}
+                                  {'city' in booking.host ? booking.host.city : 'Unknown'}, {'state' in booking.host ? booking.host.state : 'Unknown'}
                                 </div>
                               )}
                             </div>

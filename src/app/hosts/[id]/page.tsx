@@ -166,13 +166,20 @@ export default function HostProfilePage() {
               venueType: testHost.venueType,
               rating: testHost.rating,
               reviewCount: testHost.reviewCount,
-              housePhotos: testHost.housePhotos,
-              performanceSpacePhotos: testHost.performanceSpacePhotos,
-              showSpecs: testHost.showSpecs,
-              amenities: testHost.amenities,
-              hostInfo: testHost.hostInfo,
-              soundSystem: testHost.soundSystem,
-              hostingCapabilities: testHost.hostingCapabilities,
+              housePhotos: (testHost as any).housePhotos || [],
+              performanceSpacePhotos: (testHost as any).performanceSpacePhotos || [],
+              showSpecs: {
+                ...testHost.showSpecs,
+                outdoorAttendanceMax: (testHost.showSpecs as any).outdoorAttendanceMax || 0,
+                showDurationMins: (testHost.showSpecs as any).showDurationMins || 120,
+                showFormat: (testHost.showSpecs as any).showFormat || 'Intimate house concert',
+                daysAvailable: (testHost.showSpecs as any).daysAvailable || ['Friday', 'Saturday'],
+                estimatedShowsPerYear: (testHost.showSpecs as any).estimatedShowsPerYear || 10
+              },
+              amenities: (testHost as any).amenities || {},
+              hostInfo: (testHost as any).hostInfo || { hostName: testHost.name, aboutMe: testHost.bio, profilePhoto: '' },
+              soundSystem: (testHost as any).soundSystem || {},
+              hostingCapabilities: (testHost as any).hostingCapabilities || {},
               website: '',
               socialLinks: {},
               upcomingConcerts: []
@@ -222,7 +229,10 @@ export default function HostProfilePage() {
   const host = hostData;
 
   // Combine all photos for gallery
-  const allPhotos = [...host.housePhotos, ...host.performanceSpacePhotos];
+  const allPhotos = [
+    ...host.housePhotos.map(photo => ({ ...photo, category: 'house' as const })), 
+    ...host.performanceSpacePhotos.map(photo => ({ ...photo, category: 'performance_space' as const }))
+  ];
 
   const handlePhotoClick = (index: number) => {
     setLightboxIndex(index);
@@ -318,7 +328,7 @@ export default function HostProfilePage() {
                 </div>
                 <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
                   <DollarSign className="w-5 h-5 mr-2 text-neutral-600" />
-                  <span className="text-neutral-900">${host.suggestedDoorFee || 20} suggested door</span>
+                  <span className="text-neutral-900">${(host as any).suggestedDoorFee || 20} suggested door</span>
                 </div>
               </div>
               
@@ -751,7 +761,7 @@ export default function HostProfilePage() {
         )}
 
         {/* Lodging Information */}
-        {host.offersLodging && host.lodgingDetails && (
+        {(host as any).offersLodging && (host as any).lodgingDetails && (
           <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
             <div className="p-8">
               <div className="mb-8">
@@ -759,15 +769,15 @@ export default function HostProfilePage() {
                   Where you'll sleep
                 </h2>
                 <p className="text-neutral-600">
-                  {host.lodgingDetails.numberOfRooms || 1} bedroom{(host.lodgingDetails.numberOfRooms || 1) > 1 ? 's' : ''} available
+                  {(host as any).lodgingDetails?.numberOfRooms || 1} bedroom{((host as any).lodgingDetails?.numberOfRooms || 1) > 1 ? 's' : ''} available
                 </p>
               </div>
               
               {/* Room Cards - Apple-inspired design */}
               <div className="space-y-6">
-                {host.lodgingDetails.rooms?.map((room, index) => {
+                {(host as any).lodgingDetails?.rooms?.map((room: any, index: number) => {
                   const mainPhoto = room.photos?.[0];
-                  const bedInfo = room.beds?.map(bed => 
+                  const bedInfo = room.beds?.map((bed: any) => 
                     `${bed.quantity} ${bed.type === 'queen' ? 'Queen' : 
                       bed.type === 'king' ? 'King' : 
                       bed.type === 'full' ? 'Full' : 
@@ -851,7 +861,7 @@ export default function HostProfilePage() {
               </div>
 
               {/* Fallback for single room configuration */}
-              {(!host.lodgingDetails.rooms || host.lodgingDetails.rooms.length === 0) && (
+              {(!(host as any).lodgingDetails?.rooms || (host as any).lodgingDetails?.rooms.length === 0) && (
                 <div className="group relative bg-neutral-50 rounded-2xl overflow-hidden transition-all hover:shadow-lg">
                   <div className="flex flex-col md:flex-row">
                     {/* Photo Section - Placeholder */}
@@ -908,7 +918,7 @@ export default function HostProfilePage() {
                     { key: 'linensProvided', label: 'Linens', icon: Bed },
                     { key: 'towelsProvided', label: 'Towels', icon: Shield },
                   ].filter(({ key }) => {
-                    const isAvailable = host.lodgingDetails?.amenities?.[key as keyof typeof host.lodgingDetails.amenities] || false;
+                    const isAvailable = (host as any).lodgingDetails?.amenities?.[key as keyof any] || false;
                     return isAvailable;
                   }).map(({ key, label, icon: IconComponent }) => (
                     <div key={key} className="flex items-center gap-3 text-neutral-700">
@@ -994,7 +1004,7 @@ export default function HostProfilePage() {
                 </h2>
                 <p className="text-neutral-600">Concerts scheduled at this venue</p>
               </div>
-              <Badge variant="outline" className="bg-sage/10 text-sage">
+              <Badge variant="secondary" className="bg-sage/10 text-sage">
                 {host.upcomingConcerts?.length || 0} Shows
               </Badge>
             </div>

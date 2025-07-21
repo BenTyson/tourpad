@@ -31,6 +31,40 @@ npx prisma generate
 npm run dev
 ```
 
+#### 4. Large File Uploads Memory Issues (NEW)
+**Symptoms**: 
+- Server crashes during hot reload after code changes
+- Memory spikes when file watcher processes large uploads folder
+- Repeated server restarts needed after minor edits
+
+**Root Cause**: Next.js file watcher consuming excessive memory with large uploads folder (57+ images, 42MB+ in /public/uploads/)
+
+**Immediate Solution**:
+```bash
+# Start with increased memory limit
+NODE_OPTIONS='--max-old-space-size=4096' npm run dev
+```
+
+**Permanent Solution - Webpack Config**:
+```typescript
+// next.config.ts
+const nextConfig: NextConfig = {
+  webpack: (config) => {
+    // Ignore uploads folder to prevent file watcher memory issues
+    config.watchOptions = {
+      ignored: /public\/uploads/,
+    };
+    return config;
+  },
+};
+```
+
+**Alternative Solutions**:
+1. **Move uploads outside public folder** (recommended for production)
+2. **Use external CDN** for user uploads  
+3. **Implement upload cleanup** (delete old files periodically)
+4. **Use .gitignore** for uploads folder to reduce file count
+
 **Prevention**:
 - Always run `npx tsc --noEmit` before implementing new features
 - Fix compilation errors immediately, don't let them accumulate

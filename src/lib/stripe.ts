@@ -22,3 +22,12 @@ export async function getSession(sessionId: string): Promise<StripeSession | nul
     status: 'complete'
   };
 }
+
+export function getStripe() {
+  // Mock Stripe client
+  return {
+    redirectToCheckout: async (options: { sessionId: string }) => {
+      window.location.href = `https://checkout.stripe.com/pay/${options.sessionId}`;
+    }
+  };
+}

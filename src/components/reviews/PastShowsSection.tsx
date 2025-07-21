@@ -76,7 +76,7 @@ export function PastShowsSection({ userId, userType }: PastShowsSectionProps) {
         <CardHeader>
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold">Past Shows</h2>
-            <Badge variant="outline">
+            <Badge variant="secondary">
               {pastShows.length} {pastShows.length === 1 ? 'show' : 'shows'}
             </Badge>
           </div>
@@ -139,7 +139,7 @@ export function PastShowsSection({ userId, userType }: PastShowsSectionProps) {
                               {existingReview.rating}
                             </span>
                           </div>
-                          <Badge variant="outline" className="text-green-600 border-green-300">
+                          <Badge variant="secondary" className="text-green-600 border-green-300">
                             <CheckCircle className="w-3 h-3 mr-1" />
                             Reviewed
                           </Badge>

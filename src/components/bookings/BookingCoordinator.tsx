@@ -116,7 +116,7 @@ export default function BookingCoordinator({
             <Bell className="w-5 h-5 text-blue-600" />
             <h3 className="font-semibold text-gray-900">Host Coordination</h3>
           </div>
-          <Badge variant="outline" className="text-xs">
+          <Badge variant="secondary" className="text-xs">
             {lodgingBooking.distance}mi apart
           </Badge>
         </div>

@@ -80,9 +80,15 @@ export async function POST(request: NextRequest) {
         ...(userType === 'host' && {
           host: {
             create: {
-              city: host?.city || profile?.city || '',
-              state: host?.state || profile?.state || '',
-              venueType: host?.venueType || profile?.venueType || 'OTHER',
+              city: host?.city || '',
+              state: host?.state || '',
+              venueType: host?.venueType || 'HOME',
+              actualAddress: host?.actualAddress || '',
+              indoorCapacity: host?.indoorCapacity || null,
+              venueDescription: host?.venueDescription || '',
+              hostingExperience: host?.hostingExperience || 0,
+              offersLodging: host?.offersLodging || false,
+              lodgingDetails: host?.lodgingDetails || {},
               applicationSubmittedAt: new Date()
             }
           }

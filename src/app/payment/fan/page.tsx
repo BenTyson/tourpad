@@ -14,6 +14,7 @@ import {
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
+import { Input } from '@/components/ui/Input';
 
 export default function FanPaymentPage() {
   const [paymentStep, setPaymentStep] = useState<'plan' | 'payment' | 'processing' | 'success'>('plan');

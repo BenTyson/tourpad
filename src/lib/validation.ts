@@ -82,7 +82,17 @@ export const registrationSchema = z.object({
   host: z.object({
     city: z.string().optional(),
     state: z.string().optional(),
-    venueType: z.enum(['HOME', 'LOFT', 'WAREHOUSE', 'OTHER']).optional()
+    venueType: z.enum(['HOME', 'LOFT', 'WAREHOUSE', 'OTHER']).optional(),
+    actualAddress: z.string().optional(),
+    indoorCapacity: z.number().optional(),
+    serviceRadius: z.number().optional(),
+    venueDescription: z.string().optional(),
+    hostingExperience: z.number().optional(), // 0 for new, 1+ for experienced
+    offersLodging: z.boolean().optional(),
+    lodgingDetails: z.object({
+      description: z.string().optional(),
+      motivation: z.string().optional()
+    }).optional()
   }).optional()
 });
 

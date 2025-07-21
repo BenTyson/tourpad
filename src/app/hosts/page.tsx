@@ -33,7 +33,7 @@ export default function HostsPage() {
   const { data: session, status } = useSession();
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
-  const [hosts, setHosts] = useState([]);
+  const [hosts, setHosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     minAttendance: '',
@@ -135,7 +135,7 @@ export default function HostsPage() {
           </div>
           
           <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-            <Badge variant="outline" className="mb-6 border-white/30 text-white bg-white/10 backdrop-blur-sm">
+            <Badge variant="secondary" className="mb-6 border-white/30 text-white bg-white/10 backdrop-blur-sm">
               Exclusive Network Access
             </Badge>
             
@@ -522,19 +522,19 @@ export default function HostsPage() {
   // Filter hosts based on search and filters
   const filteredHosts = hosts.filter(host => {
     const matchesSearch = searchQuery === '' || 
-      host.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      host.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      host.state.toLowerCase().includes(searchQuery.toLowerCase());
+      host?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      host?.city?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      host?.state?.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesAttendance = !filters.minAttendance || 
-      host.showSpecs.avgAttendance >= parseInt(filters.minAttendance);
+      (host?.showSpecs?.avgAttendance >= parseInt(filters.minAttendance));
 
     const matchesDoorFee = !filters.maxDoorFee || 
-      host.showSpecs.avgDoorFee <= parseInt(filters.maxDoorFee);
+      (host?.showSpecs?.avgDoorFee <= parseInt(filters.maxDoorFee));
 
     const matchesAmenities = Object.entries(filters.amenities).every(([amenity, required]) => {
       if (!required) return true;
-      return host.amenities[amenity as keyof typeof host.amenities];
+      return host?.amenities?.[amenity as keyof typeof host.amenities];
     });
 
     return matchesSearch && matchesAttendance && matchesDoorFee && matchesAmenities;
@@ -649,7 +649,7 @@ export default function HostsPage() {
         {filteredHosts.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredHosts.map((host) => (
-              <HostCard key={host.id} host={host} showBookingButton={true} />
+              <HostCard key={host?.id || Math.random()} host={host} showBookingButton={true} />
             ))}
           </div>
         ) : hosts.length === 0 ? (

@@ -503,22 +503,22 @@ export default function ArtistsPage() {
   const filteredArtists = artists.filter(artist => {
 
     const matchesSearch = searchQuery === '' || 
-      artist.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      artist.bio.toLowerCase().includes(searchQuery.toLowerCase());
+      (artist as any).name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (artist as any).bio?.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesYearsActive = !filters.minYearsActive || 
-      artist.yearsActive >= parseInt(filters.minYearsActive);
+      ((artist as any).yearsActive && (artist as any).yearsActive >= parseInt(filters.minYearsActive));
 
     const matchesTourMonths = !filters.maxTourMonths || 
-      artist.tourMonthsPerYear <= parseInt(filters.maxTourMonths);
+      ((artist as any).tourMonthsPerYear && (artist as any).tourMonthsPerYear <= parseInt(filters.maxTourMonths));
 
     const matchesRequirements = Object.entries(filters.requirements).every(([requirement, mustHave]) => {
       if (!mustHave) return true;
-      return artist[requirement as keyof typeof artist];
+      return (artist as any)[requirement];
     });
 
     const matchesCancellationPolicy = !filters.cancellationPolicy || 
-      artist.cancellationPolicy === filters.cancellationPolicy;
+      (artist as any).cancellationPolicy === filters.cancellationPolicy;
 
     return matchesSearch && matchesYearsActive && matchesTourMonths && matchesRequirements && matchesCancellationPolicy;
   });
@@ -720,7 +720,7 @@ export default function ArtistsPage() {
                     </div>
                     
                     <div className="flex flex-wrap gap-1 mb-4">
-                      {concert.genre.slice(0, 3).map((genre) => (
+                      {(concert as any).genre?.slice(0, 3)?.map((genre: string) => (
                         <Badge key={genre} variant="secondary" className="text-xs">
                           {genre}
                         </Badge>
@@ -755,7 +755,7 @@ export default function ArtistsPage() {
           filteredArtists.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredArtists.map((artist) => (
-                <ArtistCard key={artist.id} artist={artist} />
+                <ArtistCard key={(artist as any).id || Math.random()} artist={artist} />
               ))}
             </div>
           ) : artists.length === 0 ? (

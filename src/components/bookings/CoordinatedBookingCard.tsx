@@ -142,7 +142,7 @@ export default function CoordinatedBookingCard({
                 <Badge className={getStatusColor(lodgingBooking.status)}>
                   {lodgingBooking.status}
                 </Badge>
-                <Badge variant="outline" className="text-xs">
+                <Badge variant="secondary" className="text-xs">
                   {lodgingBooking.distance}mi away
                 </Badge>
               </div>

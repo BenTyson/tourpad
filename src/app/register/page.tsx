@@ -6,7 +6,7 @@ import { HomeIcon, MusicalNoteIcon, ExclamationCircleIcon, PhotoIcon, XMarkIcon 
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
-import { registerSchema, validateData } from '@/lib/validation';
+import { registerSchema, registrationSchema, validateData } from '@/lib/validation';
 
 // US States for dropdown
 const US_STATES = [
@@ -67,6 +67,8 @@ function RegisterForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Form submitted! UserType:', userType);
+    console.log('Form data:', formData);
     setErrors({});
     setIsSubmitting(true);
     
@@ -100,13 +102,57 @@ function RegisterForm() {
           return;
         }
       } else {
-        // Use existing validation for artists and hosts
-        const dataToValidate = { ...formData, type: userType };
+        // For artists and hosts, build data structure that matches registrationSchema
+        const dataToValidate = {
+          email: formData.email,
+          password: formData.password,
+          name: formData.name,
+          userType: userType,
+          profile: {
+            bio: formData.bio,
+            location: `${formData.city}, ${formData.state}`,
+            websiteUrl: formData.bandWebsite,
+            socialLinks: {
+              facebook: formData.socialFacebook,
+              instagram: formData.socialInstagram,
+              spotify: formData.musicProfileUrl,
+              website: formData.bandWebsite
+            }
+          },
+          // Artist-specific validation
+          ...(userType === 'artist' && {
+            artist: {
+              stageName: formData.bandName,
+              genres: formData.genre.split(',').map(g => g.trim()).filter(Boolean),
+              performanceVideoUrl: formData.performanceVideoUrl
+            }
+          }),
+          // Host-specific validation
+          ...(userType === 'host' && {
+            host: {
+              city: formData.city,
+              state: formData.state,
+              venueType: 'HOME' as const,
+              actualAddress: `${formData.address}, ${formData.city}, ${formData.state} ${formData.zipCode}`,
+              indoorCapacity: hostType === 'lodging' ? undefined : (formData.estimatedAttendance ? parseInt(formData.estimatedAttendance) : undefined),
+              serviceRadius: hostType === 'lodging' ? (formData.serviceRadius ? parseInt(formData.serviceRadius) : undefined) : undefined,
+              venueDescription: hostType === 'lodging' ? formData.whyLodging : formData.hostingMotivation,
+              hostingExperience: formData.newToHosting === 'yes' ? 0 : 1,
+              offersLodging: hostType === 'lodging',
+              lodgingDetails: hostType === 'lodging' ? {
+                description: formData.lodgingDescription,
+                motivation: formData.whyLodging
+              } : undefined
+            }
+          })
+        };
         
-        // Validate form data
-        const validation = validateData(registerSchema, dataToValidate);
+        // Validate using the registration schema
+        console.log('Validating host data:', dataToValidate);
+        const validation = validateData(registrationSchema, dataToValidate);
         
         if (!validation.success) {
+          console.error('Validation failed:', validation.errors);
           const errorMap: Record<string, string> = {};
           validation.errors?.forEach(error => {
             const [field, message] = error.split(': ');
@@ -115,6 +161,7 @@ function RegisterForm() {
           setErrors(errorMap);
           return;
         }
+        console.log('Validation passed for host registration');
       }
       
       // Submit to backend API
@@ -152,7 +199,17 @@ function RegisterForm() {
           host: {
             city: formData.city,
             state: formData.state,
-            venueType: 'HOME' // Default venue type, can be enhanced later
+            venueType: 'HOME' as const,
+            actualAddress: `${formData.address}, ${formData.city}, ${formData.state} ${formData.zipCode}`,
+            indoorCapacity: hostType === 'lodging' ? undefined : (formData.estimatedAttendance ? parseInt(formData.estimatedAttendance) : undefined),
+            serviceRadius: hostType === 'lodging' ? (formData.serviceRadius ? parseInt(formData.serviceRadius) : undefined) : undefined,
+            venueDescription: hostType === 'lodging' ? formData.whyLodging : formData.hostingMotivation,
+            hostingExperience: formData.newToHosting === 'yes' ? 0 : 1,
+            offersLodging: hostType === 'lodging',
+            lodgingDetails: hostType === 'lodging' ? {
+              description: formData.lodgingDescription,
+              motivation: formData.whyLodging
+            } : undefined
           }
         })
       };
@@ -583,7 +640,6 @@ function RegisterForm() {
                         min="1"
                         max="100"
                         placeholder="15"
-                        help="How far from your location are you willing to accommodate artists?"
                       />
                       {errors.serviceRadius && (
                         <p className="mt-1 text-sm text-red-600">{errors.serviceRadius}</p>

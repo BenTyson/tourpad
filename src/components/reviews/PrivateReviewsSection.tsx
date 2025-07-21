@@ -67,7 +67,7 @@ export function PrivateReviewsSection({ userId, userType }: PrivateReviewsSectio
             </p>
           </div>
           <div className="flex items-center space-x-2">
-            <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+            <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-200">
               <EyeOff className="w-3 h-3 mr-1" />
               {privateReviews.length} private
             </Badge>
@@ -119,7 +119,7 @@ export function PrivateReviewsSection({ userId, userType }: PrivateReviewsSectio
                           />
                         ))}
                       </div>
-                      <Badge variant="outline" className="bg-white text-gray-700 text-xs">
+                      <Badge variant="secondary" className="bg-white text-gray-700 text-xs">
                         <EyeOff className="w-3 h-3 mr-1" />
                         Private
                       </Badge>

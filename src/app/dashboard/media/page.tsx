@@ -221,9 +221,7 @@ export default function HostMediaPage() {
                 <CardContent>
                   <MediaUploader
                     onUpload={handleMediaUpload}
-                    acceptedFileTypes={{
-                      'image/*': ['.jpeg', '.jpg', '.png', '.webp']
-                    }}
+                    acceptedTypes="images"
                     maxFiles={10}
                     maxSizeMB={50}
                     categories={Object.keys(categoryInfo).map(key => ({
@@ -254,9 +252,12 @@ export default function HostMediaPage() {
                     photos={filteredMedia.map(media => ({
                       id: media.id,
                       url: media.url,
-                      category: media.category,
+                      category: media.category === 'interior' || media.category === 'amenities' || media.category === 'setup' 
+                        ? 'house' as const 
+                        : media.category as 'exterior' | 'performance_space',
                       title: media.title,
-                      description: media.description
+                      description: media.description,
+                      alt: media.title || 'Venue photo'
                     }))}
                     onPhotoClick={(index) => setLightboxIndex(index)}
                   />
@@ -285,13 +286,14 @@ export default function HostMediaPage() {
             photos={filteredMedia.map(media => ({
               id: media.id,
               url: media.url,
-              category: media.category,
-              title: media.title,
-              description: media.description
+              category: media.category === 'interior' || media.category === 'amenities' || media.category === 'setup' 
+                ? 'house' as const 
+                : media.category as 'exterior' | 'performance_space',
+              alt: media.title || 'Venue photo'
             }))}
-            currentIndex={lightboxIndex}
+            initialIndex={lightboxIndex}
+            isOpen={true}
             onClose={() => setLightboxIndex(null)}
-            onNavigate={setLightboxIndex}
           />
         )}
       </div>

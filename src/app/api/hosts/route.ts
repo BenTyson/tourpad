@@ -88,7 +88,7 @@ export async function GET(request: NextRequest) {
         parking: host.amenities?.includes('Free parking on premises') || false,
         petFriendly: host.amenities?.includes('Pet friendly') || false,
         soundSystem: host.amenities?.includes('Sound system provided') || false,
-        soundSystemSpecs: host.soundSystem?.description || '',
+        soundSystemSpecs: (host.soundSystem as any)?.description || '',
         outdoorSpace: host.amenities?.includes('Outdoor space') || false,
         accessible: host.amenities?.includes('Step-free access') || false,
         bnbOffered: host.offersLodging || false
