@@ -10,12 +10,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function GET(request: NextRequest) {
   try {
-    console.log('🔍 Subscription status API called');
     const session = await auth();
-    console.log('🔍 Session user ID:', session?.user?.id);
     
     if (!session?.user?.id) {
-      console.log('❌ No session found');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -127,9 +124,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('❌ Error fetching subscription status:', error);
-    console.error('❌ Error details:', error instanceof Error ? error.message : 'Unknown error');
-    console.error('❌ Stack trace:', error instanceof Error ? error.stack : 'No stack');
+    console.error('Error fetching subscription status:', error);
     return NextResponse.json(
       { error: 'Failed to fetch subscription status' },
       { status: 500 }

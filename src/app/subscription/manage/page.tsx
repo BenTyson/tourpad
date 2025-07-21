@@ -50,7 +50,6 @@ export default function ManageSubscriptionPage() {
 
   const handleUpdatePaymentMethod = async () => {
     setUpdating(true);
-    // TODO: Implement Stripe Customer Portal redirect
     try {
       const response = await fetch('/api/payments/create-portal-session', {
         method: 'POST',
@@ -61,7 +60,13 @@ export default function ManageSubscriptionPage() {
         const { url } = await response.json();
         window.location.href = url;
       } else {
-        setError('Unable to open billing portal');
+        const errorData = await response.json();
+        if (response.status === 503) {
+          // Service unavailable - billing portal not configured
+          setError(`${errorData.message} Contact: ${errorData.supportEmail}`);
+        } else {
+          setError('Unable to open billing portal');
+        }
       }
     } catch (error) {
       setError('Error opening billing portal');

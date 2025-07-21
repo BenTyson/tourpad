@@ -34,6 +34,19 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Error creating portal session:', error);
+    
+    // Handle Stripe configuration errors specifically
+    if (error instanceof Error && error.message.includes('No configuration provided')) {
+      return NextResponse.json(
+        { 
+          error: 'Billing portal not configured',
+          message: 'The billing portal is not set up yet. Please contact support for billing changes.',
+          supportEmail: 'support@tourpad.com'
+        },
+        { status: 503 } // Service Unavailable
+      );
+    }
+    
     return NextResponse.json(
       { error: 'Failed to create portal session' },
       { status: 500 }
