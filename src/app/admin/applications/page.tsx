@@ -334,6 +334,19 @@ export default function AdminApplicationsPage() {
                             {(application as Host).host?.venueDescription && (
                               <p><span className="font-medium">Description:</span> {(application as Host).host?.venueDescription}</p>
                             )}
+                            {(application as Host).host?.lodgingDetails && (
+                              <>
+                                {((application as Host).host?.lodgingDetails as any)?.hostingMotivation && (
+                                  <p><span className="font-medium">What do you enjoy most about hosting:</span> {((application as Host).host?.lodgingDetails as any).hostingMotivation}</p>
+                                )}
+                                {((application as Host).host?.lodgingDetails as any)?.additionalInfo && (
+                                  <p><span className="font-medium">Additional Information:</span> {((application as Host).host?.lodgingDetails as any).additionalInfo}</p>
+                                )}
+                                {((application as Host).host?.lodgingDetails as any)?.newToHosting && (
+                                  <p><span className="font-medium">New to hosting:</span> {((application as Host).host?.lodgingDetails as any).newToHosting}</p>
+                                )}
+                              </>
+                            )}
                           </div>
                         </div>
                       )}

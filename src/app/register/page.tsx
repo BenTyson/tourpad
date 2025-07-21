@@ -208,8 +208,13 @@ function RegisterForm() {
             offersLodging: hostType === 'lodging',
             lodgingDetails: hostType === 'lodging' ? {
               description: formData.lodgingDescription,
-              motivation: formData.whyLodging
-            } : undefined
+              motivation: formData.whyLodging,
+              additionalInfo: formData.additionalInfo
+            } : {
+              hostingMotivation: formData.hostingMotivation,
+              additionalInfo: formData.additionalInfo,
+              newToHosting: formData.newToHosting
+            }
           }
         })
       };
@@ -227,12 +232,44 @@ function RegisterForm() {
       if (!response.ok) {
         throw new Error(result.error || 'Registration failed');
       }
+
+      // Upload photos if host and has photos
+      if (userType === 'host' && formData.concertSpacePhotos.length > 0 && result.user?.id) {
+        for (const photo of formData.concertSpacePhotos) {
+          const photoFormData = new FormData();
+          photoFormData.append('file', photo);
+          photoFormData.append('type', 'venue');
+          photoFormData.append('category', 'venue');
+          
+          await fetch('/api/upload', {
+            method: 'POST',
+            body: photoFormData
+          });
+        }
+      }
       
       if (userType === 'fan') {
         // For fans, redirect to payment page
         router.push('/payment/fan');
       } else {
+        // Show success message first
         alert(`${userType === 'artist' ? 'Artist' : 'Host'} application submitted successfully! We'll review and get back to you within 48 hours.`);
+        
+        // Auto-login and redirect to holding page
+        const { signIn } = await import('next-auth/react');
+        const signInResult = await signIn('credentials', {
+          email: formData.email,
+          password: formData.password,
+          redirect: false
+        });
+
+        if (signInResult?.ok) {
+          // Redirect to dashboard which will show holding page for pending users
+          router.push('/dashboard');
+        } else {
+          // If auto-login fails, redirect to login page
+          router.push('/login');
+        }
       }
       
     } catch (error) {
