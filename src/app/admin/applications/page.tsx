@@ -242,38 +242,49 @@ export default function AdminApplicationsPage() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center mb-4">
+          <div className="flex items-center">
             <Link href="/admin" className="mr-4">
               <ArrowLeftIcon className="w-6 h-6 text-gray-600 hover:text-gray-900" />
             </Link>
             <h1 className="text-3xl font-bold text-gray-900">Applications</h1>
           </div>
-          <p className="text-gray-600">Review and approve new artist and host applications</p>
         </div>
 
         {/* Filters */}
         <div className="mb-6">
-          <div className="flex space-x-4">
-            <Button
-              variant={filter === 'all' ? 'primary' : 'secondary'}
+          <div className="flex space-x-2">
+            <button
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                filter === 'all' 
+                  ? 'bg-gray-900 text-white' 
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
               onClick={() => setFilter('all')}
             >
               All ({applications.length})
-            </Button>
-            <Button
-              variant={filter === 'host' ? 'primary' : 'secondary'}
+            </button>
+            <button
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center ${
+                filter === 'host' 
+                  ? 'bg-gray-900 text-white' 
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
               onClick={() => setFilter('host')}
             >
               <HomeIcon className="w-4 h-4 mr-2" />
               Hosts ({applications.filter(a => a.userType.toLowerCase() === 'host').length})
-            </Button>
-            <Button
-              variant={filter === 'artist' ? 'primary' : 'secondary'}
+            </button>
+            <button
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center ${
+                filter === 'artist' 
+                  ? 'bg-gray-900 text-white' 
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
               onClick={() => setFilter('artist')}
             >
               <MusicalNoteIcon className="w-4 h-4 mr-2" />
               Artists ({applications.filter(a => a.userType.toLowerCase() === 'artist').length})
-            </Button>
+            </button>
           </div>
         </div>
 
@@ -305,7 +316,11 @@ export default function AdminApplicationsPage() {
                       )}
                       <div>
                         <h3 className="text-lg font-semibold text-gray-900">{application.name}</h3>
-                        <p className="text-sm text-gray-600">{application.email}</p>
+                        <div className="flex items-center space-x-3 text-sm text-gray-600">
+                          <span>{application.email}</span>
+                          <span>•</span>
+                          <span>Submitted: {new Date(application.createdAt).toLocaleDateString()}</span>
+                        </div>
                       </div>
                     </div>
                     <div className="flex items-center space-x-3">
@@ -323,11 +338,7 @@ export default function AdminApplicationsPage() {
                 <CardContent className="p-6">
                   <div className="space-y-6">
                     {/* Top Section - Application Info */}
-                    <div className="grid md:grid-cols-4 gap-4 text-sm">
-                      <div>
-                        <span className="font-medium text-gray-900">Submitted:</span>
-                        <p className="text-gray-600">{new Date(application.createdAt).toLocaleDateString()}</p>
-                      </div>
+                    <div className="grid md:grid-cols-3 gap-4 text-sm">
                       {application.profile?.phone && (
                         <div>
                           <span className="font-medium text-gray-900">Phone:</span>
@@ -346,10 +357,6 @@ export default function AdminApplicationsPage() {
                     <div>
                       {application.userType.toLowerCase() === 'host' && (application as Host).host && (
                         <div>
-                          <h4 className="font-medium text-gray-900 mb-3 flex items-center">
-                            <HomeIcon className="w-4 h-4 mr-2 text-gray-500" />
-                            Venue Information
-                          </h4>
                           <div className="grid md:grid-cols-2 gap-6">
                             <div className="space-y-3 text-sm">
                               <div className="flex items-start">
@@ -406,10 +413,6 @@ export default function AdminApplicationsPage() {
 
                       {application.userType.toLowerCase() === 'artist' && (application as Artist).artist && (
                         <div>
-                          <h4 className="font-medium text-gray-900 mb-3 flex items-center">
-                            <MusicalNoteIcon className="w-4 h-4 mr-2 text-gray-500" />
-                            Artist Information
-                          </h4>
                           <div className="grid md:grid-cols-2 gap-6">
                             <div className="space-y-3 text-sm">
                               {(application as Artist).artist?.stageName && (
@@ -442,11 +445,7 @@ export default function AdminApplicationsPage() {
                   </div>
 
                   {/* Photos Section */}
-                  <div className="pt-6 border-t border-gray-200">
-                    <h4 className="font-medium text-gray-900 mb-4 flex items-center">
-                      <PhotoIcon className="w-4 h-4 mr-2 text-gray-500" />
-                      Submitted Photos
-                    </h4>
+                  <div className="pt-6">
                     
                     {/* Host Photos */}
                     {application.userType.toLowerCase() === 'host' && (application as Host).host && (
