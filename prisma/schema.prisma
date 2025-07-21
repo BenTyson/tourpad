@@ -410,9 +410,9 @@ model Subscription {
   user                   User                @relation(fields: [userId], references: [id])
   
   // Stripe data
-  stripeSubscriptionId   String              @unique
+  stripeSubscriptionId   String?             @unique
   stripeCustomerId       String
-  stripePriceId          String
+  stripePriceId          String?
   
   // Status tracking
   status                 SubscriptionStatus

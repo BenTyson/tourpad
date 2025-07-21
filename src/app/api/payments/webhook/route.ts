@@ -66,8 +66,9 @@ export async function POST(request: NextRequest) {
           }
         });
 
-        // Create or update subscription if it's a subscription
+        // Create or update subscription - for both subscription and one-time payments
         if (session.subscription) {
+          // Handle actual Stripe subscriptions
           const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
           
           await prisma.subscription.upsert({
@@ -87,6 +88,29 @@ export async function POST(request: NextRequest) {
               status: 'ACTIVE',
               currentPeriodStart: new Date(subscription.current_period_start * 1000),
               currentPeriodEnd: new Date(subscription.current_period_end * 1000)
+            }
+          });
+        } else {
+          // Handle one-time payments by creating a manual subscription record
+          const now = new Date();
+          const oneYearFromNow = new Date();
+          oneYearFromNow.setFullYear(now.getFullYear() + 1);
+
+          await prisma.subscription.upsert({
+            where: { userId: user.id },
+            create: {
+              userId: user.id,
+              stripeCustomerId: customerId,
+              status: 'ACTIVE',
+              currentPeriodStart: now,
+              currentPeriodEnd: oneYearFromNow,
+              amount: session.amount_total || 40000,
+              interval: 'year'
+            },
+            update: {
+              status: 'ACTIVE',
+              currentPeriodStart: now,
+              currentPeriodEnd: oneYearFromNow
             }
           });
         }
