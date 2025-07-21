@@ -239,6 +239,42 @@ lsof -ti:3000 | xargs kill -9
 killall node 2>/dev/null
 ```
 
+#### Localhost Binding Issues (macOS)
+**Symptoms**:
+- Next.js shows "Ready" but localhost:3000 not accessible
+- curl fails with "Couldn't connect to server"
+- netstat shows no processes listening on ports
+
+**Root Cause**: Next.js binding to limited interfaces instead of all interfaces
+
+**Critical Solution**:
+```bash
+# ALWAYS start Next.js with explicit host binding
+npx next dev -H 0.0.0.0 -p 3000
+
+# Or for different port
+npx next dev -H 0.0.0.0 -p 3002
+```
+
+**Update package.json to prevent recurrence**:
+```json
+"scripts": {
+  "dev": "next dev -H 0.0.0.0",
+  "dev:stable": "next dev -H 0.0.0.0 -p 3002"
+}
+```
+
+**Verification Commands**:
+```bash
+# Test connectivity
+curl -I http://localhost:3000
+# Should return: HTTP/1.1 200 OK
+
+# Check port binding
+netstat -an | grep 3000
+# Should show: *.3000 (not just 127.0.0.1.3000)
+```
+
 #### Database Connection Issues
 ```bash
 # Test Prisma connection

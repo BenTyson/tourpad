@@ -1198,8 +1198,8 @@ export const testBookings: Booking[] = [
   }
 ];
 
-// Concert data for fan discovery
-export interface Concert {
+// Concert data for fan discovery - using flexible interface
+export interface ConcertListing {
   id: string;
   title: string;
   artistId: string;
@@ -1229,7 +1229,7 @@ export interface Concert {
   imageUrl?: string;
 }
 
-export const testConcerts: Concert[] = [
+export const testConcerts: ConcertListing[] = [
   {
     id: 'concert1',
     title: 'An Evening with Sarah & The Wanderers',

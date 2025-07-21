@@ -14,7 +14,6 @@ import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Badge } from '@/components/ui/Badge';
-import { apiClient, handleApiResponse } from '@/lib/api-client';
 import { getStripe } from '@/lib/stripe';
 
 export default function ArtistPaymentPage() {
@@ -43,42 +42,46 @@ export default function ArtistPaymentPage() {
     'Priority customer support'
   ];
 
-  const handlePayment = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handlePayment = async () => {
     setPaymentStep('processing');
     
     try {
       // Create Stripe checkout session
-      const response = await apiClient.request('/payments/create-checkout', {
+      const response = await fetch('/api/payments/create-checkout-session', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
-          priceId: process.env.NEXT_PUBLIC_STRIPE_ARTIST_PRICE_ID || 'price_1234567890', // Would be configured in env
-          successUrl: `${window.location.origin}/payment/success`,
-          cancelUrl: `${window.location.origin}/payment/artist`
+          priceId: 'price_1RnOGfPNV1CmbPyC0lkEfYbl', // Artist annual price ID
+          userType: 'artist'
         })
       });
       
-      await handleApiResponse(
-        response,
-        async (data) => {
-          // Redirect to Stripe Checkout
-          const stripe = await getStripe();
-          if (stripe && data.sessionId) {
-            await stripe.redirectToCheckout({ sessionId: data.sessionId });
-          } else {
-            throw new Error('Failed to initialize Stripe');
-          }
-        },
-        (error) => {
-          console.error('Payment error:', error);
-          setPaymentStep('payment');
-          // TODO: Show error message to user
+      if (!response.ok) {
+        throw new Error('Failed to create checkout session');
+      }
+      
+      const { sessionId, url } = await response.json();
+      
+      // Redirect to Stripe Checkout
+      const stripe = await getStripe();
+      if (stripe && sessionId) {
+        const { error } = await stripe.redirectToCheckout({ sessionId });
+        if (error) {
+          console.error('Stripe redirect error:', error);
+          setPaymentStep('plan');
         }
-      );
+      } else if (url) {
+        // Fallback to direct URL redirect
+        window.location.href = url;
+      } else {
+        throw new Error('No checkout session created');
+      }
       
     } catch (error) {
       console.error('Error creating payment:', error);
-      setPaymentStep('payment');
+      setPaymentStep('plan');
       // TODO: Show error message to user
     }
   };
@@ -197,186 +200,16 @@ export default function ArtistPaymentPage() {
                   </div>
 
                   <Button 
-                    onClick={() => setPaymentStep('payment')}
+                    onClick={handlePayment}
                     size="lg" 
                     className="w-full"
                   >
-                    Continue to Payment
+                    Start Your Music Journey - $400/year
                   </Button>
                 </CardContent>
               </Card>
             )}
 
-            {paymentStep === 'payment' && (
-              <Card>
-                <CardHeader>
-                  <h2 className="text-xl font-semibold">Payment Information</h2>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handlePayment} className="space-y-6">
-                    {/* Payment Method Selection */}
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
-                        Payment Method
-                      </label>
-                      <div className="grid grid-cols-2 gap-3">
-                        <button
-                          type="button"
-                          onClick={() => setPaymentMethod('card')}
-                          className={`p-4 border rounded-lg flex items-center justify-center transition-colors ${
-                            paymentMethod === 'card'
-                              ? 'border-teal-500 bg-teal-50 text-teal-700'
-                              : 'border-gray-300 hover:bg-gray-50'
-                          }`}
-                        >
-                          <CreditCardIcon className="w-5 h-5 mr-2" />
-                          Credit Card
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setPaymentMethod('bank')}
-                          className={`p-4 border rounded-lg flex items-center justify-center transition-colors ${
-                            paymentMethod === 'bank'
-                              ? 'border-teal-500 bg-teal-50 text-teal-700'
-                              : 'border-gray-300 hover:bg-gray-50'
-                          }`}
-                        >
-                          <span className="text-sm font-medium">Bank Transfer</span>
-                        </button>
-                      </div>
-                    </div>
-
-                    {paymentMethod === 'card' && (
-                      <>
-                        {/* Card Information */}
-                        <div className="space-y-4">
-                          <Input
-                            label="Card Number"
-                            value={cardData.number}
-                            onChange={(e) => setCardData({ ...cardData, number: e.target.value })}
-                            placeholder="1234 5678 9012 3456"
-                            required
-                          />
-                          
-                          <div className="grid grid-cols-2 gap-4">
-                            <Input
-                              label="Expiry Date"
-                              value={cardData.expiry}
-                              onChange={(e) => setCardData({ ...cardData, expiry: e.target.value })}
-                              placeholder="MM/YY"
-                              required
-                            />
-                            <Input
-                              label="CVC"
-                              value={cardData.cvc}
-                              onChange={(e) => setCardData({ ...cardData, cvc: e.target.value })}
-                              placeholder="123"
-                              required
-                            />
-                          </div>
-
-                          <Input
-                            label="Cardholder Name"
-                            value={cardData.name}
-                            onChange={(e) => setCardData({ ...cardData, name: e.target.value })}
-                            placeholder="John Doe"
-                            required
-                          />
-                        </div>
-
-                        {/* Billing Address */}
-                        <div className="space-y-4">
-                          <h4 className="font-medium text-gray-900">Billing Address</h4>
-                          
-                          <Input
-                            label="Email Address"
-                            type="email"
-                            value={cardData.email}
-                            onChange={(e) => setCardData({ ...cardData, email: e.target.value })}
-                            placeholder="john@example.com"
-                            required
-                          />
-
-                          <Input
-                            label="Address"
-                            value={cardData.address}
-                            onChange={(e) => setCardData({ ...cardData, address: e.target.value })}
-                            placeholder="123 Main St"
-                            required
-                          />
-
-                          <div className="grid grid-cols-2 gap-4">
-                            <Input
-                              label="City"
-                              value={cardData.city}
-                              onChange={(e) => setCardData({ ...cardData, city: e.target.value })}
-                              placeholder="Austin"
-                              required
-                            />
-                            <Input
-                              label="State"
-                              value={cardData.state}
-                              onChange={(e) => setCardData({ ...cardData, state: e.target.value })}
-                              placeholder="TX"
-                              required
-                            />
-                          </div>
-
-                          <Input
-                            label="ZIP Code"
-                            value={cardData.zip}
-                            onChange={(e) => setCardData({ ...cardData, zip: e.target.value })}
-                            placeholder="78701"
-                            required
-                          />
-                        </div>
-                      </>
-                    )}
-
-                    {paymentMethod === 'bank' && (
-                      <div className="text-center py-8 bg-gray-50 rounded-lg">
-                        <p className="text-gray-600 mb-4">
-                          Bank transfer option coming soon. Please use credit card for now.
-                        </p>
-                        <Button 
-                          type="button"
-                          variant="outline"
-                          onClick={() => setPaymentMethod('card')}
-                        >
-                          Use Credit Card Instead
-                        </Button>
-                      </div>
-                    )}
-
-                    {paymentMethod === 'card' && (
-                      <>
-                        {/* Terms */}
-                        <div className="bg-gray-50 p-4 rounded-lg">
-                          <label className="flex items-start">
-                            <input type="checkbox" className="mt-1 mr-3" required />
-                            <span className="text-sm text-gray-700">
-                              I agree to the{' '}
-                              <Link href="/terms" className="text-teal-600 hover:underline">
-                                Terms of Service
-                              </Link>{' '}
-                              and{' '}
-                              <Link href="/privacy" className="text-teal-600 hover:underline">
-                                Privacy Policy
-                              </Link>
-                              . My membership will automatically renew annually.
-                            </span>
-                          </label>
-                        </div>
-
-                        <Button type="submit" size="lg" className="w-full">
-                          Complete Payment - $400
-                        </Button>
-                      </>
-                    )}
-                  </form>
-                </CardContent>
-              </Card>
-            )}
           </div>
 
           {/* Sidebar */}

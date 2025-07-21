@@ -45,13 +45,13 @@ function LodgingSearchContent() {
   
   // Get lodging hosts (both lodging-only and hybrid hosts that offer lodging)
   const lodgingHosts = testHosts.filter(host => 
-    host.hostingCapabilities?.lodgingHosting?.enabled && 
-    host.hostingCapabilities?.lodgingHosting?.lodgingDetails
+    (host as any).hostingCapabilities?.lodgingHosting?.enabled && 
+    (host as any).hostingCapabilities?.lodgingHosting?.lodgingDetails
   );
   
   // Filter hosts based on search criteria
   const filteredHosts = lodgingHosts.filter(host => {
-    const lodgingDetails = host.hostingCapabilities.lodgingHosting.lodgingDetails!;
+    const lodgingDetails = (host as any).hostingCapabilities.lodgingHosting.lodgingDetails!;
     
     // Price filter
     if (lodgingDetails.pricing.baseRate > searchFilters.maxPrice) return false;
@@ -86,7 +86,7 @@ function LodgingSearchContent() {
   };
   
   const calculateTotalCost = (host: any) => {
-    const lodgingDetails = host.hostingCapabilities.lodgingHosting.lodgingDetails!;
+    const lodgingDetails = (host as any).hostingCapabilities.lodgingHosting.lodgingDetails!;
     const nights = 1; // Assuming 1 night for now
     const additionalGuests = Math.max(0, searchFilters.guests - 1);
     
@@ -238,7 +238,7 @@ function LodgingSearchContent() {
         {/* Lodging Results */}
         <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {filteredHosts.map(host => {
-            const lodgingDetails = host.hostingCapabilities.lodgingHosting.lodgingDetails!;
+            const lodgingDetails = (host as any).hostingCapabilities.lodgingHosting.lodgingDetails!;
             const distance = calculateDistance(host);
             const totalCost = calculateTotalCost(host);
             

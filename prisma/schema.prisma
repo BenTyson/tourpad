@@ -37,6 +37,8 @@ model User {
   reviews                 Review[]       @relation("ReviewerUser")
   sessions                Session[]
   profile                 UserProfile?
+  subscription            Subscription?
+  stripeCustomerId        String?        @unique
 
   @@map("users")
 }
@@ -284,18 +286,23 @@ model Review {
 model Payment {
   id                    String        @id @default(cuid())
   stripePaymentIntentId String?
+  stripePaymentId       String?       @unique
+  stripeCustomerId      String?
   amount                Int
   currency              String        @default("USD")
   userId                String
   bookingId             String?
   paymentType           PaymentType
   status                PaymentStatus @default(PENDING)
+  description           String?
   metadata              Json?
   createdAt             DateTime      @default(now())
   updatedAt             DateTime      @updatedAt
   booking               Booking?      @relation(fields: [bookingId], references: [id])
   user                  User          @relation(fields: [userId], references: [id])
-
+  
+  @@index([userId])
+  @@index([stripePaymentId])
   @@map("payments")
 }
 
@@ -397,6 +404,33 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
+model Subscription {
+  id                     String              @id @default(cuid())
+  userId                 String              @unique
+  user                   User                @relation(fields: [userId], references: [id])
+  
+  // Stripe data
+  stripeSubscriptionId   String              @unique
+  stripeCustomerId       String
+  stripePriceId          String
+  
+  // Status tracking
+  status                 SubscriptionStatus
+  currentPeriodStart     DateTime
+  currentPeriodEnd       DateTime
+  cancelAtPeriodEnd      Boolean             @default(false)
+  
+  // Billing
+  amount                 Int                 // recurring amount in cents
+  interval               String              // "month" or "year"
+  
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+  
+  @@index([stripeSubscriptionId])
+  @@map("subscriptions")
+}
+
 enum UserType {
   ARTIST
   HOST
@@ -461,12 +495,18 @@ enum PaymentType {
   MEMBERSHIP
   BOOKING
   DOOR_FEE
+  ARTIST_ANNUAL
+  FAN_MONTHLY
+  ONE_TIME
 }
 
 enum PaymentStatus {
   PENDING
+  PROCESSING
+  SUCCEEDED
   COMPLETED
   FAILED
+  CANCELED
   REFUNDED
 }
 

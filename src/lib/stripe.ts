@@ -1,33 +1,24 @@
-// Mock Stripe service
-export interface StripeSession {
-  id: string;
-  url: string;
-  status: string;
-}
+import { loadStripe, Stripe } from '@stripe/stripe-js';
 
-export async function createCheckoutSession(priceId: string, userId: string): Promise<StripeSession> {
-  // Mock implementation
-  return {
-    id: 'cs_test_123',
-    url: 'https://checkout.stripe.com/pay/cs_test_123',
-    status: 'open'
-  };
-}
+let stripePromise: Promise<Stripe | null>;
 
-export async function getSession(sessionId: string): Promise<StripeSession | null> {
-  // Mock implementation
-  return {
-    id: sessionId,
-    url: 'https://checkout.stripe.com/pay/' + sessionId,
-    status: 'complete'
-  };
-}
+export const getStripe = () => {
+  if (!stripePromise) {
+    stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+  }
+  return stripePromise;
+};
 
-export function getStripe() {
-  // Mock Stripe client
-  return {
-    redirectToCheckout: async (options: { sessionId: string }) => {
-      window.location.href = `https://checkout.stripe.com/pay/${options.sessionId}`;
-    }
-  };
-}
+// Price IDs from environment
+export const PRICE_IDS = {
+  ARTIST_ANNUAL: process.env.STRIPE_ARTIST_ANNUAL_PRICE_ID!,
+  FAN_MONTHLY: process.env.STRIPE_FAN_MONTHLY_PRICE_ID!,
+} as const;
+
+// Helper to format price for display
+export const formatPrice = (amount: number, currency = 'usd'): string => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: currency.toUpperCase(),
+  }).format(amount / 100); // Stripe uses cents
+};

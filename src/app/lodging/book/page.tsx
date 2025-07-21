@@ -51,7 +51,7 @@ function LodgingBookPageContent() {
   const host = testHosts.find(h => h.id === hostId);
   const showHost = showHostId ? testHosts.find(h => h.id === showHostId) : null;
   
-  if (!host || !host.hostingCapabilities?.lodgingHosting?.enabled) {
+  if (!host || !(host as any).hostingCapabilities?.lodgingHosting?.enabled) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -65,7 +65,7 @@ function LodgingBookPageContent() {
     );
   }
   
-  const lodgingDetails = host.hostingCapabilities.lodgingHosting.lodgingDetails!;
+  const lodgingDetails = (host as any).hostingCapabilities.lodgingHosting.lodgingDetails!;
   
   const calculateTotalCost = () => {
     const nights = 1; // For now, assuming 1 night

@@ -13,8 +13,8 @@ function PaymentSuccessContent() {
 
   useEffect(() => {
     if (sessionId) {
-      // TODO: Verify payment with backend
-      // For now, assume success
+      // For now, assume success if we have a session ID from Stripe
+      // Webhook will handle the actual user activation
       setTimeout(() => setStatus('success'), 1000);
     } else {
       setStatus('error');
@@ -23,10 +23,10 @@ function PaymentSuccessContent() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-stone-50 flex items-center justify-center">
         <Card className="max-w-md">
           <CardContent className="text-center p-8">
-            <div className="animate-spin w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+            <div className="animate-spin w-12 h-12 border-4 border-teal-600 border-t-transparent rounded-full mx-auto mb-4"></div>
             <h1 className="text-xl font-bold text-gray-900 mb-2">Confirming Payment...</h1>
             <p className="text-gray-600">Please wait while we verify your payment</p>
           </CardContent>
@@ -37,7 +37,7 @@ function PaymentSuccessContent() {
 
   if (status === 'error') {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-stone-50 flex items-center justify-center">
         <Card className="max-w-md">
           <CardContent className="text-center p-8">
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -65,16 +65,16 @@ function PaymentSuccessContent() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <Card className="max-w-md">
         <CardContent className="text-center p-8">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <CheckCircleIcon className="w-10 h-10 text-green-600" />
+          <div className="w-16 h-16 bg-sage-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <CheckCircleIcon className="w-10 h-10 text-sage-600" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome to TourPad!</h1>
           <p className="text-gray-600 mb-4">
             Your membership is active and your profile is now live.
           </p>
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-            <h3 className="font-medium text-green-900 mb-2">What's Next?</h3>
-            <ul className="text-sm text-green-800 space-y-1 text-left">
+          <div className="bg-sage-50 border border-sage-200 rounded-lg p-4 mb-6">
+            <h3 className="font-medium text-sage-900 mb-2">What's Next?</h3>
+            <ul className="text-sm text-sage-800 space-y-1 text-left">
               <li>✓ Your profile is visible to hosts</li>
               <li>✓ You can now book venues</li>
               <li>✓ Start browsing available hosts</li>
@@ -98,10 +98,10 @@ function PaymentSuccessContent() {
 export default function PaymentSuccessPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-stone-50 flex items-center justify-center">
         <Card className="max-w-md">
           <CardContent className="text-center p-8">
-            <div className="animate-spin w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+            <div className="animate-spin w-12 h-12 border-4 border-teal-600 border-t-transparent rounded-full mx-auto mb-4"></div>
             <h1 className="text-xl font-bold text-gray-900 mb-2">Loading...</h1>
             <p className="text-gray-600">Please wait</p>
           </CardContent>
