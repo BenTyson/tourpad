@@ -85,6 +85,14 @@ export default function AdminPage() {
       href: '/admin/users'
     },
     {
+      title: 'Finance & Analytics',
+      description: 'Revenue tracking and financial reports',
+      icon: ChartBarIcon,
+      color: 'bg-blue-600',
+      count: Math.round(platformMetrics.monthlyRevenue / 100), // Convert to dollars
+      href: '/admin/finance'
+    },
+    {
       title: 'Bookings & Events',
       description: 'Monitor all platform bookings and events',
       icon: CalendarIcon,

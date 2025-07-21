@@ -419,27 +419,60 @@ model Review {
 }
 ```
 
-### Payment & Admin
+### Payment & Billing System ✅
 
 #### Payment Model
 ```prisma
 model Payment {
-  id                    String        @id @default(cuid())
-  stripePaymentIntentId String?
-  amount                Int           // Amount in cents
-  currency              String        @default("USD")
-  userId                String
-  bookingId             String?
-  paymentType           PaymentType   // MEMBERSHIP, BOOKING, DOOR_FEE
-  status                PaymentStatus @default(PENDING)
-  metadata              Json?
-  
+  id                  String        @id @default(cuid())
+  userId              String
+  stripePaymentId     String        @unique  // Stripe Payment Intent or Session ID
+  stripeCustomerId    String
+  amount              Int           // Amount in cents
+  currency            String        @default("usd")
+  status              PaymentStatus // SUCCEEDED, FAILED, PROCESSING, CANCELED
+  description         String?
+  paymentType         PaymentType   // ARTIST_ANNUAL, FAN_MONTHLY, ONE_TIME
+  bookingId           String?
+
   // Relations
-  user                  User          @relation(fields: [userId], references: [id])
-  booking               Booking?      @relation(fields: [bookingId], references: [id])
+  user                User          @relation(fields: [userId], references: [id])
+  booking             Booking?      @relation(fields: [bookingId], references: [id])
+
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  @@index([stripePaymentId])
+  @@index([userId])
+}
+```
+
+#### Subscription Model ✅
+```prisma
+model Subscription {
+  id                     String              @id @default(cuid())
+  userId                 String              @unique
+  user                   User                @relation(fields: [userId], references: [id])
   
-  createdAt             DateTime      @default(now())
-  updatedAt             DateTime      @updatedAt
+  // Stripe data (optional for one-time payments)
+  stripeSubscriptionId   String?             @unique
+  stripeCustomerId       String
+  stripePriceId          String?
+  
+  // Status tracking
+  status                 SubscriptionStatus  // ACTIVE, PAST_DUE, CANCELED
+  currentPeriodStart     DateTime
+  currentPeriodEnd       DateTime
+  cancelAtPeriodEnd      Boolean             @default(false)
+  
+  // Billing
+  amount                 Int                 // recurring amount in cents
+  interval               String              // "month" or "year"
+  
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+
+  @@index([stripeSubscriptionId])
 }
 ```
 
@@ -562,15 +595,18 @@ enum SubscriptionStatus {
 }
 
 enum PaymentType {
-  MEMBERSHIP
+  ARTIST_ANNUAL
+  FAN_MONTHLY
+  ONE_TIME
   BOOKING
   DOOR_FEE
 }
 
 enum PaymentStatus {
-  PENDING
-  COMPLETED
+  SUCCEEDED
   FAILED
+  PROCESSING
+  CANCELED
   REFUNDED
 }
 
@@ -656,12 +692,21 @@ POST   /api/concerts/[id]/rsvp   // Fan RSVP to concert
 GET    /api/fans/[id]/rsvps      // Fan's concert RSVPs
 ```
 
-#### Payment Integration
+#### Payment & Billing Integration ✅
 ```typescript
-POST   /api/payments/create-intent    // Stripe payment intent
-POST   /api/payments/webhook          // Stripe webhook handler
-GET    /api/payments/subscription     // Subscription status
-POST   /api/payments/cancel          // Cancel subscription
+// Stripe Checkout & Webhooks
+POST   /api/payments/create-checkout-session  // Create Stripe checkout
+POST   /api/payments/webhook                  // Stripe webhook handler (WORKING)
+
+// Subscription Management (WORKING)
+GET    /api/payments/subscription-status      // Current user subscription details
+POST   /api/payments/cancel-subscription      // Cancel subscription at period end
+POST   /api/payments/create-portal-session    // Stripe Customer Portal redirect
+
+// Admin Payment APIs (WORKING)
+GET    /api/admin/users                       // Users with payment status
+POST   /api/admin/fix-missing-subscriptions   // Retroactive subscription fix
+GET    /api/admin/finance/overview            // Revenue analytics (READY)
 ```
 
 #### Admin Tools ✅ IMPLEMENTED
@@ -831,6 +876,44 @@ Artist Request → Host Notification → Host Response → Confirmation → Conc
 
 ---
 
+## Stripe Payment Integration ✅
+
+### Stripe Configuration
+```typescript
+// Environment Variables Required
+STRIPE_SECRET_KEY="sk_test_..."           // Stripe secret key
+STRIPE_WEBHOOK_SECRET="whsec_..."         // Webhook endpoint secret
+NEXTAUTH_URL="http://localhost:3000"      // For return URLs
+```
+
+### Payment Flow Architecture
+```
+User Clicks Pay → Stripe Checkout → Payment Success → Webhook → Database Update → User Activation
+```
+
+### Webhook Events Handled
+```typescript
+// /api/payments/webhook/route.ts
+'checkout.session.completed'    // Initial payment success
+'invoice.payment_succeeded'     // Recurring payment success
+'invoice.payment_failed'        // Payment failure handling
+'customer.subscription.deleted' // Subscription cancellation
+```
+
+### Subscription Management
+```typescript
+// One-time payments get converted to annual subscriptions
+// Stripe recurring subscriptions use actual Stripe subscription data
+// Customer Portal allows payment method updates and billing history
+```
+
+### Models Integration
+- **Payment**: Stores all transaction records with Stripe IDs
+- **Subscription**: Tracks user subscription status and periods
+- **User**: Links to stripeCustomerId for Stripe operations
+
+---
+
 ## Environment Configuration
 
 ### Development
@@ -845,6 +928,10 @@ NEXTAUTH_URL="http://localhost:3000"
 # Google OAuth
 GOOGLE_CLIENT_ID="your-google-client-id"
 GOOGLE_CLIENT_SECRET="your-google-client-secret"
+
+# Stripe Payments  
+STRIPE_SECRET_KEY="sk_test_..."
+STRIPE_WEBHOOK_SECRET="whsec_..."
 
 # File Storage (Optional for dev)
 AWS_ACCESS_KEY_ID="your-access-key"
@@ -872,7 +959,7 @@ AWS_SECRET_ACCESS_KEY="prod-secret-key"
 AWS_S3_BUCKET="tourpad-prod"
 AWS_REGION="us-east-1"
 
-# Payments (Ready for Stripe)
+# Stripe Payments (Production)
 STRIPE_SECRET_KEY="sk_live_..."
 STRIPE_WEBHOOK_SECRET="whsec_..."
 ```
