@@ -231,20 +231,20 @@ export default function AdminApplicationsPage() {
         <div className="mb-6">
           <div className="flex space-x-4">
             <Button
-              variant={filter === 'all' ? 'default' : 'secondary'}
+              variant={filter === 'all' ? 'primary' : 'secondary'}
               onClick={() => setFilter('all')}
             >
               All ({applications.length})
             </Button>
             <Button
-              variant={filter === 'host' ? 'default' : 'secondary'}
+              variant={filter === 'host' ? 'primary' : 'secondary'}
               onClick={() => setFilter('host')}
             >
               <HomeIcon className="w-4 h-4 mr-2" />
               Hosts ({applications.filter(a => a.userType.toLowerCase() === 'host').length})
             </Button>
             <Button
-              variant={filter === 'artist' ? 'default' : 'secondary'}
+              variant={filter === 'artist' ? 'primary' : 'secondary'}
               onClick={() => setFilter('artist')}
             >
               <MusicalNoteIcon className="w-4 h-4 mr-2" />
@@ -326,13 +326,13 @@ export default function AdminApplicationsPage() {
                             </p>
                             <p><span className="font-medium">Venue Type:</span> {(application as Host).host?.venueType}</p>
                             {(application as Host).host?.venueName && (
-                              <p><span className="font-medium">Venue Name:</span> {(application as Host).host.venueName}</p>
+                              <p><span className="font-medium">Venue Name:</span> {(application as Host).host?.venueName}</p>
                             )}
                             {(application as Host).host?.indoorCapacity && (
-                              <p><span className="font-medium">Indoor Capacity:</span> {(application as Host).host.indoorCapacity} people</p>
+                              <p><span className="font-medium">Indoor Capacity:</span> {(application as Host).host?.indoorCapacity} people</p>
                             )}
                             {(application as Host).host?.venueDescription && (
-                              <p><span className="font-medium">Description:</span> {(application as Host).host.venueDescription}</p>
+                              <p><span className="font-medium">Description:</span> {(application as Host).host?.venueDescription}</p>
                             )}
                           </div>
                         </div>
@@ -343,10 +343,10 @@ export default function AdminApplicationsPage() {
                           <h4 className="font-medium text-gray-900 mb-2">Artist Information</h4>
                           <div className="space-y-2 text-sm text-gray-600">
                             {(application as Artist).artist?.stageName && (
-                              <p><span className="font-medium">Stage Name:</span> {(application as Artist).artist.stageName}</p>
+                              <p><span className="font-medium">Stage Name:</span> {(application as Artist).artist?.stageName}</p>
                             )}
-                            {(application as Artist).artist?.genres && (application as Artist).artist.genres.length > 0 && (
-                              <p><span className="font-medium">Genres:</span> {(application as Artist).artist.genres.join(', ')}</p>
+                            {(application as Artist).artist?.genres && (application as Artist).artist?.genres?.length > 0 && (
+                              <p><span className="font-medium">Genres:</span> {(application as Artist).artist?.genres?.join(', ')}</p>
                             )}
                             {(application as Artist).artist?.performanceVideoUrl && (
                               <p><span className="font-medium">Performance Video:</span> 
@@ -426,13 +426,13 @@ export default function AdminApplicationsPage() {
                         })()}
 
                         {/* Band Member Photos */}
-                        {(application as Artist).artist?.bandMembers && (application as Artist).artist.bandMembers.length > 0 && (
+                        {(application as Artist).artist?.bandMembers && (application as Artist).artist?.bandMembers?.length > 0 && (
                           <div className="mt-6">
                             <h5 className="font-medium text-gray-700 mb-3">Band Member Photos</h5>
                             {(() => {
-                              const bandMemberPhotos = (application as Artist).artist!.bandMembers!
-                                .filter(member => member.photoUrl)
-                                .map(member => member.photoUrl!);
+                              const bandMemberPhotos = (application as Artist).artist?.bandMembers
+                                ?.filter(member => member.photoUrl)
+                                .map(member => member.photoUrl!) || [];
                               
                               return bandMemberPhotos.length > 0 ? (
                                 <PhotoGallery photos={bandMemberPhotos} title="Band Member Photos" />
@@ -460,7 +460,7 @@ export default function AdminApplicationsPage() {
                         Reject
                       </Button>
                       <Button 
-                        variant="success"
+                        variant="primary"
                         onClick={() => handleApprove(application.id)}
                       >
                         <CheckIcon className="w-4 h-4 mr-2" />

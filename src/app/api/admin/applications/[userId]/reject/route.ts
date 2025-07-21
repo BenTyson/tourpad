@@ -12,8 +12,7 @@ export async function POST(
     const updatedUser = await prisma.user.update({
       where: { id: userId },
       data: {
-        status: 'REJECTED',
-        rejectedAt: new Date()
+        status: 'REJECTED'
       }
     });
 

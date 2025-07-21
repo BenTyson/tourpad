@@ -30,6 +30,7 @@ import { testConcerts } from '@/data/realTestData';
 import { useRouter } from 'next/navigation';
 import { PastShowsSection } from '@/components/reviews/PastShowsSection';
 import { PrivateReviewsSection } from '@/components/reviews/PrivateReviewsSection';
+import HoldingPage from '@/components/dashboard/HoldingPage';
 
 type UserRole = 'host' | 'artist' | 'admin' | 'fan';
 
@@ -37,6 +38,8 @@ export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [userLoading, setUserLoading] = useState(true);
   const [userStats, setUserStats] = useState({
     responseRate: 95,
     averageRating: 4.8,
@@ -44,6 +47,28 @@ export default function DashboardPage() {
     profileViews: 0
   });
   const [userProfileId, setUserProfileId] = useState<string | null>(null);
+  
+  // Fetch current user data (with latest status from database)
+  useEffect(() => {
+    if (session?.user) {
+      setUserLoading(true);
+      fetch('/api/user/current')
+        .then(res => res.json())
+        .then(data => {
+          if (!data.error) {
+            setCurrentUser(data);
+          } else {
+            console.error('Error fetching current user:', data.error);
+          }
+        })
+        .catch(err => {
+          console.error('Error fetching current user:', err);
+        })
+        .finally(() => {
+          setUserLoading(false);
+        });
+    }
+  }, [session?.user]);
   
   // Fetch user stats
   useEffect(() => {
@@ -78,7 +103,7 @@ export default function DashboardPage() {
   }, [session?.user]);
   
   // If not authenticated, redirect to login
-  if (status === 'loading') {
+  if (status === 'loading' || userLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -103,10 +128,134 @@ export default function DashboardPage() {
     );
   }
 
-  // Get user info from session
-  const userRole = session.user.type as 'host' | 'artist' | 'admin' | 'fan';
-  const userStatus = session.user.status;
-  const selectedUserId = session.user.id;
+  // Get user info from current user data (fresh from database) if available, otherwise fall back to session
+  const userData = currentUser || session.user;
+  const userRole = (userData.type || 'fan') as 'host' | 'artist' | 'admin' | 'fan';
+  const userStatus = userData.status || 'pending';
+  const selectedUserId = userData.id;
+
+  // Status-based routing logic
+  
+  // PENDING users (except fans) see holding page
+  if (userStatus === 'pending' && userRole !== 'fan') {
+    return (
+      <HoldingPage 
+        user={{
+          name: userData.name || '',
+          email: userData.email || '',
+          userType: userRole.toUpperCase() as 'HOST' | 'ARTIST' | 'FAN',
+          status: userStatus,
+          createdAt: userData.createdAt || new Date().toISOString()
+        }}
+      />
+    );
+  }
+
+  // REJECTED users see rejection notice
+  if (userStatus === 'rejected') {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="max-w-md w-full text-center">
+          <div className="bg-white rounded-lg shadow-lg p-8">
+            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <AlertTriangle className="w-8 h-8 text-red-600" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Application Not Approved</h1>
+            <p className="text-gray-600 mb-6">
+              Unfortunately, your {userRole} application was not approved at this time. 
+              You may reapply in the future or contact support for more information.
+            </p>
+            <div className="space-y-3">
+              <Button 
+                onClick={() => router.push('/register?type=' + userRole)}
+                className="w-full"
+              >
+                Apply Again
+              </Button>
+              <Button 
+                variant="secondary" 
+                onClick={() => router.push('/contact')}
+                className="w-full"
+              >
+                Contact Support
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ARTISTS with APPROVED status need to complete payment
+  if (userRole === 'artist' && userStatus === 'approved') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-primary-50 flex items-center justify-center p-4">
+        <div className="max-w-md w-full text-center">
+          <div className="bg-white rounded-lg shadow-xl p-8">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle className="w-8 h-8 text-green-600" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Congratulations!</h1>
+            <p className="text-gray-600 mb-6">
+              Your artist application has been approved! Complete your payment to access your full dashboard and start booking shows.
+            </p>
+            <Button 
+              onClick={() => router.push('/payment/artist')}
+              className="w-full mb-3"
+            >
+              Complete Payment Setup
+            </Button>
+            <p className="text-sm text-gray-500">
+              Annual membership: $400/year
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // FANS with PENDING status need to complete payment
+  if (userRole === 'fan' && userStatus === 'pending') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 flex items-center justify-center p-4">
+        <div className="max-w-md w-full text-center">
+          <div className="bg-white rounded-lg shadow-xl p-8">
+            <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Users className="w-8 h-8 text-primary-600" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Welcome to TourPad!</h1>
+            <p className="text-gray-600 mb-6">
+              Complete your subscription to start discovering and RSVPing to intimate live music experiences in your area.
+            </p>
+            <Button 
+              onClick={() => router.push('/payment/fan')}
+              className="w-full mb-3"
+            >
+              Start Subscription
+            </Button>
+            <p className="text-sm text-gray-500">
+              Monthly membership: $10/month
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Only ACTIVE users proceed to full dashboard
+  if (userStatus !== 'active') {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Account Status: {userStatus}</h1>
+          <p className="text-gray-600 mb-4">Your account is not currently active.</p>
+          <Button onClick={() => router.push('/contact')}>
+            Contact Support
+          </Button>
+        </div>
+      </div>
+    );
+  }
   
   // CRITICAL: ID Mapping between data sources
   // Session uses realTestData IDs ('artist1'), but profile pages use mockData IDs ('1')
@@ -125,8 +274,8 @@ export default function DashboardPage() {
   const hasFullAccess = userRole === 'admin' || 
                        userStatus === 'approved' || 
                        userStatus === 'active' ||
-                       (userRole === 'fan' && (session.user as any).paymentStatus === 'active');
-  const needsPayment = userRole === 'artist' && userStatus === 'approved' && !(session.user as any).paymentStatus;
+                       (userRole === 'fan' && userData.fan?.subscriptionStatus === 'ACTIVE');
+  const needsPayment = userRole === 'artist' && userStatus === 'approved' && userData.artist?.approvedAt && !userData.fan?.subscriptionStatus;
 
   // Filter data based on user role
   const userBookings = userRole === 'admin' 
@@ -213,13 +362,13 @@ export default function DashboardPage() {
               <div className="flex-1">
                 <h3 className="font-medium text-secondary-900 mb-2">Limited Dashboard Access</h3>
                 <p className="text-secondary-800 mb-4">
-                  {userRole === 'fan' && (session.user as any).paymentStatus !== 'active' && 'Your membership has expired. Renew to continue accessing exclusive house concerts.'}
+                  {userRole === 'fan' && userData.fan?.subscriptionStatus !== 'ACTIVE' && 'Your membership has expired. Renew to continue accessing exclusive house concerts.'}
                   {userRole !== 'fan' && userStatus === 'pending' && 'Your application is under review. Full dashboard functionality will be available once approved.'}
                   {userRole !== 'fan' && userStatus === 'rejected' && 'Your application was not approved. Please review your application status for next steps.'}
                   {userRole !== 'fan' && userStatus === 'suspended' && 'Your account has been suspended. Contact support for assistance.'}
                 </p>
                 <div className="flex space-x-3">
-                  {userRole === 'fan' && (session.user as any).paymentStatus !== 'active' ? (
+                  {userRole === 'fan' && userData.fan?.subscriptionStatus !== 'ACTIVE' ? (
                     <Link
                       href="/payment/fan"
                       className="bg-secondary-100 text-secondary-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-secondary-200 transition-colors"
@@ -304,7 +453,7 @@ export default function DashboardPage() {
                 <div className="px-6 py-4 border-b border-neutral-200 flex items-center justify-between">
                   <div>
                     <h2 className="text-xl font-bold text-neutral-900">
-                      Welcome back, {session?.user?.name || 'User'}
+                      Welcome back, {userData.name || 'User'}
                     </h2>
                     <p className="text-sm text-neutral-600 mt-1">
                       {userRole === 'admin' ? 'Platform overview and management' :
