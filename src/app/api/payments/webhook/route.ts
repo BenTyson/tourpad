@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import Stripe from 'stripe';
 import { PrismaClient } from '@prisma/client';
+import { sendPaymentEvent } from '../../events/route';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-06-30.basil',
@@ -131,6 +132,17 @@ export async function POST(request: NextRequest) {
         }
 
         console.log('✅ Payment processed successfully for user:', user.id);
+        
+        // Send real-time notification
+        sendPaymentEvent({
+          type: 'payment_success',
+          userId: user.id,
+          data: {
+            amount: session.amount_total,
+            description: 'Artist Annual Membership',
+            timestamp: new Date().toISOString()
+          }
+        });
         break;
       }
 
@@ -166,6 +178,17 @@ export async function POST(request: NextRequest) {
           });
 
           console.log('✅ Renewal payment processed for user:', user.id);
+          
+          // Send real-time notification
+          sendPaymentEvent({
+            type: 'payment_success',
+            userId: user.id,
+            data: {
+              amount: invoice.amount_paid,
+              description: 'Subscription Renewal',
+              timestamp: new Date().toISOString()
+            }
+          });
         }
         break;
       }
@@ -203,6 +226,17 @@ export async function POST(request: NextRequest) {
           }
 
           console.log('⚠️ Payment failed for user:', user.id);
+          
+          // Send real-time notification
+          sendPaymentEvent({
+            type: 'payment_failed',
+            userId: user.id,
+            data: {
+              amount: invoice.amount_due,
+              description: 'Payment Failed',
+              timestamp: new Date().toISOString()
+            }
+          });
         }
         break;
       }
@@ -227,6 +261,16 @@ export async function POST(request: NextRequest) {
             data: { status: 'INACTIVE' }
           });
           console.log('❌ User deactivated due to subscription cancellation:', user.id);
+          
+          // Send real-time notification
+          sendPaymentEvent({
+            type: 'subscription_canceled',
+            userId: user.id,
+            data: {
+              subscriptionId: subscription.id,
+              timestamp: new Date().toISOString()
+            }
+          });
         }
         break;
       }

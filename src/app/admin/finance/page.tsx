@@ -1,5 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { PaymentNotifications } from '@/components/admin/PaymentNotifications';
+import { useAutoRefresh } from '@/hooks/useAutoRefresh';
 import Link from 'next/link';
 import { 
   DollarSign, 
@@ -115,6 +117,9 @@ export default function AdminFinancePage() {
     fetchFinanceData();
   }, [dateRange]);
 
+  // Auto-refresh when payment events occur
+  useAutoRefresh(fetchFinanceData, ['payment_success', 'payment_failed', 'subscription_updated', 'subscription_canceled']);
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -207,6 +212,7 @@ export default function AdminFinancePage() {
 
   return (
     <div className="min-h-screen py-8" style={{background: 'linear-gradient(135deg, #f8f9f9 0%, #ebebe9 100%)'}}>
+      <PaymentNotifications />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">

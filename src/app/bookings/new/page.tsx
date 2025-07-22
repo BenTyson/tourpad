@@ -1,5 +1,5 @@
 'use client';
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { 
@@ -16,6 +16,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Badge } from '@/components/ui/Badge';
 import { mockHosts, mockArtists } from '@/data/mockData';
+import { testHosts, testArtists } from '@/data/realTestData';
 import { apiClient, handleApiResponse } from '@/lib/api-client';
 import { validateData, bookingSchema } from '@/lib/validation';
 
@@ -24,18 +25,100 @@ function NewBookingForm() {
   const hostId = searchParams.get('hostId');
   const artistId = searchParams.get('artistId');
   
-  // Determine booking type and get relevant data
+  // State for fetched data
+  const [host, setHost] = useState<any>(null);
+  const [artist, setArtist] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  
+  // Determine booking type
   const isHostBookingArtist = !!artistId; // Host is booking an artist
   const isArtistBookingHost = !!hostId;   // Artist is booking a host
-  
-  const host = hostId ? mockHosts.find(h => h.id === hostId) : null;
-  const artist = artistId ? mockArtists.find(a => a.id === artistId) : null;
+
+  // Fetch host/artist data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (hostId) {
+          // Try API first, fallback to test data
+          try {
+            const response = await fetch(`/api/hosts/${hostId}`);
+            if (response.ok) {
+              const hostData = await response.json();
+              setHost(hostData);
+            } else {
+              console.warn('Host API failed, falling back to test data');
+              // Fallback to test data
+              const testHost = testHosts.find(h => h.id === hostId);
+              if (testHost) {
+                setHost(testHost);
+              } else {
+                console.error('Host not found in test data either:', hostId);
+              }
+            }
+          } catch (apiError) {
+            console.warn('Host API error, falling back to test data:', apiError);
+            // Fallback to test data
+            const testHost = testHosts.find(h => h.id === hostId);
+            if (testHost) {
+              setHost(testHost);
+            } else {
+              console.error('Host not found in test data either:', hostId);
+            }
+          }
+        }
+        
+        if (artistId) {
+          // Try API first, fallback to test data
+          try {
+            const response = await fetch(`/api/artists/${artistId}`);
+            if (response.ok) {
+              const artistData = await response.json();
+              setArtist(artistData);
+            } else {
+              console.warn('Artist API failed, falling back to test data');
+              // Fallback to test data
+              const testArtist = testArtists.find(a => a.id === artistId);
+              if (testArtist) {
+                setArtist(testArtist);
+              } else {
+                console.error('Artist not found in test data either:', artistId);
+              }
+            }
+          } catch (apiError) {
+            console.warn('Artist API error, falling back to test data:', apiError);
+            // Fallback to test data
+            const testArtist = testArtists.find(a => a.id === artistId);
+            if (testArtist) {
+              setArtist(testArtist);
+            } else {
+              console.error('Artist not found in test data either:', artistId);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error in fetchData:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (hostId || artistId) {
+      console.log('Fetching data for hostId:', hostId, 'artistId:', artistId);
+      fetchData().catch(error => {
+        console.error('Unhandled error in fetchData:', error);
+        setLoading(false);
+      });
+    } else {
+      console.log('No hostId or artistId provided');
+      setLoading(false);
+    }
+  }, [hostId, artistId]);
 
   const [formData, setFormData] = useState({
     eventDate: '',
     eventTime: '19:00',
-    expectedGuests: host?.showSpecs.avgAttendance || 25,
-    doorFee: host?.showSpecs.avgDoorFee || 15,
+    expectedGuests: 25,
+    doorFee: 15,
     message: '',
     specialRequirements: '',
     contactPhone: '',
@@ -52,16 +135,40 @@ function NewBookingForm() {
     }
   });
 
+  // Update form defaults when host data is loaded
+  useEffect(() => {
+    if (host) {
+      setFormData(prev => ({
+        ...prev,
+        expectedGuests: host.showSpecs?.avgAttendance || host.capacity?.preferred || 25,
+        doorFee: host.showSpecs?.avgDoorFee || host.suggestedDoorFee || 15,
+      }));
+    }
+  }, [host]);
+
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
 
+  // Show loading while fetching data
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading booking details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error if no valid host or artist found
   if (!host && !artist) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Invalid Booking Request</h1>
-          <p className="text-gray-600 mb-4">Please select a host or artist to book.</p>
+          <p className="text-gray-600 mb-4">Could not find the requested host or artist.</p>
           <Link href="/dashboard">
             <Button>Back to Dashboard</Button>
           </Link>
@@ -79,42 +186,71 @@ function NewBookingForm() {
     setErrors([]);
     
     try {
-      // Prepare booking data
-      const eventDateTime = `${formData.eventDate}T${formData.eventTime}:00.000Z`;
-      const duration = 120; // Default 2 hours, could be made configurable
-      
-      const bookingData = {
-        artistId: artistId || 'current-artist-id', // Would come from session
-        hostId: hostId || 'current-host-id', // Would come from session
-        eventDate: eventDateTime,
-        duration,
-        message: formData.message
-      };
-      
-      // Validate data
-      const validation = validateData(bookingSchema, bookingData);
-      if (!validation.success) {
-        setErrors(validation.errors || ['Invalid booking data']);
+      // Validate required fields client-side
+      if (!formData.eventDate) {
+        setErrors(['Please select an event date']);
         return;
       }
       
-      // Submit to API
-      const response = await apiClient.createBooking(validation.data!);
+      if (!formData.message) {
+        setErrors(['Please include a message to the host']);
+        return;
+      }
       
-      await handleApiResponse(
-        response,
-        (data) => {
-          console.log('Booking created:', data);
-          setShowConfirmation(true);
+      if (!formData.agreeToTerms) {
+        setErrors(['Please agree to the booking terms']);
+        return;
+      }
+
+      // Prepare booking data
+      const bookingData = {
+        hostId: hostId,
+        requestedDate: formData.eventDate,
+        requestedTime: formData.eventTime,
+        estimatedDuration: 120, // Default 2 hours, could be made configurable
+        expectedAttendance: formData.expectedGuests,
+        doorFee: formData.doorFee,
+        artistMessage: formData.message,
+        lodgingRequested: formData.needsLodging,
+        lodgingDetails: formData.needsLodging ? formData.lodgingDetails : null
+      };
+      
+      console.log('Submitting booking data:', bookingData);
+      
+      // Submit to API
+      const response = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        (error, apiErrors) => {
-          setErrors(apiErrors || [error]);
-        }
-      );
+        body: JSON.stringify(bookingData),
+      });
+      
+      let data;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        console.error('Failed to parse response as JSON:', parseError);
+        setErrors(['Invalid server response. Please try again.']);
+        return;
+      }
+      
+      if (!response.ok) {
+        console.error('API Error:', response.status, data);
+        setErrors([data.error || `Server error (${response.status}). Please try again.`]);
+        return;
+      }
+      
+      console.log('Booking created successfully:', data);
+      setShowConfirmation(true);
       
     } catch (error) {
       console.error('Error creating booking:', error);
-      setErrors(['Failed to create booking. Please try again.']);
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        setErrors(['Network error. Please check your connection and try again.']);
+      } else {
+        setErrors(['An unexpected error occurred. Please try again.']);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -229,7 +365,7 @@ function NewBookingForm() {
                       onChange={(e) => setFormData({ ...formData, expectedGuests: parseInt(e.target.value) })}
                       required
                       min="1"
-                      max={host?.showSpecs.indoorAttendanceMax || 100}
+                      max={host?.showSpecs?.indoorAttendanceMax || 100}
                     />
                     {isArtistBookingHost && (
                       <Input
@@ -401,7 +537,7 @@ function NewBookingForm() {
                         <h4 className="font-medium mb-1">Booking Policy</h4>
                         <p className="mb-2">
                           {isArtistBookingHost 
-                            ? `This venue has a ${host?.showSpecs.hostingHistory} hosting history. Cancellation policy and house rules apply.`
+                            ? `This venue has a ${host?.showSpecs?.hostingHistory} hosting history. Cancellation policy and house rules apply.`
                             : `This artist has a ${artist?.cancellationPolicy} cancellation policy.`
                           }
                         </p>
@@ -447,7 +583,7 @@ function NewBookingForm() {
                   {host && (
                     <div className="flex items-center justify-center text-sm text-gray-600 mt-1">
                       <MapPinIcon className="w-4 h-4 mr-1" />
-                      {host.city}, {host.state}
+                      {(host as any)?.city || (host as any)?.location?.city}, {(host as any)?.state || (host as any)?.location?.state}
                     </div>
                   )}
                 </div>
@@ -462,15 +598,15 @@ function NewBookingForm() {
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Typical Attendance</span>
-                      <span className="font-medium">{host.showSpecs.avgAttendance}</span>
+                      <span className="font-medium">{host.showSpecs?.avgAttendance}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Usual Door Fee</span>
-                      <span className="font-medium">${host.showSpecs.avgDoorFee}</span>
+                      <span className="font-medium">${host.showSpecs?.avgDoorFee}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Max Capacity</span>
-                      <span className="font-medium">{host.showSpecs.indoorAttendanceMax}</span>
+                      <span className="font-medium">{host.showSpecs?.indoorAttendanceMax}</span>
                     </div>
                   </div>
                 )}
