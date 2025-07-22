@@ -585,6 +585,24 @@ export default function DashboardPage() {
                       </div>
                     </Link>
 
+                    {/* Bookings Management - Artists and Hosts only */}
+                    {(userRole === 'artist' || userRole === 'host') && (
+                      <Link href="/dashboard/bookings">
+                        <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                          <div className="flex items-center">
+                            <div className="flex-shrink-0">
+                              <Calendar className="w-5 h-5 text-neutral-600 group-hover:text-primary-600" />
+                            </div>
+                            <div className="ml-3">
+                              <h3 className="text-sm font-semibold text-neutral-900">
+                                {userRole === 'artist' ? 'My Bookings' : 'Booking Requests'}
+                              </h3>
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    )}
+
                     {/* Artist-specific actions */}
                     {userRole === 'artist' && (
                       <>
