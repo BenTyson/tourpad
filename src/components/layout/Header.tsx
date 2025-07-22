@@ -10,6 +10,7 @@ import {
   ChevronDown
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import NotificationBell from '@/components/notifications/NotificationBell';
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -140,6 +141,11 @@ export function Header() {
                   Welcome, <span className="font-medium text-gray-900">{session.user?.name}</span>
                 </div>
                 
+                {/* Notifications - show for approved/active users */}
+                {(session.user?.status === 'approved' || session.user?.status === 'active') && (
+                  <NotificationBell />
+                )}
+                
                 {/* User menu */}
                 <div className="relative" ref={userMenuRef}>
                   <button
@@ -237,6 +243,12 @@ export function Header() {
                 <div className="text-sm font-medium text-gray-900">{session.user?.name}</div>
                 <div className="text-xs text-gray-600">{session.user?.email}</div>
                 <div className="text-xs text-blue-600 mt-1 capitalize">{session.user?.type}</div>
+              </div>
+            )}
+            {/* Mobile notifications */}
+            {session && (session.user?.status === 'approved' || session.user?.status === 'active') && (
+              <div className="px-3 py-2">
+                <NotificationBell />
               </div>
             )}
             <div className="space-y-2">

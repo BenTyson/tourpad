@@ -251,38 +251,40 @@ model BandMember {
 
 ### Booking & Event System
 
-#### Booking Model
+#### Booking Model ✅ IMPLEMENTED
 ```prisma
 model Booking {
-  id                 String         @id @default(cuid())
-  artistId           String
-  hostId             String
-  requestedDate      DateTime
-  requestedTime      DateTime?
-  estimatedDuration  Int?
-  expectedAttendance Int?
-  status             BookingStatus  @default(PENDING)
-  artistFee          Int?
-  doorFee            Int?
-  artistMessage      String?
-  hostResponse       String?
-  lodgingRequested   Boolean        @default(false)
-  lodgingDetails     Json?
-  requestedAt        DateTime       @default(now())
-  respondedAt        DateTime?
-  confirmedAt        DateTime?
-  completedAt        DateTime?
+  id                   String         @id @default(cuid())
+  artistId             String
+  hostId               String
+  requestedDate        DateTime
+  requestedTime        DateTime?
+  estimatedDuration    Int?
+  expectedAttendance   Int?
+  status               BookingStatus  @default(PENDING)
+  doorFee              Int?           // Only door fee, no artist fee
+  doorFeeStatus        DoorFeeStatus? // Door fee negotiation workflow
+  artistMessage        String?
+  hostResponse         String?
+  specialRequirements  String?        // Host-specific requirements
+  lodgingRequested     Boolean        @default(false)
+  lodgingDetails       Json?
+  confirmationDeadline DateTime?      // 5-day artist confirmation window
+  requestedAt          DateTime       @default(now())
+  respondedAt          DateTime?
+  confirmedAt          DateTime?
+  completedAt          DateTime?
   
   // Relations
-  artist             Artist         @relation(fields: [artistId], references: [id])
-  host               Host           @relation(fields: [hostId], references: [id])
-  concert            Concert?
-  conversations      Conversation[]
-  payments           Payment[]
-  reviews            Review[]
+  artist               Artist         @relation(fields: [artistId], references: [id])
+  host                 Host           @relation(fields: [hostId], references: [id])
+  concert              Concert?
+  conversations        Conversation[]
+  payments             Payment[]
+  reviews              Review[]
   
-  createdAt          DateTime       @default(now())
-  updatedAt          DateTime       @updatedAt
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
 }
 ```
 
@@ -370,7 +372,7 @@ model Message {
 }
 ```
 
-#### Notification Model
+#### Notification Model ✅ IMPLEMENTED
 ```prisma
 model Notification {
   id          String           @id @default(cuid())
@@ -382,8 +384,8 @@ model Notification {
   relatedType String?          // booking, message, payment
   isRead      Boolean          @default(false)
   readAt      DateTime?
-  actionUrl   String?
-  actionText  String?
+  actionUrl   String?          // Deep links to booking/message pages
+  actionText  String?          // Custom action button text
   
   // Relations
   user        User             @relation(fields: [userId], references: [id])
@@ -566,12 +568,18 @@ enum MediaType {
 }
 
 enum BookingStatus {
-  PENDING
-  APPROVED
-  REJECTED
-  CONFIRMED
-  COMPLETED
-  CANCELLED
+  PENDING      // Initial artist request
+  APPROVED     // Host approved, awaiting artist confirmation
+  REJECTED     // Host rejected
+  CONFIRMED    // Artist confirmed within 5 days
+  COMPLETED    // Show completed
+  CANCELLED    // Either party cancelled
+}
+
+enum DoorFeeStatus {
+  PENDING_HOST    // Host needs to approve/counter artist suggestion
+  PENDING_ARTIST  // Artist needs to approve host counter-offer
+  AGREED          // Both parties agreed on door fee
 }
 
 enum ConcertStatus {
@@ -674,20 +682,38 @@ POST   /api/auth/signout         // Session termination
 
 ### Implemented Systems ✅
 
-#### Booking System ✅ IMPLEMENTED
+#### Booking System ✅ FULLY IMPLEMENTED
 ```typescript
-POST   /api/bookings             // Create booking request (EXISTING)
-GET    /api/bookings             // List user bookings (EXISTING)
-GET    /api/bookings/[id]        // Booking details (COMPLETED)
-PUT    /api/bookings/[id]        // Update booking status/data (COMPLETED)
-DELETE /api/bookings/[id]        // Cancel booking (COMPLETED)
+POST   /api/bookings             // Create booking request
+GET    /api/bookings             // List user bookings with filtering
+GET    /api/bookings/[id]        // Booking details
+PUT    /api/bookings/[id]        // Update booking status/data
+DELETE /api/bookings/[id]        // Cancel booking
 
 // Features implemented:
 // - Complete CRUD operations with Prisma integration
-// - Role-based permission system (artist/host/admin)
-// - Status workflow management (PENDING → APPROVED → CONFIRMED → COMPLETED)
-// - Real-time updates with optimistic UI
-// - Comprehensive error handling and validation
+// - Role-based permission system (artist/host/admin)  
+// - Status workflow: PENDING → APPROVED → CONFIRMED → COMPLETED
+// - Door fee negotiation workflow with status tracking
+// - 5-day confirmation deadline management
+// - Real-time notifications on status changes
+// - Comprehensive UI with collapsible details
+// - Mobile-responsive booking cards
+```
+
+#### Notification System ✅ FULLY IMPLEMENTED
+```typescript
+GET    /api/notifications        // Fetch user notifications (paginated)
+PUT    /api/notifications        // Mark notifications as read
+
+// Features implemented:
+// - Real-time notification creation on booking events
+// - In-app notification bell with unread count badge
+// - Notification dropdown with action links
+// - Auto-polling every 30 seconds for new notifications
+// - Mark individual/all notifications as read
+// - Deep linking to relevant pages (booking details)
+// - Integrated into header for approved/active users
 ```
 
 ### Ready for Implementation 🔄

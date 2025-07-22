@@ -14,11 +14,15 @@ import {
   User,
   Music,
   Home,
-  MoreHorizontal
+  MoreHorizontal,
+  ChevronDown,
+  ChevronUp,
+  FileText
 } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import Link from 'next/link';
 
 export interface BookingData {
   id: string;
@@ -34,14 +38,15 @@ export interface BookingData {
   estimatedDuration?: number | null;
   expectedAttendance?: number | null;
   status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'CONFIRMED' | 'COMPLETED' | 'CANCELLED';
-  artistFee?: number | null;
   doorFee?: number | null;
+  doorFeeStatus?: 'PENDING_HOST' | 'PENDING_ARTIST' | 'AGREED' | null;
   artistMessage?: string | null;
   hostResponse?: string | null;
   lodgingRequested: boolean;
   lodgingDetails?: any;
   requestedAt: Date | string;
   respondedAt?: Date | string | null;
+  confirmationDeadline?: Date | string | null;
   confirmedAt?: Date | string | null;
   completedAt?: Date | string | null;
   artist?: {
@@ -56,7 +61,10 @@ export interface BookingData {
     email: string;
     venueName: string;
     profileImageUrl?: string | null;
+    city?: string;
+    state?: string;
   };
+  specialRequirements?: string | null;
 }
 
 interface BookingCardProps {
@@ -76,20 +84,20 @@ export default function BookingCard({
 }: BookingCardProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [showResponseForm, setShowResponseForm] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
   const [hostResponse, setHostResponse] = useState(booking.hostResponse || '');
-  const [artistFee, setArtistFee] = useState(booking.artistFee?.toString() || '');
-  const [doorFee, setDoorFee] = useState(booking.doorFee?.toString() || '');
+  const [proposedDoorFee, setProposedDoorFee] = useState(booking.doorFee?.toString() || '');
 
   // Status styling
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'PENDING': return 'bg-yellow-100 text-yellow-800';
-      case 'APPROVED': return 'bg-blue-100 text-blue-800';
-      case 'REJECTED': return 'bg-red-100 text-red-800';
-      case 'CONFIRMED': return 'bg-green-100 text-green-800';
-      case 'COMPLETED': return 'bg-gray-100 text-gray-800';
-      case 'CANCELLED': return 'bg-gray-100 text-gray-600';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'PENDING': return 'bg-white text-[var(--color-french-blue)] border border-[var(--color-french-blue)]';
+      case 'APPROVED': return 'bg-[var(--color-french-blue)] text-white border border-[var(--color-french-blue)]';
+      case 'REJECTED': return 'bg-white text-red-600 border border-red-300';
+      case 'CONFIRMED': return 'bg-[var(--color-sage)] text-white border border-[var(--color-sage)]';
+      case 'COMPLETED': return 'bg-white text-neutral-600 border border-neutral-300';
+      case 'CANCELLED': return 'bg-white text-neutral-500 border border-neutral-300';
+      default: return 'bg-white text-neutral-600 border border-neutral-300';
     }
   };
 
@@ -125,8 +133,8 @@ export default function BookingCard({
   const handleHostResponse = async () => {
     const data = {
       hostResponse,
-      artistFee: artistFee ? parseInt(artistFee) : null,
-      doorFee: doorFee ? parseInt(doorFee) : null
+      doorFee: proposedDoorFee ? parseInt(proposedDoorFee) : booking.doorFee,
+      doorFeeStatus: proposedDoorFee && parseInt(proposedDoorFee) !== booking.doorFee ? 'PENDING_ARTIST' : 'AGREED'
     };
     await handleStatusUpdate('APPROVED', data);
   };
@@ -146,12 +154,12 @@ export default function BookingCard({
   };
 
   return (
-    <Card className={`${className} border-l-4 ${
-      booking.status === 'PENDING' ? 'border-l-yellow-400' :
-      booking.status === 'APPROVED' ? 'border-l-blue-400' :
-      booking.status === 'CONFIRMED' ? 'border-l-green-400' :
-      booking.status === 'REJECTED' ? 'border-l-red-400' :
-      'border-l-gray-400'
+    <Card className={`${className} border border-neutral-200 hover:border-[var(--color-french-blue)] hover:shadow-md transition-all duration-200 ${
+      booking.status === 'PENDING' ? 'bg-white' :
+      booking.status === 'APPROVED' ? 'bg-slate-50' :
+      booking.status === 'CONFIRMED' ? 'bg-emerald-50' :
+      booking.status === 'REJECTED' ? 'bg-red-50' :
+      'bg-white'
     }`}>
       <CardHeader>
         <div className="flex items-start justify-between">
@@ -160,43 +168,43 @@ export default function BookingCard({
             <div className="flex items-center space-x-2 mb-2">
               {viewType === 'artist' ? (
                 <>
-                  <Home className="w-5 h-5 text-blue-600" />
-                  <h3 className="font-semibold text-gray-900">{booking.venueName}</h3>
-                  <span className="text-sm text-gray-500">• {booking.hostName}</span>
+                  <Home className="w-5 h-5 text-[var(--color-french-blue)]" />
+                  <h3 className="font-semibold text-neutral-900">{booking.venueName}</h3>
+                  <span className="text-sm text-neutral-500">• 
+                    <Link 
+                      href={`/hosts/${booking.hostId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[var(--color-french-blue)] hover:text-blue-600 hover:underline ml-1"
+                    >
+                      {booking.hostName}
+                    </Link>
+                  </span>
                 </>
               ) : (
                 <>
-                  <Music className="w-5 h-5 text-purple-600" />
-                  <h3 className="font-semibold text-gray-900">{booking.artistName}</h3>
-                  <span className="text-sm text-gray-500">• Artist</span>
+                  <Music className="w-5 h-5 text-[var(--color-french-blue)]" />
+                  <h3 className="font-semibold text-neutral-900">
+                    <Link 
+                      href={`/artists/${booking.artistId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-neutral-900 hover:text-[var(--color-french-blue)] hover:underline"
+                    >
+                      {booking.artistName}
+                    </Link>
+                  </h3>
+                  <span className="text-sm text-neutral-500">• Artist</span>
                 </>
               )}
             </div>
 
-            {/* Basic Info */}
-            <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
+            {/* Basic Info - Date Only */}
+            <div className="text-sm text-neutral-600">
               <div className="flex items-center">
-                <Calendar className="w-4 h-4 mr-2" />
+                <Calendar className="w-4 h-4 mr-2 text-[var(--color-french-blue)]" />
                 <span>{formatDate(booking.requestedDate)}</span>
               </div>
-              {booking.requestedTime && (
-                <div className="flex items-center">
-                  <Clock className="w-4 h-4 mr-2" />
-                  <span>{formatTime(booking.requestedTime)}</span>
-                </div>
-              )}
-              {booking.expectedAttendance && (
-                <div className="flex items-center">
-                  <Users className="w-4 h-4 mr-2" />
-                  <span>{booking.expectedAttendance} guests</span>
-                </div>
-              )}
-              {booking.estimatedDuration && (
-                <div className="flex items-center">
-                  <Clock className="w-4 h-4 mr-2" />
-                  <span>{booking.estimatedDuration} mins</span>
-                </div>
-              )}
             </div>
           </div>
 
@@ -222,12 +230,12 @@ export default function BookingCard({
       <CardContent>
         {/* Artist Message */}
         {booking.artistMessage && (
-          <div className="mb-4 p-3 bg-gray-50 rounded-md">
+          <div className="mb-4 p-3 bg-white border border-neutral-200 rounded-md">
             <div className="flex items-start space-x-2">
-              <MessageSquare className="w-4 h-4 text-gray-500 mt-0.5" />
+              <MessageSquare className="w-4 h-4 text-[var(--color-french-blue)] mt-0.5" />
               <div className="flex-1">
-                <p className="text-sm font-medium text-gray-700">Artist Message:</p>
-                <p className="text-sm text-gray-600 mt-1">{booking.artistMessage}</p>
+                <p className="text-sm font-medium text-neutral-700">Artist Message:</p>
+                <p className="text-sm text-neutral-600 mt-1">{booking.artistMessage}</p>
               </div>
             </div>
           </div>
@@ -235,55 +243,192 @@ export default function BookingCard({
 
         {/* Host Response */}
         {booking.hostResponse && (
-          <div className="mb-4 p-3 bg-blue-50 rounded-md">
+          <div className="mb-4 p-3 bg-slate-50 border border-slate-200 rounded-md">
             <div className="flex items-start space-x-2">
-              <MessageSquare className="w-4 h-4 text-blue-500 mt-0.5" />
+              <MessageSquare className="w-4 h-4 text-[var(--color-french-blue)] mt-0.5" />
               <div className="flex-1">
-                <p className="text-sm font-medium text-blue-700">Host Response:</p>
-                <p className="text-sm text-blue-600 mt-1">{booking.hostResponse}</p>
+                <p className="text-sm font-medium text-[var(--color-french-blue)]">Host Response:</p>
+                <p className="text-sm text-neutral-700 mt-1">{booking.hostResponse}</p>
               </div>
             </div>
           </div>
         )}
 
-        {/* Fees */}
-        {(booking.artistFee || booking.doorFee) && (
-          <div className="mb-4 flex items-center space-x-4 text-sm text-gray-600">
-            {booking.artistFee && (
-              <div className="flex items-center">
-                <DollarSign className="w-4 h-4 mr-1" />
-                <span>Artist Fee: ${booking.artistFee}</span>
-              </div>
-            )}
-            {booking.doorFee && (
-              <div className="flex items-center">
-                <DollarSign className="w-4 h-4 mr-1" />
-                <span>Door Fee: ${booking.doorFee}</span>
-              </div>
-            )}
-          </div>
-        )}
 
         {/* Lodging Request */}
         {booking.lodgingRequested && (
-          <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+          <div className="mb-4 p-3 bg-orange-50 border border-orange-200 rounded-md">
             <div className="flex items-center space-x-2">
-              <Home className="w-4 h-4 text-yellow-600" />
-              <span className="text-sm text-yellow-800 font-medium">
+              <Home className="w-4 h-4 text-orange-600" />
+              <span className="text-sm text-orange-700 font-medium">
                 Lodging requested
               </span>
             </div>
           </div>
         )}
 
+        {/* Additional Details Toggle */}
+        {/* Temporarily always show for testing */}
+        {true && (
+          <div className="mb-4">
+            <button
+              onClick={() => setShowDetails(!showDetails)}
+              className="flex items-center space-x-2 text-sm text-[var(--color-french-blue)] hover:text-blue-600 transition-colors"
+            >
+              {showDetails ? (
+                <ChevronUp className="w-4 h-4" />
+              ) : (
+                <ChevronDown className="w-4 h-4" />
+              )}
+              <span>{showDetails ? 'Hide Details' : 'Show Details'}</span>
+            </button>
+            
+            {showDetails && (
+              <div className="mt-3 p-3 bg-white border border-neutral-200 rounded-md space-y-2">
+                {/* Debug Info - Temporary */}
+                <div className="text-xs text-neutral-500 bg-neutral-50 border border-neutral-200 p-2 rounded">
+                  <strong>Debug:</strong> lodgingRequested: {booking.lodgingRequested ? 'Yes' : 'No'}, 
+                  host data: {booking.host ? 'Available' : 'Missing'}
+                </div>
+                
+                {/* Event Details */}
+                <div className="space-y-2">
+                  {booking.requestedTime && (
+                    <div className="flex items-start space-x-2">
+                      <Clock className="w-4 h-4 text-[var(--color-french-blue)] mt-0.5" />
+                      <div>
+                        <span className="text-sm font-medium text-neutral-700">Start Time:</span>
+                        <span className="text-sm text-neutral-600 ml-1">{formatTime(booking.requestedTime)}</span>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {booking.expectedAttendance && (
+                    <div className="flex items-start space-x-2">
+                      <Users className="w-4 h-4 text-[var(--color-french-blue)] mt-0.5" />
+                      <div>
+                        <span className="text-sm font-medium text-neutral-700">Expected Guests:</span>
+                        <span className="text-sm text-neutral-600 ml-1">{booking.expectedAttendance} people</span>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {booking.estimatedDuration && (
+                    <div className="flex items-start space-x-2">
+                      <Clock className="w-4 h-4 text-[var(--color-french-blue)] mt-0.5" />
+                      <div>
+                        <span className="text-sm font-medium text-neutral-700">Duration:</span>
+                        <span className="text-sm text-neutral-600 ml-1">{booking.estimatedDuration} minutes</span>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {booking.doorFee && (
+                    <div className="flex items-start space-x-2">
+                      <DollarSign className="w-4 h-4 text-[var(--color-french-blue)] mt-0.5" />
+                      <div>
+                        <span className="text-sm font-medium text-neutral-700">Door Fee:</span>
+                        <div className="text-sm text-neutral-600 ml-1">
+                          ${booking.doorFee}
+                          {booking.doorFeeStatus && (
+                            <span className={`ml-2 px-2 py-1 rounded-full text-xs ${
+                              booking.doorFeeStatus === 'AGREED' ? 'bg-green-100 text-green-700' :
+                              booking.doorFeeStatus === 'PENDING_HOST' ? 'bg-yellow-100 text-yellow-700' :
+                              booking.doorFeeStatus === 'PENDING_ARTIST' ? 'bg-blue-100 text-blue-700' :
+                              'bg-gray-100 text-gray-600'
+                            }`}>
+                              {booking.doorFeeStatus === 'AGREED' ? '✓ Agreed' :
+                               booking.doorFeeStatus === 'PENDING_HOST' ? 'Awaiting host approval' :
+                               booking.doorFeeStatus === 'PENDING_ARTIST' ? 'Awaiting artist approval' :
+                               'Pending'}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Host Location */}
+                {(booking.host?.city || booking.host?.state) ? (
+                  <div className="flex items-start space-x-2">
+                    <MapPin className="w-4 h-4 text-[var(--color-french-blue)] mt-0.5" />
+                    <div>
+                      <span className="text-sm font-medium text-neutral-700">Location:</span>
+                      <span className="text-sm text-neutral-600 ml-1">
+                        {booking.host?.city}{booking.host?.city && booking.host?.state && ', '}{booking.host?.state}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-start space-x-2">
+                    <MapPin className="w-4 h-4 text-neutral-400 mt-0.5" />
+                    <div>
+                      <span className="text-sm font-medium text-neutral-700">Location:</span>
+                      <span className="text-sm text-neutral-400 ml-1">Not available</span>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Special Requirements */}
+                {booking.specialRequirements ? (
+                  <div className="flex items-start space-x-2">
+                    <FileText className="w-4 h-4 text-[var(--color-french-blue)] mt-0.5" />
+                    <div>
+                      <span className="text-sm font-medium text-neutral-700">Special Requirements:</span>
+                      <p className="text-sm text-neutral-600 mt-1">{booking.specialRequirements}</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-start space-x-2">
+                    <FileText className="w-4 h-4 text-neutral-400 mt-0.5" />
+                    <div>
+                      <span className="text-sm font-medium text-neutral-700">Special Requirements:</span>
+                      <span className="text-sm text-neutral-400 ml-1">None specified</span>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Lodging Details */}
+                {booking.lodgingRequested ? (
+                  <div className="flex items-start space-x-2">
+                    <Home className="w-4 h-4 text-orange-600 mt-0.5" />
+                    <div>
+                      <span className="text-sm font-medium text-neutral-700">Accommodation:</span>
+                      <p className="text-sm text-neutral-600 mt-1">
+                        {booking.lodgingDetails ? (
+                          typeof booking.lodgingDetails === 'string' 
+                            ? booking.lodgingDetails 
+                            : booking.lodgingDetails?.description || 'Overnight accommodation requested'
+                        ) : 'Overnight accommodation requested'}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-start space-x-2">
+                    <Home className="w-4 h-4 text-neutral-400 mt-0.5" />
+                    <div>
+                      <span className="text-sm font-medium text-neutral-700">Accommodation:</span>
+                      <span className="text-sm text-neutral-400 ml-1">Not requested</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Timestamps */}
-        <div className="text-xs text-gray-500 space-y-1">
+        <div className="text-xs text-neutral-500 space-y-1">
           <div>Requested: {formatDateTime(booking.requestedAt)}</div>
           {booking.respondedAt && (
-            <div>Responded: {formatDateTime(booking.respondedAt)}</div>
+            <div>Host Responded: {formatDateTime(booking.respondedAt)}</div>
+          )}
+          {booking.confirmationDeadline && booking.status === 'APPROVED' && (
+            <div className="text-orange-600 font-semibold">Confirm by: {formatDateTime(booking.confirmationDeadline)}</div>
           )}
           {booking.confirmedAt && (
-            <div>Confirmed: {formatDateTime(booking.confirmedAt)}</div>
+            <div className="text-green-600 font-semibold">Show Confirmed: {formatDateTime(booking.confirmedAt)}</div>
           )}
           {booking.completedAt && (
             <div>Completed: {formatDateTime(booking.completedAt)}</div>
@@ -292,7 +437,7 @@ export default function BookingCard({
 
         {/* Action Buttons */}
         {onStatusUpdate && (
-          <div className="mt-4 pt-4 border-t border-gray-200">
+          <div className="mt-4 pt-4 border-t border-neutral-200">
             {/* Host Actions */}
             {viewType === 'host' && booking.status === 'PENDING' && (
               <div className="space-y-3">
@@ -315,43 +460,36 @@ export default function BookingCard({
                     </Button>
                   </div>
                 ) : (
-                  <div className="space-y-3 p-3 bg-gray-50 rounded-md">
+                  <div className="space-y-3 p-3 bg-white border border-neutral-200 rounded-md">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">
                         Response Message
                       </label>
                       <textarea
                         value={hostResponse}
                         onChange={(e) => setHostResponse(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:border-[var(--color-french-blue)] focus:ring-[var(--color-french-blue)]"
                         rows={3}
                         placeholder="Add a message to the artist..."
                       />
                     </div>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-3">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Artist Fee ($)
+                        <label className="block text-sm font-medium text-neutral-700 mb-1">
+                          Door Fee ($) - Artist suggested: ${booking.doorFee || 0}
                         </label>
                         <input
                           type="number"
-                          value={artistFee}
-                          onChange={(e) => setArtistFee(e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                          placeholder="0"
+                          value={proposedDoorFee}
+                          onChange={(e) => setProposedDoorFee(e.target.value)}
+                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:border-[var(--color-french-blue)] focus:ring-[var(--color-french-blue)]"
+                          placeholder={booking.doorFee?.toString() || '0'}
                         />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Door Fee ($)
-                        </label>
-                        <input
-                          type="number"
-                          value={doorFee}
-                          onChange={(e) => setDoorFee(e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                          placeholder="0"
-                        />
+                        <p className="text-xs text-neutral-500 mt-1">
+                          {proposedDoorFee && parseInt(proposedDoorFee) !== booking.doorFee 
+                            ? 'You are proposing a different door fee. Artist will need to approve.' 
+                            : 'Leave as suggested amount or propose a different fee.'}
+                        </p>
                       </div>
                     </div>
                     <div className="flex space-x-2">
@@ -377,22 +515,68 @@ export default function BookingCard({
 
             {/* Artist Actions */}
             {viewType === 'artist' && booking.status === 'APPROVED' && (
-              <div className="flex space-x-2">
-                <Button
-                  size="sm"
-                  onClick={() => handleStatusUpdate('CONFIRMED')}
-                  disabled={isUpdating}
-                >
-                  {isUpdating ? 'Confirming...' : 'Confirm Booking'}
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleStatusUpdate('CANCELLED')}
-                  disabled={isUpdating}
-                >
-                  Cancel
-                </Button>
+              <div className="space-y-3">
+                {/* Confirmation Deadline Warning */}
+                {booking.confirmationDeadline && booking.doorFeeStatus === 'AGREED' && (
+                  <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
+                    <p className="text-sm text-blue-800">
+                      <strong>Action Required:</strong> Please confirm this show by{' '}
+                      <strong>{formatDate(booking.confirmationDeadline)}</strong>
+                    </p>
+                  </div>
+                )}
+                
+                {/* Door Fee Approval */}
+                {booking.doorFeeStatus === 'PENDING_ARTIST' && (
+                  <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+                    <p className="text-sm text-yellow-800 mb-2">
+                      Host proposed door fee: <strong>${booking.doorFee}</strong>
+                    </p>
+                    <div className="flex space-x-2">
+                      <Button
+                        size="sm"
+                        onClick={() => handleStatusUpdate(booking.status, { doorFeeStatus: 'AGREED' })}
+                        disabled={isUpdating}
+                      >
+                        Accept Door Fee
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleStatusUpdate('PENDING', { doorFeeStatus: 'PENDING_HOST' })}
+                        disabled={isUpdating}
+                      >
+                        Negotiate
+                      </Button>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Booking Confirmation */}
+                <div className="flex space-x-2">
+                  <Button
+                    size="sm"
+                    onClick={() => handleStatusUpdate('CONFIRMED')}
+                    disabled={isUpdating || booking.doorFeeStatus !== 'AGREED'}
+                    className={booking.doorFeeStatus === 'AGREED' ? 'bg-green-600 hover:bg-green-700' : ''}
+                  >
+                    {isUpdating ? 'Confirming...' : 'Confirm Show'}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleStatusUpdate('CANCELLED')}
+                    disabled={isUpdating}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+                
+                {booking.doorFeeStatus !== 'AGREED' && (
+                  <p className="text-xs text-yellow-600">
+                    Please agree on the door fee before confirming the show.
+                  </p>
+                )}
               </div>
             )}
 

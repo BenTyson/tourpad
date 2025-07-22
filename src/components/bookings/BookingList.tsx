@@ -16,7 +16,7 @@ import BookingCard, { BookingData } from './BookingCard';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Input } from '@/components/ui/Input';
-import { Loading } from '@/components/ui/Loading';
+import { LoadingSpinner } from '@/components/ui/Loading';
 
 interface BookingListProps {
   viewType: 'artist' | 'host' | 'admin';
@@ -180,7 +180,7 @@ export default function BookingList({
   if (loading) {
     return (
       <div className={`${className} flex items-center justify-center py-12`}>
-        <Loading />
+        <LoadingSpinner size="lg" />
       </div>
     );
   }
@@ -189,8 +189,8 @@ export default function BookingList({
     return (
       <div className={`${className} text-center py-12`}>
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">Failed to Load Bookings</h3>
-        <p className="text-gray-600 mb-4">{error}</p>
+        <h3 className="text-lg font-medium text-neutral-900 mb-2">Failed to Load Bookings</h3>
+        <p className="text-neutral-600 mb-4">{error}</p>
         <Button onClick={handleRefresh}>Try Again</Button>
       </div>
     );
@@ -198,18 +198,11 @@ export default function BookingList({
 
   return (
     <div className={`${className} space-y-6`}>
-      {/* Header */}
+      {/* Controls */}
       <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900">
-            {viewType === 'artist' ? 'My Booking Requests' :
-             viewType === 'host' ? 'Incoming Requests' : 
-             'All Booking Requests'}
-          </h2>
-          <p className="text-gray-600">
-            {filteredBookings.length} of {bookings.length} bookings
-          </p>
-        </div>
+        <p className="text-neutral-600">
+          {filteredBookings.length} of {bookings.length} bookings
+        </p>
         <Button
           onClick={handleRefresh}
           variant="outline"
@@ -225,22 +218,22 @@ export default function BookingList({
       <div className="flex flex-col sm:flex-row gap-4">
         {/* Search */}
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--color-french-blue)] w-4 h-4" />
           <Input
             placeholder="Search bookings..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            className="pl-10 border-neutral-300 focus:border-[var(--color-french-blue)] focus:ring-[var(--color-french-blue)]"
           />
         </div>
 
         {/* Status Filter */}
         <div className="relative">
-          <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--color-french-blue)] w-4 h-4" />
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="pl-10 pr-8 py-2 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="pl-10 pr-8 py-2 border border-neutral-300 rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-french-blue)] focus:border-transparent"
           >
             <option value="all">All Status ({statusCounts.all})</option>
             <option value="PENDING">Pending ({statusCounts.PENDING})</option>
@@ -257,7 +250,7 @@ export default function BookingList({
           <select
             value={sortField}
             onChange={(e) => setSortField(e.target.value as SortField)}
-            className="px-3 py-2 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="px-3 py-2 border border-neutral-300 rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-french-blue)] focus:border-transparent"
           >
             <option value="date">Show Date</option>
             <option value="created">Created Date</option>
@@ -283,13 +276,13 @@ export default function BookingList({
           
           const getStatusColor = (status: string) => {
             switch (status) {
-              case 'PENDING': return 'bg-yellow-100 text-yellow-800';
-              case 'APPROVED': return 'bg-blue-100 text-blue-800';
-              case 'CONFIRMED': return 'bg-green-100 text-green-800';
-              case 'COMPLETED': return 'bg-gray-100 text-gray-800';
-              case 'REJECTED': return 'bg-red-100 text-red-800';
-              case 'CANCELLED': return 'bg-gray-100 text-gray-600';
-              default: return 'bg-gray-100 text-gray-800';
+              case 'PENDING': return 'bg-white text-[var(--color-french-blue)] border border-[var(--color-french-blue)] hover:bg-slate-50';
+              case 'APPROVED': return 'bg-[var(--color-french-blue)] text-white border border-[var(--color-french-blue)] hover:bg-slate-600';
+              case 'CONFIRMED': return 'bg-[var(--color-sage)] text-white border border-[var(--color-sage)] hover:bg-emerald-600';
+              case 'COMPLETED': return 'bg-white text-neutral-600 border border-neutral-300 hover:bg-neutral-50';
+              case 'REJECTED': return 'bg-white text-red-600 border border-red-300 hover:bg-red-50';
+              case 'CANCELLED': return 'bg-white text-neutral-500 border border-neutral-300 hover:bg-neutral-50';
+              default: return 'bg-white text-neutral-600 border border-neutral-300';
             }
           };
 
@@ -308,14 +301,14 @@ export default function BookingList({
       {/* Bookings List */}
       {filteredBookings.length === 0 ? (
         <div className="text-center py-12">
-          <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <Calendar className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-neutral-900 mb-2">
             {searchTerm || statusFilter !== 'all' ? 
               'No bookings match your filters' : 
               'No booking requests yet'
             }
           </h3>
-          <p className="text-gray-600">
+          <p className="text-neutral-600">
             {searchTerm || statusFilter !== 'all' ? 
               'Try adjusting your search or filter criteria.' :
               viewType === 'artist' ? 

@@ -203,14 +203,15 @@ model Booking {
   estimatedDuration  Int?
   expectedAttendance Int?
   status             BookingStatus  @default(PENDING)
-  artistFee          Int?
   doorFee            Int?
+  doorFeeStatus      DoorFeeStatus?
   artistMessage      String?
   hostResponse       String?
   lodgingRequested   Boolean        @default(false)
   lodgingDetails     Json?
   requestedAt        DateTime       @default(now())
   respondedAt        DateTime?
+  confirmationDeadline DateTime?
   confirmedAt        DateTime?
   completedAt        DateTime?
   createdAt          DateTime       @default(now())
@@ -469,6 +470,12 @@ enum BookingStatus {
   CONFIRMED
   COMPLETED
   CANCELLED
+}
+
+enum DoorFeeStatus {
+  PENDING_HOST
+  PENDING_ARTIST
+  AGREED
 }
 
 enum ConcertStatus {

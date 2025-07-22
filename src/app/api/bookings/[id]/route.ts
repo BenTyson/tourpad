@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { 
+  notifyBookingApproved, 
+  notifyBookingConfirmed, 
+  notifyBookingRejected,
+  notifyDoorFeeChange 
+} from '@/lib/notifications';
 
 interface RouteParams {
   params: {
@@ -60,7 +66,7 @@ export async function GET(
     // User can view if they're the artist, host, or admin
     const isArtist = booking.artist.userId === session.user.id;
     const isHost = booking.host.userId === session.user.id;
-    const isAdmin = session.user.userType === 'ADMIN';
+    const isAdmin = session.user.type === 'ADMIN';
 
     if (!isArtist && !isHost && !isAdmin) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
@@ -81,14 +87,15 @@ export async function GET(
       estimatedDuration: booking.estimatedDuration,
       expectedAttendance: booking.expectedAttendance,
       status: booking.status,
-      artistFee: booking.artistFee,
       doorFee: booking.doorFee,
+      doorFeeStatus: booking.doorFeeStatus,
       artistMessage: booking.artistMessage,
       hostResponse: booking.hostResponse,
       lodgingRequested: booking.lodgingRequested,
       lodgingDetails: booking.lodgingDetails,
       requestedAt: booking.requestedAt,
       respondedAt: booking.respondedAt,
+      confirmationDeadline: booking.confirmationDeadline,
       confirmedAt: booking.confirmedAt,
       completedAt: booking.completedAt,
       artist: {
@@ -138,7 +145,7 @@ export async function PUT(
   try {
     const { id } = params;
     const body = await request.json();
-    const { status, hostResponse, artistFee, doorFee } = body;
+    const { status, hostResponse, doorFee, doorFeeStatus } = body;
 
     const session = await auth();
     if (!session?.user?.id) {
@@ -174,7 +181,7 @@ export async function PUT(
     // Check permissions - only artist, host, or admin can update
     const isArtist = booking.artist.userId === session.user.id;
     const isHost = booking.host.userId === session.user.id;
-    const isAdmin = session.user.userType === 'ADMIN';
+    const isAdmin = session.user.type === 'ADMIN';
     
     if (!isArtist && !isHost && !isAdmin) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
@@ -191,26 +198,36 @@ export async function PUT(
       // Set appropriate timestamps based on status
       if (status === 'APPROVED' || status === 'REJECTED') {
         updateData.respondedAt = new Date();
+        
+        // Set confirmation deadline to 5 days from approval
+        if (status === 'APPROVED') {
+          const deadline = new Date();
+          deadline.setDate(deadline.getDate() + 5);
+          updateData.confirmationDeadline = deadline;
+        }
       }
       if (status === 'CONFIRMED') {
         updateData.confirmedAt = new Date();
+        
+        // Create a concert record for confirmed shows
+        // TODO: This will be implemented when we handle the concert creation
       }
       if (status === 'COMPLETED') {
         updateData.completedAt = new Date();
       }
     }
 
-    // Hosts can add response message and fees
+    // Hosts can add response message and door fee
     if (isHost && hostResponse !== undefined) {
       updateData.hostResponse = hostResponse;
     }
     
-    if (isHost && artistFee !== undefined) {
-      updateData.artistFee = artistFee;
+    if ((isHost || isArtist) && doorFee !== undefined) {
+      updateData.doorFee = doorFee;
     }
     
-    if (isHost && doorFee !== undefined) {
-      updateData.doorFee = doorFee;
+    if ((isHost || isArtist) && doorFeeStatus !== undefined) {
+      updateData.doorFeeStatus = doorFeeStatus;
     }
 
     // Update the booking
@@ -245,15 +262,37 @@ export async function PUT(
       }
     });
 
+    // Send notifications based on status changes
+    try {
+      if (status === 'APPROVED' && isHost) {
+        await notifyBookingApproved(updatedBooking, updatedBooking.host);
+      } else if (status === 'REJECTED' && isHost) {
+        await notifyBookingRejected(updatedBooking, updatedBooking.host);
+      } else if (status === 'CONFIRMED' && isArtist) {
+        await notifyBookingConfirmed(updatedBooking, updatedBooking.artist);
+      }
+      
+      // Notify about door fee changes
+      if (doorFeeStatus === 'PENDING_ARTIST' && isHost) {
+        await notifyDoorFeeChange(updatedBooking, true);
+      } else if (doorFeeStatus === 'PENDING_HOST' && isArtist) {
+        await notifyDoorFeeChange(updatedBooking, false);
+      }
+    } catch (notifError) {
+      console.error('Failed to send notification:', notifError);
+      // Don't fail the request if notification fails
+    }
+
     return NextResponse.json({
       success: true,
       booking: {
         id: updatedBooking.id,
         status: updatedBooking.status,
         hostResponse: updatedBooking.hostResponse,
-        artistFee: updatedBooking.artistFee,
         doorFee: updatedBooking.doorFee,
+        doorFeeStatus: updatedBooking.doorFeeStatus,
         respondedAt: updatedBooking.respondedAt,
+        confirmationDeadline: updatedBooking.confirmationDeadline,
         confirmedAt: updatedBooking.confirmedAt,
         completedAt: updatedBooking.completedAt,
         updatedAt: updatedBooking.updatedAt
@@ -298,7 +337,7 @@ export async function DELETE(
     // Check permissions
     const isArtist = booking.artist.userId === session.user.id;
     const isHost = booking.host.userId === session.user.id;
-    const isAdmin = session.user.userType === 'ADMIN';
+    const isAdmin = session.user.type === 'ADMIN';
     
     if (!isArtist && !isHost && !isAdmin) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });

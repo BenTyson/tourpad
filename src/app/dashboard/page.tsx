@@ -31,6 +31,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { mockBookings, mockMessages, mockNotifications, mockArtists, mockHosts } from '@/data/mockData';
 import { testConcerts } from '@/data/realTestData';
+import UpcomingShowsList from '@/components/shows/UpcomingShowsList';
 import { useRouter } from 'next/navigation';
 import { PastShowsSection } from '@/components/reviews/PastShowsSection';
 import { PrivateReviewsSection } from '@/components/reviews/PrivateReviewsSection';
@@ -933,7 +934,9 @@ export default function DashboardPage() {
                 </Link>
               </div>
               <div className="p-6">
-                {upcomingBookings.length > 0 ? (
+                {(userRole === 'artist' || userRole === 'host') ? (
+                  <UpcomingShowsList viewType={userRole as 'artist' | 'host'} />
+                ) : upcomingBookings.length > 0 ? (
                   <div className="space-y-4">
                     {upcomingBookings.slice(0, 3).map((booking) => (
                       <div key={booking.id} className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors">

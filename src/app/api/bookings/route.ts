@@ -5,7 +5,9 @@ import { prisma } from '@/lib/prisma';
 // GET /api/bookings - Get user's bookings
 export async function GET(request: NextRequest) {
   try {
+    console.log('=== GET /api/bookings called ===');
     const session = await auth();
+    console.log('Session:', { userId: session?.user?.id, userType: session?.user?.type });
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -25,6 +27,8 @@ export async function GET(request: NextRequest) {
       where: { userId: session.user.id },
       select: { id: true }
     });
+    
+    console.log('User profiles found:', { artist: artist?.id, host: host?.id });
 
     // Build where clause based on user type
     const whereClause: any = {
@@ -52,6 +56,8 @@ export async function GET(request: NextRequest) {
       whereClause.status = status.toUpperCase();
     }
 
+    console.log('Querying with whereClause:', JSON.stringify(whereClause, null, 2));
+    
     const bookings = await prisma.booking.findMany({
       where: whereClause,
       include: {
@@ -94,23 +100,42 @@ export async function GET(request: NextRequest) {
       artistId: booking.artistId,
       hostId: booking.hostId,
       artistName: booking.artist.user.name,
+      artistEmail: booking.artist.user.email,
       hostName: booking.host.user.name,
+      hostEmail: booking.host.user.email,
       venueName: booking.host.venueName,
       requestedDate: booking.requestedDate,
       requestedTime: booking.requestedTime,
       estimatedDuration: booking.estimatedDuration,
       expectedAttendance: booking.expectedAttendance,
       status: booking.status,
-      artistFee: booking.artistFee,
       doorFee: booking.doorFee,
+      doorFeeStatus: booking.doorFeeStatus,
       artistMessage: booking.artistMessage,
       hostResponse: booking.hostResponse,
       lodgingRequested: booking.lodgingRequested,
       lodgingDetails: booking.lodgingDetails,
       requestedAt: booking.requestedAt,
       respondedAt: booking.respondedAt,
+      confirmationDeadline: booking.confirmationDeadline,
       confirmedAt: booking.confirmedAt,
       completedAt: booking.completedAt,
+      artist: {
+        id: booking.artist.id,
+        name: booking.artist.user.name,
+        email: booking.artist.user.email,
+        profileImageUrl: booking.artist.user.profileImageUrl
+      },
+      host: {
+        id: booking.host.id,
+        name: booking.host.user.name,
+        email: booking.host.user.email,
+        venueName: booking.host.venueName,
+        profileImageUrl: booking.host.user.profileImageUrl,
+        city: booking.host.city,
+        state: booking.host.state
+      },
+      specialRequirements: null, // TODO: Add this field if needed
       concert: booking.concert ? {
         id: booking.concert.id,
         title: booking.concert.title,

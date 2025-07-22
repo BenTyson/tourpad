@@ -51,10 +51,10 @@ export default function BookingsPage() {
   // Loading state
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <div className="animate-spin w-8 h-8 border-4 border-[var(--color-french-blue)] border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-neutral-600">Loading...</p>
         </div>
       </div>
     );
@@ -63,10 +63,10 @@ export default function BookingsPage() {
   // Not authenticated
   if (!session?.user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
-          <p className="text-gray-600 mb-4">Please sign in to access your bookings.</p>
+          <h1 className="text-2xl font-bold text-neutral-900 mb-4">Access Denied</h1>
+          <p className="text-neutral-600 mb-4">Please sign in to access your bookings.</p>
           <Button onClick={() => router.push('/login')}>Sign In</Button>
         </div>
       </div>
@@ -74,23 +74,23 @@ export default function BookingsPage() {
   }
 
   // Get user type from session
-  const userType = session.user.userType?.toLowerCase() as 'artist' | 'host' | 'admin';
+  const userType = session.user.type?.toLowerCase() as 'artist' | 'host' | 'admin';
 
   // Redirect admin users to admin bookings page
   if (userType === 'admin') {
     router.push('/admin/bookings');
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-gray-600">Redirecting to admin dashboard...</p>
+          <div className="animate-spin w-8 h-8 border-4 border-[var(--color-french-blue)] border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-neutral-600">Redirecting to admin dashboard...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-6">
@@ -102,17 +102,9 @@ export default function BookingsPage() {
                   Dashboard
                 </Button>
               </Link>
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">
-                  {userType === 'artist' ? 'My Booking Requests' : 'Incoming Booking Requests'}
-                </h1>
-                <p className="text-gray-600 mt-2">
-                  {userType === 'artist' 
-                    ? 'Manage your booking requests to hosts and track their status'
-                    : 'Review and respond to booking requests from artists'
-                  }
-                </p>
-              </div>
+              <h1 className="text-xl font-semibold text-neutral-900">
+                {userType === 'artist' ? 'My Bookings' : 'Booking Requests'}
+              </h1>
             </div>
 
             {/* Action Buttons */}
