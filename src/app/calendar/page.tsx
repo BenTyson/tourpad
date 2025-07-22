@@ -150,10 +150,10 @@ export default function CalendarPage() {
           title: concert.title,
           date: new Date(concert.date),
           status: concert.status as EventStatus,
-          location: concert.host.venueName,
+          location: (concert as any).host?.venueName || 'TBD',
           participants: {
-            artist: concert.artist.name,
-            host: concert.host.venueName,
+            artist: (concert as any).artist?.name || 'TBD',
+            host: (concert as any).host?.venueName || 'TBD',
             attendeeCount: concert.attendees.length
           },
           details: concert

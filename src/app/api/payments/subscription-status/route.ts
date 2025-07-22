@@ -90,7 +90,7 @@ export async function GET(request: NextRequest) {
 
     // Calculate grace period end (7 days after period end for failed payments)
     let gracePeriodEnd = null;
-    if (user.subscription.status === 'PAST_DUE') {
+    if (user.subscription.status === 'EXPIRED') {
       const gracePeriodDays = 7;
       gracePeriodEnd = new Date(user.subscription.currentPeriodEnd);
       gracePeriodEnd.setDate(gracePeriodEnd.getDate() + gracePeriodDays);

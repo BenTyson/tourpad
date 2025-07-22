@@ -445,7 +445,7 @@ export default function AdminApplicationsPage() {
                                 <span className="font-medium text-gray-900">Personal Name:</span>
                                 <p className="text-gray-600">{application.name}</p>
                               </div>
-                              {(application as Artist).artist?.genres && (application as Artist).artist?.genres.length > 0 && (
+                              {(application as Artist).artist?.genres && ((application as Artist).artist?.genres?.length || 0) > 0 && (
                                 <div>
                                   <span className="font-medium text-gray-900">Genres:</span>
                                   <p className="text-gray-600">{(application as Artist).artist?.genres?.join(', ')}</p>
@@ -518,7 +518,7 @@ export default function AdminApplicationsPage() {
                     {application.userType.toLowerCase() === 'host' && (application as Host).host && (
                       <div>
                         <h5 className="font-medium text-gray-700 mb-3">Venue Photos</h5>
-                        {((application as Host).host?.media && (application as Host).host?.media.length > 0) ? (
+                        {((application as Host).host?.media && ((application as Host).host?.media?.length || 0) > 0) ? (
                           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                             {(application as Host).host?.media?.map((media: any, index: number) => (
                               <div key={index} className="relative">
@@ -550,7 +550,7 @@ export default function AdminApplicationsPage() {
                     {application.userType.toLowerCase() === 'artist' && (application as Artist).artist && (
                       <div>
                         <h5 className="font-medium text-gray-700 mb-3">Artist Photos</h5>
-                        {((application as Artist).artist?.media && (application as Artist).artist?.media.length > 0) ? (
+                        {((application as Artist).artist?.media && ((application as Artist).artist?.media?.length || 0) > 0) ? (
                           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                             {(application as Artist).artist?.media?.map((media: any, index: number) => (
                               <div key={index} className="relative">
@@ -579,7 +579,7 @@ export default function AdminApplicationsPage() {
                     )}
 
                     {/* Band Member Photos */}
-                    {(application as Artist).artist?.bandMembers && (application as Artist).artist?.bandMembers.length > 0 && (
+                    {(application as Artist).artist?.bandMembers && ((application as Artist).artist?.bandMembers?.length || 0) > 0 && (
                       <div className="mt-6">
                         <h5 className="font-medium text-gray-700 mb-3">Band Member Photos</h5>
                         {(() => {

@@ -24,16 +24,7 @@ export async function POST(request: NextRequest) {
       data: {
         userId: user.id,
         genres: ['Folk', 'Singer-Songwriter'],
-        instruments: ['Guitar', 'Vocals'],
-        experienceLevel: 'PROFESSIONAL',
-        yearsActive: 5,
         tourMonthsPerYear: 6,
-        performanceHistory: '5+ years performing at house concerts and small venues',
-        cancellationPolicy: 'FLEXIBLE',
-        bio: 'Passionate singer-songwriter with a focus on intimate acoustic performances.',
-        city: 'Nashville',
-        state: 'TN',
-        country: 'US'
       }
     });
     

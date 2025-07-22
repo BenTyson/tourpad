@@ -926,7 +926,7 @@ export default function DashboardPage() {
                           <div>
                             <h3 className="font-medium text-neutral-900">
                               {userRole === 'fan' ? ('title' in booking ? booking.title : 'Concert') :
-                               userRole === 'host' ? booking.artist.name : booking.host.name}
+                               userRole === 'host' ? (booking as any).artist?.name || 'TBD' : (booking as any).host?.name || 'TBD'}
                             </h3>
                             <div className="flex items-center text-sm text-neutral-600 space-x-4">
                               <span>{userRole === 'fan' ? 
@@ -941,7 +941,7 @@ export default function DashboardPage() {
                               {userRole === 'artist' && (
                                 <div className="flex items-center">
                                   <MapPin className="w-4 h-4 mr-1" />
-                                  {'city' in booking.host ? booking.host.city : 'Unknown'}, {'state' in booking.host ? booking.host.state : 'Unknown'}
+                                  {(booking as any).host?.city || 'Unknown'}, {(booking as any).host?.state || 'Unknown'}
                                 </div>
                               )}
                             </div>

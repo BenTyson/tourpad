@@ -181,7 +181,7 @@ export default function MapPage() {
             <div className="flex items-center space-x-3">
               <div className="flex rounded-lg border border-neutral-200 bg-white p-1">
                 <Button
-                  variant={viewMode === 'map' ? 'default' : 'ghost'}
+                  variant={viewMode === 'map' ? 'primary' : 'ghost'}
                   size="sm"
                   onClick={() => setViewMode('map')}
                   className={viewMode === 'map' ? 'bg-primary-600 text-white' : 'text-neutral-600 hover:text-neutral-900'}
@@ -190,7 +190,7 @@ export default function MapPage() {
                   Map
                 </Button>
                 <Button
-                  variant={viewMode === 'list' ? 'default' : 'ghost'}
+                  variant={viewMode === 'list' ? 'primary' : 'ghost'}
                   size="sm"
                   onClick={() => setViewMode('list')}
                   className={viewMode === 'list' ? 'bg-primary-600 text-white' : 'text-neutral-600 hover:text-neutral-900'}

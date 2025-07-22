@@ -72,7 +72,7 @@ export function MediaUploader({
 
   const { getRootProps, getInputProps, isDragActive, isDragReject } = useDropzone({
     onDrop,
-    accept: getAcceptedFormats(),
+    accept: getAcceptedFormats() as any,
     maxFiles: maxFiles - files.length,
     maxSize: maxSizeMB * 1024 * 1024,
     disabled: isUploading || files.length >= maxFiles

@@ -266,7 +266,7 @@ export default function FanPaymentPage() {
 
                 <div className="mt-8 space-y-4">
                   <Button type="submit" size="lg" className="w-full">
-                    {paymentStep === 'processing' ? 'Processing...' : `Pay $${plans[selectedPlan].price}`}
+                    {(paymentStep as string) === 'processing' ? 'Processing...' : `Pay $${plans[selectedPlan].price}`}
                   </Button>
                   <button
                     type="button"

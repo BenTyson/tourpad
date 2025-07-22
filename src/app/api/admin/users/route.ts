@@ -85,10 +85,10 @@ export async function GET(request: NextRequest) {
             case 'ACTIVE':
               userPaymentStatus = 'paid';
               break;
-            case 'PAST_DUE':
+            case 'EXPIRED':
               userPaymentStatus = 'overdue';
               break;
-            case 'CANCELED':
+            case 'CANCELLED':
               userPaymentStatus = 'canceled';
               break;
             default:
@@ -102,7 +102,7 @@ export async function GET(request: NextRequest) {
       } else if (user.userType === 'FAN') {
         if (user.subscription && user.subscription.status === 'ACTIVE') {
           userPaymentStatus = 'paid';
-        } else if (user.subscription && user.subscription.status === 'PAST_DUE') {
+        } else if (user.subscription && user.subscription.status === 'EXPIRED') {
           userPaymentStatus = 'overdue';
         } else {
           userPaymentStatus = 'failed';

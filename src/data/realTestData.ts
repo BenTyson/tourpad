@@ -363,7 +363,7 @@ export const testArtists: Artist[] = [
 ];
 
 // Realistic Hosts
-export const testHosts: Host[] = [
+export const testHosts: any[] = [
   {
     id: 'host1',
     name: 'Mike Wilson',
@@ -1331,7 +1331,7 @@ export const testConcerts: ConcertListing[] = [
     capacity: 30,
     currentReservations: 25,
     ticketPrice: 15,
-    status: 'completed',
+    status: 'past',
     attendees: ['fan1'],
     location: {
       city: 'Austin',
@@ -1359,7 +1359,7 @@ export const testConcerts: ConcertListing[] = [
     capacity: 60,
     currentReservations: 45,
     ticketPrice: 20,
-    status: 'completed',
+    status: 'past',
     attendees: ['fan1'],
     location: {
       city: 'Nashville',
@@ -1387,7 +1387,7 @@ export const testConcerts: ConcertListing[] = [
     capacity: 20,
     currentReservations: 15,
     ticketPrice: 12,
-    status: 'completed',
+    status: 'past',
     attendees: ['fan1'],
     location: {
       city: 'Portland',
@@ -1667,7 +1667,7 @@ export const testConcerts: ConcertListing[] = [
     capacity: 60,
     currentReservations: 50,
     ticketPrice: 25,
-    status: 'completed',
+    status: 'past',
     attendees: ['fan7', 'fan9'],
     location: {
       city: 'Sedona',
@@ -1695,7 +1695,7 @@ export const testConcerts: ConcertListing[] = [
     capacity: 60,
     currentReservations: 55,
     ticketPrice: 20,
-    status: 'completed',
+    status: 'past',
     attendees: ['fan6'],
     location: {
       city: 'Nashville',
@@ -1723,7 +1723,7 @@ export const testConcerts: ConcertListing[] = [
     capacity: 30,
     currentReservations: 30,
     ticketPrice: 25,
-    status: 'completed',
+    status: 'past',
     attendees: ['fan4', 'fan8'],
     location: {
       city: 'Charleston',

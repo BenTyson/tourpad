@@ -26,7 +26,7 @@ export default function HostListCard({ host, onViewProfile }: HostListCardProps)
   };
 
   // Check if host offers lodging
-  const hasLodging = host.hostingCapabilities?.lodgingHosting?.enabled || false;
+  const hasLodging = (host as any).hostingCapabilities?.lodgingHosting?.enabled || false;
 
   // Get primary photo
   const primaryPhoto = host.housePhotos?.[0] || host.performanceSpacePhotos?.[0];

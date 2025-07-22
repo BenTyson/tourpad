@@ -40,7 +40,7 @@ export function Header() {
     // Only show browse links to approved/active users, fans with active payment, or non-authenticated users (as teasers)
     if (!session || 
         (session && (session.user.status === 'approved' || session.user.status === 'active')) ||
-        (session && session.user.type === 'fan' && session.user.paymentStatus === 'active')) {
+        (session && session.user.type === 'fan' && (session.user as any).paymentStatus === 'active')) {
       // Customize link text based on user type
       const browseArtistsText = (session && session.user.type === 'fan') ? 'Find Concerts' : 'Browse Artists';
       const findHostsText = (session && session.user.type === 'fan') ? 'Find Venues' : 'Find Hosts';
@@ -53,7 +53,7 @@ export function Header() {
       // Add Map link for approved/active users or fans with active payment
       if (session && 
           ((session.user.status === 'approved' || session.user.status === 'active') ||
-           (session.user.type === 'fan' && session.user.paymentStatus === 'active'))) {
+           (session.user.type === 'fan' && (session.user as any).paymentStatus === 'active'))) {
         baseNavigation.push(
           { name: 'Map', href: '/map', requiresAuth: true }
         );
@@ -68,7 +68,7 @@ export function Header() {
       // Add status-specific items
       if (userStatus === 'pending') {
         baseNavigation.push(
-          { name: 'Application Status', href: '/account/status', requiresAuth: true, highlight: true }
+          { name: 'Application Status', href: '/account/status', requiresAuth: true }
         );
       } else if (userStatus === 'approved' || userStatus === 'active') {
         // Full access for approved/active users
@@ -81,16 +81,16 @@ export function Header() {
             { name: 'My Venue', href: '/dashboard', requiresAuth: true }
           );
         }
-      } else if (userType === 'fan' && session.user.paymentStatus === 'active') {
+      } else if (userType === 'fan' && (session.user as any).paymentStatus === 'active') {
         // Fans with active payment get full access
         baseNavigation.push(
           { name: 'My Concerts', href: '/dashboard', requiresAuth: true },
           { name: 'Discover Shows', href: '/artists', requiresAuth: true }
         );
-      } else if (userType === 'fan' && session.user.paymentStatus !== 'active') {
+      } else if (userType === 'fan' && (session.user as any).paymentStatus !== 'active') {
         // Fans with expired payment get limited access
         baseNavigation.push(
-          { name: 'Renew Membership', href: '/payment/fan', requiresAuth: true, highlight: true }
+          { name: 'Renew Membership', href: '/payment/fan', requiresAuth: true }
         );
       }
     }
@@ -121,7 +121,7 @@ export function Header() {
                 key={item.name}
                 href={item.href}
                 className={`px-3 py-2 text-sm font-medium transition-colors ${
-                  item.highlight 
+                  false 
                     ? 'bg-primary-100 text-primary-700 rounded-lg hover:bg-primary-200' 
                     : 'text-gray-700 hover:text-primary-600'
                 }`}
@@ -245,7 +245,7 @@ export function Header() {
                   key={item.name}
                   href={item.href}
                   className={`block px-3 py-2 transition-colors ${
-                    item.highlight 
+                    false 
                       ? 'bg-primary-100 text-primary-700 rounded-lg mx-3 hover:bg-primary-200' 
                       : 'text-gray-700 hover:text-primary-600'
                   }`}

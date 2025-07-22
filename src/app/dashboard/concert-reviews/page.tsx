@@ -35,7 +35,7 @@ export default function ConcertReviewsPage() {
   // Mock data for concerts fan has attended (past concerts)
   const attendedConcerts = testConcerts
     .filter(concert => 
-      concert.status === 'completed' && 
+      concert.status === 'past' && 
       concert.attendees.includes('fan1') // In real implementation, use session.user.id
     )
     .map(concert => ({

@@ -138,7 +138,7 @@ export default function MessagesPage() {
                             {latestMessage.content}
                           </p>
                           <p className="text-xs text-gray-500">
-                            {formatTime(latestMessage.timestamp)}
+                            {formatTime(latestMessage.timestamp.toISOString())}
                           </p>
                         </button>
                       );
@@ -196,7 +196,7 @@ export default function MessagesPage() {
                             <p className={`text-xs mt-1 ${
                               message.senderId === session.user.id ? 'text-blue-100' : 'text-gray-500'
                             }`}>
-                              {formatTime(message.timestamp)}
+                              {formatTime(message.timestamp.toISOString())}
                             </p>
                           </div>
                         </div>

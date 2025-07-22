@@ -150,8 +150,7 @@ export function PastShowsSection({ userId, userType }: PastShowsSectionProps) {
                           onClick={() => handleLeaveReview(booking)}
                           className="text-neutral-800 hover:text-neutral-900 transition-colors"
                           style={{ 
-                            backgroundColor: '#ebebe9', 
-                            '&:hover': { backgroundColor: '#ddddd9' } 
+                            backgroundColor: '#ebebe9'
                           }}
                           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#ddddd9'}
                           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ebebe9'}
@@ -179,7 +178,7 @@ export function PastShowsSection({ userId, userType }: PastShowsSectionProps) {
                               />
                             ))}
                           </div>
-                          <Badge variant={existingReview.isPublic ? 'default' : 'outline'}>
+                          <Badge variant={existingReview.isPublic ? 'default' : 'secondary'}>
                             {existingReview.isPublic ? 'Public' : 'Private'}
                           </Badge>
                         </div>

@@ -426,7 +426,7 @@ export default function AdminFinancePage() {
                   <AlertTriangle className="w-5 h-5 text-red-500 mr-2" />
                   <h3 className="text-lg font-semibold text-gray-900">Failed Payments</h3>
                 </div>
-                <Badge variant={financeData.operations.failedPayments > 0 ? "destructive" : "secondary"}>
+                <Badge variant={financeData.operations.failedPayments > 0 ? "error" : "secondary"}>
                   {financeData.operations.failedPayments}
                 </Badge>
               </div>
@@ -447,7 +447,7 @@ export default function AdminFinancePage() {
                         <div className="font-semibold text-red-600">
                           {formatCurrency(payment.amount)}
                         </div>
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="secondary" className="text-xs">
                           {payment.userType}
                         </Badge>
                       </div>
@@ -497,7 +497,7 @@ export default function AdminFinancePage() {
                         {formatCurrency(customer.revenue)}
                       </div>
                       <Badge 
-                        variant="outline" 
+                        variant="secondary" 
                         className="text-xs"
                         style={{
                           borderColor: customer.userType === 'ARTIST' ? '#318CE7' : '#738a6e',

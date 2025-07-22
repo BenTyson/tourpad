@@ -51,7 +51,7 @@ export default function HostPopup({ host, onViewProfile, onBookNow }: HostPopupP
   };
 
   // Check if host offers lodging
-  const hasLodging = host.hostingCapabilities?.lodgingHosting?.enabled || false;
+  const hasLodging = (host as any).hostingCapabilities?.lodgingHosting?.enabled || false;
 
   return (
     <Popup className="tourpad-popup" minWidth={280} maxWidth={320}>

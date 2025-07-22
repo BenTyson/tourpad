@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
       message: 'Subscription will be canceled at the end of the current period',
       subscription: {
         cancelAtPeriodEnd: true,
-        currentPeriodEnd: stripeSubscription.current_period_end * 1000 // Convert to milliseconds
+        currentPeriodEnd: (stripeSubscription as any).current_period_end * 1000 // Convert to milliseconds
       }
     });
 

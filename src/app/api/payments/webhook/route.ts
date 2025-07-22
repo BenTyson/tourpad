@@ -81,15 +81,15 @@ export async function POST(request: NextRequest) {
               stripeCustomerId: customerId,
               stripePriceId: subscription.items.data[0].price.id,
               status: 'ACTIVE',
-              currentPeriodStart: new Date(subscription.current_period_start * 1000),
-              currentPeriodEnd: new Date(subscription.current_period_end * 1000),
+              currentPeriodStart: new Date((subscription as any).current_period_start * 1000),
+              currentPeriodEnd: new Date((subscription as any).current_period_end * 1000),
               amount: subscription.items.data[0].price.unit_amount || 40000,
               interval: subscription.items.data[0].price.recurring?.interval || 'year'
             },
             update: {
               status: 'ACTIVE',
-              currentPeriodStart: new Date(subscription.current_period_start * 1000),
-              currentPeriodEnd: new Date(subscription.current_period_end * 1000)
+              currentPeriodStart: new Date((subscription as any).current_period_start * 1000),
+              currentPeriodEnd: new Date((subscription as any).current_period_end * 1000)
             }
           });
         } else {
@@ -161,7 +161,7 @@ export async function POST(request: NextRequest) {
           await prisma.payment.create({
             data: {
               userId: user.id,
-              stripePaymentId: invoice.payment_intent as string || invoice.id,
+              stripePaymentId: (invoice as any).payment_intent as string || invoice.id,
               stripeCustomerId: customerId,
               amount: invoice.amount_paid,
               currency: invoice.currency,
@@ -207,7 +207,7 @@ export async function POST(request: NextRequest) {
           await prisma.payment.create({
             data: {
               userId: user.id,
-              stripePaymentId: invoice.payment_intent as string || invoice.id,
+              stripePaymentId: (invoice as any).payment_intent as string || invoice.id,
               stripeCustomerId: customerId,
               amount: invoice.amount_due,
               currency: invoice.currency,
@@ -218,10 +218,10 @@ export async function POST(request: NextRequest) {
           });
 
           // Update subscription status
-          if (invoice.subscription) {
+          if ((invoice as any).subscription) {
             await prisma.subscription.update({
-              where: { stripeSubscriptionId: invoice.subscription as string },
-              data: { status: 'PAST_DUE' }
+              where: { stripeSubscriptionId: (invoice as any).subscription as string },
+              data: { status: 'EXPIRED' }
             });
           }
 
@@ -247,7 +247,7 @@ export async function POST(request: NextRequest) {
         
         await prisma.subscription.update({
           where: { stripeSubscriptionId: subscription.id },
-          data: { status: 'CANCELED' }
+          data: { status: 'CANCELLED' }
         });
 
         // Set user to inactive after grace period
@@ -258,7 +258,7 @@ export async function POST(request: NextRequest) {
         if (user) {
           await prisma.user.update({
             where: { id: user.id },
-            data: { status: 'INACTIVE' }
+            data: { status: 'PAYMENT_EXPIRED' }
           });
           console.log('❌ User deactivated due to subscription cancellation:', user.id);
           
