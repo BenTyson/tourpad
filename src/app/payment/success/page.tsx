@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
@@ -8,18 +9,28 @@ import { Card, CardContent } from '@/components/ui/Card';
 
 function PaymentSuccessContent() {
   const searchParams = useSearchParams();
+  const { update } = useSession();
   const sessionId = searchParams.get('session_id');
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
 
   useEffect(() => {
     if (sessionId) {
-      // For now, assume success if we have a session ID from Stripe
-      // Webhook will handle the actual user activation
-      setTimeout(() => setStatus('success'), 1000);
+      // Force session refresh to pick up the status change from webhook
+      const refreshSession = async () => {
+        // Wait a bit for webhook to process
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // Force NextAuth session update
+        await update();
+        
+        setStatus('success');
+      };
+      
+      refreshSession();
     } else {
       setStatus('error');
     }
-  }, [sessionId]);
+  }, [sessionId, update]);
 
   if (status === 'loading') {
     return (

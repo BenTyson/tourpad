@@ -37,24 +37,53 @@ export async function POST(
       }
     });
 
-    // If it's a host, also update the host-specific approval
-    if (updatedUser.host) {
-      await prisma.host.update({
-        where: { userId: userId },
-        data: {
-          approvedAt: new Date()
-        }
-      });
+    // Ensure host profile exists and update approval
+    if (user.userType === 'HOST') {
+      if (!updatedUser.host) {
+        // Create missing host profile with minimal required data
+        await prisma.host.create({
+          data: {
+            userId: userId,
+            venueType: 'HOME', // Default venue type
+            city: 'Unknown', // Required field - will need to be updated by user
+            state: 'Unknown', // Required field - will need to be updated by user
+            country: 'USA',
+            applicationSubmittedAt: new Date(),
+            approvedAt: new Date()
+          }
+        });
+      } else {
+        // Update existing host profile
+        await prisma.host.update({
+          where: { userId: userId },
+          data: {
+            approvedAt: new Date()
+          }
+        });
+      }
     }
 
-    // If it's an artist, also update the artist-specific approval
-    if (updatedUser.artist) {
-      await prisma.artist.update({
-        where: { userId: userId },
-        data: {
-          approvedAt: new Date()
-        }
-      });
+    // Ensure artist profile exists and update approval
+    if (user.userType === 'ARTIST') {
+      if (!updatedUser.artist) {
+        // Create missing artist profile with minimal required data
+        await prisma.artist.create({
+          data: {
+            userId: userId,
+            genres: [], // Required field - empty array is acceptable
+            applicationSubmittedAt: new Date(),
+            approvedAt: new Date()
+          }
+        });
+      } else {
+        // Update existing artist profile
+        await prisma.artist.update({
+          where: { userId: userId },
+          data: {
+            approvedAt: new Date()
+          }
+        });
+      }
     }
 
     const message = user.userType === 'ARTIST' 
