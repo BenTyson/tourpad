@@ -60,7 +60,7 @@ export default function AdminBookingsPage() {
   }
 
   // Not authenticated or not admin
-  if (!session?.user || session.user.type !== 'ADMIN') {
+  if (!session?.user || session.user.type !== 'admin') {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
         <div className="text-center">

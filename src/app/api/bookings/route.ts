@@ -31,24 +31,32 @@ export async function GET(request: NextRequest) {
     console.log('User profiles found:', { artist: artist?.id, host: host?.id });
 
     // Build where clause based on user type
-    const whereClause: any = {
-      OR: []
-    };
+    let whereClause: any = {};
     
-    if (artist) {
-      whereClause.OR.push({ artistId: artist.id });
-    }
-    
-    if (host) {
-      whereClause.OR.push({ hostId: host.id });
-    }
-    
-    // If user has no artist or host profile, return empty results
-    if (whereClause.OR.length === 0) {
-      return NextResponse.json({
-        bookings: [],
-        pagination: { total: 0, limit, offset }
-      });
+    // Admin users see all bookings
+    if (session.user.type === 'admin') {
+      // Admin sees all bookings - no user restriction
+      whereClause = {};
+      console.log('Admin user - showing all bookings');
+    } else {
+      // Regular users only see their own bookings
+      whereClause.OR = [];
+      
+      if (artist) {
+        whereClause.OR.push({ artistId: artist.id });
+      }
+      
+      if (host) {
+        whereClause.OR.push({ hostId: host.id });
+      }
+      
+      // If user has no artist or host profile, return empty results
+      if (whereClause.OR.length === 0) {
+        return NextResponse.json({
+          bookings: [],
+          pagination: { total: 0, limit, offset }
+        });
+      }
     }
 
     // Add status filter if provided

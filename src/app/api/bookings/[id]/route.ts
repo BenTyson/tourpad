@@ -20,7 +20,7 @@ export async function GET(
   { params }: RouteParams
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     
     const session = await auth();
     if (!session?.user?.id) {
@@ -143,7 +143,7 @@ export async function PUT(
   { params }: RouteParams
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
     const { status, hostResponse, doorFee, doorFeeStatus } = body;
 
@@ -227,7 +227,13 @@ export async function PUT(
     }
     
     if ((isHost || isArtist) && doorFeeStatus !== undefined) {
-      updateData.doorFeeStatus = doorFeeStatus;
+      // Validate doorFeeStatus enum values
+      const validDoorFeeStatuses = ['PENDING_HOST', 'PENDING_ARTIST', 'AGREED'];
+      if (validDoorFeeStatuses.includes(doorFeeStatus)) {
+        updateData.doorFeeStatus = doorFeeStatus;
+      } else {
+        console.log('Invalid doorFeeStatus value:', doorFeeStatus);
+      }
     }
 
     // Update the booking
@@ -280,7 +286,7 @@ export async function PUT(
       }
     } catch (notifError) {
       console.error('Failed to send notification:', notifError);
-      // Don't fail the request if notification fails
+      // Don't fail the request if notification fails - continue with response
     }
 
     return NextResponse.json({
@@ -314,7 +320,7 @@ export async function DELETE(
   { params }: RouteParams
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     const session = await auth();
     if (!session?.user?.id) {
