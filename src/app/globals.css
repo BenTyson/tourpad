@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+/* Typing indicator animations */
+@keyframes typing-bounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-8px);
+  }
+}
+
+.typing-dot {
+  animation: typing-bounce 1.4s infinite ease-in-out;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

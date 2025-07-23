@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CheckCircleIcon, XCircleIcon, XMarkIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
+import { CheckCircle, XCircle, X, Info } from 'lucide-react';
 
 export interface ToastProps {
   id: string;
@@ -43,11 +43,11 @@ export const Toast: React.FC<ToastProps> = ({
   const getIcon = () => {
     switch (type) {
       case 'success':
-        return <CheckCircleIcon className="w-6 h-6 text-green-500" />;
+        return <CheckCircle className="w-6 h-6 text-green-500" />;
       case 'error':
-        return <XCircleIcon className="w-6 h-6 text-red-500" />;
+        return <XCircle className="w-6 h-6 text-red-500" />;
       default:
-        return <InformationCircleIcon className="w-6 h-6 text-blue-500" />;
+        return <Info className="w-6 h-6 text-blue-500" />;
     }
   };
 
@@ -86,7 +86,7 @@ export const Toast: React.FC<ToastProps> = ({
               onClick={handleClose}
             >
               <span className="sr-only">Close</span>
-              <XMarkIcon className="h-5 w-5" />
+              <X className="h-5 w-5" />
             </button>
           </div>
         </div>

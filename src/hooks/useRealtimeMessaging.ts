@@ -1,0 +1,264 @@
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { useSession } from 'next-auth/react';
+
+interface RealtimeMessagingOptions {
+  conversationId?: string | null;
+  pollInterval?: number;
+  typingTimeout?: number;
+  heartbeatInterval?: number;
+}
+
+interface TypingUser {
+  userId: string;
+  userName: string;
+}
+
+interface OnlineStatus {
+  [userId: string]: {
+    isOnline: boolean;
+    lastSeen?: number;
+  };
+}
+
+export function useRealtimeMessaging(options: RealtimeMessagingOptions = {}) {
+  const { data: session } = useSession();
+  const {
+    conversationId,
+    pollInterval = 30000, // 30 seconds
+    typingTimeout = 3000, // 3 seconds
+    heartbeatInterval = 60000 // 1 minute
+  } = options;
+
+  const [newMessages, setNewMessages] = useState<any[]>([]);
+  const [updatedConversations, setUpdatedConversations] = useState<any[]>([]);
+  const [typingUsers, setTypingUsers] = useState<TypingUser[]>([]);
+  const [onlineStatus, setOnlineStatus] = useState<OnlineStatus>({});
+  const [lastPollTime, setLastPollTime] = useState<string | null>(null);
+
+  // Refs for timers
+  const pollTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const typingTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const heartbeatTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const typingIndicatorTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Poll for new messages and conversation updates
+  const pollMessages = useCallback(async () => {
+    if (!session?.user?.id) return;
+
+    try {
+      const params = new URLSearchParams();
+      if (lastPollTime) {
+        params.append('since', lastPollTime);
+      }
+      if (conversationId) {
+        params.append('conversationId', conversationId);
+      }
+
+      const response = await fetch(`/api/messages/poll?${params}`);
+      if (!response.ok) return;
+
+      const data = await response.json();
+      
+      // Update state with new data
+      if (data.updatedConversations?.length > 0) {
+        setUpdatedConversations(data.updatedConversations);
+      }
+      
+      if (data.newMessages?.length > 0) {
+        setNewMessages(prev => [...prev, ...data.newMessages]);
+      }
+
+      setLastPollTime(data.timestamp);
+
+    } catch (error) {
+      console.error('Error polling messages:', error);
+    }
+  }, [session?.user?.id, conversationId, lastPollTime]);
+
+  // Send typing indicator
+  const sendTypingIndicator = useCallback(async (isTyping: boolean) => {
+    if (!session?.user?.id || !conversationId) return;
+
+    try {
+      await fetch('/api/messages/typing', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          conversationId,
+          isTyping
+        })
+      });
+    } catch (error) {
+      console.error('Error sending typing indicator:', error);
+    }
+  }, [session?.user?.id, conversationId]);
+
+  // Start typing (with auto-stop timer)
+  const startTyping = useCallback(() => {
+    sendTypingIndicator(true);
+    
+    // Clear any existing timer
+    if (typingIndicatorTimeoutRef.current) {
+      clearTimeout(typingIndicatorTimeoutRef.current);
+    }
+
+    // Auto-stop typing after timeout
+    typingIndicatorTimeoutRef.current = setTimeout(() => {
+      sendTypingIndicator(false);
+    }, typingTimeout);
+  }, [sendTypingIndicator, typingTimeout]);
+
+  // Stop typing
+  const stopTyping = useCallback(() => {
+    sendTypingIndicator(false);
+    
+    if (typingIndicatorTimeoutRef.current) {
+      clearTimeout(typingIndicatorTimeoutRef.current);
+      typingIndicatorTimeoutRef.current = null;
+    }
+  }, [sendTypingIndicator]);
+
+  // Fetch typing indicators
+  const fetchTypingIndicators = useCallback(async () => {
+    if (!session?.user?.id || !conversationId) return;
+
+    try {
+      const response = await fetch(`/api/messages/typing?conversationId=${conversationId}`);
+      if (!response.ok) return;
+
+      const data = await response.json();
+      setTypingUsers(data.typingUsers || []);
+    } catch (error) {
+      console.error('Error fetching typing indicators:', error);
+    }
+  }, [session?.user?.id, conversationId]);
+
+  // Update online status
+  const updateOnlineStatus = useCallback(async (status: 'online' | 'offline' = 'online') => {
+    if (!session?.user?.id) return;
+
+    try {
+      await fetch('/api/messages/online-status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+    } catch (error) {
+      console.error('Error updating online status:', error);
+    }
+  }, [session?.user?.id]);
+
+  // Send heartbeat to maintain online status
+  const sendHeartbeat = useCallback(async () => {
+    if (!session?.user?.id) return;
+
+    try {
+      await fetch('/api/messages/online-status', {
+        method: 'PUT'
+      });
+    } catch (error) {
+      console.error('Error sending heartbeat:', error);
+    }
+  }, [session?.user?.id]);
+
+  // Fetch online status for users
+  const fetchOnlineStatus = useCallback(async (userIds: string[]) => {
+    if (!session?.user?.id || userIds.length === 0) return;
+
+    try {
+      const response = await fetch(`/api/messages/online-status?userIds=${userIds.join(',')}`);
+      if (!response.ok) return;
+
+      const data = await response.json();
+      setOnlineStatus(data.onlineStatus || {});
+    } catch (error) {
+      console.error('Error fetching online status:', error);
+    }
+  }, [session?.user?.id]);
+
+  // Set up polling timer
+  useEffect(() => {
+    if (!session?.user?.id) return;
+
+    // Initial poll
+    pollMessages();
+
+    // Set up polling interval
+    pollTimerRef.current = setInterval(pollMessages, pollInterval);
+
+    return () => {
+      if (pollTimerRef.current) {
+        clearInterval(pollTimerRef.current);
+      }
+    };
+  }, [session?.user?.id, pollMessages, pollInterval]);
+
+  // Set up typing indicator polling for current conversation
+  useEffect(() => {
+    if (!conversationId) return;
+
+    // Fetch typing indicators every 2 seconds when in a conversation
+    const typingInterval = setInterval(fetchTypingIndicators, 2000);
+
+    return () => {
+      clearInterval(typingInterval);
+    };
+  }, [conversationId, fetchTypingIndicators]);
+
+  // Set up heartbeat timer
+  useEffect(() => {
+    if (!session?.user?.id) return;
+
+    // Mark user as online
+    updateOnlineStatus('online');
+
+    // Set up heartbeat interval
+    heartbeatTimerRef.current = setInterval(sendHeartbeat, heartbeatInterval);
+
+    // Handle page unload to mark user offline
+    const handleUnload = () => {
+      updateOnlineStatus('offline');
+    };
+
+    window.addEventListener('beforeunload', handleUnload);
+    window.addEventListener('unload', handleUnload);
+
+    return () => {
+      if (heartbeatTimerRef.current) {
+        clearInterval(heartbeatTimerRef.current);
+      }
+      updateOnlineStatus('offline');
+      window.removeEventListener('beforeunload', handleUnload);
+      window.removeEventListener('unload', handleUnload);
+    };
+  }, [session?.user?.id, updateOnlineStatus, sendHeartbeat, heartbeatInterval]);
+
+  // Clear new messages (called after UI processes them)
+  const clearNewMessages = useCallback(() => {
+    setNewMessages([]);
+  }, []);
+
+  // Clear conversation updates (called after UI processes them)
+  const clearUpdatedConversations = useCallback(() => {
+    setUpdatedConversations([]);
+  }, []);
+
+  return {
+    // Data
+    newMessages,
+    updatedConversations,
+    typingUsers,
+    onlineStatus,
+
+    // Actions
+    startTyping,
+    stopTyping,
+    fetchOnlineStatus,
+    clearNewMessages,
+    clearUpdatedConversations,
+
+    // Utils
+    isUserOnline: (userId: string) => onlineStatus[userId]?.isOnline || false,
+    getLastSeen: (userId: string) => onlineStatus[userId]?.lastSeen
+  };
+}

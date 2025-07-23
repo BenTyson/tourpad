@@ -17,7 +17,13 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * pageSize;
 
     // Get conversations - admins see all, others see only their own
-    const whereClause = session.user.type === 'admin' 
+    console.log('Conversations access check:', {
+      userId: session.user.id,
+      userType: session.user.type,
+      isAdmin: session.user.type?.toLowerCase() === 'admin'
+    });
+    
+    const whereClause = session.user.type?.toLowerCase() === 'admin' 
       ? {} // Admin sees all conversations
       : {
           participantIds: {
@@ -83,7 +89,7 @@ export async function GET(request: NextRequest) {
     const conversationsWithUnread = await Promise.all(
       conversations.map(async (conv) => {
         // For admins, show total message count instead of unread count
-        const unreadCount = session.user.type === 'admin' 
+        const unreadCount = session.user.type?.toLowerCase() === 'admin' 
           ? await prisma.message.count({
               where: { conversationId: conv.id }
             })
@@ -148,7 +154,7 @@ export async function GET(request: NextRequest) {
             status: conv.booking.status,
             venueName: conv.booking.host.venueName
           } : null,
-          participants: session.user.type === 'admin' 
+          participants: session.user.type?.toLowerCase() === 'admin' 
             ? participants // Admin sees all participants
             : participants.filter(p => p.id !== session.user.id), // Others see only the other party
           lastMessage: conv.messages[0] || null,

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { 
@@ -21,6 +21,9 @@ import { LoadingSpinner } from '@/components/ui/Loading';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { ProfileImage } from '@/components/ui/ProfileImage';
+import { TypingIndicator } from '@/components/ui/TypingIndicator';
+import { OnlineStatusIndicator, ProfileImageWithStatus } from '@/components/ui/OnlineStatusIndicator';
+import { useRealtimeMessaging } from '@/hooks/useRealtimeMessaging';
 
 export default function MessagesPage() {
   const { data: session, status } = useSession();
@@ -35,6 +38,30 @@ export default function MessagesPage() {
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [startConversationUserId, setStartConversationUserId] = useState<string | null>(null);
   const [newConversationRecipient, setNewConversationRecipient] = useState<any>(null);
+  
+  // Refs for managing input focus and typing state
+  const messageInputRef = useRef<HTMLInputElement>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastTypingTimeRef = useRef<number>(0);
+
+  // Real-time messaging hook
+  const {
+    newMessages,
+    updatedConversations,
+    typingUsers,
+    onlineStatus,
+    startTyping,
+    stopTyping,
+    fetchOnlineStatus,
+    clearNewMessages,
+    clearUpdatedConversations,
+    isUserOnline
+  } = useRealtimeMessaging({
+    conversationId: selectedConversation,
+    pollInterval: 15000, // Poll every 15 seconds for active conversations
+    typingTimeout: 3000,
+    heartbeatInterval: 60000
+  });
 
   // Fetch conversations
   const fetchConversations = async () => {
@@ -155,11 +182,105 @@ export default function MessagesPage() {
     }
   }, [selectedConversation]);
 
-  // Helper function to format display name with band/venue name
-  const formatDisplayName = (participant: any) => {
-    if (!participant) return 'Unknown';
+  // Handle new messages from real-time polling
+  useEffect(() => {
+    if (newMessages.length > 0) {
+      setMessages(prevMessages => {
+        // Avoid duplicates by checking if message already exists
+        const existingIds = new Set(prevMessages.map(m => m.id));
+        const uniqueNewMessages = newMessages.filter(m => !existingIds.has(m.id));
+        
+        if (uniqueNewMessages.length > 0) {
+          return [...prevMessages, ...uniqueNewMessages];
+        }
+        return prevMessages;
+      });
+      
+      // Clear processed messages
+      clearNewMessages();
+    }
+  }, [newMessages, clearNewMessages]);
+
+  // Handle conversation updates from real-time polling
+  useEffect(() => {
+    if (updatedConversations.length > 0) {
+      setConversations(prevConversations => {
+        const updatedConvMap = new Map(updatedConversations.map(c => [c.id, c]));
+        
+        // Update existing conversations or add new ones
+        const updated = prevConversations.map(conv => 
+          updatedConvMap.get(conv.id) || conv
+        );
+        
+        // Add any completely new conversations
+        const existingIds = new Set(prevConversations.map(c => c.id));
+        const newConvs = updatedConversations.filter(c => !existingIds.has(c.id));
+        
+        const result = [...updated, ...newConvs].sort((a, b) => 
+          new Date(b.lastMessageAt || 0).getTime() - new Date(a.lastMessageAt || 0).getTime()
+        );
+        
+        return result;
+      });
+      
+      // Clear processed updates
+      clearUpdatedConversations();
+    }
+  }, [updatedConversations, clearUpdatedConversations]);
+
+  // Fetch online status for conversation participants
+  useEffect(() => {
+    if (conversations.length > 0) {
+      const participantIds = conversations.flatMap(conv => 
+        conv.participants?.map((p: any) => p.id) || []
+      );
+      
+      if (participantIds.length > 0) {
+        fetchOnlineStatus([...new Set(participantIds)]);
+      }
+    }
+  }, [conversations, fetchOnlineStatus]);
+
+  // Handle typing indicator on input change
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setMessageText(value);
     
-    const baseName = participant.name;
+    // Send typing indicator if user is typing
+    if (value.trim() && selectedConversation) {
+      const now = Date.now();
+      
+      // Only send typing indicator if enough time has passed since last one
+      if (now - lastTypingTimeRef.current > 2000) {
+        startTyping();
+        lastTypingTimeRef.current = now;
+      }
+      
+      // Clear any existing timeout
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+      
+      // Set timeout to stop typing indicator
+      typingTimeoutRef.current = setTimeout(() => {
+        stopTyping();
+      }, 1000);
+    }
+  };
+
+  // Stop typing when input loses focus
+  const handleInputBlur = () => {
+    stopTyping();
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+  };
+
+  // Helper function to format display name with band/venue name
+  const formatDisplayName = (participant: any): { primary: string; secondary: string } => {
+    if (!participant) return { primary: 'Unknown', secondary: '' };
+    
+    const baseName = participant.name || 'Unknown';
     const stageName = participant.artist?.stageName;
     const venueName = participant.host?.venueName;
     
@@ -176,7 +297,7 @@ export default function MessagesPage() {
     } else {
       return {
         primary: baseName,
-        secondary: participant.userType?.toLowerCase()
+        secondary: participant.userType?.toLowerCase() || ''
       };
     }
   };
@@ -245,11 +366,15 @@ export default function MessagesPage() {
               >
                 <div className="flex items-start justify-between mb-1">
                   <div className="flex items-center space-x-2">
-                    <ProfileImage 
-                      user={conv.participants.length > 0 ? conv.participants[0] : null}
-                      alt={conv.participants.length > 0 ? conv.participants[0]?.name : 'User'}
-                      size="md"
-                    />
+                    <ProfileImageWithStatus
+                      isOnline={conv.participants.length > 0 ? isUserOnline(conv.participants[0]?.id) : false}
+                    >
+                      <ProfileImage 
+                        user={conv.participants.length > 0 ? conv.participants[0] : null}
+                        alt={conv.participants.length > 0 ? conv.participants[0]?.name : 'User'}
+                        size="md"
+                      />
+                    </ProfileImageWithStatus>
                     <div>
                       {(() => {
                         const participant = conv.participants.length > 0 ? conv.participants[0] : null;
@@ -368,7 +493,7 @@ export default function MessagesPage() {
                     className="bg-[var(--color-french-blue)] hover:bg-blue-600"
                   >
                     {sendingMessage ? (
-                      <LoadingSpinner size="xs" />
+                      <LoadingSpinner size="sm" />
                     ) : (
                       <Send className="w-4 h-4" />
                     )}
@@ -383,23 +508,35 @@ export default function MessagesPage() {
             <div className="p-4 border-b border-neutral-200 bg-white">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <ProfileImage 
-                    user={selectedConv.participants.length > 0 ? selectedConv.participants[0] : null}
-                    alt={selectedConv.participants.length > 0 ? selectedConv.participants[0]?.name : 'User'}
-                    size="md"
-                  />
+                  <ProfileImageWithStatus
+                    isOnline={selectedConv.participants.length > 0 ? isUserOnline(selectedConv.participants[0]?.id) : false}
+                  >
+                    <ProfileImage 
+                      user={selectedConv.participants.length > 0 ? selectedConv.participants[0] : null}
+                      alt={selectedConv.participants.length > 0 ? selectedConv.participants[0]?.name : 'User'}
+                      size="md"
+                    />
+                  </ProfileImageWithStatus>
                   <div>
                     {(() => {
                       const participant = selectedConv.participants.length > 0 ? selectedConv.participants[0] : null;
                       const displayName = formatDisplayName(participant);
+                      const isOnline = participant ? isUserOnline(participant.id) : false;
                       return (
                         <>
                           <h3 className="font-semibold text-neutral-900">
                             {displayName.primary}
                           </h3>
-                          <p className="text-sm text-neutral-500">
-                            {displayName.secondary}
-                          </p>
+                          <div className="flex items-center space-x-2">
+                            <p className="text-sm text-neutral-500">
+                              {displayName.secondary}
+                            </p>
+                            <OnlineStatusIndicator 
+                              isOnline={isOnline}
+                              showLabel={true}
+                              size="sm"
+                            />
+                          </div>
                         </>
                       );
                     })()}
@@ -466,6 +603,13 @@ export default function MessagesPage() {
                   );
                 })
               )}
+              
+              {/* Typing Indicator */}
+              {typingUsers.length > 0 && (
+                <div className="px-4 pb-2">
+                  <TypingIndicator typingUsers={typingUsers} />
+                </div>
+              )}
             </div>
 
             {/* Message Composer */}
@@ -475,12 +619,15 @@ export default function MessagesPage() {
                   <Paperclip className="w-4 h-4" />
                 </Button>
                 <Input
+                  ref={messageInputRef}
                   placeholder="Type a message..."
                   value={messageText}
-                  onChange={(e) => setMessageText(e.target.value)}
+                  onChange={handleInputChange}
+                  onBlur={handleInputBlur}
                   onKeyPress={(e) => {
                     if (e.key === 'Enter' && messageText.trim() && !sendingMessage) {
                       sendMessage();
+                      stopTyping();
                     }
                   }}
                   className="flex-1"
@@ -493,7 +640,7 @@ export default function MessagesPage() {
                   className="bg-[var(--color-french-blue)] hover:bg-blue-600"
                 >
                   {sendingMessage ? (
-                    <LoadingSpinner size="xs" />
+                    <LoadingSpinner size="sm" />
                   ) : (
                     <Send className="w-4 h-4" />
                   )}

@@ -29,7 +29,17 @@ export async function GET(request: NextRequest) {
     }
 
     // Check access: participant or admin
-    const hasAccess = conversation.participantIds.includes(session.user.id) || session.user.type === 'admin';
+    console.log('Messages access check:', {
+      userId: session.user.id,
+      userType: session.user.type,
+      conversationId,
+      participantIds: conversation.participantIds,
+      isParticipant: conversation.participantIds.includes(session.user.id),
+      isAdmin: session.user.type?.toLowerCase() === 'admin'
+    });
+    
+    const hasAccess = conversation.participantIds.includes(session.user.id) || 
+                     session.user.type?.toLowerCase() === 'admin';
     if (!hasAccess) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
@@ -100,7 +110,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Mark messages as read (only for participants, not admins)
-    if (session.user.type !== 'admin') {
+    if (session.user.type?.toLowerCase() !== 'admin') {
       const unreadMessageIds = messagesToReturn
         .filter(msg => !msg.readBy.includes(session.user.id))
         .map(msg => msg.id);
