@@ -40,9 +40,22 @@ export async function GET(
     // Calculate approximate years active
     const yearsActive = Math.max(1, new Date().getFullYear() - artist.createdAt.getFullYear());
     
-    // Calculate rating from reviews (for now use default values)
-    const rating = 4.8; // TODO: Calculate from actual reviews table
-    const reviewCount = Math.floor(Math.random() * 20) + 5; // TODO: Count from actual reviews table
+    // Calculate rating from reviews using database
+    const reviewStats = await prisma.review.aggregate({
+      where: {
+        revieweeId: artist.userId,
+        isPublic: true
+      },
+      _avg: {
+        rating: true
+      },
+      _count: {
+        id: true
+      }
+    });
+
+    const rating = reviewStats._avg.rating ? Math.round(reviewStats._avg.rating * 10) / 10 : 0;
+    const reviewCount = reviewStats._count.id;
 
     // Return the artist data in the format expected by the profile page
     return NextResponse.json({
@@ -69,7 +82,7 @@ export async function GET(
         youtube: (artist.user.profile?.socialLinks as any)?.youtube || '',
         patreon: (artist.user.profile?.socialLinks as any)?.patreon || ''
       },
-      rating,
+      rating: rating || 0,
       reviewCount,
       tourMonthsPerYear: artist.tourMonthsPerYear || 3,
       tourVehicle: artist.tourVehicle || 'van',

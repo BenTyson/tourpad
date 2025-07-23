@@ -38,11 +38,137 @@ export default function MessagesPage() {
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [startConversationUserId, setStartConversationUserId] = useState<string | null>(null);
   const [newConversationRecipient, setNewConversationRecipient] = useState<any>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Refs for managing input focus and typing state
   const messageInputRef = useRef<HTMLInputElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastTypingTimeRef = useRef<number>(0);
+
+  // Handle file selection
+  const handleFileSelect = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
+  // Send file attachment
+  const sendFileAttachment = async (file: File, messageContent?: string) => {
+    if (!selectedConversation || uploadingFile) return;
+
+    setUploadingFile(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('conversationId', selectedConversation);
+      if (messageContent) {
+        formData.append('content', messageContent);
+      }
+
+      const response = await fetch('/api/messages/attachment', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || 'Failed to send attachment');
+      }
+      
+      const data = await response.json();
+      // Handle API response - it should now have sender object
+      if (data.id && data.sender) {
+        setMessages([...messages, data]);
+        setSelectedFile(null);
+        setMessageText('');
+        
+        // Reset file input
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
+        
+        // Update conversation list to reflect new message
+        await fetchConversations();
+      } else {
+        throw new Error('Invalid attachment response format');
+      }
+    } catch (error) {
+      console.error('Error sending attachment:', error);
+      throw error; // Re-throw so calling function can handle it
+    } finally {
+      setUploadingFile(false);
+    }
+  };
+
+  // Helper to format file size
+  const formatFileSize = (bytes: number): string => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
+  // Render attachment in message
+  const renderAttachment = (msg: any) => {
+    if (!msg.attachmentUrl) return null;
+
+    const isImage = msg.attachmentType?.startsWith('image/');
+    const isPdf = msg.attachmentType === 'application/pdf';
+
+    return (
+      <div className="mt-2">
+        {isImage ? (
+          <div className="relative">
+            <img 
+              src={msg.attachmentUrl} 
+              alt={msg.attachmentName}
+              className="max-w-xs rounded-lg cursor-pointer hover:opacity-90"
+              onClick={() => window.open(msg.attachmentUrl, '_blank')}
+            />
+            <div className="absolute bottom-2 left-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded">
+              {msg.attachmentName}
+            </div>
+          </div>
+        ) : (
+          <div className="bg-neutral-100 border border-neutral-200 rounded-lg p-3 max-w-xs">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
+                {isPdf ? (
+                  <span className="text-red-600 font-bold text-xs">PDF</span>
+                ) : (
+                  <span className="text-blue-600 font-bold text-xs">FILE</span>
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-neutral-900 truncate">
+                  {msg.attachmentName}
+                </p>
+                <p className="text-xs text-neutral-500">
+                  {msg.attachmentSize ? formatFileSize(msg.attachmentSize) : 'Unknown size'}
+                </p>
+              </div>
+            </div>
+            <Button 
+              size="sm" 
+              variant="outline" 
+              className="mt-2 w-full"
+              onClick={() => window.open(msg.attachmentUrl, '_blank')}
+            >
+              Download
+            </Button>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   // Real-time messaging hook
   const {
@@ -58,9 +184,9 @@ export default function MessagesPage() {
     isUserOnline
   } = useRealtimeMessaging({
     conversationId: selectedConversation,
-    pollInterval: 15000, // Poll every 15 seconds for active conversations
+    pollInterval: 300000, // Poll every 5 minutes - disabled for stability testing
     typingTimeout: 3000,
-    heartbeatInterval: 60000
+    heartbeatInterval: 300000
   });
 
   // Fetch conversations
@@ -94,7 +220,18 @@ export default function MessagesPage() {
 
   // Send a message
   const sendMessage = async () => {
-    if (!messageText.trim() || !selectedConversation || sendingMessage) return;
+    if ((!messageText.trim() && !selectedFile) || !selectedConversation || sendingMessage) return;
+
+    // If there's a file selected, send as attachment
+    if (selectedFile) {
+      try {
+        await sendFileAttachment(selectedFile, messageText.trim() || undefined);
+      } catch (error) {
+        console.error('Error sending file attachment:', error);
+        alert('Failed to send file attachment. Please try again.');
+      }
+      return;
+    }
 
     setSendingMessage(true);
     try {
@@ -107,16 +244,24 @@ export default function MessagesPage() {
         })
       });
 
-      if (!response.ok) throw new Error('Failed to send message');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || 'Failed to send message');
+      }
       
       const data = await response.json();
-      setMessages([...messages, data.message]);
-      setMessageText('');
-      
-      // Update conversation list to reflect new message
-      await fetchConversations();
+      if (data.message) {
+        setMessages([...messages, data.message]);
+        setMessageText('');
+        
+        // Update conversation list to reflect new message
+        await fetchConversations();
+      } else {
+        throw new Error('Invalid response format');
+      }
     } catch (error) {
       console.error('Error sending message:', error);
+      alert('Failed to send message. Please try again.');
     } finally {
       setSendingMessage(false);
     }
@@ -124,6 +269,44 @@ export default function MessagesPage() {
 
   // Start new conversation
   const startNewConversation = async (recipientId: string, initialMessage: string) => {
+    // If there's a file selected, start with attachment
+    if (selectedFile) {
+      setSendingMessage(true);
+      try {
+        // First create the conversation
+        const response = await fetch('/api/conversations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            recipientId,
+            initialMessage: initialMessage || `Shared a file: ${selectedFile.name}`
+          })
+        });
+
+        if (!response.ok) throw new Error('Failed to start conversation');
+        
+        const data = await response.json();
+        setSelectedConversation(data.conversation.id);
+        
+        // Now send the file attachment
+        await sendFileAttachment(selectedFile, initialMessage || undefined);
+        
+        setStartConversationUserId(null);
+        setNewConversationRecipient(null);
+        setMessageText('');
+        
+        // Refresh conversations to show new one
+        await fetchConversations();
+        await fetchMessages(data.conversation.id);
+      } catch (error) {
+        console.error('Error starting conversation with attachment:', error);
+      } finally {
+        setSendingMessage(false);
+      }
+      return;
+    }
+
+    // Regular text message conversation start
     setSendingMessage(true);
     try {
       const response = await fetch('/api/conversations', {
@@ -470,29 +653,75 @@ export default function MessagesPage() {
               </div>
               
               <div className="p-4 border-t border-neutral-200 bg-white">
+                {/* File attachment preview for new conversation */}
+                {selectedFile && (
+                  <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
+                          <Paperclip className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-blue-900">
+                            {selectedFile.name}
+                          </p>
+                          <p className="text-xs text-blue-600">
+                            {formatFileSize(selectedFile.size)}
+                          </p>
+                        </div>
+                      </div>
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        onClick={() => {
+                          setSelectedFile(null);
+                          if (fileInputRef.current) {
+                            fileInputRef.current.value = '';
+                          }
+                        }}
+                        className="text-blue-600 border-blue-200 hover:bg-blue-100"
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  </div>
+                )}
+                
                 <div className="flex items-center space-x-2">
-                  <Button variant="outline" size="sm">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    onChange={handleFileChange}
+                    accept="image/*,application/pdf,.txt,.doc,.docx"
+                    className="hidden"
+                  />
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={handleFileSelect}
+                    disabled={uploadingFile}
+                  >
                     <Paperclip className="w-4 h-4" />
                   </Button>
                   <Input
-                    placeholder={`Write your message to ${newConversationRecipient.name}...`}
+                    placeholder={selectedFile ? "Add a message (optional)..." : `Write your message to ${newConversationRecipient.name}...`}
                     value={messageText}
                     onChange={(e) => setMessageText(e.target.value)}
                     onKeyPress={(e) => {
-                      if (e.key === 'Enter' && messageText.trim() && !sendingMessage) {
+                      if (e.key === 'Enter' && (messageText.trim() || selectedFile) && !sendingMessage && !uploadingFile) {
                         startNewConversation(startConversationUserId, messageText);
                       }
                     }}
                     className="flex-1"
-                    disabled={sendingMessage}
+                    disabled={sendingMessage || uploadingFile}
                   />
                   <Button 
                     size="sm"
-                    disabled={!messageText.trim() || sendingMessage}
+                    disabled={(!messageText.trim() && !selectedFile) || sendingMessage || uploadingFile}
                     onClick={() => startNewConversation(startConversationUserId, messageText)}
                     className="bg-[var(--color-french-blue)] hover:bg-blue-600"
                   >
-                    {sendingMessage ? (
+                    {sendingMessage || uploadingFile ? (
                       <LoadingSpinner size="sm" />
                     ) : (
                       <Send className="w-4 h-4" />
@@ -582,6 +811,7 @@ export default function MessagesPage() {
                         }`}
                       >
                         <p className="text-sm">{msg.content}</p>
+                        {renderAttachment(msg)}
                         <p className={`text-xs mt-1 ${
                           isOwnMessage ? 'text-blue-100' : 'text-neutral-500'
                         }`}>
@@ -614,32 +844,78 @@ export default function MessagesPage() {
 
             {/* Message Composer */}
             <div className="p-4 border-t border-neutral-200 bg-white">
+              {/* File attachment preview */}
+              {selectedFile && (
+                <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
+                        <Paperclip className="w-4 h-4 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-blue-900">
+                          {selectedFile.name}
+                        </p>
+                        <p className="text-xs text-blue-600">
+                          {formatFileSize(selectedFile.size)}
+                        </p>
+                      </div>
+                    </div>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      onClick={() => {
+                        setSelectedFile(null);
+                        if (fileInputRef.current) {
+                          fileInputRef.current.value = '';
+                        }
+                      }}
+                      className="text-blue-600 border-blue-200 hover:bg-blue-100"
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                </div>
+              )}
+              
               <div className="flex items-center space-x-2">
-                <Button variant="outline" size="sm">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  onChange={handleFileChange}
+                  accept="image/*,application/pdf,.txt,.doc,.docx"
+                  className="hidden"
+                />
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleFileSelect}
+                  disabled={uploadingFile}
+                >
                   <Paperclip className="w-4 h-4" />
                 </Button>
                 <Input
                   ref={messageInputRef}
-                  placeholder="Type a message..."
+                  placeholder={selectedFile ? "Add a message (optional)..." : "Type a message..."}
                   value={messageText}
                   onChange={handleInputChange}
                   onBlur={handleInputBlur}
                   onKeyPress={(e) => {
-                    if (e.key === 'Enter' && messageText.trim() && !sendingMessage) {
+                    if (e.key === 'Enter' && (messageText.trim() || selectedFile) && !sendingMessage && !uploadingFile) {
                       sendMessage();
                       stopTyping();
                     }
                   }}
                   className="flex-1"
-                  disabled={sendingMessage}
+                  disabled={sendingMessage || uploadingFile}
                 />
                 <Button 
                   size="sm"
-                  disabled={!messageText.trim() || sendingMessage}
+                  disabled={(!messageText.trim() && !selectedFile) || sendingMessage || uploadingFile}
                   onClick={sendMessage}
                   className="bg-[var(--color-french-blue)] hover:bg-blue-600"
                 >
-                  {sendingMessage ? (
+                  {sendingMessage || uploadingFile ? (
                     <LoadingSpinner size="sm" />
                   ) : (
                     <Send className="w-4 h-4" />

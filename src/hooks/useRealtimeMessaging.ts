@@ -35,11 +35,12 @@ export function useRealtimeMessaging(options: RealtimeMessagingOptions = {}) {
   const [onlineStatus, setOnlineStatus] = useState<OnlineStatus>({});
   const [lastPollTime, setLastPollTime] = useState<string | null>(null);
 
-  // Refs for timers
+  // Refs for timers and stable references
   const pollTimerRef = useRef<NodeJS.Timeout | null>(null);
   const typingTimerRef = useRef<NodeJS.Timeout | null>(null);
   const heartbeatTimerRef = useRef<NodeJS.Timeout | null>(null);
   const typingIndicatorTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastPollTimeRef = useRef<string | null>(null);
 
   // Poll for new messages and conversation updates
   const pollMessages = useCallback(async () => {
@@ -47,8 +48,8 @@ export function useRealtimeMessaging(options: RealtimeMessagingOptions = {}) {
 
     try {
       const params = new URLSearchParams();
-      if (lastPollTime) {
-        params.append('since', lastPollTime);
+      if (lastPollTimeRef.current) {
+        params.append('since', lastPollTimeRef.current);
       }
       if (conversationId) {
         params.append('conversationId', conversationId);
@@ -68,12 +69,13 @@ export function useRealtimeMessaging(options: RealtimeMessagingOptions = {}) {
         setNewMessages(prev => [...prev, ...data.newMessages]);
       }
 
+      lastPollTimeRef.current = data.timestamp;
       setLastPollTime(data.timestamp);
 
     } catch (error) {
       console.error('Error polling messages:', error);
     }
-  }, [session?.user?.id, conversationId, lastPollTime]);
+  }, [session?.user?.id, conversationId]);
 
   // Send typing indicator
   const sendTypingIndicator = useCallback(async (isTyping: boolean) => {
@@ -191,7 +193,7 @@ export function useRealtimeMessaging(options: RealtimeMessagingOptions = {}) {
         clearInterval(pollTimerRef.current);
       }
     };
-  }, [session?.user?.id, pollMessages, pollInterval]);
+  }, [session?.user?.id, pollInterval]); // Removed pollMessages to prevent restart loops
 
   // Set up typing indicator polling for current conversation
   useEffect(() => {

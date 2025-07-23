@@ -327,6 +327,11 @@ model Message {
   senderId       String
   content        String
   messageType    MessageType  @default(TEXT)
+  // File attachment fields
+  attachmentUrl  String?      // URL to the uploaded file
+  attachmentType String?      // MIME type (image/jpeg, application/pdf, etc.)
+  attachmentName String?      // Original filename
+  attachmentSize Int?         // File size in bytes
   readBy         String[]
   createdAt      DateTime     @default(now())
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
@@ -519,6 +524,7 @@ enum PaymentStatus {
 
 enum MessageType {
   TEXT
+  ATTACHMENT
   SYSTEM
   BOOKING_UPDATE
 }

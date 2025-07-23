@@ -50,7 +50,17 @@ export async function GET(request: NextRequest) {
         conversationId,
         ...(cursor && { createdAt: { lt: new Date(cursor) } })
       },
-      include: {
+      select: {
+        id: true,
+        content: true,
+        messageType: true,
+        senderId: true,
+        createdAt: true,
+        readBy: true,
+        attachmentUrl: true,
+        attachmentType: true,
+        attachmentName: true,
+        attachmentSize: true,
         sender: {
           select: {
             id: true,

@@ -117,9 +117,25 @@ export async function GET(
         profilePhoto: host.user.profile?.profileImageUrl || host.user.profileImageUrl,
         aboutMe: host.user.profile?.bio || 'Passionate about bringing live music into intimate settings. I love creating memorable experiences where artists and audiences can connect in a personal, meaningful way.'
       },
-      // Stats from mockData format
-      rating: 4.9, // TODO: Calculate from reviews
-      reviewCount: 0, // TODO: Count actual reviews
+      // Calculate rating from reviews using database (single query)
+      ...await (async () => {
+        const reviewStats = await prisma.review.aggregate({
+          where: {
+            revieweeId: host.userId,
+            isPublic: true
+          },
+          _avg: {
+            rating: true
+          },
+          _count: {
+            id: true
+          }
+        });
+        return {
+          rating: reviewStats._avg.rating ? Math.round(reviewStats._avg.rating * 10) / 10 : 0,
+          reviewCount: reviewStats._count.id
+        };
+      })(),
       // Show specs - derived from database fields
       showSpecs: {
         avgAttendance: Math.floor((host.indoorCapacity || 0) * 0.8),
@@ -127,7 +143,11 @@ export async function GET(
         outdoorAttendanceMax: host.outdoorCapacity || 0,
         showDurationMins: host.typicalShowLength || 120,
         showFormat: host.venueType === 'HOME' ? 'Intimate house concert' : 'Venue performance',
-        daysAvailable: ['Friday', 'Saturday'], // TODO: Store in database
+        daysAvailable: host.venueType === 'HOME' 
+          ? ['Friday', 'Saturday', 'Sunday'] 
+          : host.venueType === 'WAREHOUSE' 
+            ? ['Thursday', 'Friday', 'Saturday'] 
+            : ['Friday', 'Saturday'], // Derived from venue type, TODO: Store in database
         estimatedShowsPerYear: host.hostingExperience || 10,
         avgDoorFee: host.suggestedDoorFee || 20, // Use suggested door fee with fallback
         hostingHistory: `${host.hostingExperience || 0} years`
