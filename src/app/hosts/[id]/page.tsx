@@ -338,7 +338,7 @@ export default function HostProfilePage() {
                     Request Booking
                   </Button>
                 </Link>
-                <Link href={`/messages?hostId=${host.id}`}>
+                <Link href={`/dashboard/messages?startConversation=${host.userId}`}>
                   <Button size="lg" variant="outline" className="border-neutral-300 text-neutral-700 hover:bg-neutral-50">
                     Send Message
                   </Button>

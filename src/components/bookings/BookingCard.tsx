@@ -85,7 +85,6 @@ export default function BookingCard({
   const [isUpdating, setIsUpdating] = useState(false);
   const [showResponseForm, setShowResponseForm] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const [showToast, setShowToast] = useState<{ show: boolean; id: string }>({ show: false, id: '' });
   const [hostResponse, setHostResponse] = useState(booking.hostResponse || '');
   const [proposedDoorFee, setProposedDoorFee] = useState(booking.doorFee?.toString() || '');
 
@@ -142,20 +141,9 @@ export default function BookingCard({
 
   const handleConfirmShow = async () => {
     try {
-      // Create unique toast ID to persist through re-renders
-      const toastId = `confirm-${booking.id}-${Date.now()}`;
-      setShowToast({ show: true, id: toastId });
-      
       await handleStatusUpdate('CONFIRMED');
-      
-      // Keep toast visible for 10 seconds with same ID
-      setTimeout(() => {
-        setShowToast(prev => prev.id === toastId ? { show: false, id: '' } : prev);
-      }, 10000);
     } catch (error) {
       console.error('Failed to confirm show:', error);
-      // Hide toast on error
-      setShowToast({ show: false, id: '' });
     }
   };
 
@@ -174,47 +162,6 @@ export default function BookingCard({
   };
 
   return (
-    <>
-    {/* Success Toast */}
-    {showToast.show && (
-      <div className="fixed top-4 right-4 z-[9999] bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center space-x-3 transform transition-all duration-300 ease-out scale-100 opacity-100">
-        <div className="flex-shrink-0">
-          <CheckCircle className="w-6 h-6 animate-bounce" />
-        </div>
-        <div>
-          <p className="font-bold text-lg">Show Confirmed! 🎉</p>
-          <p className="text-sm text-green-100 mt-1">Your performance with {booking.hostName} is locked in!</p>
-        </div>
-        <div className="flex-shrink-0 text-2xl animate-pulse">
-          🎵
-        </div>
-      </div>
-    )}
-    
-    {/* Global Toast Portal - persists through re-renders */}
-    {showToast.show && (
-      <div 
-        id={`toast-${showToast.id}`}
-        className="fixed top-4 right-4 z-[10000] bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center space-x-3 transform transition-all duration-300 ease-out scale-100 opacity-100"
-      >
-        <div className="flex-shrink-0">
-          <CheckCircle className="w-6 h-6 animate-bounce" />
-        </div>
-        <div>
-          <p className="font-bold text-lg">Show Confirmed! 🎉</p>
-          <p className="text-sm text-green-100 mt-1">Your performance with {booking.hostName} is locked in!</p>
-        </div>
-        <div className="flex-shrink-0 text-2xl animate-pulse">
-          🎵
-        </div>
-        <button 
-          onClick={() => setShowToast({ show: false, id: '' })}
-          className="ml-2 text-white/70 hover:text-white"
-        >
-          ✕
-        </button>
-      </div>
-    )}
     
     <Card className={`${className} border border-neutral-200 hover:border-[var(--color-french-blue)] hover:shadow-md transition-all duration-200 ${
       booking.status === 'PENDING' ? 'bg-white' :
@@ -677,6 +624,5 @@ export default function BookingCard({
         )}
       </CardContent>
     </Card>
-    </>
   );
 }

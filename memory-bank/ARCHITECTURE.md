@@ -718,6 +718,50 @@ PUT    /api/notifications        // Mark notifications as read
 
 ### Ready for Implementation 🔄
 
+#### Messaging System 📨 (PLANNED - HIGH PRIORITY)
+```typescript
+// Core Messaging APIs
+GET    /api/messages                      // List messages (paginated, filtered)
+POST   /api/messages                      // Send new message
+GET    /api/messages/[id]                 // Get single message
+PUT    /api/messages/[id]                 // Update message (mark read)
+DELETE /api/messages/[id]                 // Delete message (soft delete)
+
+// Conversation Management
+GET    /api/conversations                 // List user conversations
+GET    /api/conversations/[id]            // Get conversation with messages
+POST   /api/conversations                 // Start new conversation
+PUT    /api/conversations/[id]/mark-read  // Mark all messages as read
+GET    /api/conversations/unread-count    // Get total unread count
+
+// Real-time Features
+GET    /api/messages/poll                 // Poll for new messages (extend notification polling)
+POST   /api/messages/typing               // Send typing indicator
+GET    /api/messages/online-status        // Check user online status
+
+// File Attachments
+POST   /api/messages/upload               // Upload attachment (reuse existing upload system)
+
+// Implementation Plan:
+// Phase 1: Core messaging CRUD, conversation threading, dashboard integration
+// Phase 2: Real-time updates, typing indicators, online status
+// Phase 3: File attachments, search/filters, message templates
+// 
+// UI Components:
+// - MessageInbox: Main messaging dashboard
+// - ConversationList: Sidebar with active conversations
+// - ConversationThread: Message display with bubbles
+// - MessageComposer: Rich text input with attachments
+// - UnreadBadge: Integration with existing notification system
+//
+// Design Guidelines:
+// - French Blue (#6B8CA4): Send buttons, active conversations
+// - Sage (#738a6e): Received message bubbles
+// - Mist (#ebebe9): Message backgrounds
+// - Sand (#d4c4a8): Sent message bubbles
+// - Mobile-first responsive design essential
+```
+
 #### Concert & Fan Features  
 ```typescript
 GET    /api/concerts             // Public concert discovery
@@ -998,6 +1042,265 @@ AWS_REGION="us-east-1"
 STRIPE_SECRET_KEY="sk_live_..."
 STRIPE_WEBHOOK_SECRET="whsec_..."
 ```
+
+---
+
+## Messaging System Architecture (Detailed Implementation Plan)
+
+### Overview
+The TourPad messaging system is designed to be the primary communication channel between artists and hosts, reducing reliance on external communication methods while maintaining platform engagement and providing admin oversight capabilities.
+
+### System Design Principles
+1. **Mobile-First**: Messaging is heavily used on mobile devices
+2. **Real-time Feel**: Use polling + optimistic updates for responsive UX
+3. **Booking Context**: Messages are primarily linked to bookings
+4. **Privacy First**: Users only see their own conversations
+5. **Admin Oversight**: Support staff can access conversations when needed
+
+### Database Architecture
+
+#### Key Relationships
+```
+User (1) -> (N) Message (as sender)
+User (N) -> (N) Conversation (via participantIds[])
+Booking (1) -> (N) Conversation
+Conversation (1) -> (N) Message
+Message (N) -> (N) User (via readBy[])
+```
+
+#### Indexing Strategy
+```sql
+-- Performance indexes for messaging
+CREATE INDEX idx_conversation_participants ON Conversation USING GIN(participantIds);
+CREATE INDEX idx_conversation_booking ON Conversation(bookingId);
+CREATE INDEX idx_conversation_last_message ON Conversation(lastMessageAt DESC);
+CREATE INDEX idx_message_conversation ON Message(conversationId, createdAt DESC);
+CREATE INDEX idx_message_sender ON Message(senderId);
+CREATE INDEX idx_message_read_by ON Message USING GIN(readBy);
+```
+
+### User Experience Flows
+
+#### 1. Artist → Host Initial Contact
+- Artist views host profile
+- Clicks "Message Host" button
+- Creates new conversation (no booking context)
+- Sends introductory message
+- Host receives notification
+
+#### 2. Booking-Related Messaging
+- During booking request: Message attached to booking
+- After approval: Continue conversation in booking context
+- Pre-show coordination: Logistics, technical requirements
+- Post-show: Thank you messages, future planning
+
+#### 3. Message Discovery
+- Dashboard: Messages tab with unread count badge
+- Booking cards: Quick "Message" button
+- Notifications: New message alerts via bell icon
+- Search: Find messages by content or participant
+
+### Technical Implementation Details
+
+#### API Response Formats
+```typescript
+// Conversation List Response
+interface ConversationListResponse {
+  conversations: {
+    id: string;
+    subject?: string;
+    lastMessage?: {
+      content: string;
+      senderId: string;
+      createdAt: string;
+    };
+    participants: {
+      id: string;
+      name: string;
+      profileImageUrl?: string;
+      userType: UserType;
+    }[];
+    booking?: {
+      id: string;
+      requestedDate: string;
+      status: BookingStatus;
+    };
+    unreadCount: number;
+    lastMessageAt: string;
+  }[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+// Message Thread Response
+interface MessageThreadResponse {
+  conversation: {
+    id: string;
+    subject?: string;
+    participants: User[];
+    booking?: Booking;
+  };
+  messages: {
+    id: string;
+    content: string;
+    senderId: string;
+    sender: {
+      name: string;
+      profileImageUrl?: string;
+    };
+    messageType: MessageType;
+    readBy: string[];
+    createdAt: string;
+  }[];
+  hasMore: boolean;
+  nextCursor?: string;
+}
+```
+
+#### Real-time Updates
+```typescript
+// Extend existing notification polling
+const MessagePolling = {
+  interval: 30000, // 30 seconds, same as notifications
+  
+  endpoints: [
+    '/api/notifications?unread=true',
+    '/api/conversations/unread-count',
+    '/api/messages/new?since={lastCheck}'
+  ],
+  
+  // Optimistic updates for sent messages
+  optimisticSend: (message) => {
+    // Add to UI immediately
+    // Mark with pending status
+    // Update when server confirms
+  }
+};
+```
+
+#### Security & Privacy
+```typescript
+// Message access control
+const canAccessMessage = async (userId: string, messageId: string) => {
+  const message = await prisma.message.findUnique({
+    where: { id: messageId },
+    include: { conversation: true }
+  });
+  
+  return message?.conversation.participantIds.includes(userId) || 
+         isAdmin(userId);
+};
+
+// Conversation access control
+const canAccessConversation = async (userId: string, conversationId: string) => {
+  const conversation = await prisma.conversation.findUnique({
+    where: { id: conversationId }
+  });
+  
+  return conversation?.participantIds.includes(userId) || 
+         isAdmin(userId);
+};
+```
+
+### UI Component Architecture
+
+#### Component Hierarchy
+```
+MessagesDashboard
+├── ConversationList
+│   ├── ConversationSearch
+│   ├── ConversationFilters
+│   └── ConversationItem[]
+├── ConversationThread
+│   ├── ConversationHeader
+│   ├── MessageList
+│   │   └── MessageBubble[]
+│   └── MessageComposer
+│       ├── TextInput
+│       ├── AttachmentButton
+│       └── SendButton
+└── EmptyState
+```
+
+#### Mobile Responsive Breakpoints
+- Mobile: < 640px (single column, full screen thread)
+- Tablet: 640px - 1024px (collapsible sidebar)
+- Desktop: > 1024px (persistent sidebar, 1/3 + 2/3 layout)
+
+### Integration Points
+
+#### 1. Booking System
+- "Message Host/Artist" buttons on booking cards
+- Automatic conversation creation for new bookings
+- Booking status updates create system messages
+
+#### 2. Notification System
+- New message notifications via existing bell icon
+- Mark messages as read when viewed
+- Deep links to specific conversations
+
+#### 3. User Profiles
+- "Send Message" button on public profiles
+- Message history in user dashboard
+- Online/offline status indicators
+
+#### 4. Admin Dashboard
+- View all conversations for support
+- Flag/moderate inappropriate content
+- Export conversation history
+
+### Performance Optimizations
+
+#### 1. Message Pagination
+```typescript
+// Cursor-based pagination for infinite scroll
+const getMessages = async (conversationId: string, cursor?: string) => {
+  const pageSize = 50;
+  const messages = await prisma.message.findMany({
+    where: {
+      conversationId,
+      ...(cursor && { createdAt: { lt: new Date(cursor) } })
+    },
+    orderBy: { createdAt: 'desc' },
+    take: pageSize + 1,
+    include: { sender: true }
+  });
+  
+  const hasMore = messages.length > pageSize;
+  return {
+    messages: messages.slice(0, pageSize),
+    nextCursor: hasMore ? messages[pageSize].createdAt : null
+  };
+};
+```
+
+#### 2. Conversation List Optimization
+- Denormalized lastMessageAt for sorting
+- Cached unread counts
+- Lazy load participant details
+
+#### 3. Real-time Optimization
+- Debounced typing indicators
+- Batched read receipts
+- Connection pooling for database
+
+### Migration Strategy
+
+#### Phase 1: Foundation (Week 1)
+- Create API routes and database queries
+- Build basic UI components
+- Integrate with authentication
+
+#### Phase 2: Enhancement (Week 2)
+- Add real-time updates
+- Implement file attachments
+- Add search and filters
+
+#### Phase 3: Polish (Week 3)
+- Mobile responsive design
+- Performance optimization
+- Admin tools and moderation
 
 ---
 

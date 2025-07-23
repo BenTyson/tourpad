@@ -540,25 +540,6 @@ export default function DashboardPage() {
                       </div>
                     </Link>
 
-                    <Link href="/messages">
-                      <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0">
-                            <div className="relative">
-                              <Mail className="w-5 h-5 text-neutral-600 group-hover:text-primary-600" />
-                              {unreadMessages.length > 0 && (
-                                <div className="absolute -top-2 -right-2 w-4 h-4 bg-primary-500 rounded-full flex items-center justify-center">
-                                  <span className="text-xs font-medium text-white">{unreadMessages.length}</span>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                          <div className="ml-3">
-                            <h3 className="text-sm font-semibold text-neutral-900">Messages</h3>
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
 
                     <Link href="/calendar">
                       <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
@@ -603,6 +584,25 @@ export default function DashboardPage() {
                         </div>
                       </Link>
                     )}
+
+                    {/* Messages - All users */}
+                    <Link href="/dashboard/messages">
+                      <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                        <div className="flex items-center">
+                          <div className="flex-shrink-0 relative">
+                            <Mail className="w-5 h-5 text-neutral-600 group-hover:text-primary-600" />
+                            {unreadMessages.length > 0 && (
+                              <div className="absolute -top-2 -right-2 w-4 h-4 bg-[var(--color-french-blue)] rounded-full flex items-center justify-center">
+                                <span className="text-xs font-medium text-white">{unreadMessages.length}</span>
+                              </div>
+                            )}
+                          </div>
+                          <div className="ml-3">
+                            <h3 className="text-sm font-semibold text-neutral-900">Messages</h3>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
 
                     {/* Artist-specific actions */}
                     {userRole === 'artist' && (
@@ -1079,7 +1079,7 @@ export default function DashboardPage() {
                   <h2 className="text-lg font-semibold text-neutral-900">Recent Messages</h2>
                   <p className="text-sm text-neutral-600 mt-1">Latest conversations</p>
                 </div>
-                <Link href="/messages">
+                <Link href="/dashboard/messages">
                   <Button variant="outline" size="sm">
                     <Mail className="w-4 h-4 mr-2" />
                     View All

@@ -109,6 +109,14 @@ export default function AdminPage() {
       href: '/admin/operations'
     },
     {
+      title: 'Messages',
+      description: 'Monitor platform messages and conversations',
+      icon: ChatBubbleLeftRightIcon,
+      color: 'bg-blue-500',
+      count: 'Monitor',
+      href: '/admin/messages'
+    },
+    {
       title: 'Support Center',
       description: 'Manage support tickets and user communications',
       icon: ChatBubbleLeftRightIcon,
