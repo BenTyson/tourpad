@@ -4,6 +4,9 @@ import { prisma } from '@/lib/prisma';
 
 // GET /api/messages/poll - Poll for new messages and conversation updates
 export async function GET(request: NextRequest) {
+  // COMPLETELY DISABLED - returning 404 to stop excessive polling
+  return NextResponse.json({ error: 'Polling disabled' }, { status: 404 });
+  
   try {
     const session = await auth();
     if (!session?.user?.id) {

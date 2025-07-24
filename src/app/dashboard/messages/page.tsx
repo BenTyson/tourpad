@@ -23,7 +23,7 @@ import { Badge } from '@/components/ui/Badge';
 import { ProfileImage } from '@/components/ui/ProfileImage';
 import { TypingIndicator } from '@/components/ui/TypingIndicator';
 import { OnlineStatusIndicator, ProfileImageWithStatus } from '@/components/ui/OnlineStatusIndicator';
-import { useRealtimeMessaging } from '@/hooks/useRealtimeMessaging';
+// import { useRealtimeMessaging } from '@/hooks/useRealtimeMessaging'; // Temporarily disabled
 
 export default function MessagesPage() {
   const { data: session, status } = useSession();
@@ -144,7 +144,7 @@ export default function MessagesPage() {
                 {isPdf ? (
                   <span className="text-red-600 font-bold text-xs">PDF</span>
                 ) : (
-                  <span className="text-blue-600 font-bold text-xs">FILE</span>
+                  <span className="text-[var(--color-french-blue)] font-bold text-xs">FILE</span>
                 )}
               </div>
               <div className="flex-1 min-w-0">
@@ -170,24 +170,17 @@ export default function MessagesPage() {
     );
   };
 
-  // Real-time messaging hook
-  const {
-    newMessages,
-    updatedConversations,
-    typingUsers,
-    onlineStatus,
-    startTyping,
-    stopTyping,
-    fetchOnlineStatus,
-    clearNewMessages,
-    clearUpdatedConversations,
-    isUserOnline
-  } = useRealtimeMessaging({
-    conversationId: selectedConversation,
-    pollInterval: 300000, // Poll every 5 minutes - disabled for stability testing
-    typingTimeout: 3000,
-    heartbeatInterval: 300000
-  });
+  // Temporarily disabled real-time messaging for stability testing
+  const newMessages: any[] = [];
+  const updatedConversations: any[] = [];
+  const typingUsers: any[] = [];
+  const onlineStatus: any = {};
+  const startTyping = () => {};
+  const stopTyping = () => {};
+  const fetchOnlineStatus = () => {};
+  const clearNewMessages = () => {};
+  const clearUpdatedConversations = () => {};
+  const isUserOnline = () => false;
 
   // Fetch conversations
   const fetchConversations = async () => {
@@ -516,7 +509,7 @@ export default function MessagesPage() {
               placeholder="Search messages..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 bg-[var(--color-mist)] border-0 focus:ring-2 focus:ring-[var(--color-french-blue)]"
+              className="pl-10 bg-[var(--color-mist)] border border-[var(--color-sage)] focus:ring-2 focus:ring-[var(--color-french-blue)] focus:border-transparent rounded-lg"
             />
           </div>
         </div>
@@ -543,8 +536,8 @@ export default function MessagesPage() {
                   // Clear query parameters from URL
                   window.history.replaceState({}, '', '/dashboard/messages');
                 }}
-                className={`w-full p-4 border-b border-neutral-100 hover:bg-neutral-50 transition-colors text-left ${
-                  selectedConversation === conv.id ? 'bg-blue-50 border-l-4 border-l-[var(--color-french-blue)]' : ''
+                className={`w-full p-4 border-b border-[var(--color-sage)]/20 hover:bg-[var(--color-mist)]/50 transition-colors text-left ${
+                  selectedConversation === conv.id ? 'bg-[var(--color-mist)] border-l-4 border-l-[var(--color-french-blue)]' : ''
                 }`}
               >
                 <div className="flex items-start justify-between mb-1">
@@ -642,7 +635,7 @@ export default function MessagesPage() {
             {/* New Conversation Composer */}
             <div className="flex-1 flex flex-col justify-end">
               <div className="p-4">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <div className="bg-[var(--color-mist)] border border-[var(--color-sage)] rounded-lg p-4 mb-4">
                   <h4 className="font-medium text-[var(--color-french-blue)] mb-2">
                     Start a conversation
                   </h4>
@@ -655,17 +648,17 @@ export default function MessagesPage() {
               <div className="p-4 border-t border-neutral-200 bg-white">
                 {/* File attachment preview for new conversation */}
                 {selectedFile && (
-                  <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="mb-3 p-3 bg-[var(--color-mist)] border border-[var(--color-sage)] rounded-lg">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
-                          <Paperclip className="w-4 h-4 text-blue-600" />
+                        <div className="w-8 h-8 bg-[var(--color-sage)]/20 rounded flex items-center justify-center">
+                          <Paperclip className="w-4 h-4 text-[var(--color-french-blue)]" />
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-blue-900">
+                          <p className="text-sm font-medium text-[var(--color-evergreen)]">
                             {selectedFile.name}
                           </p>
-                          <p className="text-xs text-blue-600">
+                          <p className="text-xs text-[var(--color-french-blue)]">
                             {formatFileSize(selectedFile.size)}
                           </p>
                         </div>
@@ -679,7 +672,7 @@ export default function MessagesPage() {
                             fileInputRef.current.value = '';
                           }
                         }}
-                        className="text-blue-600 border-blue-200 hover:bg-blue-100"
+                        className="text-[var(--color-french-blue)] border-[var(--color-sage)] hover:bg-[var(--color-mist)]"
                       >
                         Remove
                       </Button>
@@ -703,17 +696,19 @@ export default function MessagesPage() {
                   >
                     <Paperclip className="w-4 h-4" />
                   </Button>
-                  <Input
+                  <textarea
                     placeholder={selectedFile ? "Add a message (optional)..." : `Write your message to ${newConversationRecipient.name}...`}
                     value={messageText}
                     onChange={(e) => setMessageText(e.target.value)}
                     onKeyPress={(e) => {
-                      if (e.key === 'Enter' && (messageText.trim() || selectedFile) && !sendingMessage && !uploadingFile) {
+                      if (e.key === 'Enter' && !e.shiftKey && (messageText.trim() || selectedFile) && !sendingMessage && !uploadingFile) {
+                        e.preventDefault();
                         startNewConversation(startConversationUserId, messageText);
                       }
                     }}
-                    className="flex-1"
+                    className="flex-1 resize-none h-12 px-3 py-2 border border-[var(--color-sage)] rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-french-blue)] focus:border-transparent disabled:opacity-50"
                     disabled={sendingMessage || uploadingFile}
+                    rows={2}
                   />
                   <Button 
                     size="sm"
@@ -846,17 +841,17 @@ export default function MessagesPage() {
             <div className="p-4 border-t border-neutral-200 bg-white">
               {/* File attachment preview */}
               {selectedFile && (
-                <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="mb-3 p-3 bg-[var(--color-mist)] border border-[var(--color-sage)] rounded-lg">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
-                        <Paperclip className="w-4 h-4 text-blue-600" />
+                      <div className="w-8 h-8 bg-[var(--color-sage)]/20 rounded flex items-center justify-center">
+                        <Paperclip className="w-4 h-4 text-[var(--color-french-blue)]" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-blue-900">
+                        <p className="text-sm font-medium text-[var(--color-evergreen)]">
                           {selectedFile.name}
                         </p>
-                        <p className="text-xs text-blue-600">
+                        <p className="text-xs text-[var(--color-french-blue)]">
                           {formatFileSize(selectedFile.size)}
                         </p>
                       </div>
@@ -870,7 +865,7 @@ export default function MessagesPage() {
                           fileInputRef.current.value = '';
                         }
                       }}
-                      className="text-blue-600 border-blue-200 hover:bg-blue-100"
+                      className="text-[var(--color-french-blue)] border-[var(--color-sage)] hover:bg-[var(--color-mist)]"
                     >
                       Remove
                     </Button>
@@ -894,20 +889,22 @@ export default function MessagesPage() {
                 >
                   <Paperclip className="w-4 h-4" />
                 </Button>
-                <Input
-                  ref={messageInputRef}
+                <textarea
+                  ref={messageInputRef as any}
                   placeholder={selectedFile ? "Add a message (optional)..." : "Type a message..."}
                   value={messageText}
-                  onChange={handleInputChange}
+                  onChange={(e) => handleInputChange(e as any)}
                   onBlur={handleInputBlur}
                   onKeyPress={(e) => {
-                    if (e.key === 'Enter' && (messageText.trim() || selectedFile) && !sendingMessage && !uploadingFile) {
+                    if (e.key === 'Enter' && !e.shiftKey && (messageText.trim() || selectedFile) && !sendingMessage && !uploadingFile) {
+                      e.preventDefault();
                       sendMessage();
                       stopTyping();
                     }
                   }}
-                  className="flex-1"
+                  className="flex-1 resize-none h-12 px-3 py-2 border border-[var(--color-sage)] rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-french-blue)] focus:border-transparent disabled:opacity-50"
                   disabled={sendingMessage || uploadingFile}
+                  rows={2}
                 />
                 <Button 
                   size="sm"

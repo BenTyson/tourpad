@@ -24,7 +24,7 @@ import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { ProfileImage } from '@/components/ui/ProfileImage';
 import { OnlineStatusIndicator, ProfileImageWithStatus } from '@/components/ui/OnlineStatusIndicator';
-import { useRealtimeMessaging } from '@/hooks/useRealtimeMessaging';
+// import { useRealtimeMessaging } from '@/hooks/useRealtimeMessaging'; // Temporarily disabled
 
 export default function AdminMessagesPage() {
   const { data: session, status } = useSession();
@@ -37,16 +37,10 @@ export default function AdminMessagesPage() {
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [filterType, setFilterType] = useState<'all' | 'artist' | 'host' | 'flagged'>('all');
 
-  // Real-time messaging hook for admin monitoring
-  const {
-    newMessages,
-    updatedConversations,
-    onlineStatus
-  } = useRealtimeMessaging({
-    conversationId: selectedConversation,
-    pollInterval: 10000, // Admin polling every 10 seconds
-    enableTyping: false // Admins don't need typing indicators
-  });
+  // Temporarily disabled real-time messaging for stability testing
+  const newMessages: any[] = [];
+  const updatedConversations: any[] = [];
+  const onlineStatus: any = {};
 
   useEffect(() => {
     if (status === 'loading') return;

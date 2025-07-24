@@ -41,6 +41,10 @@ export function useRealtimeMessaging(options: RealtimeMessagingOptions = {}) {
   const heartbeatTimerRef = useRef<NodeJS.Timeout | null>(null);
   const typingIndicatorTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastPollTimeRef = useRef<string | null>(null);
+  
+  // Stable function refs to prevent dependency loops
+  const pollMessagesRef = useRef<() => Promise<void>>();
+  const fetchTypingIndicatorsRef = useRef<() => Promise<void>>();
 
   // Poll for new messages and conversation updates
   const pollMessages = useCallback(async () => {
@@ -76,6 +80,9 @@ export function useRealtimeMessaging(options: RealtimeMessagingOptions = {}) {
       console.error('Error polling messages:', error);
     }
   }, [session?.user?.id, conversationId]);
+
+  // Update function refs to prevent dependency loops
+  pollMessagesRef.current = pollMessages;
 
   // Send typing indicator
   const sendTypingIndicator = useCallback(async (isTyping: boolean) => {
@@ -135,6 +142,9 @@ export function useRealtimeMessaging(options: RealtimeMessagingOptions = {}) {
     }
   }, [session?.user?.id, conversationId]);
 
+  // Update function refs to prevent dependency loops
+  fetchTypingIndicatorsRef.current = fetchTypingIndicators;
+
   // Update online status
   const updateOnlineStatus = useCallback(async (status: 'online' | 'offline' = 'online') => {
     if (!session?.user?.id) return;
@@ -183,29 +193,33 @@ export function useRealtimeMessaging(options: RealtimeMessagingOptions = {}) {
     if (!session?.user?.id) return;
 
     // Initial poll
-    pollMessages();
+    pollMessagesRef.current?.();
 
-    // Set up polling interval
-    pollTimerRef.current = setInterval(pollMessages, pollInterval);
+    // Set up polling interval using stable ref
+    pollTimerRef.current = setInterval(() => {
+      pollMessagesRef.current?.();
+    }, pollInterval);
 
     return () => {
       if (pollTimerRef.current) {
         clearInterval(pollTimerRef.current);
       }
     };
-  }, [session?.user?.id, pollInterval]); // Removed pollMessages to prevent restart loops
+  }, [session?.user?.id, pollInterval]); // Removed pollMessages dependency
 
   // Set up typing indicator polling for current conversation
   useEffect(() => {
     if (!conversationId) return;
 
-    // Fetch typing indicators every 2 seconds when in a conversation
-    const typingInterval = setInterval(fetchTypingIndicators, 2000);
+    // Fetch typing indicators every 2 seconds when in a conversation using stable ref
+    const typingInterval = setInterval(() => {
+      fetchTypingIndicatorsRef.current?.();
+    }, 2000);
 
     return () => {
       clearInterval(typingInterval);
     };
-  }, [conversationId, fetchTypingIndicators]);
+  }, [conversationId]); // Uses stable ref to prevent dependency loops
 
   // Set up heartbeat timer
   useEffect(() => {
