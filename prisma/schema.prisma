@@ -127,36 +127,42 @@ model BandMember {
 }
 
 model Host {
-  id                     String      @id @default(cuid())
-  userId                 String      @unique
+  id                     String              @id @default(cuid())
+  userId                 String              @unique
   venueName              String?
   venueType              VenueType
   city                   String
   state                  String
-  country                String      @default("USA")
+  country                String              @default("USA")
   displayCoordinates     String?
   actualAddress          String?
+  // Enhanced location data for map functionality
+  latitude               Float?
+  longitude              Float?
+  privacyLevel           LocationPrivacy     @default(NEIGHBORHOOD)
+  displayLat             Float?              // Obfuscated coordinates for public display
+  displayLng             Float?
   indoorCapacity         Int?
   outdoorCapacity        Int?
   preferredGenres        String[]
   hostingExperience      Int?
   typicalShowLength      Int?
   houseRules             String?
-  offersLodging          Boolean     @default(false)
+  offersLodging          Boolean             @default(false)
   lodgingDetails         Json?
   suggestedDoorFee       Int?
   applicationSubmittedAt DateTime?
   approvedAt             DateTime?
   approvedByUserId       String?
-  createdAt              DateTime    @default(now())
-  updatedAt              DateTime    @updatedAt
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
   venueDescription       String?
   venuePhotoUrl          String?
   amenities              String[]
   soundSystem            Json?
   bookings               Booking[]
   media                  HostMedia[]
-  user                   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                   User                @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("hosts")
 }
@@ -541,4 +547,10 @@ enum AdminActionType {
   REJECT_USER
   SUSPEND_USER
   APPROVE_BOOKING
+}
+
+enum LocationPrivacy {
+  NEIGHBORHOOD  // ±1 mile radius
+  STREET       // ±0.2 mile radius
+  EXACT        // Only after booking confirmed
 }

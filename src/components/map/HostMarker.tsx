@@ -1,10 +1,11 @@
 'use client';
 import { Marker } from 'react-leaflet';
 import { Icon, LatLngTuple } from 'leaflet';
-import { mockHosts } from '@/data/mockData';
 
 // Create custom TourPad marker icons
-const createCustomIcon = (venueType: string, rating: number) => {
+const createCustomIcon = (venueType: string, hostingExperience: number) => {
+  // Convert hosting experience to a rating-like value
+  const rating = Math.min(5, Math.max(1, hostingExperience * 0.5 + 3.5));
   // Color coding based on venue type
   const getMarkerColor = (type: string) => {
     switch (type) {
@@ -37,21 +38,55 @@ const createCustomIcon = (venueType: string, rating: number) => {
   });
 };
 
+interface MapHost {
+  id: string;
+  userId: string;
+  name: string;
+  email: string;
+  profileImageUrl?: string;
+  venueName?: string;
+  venueType: string;
+  city: string;
+  state: string;
+  country: string;
+  description: string;
+  capacity: number;
+  indoorCapacity?: number;
+  outdoorCapacity?: number;
+  preferredGenres: string[];
+  suggestedDoorFee?: number;
+  coordinates: [number, number];
+  actualCoordinates: [number, number];
+  amenities: {
+    soundSystem: boolean;
+    parking: boolean;
+    accessible: boolean;
+    kidFriendly: boolean;
+    outdoorSpace: boolean;
+  };
+  media: Array<{ id: string; url: string; type: string }>;
+  hostingExperience: number;
+  offersLodging: boolean;
+  lodgingDetails?: any;
+  houseRules?: string;
+  mapLocation: {
+    searchKeywords: string[];
+  };
+}
+
 interface HostMarkerProps {
-  host: typeof mockHosts[0];
-  onClick?: (host: typeof mockHosts[0]) => void;
+  host: MapHost;
+  onClick?: (host: MapHost) => void;
   children?: React.ReactNode;
 }
 
 export default function HostMarker({ host, onClick, children }: HostMarkerProps) {
-  if (!host.mapLocation) return null;
-
   const position: LatLngTuple = [
-    host.mapLocation.displayLat,
-    host.mapLocation.displayLng
+    host.coordinates[0],
+    host.coordinates[1]
   ];
 
-  const customIcon = createCustomIcon(host.venueType, host.rating);
+  const customIcon = createCustomIcon(host.venueType, host.hostingExperience);
 
   return (
     <Marker 

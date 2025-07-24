@@ -3,7 +3,6 @@ import { useEffect, useState, useRef } from 'react';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import { LatLngTuple } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { mockHosts } from '@/data/mockData';
 import HostMarker from './HostMarker';
 import HostPopup from './HostPopup';
 
@@ -21,12 +20,48 @@ function MapUpdater({ center, zoom }: { center: LatLngTuple; zoom: number }) {
   return null;
 }
 
+interface MapHost {
+  id: string;
+  userId: string;
+  name: string;
+  email: string;
+  profileImageUrl?: string;
+  venueName?: string;
+  venueType: string;
+  city: string;
+  state: string;
+  country: string;
+  description: string;
+  capacity: number;
+  indoorCapacity?: number;
+  outdoorCapacity?: number;
+  preferredGenres: string[];
+  suggestedDoorFee?: number;
+  coordinates: [number, number];
+  actualCoordinates: [number, number];
+  amenities: {
+    soundSystem: boolean;
+    parking: boolean;
+    accessible: boolean;
+    kidFriendly: boolean;
+    outdoorSpace: boolean;
+  };
+  media: Array<{ id: string; url: string; type: string }>;
+  hostingExperience: number;
+  offersLodging: boolean;
+  lodgingDetails?: any;
+  houseRules?: string;
+  mapLocation: {
+    searchKeywords: string[];
+  };
+}
+
 interface MapContainerProps {
   className?: string;
   initialCenter?: LatLngTuple;
   initialZoom?: number;
   showFilters?: boolean;
-  hosts?: typeof mockHosts;
+  hosts?: MapHost[];
 }
 
 export default function TourPadMapContainer({ 
@@ -34,7 +69,7 @@ export default function TourPadMapContainer({
   initialCenter = [39.7392, -104.9903], // Denver, Colorado
   initialZoom = 10,
   showFilters = true,
-  hosts = mockHosts
+  hosts = []
 }: MapContainerProps) {
   const [isClient, setIsClient] = useState(false);
   const [mapLoaded, setMapLoaded] = useState(false);
@@ -50,8 +85,8 @@ export default function TourPadMapContainer({
     return () => clearTimeout(timer);
   }, []);
 
-  // Filter hosts that have map location data
-  const hostsWithLocation = hosts.filter(host => host.mapLocation);
+  // All hosts from API already have coordinates - ensure it's an array
+  const hostsWithLocation = Array.isArray(hosts) ? hosts : [];
 
   if (!isClient || !mapLoaded) {
     return (

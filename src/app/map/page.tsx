@@ -15,7 +15,6 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import MapFilters from '@/components/map/MapFilters';
 import HostListCard from '@/components/map/HostListCard';
-import { mockHosts } from '@/data/mockData';
 
 // Dynamic import for MapContainer to avoid SSR issues
 const TourPadMapContainer = dynamic(
@@ -29,20 +28,24 @@ export default function MapPage() {
   const { data: session, status } = useSession();
   const [viewMode, setViewMode] = useState<ViewMode>('map');
   const [showFilters, setShowFilters] = useState(true);
-  const [filteredHosts, setFilteredHosts] = useState(mockHosts.filter(host => host.mapLocation));
+  const [hosts, setHosts] = useState<MapHost[]>([]);
+  const [filteredHosts, setFilteredHosts] = useState<MapHost[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchLocation, setSearchLocation] = useState('');
   const [searchSuggestions, setSearchSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [mapCenter, setMapCenter] = useState<[number, number]>([39.7392, -104.9903]);
   const [mapZoom, setMapZoom] = useState(10);
   const [sortBy, setSortBy] = useState<'rating' | 'alphabetical' | 'price' | 'reviews'>('rating');
+  const [currentFilters, setCurrentFilters] = useState<any>({});
 
   // Create location suggestions from available data
   const generateSuggestions = (query: string): string[] => {
     if (!query.trim()) return [];
     
     const allLocations = new Set<string>();
-    const hostsWithLocation = mockHosts.filter(host => host.mapLocation);
+    const hostsWithLocation = hosts;
     
     hostsWithLocation.forEach(host => {
       // Add cities and states
@@ -76,31 +79,10 @@ export default function MapPage() {
     setSearchLocation(searchTerm);
     setShowSuggestions(false);
     
-    // Find matching hosts and fly to location
-    const matchingHosts = mockHosts.filter(host => {
-      if (!host.mapLocation) return false;
-      
-      const searchLower = searchTerm.toLowerCase();
-      return (
-        host.city.toLowerCase().includes(searchLower) ||
-        host.state.toLowerCase().includes(searchLower) ||
-        host.mapLocation.searchKeywords.some(keyword => 
-          keyword.toLowerCase().includes(searchLower)
-        )
-      );
-    });
-
-    if (matchingHosts.length > 0) {
-      // Calculate center of matching hosts
-      const lats = matchingHosts.map(host => host.mapLocation!.displayLat);
-      const lngs = matchingHosts.map(host => host.mapLocation!.displayLng);
-      
-      const centerLat = lats.reduce((sum, lat) => sum + lat, 0) / lats.length;
-      const centerLng = lngs.reduce((sum, lng) => sum + lng, 0) / lngs.length;
-      
-      setMapCenter([centerLat, centerLng]);
-      setMapZoom(matchingHosts.length === 1 ? 12 : 10);
-    }
+    // Search will be handled by the API call in handleFiltersChange
+    const newFilters = { ...currentFilters, searchLocation: searchTerm };
+    setCurrentFilters(newFilters);
+    fetchHosts(newFilters);
   };
 
   // Sort hosts for list view
@@ -264,6 +246,9 @@ export default function MapPage() {
                 setShowSuggestions(false);
                 setMapCenter([39.7392, -104.9903]);
                 setMapZoom(10);
+                const clearedFilters = { ...currentFilters, searchLocation: '' };
+                setCurrentFilters(clearedFilters);
+                fetchHosts(clearedFilters);
               }}
               variant="outline"
               className="px-4 py-3"
@@ -294,12 +279,23 @@ export default function MapPage() {
           <div className={`${showFilters ? 'lg:col-span-3' : 'lg:col-span-4'}`}>
             {viewMode === 'map' ? (
               <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden h-[600px]">
-                <TourPadMapContainer 
-                  className="w-full h-full"
-                  initialCenter={mapCenter}
-                  initialZoom={mapZoom}
-                  hosts={filteredHosts}
-                />
+                {error ? (
+                  <div className="flex items-center justify-center h-full">
+                    <div className="text-center">
+                      <p className="text-red-600 mb-2">{error}</p>
+                      <Button onClick={() => fetchHosts(currentFilters)} size="sm">
+                        Retry
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <TourPadMapContainer 
+                    className="w-full h-full"
+                    initialCenter={mapCenter}
+                    initialZoom={mapZoom}
+                    hosts={filteredHosts}
+                  />
+                )}
               </div>
             ) : (
               <div className="bg-white rounded-xl shadow-sm border border-neutral-200 h-full flex flex-col">

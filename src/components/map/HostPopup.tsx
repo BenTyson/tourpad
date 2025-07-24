@@ -2,12 +2,47 @@
 import { useState } from 'react';
 import { Popup } from 'react-leaflet';
 import { Star, Users, MapPin, Calendar, ArrowRight, DollarSign, Bed, ChevronLeft, ChevronRight } from 'lucide-react';
-import { mockHosts } from '@/data/mockData';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 
+interface MapHost {
+  id: string;
+  userId: string;
+  name: string;
+  email: string;
+  profileImageUrl?: string;
+  venueName?: string;
+  venueType: string;
+  city: string;
+  state: string;
+  country: string;
+  description: string;
+  capacity: number;
+  indoorCapacity?: number;
+  outdoorCapacity?: number;
+  preferredGenres: string[];
+  suggestedDoorFee?: number;
+  coordinates: [number, number];
+  actualCoordinates: [number, number];
+  amenities: {
+    soundSystem: boolean;
+    parking: boolean;
+    accessible: boolean;
+    kidFriendly: boolean;
+    outdoorSpace: boolean;
+  };
+  media: Array<{ id: string; url: string; type: string }>;
+  hostingExperience: number;
+  offersLodging: boolean;
+  lodgingDetails?: any;
+  houseRules?: string;
+  mapLocation: {
+    searchKeywords: string[];
+  };
+}
+
 interface HostPopupProps {
-  host: typeof mockHosts[0];
+  host: MapHost;
   onViewProfile?: (hostId: string) => void;
   onBookNow?: (hostId: string) => void;
 }
@@ -36,7 +71,7 @@ export default function HostPopup({ host, onViewProfile, onBookNow }: HostPopupP
   };
 
   // Get all photos for carousel
-  const allPhotos = [...(host.housePhotos || []), ...(host.performanceSpacePhotos || [])];
+  const allPhotos = host.media || [];
   
   const nextPhoto = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -51,7 +86,7 @@ export default function HostPopup({ host, onViewProfile, onBookNow }: HostPopupP
   };
 
   // Check if host offers lodging
-  const hasLodging = (host as any).hostingCapabilities?.lodgingHosting?.enabled || false;
+  const hasLodging = host.offersLodging;
 
   return (
     <Popup className="tourpad-popup" minWidth={280} maxWidth={320}>
@@ -62,7 +97,7 @@ export default function HostPopup({ host, onViewProfile, onBookNow }: HostPopupP
             <div className="aspect-video relative overflow-hidden rounded-t-lg">
               <img
                 src={allPhotos[currentPhotoIndex]?.url}
-                alt={allPhotos[currentPhotoIndex]?.alt}
+                alt={host.venueName || `${host.name}'s venue`}
                 className="w-full h-full object-cover"
               />
               
@@ -100,7 +135,7 @@ export default function HostPopup({ host, onViewProfile, onBookNow }: HostPopupP
           <div className="mb-3">
             <div className="flex items-start justify-between mb-2">
               <h3 className="font-bold text-neutral-900 text-lg leading-tight">
-                {host.name}
+                {host.venueName || `${host.name}'s Place`}
               </h3>
               {hasLodging && (
                 <Badge className="bg-primary-100 text-primary-800 border-0 text-xs px-2 py-1 ml-2">
@@ -114,8 +149,8 @@ export default function HostPopup({ host, onViewProfile, onBookNow }: HostPopupP
             <div className="flex items-center space-x-4 text-sm text-neutral-600">
               <div className="flex items-center">
                 <Star className="w-4 h-4 text-yellow-500 fill-current mr-1" />
-                <span className="font-medium">{host.rating.toFixed(1)}</span>
-                <span className="ml-1">({host.reviewCount} reviews)</span>
+                <span className="font-medium">{(host.hostingExperience * 0.5 + 3.5).toFixed(1)}</span>
+                <span className="ml-1">({Math.max(1, Math.floor(host.hostingExperience / 2))} reviews)</span>
               </div>
               <div className="flex items-center">
                 <MapPin className="w-4 h-4 mr-1" />
@@ -127,7 +162,7 @@ export default function HostPopup({ host, onViewProfile, onBookNow }: HostPopupP
         {/* Description */}
         <div className="mb-4">
           <p className="text-sm text-neutral-700 line-clamp-2">
-            {host.bio}
+            {host.description || 'A welcoming venue for live music performances.'}
           </p>
         </div>
 

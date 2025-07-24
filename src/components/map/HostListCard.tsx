@@ -2,10 +2,45 @@
 import { Star, MapPin, Users, Bed } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
-import { mockHosts } from '@/data/mockData';
+
+interface MapHost {
+  id: string;
+  userId: string;
+  name: string;
+  email: string;
+  profileImageUrl?: string;
+  venueName?: string;
+  venueType: string;
+  city: string;
+  state: string;
+  country: string;
+  description: string;
+  capacity: number;
+  indoorCapacity?: number;
+  outdoorCapacity?: number;
+  preferredGenres: string[];
+  suggestedDoorFee?: number;
+  coordinates: [number, number];
+  actualCoordinates: [number, number];
+  amenities: {
+    soundSystem: boolean;
+    parking: boolean;
+    accessible: boolean;
+    kidFriendly: boolean;
+    outdoorSpace: boolean;
+  };
+  media: Array<{ id: string; url: string; type: string }>;
+  hostingExperience: number;
+  offersLodging: boolean;
+  lodgingDetails?: any;
+  houseRules?: string;
+  mapLocation: {
+    searchKeywords: string[];
+  };
+}
 
 interface HostListCardProps {
-  host: typeof mockHosts[0];
+  host: MapHost;
   onViewProfile?: (hostId: string) => void;
 }
 
@@ -26,10 +61,10 @@ export default function HostListCard({ host, onViewProfile }: HostListCardProps)
   };
 
   // Check if host offers lodging
-  const hasLodging = (host as any).hostingCapabilities?.lodgingHosting?.enabled || false;
+  const hasLodging = host.offersLodging;
 
   // Get primary photo
-  const primaryPhoto = host.housePhotos?.[0] || host.performanceSpacePhotos?.[0];
+  const primaryPhoto = host.media?.[0];
 
   return (
     <div className="bg-white border border-neutral-200 rounded-xl p-4 hover:shadow-md transition-shadow">
@@ -40,7 +75,7 @@ export default function HostListCard({ host, onViewProfile }: HostListCardProps)
             {primaryPhoto ? (
               <img
                 src={primaryPhoto.url}
-                alt={primaryPhoto.alt}
+                alt={host.venueName || `${host.name}'s venue`}
                 className="w-full h-full object-cover"
               />
             ) : (
@@ -57,7 +92,7 @@ export default function HostListCard({ host, onViewProfile }: HostListCardProps)
           <div className="flex items-start justify-between mb-2">
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-neutral-900 text-lg truncate">
-                {host.name}
+                {host.venueName || `${host.name}'s Place`}
               </h3>
               <div className="flex items-center gap-3 text-sm text-neutral-600 mt-1">
                 <div className="flex items-center">
@@ -66,8 +101,8 @@ export default function HostListCard({ host, onViewProfile }: HostListCardProps)
                 </div>
                 <div className="flex items-center">
                   <Star className="w-4 h-4 text-yellow-500 fill-current mr-1" />
-                  <span className="font-medium">{host.rating.toFixed(1)}</span>
-                  <span className="ml-1">({host.reviewCount})</span>
+                  <span className="font-medium">{(host.hostingExperience * 0.5 + 3.5).toFixed(1)}</span>
+                  <span className="ml-1">({Math.max(1, Math.floor(host.hostingExperience / 2))})</span>
                 </div>
               </div>
             </div>
@@ -88,7 +123,7 @@ export default function HostListCard({ host, onViewProfile }: HostListCardProps)
 
           {/* Description */}
           <p className="text-sm text-neutral-700 line-clamp-2 mb-3">
-            {host.bio}
+            {host.description || 'A welcoming venue for live music performances.'}
           </p>
 
           {/* Details */}
@@ -96,11 +131,11 @@ export default function HostListCard({ host, onViewProfile }: HostListCardProps)
             <div className="flex items-center gap-4 text-sm text-neutral-600">
               <div className="flex items-center">
                 <Users className="w-4 h-4 mr-1" />
-                <span>Up to {host.showSpecs.indoorAttendanceMax} guests</span>
+                <span>Up to {host.capacity} guests</span>
               </div>
-              {host.mapLocation?.priceRange && (
+              {host.suggestedDoorFee && (
                 <div className="text-neutral-700 font-medium">
-                  {host.mapLocation.priceRange}
+                  ${host.suggestedDoorFee} suggested
                 </div>
               )}
             </div>

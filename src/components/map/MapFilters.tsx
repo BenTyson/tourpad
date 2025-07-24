@@ -2,10 +2,9 @@
 import { useState, useEffect } from 'react';
 import { Search, X, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
-import { mockHosts } from '@/data/mockData';
 
 interface MapFiltersProps {
-  onFiltersChange: (filteredHosts: typeof mockHosts) => void;
+  onFiltersChange: (filters: FilterState) => void;
   searchLocation?: string;
   className?: string;
 }
@@ -31,75 +30,60 @@ export default function MapFilters({ onFiltersChange, searchLocation = '', class
   useEffect(() => {
     const updatedFilters = { ...filters, searchLocation };
     setFilters(updatedFilters);
-    applyFilters(updatedFilters);
-  }, [searchLocation]);
+    onFiltersChange(updatedFilters);
+  }, [searchLocation, onFiltersChange]);
 
   // Apply initial filters on mount
   useEffect(() => {
-    applyFilters(filters);
+    onFiltersChange(filters);
   }, []);
 
-  // Apply filters to hosts
-  const applyFilters = (newFilters: FilterState) => {
-    let filtered = mockHosts.filter(host => host.mapLocation);
-
+  // Transform filters into API-compatible format
+  const transformFilters = (newFilters: FilterState) => {
+    const apiFilters: any = {};
+    
     // Use external search location if provided, otherwise use internal filter
     const searchTerm = searchLocation.trim() || newFilters.searchLocation.trim();
     if (searchTerm) {
-      const searchLower = searchTerm.toLowerCase();
-      filtered = filtered.filter(host => {
-        const cityMatch = host.city.toLowerCase().includes(searchLower);
-        const stateMatch = host.state.toLowerCase().includes(searchLower);
-        const keywordMatch = host.mapLocation?.searchKeywords.some(keyword => 
-          keyword.toLowerCase().includes(searchLower)
-        );
-        return cityMatch || stateMatch || keywordMatch;
-      });
+      apiFilters.searchLocation = searchTerm;
     }
-
+    
     // Venue type filter
     if (newFilters.venueTypes.length > 0) {
-      filtered = filtered.filter(host => 
-        newFilters.venueTypes.includes(host.venueType)
-      );
+      apiFilters.venueTypes = newFilters.venueTypes;
     }
-
-    // Capacity filter
+    
+    // Capacity filter - convert to min/max values
     if (newFilters.capacityRange) {
-      filtered = filtered.filter(host => {
-        const capacity = host.showSpecs.indoorAttendanceMax;
-        switch (newFilters.capacityRange) {
-          case 'small': return capacity <= 25;
-          case 'medium': return capacity > 25 && capacity <= 50;
-          case 'large': return capacity > 50;
-          default: return true;
-        }
-      });
+      switch (newFilters.capacityRange) {
+        case 'small':
+          apiFilters.capacityMin = 0;
+          apiFilters.capacityMax = 25;
+          break;
+        case 'medium':
+          apiFilters.capacityMin = 26;
+          apiFilters.capacityMax = 50;
+          break;
+        case 'large':
+          apiFilters.capacityMin = 51;
+          apiFilters.capacityMax = 999;
+          break;
+      }
     }
-
+    
     // Amenities filter
     if (newFilters.amenities.length > 0) {
-      filtered = filtered.filter(host => {
-        return newFilters.amenities.every(amenity => {
-          switch (amenity) {
-            case 'sound_system': return host.amenities.soundSystem;
-            case 'parking': return host.amenities.parking;
-            case 'accessible': return host.amenities.accessible;
-            case 'kid_friendly': return host.amenities.kidFriendly;
-            case 'outdoor_space': return host.amenities.outdoorSpace;
-            default: return true;
-          }
-        });
-      });
+      apiFilters.amenities = newFilters.amenities;
     }
-
-    onFiltersChange(filtered);
+    
+    return apiFilters;
   };
 
   const updateFilters = (newFilters: Partial<FilterState>) => {
     const updatedFilters = { ...filters, ...newFilters };
     setFilters(updatedFilters);
-    applyFilters(updatedFilters);
+    const apiFilters = transformFilters(updatedFilters);
+    onFiltersChange(apiFilters);
   };
 
   const clearAllFilters = () => {
@@ -111,7 +95,8 @@ export default function MapFilters({ onFiltersChange, searchLocation = '', class
       amenities: []
     };
     setFilters(emptyFilters);
-    applyFilters(emptyFilters);
+    const apiFilters = transformFilters(emptyFilters);
+    onFiltersChange(apiFilters);
   };
 
   const handleVenueTypeChange = (venueType: string, checked: boolean) => {
