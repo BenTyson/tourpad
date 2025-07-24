@@ -29,9 +29,10 @@ import {
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
-import { mockBookings, mockMessages, mockNotifications, mockArtists, mockHosts } from '@/data/mockData';
+import { mockMessages, mockNotifications, mockArtists, mockHosts } from '@/data/mockData';
 import { testConcerts } from '@/data/realTestData';
 import UpcomingShowsList from '@/components/shows/UpcomingShowsList';
+import BookingList from '@/components/bookings/BookingList';
 import { useRouter } from 'next/navigation';
 import { PastShowsSection } from '@/components/reviews/PastShowsSection';
 import { PrivateReviewsSection } from '@/components/reviews/PrivateReviewsSection';
@@ -121,7 +122,7 @@ export default function DashboardPage() {
     const fetchSubscriptionData = async () => {
       if (!session?.user || !currentUser) return;
       
-      const userRole = currentUser.type || 'fan';
+      const userRole = currentUser.userType || currentUser.type || 'fan';
       if (userRole !== 'artist' && userRole !== 'fan') return;
 
       setSubscriptionLoading(true);
@@ -169,7 +170,7 @@ export default function DashboardPage() {
 
   // Get user info from current user data (fresh from database) if available, otherwise fall back to session
   const userData = currentUser || session.user;
-  const userRole = (userData.type || 'fan') as 'host' | 'artist' | 'admin' | 'fan';
+  const userRole = (userData.userType || userData.type || 'fan') as 'host' | 'artist' | 'admin' | 'fan';
   const userStatus = userData.status || 'pending';
   const selectedUserId = userData.id;
 
@@ -316,14 +317,7 @@ export default function DashboardPage() {
                        (userRole === 'fan' && userData.fan?.subscriptionStatus === 'ACTIVE');
   const needsPayment = userRole === 'artist' && userStatus === 'approved' && userData.artist?.approvedAt && !userData.fan?.subscriptionStatus;
 
-  // Filter data based on user role
-  const userBookings = userRole === 'admin' 
-    ? mockBookings || [] // Admin sees all bookings
-    : userRole === 'fan'
-    ? [] // Fans don't have bookings, they have concert reservations
-    : (mockBookings || []).filter(booking => 
-        userRole === 'host' ? booking.hostId === selectedUserId : booking.artistId === selectedUserId
-      );
+  // Bookings are now handled by BookingList component which fetches real data
 
   // Fan-specific data
   const fanConcerts = userRole === 'fan' 
@@ -351,21 +345,7 @@ export default function DashboardPage() {
 
   const upcomingBookings = userRole === 'fan'
     ? fanUpcomingConcerts.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-    : userBookings
-        .filter(booking => {
-          const eventDate = new Date(booking.eventDate);
-          const now = new Date();
-          const isUpcoming = eventDate > now;
-          const isApproved = booking.status === 'approved';
-          return isUpcoming && isApproved;
-        })
-        .sort((a, b) => new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime());
-
-  const pendingActions = userBookings.filter(booking => 
-    // Filter out completed bookings and show only actionable items
-    booking.status !== 'approved' &&
-    (userRole === 'host' ? booking.status === 'requested' : booking.status === 'pending')
-  );
+    : []; // Real bookings now handled by BookingList component
 
   const unreadMessages = userMessages.filter(msg => !msg.read && msg.recipientId === selectedUserId);
   const unreadNotifications = userNotifications.filter(notif => !notif.read);
@@ -457,18 +437,13 @@ export default function DashboardPage() {
         )}
 
         {/* Alert Bar - Action Items */}
-        {hasFullAccess && (pendingActions.length > 0 || unreadMessages.length > 0) && (
+        {hasFullAccess && (unreadMessages.length > 0) && (
           <div className="bg-primary-50 border border-primary-200 rounded-lg p-4 mb-6">
             <div className="flex items-center">
               <AlertTriangle className="w-5 h-5 text-primary-600 mr-3" />
               <div className="flex-1">
                 <h3 className="font-medium text-primary-900">You have items that need attention</h3>
                 <div className="text-sm text-primary-800 mt-1">
-                  {pendingActions.length > 0 && (
-                    <span className="mr-4">
-                      {pendingActions.length} booking {pendingActions.length === 1 ? 'request' : 'requests'} pending
-                    </span>
-                  )}
                   {unreadMessages.length > 0 && (
                     <span>
                       {unreadMessages.length} unread {unreadMessages.length === 1 ? 'message' : 'messages'}
@@ -476,7 +451,7 @@ export default function DashboardPage() {
                   )}
                 </div>
               </div>
-              <Link href={pendingActions.length > 0 ? `/bookings/${pendingActions[0].id}` : '/dashboard'}>
+              <Link href='/dashboard/messages'>
   <Button size="sm">Review</Button>
 </Link>
             </div>
@@ -728,7 +703,7 @@ export default function DashboardPage() {
                   </div>
                   <div className="ml-4">
                     <div className="text-2xl font-bold text-neutral-900">
-                      {userRole === 'fan' ? fanConcerts.length : pendingActions.length}
+                      {userRole === 'fan' ? fanConcerts.length : 'TBD'}
                     </div>
                     <div className="text-sm text-neutral-600">
                       {userRole === 'fan' ? 'Available Concerts' : 
@@ -920,100 +895,101 @@ export default function DashboardPage() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Upcoming Bookings */}
-            <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
-              <div className="px-6 py-4 border-b border-neutral-200 flex items-center justify-between">
-                <div>
-                  <h2 className="text-xl font-semibold text-neutral-900">
-                    {userRole === 'fan' ? 'Your Concert Reservations' :
-                     userRole === 'host' ? 'Upcoming Shows at Your Venue' : 'Your Upcoming Performances'}
-                  </h2>
-                  <p className="text-sm text-neutral-600 mt-1">
-                    {userRole === 'fan' ? 'Concerts you\'ve reserved' :
-                     userRole === 'host' ? 'Artists performing at your venue' : 'Your confirmed performances'}
-                  </p>
+            {/* Bookings */}
+            {(userRole === 'artist' || userRole === 'host') && (
+              <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
+                <div className="px-6 py-4 border-b border-neutral-200 flex items-center justify-between">
+                  <div>
+                    <h2 className="text-xl font-semibold text-neutral-900">
+                      {userRole === 'host' ? 'Booking Requests & Shows' : 'My Bookings & Performances'}
+                    </h2>
+                    <p className="text-sm text-neutral-600 mt-1">
+                      {userRole === 'host' ? 'Manage booking requests and upcoming shows at your venue' : 'Track your booking requests and confirmed performances'}
+                    </p>
+                  </div>
+                  <Link href="/calendar">
+                    <Button variant="outline" size="sm" className="flex items-center">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      View Calendar
+                    </Button>
+                  </Link>
                 </div>
-                <Link href="/calendar">
-                  <Button variant="outline" size="sm" className="flex items-center">
-                    <Calendar className="w-4 h-4 mr-2" />
-                    View Calendar
-                  </Button>
-                </Link>
+                <div className="p-6">
+                  <BookingList viewType={userRole} />
+                </div>
               </div>
-              <div className="p-6">
-                {(userRole === 'artist' || userRole === 'host') ? (
-                  <UpcomingShowsList viewType={userRole as 'artist' | 'host'} />
-                ) : upcomingBookings.length > 0 ? (
-                  <div className="space-y-4">
-                    {upcomingBookings.slice(0, 3).map((booking) => (
-                      <div key={booking.id} className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors">
-                        <div className="flex items-center space-x-4">
-                          <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
-                            <Calendar className="w-6 h-6 text-primary-600" />
-                          </div>
-                          <div>
-                            <h3 className="font-medium text-neutral-900">
-                              {userRole === 'fan' ? ('title' in booking ? booking.title : 'Concert') :
-                               userRole === 'host' ? (booking as any).artist?.name || 'TBD' : (booking as any).host?.name || 'TBD'}
-                            </h3>
-                            <div className="flex items-center text-sm text-neutral-600 space-x-4">
-                              <span>{userRole === 'fan' ? 
-                                ('date' in booking && 'startTime' in booking ? formatDate(new Date(booking.date + 'T' + booking.startTime)) : 'TBD') : 
-                                ('eventDate' in booking ? formatDate(booking.eventDate) : formatDate(new Date()))}</span>
-                              <div className="flex items-center">
-                                <Users className="w-4 h-4 mr-1" />
-                                {userRole === 'fan' ? 
-                                  ('capacity' in booking ? booking.capacity : 'TBD') : 
-                                  ('guestCount' in booking ? booking.guestCount : 'TBD')} {userRole === 'fan' ? 'capacity' : 'guests'}
-                              </div>
-                              {userRole === 'artist' && (
+            )}
+
+            {/* Fan Concert Reservations */}
+            {userRole === 'fan' && (
+              <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
+                <div className="px-6 py-4 border-b border-neutral-200 flex items-center justify-between">
+                  <div>
+                    <h2 className="text-xl font-semibold text-neutral-900">Your Concert Reservations</h2>
+                    <p className="text-sm text-neutral-600 mt-1">Concerts you've reserved</p>
+                  </div>
+                  <Link href="/calendar">
+                    <Button variant="outline" size="sm" className="flex items-center">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      View Calendar
+                    </Button>
+                  </Link>
+                </div>
+                <div className="p-6">
+                  {upcomingBookings.length > 0 ? (
+                    <div className="space-y-4">
+                      {upcomingBookings.slice(0, 3).map((booking) => (
+                        <div key={booking.id} className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors">
+                          <div className="flex items-center space-x-4">
+                            <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
+                              <Calendar className="w-6 h-6 text-primary-600" />
+                            </div>
+                            <div>
+                              <h3 className="font-medium text-neutral-900">
+                                {'title' in booking ? booking.title : 'Concert'}
+                              </h3>
+                              <div className="flex items-center text-sm text-neutral-600 space-x-4">
+                                <span>{
+                                  'date' in booking && 'startTime' in booking ? formatDate(new Date(booking.date + 'T' + booking.startTime)) : 'TBD'
+                                }</span>
                                 <div className="flex items-center">
-                                  <MapPin className="w-4 h-4 mr-1" />
-                                  {(booking as any).host?.city || 'Unknown'}, {(booking as any).host?.state || 'Unknown'}
+                                  <Users className="w-4 h-4 mr-1" />
+                                  {'capacity' in booking ? booking.capacity : 'TBD'} capacity
                                 </div>
-                              )}
+                              </div>
                             </div>
                           </div>
+                          <div className="flex items-center space-x-3">
+                            <Badge variant="success" className="bg-primary-100 text-primary-700">
+                              Reserved
+                            </Badge>
+                            <Link href={`/concerts/${booking.id}`}>
+                              <Button variant="outline" size="sm">
+                                Details
+                              </Button>
+                            </Link>
+                          </div>
                         </div>
-                        <div className="flex items-center space-x-3">
-                          <Badge variant={getStatusColor(userRole === 'fan' ? 'success' : booking.status) as any} className="bg-primary-100 text-primary-700">
-                            {userRole === 'fan' ? 'Reserved' : booking.status}
-                          </Badge>
-                          <Link href={userRole === 'fan' ? `/concerts/${booking.id}` : `/bookings/${booking.id}`}>
-                            <Button variant="outline" size="sm">
-                              Details
-                            </Button>
-                          </Link>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-12">
-                    <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Calendar className="w-8 h-8 text-neutral-400" />
+                      ))}
                     </div>
-                    <h3 className="text-lg font-medium text-neutral-900 mb-2">
-                      {userRole === 'fan' ? 'No upcoming concerts' : 'No upcoming shows'}
-                    </h3>
-                    <p className="text-neutral-600 mb-6">
-                      {userRole === 'fan' 
-                        ? 'Discover and book your first house concert experience'
-                        : userRole === 'host' 
-                        ? 'Start hosting by browsing artists looking for venues'
-                        : 'Find your next performance venue'
-                      }
-                    </p>
-                    <Link href={userRole === 'fan' ? '/artists' : userRole === 'host' ? '/artists' : '/hosts'}>
-                      <Button className="bg-primary-600 text-white hover:bg-primary-700">
-                        <Plus className="w-4 h-4 mr-2" />
-                        {userRole === 'fan' ? 'Browse Concerts' : userRole === 'host' ? 'Browse Artists' : 'Find Venues'}
-                      </Button>
-                    </Link>
-                  </div>
-                )}
+                  ) : (
+                    <div className="text-center py-12">
+                      <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Calendar className="w-8 h-8 text-neutral-400" />
+                      </div>
+                      <h3 className="text-lg font-medium text-neutral-900 mb-2">No upcoming concerts</h3>
+                      <p className="text-neutral-600 mb-6">Discover and book your first house concert experience</p>
+                      <Link href='/artists'>
+                        <Button className="bg-primary-600 text-white hover:bg-primary-700">
+                          <Plus className="w-4 h-4 mr-2" />
+                          Browse Concerts
+                        </Button>
+                      </Link>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Past Shows - Only show for artists and hosts */}
             {(userRole === 'artist' || userRole === 'host') && (
@@ -1025,56 +1001,6 @@ export default function DashboardPage() {
               <PrivateReviewsSection userId={selectedUserId} userType={userRole} />
             )}
 
-            {/* Action Items */}
-            {pendingActions.length > 0 && (
-              <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
-                <div className="px-6 py-4 border-b border-neutral-200">
-                  <h2 className="text-xl font-semibold text-neutral-900">
-                    {userRole === 'host' ? 'Booking Requests' : 'Pending Requests'}
-                  </h2>
-                  <p className="text-sm text-neutral-600 mt-1">
-                    {userRole === 'host' ? 'Artists requesting to book your venue' : 'Waiting for host responses'}
-                  </p>
-                </div>
-                <div className="p-6">
-                  <div className="space-y-4">
-                    {pendingActions.map((booking) => (
-                      <div key={booking.id} className="flex items-center justify-between p-4 bg-secondary-50 border border-secondary-200 rounded-lg">
-                        <div className="flex items-center space-x-4">
-                          <div className="w-10 h-10 bg-secondary-100 rounded-lg flex items-center justify-center">
-                            <Clock className="w-5 h-5 text-secondary-600" />
-                          </div>
-                          <div>
-                            <h3 className="font-medium text-neutral-900">
-                              {userRole === 'host' ? booking.artist.name : booking.host.name}
-                            </h3>
-                            <div className="text-sm text-neutral-600">
-                              {formatDate(booking.eventDate)} • {booking.guestCount} guests
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex space-x-2">
-                          {userRole === 'host' ? (
-                            <>
-                              <Link href={`/bookings/${booking.id}`}>
-                                <Button variant="outline" size="sm">View Details</Button>
-                              </Link>
-                              <Link href={`/bookings/${booking.id}`}>
-                                <Button size="sm" className="bg-secondary-600 text-white hover:bg-secondary-700">Review</Button>
-                              </Link>
-                            </>
-                          ) : (
-                            <Link href={`/bookings/${booking.id}`}>
-                              <Button variant="outline" size="sm">View Status</Button>
-                            </Link>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Sidebar */}

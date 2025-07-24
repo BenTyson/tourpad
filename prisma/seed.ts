@@ -230,6 +230,45 @@ async function main() {
     }
   });
 
+  // Add artist media (press photos)
+  await prisma.artistMedia.create({
+    data: {
+      artistId: artist1User.artist!.id,
+      mediaType: 'PHOTO',
+      category: 'PRESS',
+      fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
+      title: 'Sarah Johnson Press Photo',
+      description: 'Professional press photo for Sarah Johnson',
+      sortOrder: 0
+    }
+  });
+
+  await prisma.artistMedia.create({
+    data: {
+      artistId: artist2User.artist!.id,
+      mediaType: 'PHOTO',
+      category: 'PRESS',
+      fileUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop&crop=face',
+      title: 'Marcus Williams Press Photo',  
+      description: 'Professional press photo for Marcus Williams',
+      sortOrder: 0
+    }
+  });
+
+  await prisma.artistMedia.create({
+    data: {
+      artistId: artist3User.artist!.id,
+      mediaType: 'PHOTO',
+      category: 'PRESS',
+      fileUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=800&h=600&fit=crop&crop=face',
+      title: 'Luna Martinez Press Photo',
+      description: 'Professional press photo for Luna Martinez',
+      sortOrder: 0
+    }
+  });
+
+  // Add host media (venue photos) - will be added after hosts are created
+  
   // Create FIRST host - Mike Chen
   const host1User = await prisma.user.create({
     data: {
@@ -812,15 +851,180 @@ async function main() {
     }
   });
 
-  // Create sample concert from first booking
+  // Add host media (venue photos)
+  await prisma.hostMedia.create({
+    data: {
+      hostId: host1User.host!.id,
+      mediaType: 'PHOTO',
+      category: 'VENUE',
+      fileUrl: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop',
+      title: 'Mike Chen Living Room Venue',
+      description: 'Cozy living room perfect for intimate performances',
+      sortOrder: 0
+    }
+  });
+
+  await prisma.hostMedia.create({
+    data: {
+      hostId: host2User.host!.id,
+      mediaType: 'PHOTO',
+      category: 'VENUE',
+      fileUrl: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop',
+      title: 'Emily Thompson Garden Stage',
+      description: 'Beautiful garden stage with natural acoustics',
+      sortOrder: 0
+    }
+  });
+
+  await prisma.hostMedia.create({
+    data: {
+      hostId: host3User.host!.id,
+      mediaType: 'PHOTO',
+      category: 'VENUE',
+      fileUrl: 'https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=800&h=600&fit=crop',
+      title: 'James Wilson Barn Venue',
+      description: 'Rustic barn venue with authentic country atmosphere',
+      sortOrder: 0
+    }
+  });
+
+  // CREATE ACTIVE BOOKINGS AND CONCERTS FOR CALENDAR TESTING
+  console.log('📅 Creating active bookings and concerts for calendar...');
+  
+  // Future dates for active events
+  const nextWeek = new Date();
+  nextWeek.setDate(nextWeek.getDate() + 7);
+  const nextMonth = new Date();
+  nextMonth.setDate(nextMonth.getDate() + 30);
+  const twoWeeks = new Date();
+  twoWeeks.setDate(twoWeeks.getDate() + 14);
+  
+  // Active booking 1 - CONFIRMED (should show on calendar)
+  const activeBooking1 = await prisma.booking.create({
+    data: {
+      artistId: artist1User.artist!.id,
+      hostId: host1User.host!.id,
+      requestedDate: nextWeek,
+      requestedTime: new Date(nextWeek.getTime() + (19 * 60 * 60 * 1000)), // 7pm
+      estimatedDuration: 90,
+      expectedAttendance: 25,
+      status: 'CONFIRMED',
+      doorFee: 20,
+      artistMessage: 'Excited for this upcoming show!',
+      hostResponse: 'Looking forward to hosting you!',
+      lodgingRequested: false,
+      respondedAt: new Date(),
+      confirmedAt: new Date()
+    }
+  });
+
+  // Active booking 2 - APPROVED (should show on calendar)
+  const activeBooking2 = await prisma.booking.create({
+    data: {
+      artistId: artist2User.artist!.id,
+      hostId: host2User.host!.id,
+      requestedDate: twoWeeks,
+      requestedTime: new Date(twoWeeks.getTime() + (20 * 60 * 60 * 1000)), // 8pm
+      estimatedDuration: 120,
+      expectedAttendance: 30,
+      status: 'APPROVED',
+      doorFee: 25,
+      artistMessage: 'Jazz in the garden sounds perfect!',
+      hostResponse: 'Approved! Can\'t wait!',
+      lodgingRequested: true,
+      lodgingDetails: {
+        guests: 1,
+        nights: 1,
+        specialRequests: 'Quiet room for pre-show rest'
+      },
+      respondedAt: new Date()
+    }
+  });
+
+  // Active booking 3 - PENDING (should show on calendar)
+  const activeBooking3 = await prisma.booking.create({
+    data: {
+      artistId: artist3User.artist!.id,
+      hostId: host3User.host!.id,
+      requestedDate: nextMonth,
+      requestedTime: new Date(nextMonth.getTime() + (19 * 60 * 60 * 1000)), // 7pm
+      estimatedDuration: 100,
+      expectedAttendance: 40,
+      status: 'PENDING',
+      doorFee: 30,
+      artistMessage: 'Electronic music in your barn would be incredible!',
+      lodgingRequested: true,
+      lodgingDetails: {
+        guests: 2,
+        nights: 1,
+        specialRequests: 'Need space for equipment setup'
+      }
+    }
+  });
+
+  // Create concerts from confirmed bookings
+  const activeConcert1 = await prisma.concert.create({
+    data: {
+      bookingId: activeBooking1.id,
+      title: 'Sarah Johnson - Folk Under the Stars',
+      description: 'An intimate evening of folk music featuring original songs and heartfelt covers.',
+      date: nextWeek,
+      startTime: new Date(nextWeek.getTime() + (19 * 60 * 60 * 1000)), // 7pm
+      endTime: new Date(nextWeek.getTime() + (20.5 * 60 * 60 * 1000)), // 8:30pm
+      maxCapacity: 25,
+      doorFee: 20,
+      status: 'SCHEDULED',
+      isPrivate: false,
+      requiresApproval: false
+    }
+  });
+
+  const activeConcert2 = await prisma.concert.create({
+    data: {
+      bookingId: activeBooking2.id,
+      title: 'Mike Chen - Jazz in the Garden',
+      description: 'Smooth jazz melodies in a beautiful garden setting.',
+      date: twoWeeks,
+      startTime: new Date(twoWeeks.getTime() + (20 * 60 * 60 * 1000)), // 8pm  
+      endTime: new Date(twoWeeks.getTime() + (22 * 60 * 60 * 1000)), // 10pm
+      maxCapacity: 30,
+      doorFee: 25,
+      status: 'SCHEDULED',
+      isPrivate: false,
+      requiresApproval: true
+    }
+  });
+
+  // Create sample RSVPs for the concerts
+  await prisma.fanRSVP.create({
+    data: {
+      fanId: fanUser.fan!.id,
+      concertId: activeConcert1.id,
+      status: 'APPROVED',
+      guestsCount: 1,
+      specialRequests: 'Looking forward to this!'
+    }
+  });
+
+  await prisma.fanRSVP.create({
+    data: {
+      fanId: fanUser.fan!.id,
+      concertId: activeConcert2.id,
+      status: 'PENDING',
+      guestsCount: 2,
+      specialRequests: 'Hope to bring a friend'
+    }
+  });
+
+  // Create sample concert from first booking (keeping existing)
   const concert = await prisma.concert.create({
     data: {
       bookingId: booking1.id,
       title: 'Sarah Johnson - Intimate Folk Session',
       description: 'Join us for an intimate evening of original folk music with Sarah Johnson.',
       date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
-      startTime: new Date('2024-01-15T19:00:00Z'),
-      endTime: new Date('2024-01-15T21:00:00Z'),
+      startTime: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000 + (19 * 60 * 60 * 1000)), // 7pm
+      endTime: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000 + (21 * 60 * 60 * 1000)), // 9pm
       maxCapacity: 25,
       doorFee: 15,
       status: 'SCHEDULED',
@@ -970,6 +1174,8 @@ async function main() {
   console.log(`  - 3 Artists with varied genres (Folk, Jazz, Electronic)`);
   console.log(`  - 6 Hosts with different venue types across multiple cities`);
   console.log(`  - 4 Completed bookings ready for testing`);
+  console.log(`  - 3 Active bookings (CONFIRMED, APPROVED, PENDING) for calendar testing`);
+  console.log(`  - 3 Active concerts (SCHEDULED) for calendar testing`);
   console.log(`  - 8 Reviews with ratings from 3 to 5 stars`);
   console.log(`  - Real profile images for all users`);
   console.log(`  - Professional venue photos for all hosts`);
