@@ -77,8 +77,41 @@ export default function LoginPage() {
     }
   };
 
-  const handleDemoLogin = (email: string, password: string) => {
+  const handleDemoLogin = async (email: string, password: string) => {
+    console.log('Demo login clicked:', email, password);
     setFormData({ email, password });
+    setErrors([]); // Clear any previous errors
+    
+    // Auto-submit after a brief delay to allow state to update
+    setTimeout(async () => {
+      setIsLoading(true);
+      
+      try {
+        const result = await signIn('credentials', {
+          email: email,
+          password: password,
+          redirect: false
+        });
+
+        if (result?.error) {
+          setErrors(['Invalid email or password']);
+        } else {
+          // Get session to determine redirect
+          const session = await getSession();
+          
+          if (session?.user?.type === 'admin') {
+            router.push('/admin');
+          } else {
+            router.push('/dashboard');
+          }
+        }
+      } catch (error) {
+        console.error('Demo login error:', error);
+        setErrors(['An error occurred during login. Please try again.']);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 100);
   };
 
   return (

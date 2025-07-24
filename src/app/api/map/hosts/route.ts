@@ -13,12 +13,22 @@ interface LocationPrivacy {
   privacyLevel: 'neighborhood' | 'street' | 'exact';
 }
 
-// Location obfuscation utility
+// Simple cache for obfuscated coordinates
+const coordinateCache = new Map<string, [number, number]>();
+
+// Location obfuscation utility with caching
 function obfuscateCoordinates(
   lat: number, 
   lng: number, 
   privacyLevel: 'neighborhood' | 'street' | 'exact' = 'neighborhood'
 ): [number, number] {
+  const cacheKey = `${lat},${lng},${privacyLevel}`;
+  
+  // Return cached result if exists
+  if (coordinateCache.has(cacheKey)) {
+    return coordinateCache.get(cacheKey)!;
+  }
+
   const radiusMap = {
     neighborhood: 0.015, // ~1 mile
     street: 0.003,       // ~0.2 mile
@@ -29,7 +39,14 @@ function obfuscateCoordinates(
   const randomLat = lat + (Math.random() - 0.5) * radius * 2;
   const randomLng = lng + (Math.random() - 0.5) * radius * 2;
   
-  return [randomLat, randomLng];
+  const result: [number, number] = [randomLat, randomLng];
+  
+  // Cache the result (keep cache reasonable size)
+  if (coordinateCache.size < 100) {
+    coordinateCache.set(cacheKey, result);
+  }
+  
+  return result;
 }
 
 // Default coordinates for hosts without location data
@@ -51,11 +68,14 @@ export async function GET(request: NextRequest) {
     const capacityMax = searchParams.get('capacityMax') ? parseInt(searchParams.get('capacityMax')!) : 999;
     const searchLocation = searchParams.get('searchLocation') || '';
     const amenities = searchParams.get('amenities')?.split(',') || [];
+    const offersLodging = searchParams.get('offersLodging') === 'true';
     
     // Build where clause for filtering
     const where: any = {
       user: {
-        status: 'APPROVED'
+        status: {
+          in: ['APPROVED', 'ACTIVE']
+        }
       }
     };
 
@@ -110,6 +130,11 @@ export async function GET(request: NextRequest) {
           }
         }
       ];
+    }
+
+    // Lodging filter
+    if (offersLodging) {
+      where.offersLodging = true;
     }
 
     // Fetch approved hosts with user data
@@ -216,6 +241,9 @@ export async function GET(request: NextRequest) {
         offersLodging: host.offersLodging,
         lodgingDetails: host.lodgingDetails,
         houseRules: host.houseRules,
+        // UI properties for sorting (placeholder values for now)
+        rating: 4.0 + Math.random() * 1.0, // TODO: Calculate from actual reviews
+        reviewCount: Math.floor(Math.random() * 20), // TODO: Count actual reviews
         // Map-specific data
         mapLocation: {
           searchKeywords: [
@@ -223,7 +251,10 @@ export async function GET(request: NextRequest) {
             host.state.toLowerCase(),
             ...(host.preferredGenres || []).map(g => g.toLowerCase()),
             venueTypeMap[host.venueType]?.toLowerCase() || host.venueType.toLowerCase()
-          ]
+          ],
+          priceRange: host.suggestedDoorFee 
+            ? `$${host.suggestedDoorFee}-${host.suggestedDoorFee + 10}` 
+            : '$15-25' // Default price range
         }
       };
     });
@@ -244,7 +275,8 @@ export async function GET(request: NextRequest) {
         venueTypes,
         capacityRange: { min: capacityMin, max: capacityMax },
         searchLocation,
-        amenities
+        amenities,
+        offersLodging
       }
     });
 

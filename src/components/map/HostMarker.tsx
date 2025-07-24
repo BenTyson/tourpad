@@ -1,17 +1,37 @@
 'use client';
 import { Marker } from 'react-leaflet';
 import { Icon, LatLngTuple } from 'leaflet';
+import { useMemo } from 'react';
 
-// Create custom TourPad marker icons
-const createCustomIcon = (venueType: string, hostingExperience: number) => {
+// Memoized icon cache to prevent memory leaks
+const iconCache = new Map<string, Icon>();
+
+// Create unique cache key for icon variations
+const getIconCacheKey = (venueType: string, hostingExperience: number) => {
+  const rating = Math.min(5, Math.max(1, hostingExperience * 0.5 + 3.5));
+  const size = rating >= 4.5 ? 32 : rating >= 4.0 ? 28 : 24;
+  return `${venueType}-${size}`;
+};
+
+// Create custom TourPad marker icons with caching
+const createCustomIcon = (venueType: string, hostingExperience: number): Icon => {
+  const cacheKey = getIconCacheKey(venueType, hostingExperience);
+  
+  // Return cached icon if exists
+  if (iconCache.has(cacheKey)) {
+    return iconCache.get(cacheKey)!;
+  }
+
   // Convert hosting experience to a rating-like value
   const rating = Math.min(5, Math.max(1, hostingExperience * 0.5 + 3.5));
+  
   // Color coding based on venue type
   const getMarkerColor = (type: string) => {
     switch (type) {
       case 'Home/Living Room': return '#738a6e'; // sage
       case 'Other': return '#8ea58c'; // french blue  
       case 'Loft/Warehouse': return '#d4c4a8'; // sand
+      case 'BACKYARD': return '#9ca3af'; // mist
       default: return '#344c3d'; // evergreen
     }
   };
@@ -30,12 +50,16 @@ const createCustomIcon = (venueType: string, hostingExperience: number) => {
     </svg>
   `;
 
-  return new Icon({
+  const icon = new Icon({
     iconUrl: `data:image/svg+xml;base64,${btoa(svgIcon)}`,
     iconSize: [size, size],
     iconAnchor: [size / 2, size / 2],
     popupAnchor: [0, -(size / 2)],
   });
+
+  // Cache the icon to prevent recreation
+  iconCache.set(cacheKey, icon);
+  return icon;
 };
 
 interface MapHost {
@@ -86,7 +110,11 @@ export default function HostMarker({ host, onClick, children }: HostMarkerProps)
     host.coordinates[1]
   ];
 
-  const customIcon = createCustomIcon(host.venueType, host.hostingExperience);
+  // Memoize icon creation to prevent re-creation on every render
+  const customIcon = useMemo(() => 
+    createCustomIcon(host.venueType, host.hostingExperience), 
+    [host.venueType, host.hostingExperience]
+  );
 
   return (
     <Marker 

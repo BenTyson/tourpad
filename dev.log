@@ -1,0 +1,167 @@
+
+> pad@0.1.0 dev
+> next dev -H 0.0.0.0 -p 3001
+
+   ▲ Next.js 15.3.5
+   - Local:        http://localhost:3001
+   - Network:      http://0.0.0.0:3001
+   - Environments: .env.local, .env
+   - Experiments (use with caution):
+     ⨯ webpackBuildWorker
+
+ ✓ Starting...
+ ✓ Ready in 1102ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 1125ms (523 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+[31m[auth][error][0m MissingCSRF: CSRF token was missing during an action signin. Read more at https://errors.authjs.dev#missingcsrf
+    at validateCSRF (webpack-internal:///(rsc)/./node_modules/@auth/core/lib/actions/callback/oauth/csrf-token.js:45:11)
+    at AuthInternal (webpack-internal:///(rsc)/./node_modules/@auth/core/lib/index.js:75:100)
+    at async Auth (webpack-internal:///(rsc)/./node_modules/@auth/core/index.js:130:34)
+    at async AppRouteRouteModule.do (/Users/bentyson/pad/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:26:34112)
+    at async AppRouteRouteModule.handle (/Users/bentyson/pad/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:26:41338)
+    at async doRender (/Users/bentyson/pad/node_modules/next/dist/server/base-server.js:1518:42)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/bentyson/pad/node_modules/next/dist/server/base-server.js:1920:28)
+    at async DevServer.renderPageComponent (/Users/bentyson/pad/node_modules/next/dist/server/base-server.js:2408:24)
+    at async DevServer.renderToResponseImpl (/Users/bentyson/pad/node_modules/next/dist/server/base-server.js:2445:32)
+    at async DevServer.pipeImpl (/Users/bentyson/pad/node_modules/next/dist/server/base-server.js:1008:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/bentyson/pad/node_modules/next/dist/server/next-server.js:305:17)
+    at async DevServer.handleRequestImpl (/Users/bentyson/pad/node_modules/next/dist/server/base-server.js:900:17)
+    at async /Users/bentyson/pad/node_modules/next/dist/server/dev/next-dev-server.js:371:20
+    at async Span.traceAsyncFn (/Users/bentyson/pad/node_modules/next/dist/trace/trace.js:157:20)
+    at async DevServer.handleRequest (/Users/bentyson/pad/node_modules/next/dist/server/dev/next-dev-server.js:368:24)
+    at async invokeRender (/Users/bentyson/pad/node_modules/next/dist/server/lib/router-server.js:237:21)
+    at async handleRequest (/Users/bentyson/pad/node_modules/next/dist/server/lib/router-server.js:428:24)
+    at async requestHandlerImpl (/Users/bentyson/pad/node_modules/next/dist/server/lib/router-server.js:452:13)
+    at async Server.requestListener (/Users/bentyson/pad/node_modules/next/dist/server/lib/start-server.js:158:13)
+ POST /api/auth/signin/credentials 302 in 1591ms
+ ✓ Compiled /api/user/current in 76ms (525 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+🔍 Session data: null
+❌ No session or user ID found
+ GET /api/user/current 401 in 125ms
+ ✓ Compiled in 92ms (525 modules)
+ ✓ Compiled /api/test-admin in 77ms (367 modules)
+🧪 Testing admin user authentication...
+ GET /api/test-admin 200 in 436ms
+ ✓ Compiled in 69ms (367 modules)
+ ✓ Compiled /api/test-session in 89ms (523 modules)
+🧪 Testing session data...
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+Session: null
+ GET /api/test-session 200 in 187ms
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 589ms (265 modules)
+ ○ Compiling /login ...
+ ✓ Compiled /login in 1859ms (974 modules)
+ GET /login 200 in 1966ms
+ ✓ Compiled /api/auth/[...nextauth] in 109ms (713 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/providers 200 in 216ms
+ GET /api/auth/csrf 200 in 5ms
+ POST /api/auth/callback/credentials? 200 in 328ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/auth/session 200 in 17ms
+ ✓ Compiled /admin in 361ms (1154 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 414ms
+ GET /admin 200 in 435ms
+ GET /api/notifications?unread=true&limit=0 200 in 458ms
+ GET /api/auth/session 200 in 16ms
+ GET /api/notifications?unread=true&limit=0 200 in 20ms
+ GET /api/notifications?unread=true&limit=0 200 in 8ms
+ GET /api/notifications?unread=true&limit=0 200 in 9ms
+ ✓ Compiled /api/admin/metrics in 112ms (1156 modules)
+ GET /api/admin/metrics 200 in 146ms
+ GET /api/admin/metrics 200 in 6ms
+ GET /admin 200 in 167ms
+ ✓ Compiled /_not-found in 201ms (1160 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 288ms
+ ✓ Compiled /favicon.ico in 104ms (737 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /favicon.ico 200 in 232ms
+ GET /api/admin/metrics 200 in 195ms
+ GET /api/auth/session 200 in 195ms
+ GET /api/auth/session 200 in 13ms
+ GET /api/notifications?unread=true&limit=0 200 in 15ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/notifications?unread=true&limit=0 200 in 10ms
+ ○ Compiling /map ...
+ ✓ Compiled /map in 598ms (1334 modules)
+ GET /map 200 in 675ms
+ ✓ Compiled /api/map/hosts in 176ms (1318 modules)
+ GET /api/map/hosts? 200 in 207ms
+ GET /api/map/hosts? 200 in 6ms
+ GET /api/map/hosts? 200 in 6ms
+ GET /api/map/hosts? 200 in 8ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/csrf 200 in 84ms
+ POST /api/auth/signout 200 in 15ms
+ GET /api/auth/session 200 in 9ms
+ GET /map 200 in 117ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 45ms
+ GET /api/map/hosts? 200 in 14ms
+ GET /api/auth/session 200 in 14ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 5ms
+ GET /login 200 in 28ms
+ GET /api/auth/providers 200 in 18ms
+ GET /api/auth/csrf 200 in 8ms
+ POST /api/auth/callback/credentials? 200 in 296ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/notifications?unread=true&limit=0 200 in 12ms
+ GET /admin 200 in 20ms
+ GET /api/notifications?unread=true&limit=0 200 in 20ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 10ms
+ GET /api/notifications?unread=true&limit=0 200 in 8ms
+ GET /api/notifications?unread=true&limit=0 200 in 8ms
+ GET /api/admin/metrics 200 in 8ms
+ GET /api/admin/metrics 200 in 5ms
+ GET /map 200 in 27ms
+ GET /api/map/hosts? 200 in 12ms
+ GET /api/map/hosts? 200 in 8ms
+ GET /api/map/hosts? 200 in 9ms
+ GET /api/map/hosts? 200 in 6ms
+ GET /api/map/hosts?searchLocation=a 200 in 24ms
+ GET /api/map/hosts?searchLocation=au 200 in 15ms
+ GET /api/map/hosts?searchLocation=aus 200 in 16ms
+ GET /api/map/hosts?searchLocation=aust 200 in 20ms
+ GET /api/map/hosts?searchLocation=austi 200 in 9ms
+ GET /api/map/hosts?searchLocation=austin 200 in 13ms
+ ✓ Compiled /hosts/[id] in 432ms (1411 modules)
+ GET /hosts/cmdhm5kll000llucuremq4pfc 200 in 851ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 47ms
+ ✓ Compiled /api/hosts/[id] in 319ms (1413 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 310ms
+ GET /api/notifications?unread=true&limit=0 200 in 313ms
+ GET /api/auth/session 200 in 12ms
+ GET /api/notifications?unread=true&limit=0 200 in 13ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/hosts/cmdhm5kll000llucuremq4pfc 200 in 667ms
+ GET /api/auth/session 200 in 14ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 6ms
+ ✓ Compiled /dashboard in 448ms (1470 modules)
+ GET /dashboard 200 in 495ms
+ ✓ Compiled /api/user/profile-id in 124ms (898 modules)
+ ✓ Compiled in 259ms (1477 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/stats 200 in 533ms
+ GET /api/user/profile-id 200 in 534ms
+ GET /api/user/current 200 in 540ms
+ GET /hosts/cmdhm5kll000llucuremq4pfc 200 in 390ms
+ GET /dashboard 200 in 397ms
+ GET /api/stats 200 in 14ms
+ GET /api/user/profile-id 200 in 16ms
+ GET /api/user/current 200 in 15ms
+ ✓ Compiled /api/payments/subscription-status in 395ms (1678 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/payments/subscription-status 200 in 470ms
+ GET /api/payments/subscription-status 200 in 20ms
+ GET /api/notifications?unread=true&limit=0 200 in 23ms
+ GET /api/notifications?unread=true&limit=0 200 in 22ms

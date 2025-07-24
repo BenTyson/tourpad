@@ -4,8 +4,9 @@ import { Search, X, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
 interface MapFiltersProps {
-  onFiltersChange: (filters: FilterState) => void;
+  onFiltersChange: (filters: any) => void;
   searchLocation?: string;
+  mapMode?: 'hosts' | 'shows';
   className?: string;
 }
 
@@ -15,25 +16,29 @@ interface FilterState {
   capacityRange: string;
   priceRange: string;
   amenities: string[];
+  offersLodging: boolean;
 }
 
-export default function MapFilters({ onFiltersChange, searchLocation = '', className = '' }: MapFiltersProps) {
+export default function MapFilters({ onFiltersChange, searchLocation = '', mapMode = 'hosts', className = '' }: MapFiltersProps) {
   const [filters, setFilters] = useState<FilterState>({
     searchLocation: searchLocation,
     venueTypes: [],
     capacityRange: '',
     priceRange: '',
-    amenities: []
+    amenities: [],
+    offersLodging: false
   });
 
   // Update filters when external search location changes
   useEffect(() => {
-    const updatedFilters = { ...filters, searchLocation };
-    setFilters(updatedFilters);
-    onFiltersChange(updatedFilters);
-  }, [searchLocation, onFiltersChange]);
+    if (searchLocation !== filters.searchLocation) {
+      const updatedFilters = { ...filters, searchLocation };
+      setFilters(updatedFilters);
+      onFiltersChange(updatedFilters);
+    }
+  }, [searchLocation]);
 
-  // Apply initial filters on mount
+  // Apply initial filters on mount only
   useEffect(() => {
     onFiltersChange(filters);
   }, []);
@@ -76,6 +81,11 @@ export default function MapFilters({ onFiltersChange, searchLocation = '', class
       apiFilters.amenities = newFilters.amenities;
     }
     
+    // Lodging filter
+    if (newFilters.offersLodging) {
+      apiFilters.offersLodging = true;
+    }
+    
     return apiFilters;
   };
 
@@ -92,7 +102,8 @@ export default function MapFilters({ onFiltersChange, searchLocation = '', class
       venueTypes: [],
       capacityRange: '',
       priceRange: '',
-      amenities: []
+      amenities: [],
+      offersLodging: false
     };
     setFilters(emptyFilters);
     const apiFilters = transformFilters(emptyFilters);
@@ -117,7 +128,8 @@ export default function MapFilters({ onFiltersChange, searchLocation = '', class
     (searchLocation.trim() || filters.searchLocation.trim() ? 1 : 0) +
     filters.venueTypes.length +
     (filters.capacityRange ? 1 : 0) +
-    filters.amenities.length;
+    filters.amenities.length +
+    (filters.offersLodging ? 1 : 0);
 
   return (
     <div className={`bg-white rounded-xl shadow-sm border border-neutral-200 p-6 h-full max-h-[600px] overflow-y-auto ${className}`}>
@@ -148,7 +160,7 @@ export default function MapFilters({ onFiltersChange, searchLocation = '', class
                 type="checkbox"
                 checked={filters.venueTypes.includes(type)}
                 onChange={(e) => handleVenueTypeChange(type, e.target.checked)}
-                className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                className="rounded border-[var(--color-sage)] text-[var(--color-french-blue)] focus:ring-[var(--color-french-blue)]"
               />
               <span className="ml-2 text-sm text-neutral-600">{type}</span>
             </label>
@@ -172,11 +184,27 @@ export default function MapFilters({ onFiltersChange, searchLocation = '', class
                 value={option.value}
                 checked={filters.capacityRange === option.value}
                 onChange={(e) => updateFilters({ capacityRange: e.target.value })}
-                className="border-neutral-300 text-primary-600 focus:ring-primary-500"
+                className="border-[var(--color-sage)] text-[var(--color-french-blue)] focus:ring-[var(--color-french-blue)]"
               />
               <span className="ml-2 text-sm text-neutral-600">{option.label}</span>
             </label>
           ))}
+        </div>
+      </div>
+
+      {/* Lodging */}
+      <div className="mb-6">
+        <h3 className="text-sm font-medium text-neutral-700 mb-3">Lodging</h3>
+        <div className="space-y-2">
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              checked={filters.offersLodging || false}
+              onChange={(e) => updateFilters({ offersLodging: e.target.checked })}
+              className="rounded border-[var(--color-sage)] text-[var(--color-french-blue)] focus:ring-[var(--color-french-blue)]"
+            />
+            <span className="ml-2 text-sm text-neutral-600">Offers Lodging</span>
+          </label>
         </div>
       </div>
 
@@ -196,7 +224,7 @@ export default function MapFilters({ onFiltersChange, searchLocation = '', class
                 type="checkbox"
                 checked={filters.amenities.includes(amenity.value)}
                 onChange={(e) => handleAmenityChange(amenity.value, e.target.checked)}
-                className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                className="rounded border-[var(--color-sage)] text-[var(--color-french-blue)] focus:ring-[var(--color-french-blue)]"
               />
               <span className="ml-2 text-sm text-neutral-600">{amenity.label}</span>
             </label>
@@ -212,7 +240,7 @@ export default function MapFilters({ onFiltersChange, searchLocation = '', class
             <button
               key={city}
               onClick={() => updateFilters({ searchLocation: city })}
-              className="flex items-center w-full text-left px-2 py-1 text-sm text-neutral-600 hover:bg-neutral-50 rounded"
+              className="flex items-center w-full text-left px-2 py-1 text-sm text-neutral-600 hover:bg-[var(--color-mist)] rounded"
             >
               <MapPin className="w-3 h-3 mr-2" />
               {city}

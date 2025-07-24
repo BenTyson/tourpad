@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -H 0.0.0.0",
+    "dev": "next dev -H 0.0.0.0 -p 3001",
+    "dev:clean": "rm -rf .next && next dev -H 0.0.0.0 -p 3001",
+    "dev:safe": "NODE_ENV=development next dev -H 0.0.0.0 -p 3001 --no-turbo",
     "dev:next": "next dev",
     "dev:stable": "node scripts/dev-server.js",
     "build": "next build",
@@ -39,6 +41,7 @@
     "multer": "^2.0.1",
     "next": "15.3.5",
     "next-auth": "^5.0.0-beta.29",
+    "node-fetch": "^3.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",

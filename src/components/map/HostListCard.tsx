@@ -2,42 +2,7 @@
 import { Star, MapPin, Users, Bed } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
-
-interface MapHost {
-  id: string;
-  userId: string;
-  name: string;
-  email: string;
-  profileImageUrl?: string;
-  venueName?: string;
-  venueType: string;
-  city: string;
-  state: string;
-  country: string;
-  description: string;
-  capacity: number;
-  indoorCapacity?: number;
-  outdoorCapacity?: number;
-  preferredGenres: string[];
-  suggestedDoorFee?: number;
-  coordinates: [number, number];
-  actualCoordinates: [number, number];
-  amenities: {
-    soundSystem: boolean;
-    parking: boolean;
-    accessible: boolean;
-    kidFriendly: boolean;
-    outdoorSpace: boolean;
-  };
-  media: Array<{ id: string; url: string; type: string }>;
-  hostingExperience: number;
-  offersLodging: boolean;
-  lodgingDetails?: any;
-  houseRules?: string;
-  mapLocation: {
-    searchKeywords: string[];
-  };
-}
+import { MapHost } from '@/types/map';
 
 interface HostListCardProps {
   host: MapHost;

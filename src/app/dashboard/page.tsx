@@ -60,16 +60,23 @@ export default function DashboardPage() {
     if (session?.user) {
       setUserLoading(true);
       fetch('/api/user/current')
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+          }
+          return res.json();
+        })
         .then(data => {
           if (!data.error) {
             setCurrentUser(data);
           } else {
-            console.error('Error fetching current user:', data.error);
+            console.warn('User fetch returned error:', data.error);
+            // Don't throw here, just log the warning
           }
         })
         .catch(err => {
-          console.error('Error fetching current user:', err);
+          console.warn('Could not fetch current user data:', err.message);
+          // Don't crash the component, just log and continue
         })
         .finally(() => {
           setUserLoading(false);

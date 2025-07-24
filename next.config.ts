@@ -1,62 +1,53 @@
 import type { NextConfig } from "next";
-import path from "path";
 
 const nextConfig: NextConfig = {
   eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
   typescript: {
-    // Temporarily ignore TypeScript errors during builds
     ignoreBuildErrors: true,
   },
   
-  // Enable experimental features for stability
+  // STABLE experimental features only - no caching issues
   experimental: {
-    // Optimize CSS loading
-    optimizeCss: true,
-    // Enable memory optimization
-    memoryBasedWorkersCount: true,
-    // Enable webpack cache for faster rebuilds
-    webpackBuildWorker: true,
+    // Disable problematic features that cause crashes
+    optimizeCss: false,          // Disable during development
+    memoryBasedWorkersCount: false,  // Use default worker count
+    webpackBuildWorker: false,   // Disable for stability
   },
 
-  // Server external packages (moved from experimental)
   serverExternalPackages: ['sharp', 'multer'],
 
-  // Webpack configuration for stability and performance
+  // STABLE webpack configuration
   webpack: (config, { dev, isServer }) => {
-    // Enhanced file watching options
-    config.watchOptions = {
-      // Ignore problematic directories
-      ignored: [
-        '**/node_modules/**',
-        '**/storage/uploads/**',
-        '**/public/uploads/**',
-        '**/.next/**',
-        '**/.git/**',
-        '**/dist/**',
-        '**/coverage/**',
-        '**/tmp/**',
-        '**/*.log'
-      ],
-      // Optimize polling settings
-      poll: false,
-      aggregateTimeout: 300,
-      // Reduce memory usage
-      followSymlinks: false,
-    };
-
-    // Memory optimization for development
     if (dev) {
-      // Reduce bundle analyzer overhead
-      config.infrastructureLogging = {
-        level: 'warn',
+      // CRITICAL: Disable webpack cache to prevent corruption
+      config.cache = false;
+      
+      // Simplified file watching - no aggressive polling
+      config.watchOptions = {
+        ignored: [
+          '**/node_modules/**',
+          '**/public/uploads/**',
+          '**/.next/**',
+          '**/.git/**',
+          '**/*.log'
+        ],
+        poll: false,                    // No polling
+        aggregateTimeout: 500,          // Increased for stability
+        followSymlinks: false,          // Prevent symlink issues
       };
+
+      // Reduce log noise and memory pressure
+      config.infrastructureLogging = {
+        level: 'error',
+      };
+
+      // Prevent memory leaks
+      config.stats = 'errors-warnings';
     }
 
-    // Performance optimizations
+    // Disable performance hints to reduce overhead
     config.performance = {
       hints: false,
     };
@@ -64,7 +55,7 @@ const nextConfig: NextConfig = {
     return config;
   },
 
-  // Static file serving configuration
+  // Static file serving
   async rewrites() {
     return [
       {
@@ -74,27 +65,28 @@ const nextConfig: NextConfig = {
     ];
   },
 
-  // Output configuration
   output: 'standalone',
   
-  // Image optimization
   images: {
-    domains: ['localhost'],
+    domains: ['localhost', 'images.unsplash.com'],
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 60,
   },
 
-  // Compression
   compress: true,
-  
-  // Power saving mode for development
   poweredByHeader: false,
   
-  // Reduce memory usage
+  // STABLE memory management - increased limits for stability
   onDemandEntries: {
-    maxInactiveAge: 25 * 1000,
-    pagesBufferLength: 2,
+    maxInactiveAge: 60 * 1000,      // Increased from 25s to 60s
+    pagesBufferLength: 5,           // Increased buffer size
   },
+  
+  // Additional stability configurations
+  generateEtags: false,             // Reduce overhead
+  distDir: '.next',                 // Explicit dist directory
+  
+  // Additional stability settings (swcMinify removed - not a valid config)
 };
 
 export default nextConfig;

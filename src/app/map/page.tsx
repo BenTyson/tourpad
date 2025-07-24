@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
@@ -15,6 +15,8 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import MapFilters from '@/components/map/MapFilters';
 import HostListCard from '@/components/map/HostListCard';
+import MapErrorBoundary from '@/components/map/MapErrorBoundary';
+import { MapHost, MapShow, MapFilters as MapFiltersType, MapMode } from '@/types/map';
 
 // Dynamic import for MapContainer to avoid SSR issues
 const TourPadMapContainer = dynamic(
@@ -26,10 +28,13 @@ type ViewMode = 'map' | 'list';
 
 export default function MapPage() {
   const { data: session, status } = useSession();
+  const [mapMode, setMapMode] = useState<MapMode>('hosts');
   const [viewMode, setViewMode] = useState<ViewMode>('map');
   const [showFilters, setShowFilters] = useState(true);
   const [hosts, setHosts] = useState<MapHost[]>([]);
+  const [shows, setShows] = useState<MapShow[]>([]);
   const [filteredHosts, setFilteredHosts] = useState<MapHost[]>([]);
+  const [filteredShows, setFilteredShows] = useState<MapShow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchLocation, setSearchLocation] = useState('');
@@ -40,14 +45,132 @@ export default function MapPage() {
   const [sortBy, setSortBy] = useState<'rating' | 'alphabetical' | 'price' | 'reviews'>('rating');
   const [currentFilters, setCurrentFilters] = useState<any>({});
 
-  // Create location suggestions from available data
-  const generateSuggestions = (query: string): string[] => {
-    if (!query.trim()) return [];
-    
+  // Fetch hosts from API
+  const fetchHosts = async (filters: MapFiltersType = {}) => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Convert filters to URL search params
+      const params = new URLSearchParams();
+      
+      if (filters.searchLocation) {
+        params.append('searchLocation', filters.searchLocation);
+      }
+      if (filters.venueTypes && filters.venueTypes.length > 0) {
+        params.append('venueTypes', filters.venueTypes.join(','));
+      }
+      if (filters.capacityMin !== undefined) {
+        params.append('capacityMin', filters.capacityMin.toString());
+      }
+      if (filters.capacityMax !== undefined) {
+        params.append('capacityMax', filters.capacityMax.toString());
+      }
+      if (filters.amenities && filters.amenities.length > 0) {
+        params.append('amenities', filters.amenities.join(','));
+      }
+
+      const response = await fetch(`/api/map/hosts?${params.toString()}`);
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch hosts: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      if (data.hosts) {
+        setHosts(data.hosts);
+        setFilteredHosts(data.hosts);
+        
+        // Update map bounds if available
+        if (data.bounds && data.hosts.length > 0) {
+          const centerLat = (data.bounds.north + data.bounds.south) / 2;
+          const centerLng = (data.bounds.east + data.bounds.west) / 2;
+          setMapCenter([centerLat, centerLng]);
+          
+          // Adjust zoom based on bounds
+          const latSpan = data.bounds.north - data.bounds.south;
+          const lngSpan = data.bounds.east - data.bounds.west;
+          const maxSpan = Math.max(latSpan, lngSpan);
+          
+          let newZoom = 10;
+          if (maxSpan < 0.1) newZoom = 13;
+          else if (maxSpan < 0.5) newZoom = 11;
+          else if (maxSpan < 1) newZoom = 10;
+          else if (maxSpan < 2) newZoom = 9;
+          else newZoom = 8;
+          
+          setMapZoom(newZoom);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching hosts:', error);
+      setError(error instanceof Error ? error.message : 'Failed to load venues');
+      setHosts([]);
+      setFilteredHosts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch shows from API
+  const fetchShows = async (filters: MapFiltersType = {}) => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Convert filters to URL search params
+      const params = new URLSearchParams();
+      
+      if (filters.searchLocation) {
+        params.append('searchLocation', filters.searchLocation);
+      }
+      // Add show-specific filters here later
+      
+      const response = await fetch(`/api/map/shows?${params.toString()}`);
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch shows: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      if (data.shows) {
+        setShows(data.shows);
+        setFilteredShows(data.shows);
+        
+        // Update map bounds if available
+        if (data.bounds && data.shows.length > 0) {
+          const centerLat = (data.bounds.north + data.bounds.south) / 2;
+          const centerLng = (data.bounds.east + data.bounds.west) / 2;
+          setMapCenter([centerLat, centerLng]);
+          setMapZoom(10);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching shows:', error);
+      setError(error instanceof Error ? error.message : 'Failed to load shows');
+      setShows([]);
+      setFilteredShows([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Load initial data on mount and handle mode changes
+  useEffect(() => {
+    if (mapMode === 'hosts') {
+      fetchHosts();
+    } else {
+      fetchShows();
+    }
+  }, [mapMode]);
+
+  // Memoized location data to prevent recreation on every search
+  const allLocationsSuggestions = useMemo(() => {
     const allLocations = new Set<string>();
-    const hostsWithLocation = hosts;
     
-    hostsWithLocation.forEach(host => {
+    hosts.forEach(host => {
       // Add cities and states
       allLocations.add(`${host.city}, ${host.state}`);
       allLocations.add(host.city);
@@ -59,12 +182,18 @@ export default function MapPage() {
       });
     });
     
+    return Array.from(allLocations).sort();
+  }, [hosts]);
+
+  // Optimized suggestion generation with memoized data
+  const generateSuggestions = useCallback((query: string): string[] => {
+    if (!query.trim()) return [];
+    
     const queryLower = query.toLowerCase();
-    return Array.from(allLocations)
+    return allLocationsSuggestions
       .filter(location => location.toLowerCase().includes(queryLower))
-      .sort()
       .slice(0, 8); // Limit to 8 suggestions
-  };
+  }, [allLocationsSuggestions]);
 
   // Handle search input changes
   const handleSearchChange = (value: string) => {
@@ -79,10 +208,15 @@ export default function MapPage() {
     setSearchLocation(searchTerm);
     setShowSuggestions(false);
     
-    // Search will be handled by the API call in handleFiltersChange
+    // Search will be handled by the API call based on current mode
     const newFilters = { ...currentFilters, searchLocation: searchTerm };
     setCurrentFilters(newFilters);
-    fetchHosts(newFilters);
+    
+    if (mapMode === 'hosts') {
+      fetchHosts(newFilters);
+    } else {
+      fetchShows(newFilters);
+    }
   };
 
   // Sort hosts for list view
@@ -152,21 +286,47 @@ export default function MapPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <Link href="/dashboard">
-                <Button variant="ghost" size="sm" className="hover:bg-primary-50 hover:text-primary-700">
+                <Button variant="ghost" size="sm" className="hover:bg-[var(--color-mist)] hover:text-[var(--color-french-blue)]">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back to Dashboard
                 </Button>
               </Link>
             </div>
             
-            {/* View Mode Toggle */}
-            <div className="flex items-center space-x-3">
-              <div className="flex rounded-lg border border-neutral-200 bg-white p-1">
+            {/* Map Mode Toggle */}
+            <div className="flex items-center space-x-4">
+              <div className="flex rounded-lg border border-[var(--color-sage)] bg-white p-1">
+                <Button
+                  variant={mapMode === 'hosts' ? 'primary' : 'ghost'}
+                  size="sm"
+                  onClick={() => setMapMode('hosts')}
+                  className={mapMode === 'hosts' 
+                    ? 'bg-[var(--color-french-blue)] text-white' 
+                    : 'text-neutral-600 hover:text-[var(--color-evergreen)]'
+                  }
+                >
+                  Available Hosts
+                </Button>
+                <Button
+                  variant={mapMode === 'shows' ? 'primary' : 'ghost'}
+                  size="sm"
+                  onClick={() => setMapMode('shows')}
+                  className={mapMode === 'shows' 
+                    ? 'bg-[var(--color-french-blue)] text-white' 
+                    : 'text-neutral-600 hover:text-[var(--color-evergreen)]'
+                  }
+                >
+                  Confirmed Shows
+                </Button>
+              </div>
+              
+              {/* View Mode Toggle */}
+              <div className="flex rounded-lg border border-[var(--color-sage)] bg-white p-1">
                 <Button
                   variant={viewMode === 'map' ? 'primary' : 'ghost'}
                   size="sm"
                   onClick={() => setViewMode('map')}
-                  className={viewMode === 'map' ? 'bg-primary-600 text-white' : 'text-neutral-600 hover:text-neutral-900'}
+                  className={viewMode === 'map' ? 'bg-[var(--color-french-blue)] text-white' : 'text-neutral-600 hover:text-[var(--color-evergreen)]'}
                 >
                   <MapPin className="w-4 h-4 mr-1" />
                   Map
@@ -175,7 +335,7 @@ export default function MapPage() {
                   variant={viewMode === 'list' ? 'primary' : 'ghost'}
                   size="sm"
                   onClick={() => setViewMode('list')}
-                  className={viewMode === 'list' ? 'bg-primary-600 text-white' : 'text-neutral-600 hover:text-neutral-900'}
+                  className={viewMode === 'list' ? 'bg-[var(--color-french-blue)] text-white' : 'text-neutral-600 hover:text-[var(--color-evergreen)]'}
                 >
                   <List className="w-4 h-4 mr-1" />
                   List
@@ -186,7 +346,7 @@ export default function MapPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowFilters(!showFilters)}
-                className="border-neutral-300 hover:bg-neutral-50"
+                className="border-[var(--color-sage)] hover:bg-[var(--color-mist)]"
               >
                 <Filter className="w-4 h-4 mr-2" />
                 Filters
@@ -221,7 +381,7 @@ export default function MapPage() {
                   }
                 }}
                 placeholder="Search venues by location (e.g., Austin, Nashville, Denver)"
-                className="w-full pl-10 pr-4 py-3 bg-white border border-neutral-200 rounded-xl shadow-sm text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:outline-none"
+                className="w-full pl-10 pr-4 py-3 bg-white border border-[var(--color-sage)] rounded-xl shadow-sm text-sm focus:ring-2 focus:ring-[var(--color-french-blue)] focus:border-[var(--color-french-blue)] focus:outline-none"
               />
               
               {/* Autocomplete Suggestions */}
@@ -231,7 +391,7 @@ export default function MapPage() {
                     <button
                       key={index}
                       onClick={() => executeSearch(suggestion)}
-                      className="w-full text-left px-4 py-2 hover:bg-neutral-50 first:rounded-t-lg last:rounded-b-lg text-sm text-neutral-700 hover:text-neutral-900"
+                      className="w-full text-left px-4 py-2 hover:bg-[var(--color-mist)] first:rounded-t-lg last:rounded-b-lg text-sm text-neutral-700 hover:text-[var(--color-evergreen)]"
                     >
                       <Search className="w-4 h-4 inline mr-2 text-neutral-400" />
                       {suggestion}
@@ -248,7 +408,11 @@ export default function MapPage() {
                 setMapZoom(10);
                 const clearedFilters = { ...currentFilters, searchLocation: '' };
                 setCurrentFilters(clearedFilters);
-                fetchHosts(clearedFilters);
+                if (mapMode === 'hosts') {
+                  fetchHosts(clearedFilters);
+                } else {
+                  fetchShows(clearedFilters);
+                }
               }}
               variant="outline"
               className="px-4 py-3"
@@ -268,8 +432,16 @@ export default function MapPage() {
           {showFilters && (
             <div className="lg:col-span-1">
               <MapFilters 
-                onFiltersChange={setFilteredHosts}
+                onFiltersChange={(filters) => {
+                  setCurrentFilters(filters);
+                  if (mapMode === 'hosts') {
+                    fetchHosts(filters);
+                  } else {
+                    fetchShows(filters);
+                  }
+                }}
                 searchLocation={searchLocation}
+                mapMode={mapMode}
                 className="h-full"
               />
             </div>
@@ -283,18 +455,26 @@ export default function MapPage() {
                   <div className="flex items-center justify-center h-full">
                     <div className="text-center">
                       <p className="text-red-600 mb-2">{error}</p>
-                      <Button onClick={() => fetchHosts(currentFilters)} size="sm">
+                      <Button onClick={() => {
+                        if (mapMode === 'hosts') {
+                          fetchHosts(currentFilters);
+                        } else {
+                          fetchShows(currentFilters);
+                        }
+                      }} size="sm">
                         Retry
                       </Button>
                     </div>
                   </div>
                 ) : (
-                  <TourPadMapContainer 
-                    className="w-full h-full"
-                    initialCenter={mapCenter}
-                    initialZoom={mapZoom}
-                    hosts={filteredHosts}
-                  />
+                  <MapErrorBoundary>
+                    <TourPadMapContainer 
+                      className="w-full h-full"
+                      initialCenter={mapCenter}
+                      initialZoom={mapZoom}
+                      hosts={mapMode === 'hosts' ? filteredHosts : []}
+                    />
+                  </MapErrorBoundary>
                 )}
               </div>
             ) : (
@@ -303,7 +483,10 @@ export default function MapPage() {
                 <div className="p-6 border-b border-neutral-200">
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-semibold text-neutral-900">
-                      Venue List ({filteredHosts.length} venues)
+                      {mapMode === 'hosts' 
+                        ? `Venue List (${filteredHosts.length} venues)`
+                        : `Show List (${filteredShows.length} shows)`
+                      }
                     </h2>
                     
                     {/* Sort Dropdown */}
@@ -312,7 +495,7 @@ export default function MapPage() {
                       <select
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-                        className="border border-neutral-300 rounded-lg px-3 py-1 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        className="border border-[var(--color-sage)] rounded-lg px-3 py-1 text-sm focus:ring-2 focus:ring-[var(--color-french-blue)] focus:border-[var(--color-french-blue)]"
                       >
                         <option value="rating">Highest Rated</option>
                         <option value="reviews">Most Reviews</option>
@@ -331,25 +514,52 @@ export default function MapPage() {
 
                 {/* List Content */}
                 <div className="flex-1 overflow-y-auto p-6">
-                  {filteredHosts.length > 0 ? (
-                    <div className="space-y-4">
-                      {getSortedHosts(filteredHosts).map((host) => (
-                        <HostListCard key={host.id} host={host} />
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-12">
-                      <div className="text-neutral-400 mb-2">
-                        <MapPin className="w-12 h-12 mx-auto" />
+                  {mapMode === 'hosts' ? (
+                    filteredHosts.length > 0 ? (
+                      <div className="space-y-4">
+                        {getSortedHosts(filteredHosts).map((host) => (
+                          <HostListCard key={host.id} host={host} />
+                        ))}
                       </div>
-                      <h3 className="text-lg font-medium text-neutral-900 mb-2">No venues found</h3>
-                      <p className="text-neutral-600">
-                        {searchLocation 
-                          ? `No venues match "${searchLocation}". Try adjusting your search or filters.`
-                          : 'No venues match your current filters. Try adjusting your criteria.'
-                        }
-                      </p>
-                    </div>
+                    ) : (
+                      <div className="text-center py-12">
+                        <div className="text-neutral-400 mb-2">
+                          <MapPin className="w-12 h-12 mx-auto" />
+                        </div>
+                        <h3 className="text-lg font-medium text-neutral-900 mb-2">No venues found</h3>
+                        <p className="text-neutral-600">
+                          {searchLocation 
+                            ? `No venues match "${searchLocation}". Try adjusting your search or filters.`
+                            : 'No venues match your current filters. Try adjusting your criteria.'
+                          }
+                        </p>
+                      </div>
+                    )
+                  ) : (
+                    filteredShows.length > 0 ? (
+                      <div className="space-y-4">
+                        {filteredShows.map((show) => (
+                          <div key={show.id} className="p-4 border border-neutral-200 rounded-lg">
+                            <h3 className="font-semibold">{show.title}</h3>
+                            <p className="text-sm text-neutral-600">{show.artistName} at {show.hostName}</p>
+                            <p className="text-sm text-neutral-500">{show.date} • {show.city}, {show.state}</p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-12">
+                        <div className="text-neutral-400 mb-2">
+                          <MapPin className="w-12 h-12 mx-auto" />
+                        </div>
+                        <h3 className="text-lg font-medium text-neutral-900 mb-2">No shows found</h3>
+                        <p className="text-neutral-600">
+                          {searchLocation 
+                            ? `No shows match "${searchLocation}". Try adjusting your search or filters.`
+                            : 'No confirmed shows match your current filters.'
+                          }
+                        </p>
+                      </div>
+                    )
                   )}
                 </div>
               </div>

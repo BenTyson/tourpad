@@ -274,13 +274,42 @@ async function main() {
           },
           applicationSubmittedAt: new Date(),
           approvedAt: new Date(),
-          approvedByUserId: adminUser.id
+          approvedByUserId: adminUser.id,
+          media: {
+            create: [
+              {
+                fileUrl: 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=800&h=600&fit=crop',
+                mimeType: 'image/jpeg',
+                fileSize: 245000,
+                mediaType: 'PHOTO',
+                sortOrder: 0
+              },
+              {
+                fileUrl: 'https://images.unsplash.com/photo-1522444690501-83bff8a2e608?w=800&h=600&fit=crop',
+                mimeType: 'image/jpeg',
+                fileSize: 198000,
+                mediaType: 'PHOTO',
+                sortOrder: 1
+              },
+              {
+                fileUrl: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=800&h=600&fit=crop',
+                mimeType: 'image/jpeg',
+                fileSize: 267000,
+                mediaType: 'PHOTO',
+                sortOrder: 2
+              }
+            ]
+          }
         }
       }
     },
     include: {
       profile: true,
-      host: true
+      host: {
+        include: {
+          media: true
+        }
+      }
     }
   });
 
@@ -321,13 +350,42 @@ async function main() {
           offersLodging: false,
           applicationSubmittedAt: new Date(),
           approvedAt: new Date(),
-          approvedByUserId: adminUser.id
+          approvedByUserId: adminUser.id,
+          media: {
+            create: [
+              {
+                fileUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop',
+                mimeType: 'image/jpeg',
+                fileSize: 312000,
+                mediaType: 'PHOTO',
+                sortOrder: 0
+              },
+              {
+                fileUrl: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&h=600&fit=crop',
+                mimeType: 'image/jpeg',
+                fileSize: 276000,
+                mediaType: 'PHOTO',
+                sortOrder: 1
+              },
+              {
+                fileUrl: 'https://images.unsplash.com/photo-1521747116042-5a810fda9664?w=800&h=600&fit=crop',
+                mimeType: 'image/jpeg',
+                fileSize: 289000,
+                mediaType: 'PHOTO',
+                sortOrder: 2
+              }
+            ]
+          }
         }
       }
     },
     include: {
       profile: true,
-      host: true
+      host: {
+        include: {
+          media: true
+        }
+      }
     }
   });
 
@@ -375,13 +433,256 @@ async function main() {
           },
           applicationSubmittedAt: new Date(),
           approvedAt: new Date(),
-          approvedByUserId: adminUser.id
+          approvedByUserId: adminUser.id,
+          media: {
+            create: [
+              {
+                fileUrl: 'https://images.unsplash.com/photo-1558905921-68d23d99b52d?w=800&h=600&fit=crop',
+                mimeType: 'image/jpeg',
+                fileSize: 334000,
+                mediaType: 'PHOTO',
+                sortOrder: 0
+              },
+              {
+                fileUrl: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&h=600&fit=crop',
+                mimeType: 'image/jpeg',
+                fileSize: 298000,
+                mediaType: 'PHOTO',
+                sortOrder: 1
+              },
+              {
+                fileUrl: 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=800&h=600&fit=crop',
+                mimeType: 'image/jpeg',
+                fileSize: 256000,
+                mediaType: 'PHOTO',
+                sortOrder: 2
+              }
+            ]
+          }
         }
       }
     },
     include: {
       profile: true,
-      host: true
+      host: {
+        include: {
+          media: true
+        }
+      }
+    }
+  });
+
+  // Create FOURTH host - Rachel Green (Portland)
+  const host4User = await prisma.user.create({
+    data: {
+      email: 'rachel@example.com',
+      passwordHash: hashedPassword,
+      name: 'Rachel Green',
+      userType: 'HOST',
+      status: 'ACTIVE',
+      emailVerified: true,
+      termsAcceptedAt: new Date(),
+      privacyPolicyAcceptedAt: new Date(),
+      profile: {
+        create: {
+          bio: 'Coffee shop owner who loves hosting acoustic sessions',
+          location: 'Portland, OR',
+          phone: '(555) 654-3210',
+          profileImageUrl: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400&h=400&fit=crop&crop=face',
+          socialLinks: {
+            instagram: 'rachelscoffeehouse'
+          }
+        }
+      },
+      host: {
+        create: {
+          venueName: 'Green Bean Coffee House',
+          venueType: 'OTHER',
+          city: 'Portland',
+          state: 'OR',
+          displayCoordinates: '45.5152,-122.6784',
+          indoorCapacity: 30,
+          preferredGenres: ['Acoustic', 'Indie', 'Folk', 'Singer-Songwriter'],
+          hostingExperience: 4,
+          typicalShowLength: 75,
+          houseRules: 'All ages welcome, coffee and pastries available for purchase',
+          offersLodging: false,
+          applicationSubmittedAt: new Date(),
+          approvedAt: new Date(),
+          approvedByUserId: adminUser.id,
+          media: {
+            create: [
+              {
+                fileUrl: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&h=600&fit=crop',
+                mimeType: 'image/jpeg',
+                fileSize: 278000,
+                mediaType: 'PHOTO',
+                sortOrder: 0
+              },
+              {
+                fileUrl: 'https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=800&h=600&fit=crop',
+                mimeType: 'image/jpeg',
+                fileSize: 234000,
+                mediaType: 'PHOTO',
+                sortOrder: 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    include: {
+      profile: true,
+      host: {
+        include: {
+          media: true
+        }
+      }
+    }
+  });
+
+  // Create FIFTH host - David Kim (Seattle)
+  const host5User = await prisma.user.create({
+    data: {
+      email: 'david@example.com',
+      passwordHash: hashedPassword,
+      name: 'David Kim',
+      userType: 'HOST',
+      status: 'ACTIVE',
+      emailVerified: true,
+      termsAcceptedAt: new Date(),
+      privacyPolicyAcceptedAt: new Date(),
+      profile: {
+        create: {
+          bio: 'Art gallery owner passionate about combining visual and musical arts',
+          location: 'Seattle, WA',
+          phone: '(555) 543-2109',
+          profileImageUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&crop=face',
+          socialLinks: {
+            instagram: 'kimgalleryseattle'
+          }
+        }
+      },
+      host: {
+        create: {
+          venueName: 'Kim Gallery & Performance Space',
+          venueType: 'LOFT',
+          city: 'Seattle',
+          state: 'WA',
+          displayCoordinates: '47.6062,-122.3321',
+          indoorCapacity: 35,
+          preferredGenres: ['Jazz', 'Classical', 'Experimental', 'World Music'],
+          hostingExperience: 6,
+          typicalShowLength: 90,
+          houseRules: 'Art gallery setting, please respect the artwork, wine and cheese provided',
+          offersLodging: true,
+          lodgingDetails: {
+            beds: 1,
+            bathroom: 'shared',
+            amenities: ['wifi', 'parking', 'kitchenette'],
+            rules: 'Artists only, quiet after 11pm',
+            pricing: { baseRate: 45, cleaningFee: 15 }
+          },
+          applicationSubmittedAt: new Date(),
+          approvedAt: new Date(),
+          approvedByUserId: adminUser.id,
+          media: {
+            create: [
+              {
+                fileUrl: 'https://images.unsplash.com/photo-1565034946487-077786996e27?w=800&h=600&fit=crop',
+                mimeType: 'image/jpeg',
+                fileSize: 290000,
+                mediaType: 'PHOTO',
+                sortOrder: 0
+              },
+              {
+                fileUrl: 'https://images.unsplash.com/photo-1531058020387-3be344556be6?w=800&h=600&fit=crop',
+                mimeType: 'image/jpeg',
+                fileSize: 267000,
+                mediaType: 'PHOTO',
+                sortOrder: 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    include: {
+      profile: true,
+      host: {
+        include: {
+          media: true
+        }
+      }
+    }
+  });
+
+  // Create SIXTH host - Maria Garcia (Phoenix)
+  const host6User = await prisma.user.create({
+    data: {
+      email: 'maria@example.com',
+      passwordHash: hashedPassword,
+      name: 'Maria Garcia',
+      userType: 'HOST',
+      status: 'ACTIVE',
+      emailVerified: true,
+      termsAcceptedAt: new Date(),
+      privacyPolicyAcceptedAt: new Date(),
+      profile: {
+        create: {
+          bio: 'Desert oasis backyard perfect for sunset concerts',
+          location: 'Phoenix, AZ',
+          phone: '(555) 432-1098',
+          profileImageUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop&crop=face',
+          socialLinks: {
+            instagram: 'mariasmusicpatio'
+          }
+        }
+      },
+      host: {
+        create: {
+          venueName: 'Desert Rose Music Patio',
+          venueType: 'BACKYARD',
+          city: 'Phoenix',
+          state: 'AZ',
+          displayCoordinates: '33.4484,-112.0740',
+          outdoorCapacity: 45,
+          preferredGenres: ['Country', 'Folk', 'Americana', 'Blues'],
+          hostingExperience: 8,
+          typicalShowLength: 90,
+          houseRules: 'Desert casual, BYOB, bring sunscreen for afternoon shows',
+          offersLodging: false,
+          applicationSubmittedAt: new Date(),
+          approvedAt: new Date(),
+          approvedByUserId: adminUser.id,
+          media: {
+            create: [
+              {
+                fileUrl: 'https://images.unsplash.com/photo-1470229538611-16ba8c7ffbd7?w=800&h=600&fit=crop',
+                mimeType: 'image/jpeg',
+                fileSize: 301000,
+                mediaType: 'PHOTO',
+                sortOrder: 0
+              },
+              {
+                fileUrl: 'https://images.unsplash.com/photo-1523301343968-6a6ebf63c672?w=800&h=600&fit=crop',
+                mimeType: 'image/jpeg',
+                fileSize: 287000,
+                mediaType: 'PHOTO',
+                sortOrder: 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    include: {
+      profile: true,
+      host: {
+        include: {
+          media: true
+        }
+      }
     }
   });
 
@@ -663,18 +964,21 @@ async function main() {
   console.log(`  👤 Admin: ${adminUser.email}`);
   console.log(`  🎵 Artists: ${artist1User.email}, ${artist2User.email}, ${artist3User.email}`);
   console.log(`  🏠 Hosts: ${host1User.email}, ${host2User.email}, ${host3User.email}`);
+  console.log(`           ${host4User.email}, ${host5User.email}, ${host6User.email}`);
   console.log(`  🎉 Fan: ${fanUser.email}`);
   console.log('\n📈 Test Data Summary:');
   console.log(`  - 3 Artists with varied genres (Folk, Jazz, Electronic)`);
-  console.log(`  - 3 Hosts with different venue types (Home, Outdoor, Barn)`);
+  console.log(`  - 6 Hosts with different venue types across multiple cities`);
   console.log(`  - 4 Completed bookings ready for testing`);
   console.log(`  - 8 Reviews with ratings from 3 to 5 stars`);
   console.log(`  - Real profile images for all users`);
+  console.log(`  - Professional venue photos for all hosts`);
   console.log('\n🔐 Login Credentials:');
   console.log(`  - All users use password: password123`);
   console.log(`  - Admin: admin@tourpad.com`);
   console.log(`  - Artists: sarah@example.com, marcus@example.com, luna@example.com`);
   console.log(`  - Hosts: mike@example.com, emily@example.com, james@example.com`);
+  console.log(`           rachel@example.com, david@example.com, maria@example.com`);
 }
 
 main()
