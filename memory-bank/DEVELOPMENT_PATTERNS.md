@@ -4,6 +4,32 @@
 
 ## UI/UX Design Patterns ✅ ESTABLISHED
 
+### Site-Wide Color Scheme (Coastal Theme)
+```css
+/* Color variables - use these consistently */
+--color-french-blue: #3b82f6;  /* Primary actions, links, focus states */
+--color-sage: #9ca3af;         /* Borders, subtle backgrounds */
+--color-mist: #f3f4f6;         /* Light backgrounds, hover states */
+--color-sand: #fef3c7;         /* Warnings, highlights (sparingly) */
+--color-evergreen: #064e3b;    /* Dark text, important headers */
+```
+
+### Message Input Standards
+```typescript
+// ✅ Use textarea for multi-line inputs
+<textarea
+  className="flex-1 resize-none h-12 px-3 py-2 border border-[var(--color-sage)] rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-french-blue)] focus:border-transparent disabled:opacity-50"
+  rows={2}
+  placeholder="Type a message..."
+  onKeyPress={(e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  }}
+/>
+```
+
 ### Admin Interface Standards
 Based on successful admin applications page implementation:
 

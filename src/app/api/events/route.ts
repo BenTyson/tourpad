@@ -20,6 +20,7 @@ export async function GET(req: NextRequest) {
       // Store the controller for this user
       const clientId = `${userId}-${Date.now()}`;
       clients.set(clientId, controller);
+      console.log(`[SSE] Client connected: ${clientId}. Total clients: ${clients.size}`);
 
       // Send initial connection message
       const encoder = new TextEncoder();
@@ -44,6 +45,7 @@ export async function GET(req: NextRequest) {
         clearInterval(heartbeat);
         clients.delete(clientId);
         controller.close();
+        console.log(`[SSE] Client disconnected: ${clientId}. Total clients: ${clients.size}`);
       });
     },
   });

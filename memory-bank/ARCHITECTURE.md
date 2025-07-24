@@ -7,6 +7,7 @@
 - **React 19** - Frontend UI library
 - **TypeScript** - Type safety throughout application
 - **Tailwind CSS v4** - Utility-first CSS framework
+- **Node.js 20.19.4 LTS** - Runtime environment (migrated from Node 22 for stability)
 
 ### Backend & Database
 - **PostgreSQL** - Primary database
@@ -19,11 +20,17 @@
 - **AWS S3 + CloudFront** - Production file storage (configured, ready)
 - **Image Processing** - JPEG, PNG, WebP support with validation
 - **Profile Image System** - Smart resolution with fallback chains (✅ implemented)
+- **File Attachments** - Message attachments up to 10MB (images, PDFs, documents)
 
 ### Development & Deployment
-- **Local Development** - PostgreSQL + Node.js
+- **Local Development** - PostgreSQL + Node.js 20.x LTS
 - **Production Ready** - Vercel deployment configuration
 - **Version Control** - Git with documented branching strategy
+
+### Real-time Features (Temporarily Disabled)
+- **Polling System** - Message updates, typing indicators, online status
+- **Status**: Disabled due to dependency loop causing server crashes
+- **Fix Required**: useRealtimeMessaging hook needs stable refs pattern
 
 ---
 

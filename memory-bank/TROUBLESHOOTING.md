@@ -4,6 +4,30 @@
 
 ### Known Crash Scenarios & Solutions
 
+#### 0. Excessive Polling Server Crashes (CRITICAL - CURRENT ISSUE)
+**Symptoms**: 
+- Server crashes after a few seconds to minutes
+- Thousands of `/api/messages/poll` requests per second
+- "TypeError: Failed to fetch" errors when sending messages
+- Console shows rapid-fire GET requests with millisecond timestamps
+
+**Root Cause**: Dependency loop in useRealtimeMessaging hook creating cascading intervals
+
+**Temporary Fix (ACTIVE)**:
+```typescript
+// /src/app/api/messages/poll/route.ts
+export async function GET(request: NextRequest) {
+  // COMPLETELY DISABLED - returning 404 to stop excessive polling
+  return NextResponse.json({ error: 'Polling disabled' }, { status: 404 });
+}
+```
+
+**Proper Solution (TODO)**:
+- Fix useRealtimeMessaging hook with stable refs pattern
+- Use useRef for function references to prevent recreation
+- Properly cleanup intervals on unmount
+- Consider implementing WebSocket connection instead
+
 #### 1. TypeScript Compilation Errors
 **Symptoms**: 
 - Server starts but crashes when clicking UI elements
@@ -31,6 +55,11 @@ npm install
 npx prisma generate
 npm run dev
 ```
+
+**Node.js Version Compatibility**:
+- **Recommended**: Node.js 20.x LTS (20.19.4)
+- **Avoid**: Node.js 22.x (may cause stability issues)
+- **Switch versions**: `nvm use 20`
 
 #### 4. Large File Uploads Memory Issues (NEW)
 **Symptoms**: 
