@@ -540,7 +540,7 @@ export default function CalendarPage() {
             <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[85vh] flex flex-col overflow-hidden">
               {/* Header Image */}
               {(() => {
-                const userRole = session?.user?.userType || session?.user?.type || 'fan';
+                const userRole = session?.user?.type || 'fan';
                 
                 if (userRole === 'artist') {
                   // Artists see venue photos

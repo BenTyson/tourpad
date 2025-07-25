@@ -180,7 +180,7 @@ export default function MessagesPage() {
   const fetchOnlineStatus = (participantIds?: string[]) => {};
   const clearNewMessages = () => {};
   const clearUpdatedConversations = () => {};
-  const isUserOnline = () => false;
+  const isUserOnline = (userId?: string) => false;
 
   // Fetch conversations
   const fetchConversations = async () => {

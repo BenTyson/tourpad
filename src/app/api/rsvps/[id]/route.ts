@@ -254,7 +254,7 @@ export async function PUT(
         status: updatedRSVP.status,
         guestsCount: updatedRSVP.guestsCount,
         specialRequests: updatedRSVP.specialRequests,
-        hostResponse: updatedRSVP.hostResponse,
+        // hostResponse field not in schema
         rsvpDate: updatedRSVP.rsvpDate,
         statusUpdatedAt: updatedRSVP.statusUpdatedAt,
         fan: {

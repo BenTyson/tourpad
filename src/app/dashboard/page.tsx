@@ -200,7 +200,7 @@ export default function DashboardPage() {
 
   // Get user info from current user data (fresh from database) if available, otherwise fall back to session
   const userData = currentUser || session.user;
-  const userRole = (userData.userType || userData.type || 'fan') as UserRole;
+  const userRole: UserRole = (userData.userType || userData.type || 'fan') as UserRole;
   const userStatus = userData.status || 'pending';
   const selectedUserId = userData.id;
 
