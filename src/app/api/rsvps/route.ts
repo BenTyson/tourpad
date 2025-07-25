@@ -134,11 +134,11 @@ export async function GET(request: NextRequest) {
       specialRequests: rsvp.specialRequests,
       rsvpDate: rsvp.rsvpDate,
       statusUpdatedAt: rsvp.statusUpdatedAt,
-      fan: userType === 'host' ? {
-        id: rsvp.fan.id,
-        name: rsvp.fan.user.name,
-        email: rsvp.fan.user.email,
-        profileImageUrl: rsvp.fan.user.profileImageUrl
+      fan: userType === 'host' && (rsvp as any).fan ? {
+        id: (rsvp as any).fan.id,
+        name: (rsvp as any).fan.user.name,
+        email: (rsvp as any).fan.user.email,
+        profileImageUrl: (rsvp as any).fan.user.profileImageUrl
       } : null,
       concert: {
         id: rsvp.concert.id,
@@ -170,10 +170,10 @@ export async function GET(request: NextRequest) {
     // Get total count for pagination
     const totalCount = await prisma.fanRSVP.count({
       where: userType === 'fan' 
-        ? { fanId: rsvps[0]?.fanId, ...(status && { status: status.toUpperCase() }) }
+        ? { fanId: rsvps[0]?.fanId, ...(status && { status: status.toUpperCase() as any }) }
         : { 
             concert: { booking: { hostId: rsvps[0]?.concert?.booking?.hostId } },
-            ...(status && { status: status.toUpperCase() })
+            ...(status && { status: status.toUpperCase() as any })
           }
     });
 

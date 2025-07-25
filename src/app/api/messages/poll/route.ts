@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
 
     let sinceDate: Date;
     if (since !== null) {
-      sinceDate = new Date(since);
+      sinceDate = new Date(since as string);
     } else {
       // Default to last 30 seconds if no since timestamp
       sinceDate = new Date(Date.now() - 30000);
@@ -100,10 +100,10 @@ export async function GET(request: NextRequest) {
         where: { id: conversationId! }
       });
 
-      if (conversation && (conversation.participantIds.includes(session.user.id) || session.user.type === 'admin')) {
+      if (conversation && (conversation!.participantIds.includes(session!.user.id) || session!.user.type === 'admin')) {
         const messages = await prisma.message.findMany({
           where: {
-            conversationId,
+            conversationId: conversationId!,
             createdAt: {
               gte: sinceDate
             }
@@ -150,9 +150,9 @@ export async function GET(request: NextRequest) {
         newMessages = messages;
 
         // Mark new messages as read for participants (not admins)
-        if (session.user.type !== 'admin') {
+        if (session!.user.type !== 'admin') {
           const unreadMessageIds = messages
-            .filter(msg => !msg.readBy.includes(session.user.id))
+            .filter(msg => !msg.readBy.includes(session!.user.id))
             .map(msg => msg.id);
 
           if (unreadMessageIds.length > 0) {
@@ -162,7 +162,7 @@ export async function GET(request: NextRequest) {
               },
               data: {
                 readBy: {
-                  push: session.user.id
+                  push: session!.user.id
                 }
               }
             });
@@ -174,7 +174,7 @@ export async function GET(request: NextRequest) {
     // Calculate unread counts for updated conversations
     const conversationsWithUnread = await Promise.all(
       conversations.map(async (conv) => {
-        const unreadCount = session.user.type === 'admin' 
+        const unreadCount = session!.user.type === 'admin' 
           ? await prisma.message.count({
               where: { conversationId: conv.id }
             })
@@ -183,7 +183,7 @@ export async function GET(request: NextRequest) {
                 conversationId: conv.id,
                 NOT: {
                   readBy: {
-                    has: session.user.id
+                    has: session!.user.id
                   }
                 }
               }
@@ -233,9 +233,9 @@ export async function GET(request: NextRequest) {
         return {
           id: conv.id,
           subject: conv.subject,
-          participants: session.user.type === 'admin' 
+          participants: session!.user.type === 'admin' 
             ? participants 
-            : participants.filter(p => p.id !== session.user.id),
+            : participants.filter(p => p.id !== session!.user.id),
           lastMessageAt: conv.lastMessageAt,
           unreadCount,
           newMessages: conv.messages || []

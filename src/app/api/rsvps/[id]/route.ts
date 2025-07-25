@@ -98,7 +98,7 @@ export async function GET(
           venueName: rsvp.concert.booking.host.venueName,
           city: rsvp.concert.booking.host.city,
           state: rsvp.concert.booking.host.state,
-          address: userIsFan && rsvp.status === 'APPROVED' ? rsvp.concert.booking.host.address : null,
+          address: userIsFan && rsvp.status === 'APPROVED' ? rsvp.concert.booking.host.actualAddress : null,
           profileImageUrl: rsvp.concert.booking.host.user.profileImageUrl
         }
       }

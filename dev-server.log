@@ -2,9 +2,9 @@
 > pad@0.1.0 dev:stable
 > node scripts/dev-server.js
 
-✅ [2025-07-25T22:04:25.662Z] System Memory: 16GB, Allocating: 8192MB old space, 512MB semi space
-✅ [2025-07-25T22:04:25.664Z] Starting Next.js server with memory: 8192MB
-✅ [2025-07-25T22:04:25.666Z] Development server started successfully
+✅ [2025-07-25T22:24:14.094Z] System Memory: 16GB, Allocating: 8192MB old space, 512MB semi space
+✅ [2025-07-25T22:24:14.095Z] Starting Next.js server with memory: 8192MB
+✅ [2025-07-25T22:24:14.096Z] Development server started successfully
    [1m[38;2;173;127;168m▲ Next.js 15.3.5[39m[22m
    - Local:        http://localhost:3001
    - Network:      http://0.0.0.0:3001
@@ -13,6 +13,42 @@
      [1m⨯[22m webpackBuildWorker
 
  [32m[1m✓[22m[39m Starting...
- [32m[1m✓[22m[39m Ready in 1063ms
-[2025-07-25 16:04:27] [INFO] Server is ready and running at http://localhost:3000
-[2025-07-25 16:04:27] [INFO] Monitoring server (PID: 84819)
+ [32m[1m✓[22m[39m Ready in 1000ms
+ [37m[1m○[22m[39m Compiling /middleware ...
+ [32m[1m✓[22m[39m Compiled /middleware in 662ms (265 modules)
+ [37m[1m○[22m[39m Compiling /artists/[id] ...
+ [32m[1m✓[22m[39m Compiled /artists/[id] in 3.1s (1030 modules)
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 [32m200[39m in 3552ms
+ [32m[1m✓[22m[39m Compiled /api/auth/[...nextauth] in 101ms (579 modules)
+ [32m[1m✓[22m[39m Compiled in 239ms (459 modules)
+ GET /favicon.ico [32m200[39m in 686ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 [32m200[39m in 50ms
+ GET /api/artists?exclude=cmdi3mtba0004ludm6i1aexz0&limit=3 [32m200[39m in 853ms
+ GET /api/artists/cmdi3mtba0004ludm6i1aexz0 [32m200[39m in 983ms
+ GET /api/auth/session [32m200[39m in 1119ms
+ [32m[1m✓[22m[39m Compiled /api/notifications in 325ms (1188 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session [32m200[39m in 284ms
+ GET /api/notifications?unread=true&limit=0 [32m200[39m in 301ms
+ GET /api/auth/session [32m200[39m in 16ms
+ GET /api/notifications?unread=true&limit=0 [32m200[39m in 24ms
+ GET /api/auth/session [32m200[39m in 21ms
+ [32m[1m✓[22m[39m Compiled /api/profile in 145ms (1190 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+Found media: {
+  id: [32m'cmdja8jr50003luczi6pu1aoo'[39m,
+  artistId: [32m'cmdi3mtba0004ludm6i1aexz0'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'PRESS'[39m,
+  fileUrl: [32m'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face'[39m,
+  fileSize: [1mnull[22m,
+  mimeType: [1mnull[22m,
+  title: [32m'Sarah Johnson Press Photo'[39m,
+  description: [32m'Professional press photo for Sarah Johnson'[39m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-25T20:37:12.833Z[39m
+}
+ GET /api/profile [32m200[39m in 199ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 [32m200[39m in 735ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 [32m200[39m in 16ms
