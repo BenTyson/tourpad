@@ -177,7 +177,7 @@ export default function MessagesPage() {
   const onlineStatus: any = {};
   const startTyping = () => {};
   const stopTyping = () => {};
-  const fetchOnlineStatus = () => {};
+  const fetchOnlineStatus = (participantIds?: string[]) => {};
   const clearNewMessages = () => {};
   const clearUpdatedConversations = () => {};
   const isUserOnline = () => false;

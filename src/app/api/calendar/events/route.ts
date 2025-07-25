@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type') as CalendarEventType | null;
     const status = searchParams.get('status');
 
-    const rawUserRole = session.user.userType || session.user.type || 'fan';
+    const rawUserRole = session.user.type || 'fan';
     const userRole = rawUserRole.toLowerCase() as 'artist' | 'host' | 'fan' | 'admin';
     const userId = session.user.id;
     
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
       rawUserRole,
       userRole, 
       email: session.user.email,
-      userType: session.user.userType,
+      userType: session.user.type,
       type: session.user.type
     });
 
@@ -136,8 +136,8 @@ export async function GET(request: NextRequest) {
             status: booking.status.toLowerCase() as CalendarEventStatus,
             location: `${booking.host.city}, ${booking.host.state}`,
             participants: {
-              artist: booking.artist.user.name || booking.artist.stageName,
-              host: booking.host.user.name || booking.host.venueName,
+              artist: booking.artist.user.name || booking.artist.stageName || undefined,
+              host: booking.host.user.name || booking.host.venueName || undefined,
               attendeeCount: booking.expectedAttendance || undefined
             },
             details: booking
@@ -224,8 +224,8 @@ export async function GET(request: NextRequest) {
           status: concert.status.toLowerCase() as CalendarEventStatus,
           location: concert.booking.host.venueName || `${concert.booking.host.city}, ${concert.booking.host.state}`,
           participants: {
-            artist: concert.booking.artist.user.name || concert.booking.artist.stageName,
-            host: concert.booking.host.user.name || concert.booking.host.venueName,
+            artist: concert.booking.artist.user.name || concert.booking.artist.stageName || undefined,
+            host: concert.booking.host.user.name || concert.booking.host.venueName || undefined,
             attendeeCount: rsvpCount
           },
           details: {

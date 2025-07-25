@@ -58,8 +58,7 @@ class DevServerManager {
     // Enhanced Node.js flags for stability (only allowed options)
     const nodeFlags = [
       `--max-old-space-size=${memory.maxOldSpace}`,
-      '--trace-warnings',
-      '--unhandled-rejections=warn'
+      '--trace-warnings'
     ];
 
     // Environment variables for Next.js optimization

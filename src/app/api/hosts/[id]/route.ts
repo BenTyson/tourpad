@@ -121,19 +121,19 @@ export async function GET(
       ...await (async () => {
         const reviewStats = await prisma.review.aggregate({
           where: {
-            revieweeId: host.userId,
+            hostId: host.userId,
             isPublic: true
           },
           _avg: {
-            rating: true
+            hostRating: true
           },
           _count: {
             id: true
           }
         });
         return {
-          rating: reviewStats._avg.rating ? Math.round(reviewStats._avg.rating * 10) / 10 : 0,
-          reviewCount: reviewStats._count.id
+          rating: reviewStats._avg.hostRating ? Math.round(reviewStats._avg.hostRating * 10) / 10 : 0,
+          reviewCount: reviewStats._count.id || 0
         };
       })(),
       // Show specs - derived from database fields

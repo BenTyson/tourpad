@@ -219,22 +219,30 @@ class SpotifyService {
             where: { spotifyId: albumSpotifyId }
           });
           
-          if (!albumExists) {
-            // Create album data from track info
-            const albumData: SpotifyAlbumData = {
-              id: track.album.id,
-              name: track.album.name,
-              album_type: 'unknown', // Not available in track data
-              release_date: '', // Not available in track data
-              total_tracks: 0, // Not available in track data
-              images: track.album.images,
-              external_urls: { spotify: '' }, // Not available in track data
-            };
-            await this.syncAlbumData(artistId, albumData);
+          if (!albumExists && track.album?.images?.length > 0) {
+            // Only create album from track info if it has images and doesn't exist
+            // Fetch full album data from Spotify to get complete information
+            try {
+              const fullAlbumData = await this.getAlbum(track.album.id);
+              await this.syncAlbumData(artistId, fullAlbumData);
+            } catch (error) {
+              console.warn(`Could not fetch full album data for ${track.album.id}, using track info`);
+              // Fallback to track info if full album fetch fails
+              const albumData: SpotifyAlbumData = {
+                id: track.album.id,
+                name: track.album.name,
+                album_type: 'unknown',
+                release_date: '',
+                total_tracks: 0,
+                images: track.album.images,
+                external_urls: { spotify: `https://open.spotify.com/album/${track.album.id}` },
+              };
+              await this.syncAlbumData(artistId, albumData);
+            }
           }
         }
         
-        await this.syncTrackData(artistId, track, albumSpotifyId);
+        await this.syncTrackData(artistId, track, albumSpotifyId || undefined);
       }
 
       console.log(`✅ Spotify sync completed for artist ${artistId}`);
@@ -251,6 +259,13 @@ class SpotifyService {
     try {
       // Get the largest image URL
       const imageUrl = albumData.images?.[0]?.url || null;
+      
+      // Debug logging for image URLs
+      console.log(`🖼️  Syncing album "${albumData.name}":`, {
+        hasImages: albumData.images?.length > 0,
+        imageCount: albumData.images?.length || 0,
+        imageUrl: imageUrl ? imageUrl.substring(0, 50) + '...' : 'NULL'
+      });
 
       await prisma.spotifyAlbum.upsert({
         where: { spotifyId: albumData.id },

@@ -115,7 +115,7 @@ optimize_environment() {
         max_old_space=8192
     fi
     
-    export NODE_OPTIONS="--max-old-space-size=$max_old_space --optimize-for-size --gc-interval=100"
+    export NODE_OPTIONS="--max-old-space-size=$max_old_space"
     export NEXT_TELEMETRY_DISABLED=1
     export FORCE_COLOR=1
     export UV_THREADPOOL_SIZE=128

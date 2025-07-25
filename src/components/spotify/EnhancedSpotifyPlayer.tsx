@@ -13,7 +13,8 @@ import {
   Music,
   List,
   Minimize2,
-  Maximize2
+  Maximize2,
+  ExternalLink
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -71,17 +72,18 @@ export default function EnhancedSpotifyPlayer({
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const progressInterval = useRef<NodeJS.Timeout | null>(null);
 
-  // Filter tracks with preview URLs
+  // Show all tracks, filter playable ones for audio functionality
   const playableTracks = tracks.filter(track => track.previewUrl);
-  const currentTrack = playableTracks[currentTrackIndex];
+  const allTracks = tracks;
+  const currentTrack = allTracks[currentTrackIndex];
 
   // Initialize shuffled indices
   useEffect(() => {
-    if (playableTracks.length > 0) {
-      const indices = Array.from({ length: playableTracks.length }, (_, i) => i);
+    if (allTracks.length > 0) {
+      const indices = Array.from({ length: allTracks.length }, (_, i) => i);
       setShuffledIndices(indices);
     }
-  }, [playableTracks.length]);
+  }, [allTracks.length]);
 
   // Audio setup and cleanup
   useEffect(() => {
@@ -157,7 +159,7 @@ export default function EnhancedSpotifyPlayer({
       return currentTrackIndex;
     }
 
-    const indices = isShuffled ? shuffledIndices : Array.from({ length: playableTracks.length }, (_, i) => i);
+    const indices = isShuffled ? shuffledIndices : Array.from({ length: allTracks.length }, (_, i) => i);
     const currentIndex = indices.indexOf(currentTrackIndex);
     
     if (currentIndex < indices.length - 1) {
@@ -174,7 +176,7 @@ export default function EnhancedSpotifyPlayer({
       return playHistory[playHistory.length - 2];
     }
     
-    const indices = isShuffled ? shuffledIndices : Array.from({ length: playableTracks.length }, (_, i) => i);
+    const indices = isShuffled ? shuffledIndices : Array.from({ length: allTracks.length }, (_, i) => i);
     const currentIndex = indices.indexOf(currentTrackIndex);
     
     if (currentIndex > 0) {
@@ -254,7 +256,7 @@ export default function EnhancedSpotifyPlayer({
     setIsShuffled(!isShuffled);
     if (!isShuffled) {
       // Shuffle the indices
-      const indices = Array.from({ length: playableTracks.length }, (_, i) => i);
+      const indices = Array.from({ length: allTracks.length }, (_, i) => i);
       for (let i = indices.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [indices[i], indices[j]] = [indices[j], indices[i]];
@@ -277,14 +279,132 @@ export default function EnhancedSpotifyPlayer({
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
-  if (playableTracks.length === 0) {
+  if (allTracks.length === 0) {
     return (
       <Card className={`bg-neutral-100 ${className}`}>
         <CardContent className="p-6 text-center">
           <Music className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-          <p className="text-neutral-600">No preview tracks available</p>
+          <p className="text-neutral-600">No tracks available</p>
         </CardContent>
       </Card>
+    );
+  }
+
+  // If no tracks have previews, show a beautiful visual showcase
+  if (playableTracks.length === 0) {
+    return (
+      <div className={`space-y-6 ${className}`}>
+        {/* Header */}
+        <div className="text-center">
+          <h3 className="text-2xl font-bold text-neutral-900 mb-2">
+            Popular Tracks
+          </h3>
+          <p className="text-neutral-600">
+            {allTracks.length} songs by {artistName}
+          </p>
+        </div>
+
+        {/* Track Grid - Spotify-style */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {allTracks.slice(0, 6).map((track, index) => (
+            <Card 
+              key={track.id} 
+              className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-white to-neutral-50 border-neutral-200"
+            >
+              <CardContent className="p-0">
+                {/* Album Art */}
+                <div className="relative aspect-square overflow-hidden rounded-t-lg">
+                  {track.album?.imageUrl ? (
+                    <img
+                      src={track.album.imageUrl}
+                      alt={`${track.name} by ${artistName}`}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-primary-200 to-secondary-200 flex items-center justify-center">
+                      <Music className="w-16 h-16 text-primary-600" />
+                    </div>
+                  )}
+                  
+                  {/* Play Button Overlay */}
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-300 flex items-center justify-center">
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <Button
+                        onClick={() => window.open(track.spotifyUrl, '_blank')}
+                        className="w-16 h-16 rounded-full bg-green-500 hover:bg-green-400 text-white shadow-2xl transform scale-75 hover:scale-90 transition-all duration-200"
+                        title="Play on Spotify"
+                      >
+                        <Play className="w-6 h-6 ml-1" />
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Track Number */}
+                  <div className="absolute top-3 left-3">
+                    <Badge className="bg-black/70 text-white text-xs">
+                      #{index + 1}
+                    </Badge>
+                  </div>
+                </div>
+
+                {/* Track Info */}
+                <div className="p-4 space-y-2">
+                  <h4 className="font-semibold text-neutral-900 text-lg leading-tight truncate">
+                    {track.name}
+                  </h4>
+                  <p className="text-neutral-600 text-sm">
+                    {track.album?.name}
+                  </p>
+                  
+                  <div className="flex items-center justify-between pt-2">
+                    <div className="flex items-center space-x-2">
+                      {track.explicit && (
+                        <Badge className="bg-neutral-200 text-neutral-700 text-xs">E</Badge>
+                      )}
+                      <span className="text-xs text-neutral-500">
+                        {Math.floor(track.durationMs / 60000)}:{String(Math.floor((track.durationMs % 60000) / 1000)).padStart(2, '0')}
+                      </span>
+                    </div>
+                    
+                    <Button
+                      onClick={() => window.open(track.spotifyUrl, '_blank')}
+                      size="sm"
+                      variant="outline"
+                      className="border-green-300 text-green-700 hover:bg-green-50 text-xs px-2 py-1"
+                    >
+                      <ExternalLink className="w-3 h-3 mr-1" />
+                      Spotify
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Show More */}
+        {allTracks.length > 6 && (
+          <div className="text-center pt-4">
+            <p className="text-neutral-600 mb-4">
+              +{allTracks.length - 6} more tracks available
+            </p>
+            <Button
+              onClick={() => window.open(`https://open.spotify.com/artist/${currentTrack?.spotifyUrl?.split('/artist/')[1]}`, '_blank')}
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              <ExternalLink className="w-4 h-4 mr-2" />
+              View All on Spotify
+            </Button>
+          </div>
+        )}
+
+        {/* Info Note */}
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center">
+          <p className="text-yellow-800 text-sm">
+            <strong>Preview unavailable:</strong> Full tracks can be played on Spotify
+          </p>
+        </div>
+      </div>
     );
   }
 
@@ -320,10 +440,17 @@ export default function EnhancedSpotifyPlayer({
                     </p>
                     <div className="flex items-center space-x-2 mt-1">
                       <Badge className="bg-primary-700 text-primary-200 text-xs">
-                        {currentTrackIndex + 1} / {playableTracks.length}
+                        {currentTrackIndex + 1} / {allTracks.length}
                       </Badge>
                       {currentTrack?.explicit && (
                         <Badge className="bg-neutral-700 text-neutral-300 text-xs">E</Badge>
+                      )}
+                      {!currentTrack?.previewUrl && (
+                        <Badge className="bg-yellow-700 text-yellow-200 text-xs">
+                          <a href={currentTrack?.spotifyUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                            Play on Spotify
+                          </a>
+                        </Badge>
                       )}
                     </div>
                   </div>
@@ -384,7 +511,7 @@ export default function EnhancedSpotifyPlayer({
                   
                   <Button
                     onClick={handlePrevious}
-                    disabled={playableTracks.length <= 1}
+                    disabled={allTracks.length <= 1}
                     className="p-2 rounded-full hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <SkipBack className="w-5 h-5" />
@@ -392,8 +519,9 @@ export default function EnhancedSpotifyPlayer({
                   
                   <Button
                     onClick={handlePlayPause}
-                    disabled={!currentTrack}
+                    disabled={!currentTrack?.previewUrl}
                     className="p-4 bg-white text-primary-900 rounded-full hover:bg-primary-100 transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                    title={!currentTrack?.previewUrl ? 'Preview not available for this track' : undefined}
                   >
                     {isPlaying ? (
                       <Pause className="w-6 h-6" />
@@ -404,7 +532,7 @@ export default function EnhancedSpotifyPlayer({
                   
                   <Button
                     onClick={handleNext}
-                    disabled={playableTracks.length <= 1 && repeatMode === 'off'}
+                    disabled={allTracks.length <= 1 && repeatMode === 'off'}
                     className="p-2 rounded-full hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <SkipForward className="w-5 h-5" />

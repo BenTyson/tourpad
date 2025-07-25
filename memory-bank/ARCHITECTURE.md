@@ -14,6 +14,7 @@
 - **Prisma ORM** - Database client with type generation
 - **NextAuth.js** - Authentication with Google OAuth
 - **Next.js API Routes** - Serverless backend functions
+- **Spotify Web API** - Music data integration with caching (✅ implemented)
 
 ### File Storage & Media
 - **Local Storage** - Development file uploads (public/uploads/)
@@ -103,7 +104,7 @@ model UserProfile {
 
 ### Role-Specific Models
 
-#### Artist Model
+#### Artist Model ✅ UPDATED WITH SPOTIFY INTEGRATION
 ```prisma
 model Artist {
   id                      String        @id @default(cuid())
@@ -126,6 +127,14 @@ model Artist {
   videoLinks              Json?
   needsLodging            Boolean       @default(false)
   
+  // Spotify Integration ✅ IMPLEMENTED
+  spotifyArtistId         String?       // Spotify artist ID from API
+  spotifyVerified         Boolean       @default(false)
+  spotifyFollowers        Int?          // Follower count from Spotify
+  spotifyPopularity       Int?          // Popularity score (0-100)
+  spotifyGenres           String[]      @default([])  // Genres from Spotify
+  lastSpotifySync         DateTime?     // Last sync timestamp
+  
   // Application workflow
   applicationSubmittedAt  DateTime?
   approvedAt              DateTime?
@@ -136,6 +145,8 @@ model Artist {
   media                   ArtistMedia[]
   bandMembers             BandMember[]
   bookings                Booking[]
+  spotifyAlbums           SpotifyAlbum[]    // Spotify album data
+  spotifyTracks           SpotifyTrack[]    // Spotify track data
   
   createdAt               DateTime      @default(now())
   updatedAt               DateTime      @updatedAt
@@ -271,6 +282,81 @@ model HostMedia {
 - ✅ HostMedia records created with proper fileUrl paths
 - ✅ Admin applications page displays photos via lightbox gallery
 - ✅ File serving API handles image delivery with proper headers
+
+### Spotify Integration Models ✅ IMPLEMENTED
+
+#### SpotifyAlbum Model
+```prisma
+model SpotifyAlbum {
+  id                  String     @id @default(cuid())
+  spotifyId           String     @unique
+  artistId            String
+  name                String
+  albumType           String     // album, single, compilation
+  releaseDate         String
+  imageUrl            String?    // Spotify album artwork URL
+  spotifyUrl          String     // Direct link to Spotify album
+  totalTracks         Int
+  
+  artist              Artist     @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  tracks              SpotifyTrack[]
+  
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  
+  @@map("spotify_albums")
+}
+```
+
+#### SpotifyTrack Model
+```prisma
+model SpotifyTrack {
+  id                  String     @id @default(cuid())
+  spotifyId           String     @unique
+  artistId            String
+  albumId             String?
+  name                String
+  durationMs          Int
+  popularity          Int        // Spotify popularity score (0-100)
+  previewUrl          String?    // 30-second preview URL from Spotify
+  spotifyUrl          String     // Direct link to Spotify track
+  trackNumber         Int?       // Position in album
+  explicit            Boolean    @default(false)
+  
+  artist              Artist     @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  album               SpotifyAlbum? @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  
+  @@map("spotify_tracks")
+}
+```
+
+#### SpotifyCache Model
+```prisma
+model SpotifyCache {
+  id                  String     @id @default(cuid())
+  cacheKey            String     @unique
+  data                Json       // Cached Spotify API response
+  expiresAt           DateTime   // Cache expiration time
+  
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  
+  @@map("spotify_cache")
+}
+```
+
+**Spotify Integration Status:**
+- ✅ **Database Schema**: Complete with Album, Track, and Cache models
+- ✅ **Authentication**: Client Credentials flow with auto-refresh tokens
+- ✅ **API Client**: Full Spotify Web API integration (`/src/lib/spotify.ts`)
+- ✅ **Artist Sync**: Complete artist data sync with album/track relationships
+- ✅ **Caching System**: Smart caching to minimize API rate limit usage
+- ✅ **UI Components**: Latest Albums section with clickable Spotify links
+- ✅ **Audio Player**: Enhanced player with 30-second previews (when available)
+- ✅ **Dashboard Integration**: Artist dashboard Spotify connection and sync controls
 
 #### BandMember Model
 ```prisma
@@ -778,6 +864,23 @@ GET    /api/files/[...path]      // File serving API (rewrites from /uploads/*)
 GET    /api/auth/session         // Current session info
 POST   /api/auth/signin          // Google OAuth signin
 POST   /api/auth/signout         // Session termination
+```
+
+#### Spotify Integration ✅ IMPLEMENTED
+```typescript
+GET    /api/spotify/artist/[artistId]        // Get artist's Spotify data (albums, tracks)
+POST   /api/spotify/search/artists           // Search for artists on Spotify
+POST   /api/spotify/sync/[artistId]          // Sync artist data from Spotify API
+GET    /api/spotify/health                   // Spotify API health check
+
+// Features implemented:
+// - Client Credentials authentication flow with auto-refresh tokens
+// - Complete artist data sync (albums, tracks, metadata, artwork)
+// - Smart caching system to minimize API rate limits (60-minute default TTL)
+// - Album artwork and track preview URL management
+// - Integration with artist dashboard for connection management
+// - Latest Albums section with clickable Spotify links (6 albums, horizontal layout)
+// - Enhanced audio player with 30-second track previews (when available)
 ```
 
 ### Implemented Systems ✅

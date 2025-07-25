@@ -1,0 +1,18 @@
+
+> pad@0.1.0 dev:stable
+> node scripts/dev-server.js
+
+✅ [2025-07-25T22:04:25.662Z] System Memory: 16GB, Allocating: 8192MB old space, 512MB semi space
+✅ [2025-07-25T22:04:25.664Z] Starting Next.js server with memory: 8192MB
+✅ [2025-07-25T22:04:25.666Z] Development server started successfully
+   [1m[38;2;173;127;168m▲ Next.js 15.3.5[39m[22m
+   - Local:        http://localhost:3001
+   - Network:      http://0.0.0.0:3001
+   - Environments: .env.local, .env
+   - Experiments (use with caution):
+     [1m⨯[22m webpackBuildWorker
+
+ [32m[1m✓[22m[39m Starting...
+ [32m[1m✓[22m[39m Ready in 1063ms
+[2025-07-25 16:04:27] [INFO] Server is ready and running at http://localhost:3000
+[2025-07-25 16:04:27] [INFO] Monitoring server (PID: 84819)

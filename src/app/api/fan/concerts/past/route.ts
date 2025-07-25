@@ -34,12 +34,12 @@ export async function GET(request: NextRequest) {
     const now = new Date();
     const rsvpFilter = {
       fanId: fan.id,
-      status: 'APPROVED', // Only approved RSVPs count as "attended"
+      status: 'APPROVED' as const, // Only approved RSVPs count as "attended"
       concert: {
         date: {
           lt: now // Only past concerts
         },
-        status: 'COMPLETED' // Only completed concerts
+        status: 'COMPLETED' as const // Only completed concerts
       }
     };
 
@@ -97,8 +97,8 @@ export async function GET(request: NextRequest) {
       skip: offset
     });
 
-    // Check if fan has submitted a review for each concert
-    const concertIds = rsvps.map(rsvp => rsvp.concert.id);
+    // Check if fan has submitted a review for each concert  
+    const concertIds = rsvps.map((rsvp: any) => rsvp.concert.id);
     const existingReviews = await prisma.review.findMany({
       where: {
         fanId: fan.id,
@@ -115,7 +115,7 @@ export async function GET(request: NextRequest) {
     const reviewMap = new Map(existingReviews.map(review => [review.concertId, review.id]));
 
     // Transform data for frontend
-    const pastConcerts = rsvps.map(rsvp => ({
+    const pastConcerts = rsvps.map((rsvp: any) => ({
       rsvpId: rsvp.id,
       guestsCount: rsvp.guestsCount,
       specialRequests: rsvp.specialRequests,

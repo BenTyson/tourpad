@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     const conversationId = searchParams.get('conversationId');
 
     let sinceDate: Date;
-    if (since) {
+    if (since !== null) {
       sinceDate = new Date(since);
     } else {
       // Default to last 30 seconds if no since timestamp
@@ -26,11 +26,11 @@ export async function GET(request: NextRequest) {
     }
 
     // Get updated conversation data with unread counts
-    const whereClause = session.user.type === 'admin' 
+    const whereClause = session!.user.type === 'admin' 
       ? {} 
       : {
           participantIds: {
-            has: session.user.id
+            has: session!.user.id
           }
         };
 
@@ -97,7 +97,7 @@ export async function GET(request: NextRequest) {
     if (conversationId) {
       // Verify user has access to this conversation
       const conversation = await prisma.conversation.findUnique({
-        where: { id: conversationId }
+        where: { id: conversationId! }
       });
 
       if (conversation && (conversation.participantIds.includes(session.user.id) || session.user.type === 'admin')) {

@@ -450,26 +450,6 @@ export default function ArtistProfilePage() {
           </section>
         )}
 
-        {/* Performance Photos Section */}
-        {allPhotos.length > 0 && (
-          <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
-            <div className="p-8">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-neutral-900">
-                  Photo Gallery
-                </h2>
-                <Badge variant="default" className="bg-neutral-100 text-neutral-700 border-neutral-200">
-                  {allPhotos.length} {allPhotos.length === 1 ? 'Photo' : 'Photos'}
-                </Badge>
-              </div>
-              <ArtistPhotoGallery 
-                photos={allPhotos}
-                onPhotoClick={handlePhotoClick}
-              />
-            </div>
-          </section>
-        )}
-
         {/* Spotify Music Section */}
         <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
           <div className="p-8">
@@ -491,6 +471,26 @@ export default function ArtistProfilePage() {
             />
           </div>
         </section>
+
+        {/* Performance Photos Section */}
+        {allPhotos.length > 0 && (
+          <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
+            <div className="p-8">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-neutral-900">
+                  Photo Gallery
+                </h2>
+                <Badge variant="default" className="bg-neutral-100 text-neutral-700 border-neutral-200">
+                  {allPhotos.length} {allPhotos.length === 1 ? 'Photo' : 'Photos'}
+                </Badge>
+              </div>
+              <ArtistPhotoGallery 
+                photos={allPhotos}
+                onPhotoClick={handlePhotoClick}
+              />
+            </div>
+          </section>
+        )}
 
         {/* Band Members Section */}
         <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">

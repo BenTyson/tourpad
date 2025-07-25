@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import { 
   Home,
@@ -11,23 +14,25 @@ import {
   Instagram,
   Youtube,
   Linkedin,
-  Star
+  Star,
+  CheckCircle,
+  AlertCircle
 } from 'lucide-react';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   const footerLinks = {
     platform: [
       { name: 'Find Hosts', href: '/hosts' },
       { name: 'Browse Artists', href: '/artists' },
       { name: 'How It Works', href: '/how-it-works' },
-      { name: 'Pricing', href: '/pricing' },
-      { name: 'Success Stories', href: '/stories' }
+      { name: 'Pricing', href: '/pricing' }
     ],
     company: [
       { name: 'About Us', href: '/about' },
-      { name: 'Careers', href: '/careers' },
       { name: 'Press', href: '/press' },
       { name: 'Blog', href: '/blog' },
       { name: 'Contact', href: '/contact' }
@@ -55,6 +60,35 @@ export function Footer() {
     { name: 'YouTube', href: '#', icon: Youtube },
     { name: 'LinkedIn', href: '#', icon: Linkedin }
   ];
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email.trim()) return;
+    
+    setStatus('loading');
+    
+    try {
+      // Simulate API call - replace with actual newsletter service
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // For now, just log the submission
+      console.log('Newsletter signup:', {
+        email,
+        timestamp: new Date().toISOString(),
+        source: 'footer'
+      });
+      
+      setStatus('success');
+      setEmail('');
+      
+      // Reset status after 5 seconds
+      setTimeout(() => setStatus('idle'), 5000);
+    } catch (error) {
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 5000);
+    }
+  };
 
   return (
     <footer className="bg-gradient-to-br from-gray-950 to-gray-900 text-white relative overflow-hidden">
@@ -105,7 +139,7 @@ export function Footer() {
                 <div className="w-8 h-8 bg-primary-500/10 rounded-lg flex items-center justify-center mr-3 group-hover:bg-primary-500/20 transition-colors">
                   <MapPin className="w-4 h-4 text-primary-400" />
                 </div>
-                <span className="group-hover:text-white transition-colors">Austin, TX</span>
+                <span className="group-hover:text-white transition-colors">Denver, CO</span>
               </div>
             </div>
           </div>
@@ -190,16 +224,49 @@ export function Footer() {
                 </div>
                 <p className="text-neutral-300">Get updates on new features, artist spotlights, and community stories</p>
               </div>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="px-5 py-3 bg-neutral-800/50 border border-neutral-600/30 rounded-xl text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 backdrop-blur-sm"
-                />
-                <button className="px-8 py-3 bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg">
-                  Subscribe
+              <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3">
+                <div className="relative">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    required
+                    disabled={status === 'loading'}
+                    className="px-5 py-3 bg-neutral-800/50 border border-neutral-600/30 rounded-xl text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-80"
+                  />
+                  {status === 'success' && (
+                    <div className="absolute -bottom-8 left-0">
+                      <div className="flex items-center text-green-400 text-sm">
+                        <CheckCircle className="w-4 h-4 mr-1" />
+                        <span>Thanks for subscribing!</span>
+                      </div>
+                    </div>
+                  )}
+                  {status === 'error' && (
+                    <div className="absolute -bottom-8 left-0">
+                      <div className="flex items-center text-red-400 text-sm">
+                        <AlertCircle className="w-4 h-4 mr-1" />
+                        <span>Something went wrong. Try again.</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <button
+                  type="submit"
+                  disabled={status === 'loading' || !email.trim()}
+                  className="px-8 py-3 bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none whitespace-nowrap"
+                >
+                  {status === 'loading' ? (
+                    <span className="flex items-center">
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+                      Subscribing...
+                    </span>
+                  ) : (
+                    'Subscribe'
+                  )}
                 </button>
-              </div>
+              </form>
             </div>
           </div>
         </div>

@@ -62,19 +62,19 @@ export async function GET(request: NextRequest) {
       hosts.map(async (host) => {
         const reviewStats = await prisma.review.aggregate({
           where: {
-            revieweeId: host.userId,
+            hostId: host.userId,
             isPublic: true
           },
           _avg: {
-            rating: true
+            hostRating: true
           },
           _count: {
             id: true
           }
         });
 
-        const rating = reviewStats._avg.rating ? Math.round(reviewStats._avg.rating * 10) / 10 : 0;
-        const reviewCount = reviewStats._count.id;
+        const rating = reviewStats._avg.hostRating ? Math.round(reviewStats._avg.hostRating * 10) / 10 : 0;
+        const reviewCount = reviewStats._count.id || 0;
 
         return {
           id: host.id,

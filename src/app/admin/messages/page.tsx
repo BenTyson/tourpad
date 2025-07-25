@@ -251,7 +251,7 @@ export default function AdminMessagesPage() {
               {(['all', 'artist', 'host', 'flagged'] as const).map((filter) => (
                 <Button
                   key={filter}
-                  variant={filterType === filter ? "default" : "ghost"}
+                  variant={filterType === filter ? "primary" : "ghost"}
                   size="sm"
                   onClick={() => setFilterType(filter)}
                   className={`text-xs capitalize px-3 py-1 ${
@@ -290,12 +290,12 @@ export default function AdminMessagesPage() {
                       <div className="flex-shrink-0 mt-0.5">
                         {conversation.participants?.[0] && (
                           <ProfileImageWithStatus
-                            user={conversation.participants[0]}
-                            alt={formatDisplayName(conversation.participants[0])}
-                            size="sm"
-                            userId={conversation.participants[0].id}
-                            onlineStatus={onlineStatus}
-                          />
+                            isOnline={onlineStatus[conversation.participants[0].id] || false}
+                          >
+                            <div className="w-8 h-8 rounded-full bg-neutral-200 flex items-center justify-center text-xs">
+                              {formatDisplayName(conversation.participants[0]).charAt(0)}
+                            </div>
+                          </ProfileImageWithStatus>
                         )}
                       </div>
                       <div className="flex-grow min-w-0">
@@ -366,16 +366,15 @@ export default function AdminMessagesPage() {
                           <div key={p.id} className="flex items-center space-x-1">
                             <span className="text-xs text-neutral-500">{p.userType?.toLowerCase()}</span>
                             <OnlineStatusIndicator
-                              userId={p.id}
-                              onlineStatus={onlineStatus}
-                              showText={true}
+                              isOnline={onlineStatus[p.id] || false}
+                              showLabel={true}
                             />
                           </div>
                         ))}
                       </div>
                     </div>
                   </div>
-                  <Badge variant="outline" className="text-xs">
+                  <Badge variant="default" className="text-xs">
                     <Shield className="w-3 h-3 mr-1" />
                     Admin view
                   </Badge>

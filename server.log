@@ -1,0 +1,1131 @@
+   ▲ Next.js 15.3.5
+   - Local:        http://localhost:3001
+   - Network:      http://0.0.0.0:3001
+   - Environments: .env.local, .env
+   - Experiments (use with caution):
+     ⨯ webpackBuildWorker
+
+ ✓ Starting...
+ ✓ Ready in 1162ms
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 683ms (265 modules)
+ ○ Compiling / ...
+ ✓ Compiled /pricing in 3.1s (994 modules)
+ HEAD /pricing 200 in 2324ms
+ GET / 200 in 3445ms
+ ⚠ The "images.domains" configuration is deprecated. Please use "images.remotePatterns" configuration instead.
+ ✓ Compiled /api/auth/[...nextauth] in 101ms (576 modules)
+ ✓ Compiled in 126ms (421 modules)
+ GET /favicon.ico 200 in 678ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 1002ms
+ GET /api/auth/session 200 in 17ms
+ ✓ Compiled /api/user/profile-id in 287ms (1164 modules)
+=== GET /api/bookings called ===
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 358ms
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+ GET /api/user/profile-id 200 in 361ms
+ GET /api/notifications?unread=true&limit=0 200 in 398ms
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/user/current 200 in 364ms
+ GET /api/stats 200 in 370ms
+ GET /api/bookings 200 in 372ms
+ ○ Compiling /api/spotify/artist/[artistId] ...
+ ✓ Compiled /api/spotify/artist/[artistId] in 604ms (1367 modules)
+=== GET /api/bookings called ===
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/notifications?unread=true&limit=0 200 in 685ms
+ GET /api/bookings 200 in 688ms
+ GET /api/payments/subscription-status 200 in 719ms
+ GET /api/notifications?unread=true&limit=0 200 in 21ms
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/bookings 200 in 33ms
+ GET /api/notifications?unread=true&limit=0 200 in 25ms
+=== GET /api/bookings called ===
+ GET /api/payments/subscription-status 200 in 46ms
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/bookings 200 in 22ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 1061ms
+ ✓ Compiled in 1193ms (435 modules)
+ GET / 200 in 48ms
+ ✓ Compiled /artists/[id] in 450ms (1074 modules)
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 908ms
+ ✓ Compiled /api/auth/[...nextauth] in 55ms (620 modules)
+ ✓ Compiled in 88ms (470 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /favicon.ico 200 in 282ms
+ GET /api/auth/session 200 in 279ms
+ GET /api/artists?exclude=cmdi3mtba0004ludm6i1aexz0&limit=3 200 in 295ms
+ GET /api/auth/session 200 in 14ms
+ ✓ Compiled /api/notifications in 81ms (782 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 224ms
+ GET /api/notifications?unread=true&limit=0 200 in 238ms
+ GET /api/auth/session 200 in 31ms
+ GET /api/artists/cmdi3mtba0004ludm6i1aexz0 200 in 563ms
+ GET /api/notifications?unread=true&limit=0 200 in 33ms
+ ✓ Compiled /api/payments/subscription-status in 93ms (784 modules)
+ ✓ Compiled (992 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/user/profile-id 200 in 499ms
+ GET /api/user/current 200 in 503ms
+ GET /api/stats 200 in 505ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 524ms
+ GET /api/payments/subscription-status 200 in 513ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 10ms
+ ✓ Compiled /api/bookings in 115ms (994 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 274ms
+ GET /api/payments/subscription-status 200 in 280ms
+ GET /api/bookings 200 in 280ms
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/bookings 200 in 8ms
+ ⨯ ./src/components/layout/Footer.tsx
+Error:   [31mx[0m You're importing a component that needs `useState`. This React hook only works in a client component. To fix, mark the file (or its parent) with the `"use client"` directive.
+  [31m|[0m
+  [31m|[0m  Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+  [31m|[0m
+
+   ,-[[36;1;4m/Users/bentyson/pad/src/components/layout/Footer.tsx[0m:1:1]
+ [2m1[0m | import { useState } from 'react';
+   : [35;1m         ^^^^^^^^[0m
+ [2m2[0m | import Link from 'next/link';
+ [2m3[0m | import { 
+ [2m4[0m |   Home,
+   `----
+
+Import trace for requested module:
+./src/components/layout/Footer.tsx
+./src/app/layout.tsx
+ ○ Compiling /_error ...
+ ⨯ ./src/components/layout/Footer.tsx
+Error:   [31mx[0m You're importing a component that needs `useState`. This React hook only works in a client component. To fix, mark the file (or its parent) with the `"use client"` directive.
+  [31m|[0m
+  [31m|[0m  Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+  [31m|[0m
+
+   ,-[[36;1;4m/Users/bentyson/pad/src/components/layout/Footer.tsx[0m:1:1]
+ [2m1[0m | import { useState } from 'react';
+   : [35;1m         ^^^^^^^^[0m
+ [2m2[0m | import Link from 'next/link';
+ [2m3[0m | import { 
+ [2m4[0m |   Home,
+   `----
+
+Import trace for requested module:
+./src/components/layout/Footer.tsx
+./src/app/layout.tsx
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 3308ms
+ GET / 500 in 3313ms
+ GET / 500 in 12ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 14ms
+ GET / 500 in 14ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 16ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 14ms
+ GET / 500 in 16ms
+ ⨯ ./src/components/layout/Footer.tsx
+Error:   [31mx[0m You're importing a component that needs `useState`. This React hook only works in a client component. To fix, mark the file (or its parent) with the `"use client"` directive.
+  [31m|[0m
+  [31m|[0m  Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+  [31m|[0m
+
+   ,-[[36;1;4m/Users/bentyson/pad/src/components/layout/Footer.tsx[0m:1:1]
+ [2m1[0m | import { useState } from 'react';
+   : [35;1m         ^^^^^^^^[0m
+ [2m2[0m | import Link from 'next/link';
+ [2m3[0m | import { 
+ [2m4[0m |   Home,
+   `----
+
+Import trace for requested module:
+./src/components/layout/Footer.tsx
+./src/app/layout.tsx
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 255ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 5ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 12ms
+ GET / 500 in 16ms
+ ⨯ ./src/components/layout/Footer.tsx
+Error:   [31mx[0m You're importing a component that needs `useState`. This React hook only works in a client component. To fix, mark the file (or its parent) with the `"use client"` directive.
+  [31m|[0m
+  [31m|[0m  Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+  [31m|[0m
+
+   ,-[[36;1;4m/Users/bentyson/pad/src/components/layout/Footer.tsx[0m:1:1]
+ [2m1[0m | import { useState } from 'react';
+   : [35;1m         ^^^^^^^^[0m
+ [2m2[0m | import Link from 'next/link';
+ [2m3[0m | import { 
+ [2m4[0m |   Home,
+   `----
+
+Import trace for requested module:
+./src/components/layout/Footer.tsx
+./src/app/layout.tsx
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 169ms
+ GET /favicon.ico 500 in 178ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 5ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /favicon.ico 500 in 10ms
+ GET / 500 in 12ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 15ms
+ GET /favicon.ico 500 in 6ms
+ GET /favicon.ico 500 in 5ms
+ ⨯ ./src/components/layout/Footer.tsx
+Error:   [31mx[0m You're importing a component that needs `useState`. This React hook only works in a client component. To fix, mark the file (or its parent) with the `"use client"` directive.
+  [31m|[0m
+  [31m|[0m  Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+  [31m|[0m
+
+   ,-[[36;1;4m/Users/bentyson/pad/src/components/layout/Footer.tsx[0m:1:1]
+ [2m1[0m | import { useState } from 'react';
+   : [35;1m         ^^^^^^^^[0m
+ [2m2[0m | import Link from 'next/link';
+ [2m3[0m | import { 
+ [2m4[0m |   Home,
+   `----
+
+Import trace for requested module:
+./src/components/layout/Footer.tsx
+./src/app/layout.tsx
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 723ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 500 in 766ms
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 19ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET / 500 in 15ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 22ms
+ GET /favicon.ico 500 in 14ms
+ GET /favicon.ico 500 in 5ms
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 6ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 13ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 21ms
+ GET / 500 in 19ms
+ GET /favicon.ico 500 in 6ms
+ GET /favicon.ico 500 in 7ms
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 4ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 8ms
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 4ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /favicon.ico 500 in 7ms
+ GET / 500 in 8ms
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 4ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /favicon.ico 500 in 5ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 10ms
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 6ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /favicon.ico 500 in 9ms
+ GET / 500 in 9ms
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 6ms
+ GET /favicon.ico 500 in 9ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 8ms
+ GET /favicon.ico 500 in 6ms
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 6ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 500 in 8ms
+ ⨯ ./src/components/layout/Footer.tsx
+Error:   [31mx[0m You're importing a component that needs `useState`. This React hook only works in a client component. To fix, mark the file (or its parent) with the `"use client"` directive.
+  [31m|[0m
+  [31m|[0m  Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+  [31m|[0m
+
+   ,-[[36;1;4m/Users/bentyson/pad/src/components/layout/Footer.tsx[0m:1:1]
+ [2m1[0m | import { useState } from 'react';
+   : [35;1m         ^^^^^^^^[0m
+ [2m2[0m | import Link from 'next/link';
+ [2m3[0m | import { 
+ [2m4[0m |   Home,
+   `----
+
+Import trace for requested module:
+./src/components/layout/Footer.tsx
+./src/app/layout.tsx
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 426ms
+ GET /favicon.ico 500 in 425ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 16ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 500 in 18ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 24ms
+ GET /favicon.ico 500 in 5ms
+ GET /favicon.ico 500 in 5ms
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 4ms
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 7ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 12ms
+ GET / 500 in 16ms
+ GET /favicon.ico 500 in 6ms
+ GET /favicon.ico 500 in 5ms
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 4ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 8ms
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 5ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /favicon.ico 500 in 9ms
+ GET / 500 in 7ms
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 5ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /favicon.ico 500 in 10ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 6ms
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 7ms
+ GET /favicon.ico 500 in 9ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 500 in 7ms
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 5ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /favicon.ico 500 in 8ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 6ms
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 6ms
+ GET /favicon.ico 500 in 8ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 500 in 9ms
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 6ms
+ GET /favicon.ico 500 in 9ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 8ms
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 6ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /favicon.ico 500 in 9ms
+ GET / 500 in 8ms
+ ✓ Compiled /api/spotify/artist/[artistId] in 1600ms (1589 modules)
+ GET /favicon.ico 200 in 422ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 404 in 637ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 404 in 48ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 95ms
+ GET / 200 in 232ms
+ GET /favicon.ico 200 in 8ms
+ GET /favicon.ico 200 in 20ms
+ ✓ Compiled /api/auth/[...nextauth] in 143ms (857 modules)
+ ✓ Compiled (861 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 407ms
+ GET /api/artists/cmdi3mtba0004ludm6i1aexz0 200 in 414ms
+ GET /api/artists?exclude=cmdi3mtba0004ludm6i1aexz0&limit=3 200 in 424ms
+ GET /api/auth/session 200 in 24ms
+ ✓ Compiled /api/notifications in 187ms (863 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 446ms
+ GET /api/notifications?unread=true&limit=0 200 in 468ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 446ms
+ GET /api/auth/session 200 in 37ms
+ GET /api/notifications?unread=true&limit=0 200 in 48ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 50ms
+ GET /api/auth/session 200 in 21ms
+ GET /api/notifications?unread=true&limit=0 200 in 26ms
+ GET /api/auth/session 200 in 26ms
+ GET /api/notifications?unread=true&limit=0 200 in 26ms
+ GET /api/auth/session 200 in 16ms
+ ✓ Compiled /api/stats in 255ms (865 modules)
+ ✓ Compiled (1071 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 2406ms
+ GET /api/user/profile-id 200 in 2422ms
+ GET /api/user/current 200 in 2456ms
+ GET /api/stats 200 in 2479ms
+ GET /api/user/profile-id 200 in 58ms
+ GET /api/payments/subscription-status 200 in 2545ms
+ GET /api/user/current 200 in 94ms
+ GET /api/stats 200 in 255ms
+ GET /api/payments/subscription-status 200 in 238ms
+ ○ Compiling /api/bookings ...
+ ✓ Compiled /api/bookings in 723ms (1073 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 1413ms
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/bookings 200 in 1467ms
+ GET /api/payments/subscription-status 200 in 1241ms
+=== GET /api/bookings called ===
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 67ms
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/bookings 200 in 69ms
+ GET /api/payments/subscription-status 200 in 65ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 401 in 19ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 401 in 10ms
+ ✓ Compiled in 1459ms (1821 modules)
+ GET / 200 in 61ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 61ms
+ ✓ Compiled in 234ms (748 modules)
+ GET / 200 in 58ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 57ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 130ms
+ GET /favicon.ico 200 in 13ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 48ms
+ GET /api/auth/session 200 in 22ms
+ GET /api/artists/cmdi3mtba0004ludm6i1aexz0 200 in 87ms
+ GET /api/notifications?unread=true&limit=0 200 in 35ms
+ GET /api/artists?exclude=cmdi3mtba0004ludm6i1aexz0&limit=3 200 in 93ms
+ GET /api/auth/session 200 in 13ms
+ GET /api/notifications?unread=true&limit=0 200 in 15ms
+ GET /api/auth/session 200 in 15ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 18ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 14ms
+ GET /api/user/profile-id 200 in 43ms
+ GET /api/stats 200 in 47ms
+ GET /api/user/current 200 in 49ms
+ GET /api/payments/subscription-status 200 in 51ms
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/bookings 200 in 35ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 38ms
+=== GET /api/bookings called ===
+ GET /api/payments/subscription-status 200 in 47ms
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/bookings 200 in 17ms
+ ⨯ ./src/components/spotify/AlbumGallery.tsx
+Error: Failed to read source code from /Users/bentyson/pad/src/components/spotify/AlbumGallery.tsx
+
+Caused by:
+    No such file or directory (os error 2)
+
+Import trace for requested module:
+./src/components/spotify/AlbumGallery.tsx
+./src/components/artist/ArtistMusicSection.tsx
+./src/app/artists/[id]/page.tsx
+ ⨯ ./src/components/spotify/AlbumGallery.tsx
+Error: Failed to read source code from /Users/bentyson/pad/src/components/spotify/AlbumGallery.tsx
+
+Caused by:
+    No such file or directory (os error 2)
+
+Import trace for requested module:
+./src/components/spotify/AlbumGallery.tsx
+./src/components/artist/ArtistMusicSection.tsx
+./src/app/artists/[id]/page.tsx
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 1380ms (1421 modules)
+ ✓ Compiled in 0ms (679 modules)
+ ✓ Compiled in 0ms (679 modules)
+ ✓ Compiled in 0ms (679 modules)
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 371ms
+ GET / 200 in 417ms
+ ✓ Compiled /api/auth/[...nextauth] in 104ms (695 modules)
+ ✓ Compiled (855 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /favicon.ico 200 in 622ms
+ GET /api/auth/session 200 in 601ms
+ GET /api/artists/cmdi3mtba0004ludm6i1aexz0 200 in 606ms
+ GET /api/artists?exclude=cmdi3mtba0004ludm6i1aexz0&limit=3 200 in 618ms
+ GET /api/auth/session 200 in 13ms
+ ✓ Compiled /api/spotify/artist/[artistId] in 101ms (857 modules)
+ ✓ Compiled (859 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 252ms
+ GET /api/notifications?unread=true&limit=0 200 in 268ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 260ms
+ GET /api/auth/session 200 in 15ms
+ GET /api/notifications?unread=true&limit=0 200 in 18ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 17ms
+ ✓ Compiled /api/payments/subscription-status in 95ms (861 modules)
+ ✓ Compiled (1067 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/user/profile-id 200 in 657ms
+ GET /api/stats 200 in 660ms
+ GET /api/user/current 200 in 661ms
+ GET /api/payments/subscription-status 200 in 665ms
+ ✓ Compiled /api/bookings in 121ms (1069 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 278ms
+ GET /api/bookings 200 in 286ms
+ GET /api/payments/subscription-status 200 in 291ms
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/bookings 200 in 11ms
+ ✓ Compiled in 1296ms (1811 modules)
+ GET / 200 in 45ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 134ms
+ GET /favicon.ico 200 in 8ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 32ms
+ GET /api/artists/cmdi3mtba0004ludm6i1aexz0 200 in 34ms
+ GET /api/artists?exclude=cmdi3mtba0004ludm6i1aexz0&limit=3 200 in 39ms
+ GET /api/auth/session 200 in 16ms
+ GET /api/notifications?unread=true&limit=0 200 in 18ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 23ms
+ GET /api/auth/session 200 in 22ms
+ GET /api/notifications?unread=true&limit=0 200 in 26ms
+ GET /api/auth/session 200 in 15ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 19ms
+ GET /api/user/profile-id 200 in 38ms
+ GET /api/user/current 200 in 39ms
+ GET /api/stats 200 in 42ms
+ GET /api/payments/subscription-status 200 in 58ms
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 31ms
+ GET /api/bookings 200 in 34ms
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/payments/subscription-status 200 in 49ms
+ GET /api/bookings 200 in 14ms
+ ✓ Compiled in 1368ms (1811 modules)
+ GET / 200 in 42ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 40ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 38ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 53ms
+ GET /api/user/profile-id 200 in 58ms
+ GET /api/user/current 200 in 62ms
+ GET /api/stats 200 in 68ms
+ GET /api/user/profile-id 200 in 23ms
+ GET /api/user/current 200 in 25ms
+=== GET /api/bookings called ===
+ GET /api/stats 200 in 35ms
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/bookings 200 in 42ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 39ms
+ GET /api/payments/subscription-status 200 in 134ms
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 20ms
+ GET /api/bookings 200 in 30ms
+ GET /api/payments/subscription-status 200 in 35ms
+ GET /api/payments/subscription-status 200 in 19ms
+ GET /api/payments/subscription-status 200 in 28ms
+ GET /api/auth/session 200 in 10ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/user/profile-id 200 in 18ms
+ GET /api/user/current 200 in 19ms
+ GET /api/stats 200 in 20ms
+ GET /api/payments/subscription-status 200 in 24ms
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 17ms
+ GET /api/bookings 200 in 20ms
+ GET /api/payments/subscription-status 200 in 24ms
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/bookings 200 in 9ms
+ GET /api/auth/session 200 in 57ms
+ GET /api/auth/session 200 in 12ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/user/profile-id 200 in 53ms
+ GET /api/payments/subscription-status 200 in 55ms
+ GET /api/user/current 200 in 60ms
+ GET /api/stats 200 in 58ms
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 53ms
+ GET /api/bookings 200 in 60ms
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/payments/subscription-status 200 in 69ms
+ GET /api/bookings 200 in 11ms
+ ✓ Compiled in 1630ms (1421 modules)
+ GET / 200 in 104ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 104ms
+ ✓ Compiled /api/auth/[...nextauth] in 121ms (849 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 256ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 7ms
+ ✓ Compiled /api/stats in 79ms (851 modules)
+ ✓ Compiled (1057 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/user/profile-id 200 in 345ms
+ GET /api/payments/subscription-status 200 in 348ms
+ GET /api/user/current 200 in 351ms
+ GET /api/stats 200 in 352ms
+ ✓ Compiled /api/spotify/artist/[artistId] in 155ms (1059 modules)
+ ✓ Compiled (1061 modules)
+=== GET /api/bookings called ===
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 327ms
+ GET /api/bookings 200 in 333ms
+ GET /api/payments/subscription-status 200 in 335ms
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/bookings 200 in 11ms
+ GET /api/auth/session 200 in 60ms
+ GET /api/auth/session 200 in 14ms
+ GET /api/auth/session 200 in 11ms
+ GET /api/auth/session 200 in 21ms
+ GET /api/user/profile-id 200 in 53ms
+ GET /api/user/current 200 in 57ms
+ GET /api/stats 200 in 64ms
+ GET /api/payments/subscription-status 200 in 84ms
+ GET /api/user/profile-id 200 in 32ms
+ GET /api/user/current 200 in 37ms
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+ GET /api/stats 200 in 38ms
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/bookings 200 in 33ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 32ms
+ GET /api/payments/subscription-status 200 in 42ms
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 18ms
+ GET /api/bookings 200 in 32ms
+ GET /api/payments/subscription-status 200 in 22ms
+ GET /api/payments/subscription-status 200 in 27ms
+ ✓ Compiled /dashboard/profile in 478ms (1822 modules)
+ GET /dashboard/profile 200 in 543ms
+ ✓ Compiled /api/profile in 323ms (1824 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+Found media: {
+  id: 'cmdi3mtbg000eludm7jc85cpp',
+  artistId: 'cmdi3mtba0004ludm6i1aexz0',
+  mediaType: 'PHOTO',
+  category: 'PRESS',
+  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
+  fileSize: null,
+  mimeType: null,
+  title: 'Sarah Johnson Press Photo',
+  description: 'Professional press photo for Sarah Johnson',
+  sortOrder: 0,
+  createdAt: 2025-07-25T00:44:34.925Z
+}
+ GET /api/profile 200 in 363ms
+Found media: {
+  id: 'cmdi3mtbg000eludm7jc85cpp',
+  artistId: 'cmdi3mtba0004ludm6i1aexz0',
+  mediaType: 'PHOTO',
+  category: 'PRESS',
+  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
+  fileSize: null,
+  mimeType: null,
+  title: 'Sarah Johnson Press Photo',
+  description: 'Professional press photo for Sarah Johnson',
+  sortOrder: 0,
+  createdAt: 2025-07-25T00:44:34.925Z
+}
+ GET /api/profile 200 in 8ms
+Received profile data: {
+  bandName: 'Sarah Johnson',
+  bio: 'Indie folk singer-songwriter with a passion for intimate performances',
+  city: 'Austin',
+  state: 'TX',
+  genres: [ 'Folk', 'Indie', 'Acoustic' ],
+  instruments: [],
+  experienceLevel: 'intermediate',
+  yearsActive: 1,
+  tourMonthsPerYear: 3,
+  tourVehicle: 'van',
+  willingToTravel: 500,
+  needsLodging: false,
+  equipmentProvided: [ 'Microphone', 'Guitar amplifier', 'Stool' ],
+  venueRequirements: [],
+  profilePhoto: 'https://images.unsplash.com/photo-1494790108755-2616b9a8af3c?w=400&h=400&fit=crop&crop=face',
+  cancellationPolicy: 'flexible',
+  performanceRadius: 50,
+  website: 'https://sarahjohnsonmusic.com',
+  socialLinks: {
+    website: 'https://sarahjohnsonmusic.com',
+    instagram: 'sarahjohnsonmusic',
+    youtube: 'sarahjohnsonmusic',
+    spotify: 'sarahjohnsonmusic',
+    bandcamp: '',
+    facebook: ''
+  },
+  bandMembers: [
+    {
+      id: 'cmdi3mtba0005ludm4ogccejq',
+      name: 'Sarah Johnson',
+      instrument: 'Vocals, Guitar',
+      photo: 'https://images.unsplash.com/photo-1494790108755-2616b9a8af3c?w=400&h=400&fit=crop&crop=face'
+    }
+  ],
+  videoLinks: [
+    {
+      id: '1753475830396',
+      title: 'Buddah',
+      url: 'https://www.youtube.com/watch?v=Wkjy1R7H0dI&list=RDWkjy1R7H0dI&start_radio=1',
+      platform: 'youtube',
+      category: 'live_performance',
+      isLivePerformance: true
+    }
+  ],
+  musicSamples: [],
+  photos: [
+    {
+      id: 'cmdi3mtbg000eludm7jc85cpp',
+      fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
+      title: 'Sarah Johnson Press Photo',
+      description: 'Professional press photo for Sarah Johnson',
+      sortOrder: 0,
+      category: 'PRESS'
+    }
+  ]
+}
+suggestedDoorFee value: undefined type: undefined
+Processing photos: [
+  {
+    id: 'cmdi3mtbg000eludm7jc85cpp',
+    fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
+    title: 'Sarah Johnson Press Photo',
+    description: 'Professional press photo for Sarah Johnson',
+    sortOrder: 0,
+    category: 'PRESS'
+  }
+]
+Creating photos for artist: cmdi3mtba0004ludm6i1aexz0
+Photos created successfully
+ PUT /api/profile 200 in 50ms
+ GET /api/auth/session 200 in 32ms
+ GET /api/auth/session 200 in 10ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 7ms
+Found media: {
+  id: 'cmdja8jr50003luczi6pu1aoo',
+  artistId: 'cmdi3mtba0004ludm6i1aexz0',
+  mediaType: 'PHOTO',
+  category: 'PRESS',
+  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
+  fileSize: null,
+  mimeType: null,
+  title: 'Sarah Johnson Press Photo',
+  description: 'Professional press photo for Sarah Johnson',
+  sortOrder: 0,
+  createdAt: 2025-07-25T20:37:12.833Z
+}
+ GET /api/profile 200 in 10ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 151ms
+ ✓ Compiled /api/artists/[id] in 138ms (1083 modules)
+ ✓ Compiled (1087 modules)
+ GET /favicon.ico 200 in 300ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 300ms
+ GET /api/artists/cmdi3mtba0004ludm6i1aexz0 200 in 307ms
+ GET /api/artists?exclude=cmdi3mtba0004ludm6i1aexz0&limit=3 200 in 318ms
+ GET /api/auth/session 200 in 10ms
+ ✓ Compiled /api/notifications in 155ms (1089 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 371ms
+ GET /api/notifications?unread=true&limit=0 200 in 385ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 368ms
+ GET /api/auth/session 200 in 54ms
+ GET /api/notifications?unread=true&limit=0 200 in 55ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 60ms
+Found media: {
+  id: 'cmdja8jr50003luczi6pu1aoo',
+  artistId: 'cmdi3mtba0004ludm6i1aexz0',
+  mediaType: 'PHOTO',
+  category: 'PRESS',
+  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
+  fileSize: null,
+  mimeType: null,
+  title: 'Sarah Johnson Press Photo',
+  description: 'Professional press photo for Sarah Johnson',
+  sortOrder: 0,
+  createdAt: 2025-07-25T20:37:12.833Z
+}
+ GET /api/profile 200 in 26ms
+ ✓ Compiled in 1356ms (757 modules)
+ GET / 200 in 57ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 55ms
+ ✓ Compiled in 1204ms (757 modules)
+ GET / 200 in 27ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 28ms
+ ✓ Compiled in 1253ms (757 modules)
+ GET / 200 in 41ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 42ms
+ ✓ Compiled in 1187ms (757 modules)
+ GET / 200 in 23ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 23ms
+ ✓ Compiled in 1447ms (1436 modules)
+ GET / 200 in 99ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 116ms
+ ✓ Compiled /api/artists/[id] in 177ms (849 modules)
+ ✓ Compiled (851 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/artists/cmdi3mtba0004ludm6i1aexz0 200 in 389ms
+ GET /api/artists?exclude=cmdi3mtba0004ludm6i1aexz0&limit=3 200 in 397ms
+ ✓ Compiled /api/spotify/artist/[artistId] in 66ms (853 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 130ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 12ms
+ ✓ Compiled /api/auth/[...nextauth] in 158ms (849 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 211ms
+ GET /api/auth/session 200 in 16ms
+ ✓ Compiled /api/profile in 93ms (851 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 231ms
+Found media: {
+  id: 'cmdja8jr50003luczi6pu1aoo',
+  artistId: 'cmdi3mtba0004ludm6i1aexz0',
+  mediaType: 'PHOTO',
+  category: 'PRESS',
+  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
+  fileSize: null,
+  mimeType: null,
+  title: 'Sarah Johnson Press Photo',
+  description: 'Professional press photo for Sarah Johnson',
+  sortOrder: 0,
+  createdAt: 2025-07-25T20:37:12.833Z
+}
+ GET /api/profile 200 in 240ms
+ GET /api/auth/session 200 in 9ms
+Found media: {
+  id: 'cmdja8jr50003luczi6pu1aoo',
+  artistId: 'cmdi3mtba0004ludm6i1aexz0',
+  mediaType: 'PHOTO',
+  category: 'PRESS',
+  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
+  fileSize: null,
+  mimeType: null,
+  title: 'Sarah Johnson Press Photo',
+  description: 'Professional press photo for Sarah Johnson',
+  sortOrder: 0,
+  createdAt: 2025-07-25T20:37:12.833Z
+}
+ GET /api/profile 200 in 12ms
+ ✓ Compiled /dashboard/profile in 206ms (869 modules)
+ GET /dashboard/profile 200 in 435ms
+ ✓ Compiled /favicon.ico in 109ms (871 modules)
+ GET /favicon.ico 200 in 215ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 212ms
+ GET /api/auth/session 200 in 6ms
+ ✓ Compiled /api/notifications in 96ms (873 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 225ms
+Found media: {
+  id: 'cmdja8jr50003luczi6pu1aoo',
+  artistId: 'cmdi3mtba0004ludm6i1aexz0',
+  mediaType: 'PHOTO',
+  category: 'PRESS',
+  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
+  fileSize: null,
+  mimeType: null,
+  title: 'Sarah Johnson Press Photo',
+  description: 'Professional press photo for Sarah Johnson',
+  sortOrder: 0,
+  createdAt: 2025-07-25T20:37:12.833Z
+}
+ GET /api/profile 200 in 231ms
+ GET /api/auth/session 200 in 13ms
+ GET /api/notifications?unread=true&limit=0 200 in 249ms
+ GET /api/notifications?unread=true&limit=0 200 in 15ms
+Found media: {
+  id: 'cmdja8jr50003luczi6pu1aoo',
+  artistId: 'cmdi3mtba0004ludm6i1aexz0',
+  mediaType: 'PHOTO',
+  category: 'PRESS',
+  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
+  fileSize: null,
+  mimeType: null,
+  title: 'Sarah Johnson Press Photo',
+  description: 'Professional press photo for Sarah Johnson',
+  sortOrder: 0,
+  createdAt: 2025-07-25T20:37:12.833Z
+}
+ GET /api/profile 200 in 18ms
+ GET /api/auth/session 200 in 15ms
+ GET /api/auth/session 200 in 13ms
+ GET /api/auth/session 200 in 12ms
+ GET /api/auth/session 200 in 8ms
+Found media: {
+  id: 'cmdja8jr50003luczi6pu1aoo',
+  artistId: 'cmdi3mtba0004ludm6i1aexz0',
+  mediaType: 'PHOTO',
+  category: 'PRESS',
+  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
+  fileSize: null,
+  mimeType: null,
+  title: 'Sarah Johnson Press Photo',
+  description: 'Professional press photo for Sarah Johnson',
+  sortOrder: 0,
+  createdAt: 2025-07-25T20:37:12.833Z
+}
+ GET /api/profile 200 in 8ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 138ms
+ GET /favicon.ico 200 in 12ms
+ ✓ Compiled /api/artists/[id] in 95ms (875 modules)
+ ✓ Compiled (877 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/artists/cmdi3mtba0004ludm6i1aexz0 200 in 230ms
+ GET /api/auth/session 200 in 233ms
+ GET /api/artists?exclude=cmdi3mtba0004ludm6i1aexz0&limit=3 200 in 242ms
+ ✓ Compiled /api/spotify/artist/[artistId] in 129ms (879 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 307ms
+ GET /api/notifications?unread=true&limit=0 200 in 308ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 314ms
+ GET /api/notifications?unread=true&limit=0 200 in 27ms
+ GET /api/auth/session 200 in 30ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 36ms
+ GET /api/auth/session 200 in 15ms
+Found media: {
+  id: 'cmdja8jr50003luczi6pu1aoo',
+  artistId: 'cmdi3mtba0004ludm6i1aexz0',
+  mediaType: 'PHOTO',
+  category: 'PRESS',
+  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
+  fileSize: null,
+  mimeType: null,
+  title: 'Sarah Johnson Press Photo',
+  description: 'Professional press photo for Sarah Johnson',
+  sortOrder: 0,
+  createdAt: 2025-07-25T20:37:12.833Z
+}
+ GET /api/profile 200 in 17ms
+ GET /api/auth/session 200 in 36ms
+ GET /api/auth/session 200 in 35ms
+ GET /api/auth/session 200 in 11ms
+ GET /api/auth/session 200 in 8ms
+Found media: {
+  id: 'cmdja8jr50003luczi6pu1aoo',
+  artistId: 'cmdi3mtba0004ludm6i1aexz0',
+  mediaType: 'PHOTO',
+  category: 'PRESS',
+  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
+  fileSize: null,
+  mimeType: null,
+  title: 'Sarah Johnson Press Photo',
+  description: 'Professional press photo for Sarah Johnson',
+  sortOrder: 0,
+  createdAt: 2025-07-25T20:37:12.833Z
+}
+ GET /api/profile 200 in 13ms
+ ✓ Compiled in 1293ms (757 modules)
+ GET / 200 in 85ms
+ GET /dashboard/profile 200 in 87ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 80ms
+ ✓ Compiled in 1175ms (757 modules)
+ GET / 200 in 38ms
+ GET /dashboard/profile 200 in 39ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 36ms
+ ✓ Compiled in 1258ms (757 modules)
+ GET /dashboard/profile 200 in 68ms
+ GET / 200 in 71ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 66ms
+ ✓ Compiled in 1179ms (757 modules)
+ GET /dashboard/profile 200 in 33ms
+ GET / 200 in 34ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 32ms
+ ✓ Compiled in 1216ms (757 modules)
+ GET / 200 in 36ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 33ms
+ GET /dashboard/profile 200 in 37ms
+ ✓ Compiled in 1311ms (1454 modules)
+ GET / 200 in 150ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 144ms
+ GET /dashboard/profile 200 in 151ms
+ ✓ Compiled in 1442ms (1719 modules)
+ GET /dashboard/profile 200 in 84ms
+ GET / 200 in 85ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 82ms
+ ✓ Compiled in 1245ms (757 modules)
+ GET / 200 in 73ms
+ GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 67ms
+ GET /dashboard/profile 200 in 76ms
+[?25h

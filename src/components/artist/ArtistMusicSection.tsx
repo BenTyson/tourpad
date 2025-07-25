@@ -5,7 +5,6 @@ import { Play, Pause, Music, ExternalLink, Clock, TrendingUp } from 'lucide-reac
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
-import AlbumGallery from '@/components/spotify/AlbumGallery';
 import EnhancedSpotifyPlayer from '@/components/spotify/EnhancedSpotifyPlayer';
 
 interface SpotifyTrack {
@@ -87,6 +86,17 @@ export default function ArtistMusicSection({
         const data = await response.json();
         setTopTracks(data.artist.topTracks || []);
         setAlbums(data.artist.albums || []);
+        
+        // Debug logging for album data
+        console.log('🎵 Fetched Spotify data for artist:', {
+          albumCount: data.artist.albums?.length || 0,
+          albumsWithImages: data.artist.albums?.filter((a: any) => a.imageUrl).length || 0,
+          sampleAlbum: data.artist.albums?.[0] ? {
+            name: data.artist.albums[0].name,
+            hasImageUrl: !!data.artist.albums[0].imageUrl,
+            imageUrl: data.artist.albums[0].imageUrl?.substring(0, 50) + '...'
+          } : null
+        });
       }
     } catch (error) {
       console.error('Error fetching music data:', error);
@@ -316,13 +326,68 @@ export default function ArtistMusicSection({
         </div>
       )}
 
-      {/* Albums Gallery */}
+      {/* Latest Albums Section */}
       {albums.length > 0 && (
-        <AlbumGallery 
-          albums={albums}
-          artistName={artistName}
-          maxInitialDisplay={6}
-        />
+        <div>
+          <h3 className="text-xl font-semibold text-neutral-900 mb-4">
+            Latest Albums
+          </h3>
+          
+          <div className="grid grid-cols-6 gap-4">
+            {albums.slice(0, 6).map((album) => (
+              <a
+                key={album.id}
+                href={album.spotifyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block"
+              >
+                <Card className="overflow-hidden hover:shadow-lg transition-all duration-200 group-hover:scale-105">
+                  <CardContent className="p-0">
+                    {/* Album Cover */}
+                    <div className="aspect-square bg-gradient-to-br from-neutral-100 to-neutral-200 relative">
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Music className="w-8 h-8 text-neutral-400" />
+                      </div>
+                      {album.imageUrl && (
+                        <img
+                          src={album.imageUrl}
+                          alt={album.name}
+                          className="w-full h-full object-cover"
+                          onLoad={(e) => {
+                            // Hide fallback when image loads
+                            const fallback = e.currentTarget.previousElementSibling as HTMLElement;
+                            if (fallback) fallback.style.display = 'none';
+                          }}
+                          onError={(e) => {
+                            // Image failed to load, keep fallback visible
+                            e.currentTarget.style.display = 'none';
+                            console.log(`Failed to load album image: ${album.name}`);
+                          }}
+                        />
+                      )}
+                      
+                      {/* Hover overlay with external link icon */}
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-200 flex items-center justify-center">
+                        <ExternalLink className="w-5 h-5 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                      </div>
+                    </div>
+                    
+                    {/* Album Info */}
+                    <div className="p-2">
+                      <h4 className="font-medium text-neutral-900 text-xs truncate group-hover:text-primary-700 transition-colors">
+                        {album.name}
+                      </h4>
+                      <p className="text-xs text-neutral-500 mt-1">
+                        {new Date(album.releaseDate).getFullYear() || ''}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </a>
+            ))}
+          </div>
+        </div>
       )}
 
       {/* No Music Data */}
