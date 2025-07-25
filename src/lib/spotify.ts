@@ -12,8 +12,8 @@ export interface SpotifyArtistData {
   };
   images: Array<{
     url: string;
-    height: number;
-    width: number;
+    height?: number;
+    width?: number;
   }>;
   external_urls: {
     spotify: string;
@@ -28,8 +28,8 @@ export interface SpotifyAlbumData {
   total_tracks: number;
   images: Array<{
     url: string;
-    height: number;
-    width: number;
+    height?: number;
+    width?: number;
   }>;
   external_urls: {
     spotify: string;
@@ -43,7 +43,7 @@ export interface SpotifyTrackData {
   id: string;
   name: string;
   duration_ms: number;
-  popularity: number;
+  popularity?: number;
   preview_url: string | null;
   track_number: number;
   explicit: boolean;
@@ -55,8 +55,8 @@ export interface SpotifyTrackData {
     name: string;
     images: Array<{
       url: string;
-      height: number;
-      width: number;
+      height?: number;
+      width?: number;
     }>;
   };
 }
@@ -135,11 +135,11 @@ class SpotifyService {
     
     try {
       const albums = await this.api.getArtistAlbums(spotifyArtistId, {
-        album_type: 'album,single',
+        include_groups: 'album,single',
         country: 'US',
         limit: 50
       });
-      return albums.body.items;
+      return (albums as any).body.items;
     } catch (error) {
       console.error('Error getting artist albums:', error);
       throw new Error('Failed to get artist albums from Spotify');
@@ -154,7 +154,7 @@ class SpotifyService {
     
     try {
       const topTracks = await this.api.getArtistTopTracks(spotifyArtistId, 'US');
-      return topTracks.body.tracks;
+      return (topTracks as any).body.tracks;
     } catch (error) {
       console.error('Error getting artist top tracks:', error);
       throw new Error('Failed to get artist top tracks from Spotify');
@@ -169,7 +169,7 @@ class SpotifyService {
     
     try {
       const album = await this.api.getAlbum(spotifyAlbumId);
-      return album.body;
+      return (album as any).body;
     } catch (error) {
       console.error('Error getting album:', error);
       throw new Error('Failed to get album from Spotify');
@@ -325,7 +325,7 @@ class SpotifyService {
         update: {
           name: trackData.name,
           durationMs: trackData.duration_ms,
-          popularity: trackData.popularity,
+          popularity: trackData.popularity || 0,
           previewUrl: trackData.preview_url,
           spotifyUrl: trackData.external_urls.spotify,
           trackNumber: trackData.track_number,
@@ -338,7 +338,7 @@ class SpotifyService {
           albumId,
           name: trackData.name,
           durationMs: trackData.duration_ms,
-          popularity: trackData.popularity,
+          popularity: trackData.popularity || 0,
           previewUrl: trackData.preview_url,
           spotifyUrl: trackData.external_urls.spotify,
           trackNumber: trackData.track_number,

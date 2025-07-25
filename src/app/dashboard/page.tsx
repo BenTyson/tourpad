@@ -200,12 +200,16 @@ export default function DashboardPage() {
 
   // Get user info from current user data (fresh from database) if available, otherwise fall back to session
   const userData = currentUser || session.user;
-  const userRole: UserRole = (userData.userType || userData.type || 'fan') as UserRole;
+  const rawUserRole = userData.userType || userData.type || 'fan';
+  const userRole: UserRole = rawUserRole as UserRole;
   const userStatus = userData.status || 'pending';
+  
+  // Helper function to check user role (fixes TypeScript narrowing issues)
+  const isUserRole = (role: UserRole) => (userRole as string) === role;
   const selectedUserId = userData.id;
 
   // Redirect fans to their dedicated dashboard
-  if (userRole === 'fan') {
+  if (isUserRole('fan')) {
     router.push('/dashboard/fan');
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -220,7 +224,7 @@ export default function DashboardPage() {
   // Status-based routing logic
   
   // PENDING users (except fans) see holding page
-  if (userStatus === 'pending' && userRole !== 'fan') {
+  if (userStatus === 'pending' && (userRole as string) !== 'fan') {
     return (
       <HoldingPage 
         user={{
@@ -298,7 +302,7 @@ export default function DashboardPage() {
   }
 
   // FANS with PENDING status need to complete payment
-  if (userRole === 'fan' && userStatus === 'pending') {
+  if ((userRole as string) === 'fan' && userStatus === 'pending') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 flex items-center justify-center p-4">
         <div className="max-w-md w-full text-center">
@@ -357,17 +361,17 @@ export default function DashboardPage() {
   const hasFullAccess = userRole === 'admin' || 
                        userStatus === 'approved' || 
                        userStatus === 'active' ||
-                       (userRole === 'fan' && userData.fan?.subscriptionStatus === 'ACTIVE');
+                       (isUserRole('fan') && userData.fan?.subscriptionStatus === 'ACTIVE');
   const needsPayment = userRole === 'artist' && userStatus === 'approved' && userData.artist?.approvedAt && !userData.fan?.subscriptionStatus;
 
   // Bookings are now handled by BookingList component which fetches real data
 
   // Fan-specific data
-  const fanConcerts = userRole === 'fan' 
+  const fanConcerts = isUserRole('fan') 
     ? (testConcerts || []).filter(concert => concert.status === 'upcoming')
     : [];
   
-  const fanUpcomingConcerts = userRole === 'fan'
+  const fanUpcomingConcerts = isUserRole('fan')
     ? (testConcerts || []).filter(concert => 
         concert.status === 'upcoming' && 
         concert.attendees?.includes(selectedUserId)
@@ -386,7 +390,7 @@ export default function DashboardPage() {
         notif.userId === selectedUserId
       );
 
-  const upcomingBookings = userRole === 'fan'
+  const upcomingBookings = isUserRole('fan')
     ? fanUpcomingConcerts.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
     : []; // Real bookings now handled by BookingList component
 
@@ -424,10 +428,10 @@ export default function DashboardPage() {
               <div className="flex-1">
                 <h3 className="font-medium text-secondary-900 mb-2">Limited Dashboard Access</h3>
                 <p className="text-secondary-800 mb-4">
-                  {userRole === 'fan' && userData.fan?.subscriptionStatus !== 'ACTIVE' && 'Your membership has expired. Renew to continue accessing exclusive house concerts.'}
-                  {userRole !== 'fan' && userStatus === 'pending' && 'Your application is under review. Full dashboard functionality will be available once approved.'}
-                  {userRole !== 'fan' && userStatus === 'rejected' && 'Your application was not approved. Please review your application status for next steps.'}
-                  {userRole !== 'fan' && userStatus === 'suspended' && 'Your account has been suspended. Contact support for assistance.'}
+                  {isUserRole('fan') && userData.fan?.subscriptionStatus !== 'ACTIVE' && 'Your membership has expired. Renew to continue accessing exclusive house concerts.'}
+                  {!isUserRole('fan') && userStatus === 'pending' && 'Your application is under review. Full dashboard functionality will be available once approved.'}
+                  {!isUserRole('fan') && userStatus === 'rejected' && 'Your application was not approved. Please review your application status for next steps.'}
+                  {!isUserRole('fan') && userStatus === 'suspended' && 'Your account has been suspended. Contact support for assistance.'}
                 </p>
                 <div className="flex space-x-3">
                   {userRole === 'fan' && userData.fan?.subscriptionStatus !== 'ACTIVE' ? (

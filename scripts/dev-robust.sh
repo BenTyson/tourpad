@@ -141,7 +141,7 @@ start_server() {
     local server_ready=false
     
     while [ $wait_time -lt $max_wait ]; do
-        if grep -q "Ready" "$LOG_FILE" 2>/dev/null || grep -q "Local:" "$LOG_FILE" 2>/dev/null; then
+        if grep -q "Ready" "$LOG_FILE" 2>/dev/null || grep -q "Local:" "$LOG_FILE" 2>/dev/null || grep -q "localhost:3001" "$LOG_FILE" 2>/dev/null; then
             server_ready=true
             break
         fi
@@ -157,7 +157,7 @@ start_server() {
     done
     
     if [ "$server_ready" = true ]; then
-        log "INFO" "Server is ready and running at http://localhost:3000"
+        log "INFO" "Server is ready and running at http://localhost:3001"
         return 0
     else
         log "ERROR" "Server failed to start within ${max_wait} seconds"
