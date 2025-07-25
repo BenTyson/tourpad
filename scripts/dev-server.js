@@ -55,13 +55,9 @@ class DevServerManager {
   createServerProcess() {
     const memory = this.getOptimalMemorySettings();
     
-    // Enhanced Node.js flags for stability
+    // Enhanced Node.js flags for stability (only allowed options)
     const nodeFlags = [
       `--max-old-space-size=${memory.maxOldSpace}`,
-      `--max-semi-space-size=${memory.maxSemiSpace}`,
-      '--optimize-for-size',
-      '--gc-interval=100',
-      '--expose-gc',
       '--trace-warnings',
       '--unhandled-rejections=warn'
     ];
@@ -84,7 +80,7 @@ class DevServerManager {
 
     this.log(`Starting Next.js server with memory: ${memory.maxOldSpace}MB`);
     
-    const server = spawn('npx', ['next', 'dev'], {
+    const server = spawn('npx', ['next', 'dev', '-H', '0.0.0.0', '-p', '3001'], {
       stdio: 'inherit',
       env,
       cwd: process.cwd(),

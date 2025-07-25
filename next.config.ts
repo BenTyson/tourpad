@@ -21,8 +21,11 @@ const nextConfig: NextConfig = {
   // STABLE webpack configuration
   webpack: (config, { dev, isServer }) => {
     if (dev) {
-      // CRITICAL: Disable webpack cache to prevent corruption
-      config.cache = false;
+      // Enable webpack cache with memory limit to prevent OOM
+      config.cache = {
+        type: 'memory',
+        maxGenerations: 1,
+      };
       
       // Simplified file watching - no aggressive polling
       config.watchOptions = {
@@ -31,10 +34,12 @@ const nextConfig: NextConfig = {
           '**/public/uploads/**',
           '**/.next/**',
           '**/.git/**',
-          '**/*.log'
+          '**/*.log',
+          '**/prisma/dev.db**',
+          '**/prisma/dev.db-journal**'
         ],
         poll: false,                    // No polling
-        aggregateTimeout: 500,          // Increased for stability
+        aggregateTimeout: 1000,         // Increased for stability
         followSymlinks: false,          // Prevent symlink issues
       };
 
@@ -45,6 +50,9 @@ const nextConfig: NextConfig = {
 
       // Prevent memory leaks
       config.stats = 'errors-warnings';
+      
+      // Limit parallelism to reduce memory usage
+      config.parallelism = 1;
     }
 
     // Disable performance hints to reduce overhead

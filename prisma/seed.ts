@@ -748,6 +748,10 @@ async function main() {
       fan: {
         create: {
           favoriteGenres: ['Folk', 'Indie', 'Alternative'],
+          hometown: 'Austin',
+          state: 'TX',
+          bio: 'Music lover who enjoys discovering new artists and intimate concert experiences. Always looking for the next great show!',
+          profileImageUrl: 'https://images.unsplash.com/photo-1494790108755-2616b612b734?w=400&h=400&fit=crop&crop=face',
           travelRadius: 50,
           subscriptionStatus: 'ACTIVE',
           subscriptionStartDate: new Date(),

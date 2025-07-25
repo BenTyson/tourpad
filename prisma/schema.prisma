@@ -188,6 +188,10 @@ model Fan {
   id                    String             @id @default(cuid())
   userId                String             @unique
   favoriteGenres        String[]
+  hometown              String?
+  state                 String?
+  bio                   String?
+  profileImageUrl       String?
   travelRadius          Int?
   subscriptionStatus    SubscriptionStatus
   subscriptionStartDate DateTime?

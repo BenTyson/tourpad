@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -H 0.0.0.0 -p 3001",
+    "dev": "./scripts/stable-dev.sh",
     "dev:clean": "rm -rf .next && next dev -H 0.0.0.0 -p 3001",
     "dev:safe": "NODE_ENV=development next dev -H 0.0.0.0 -p 3001 --no-turbo",
     "dev:next": "next dev",
     "dev:stable": "node scripts/dev-server.js",
+    "dev:basic": "next dev -H 0.0.0.0 -p 3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

@@ -1,0 +1,151 @@
+# Cancellation & Refund Policy
+
+*Last updated: [DATE]*
+
+## Overview
+
+This policy covers cancellations and refunds for TourPad subscriptions and services. Since house concerts involve real people making plans, we encourage clear communication and early notice when changes are needed.
+
+## Subscription Cancellations & Refunds
+
+### Artist and Fan Subscriptions
+
+#### Monthly Subscriptions
+- **Cancellation**: Cancel anytime from your account settings
+- **Effective Date**: Cancellation takes effect at the end of your current billing period
+- **Refunds**: No refunds for partial months, but you keep access until the period ends
+- **Reactivation**: You can reactivate anytime before your access expires
+
+#### Annual Subscriptions
+- **Within 30 Days**: Full refund if you cancel within 30 days of purchase
+- **After 30 Days**: No refund, but service continues until the end of your annual period
+- **Exceptional Circumstances**: We may offer prorated refunds for documented emergencies or platform issues
+
+### Processing Time
+- Refunds are processed within 5-7 business days
+- Refunds appear on your original payment method
+- Contact support@tourpad.com if you don't see your refund after 10 business days
+
+## Concert Cancellations
+
+*Note: TourPad facilitates connections but doesn't directly handle concert bookings. However, we encourage these practices for a healthy community.*
+
+### Recommended Practices
+
+#### For Artists
+**Advance Notice**
+- 7+ days notice: Generally acceptable for most situations
+- 24-48 hours notice: Only for emergencies or serious circumstances
+- Same-day cancellation: Should be limited to true emergencies
+
+**Communication**
+- Contact the host directly through TourPad messaging
+- Explain the situation clearly and apologetically
+- Offer to reschedule if possible
+
+#### For Hosts
+**Flexibility**
+- Understand that touring involves uncertainties
+- Consider rescheduling when possible
+- Communicate any limitations or conflicts early
+
+**Notice to Fans**
+- Inform RSVPed fans as soon as possible
+- Use TourPad's messaging system to reach attendees
+- Provide clear information about cancellation or rescheduling
+
+## Platform-Related Refunds
+
+### When We Provide Refunds
+- **Platform Outages**: Extended downtime that prevents service use
+- **Billing Errors**: Incorrect charges or technical payment issues
+- **Account Problems**: Issues caused by platform bugs or errors
+
+### When We Don't Provide Refunds
+- **Change of Mind**: Deciding you don't want to use the service
+- **Concert Cancellations**: Issues between users (artists, hosts, fans)
+- **Unused Services**: Not using your subscription during the billing period
+- **Violation Suspensions**: Account restrictions due to guideline violations
+
+## Special Circumstances
+
+### Emergencies and Hardships
+We understand that life happens. For documented emergencies, serious illness, or genuine hardship situations, contact our support team. We'll review each case individually and may offer:
+- Subscription pauses
+- Partial refunds
+- Extended access periods
+- Payment plan adjustments
+
+### Platform Changes
+If we make significant changes to TourPad that substantially affect your ability to use the service, we may offer refunds for unused portions of annual subscriptions.
+
+## Dispute Resolution
+
+### Step 1: Contact Support
+Before disputing charges with your bank or credit card company, please contact us at support@tourpad.com. Many issues can be resolved quickly through direct communication.
+
+### Step 2: Review Period
+We'll investigate your request within 5 business days and respond with our decision and reasoning.
+
+### Step 3: Appeals
+If you disagree with our decision, you can appeal by providing additional information or documentation.
+
+## Concert-Related Disputes
+
+### TourPad's Role
+- We provide the platform for connections
+- We don't mediate individual concert arrangements
+- Users are encouraged to resolve booking issues directly
+
+### Best Practices for Resolution
+- Communicate openly and honestly
+- Consider the other party's perspective
+- Look for compromise solutions (rescheduling, partial arrangements)
+- Leave honest reviews about your experience
+
+### When TourPad May Step In
+- Platform technical issues affecting bookings
+- Violations of our Community Guidelines
+- Safety concerns related to platform use
+
+## Payment Processing
+
+### Stripe Integration
+- All payments are processed through Stripe
+- Stripe's terms and policies also apply to your transactions
+- Some refund timing depends on Stripe's processing schedule
+
+### Failed Payments
+- Failed subscription payments result in account restrictions
+- You have 7 days to update payment information before suspension
+- No additional fees for payment failures
+
+## Account Deletion
+
+### Your Data
+- Account deletion removes your personal information
+- You lose access to messages, booking history, and reviews
+- Deletion is permanent and cannot be undone
+
+### Financial Implications
+- No refunds for remaining subscription time after account deletion
+- Outstanding payments must be resolved before deletion
+- You can download your data before deleting your account
+
+## Policy Updates
+
+We may update this policy as TourPad evolves. Significant changes will be communicated via:
+- Email notification to active subscribers
+- Platform announcements
+- Updated version posted on our website
+
+## Contact Us
+
+For cancellation requests, refund questions, or policy clarification:
+- Email: billing@tourpad.com
+- Support: support@tourpad.com
+- Address: TourPad, Denver, CO
+
+---
+
+*This policy is designed to be fair to both TourPad and our community members while encouraging the clear communication that makes house concerts successful.*

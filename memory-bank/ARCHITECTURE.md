@@ -56,6 +56,7 @@ model User {
   termsAcceptedAt         DateTime?
   privacyPolicyAcceptedAt DateTime?
   lastLogin               DateTime?
+  stripeCustomerId        String?        @unique
   
   // Relations to all other models
   profile                 UserProfile?
@@ -70,9 +71,12 @@ model User {
   reviewsReceived         Review[]       @relation("RevieweeUser")
   reviews                 Review[]       @relation("ReviewerUser")
   adminActions            AdminAction[]
+  subscription            Subscription?
   
   createdAt               DateTime       @default(now())
   updatedAt               DateTime       @updatedAt
+  
+  @@map("users")
 }
 ```
 
@@ -92,6 +96,8 @@ model UserProfile {
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+  
+  @@map("user_profiles")
 }
 ```
 
@@ -109,6 +115,7 @@ model Artist {
   travelRadius            Int?          // Miles
   pressPhotoUrl           String?
   performanceVideoUrl     String?
+  performanceVideoFile    String?       // File path for uploaded MP4 video
   musicSamples            Json?         // [{title, url, duration}]
   minGuarantee            Int?          // Minimum payment
   preferredBookingAdvance Int?          // Days
@@ -132,31 +139,44 @@ model Artist {
   
   createdAt               DateTime      @default(now())
   updatedAt               DateTime      @updatedAt
+  
+  @@map("artists")
 }
 ```
 
 #### Host Model
 ```prisma
 model Host {
-  id                     String      @id @default(cuid())
-  userId                 String      @unique
+  id                     String              @id @default(cuid())
+  userId                 String              @unique
   venueName              String?
-  venueType              VenueType   // HOME, LOFT, WAREHOUSE, OTHER
+  venueType              VenueType           // HOME, LOFT, WAREHOUSE, STUDIO, BACKYARD, OTHER
   city                   String
   state                  String
-  country                String      @default("USA")
-  displayCoordinates     String?     // Public approximate location
-  actualAddress          String?     // Private exact address
+  country                String              @default("USA")
+  displayCoordinates     String?             // Public approximate location
+  actualAddress          String?             // Private exact address
+  
+  // Enhanced location privacy system
+  latitude               Float?              // Exact coordinates (private)
+  longitude              Float?              // Exact coordinates (private)
+  privacyLevel           LocationPrivacy     @default(NEIGHBORHOOD)
+  displayLat             Float?              // Obfuscated coordinates for public display
+  displayLng             Float?              // Obfuscated coordinates for public display
+  
   indoorCapacity         Int?
   outdoorCapacity        Int?
   preferredGenres        String[]
-  hostingExperience      Int?        // Years
-  typicalShowLength      Int?        // Minutes
+  hostingExperience      Int?                // Years
+  typicalShowLength      Int?                // Minutes
   houseRules             String?
-  offersLodging          Boolean     @default(false)
-  lodgingDetails         Json?       // Room configuration, amenities
-  venuePhotoUrl          String?     // Main venue photo
+  offersLodging          Boolean             @default(false)
+  lodgingDetails         Json?               // Room configuration, amenities
+  suggestedDoorFee       Int?                // Suggested door fee amount
+  venuePhotoUrl          String?             // Main venue photo
   venueDescription       String?
+  amenities              String[]            // Venue amenities array
+  soundSystem            Json?               // Sound system details
   
   // Application workflow
   applicationSubmittedAt DateTime?
@@ -164,12 +184,14 @@ model Host {
   approvedByUserId       String?
   
   // Relations
-  user                   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                   User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   bookings               Booking[]
-  media                  HostMedia[] // Gallery photos
+  media                  HostMedia[]         // Gallery photos
   
-  createdAt              DateTime    @default(now())
-  updatedAt              DateTime    @updatedAt
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+  
+  @@map("hosts")
 }
 ```
 
@@ -179,6 +201,10 @@ model Fan {
   id                    String             @id @default(cuid())
   userId                String             @unique
   favoriteGenres        String[]
+  hometown              String?            // Fan's hometown
+  state                 String?            // Fan's state
+  bio                   String?            // Fan's bio/description
+  profileImageUrl       String?            // Fan's profile image
   travelRadius          Int?
   subscriptionStatus    SubscriptionStatus // ACTIVE, EXPIRED, CANCELLED
   subscriptionStartDate DateTime?
@@ -190,6 +216,8 @@ model Fan {
   
   createdAt             DateTime           @default(now())
   updatedAt             DateTime           @updatedAt
+  
+  @@map("fans")
 }
 ```
 
@@ -211,6 +239,8 @@ model ArtistMedia {
   
   artist      Artist    @relation(fields: [artistId], references: [id], onDelete: Cascade)
   createdAt   DateTime  @default(now())
+  
+  @@map("artist_media")
 }
 ```
 
@@ -230,6 +260,8 @@ model HostMedia {
   
   host        Host      @relation(fields: [hostId], references: [id], onDelete: Cascade)
   createdAt   DateTime  @default(now())
+  
+  @@map("host_media")
 }
 ```
 
@@ -274,7 +306,6 @@ model Booking {
   doorFeeStatus        DoorFeeStatus? // Door fee negotiation workflow
   artistMessage        String?
   hostResponse         String?
-  specialRequirements  String?        // Host-specific requirements
   lodgingRequested     Boolean        @default(false)
   lodgingDetails       Json?
   confirmationDeadline DateTime?      // 5-day artist confirmation window
@@ -370,6 +401,13 @@ model Message {
   senderId       String
   content        String
   messageType    MessageType  @default(TEXT)
+  
+  // File attachment fields
+  attachmentUrl  String?      // URL to the uploaded file
+  attachmentType String?      // MIME type (image/jpeg, application/pdf, etc.)
+  attachmentName String?      // Original filename
+  attachmentSize Int?         // File size in bytes
+  
   readBy         String[]     // Array of user IDs
   
   // Relations
@@ -377,6 +415,8 @@ model Message {
   sender         User         @relation(fields: [senderId], references: [id])
   
   createdAt      DateTime     @default(now())
+  
+  @@map("messages")
 }
 ```
 
@@ -434,26 +474,29 @@ model Review {
 #### Payment Model
 ```prisma
 model Payment {
-  id                  String        @id @default(cuid())
-  userId              String
-  stripePaymentId     String        @unique  // Stripe Payment Intent or Session ID
-  stripeCustomerId    String
-  amount              Int           // Amount in cents
-  currency            String        @default("usd")
-  status              PaymentStatus // SUCCEEDED, FAILED, PROCESSING, CANCELED
-  description         String?
-  paymentType         PaymentType   // ARTIST_ANNUAL, FAN_MONTHLY, ONE_TIME
-  bookingId           String?
+  id                    String        @id @default(cuid())
+  stripePaymentIntentId String?       // Stripe Payment Intent ID
+  stripePaymentId       String?       @unique  // Stripe Payment Intent or Session ID
+  stripeCustomerId      String?       // Stripe Customer ID
+  amount                Int           // Amount in cents
+  currency              String        @default("USD")
+  userId                String
+  bookingId             String?
+  paymentType           PaymentType   // MEMBERSHIP, BOOKING, DOOR_FEE, ARTIST_ANNUAL, FAN_MONTHLY, ONE_TIME
+  status                PaymentStatus @default(PENDING) // PENDING, PROCESSING, SUCCEEDED, COMPLETED, FAILED, CANCELED, REFUNDED
+  description           String?
+  metadata              Json?         // Additional Stripe metadata
 
   // Relations
-  user                User          @relation(fields: [userId], references: [id])
-  booking             Booking?      @relation(fields: [bookingId], references: [id])
+  user                  User          @relation(fields: [userId], references: [id])
+  booking               Booking?      @relation(fields: [bookingId], references: [id])
 
-  createdAt           DateTime      @default(now())
-  updatedAt           DateTime      @updatedAt
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
 
   @@index([stripePaymentId])
   @@index([userId])
+  @@map("payments")
 }
 ```
 
@@ -464,13 +507,13 @@ model Subscription {
   userId                 String              @unique
   user                   User                @relation(fields: [userId], references: [id])
   
-  // Stripe data (optional for one-time payments)
+  // Stripe data
   stripeSubscriptionId   String?             @unique
   stripeCustomerId       String
-  stripePriceId          String?
+  stripePriceId          String?             // Stripe Price ID for the subscription
   
   // Status tracking
-  status                 SubscriptionStatus  // ACTIVE, PAST_DUE, CANCELED
+  status                 SubscriptionStatus  // ACTIVE, EXPIRED, CANCELLED
   currentPeriodStart     DateTime
   currentPeriodEnd       DateTime
   cancelAtPeriodEnd      Boolean             @default(false)
@@ -483,6 +526,7 @@ model Subscription {
   updatedAt              DateTime            @updatedAt
 
   @@index([stripeSubscriptionId])
+  @@map("subscriptions")
 }
 ```
 
@@ -560,6 +604,7 @@ enum UserStatus {
   ACTIVE
   SUSPENDED
   REJECTED
+  PAYMENT_EXPIRED
 }
 
 enum VenueType {
@@ -567,6 +612,8 @@ enum VenueType {
   LOFT
   WAREHOUSE
   OTHER
+  STUDIO
+  BACKYARD
 }
 
 enum MediaType {
@@ -611,23 +658,27 @@ enum SubscriptionStatus {
 }
 
 enum PaymentType {
+  MEMBERSHIP
+  BOOKING
+  DOOR_FEE
   ARTIST_ANNUAL
   FAN_MONTHLY
   ONE_TIME
-  BOOKING
-  DOOR_FEE
 }
 
 enum PaymentStatus {
-  SUCCEEDED
-  FAILED
+  PENDING
   PROCESSING
+  SUCCEEDED
+  COMPLETED
+  FAILED
   CANCELED
   REFUNDED
 }
 
 enum MessageType {
   TEXT
+  ATTACHMENT
   SYSTEM
   BOOKING_UPDATE
 }
@@ -645,6 +696,46 @@ enum AdminActionType {
   SUSPEND_USER
   APPROVE_BOOKING
 }
+
+enum LocationPrivacy {
+  NEIGHBORHOOD  // ±1 mile radius
+  STREET       // ±0.2 mile radius
+  EXACT        // Only after booking confirmed
+}
+```
+
+### Database Performance Indexes
+
+#### Required Indexes for Optimal Performance
+```sql
+-- Messaging system performance indexes
+CREATE INDEX idx_conversation_participants ON Conversation USING GIN(participantIds);
+CREATE INDEX idx_conversation_booking ON Conversation(bookingId);
+CREATE INDEX idx_conversation_last_message ON Conversation(lastMessageAt DESC);
+CREATE INDEX idx_message_conversation ON Message(conversationId, createdAt DESC);
+CREATE INDEX idx_message_sender ON Message(senderId);
+CREATE INDEX idx_message_read_by ON Message USING GIN(readBy);
+
+-- User and authentication indexes
+CREATE INDEX idx_user_email ON User(email);
+CREATE INDEX idx_user_status ON User(status);
+CREATE INDEX idx_user_type ON User(userType);
+
+-- Booking system indexes
+CREATE INDEX idx_booking_artist ON Booking(artistId);
+CREATE INDEX idx_booking_host ON Booking(hostId);
+CREATE INDEX idx_booking_status ON Booking(status);
+CREATE INDEX idx_booking_date ON Booking(requestedDate);
+
+-- Payment system indexes (already implemented in schema)
+-- @@index([stripePaymentId])
+-- @@index([userId])
+-- @@index([stripeSubscriptionId])
+
+-- Notification system indexes
+CREATE INDEX idx_notification_user ON Notification(userId);
+CREATE INDEX idx_notification_read ON Notification(isRead);
+CREATE INDEX idx_notification_created ON Notification(createdAt DESC);
 ```
 
 ---
