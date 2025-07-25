@@ -42,6 +42,7 @@ export default function FanProfileForm() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -49,7 +50,8 @@ export default function FanProfileForm() {
     hometown: '',
     state: '',
     bio: '',
-    travelRadius: 50
+    travelRadius: 50,
+    profileImageUrl: ''
   });
 
   // Fetch fan profile on component mount
@@ -75,7 +77,8 @@ export default function FanProfileForm() {
           hometown: data.fan.hometown || '',
           state: data.fan.state || '',
           bio: data.fan.bio || '',
-          travelRadius: data.fan.travelRadius || 50
+          travelRadius: data.fan.travelRadius || 50,
+          profileImageUrl: data.fan.profileImageUrl || ''
         });
       }
     } catch (err) {
@@ -129,6 +132,64 @@ export default function FanProfileForm() {
         ? prev.favoriteGenres.filter(g => g !== genre)
         : [...prev.favoriteGenres, genre]
     }));
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setError('Please select a valid image file');
+      return;
+    }
+
+    // Validate file size (5MB limit)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Image size must be less than 5MB');
+      return;
+    }
+
+    setUploadingImage(true);
+    setError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('category', 'profile');
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Upload failed: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.success) {
+        // Update form data with new image URL
+        setFormData(prev => ({
+          ...prev,
+          profileImageUrl: data.url
+        }));
+        
+        // Update profile state to immediately show the new image
+        setProfile(prev => prev ? {
+          ...prev,
+          profileImageUrl: data.url
+        } : prev);
+      } else {
+        throw new Error(data.error || 'Upload failed');
+      }
+    } catch (err) {
+      console.error('Error uploading image:', err);
+      setError(err instanceof Error ? err.message : 'Failed to upload image');
+    } finally {
+      setUploadingImage(false);
+    }
   };
 
   if (loading) {
@@ -195,6 +256,49 @@ export default function FanProfileForm() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Profile Image Upload */}
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-3">
+                <Camera className="w-4 h-4 inline mr-1" />
+                Profile Photo
+              </label>
+              <div className="flex items-center space-x-6">
+                <div className="w-24 h-24 bg-neutral-100 rounded-full flex items-center justify-center overflow-hidden">
+                  {(formData.profileImageUrl || profile?.profileImageUrl) ? (
+                    <img 
+                      src={formData.profileImageUrl || profile?.profileImageUrl} 
+                      alt="Profile"
+                      className="w-24 h-24 rounded-full object-cover"
+                    />
+                  ) : (
+                    <User className="w-12 h-12 text-neutral-400" />
+                  )}
+                </div>
+                <div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={uploadingImage}
+                    className="hidden"
+                    id="profile-image-upload"
+                  />
+                  <label
+                    htmlFor="profile-image-upload"
+                    className={`inline-flex items-center px-4 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 bg-white hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 cursor-pointer ${
+                      uploadingImage ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
+                  >
+                    <Camera className="w-4 h-4 mr-2" />
+                    {uploadingImage ? 'Uploading...' : 'Change Photo'}
+                  </label>
+                  <p className="text-xs text-neutral-500 mt-2">
+                    JPG, PNG or WebP. Max size 5MB.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* Location */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>

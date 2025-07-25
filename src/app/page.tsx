@@ -144,6 +144,82 @@ export default function PhotoRichHomePage() {
         </div>
       </section>
 
+      {/* Turning Homes Into Venues Section */}
+      <section className="relative py-32 overflow-hidden">
+        {/* Full Background Image */}
+        <div className="absolute inset-0">
+          <Image
+            src="/photos/fr_4.jpg"
+            alt="House concert community"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-french-blue/85 via-primary-600/80 to-primary-700/85"></div>
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">            
+            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-8 leading-tight">
+              Turning Homes Into Venues,{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-sand to-mist">
+                Nights Into Memories
+              </span>
+            </h2>
+          </div>
+
+          {/* Story cards in clean layout */}
+          <div className="space-y-12">
+            {/* Card 1 */}
+            <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
+              <div className="lg:w-2/3 order-2 lg:order-1">
+                <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-white/20">
+                  <p className="text-xl text-gray-700 leading-relaxed">
+                    Our goal is simple: to make it easier for musicians, hosts, and fans to come together and bring live music into homes and creative spaces everywhere. Whether you're an artist looking for fresh audiences, a host eager to share unforgettable nights, or a fan seeking intimate musical experiences, we're here to help you make it happen.
+                  </p>
+                </div>
+              </div>
+              <div className="lg:w-1/3 order-1 lg:order-2">
+                <div className="w-24 h-24 bg-gradient-to-br from-french-blue/30 to-primary-700/30 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30">
+                  <Users className="w-12 h-12 text-white" />
+                </div>
+              </div>
+            </div>
+
+            {/* Card 2 */}
+            <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
+              <div className="lg:w-1/3 order-1">
+                <div className="w-24 h-24 bg-gradient-to-br from-sand/30 to-mist/30 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30">
+                  <Heart className="w-12 h-12 text-white" />
+                </div>
+              </div>
+              <div className="lg:w-2/3 order-2">
+                <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-white/20">
+                  <p className="text-xl text-gray-700 leading-relaxed">
+                    House concerts break down barriers between performers and listeners. These aren't your average gigs—they're cozy, up-close shows where every note matters. We believe every living room, backyard, and community space has the potential to become a stage.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 3 - Featured Quote */}
+            <div className="text-center">
+              <div className="bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-12 border border-white/20 shadow-2xl">
+                <blockquote className="text-2xl sm:text-3xl font-bold text-white leading-tight mb-6">
+                  "Let's turn more homes into venues and more nights into something worth remembering."
+                </blockquote>
+                <div className="flex items-center justify-center space-x-2">
+                  <Star className="w-6 h-6 text-sand" />
+                  <Star className="w-6 h-6 text-sand" />
+                  <Star className="w-6 h-6 text-sand" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* What Are House Concerts Section */}
       <section className="py-32 bg-gradient-to-b from-white to-mist relative overflow-hidden">
         {/* Subtle background elements */}
@@ -305,6 +381,178 @@ export default function PhotoRichHomePage() {
         </div>
       </section>
 
+      {/* Artist-Focused Killer Section */}
+      <section className="relative py-32 bg-white overflow-hidden">
+        {/* Subtle background elements */}
+        <div className="absolute inset-0 opacity-40">
+          <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-french-blue/20 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-sage/20 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Header */}
+          <div className="text-center mb-20">
+            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-french-blue/10 to-sage/10 text-evergreen rounded-full text-sm font-medium mb-8 border border-french-blue/20">
+              <Guitar className="w-4 h-4 mr-2" />
+              For Touring Artists
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+              Stop Playing to Empty Rooms.
+              <span className="block text-french-blue">
+                Start Building Real Fans.
+              </span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              House concerts aren't just gigs—they're fan-building machines. 
+              Every show creates lifelong supporters who actually buy your music.
+            </p>
+          </div>
+
+          {/* Main content grid */}
+          <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
+            {/* Left side - Value props */}
+            <div className="space-y-8">
+              {/* Problem/Solution Cards */}
+              <div className="space-y-6">
+                <div className="bg-gradient-to-br from-mist to-white rounded-3xl p-8 shadow-lg border border-neutral-100">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Zap className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3">The Venue Problem</h3>
+                      <p className="text-gray-600 leading-relaxed">
+                        Bars take 30-50% of your merch sales. Venues book you for $200 and expect you to bring the crowd. 
+                        You're building their business, not yours.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-br from-sage/10 to-evergreen/10 rounded-3xl p-8 shadow-lg border border-sage/20">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-sage to-evergreen rounded-xl flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3">The House Concert Solution</h3>
+                      <p className="text-gray-600 leading-relaxed">
+                        Keep 100% of door fees AND merch. Guaranteed engaged audience. Hosts who actually care about your success. 
+                        Every show builds your mailing list and creates superfans.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Stats that matter */}
+              <div className="bg-white rounded-3xl p-8 shadow-xl border border-neutral-100">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">What Our Artists Actually Make</h3>
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-french-blue mb-2">$800</div>
+                    <div className="text-sm text-gray-600">Average per show</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-sage mb-2">15+</div>
+                    <div className="text-sm text-gray-600">New email signups</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-evergreen mb-2">$300</div>
+                    <div className="text-sm text-gray-600">Merch sales per show</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-sand mb-2">98%</div>
+                    <div className="text-sm text-gray-600">Want you back</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right side - Artist photo and benefits */}
+            <div className="space-y-8">
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+                <Image
+                  src="/photos/fr_5-min.jpg"
+                  alt="Artist performing at house concert"
+                  width={600}
+                  height={400}
+                  className="w-full h-[400px] object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-evergreen/60 via-transparent to-transparent"></div>
+                <div className="absolute bottom-8 left-8 right-8">
+                  <blockquote className="text-white text-lg font-medium leading-relaxed">
+                    "In three months on TourPad, I made more from door fees and merch than my entire last year of bar gigs."
+                  </blockquote>
+                  <div className="flex items-center mt-4">
+                    <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mr-3">
+                      <Music className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <div className="font-semibold text-white">Real TourPad Artist</div>
+                      <div className="text-sm text-white/80">Folk Singer-Songwriter</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Key benefits */}
+              <div className="space-y-4">
+                <div className="flex items-center space-x-4 p-4 bg-gradient-to-r from-french-blue/10 to-transparent rounded-2xl">
+                  <div className="w-8 h-8 bg-french-blue rounded-full flex items-center justify-center">
+                    <CheckCircle className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="text-gray-700 font-medium">Pre-screened hosts who actually promote your show</span>
+                </div>
+                <div className="flex items-center space-x-4 p-4 bg-gradient-to-r from-sage/10 to-transparent rounded-2xl">
+                  <div className="w-8 h-8 bg-sage rounded-full flex items-center justify-center">
+                    <CheckCircle className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="text-gray-700 font-medium">Guaranteed minimum audience size (15+ people)</span>
+                </div>
+                <div className="flex items-center space-x-4 p-4 bg-gradient-to-r from-evergreen/10 to-transparent rounded-2xl">
+                  <div className="w-8 h-8 bg-evergreen rounded-full flex items-center justify-center">
+                    <CheckCircle className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="text-gray-700 font-medium">Payment processing & host vetting handled for you</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom CTA */}
+          <div className="text-center">
+            <div className="bg-gradient-to-br from-evergreen to-neutral-800 rounded-3xl p-12 shadow-2xl relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-evergreen/90 to-transparent"></div>
+              <div className="relative z-10">
+                <h3 className="text-3xl sm:text-4xl font-bold text-white mb-6">
+                  Ready to Build Real Fans?
+                </h3>
+                <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+                  Join 500+ artists who've discovered that intimate shows create lifelong supporters, not just one-night audiences.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-lg mx-auto">
+                  <Link href="/register?type=artist">
+                    <Button size="lg" className="px-8 py-4 bg-white text-evergreen hover:bg-mist hover:text-evergreen shadow-xl hover:shadow-2xl transition-all duration-300 font-semibold">
+                      <Guitar className="w-5 h-5 mr-2" />
+                      Apply as Artist
+                    </Button>
+                  </Link>
+                  <Link href="/artists">
+                    <Button variant="outline" size="lg" className="px-8 py-4 border-white/30 text-white bg-white/10 hover:bg-white/20 transition-all duration-300">
+                      See Success Stories
+                    </Button>
+                  </Link>
+                </div>
+                <p className="text-sm text-white/70 mt-4">
+                  No upfront costs • Keep 100% of door fees & merch • We handle the logistics
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Clean Three-Column Section */}
       <section className="py-24 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -352,26 +600,6 @@ export default function PhotoRichHomePage() {
         </div>
       </section>
 
-      {/* Simple Quote Section */}
-      <section className="py-24 bg-white">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <div className="relative rounded-3xl overflow-hidden shadow-xl">
-            <Image
-              src="/photos/fr_1.jpg"
-              alt="Intimate house concert atmosphere"
-              width={800}
-              height={300}
-              className="w-full h-[300px] object-cover"
-            />
-            <div className="absolute inset-0 bg-french-blue/80"></div>
-            <div className="relative p-12">
-              <blockquote className="text-2xl sm:text-3xl font-medium text-white leading-relaxed">
-                "Every great song tells a story. Every house concert creates one."
-              </blockquote>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Clean Final CTA */}
       <section className="py-24 bg-gradient-to-br from-mist to-neutral-100">

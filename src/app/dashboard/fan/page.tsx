@@ -157,7 +157,7 @@ export default function FanDashboardPage() {
               </p>
             </div>
             <div className="flex items-center space-x-3">
-              <Link href="/dashboard/profile">
+              <Link href="/dashboard/fan/profile">
                 <Button variant="outline" size="sm">
                   <Settings className="w-4 h-4 mr-2" />
                   Settings
@@ -351,7 +351,7 @@ export default function FanDashboardPage() {
                   </div>
                 )}
 
-                <Link href="/dashboard/profile">
+                <Link href="/dashboard/fan/profile">
                   <Button variant="outline" size="sm" className="mt-4">
                     <Settings className="w-4 h-4 mr-2" />
                     Edit Profile
@@ -380,24 +380,26 @@ export default function FanDashboardPage() {
           </div>
         </div>
 
-        {/* Recent Concerts */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <h2 className="text-xl font-semibold text-neutral-900">Recent Concerts</h2>
-            <Link href="/dashboard/concerts/past">
-              <Button variant="outline" size="sm">
-                <ExternalLink className="w-4 h-4 mr-2" />
-                View All
-              </Button>
-            </Link>
-          </CardHeader>
-          <CardContent>
-            <FanConcertsList type="past" limit={3} showPagination={false} />
-          </CardContent>
-        </Card>
+        {/* Recent Concerts and Reviews */}
+        <div className="space-y-8">
+          {/* Recent Concerts */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <h2 className="text-xl font-semibold text-neutral-900">Recent Concerts</h2>
+              <Link href="/dashboard/concerts/past">
+                <Button variant="outline" size="sm">
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  View All
+                </Button>
+              </Link>
+            </CardHeader>
+            <CardContent>
+              <FanConcertsList type="past" limit={3} showPagination={false} />
+            </CardContent>
+          </Card>
 
-        {/* My Reviews */}
-        <Card>
+          {/* My Reviews */}
+          <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <h2 className="text-xl font-semibold text-neutral-900">My Reviews</h2>
             <Link href="/dashboard/reviews">
@@ -411,6 +413,7 @@ export default function FanDashboardPage() {
             <FanConcertReviewsList limit={3} showPagination={false} />
           </CardContent>
         </Card>
+        </div>
       </div>
     </div>
   );
