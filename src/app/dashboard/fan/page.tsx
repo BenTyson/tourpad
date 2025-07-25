@@ -22,6 +22,7 @@ import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import FanConcertsList from '@/components/fan/FanConcertsList';
+import FanConcertReviewsList from '@/components/reviews/FanConcertReviewsList';
 
 interface FanDashboardData {
   profile: {
@@ -42,6 +43,7 @@ interface FanDashboardData {
     pastConcerts: number;
     pendingRSVPs: number;
     favoriteArtists: number;
+    reviewsWritten: number;
   };
 }
 
@@ -94,13 +96,18 @@ export default function FanDashboardPage() {
       const pendingResponse = await fetch('/api/fan/concerts/upcoming?status=PENDING&limit=0');
       const pendingData = pendingResponse.ok ? await pendingResponse.json() : { pagination: { total: 0 } };
 
+      // Get reviews count
+      const reviewsResponse = await fetch(`/api/reviews?limit=0`);
+      const reviewsData = reviewsResponse.ok ? await reviewsResponse.json() : { pagination: { total: 0 } };
+
       setDashboardData({
         profile: profileData.fan,
         stats: {
           upcomingConcerts: upcomingData.pagination?.total || 0,
           pastConcerts: pastData.pagination?.total || 0,
           pendingRSVPs: pendingData.pagination?.total || 0,
-          favoriteArtists: 0 // TODO: Implement favorite artists
+          favoriteArtists: 0, // TODO: Implement favorite artists
+          reviewsWritten: reviewsData.pagination?.total || 0
         }
       });
     } catch (err) {
@@ -239,12 +246,12 @@ export default function FanDashboardPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                  <Star className="w-6 h-6 text-purple-600" />
+                <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                  <Star className="w-6 h-6 text-orange-600" />
                 </div>
                 <div className="ml-4">
-                  <div className="text-2xl font-bold text-neutral-900">{stats.favoriteArtists}</div>
-                  <div className="text-sm text-neutral-600">Favorite Artists</div>
+                  <div className="text-2xl font-bold text-neutral-900">{stats.reviewsWritten}</div>
+                  <div className="text-sm text-neutral-600">Reviews Written</div>
                 </div>
               </div>
             </CardContent>
@@ -258,7 +265,7 @@ export default function FanDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Link href="/calendar">
+              <Link href="/concerts">
                 <div className="group p-4 rounded-lg bg-gradient-to-br from-primary-500 to-primary-600 text-white hover:from-primary-600 hover:to-primary-700 transition-all cursor-pointer">
                   <Calendar className="w-6 h-6 mb-2" />
                   <div className="font-medium">Browse Concerts</div>
@@ -282,11 +289,11 @@ export default function FanDashboardPage() {
                 </div>
               </Link>
 
-              <Link href="/dashboard/profile">
+              <Link href="/dashboard/reviews">
                 <div className="group p-4 rounded-lg bg-white border border-neutral-200 hover:border-primary-300 hover:shadow-md transition-all cursor-pointer">
-                  <User className="w-6 h-6 mb-2 text-neutral-600 group-hover:text-primary-600" />
-                  <div className="font-medium text-neutral-900">Edit Profile</div>
-                  <div className="text-xs text-neutral-600">Update preferences</div>
+                  <Star className="w-6 h-6 mb-2 text-neutral-600 group-hover:text-primary-600" />
+                  <div className="font-medium text-neutral-900">My Reviews</div>
+                  <div className="text-xs text-neutral-600">Manage your reviews</div>
                 </div>
               </Link>
             </div>
@@ -386,6 +393,22 @@ export default function FanDashboardPage() {
           </CardHeader>
           <CardContent>
             <FanConcertsList type="past" limit={3} showPagination={false} />
+          </CardContent>
+        </Card>
+
+        {/* My Reviews */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <h2 className="text-xl font-semibold text-neutral-900">My Reviews</h2>
+            <Link href="/dashboard/reviews">
+              <Button variant="outline" size="sm">
+                <ExternalLink className="w-4 h-4 mr-2" />
+                View All
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent>
+            <FanConcertReviewsList limit={3} showPagination={false} />
           </CardContent>
         </Card>
       </div>

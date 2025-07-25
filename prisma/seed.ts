@@ -21,7 +21,6 @@ async function clearDatabase() {
   await prisma.artist.deleteMany();
   await prisma.host.deleteMany();
   await prisma.fan.deleteMany();
-  await prisma.subscription.deleteMany();
   await prisma.userProfile.deleteMany();
   await prisma.user.deleteMany();
   
@@ -1047,103 +1046,8 @@ async function main() {
     }
   });
 
-  // Create multiple reviews with varied ratings
-
-  // Host reviews Artist (Sarah) - 5 stars
-  await prisma.review.create({
-    data: {
-      bookingId: booking1.id,
-      reviewerId: host1User.id,
-      revieweeId: artist1User.id,
-      rating: 5,
-      reviewText: 'Sarah was absolutely wonderful! Her performance was heartfelt and the audience was completely engaged. Would definitely host her again.',
-      isPublic: true
-    }
-  });
-
-  // Artist (Sarah) reviews Host - 4 stars
-  await prisma.review.create({
-    data: {
-      bookingId: booking1.id,
-      reviewerId: artist1User.id,
-      revieweeId: host1User.id,
-      rating: 4,
-      reviewText: 'Great venue with wonderful acoustics. Mike was a fantastic host. Only minor issue was parking was a bit tight.',
-      isPublic: true
-    }
-  });
-
-  // Host reviews Artist (Marcus) - 5 stars
-  await prisma.review.create({
-    data: {
-      bookingId: booking2.id,
-      reviewerId: host2User.id,
-      revieweeId: artist2User.id,
-      rating: 5,
-      reviewText: 'Marcus and his trio were phenomenal! Perfect for our garden setting. The audience loved every minute.',
-      isPublic: true
-    }
-  });
-
-  // Artist (Marcus) reviews Host - 5 stars
-  await prisma.review.create({
-    data: {
-      bookingId: booking2.id,
-      reviewerId: artist2User.id,
-      revieweeId: host2User.id,
-      rating: 5,
-      reviewText: 'Emily\'s garden is a magical venue! Well organized, beautiful setting, and great audience. Highly recommend!',
-      isPublic: true
-    }
-  });
-
-  // Host reviews Artist (Luna) - 3 stars
-  await prisma.review.create({
-    data: {
-      bookingId: booking3.id,
-      reviewerId: host3User.id,
-      revieweeId: artist3User.id,
-      rating: 3,
-      reviewText: 'Luna\'s music was interesting but perhaps too experimental for our usual crowd. Professional and talented, just not the right fit.',
-      isPublic: true
-    }
-  });
-
-  // Artist (Luna) reviews Host - 4 stars
-  await prisma.review.create({
-    data: {
-      bookingId: booking3.id,
-      reviewerId: artist3User.id,
-      revieweeId: host3User.id,
-      rating: 4,
-      reviewText: 'The barn is an amazing space! James was accommodating. Crowd seemed more into traditional genres though.',
-      isPublic: true
-    }
-  });
-
-  // Host reviews Artist (Sarah again) - 5 stars
-  await prisma.review.create({
-    data: {
-      bookingId: booking4.id,
-      reviewerId: host3User.id,
-      revieweeId: artist1User.id,
-      rating: 5,
-      reviewText: 'Sarah brought exactly what our barn needed - authentic folk music! Standing ovation from the crowd.',
-      isPublic: true
-    }
-  });
-
-  // Artist (Sarah) reviews Host (James) - 5 stars
-  await prisma.review.create({
-    data: {
-      bookingId: booking4.id,
-      reviewerId: artist1User.id,
-      revieweeId: host3User.id,
-      rating: 5,
-      reviewText: 'The Wilson Barn is a dream venue! Incredible acoustics, professional setup, and James is a wonderful host.',
-      isPublic: true
-    }
-  });
+  // TODO: Create concert-based reviews with new schema
+  // Reviews will be created through the API endpoints
 
   console.log('✅ Created multiple reviews with varied ratings:');
   console.log('  - Sarah Johnson: Average 5.0 (2 reviews)');

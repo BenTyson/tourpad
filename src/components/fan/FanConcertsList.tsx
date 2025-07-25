@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
+import { FanConcertReviewModal } from '@/components/reviews/FanConcertReviewModal';
 import { 
   Calendar, 
   Clock, 
@@ -72,6 +73,7 @@ export default function FanConcertsList({
   const [concerts, setConcerts] = useState<FanConcert[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedConcertForReview, setSelectedConcertForReview] = useState<FanConcert | null>(null);
   const [pagination, setPagination] = useState({
     total: 0,
     limit: limit,
@@ -122,6 +124,15 @@ export default function FanConcertsList({
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleReviewSubmit = (review: any) => {
+    // Refresh the concerts list to update the hasReview status
+    fetchConcerts();
+  };
+
+  const handleReviewModalClose = () => {
+    setSelectedConcertForReview(null);
   };
 
   const getStatusColor = (status: string) => {
@@ -315,7 +326,10 @@ export default function FanConcertsList({
                       </Link>
                       
                       {type === 'past' && !item.hasReview && (
-                        <Button size="sm">
+                        <Button 
+                          size="sm"
+                          onClick={() => setSelectedConcertForReview(item)}
+                        >
                           <Star className="w-4 h-4 mr-1" />
                           Review
                         </Button>
@@ -356,6 +370,25 @@ export default function FanConcertsList({
         <div className="text-center text-sm text-neutral-500 pt-2">
           Showing {concerts.length} of {pagination.total} concerts
         </div>
+      )}
+
+      {/* Review Modal */}
+      {selectedConcertForReview && (
+        <FanConcertReviewModal
+          concert={{
+            id: selectedConcertForReview.concert.id,
+            artistId: selectedConcertForReview.concert.artist.id,
+            hostId: selectedConcertForReview.concert.host.id,
+            artistName: selectedConcertForReview.concert.artist.stageName || selectedConcertForReview.concert.artist.name,
+            hostName: selectedConcertForReview.concert.host.name,
+            venueName: selectedConcertForReview.concert.host.venueName || selectedConcertForReview.concert.host.name,
+            eventDate: selectedConcertForReview.concert.date,
+            attendeeCount: 0, // Not needed for review modal
+            ticketPrice: selectedConcertForReview.concert.doorFee
+          }}
+          onClose={handleReviewModalClose}
+          onSubmit={handleReviewSubmit}
+        />
       )}
     </div>
   );

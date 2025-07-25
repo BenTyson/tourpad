@@ -33,8 +33,6 @@ model User {
   sentMessages            Message[]
   notifications           Notification[]
   payments                Payment[]
-  reviewsReceived         Review[]       @relation("RevieweeUser")
-  reviews                 Review[]       @relation("ReviewerUser")
   sessions                Session[]
   profile                 UserProfile?
   subscription            Subscription?
@@ -89,6 +87,7 @@ model Artist {
   user                    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   bandMembers             BandMember[]
   bookings                Booking[]
+  reviews                 Review[]
 
   @@map("artists")
 }
@@ -162,6 +161,7 @@ model Host {
   soundSystem            Json?
   bookings               Booking[]
   media                  HostMedia[]
+  reviews                Review[]
   user                   User                @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("hosts")
@@ -199,6 +199,7 @@ model Fan {
   createdAt             DateTime           @default(now())
   updatedAt             DateTime           @updatedAt
   rsvps                 FanRSVP[]
+  reviews               Review[]
   user                  User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("fans")
@@ -231,7 +232,6 @@ model Booking {
   concert            Concert?
   conversations      Conversation[]
   payments           Payment[]
-  reviews            Review[]
 
   @@map("bookings")
 }
@@ -254,6 +254,7 @@ model Concert {
   updatedAt               DateTime      @updatedAt
   booking                 Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
   rsvps                   FanRSVP[]
+  reviews                 Review[]
 
   @@map("concerts")
 }
@@ -275,22 +276,28 @@ model FanRSVP {
 }
 
 model Review {
-  id           String    @id @default(cuid())
-  bookingId    String
-  reviewerId   String
-  revieweeId   String
-  rating       Int
-  reviewText   String?
-  isPublic     Boolean   @default(true)
-  responseText String?
-  responseDate DateTime?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  booking      Booking   @relation(fields: [bookingId], references: [id])
-  reviewee     User      @relation("RevieweeUser", fields: [revieweeId], references: [id])
-  reviewer     User      @relation("ReviewerUser", fields: [reviewerId], references: [id])
+  id               String    @id @default(cuid())
+  concertId        String
+  fanId            String
+  artistId         String
+  hostId           String
+  artistRating     Int
+  hostRating       Int
+  overallRating    Int
+  artistFeedback   String?
+  hostFeedback     String?
+  overallFeedback  String
+  isPublic         Boolean   @default(true)
+  attendedDate     DateTime
+  wouldRecommend   Boolean   @default(true)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  concert          Concert   @relation(fields: [concertId], references: [id])
+  fan              Fan       @relation(fields: [fanId], references: [id])
+  artist           Artist    @relation(fields: [artistId], references: [id])
+  host             Host      @relation(fields: [hostId], references: [id])
 
-  @@unique([bookingId, reviewerId])
+  @@unique([concertId, fanId])
   @@map("reviews")
 }
 

@@ -108,59 +108,89 @@ export function FanConcertReviewModal({ concert, onClose, onSubmit }: FanConcert
     setErrors({});
     setIsSubmitting(true);
 
-    // Validation
-    const newErrors: Record<string, string> = {};
-    
-    if (artistRating === 0) {
-      newErrors.artistRating = 'Artist rating is required';
-    }
-    if (hostRating === 0) {
-      newErrors.hostRating = 'Host rating is required';
-    }
-    if (overallRating === 0) {
-      newErrors.overallRating = 'Overall rating is required';
-    }
-    if (overallFeedback.trim().length < 10) {
-      newErrors.overallFeedback = 'Please provide at least 10 characters of feedback';
-    }
-    if (overallFeedback.trim().length > 1000) {
-      newErrors.overallFeedback = 'Feedback must be less than 1000 characters';
-    }
+    try {
+      // Validation
+      const newErrors: Record<string, string> = {};
+      
+      if (artistRating === 0) {
+        newErrors.artistRating = 'Artist rating is required';
+      }
+      if (hostRating === 0) {
+        newErrors.hostRating = 'Host rating is required';
+      }
+      if (overallRating === 0) {
+        newErrors.overallRating = 'Overall rating is required';
+      }
+      if (overallFeedback.trim().length < 10) {
+        newErrors.overallFeedback = 'Please provide at least 10 characters of feedback';
+      }
+      if (overallFeedback.trim().length > 1000) {
+        newErrors.overallFeedback = 'Feedback must be less than 1000 characters';
+      }
 
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Create review via API
+      const response = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          concertId: concert.id,
+          artistRating,
+          hostRating,
+          overallRating,
+          artistFeedback: artistFeedback.trim() || null,
+          hostFeedback: hostFeedback.trim() || null,
+          overallFeedback: overallFeedback.trim(),
+          isPublic,
+          wouldRecommend
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to submit review');
+      }
+
+      const data = await response.json();
+      const review: FanConcertReview = {
+        id: data.review.id,
+        concertId: data.review.concertId,
+        fanId: data.review.fanId,
+        artistId: data.review.artistId,
+        hostId: data.review.hostId,
+        artistRating: data.review.artistRating,
+        hostRating: data.review.hostRating,
+        overallRating: data.review.overallRating,
+        artistFeedback: data.review.artistFeedback || '',
+        hostFeedback: data.review.hostFeedback || '',
+        overallFeedback: data.review.overallFeedback,
+        isPublic: data.review.isPublic,
+        attendedDate: data.review.attendedDate,
+        wouldRecommend: data.review.wouldRecommend,
+        createdAt: data.review.createdAt
+      };
+
+      onSubmit(review);
+      setShowSuccess(true);
+      
+      // Auto-close after success
+      setTimeout(() => {
+        onClose();
+      }, 2000);
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      setErrors({
+        submit: error instanceof Error ? error.message : 'Failed to submit review'
+      });
       setIsSubmitting(false);
-      return;
     }
-
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    const review: FanConcertReview = {
-      id: `review-${Date.now()}`,
-      concertId: concert.id,
-      fanId: 'fan1', // Will be from auth context
-      artistId: concert.artistId,
-      hostId: concert.hostId,
-      artistRating,
-      hostRating,
-      overallRating,
-      artistFeedback: artistFeedback.trim(),
-      hostFeedback: hostFeedback.trim(),
-      overallFeedback: overallFeedback.trim(),
-      isPublic,
-      attendedDate: concert.eventDate,
-      wouldRecommend,
-      createdAt: new Date().toISOString()
-    };
-
-    onSubmit(review);
-    setShowSuccess(true);
-    
-    // Auto-close after success
-    setTimeout(() => {
-      onClose();
-    }, 2000);
   };
 
   const StarRating = ({ 
@@ -478,6 +508,16 @@ export function FanConcertReviewModal({ concert, onClose, onSubmit }: FanConcert
                 }`} />
               </button>
             </div>
+
+            {/* Submit Error */}
+            {errors.submit && (
+              <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-600 text-sm flex items-center">
+                  <AlertCircle className="w-4 h-4 mr-2" />
+                  {errors.submit}
+                </p>
+              </div>
+            )}
 
             {/* Submit Button */}
             <div className="flex justify-between items-center pt-4">

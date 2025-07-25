@@ -37,6 +37,7 @@ import { useRouter } from 'next/navigation';
 import { PastShowsSection } from '@/components/reviews/PastShowsSection';
 import { PrivateReviewsSection } from '@/components/reviews/PrivateReviewsSection';
 import HoldingPage from '@/components/dashboard/HoldingPage';
+import RSVPManagement from '@/components/host/RSVPManagement';
 
 type UserRole = 'host' | 'artist' | 'admin' | 'fan';
 
@@ -929,6 +930,21 @@ export default function DashboardPage() {
                 </div>
                 <div className="p-6">
                   <BookingList viewType={userRole} />
+                </div>
+              </div>
+            )}
+
+            {/* RSVP Management - Host Only */}
+            {userRole === 'host' && (
+              <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
+                <div className="px-6 py-4 border-b border-neutral-200">
+                  <div>
+                    <h2 className="text-xl font-semibold text-neutral-900">RSVP Requests</h2>
+                    <p className="text-sm text-neutral-600 mt-1">Manage fan requests for your concerts</p>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <RSVPManagement />
                 </div>
               </div>
             )}

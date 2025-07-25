@@ -122,9 +122,8 @@ export default function ConcertBrowser() {
       if (filters.maxFee) params.append('maxFee', filters.maxFee);
       if (filters.availableOnly) params.append('availableOnly', 'true');
 
-      // For now, use the existing shows API with fan filtering
-      // TODO: Create dedicated concert discovery API
-      const response = await fetch(`/api/shows?${params}`);
+      // Use dedicated concert discovery API
+      const response = await fetch(`/api/concerts?${params}`);
       
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -133,35 +132,35 @@ export default function ConcertBrowser() {
       const data = await response.json();
       
       if (data.success) {
-        const transformedConcerts = (data.shows || []).map((show: any) => ({
-          id: show.id,
-          title: show.title,
-          description: show.description,
-          date: show.date,
-          startTime: show.startTime,
-          endTime: show.endTime,
-          maxCapacity: show.maxCapacity || 50,
-          doorFee: show.doorFee,
-          status: show.status,
-          isPrivate: show.isPrivate || false,
-          requiresApproval: show.requiresApproval !== false,
+        const transformedConcerts = (data.concerts || []).map((concert: any) => ({
+          id: concert.id,
+          title: concert.title,
+          description: concert.description,
+          date: concert.date,
+          startTime: concert.startTime,
+          endTime: concert.endTime,
+          maxCapacity: concert.maxCapacity || 50,
+          doorFee: concert.doorFee,
+          status: concert.status,
+          isPrivate: concert.isPrivate || false,
+          requiresApproval: concert.requiresApproval !== false,
           artist: {
-            id: show.artist?.id || show.artistId,
-            name: show.artist?.name || show.artistName,
-            stageName: show.artist?.stageName,
-            profileImageUrl: show.artist?.profileImageUrl,
-            pressPhoto: show.artist?.pressPhoto
+            id: concert.artist?.id,
+            name: concert.artist?.name,
+            stageName: concert.artist?.stageName,
+            profileImageUrl: concert.artist?.profileImageUrl,
+            pressPhoto: concert.artist?.pressPhoto
           },
           host: {
-            id: show.host?.id || show.hostId,
-            name: show.host?.name || show.hostName,
-            venueName: show.host?.venueName,
-            city: show.host?.city || show.city,
-            state: show.host?.state || show.state,
-            profileImageUrl: show.host?.profileImageUrl
+            id: concert.host?.id,
+            name: concert.host?.name,
+            venueName: concert.host?.venueName,
+            city: concert.host?.city,
+            state: concert.host?.state,
+            profileImageUrl: concert.host?.profileImageUrl
           },
-          currentRSVPCount: show.currentRSVPCount || 0,
-          userRSVP: show.userRSVP || null
+          currentRSVPCount: concert.currentRSVPCount || 0,
+          userRSVP: concert.userRSVP || null
         }));
         
         setConcerts(transformedConcerts);
