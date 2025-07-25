@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "./scripts/dev-robust.sh",
+    "dev:watch": "nodemon",
+    "dev:auto": "./scripts/dev-with-nodemon.sh",
     "dev:clean": "rm -rf .next && next dev -H 0.0.0.0 -p 3001",
     "dev:safe": "NODE_ENV=development next dev -H 0.0.0.0 -p 3001 --no-turbo",
     "dev:next": "next dev",

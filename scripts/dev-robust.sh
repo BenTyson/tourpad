@@ -128,10 +128,20 @@ start_server() {
     
     log "INFO" "Starting development server (attempt $attempt/$MAX_RETRIES)..."
     
-    # Start the server in background and capture PID
-    npm run dev:stable > "$LOG_FILE" 2>&1 &
-    local server_pid=$!
-    echo "$server_pid" > "$PID_FILE"
+      # Start the server in background and capture PID
+  npm run dev:stable > "$LOG_FILE" 2>&1 &
+  local npm_pid=$!
+  
+  # Wait a moment for the Node.js process to start
+  sleep 3
+  
+  # Find the actual Next.js server process
+  local server_pid=$(pgrep -f "next dev" | head -1)
+  if [ -z "$server_pid" ]; then
+    server_pid=$npm_pid
+  fi
+  
+  echo "$server_pid" > "$PID_FILE"
     
     log "INFO" "Server started with PID: $server_pid"
     

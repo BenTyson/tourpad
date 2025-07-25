@@ -2,9 +2,9 @@
 > pad@0.1.0 dev:stable
 > node scripts/dev-server.js
 
-✅ [2025-07-25T22:41:56.718Z] System Memory: 16GB, Allocating: 8192MB old space, 512MB semi space
-✅ [2025-07-25T22:41:56.720Z] Starting Next.js server with memory: 8192MB
-✅ [2025-07-25T22:41:56.721Z] Development server started successfully
+✅ [2025-07-25T22:48:27.844Z] System Memory: 16GB, Allocating: 8192MB old space, 512MB semi space
+✅ [2025-07-25T22:48:27.846Z] Starting Next.js server with memory: 8192MB
+✅ [2025-07-25T22:48:27.847Z] Development server started successfully
    [1m[38;2;173;127;168m▲ Next.js 15.3.5[39m[22m
    - Local:        http://localhost:3001
    - Network:      http://0.0.0.0:3001
@@ -13,13 +13,27 @@
      [1m⨯[22m webpackBuildWorker
 
  [32m[1m✓[22m[39m Starting...
-✅ [2025-07-25T22:41:57.787Z] Shutting down development server...
-[?25h
-✅ [2025-07-25T22:41:57.805Z] Server stopped normally
-pping server process 92210
-[2025-07-25 16:41:58] [INFO] Server is ready and running at http://localhost:3001
-[2025-07-25 16:41:58] [INFO] Monitoring server (PID: 92210)
-[2025-07-25 16:41:59] [INFO] Cleanup completed
-[2025-07-25 16:42:08] [WARN] Server process has died
-[2025-07-25 16:42:08] [INFO] Cleaning up...
-[2025-07-25 16:42:08] [INFO] Cleanup completed
+ [32m[1m✓[22m[39m Ready in 1000ms
+ [37m[1m○[22m[39m Compiling /middleware ...
+ [32m[1m✓[22m[39m Compiled /middleware in 653ms (265 modules)
+ [37m[1m○[22m[39m Compiling / ...
+ [32m[1m✓[22m[39m Compiled / in 2.9s (993 modules)
+ GET / [32m200[39m in 3210ms
+ [32m[1m✓[22m[39m Compiled /admin in 345ms (992 modules)
+ GET /admin [32m200[39m in 532ms
+ [32m[1m✓[22m[39m Compiled /api/auth/[...nextauth] in 135ms (551 modules)
+ [32m[1m✓[22m[39m Compiled in 120ms (444 modules)
+ GET /favicon.ico [32m200[39m in 763ms
+ GET /api/admin/metrics [32m200[39m in 745ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session [32m200[39m in 1085ms
+ GET /api/auth/session [32m200[39m in 18ms
+ [32m[1m✓[22m[39m Compiled /api/notifications in 198ms (1155 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session [32m200[39m in 247ms
+ GET /api/notifications?unread=true&limit=0 [32m200[39m in 269ms
+ GET /api/notifications?unread=true&limit=0 [32m200[39m in 17ms
+ GET /api/auth/session [32m200[39m in 18ms
+ [32m[1m✓[22m[39m Compiled /api/profile in 113ms (1157 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/profile [32m200[39m in 155ms

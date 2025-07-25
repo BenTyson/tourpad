@@ -233,6 +233,12 @@ manager.start();
 
 // Handle manual restart via SIGUSR2 (sent by nodemon)
 process.on('SIGUSR2', () => {
-  manager.log('Received restart signal');
+  manager.log('🔄 Received restart signal from nodemon (file changes detected)');
+  manager.restart();
+});
+
+// Handle nodemon-specific restart patterns
+process.on('SIGUSR1', () => {
+  manager.log('🔄 Received SIGUSR1 restart signal');
   manager.restart();
 });

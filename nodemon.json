@@ -3,7 +3,13 @@
     "src/**/*",
     "pages/**/*",
     "app/**/*",
+    "prisma/**/*",
+    "lib/**/*",
+    "components/**/*",
+    "scripts/**/*",
     "next.config.*",
+    "tailwind.config.*",
+    "tsconfig.json",
     "package.json",
     ".env*"
   ],
@@ -18,13 +24,15 @@
     "*.log",
     "*.md",
     "**/*.test.*",
-    "**/*.spec.*",
+    "**/*.spec.*", 
     "**/__tests__/**",
     ".env.local",
     ".env.development.local",
-    ".env.production.local"
+    ".env.production.local",
+    "dev-server.log",
+    ".dev-server.pid"
   ],
-  "ext": "ts,tsx,js,jsx,json,css,scss,sass,less",
+  "ext": "ts,tsx,js,jsx,json,css,scss,sass,less,prisma,env,md",
   "env": {
     "NODE_ENV": "development",
     "NEXT_TELEMETRY_DISABLED": "1",
