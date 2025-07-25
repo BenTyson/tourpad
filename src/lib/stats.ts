@@ -44,16 +44,16 @@ export async function getUserStats(userId: string, userType: 'artist' | 'host' |
 
       stats.responseRate = totalBookings > 0 ? Math.round((respondedBookings / totalBookings) * 100) : 100;
 
-      // Calculate average rating from reviews (reviews where this artist is the reviewee)
+      // Calculate average rating from reviews (reviews where this artist is being reviewed)
       const reviews = await prisma.review.findMany({
         where: { 
-          revieweeId: userId // Reviews where this user is being reviewed
+          artistId: artist.id // Reviews where this artist is being reviewed
         },
-        select: { rating: true }
+        select: { artistRating: true }
       });
 
       if (reviews.length > 0) {
-        const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+        const totalRating = reviews.reduce((sum, review) => sum + review.artistRating, 0);
         stats.averageRating = Math.round((totalRating / reviews.length) * 10) / 10;
       } else {
         stats.averageRating = 0;
@@ -101,13 +101,13 @@ export async function getUserStats(userId: string, userType: 'artist' | 'host' |
       // Calculate average rating from reviews (reviews where this host is the reviewee)
       const reviews = await prisma.review.findMany({
         where: { 
-          revieweeId: userId // Reviews where this user is being reviewed
+          hostId: host.id // Reviews where this host is being reviewed
         },
-        select: { rating: true }
+        select: { hostRating: true }
       });
 
       if (reviews.length > 0) {
-        const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+        const totalRating = reviews.reduce((sum, review) => sum + review.hostRating, 0);
         stats.averageRating = Math.round((totalRating / reviews.length) * 10) / 10;
       } else {
         stats.averageRating = 0;

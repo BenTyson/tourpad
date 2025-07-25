@@ -5,7 +5,7 @@ import { spotifyService } from '@/lib/spotify';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { artistId: string } }
+  { params }: { params: Promise<{ artistId: string }> }
 ) {
   try {
     const session = await auth();
@@ -14,7 +14,7 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const artistId = params.artistId;
+    const { artistId } = await params;
     const body = await request.json();
     const { spotifyArtistId } = body;
 
@@ -86,7 +86,7 @@ export async function POST(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { artistId: string } }
+  { params }: { params: Promise<{ artistId: string }> }
 ) {
   try {
     const session = await auth();
@@ -95,7 +95,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const artistId = params.artistId;
+    const { artistId } = await params;
 
     // Verify the artist exists and user has permission
     const artist = await prisma.artist.findUnique({

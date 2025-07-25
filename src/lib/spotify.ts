@@ -50,6 +50,15 @@ export interface SpotifyTrackData {
   external_urls: {
     spotify: string;
   };
+  album?: {
+    id: string;
+    name: string;
+    images: Array<{
+      url: string;
+      height: number;
+      width: number;
+    }>;
+  };
 }
 
 class SpotifyService {
@@ -199,9 +208,33 @@ class SpotifyService {
         await this.syncAlbumData(artistId, album);
       }
 
-      // Sync top tracks
+      // Sync top tracks with album linking
       for (const track of topTracks) {
-        await this.syncTrackData(artistId, track);
+        // Try to find the album for this track
+        let albumSpotifyId = null;
+        if (track.album?.id) {
+          albumSpotifyId = track.album.id;
+          // Make sure this album exists in our database
+          const albumExists = await prisma.spotifyAlbum.findUnique({
+            where: { spotifyId: albumSpotifyId }
+          });
+          
+          if (!albumExists) {
+            // Create album data from track info
+            const albumData: SpotifyAlbumData = {
+              id: track.album.id,
+              name: track.album.name,
+              album_type: 'unknown', // Not available in track data
+              release_date: '', // Not available in track data
+              total_tracks: 0, // Not available in track data
+              images: track.album.images,
+              external_urls: { spotify: '' }, // Not available in track data
+            };
+            await this.syncAlbumData(artistId, albumData);
+          }
+        }
+        
+        await this.syncTrackData(artistId, track, albumSpotifyId);
       }
 
       console.log(`✅ Spotify sync completed for artist ${artistId}`);

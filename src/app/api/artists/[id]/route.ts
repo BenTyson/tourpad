@@ -43,18 +43,18 @@ export async function GET(
     // Calculate rating from reviews using database
     const reviewStats = await prisma.review.aggregate({
       where: {
-        revieweeId: artist.userId,
+        artistId: artist.id,
         isPublic: true
       },
       _avg: {
-        rating: true
+        artistRating: true
       },
       _count: {
         id: true
       }
     });
 
-    const rating = reviewStats._avg.rating ? Math.round(reviewStats._avg.rating * 10) / 10 : 0;
+    const rating = reviewStats._avg.artistRating ? Math.round(reviewStats._avg.artistRating * 10) / 10 : 0;
     const reviewCount = reviewStats._count.id;
 
     // Return the artist data in the format expected by the profile page
@@ -105,6 +105,11 @@ export async function GET(
         sortOrder: media.sortOrder,
         category: media.category || 'promotional'
       })) || [],
+      // Spotify fields
+      spotifyVerified: artist.spotifyVerified || false,
+      spotifyFollowers: artist.spotifyFollowers || null,
+      spotifyPopularity: artist.spotifyPopularity || null,
+      spotifyArtistId: artist.spotifyArtistId || null,
       createdAt: artist.createdAt,
       updatedAt: artist.updatedAt
     });

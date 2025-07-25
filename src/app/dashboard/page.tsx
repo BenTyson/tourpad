@@ -38,6 +38,7 @@ import { PastShowsSection } from '@/components/reviews/PastShowsSection';
 import { PrivateReviewsSection } from '@/components/reviews/PrivateReviewsSection';
 import HoldingPage from '@/components/dashboard/HoldingPage';
 import RSVPManagement from '@/components/host/RSVPManagement';
+import SpotifyConnectionCard from '@/components/dashboard/artist/SpotifyConnectionCard';
 
 type UserRole = 'host' | 'artist' | 'admin' | 'fan';
 
@@ -56,6 +57,7 @@ export default function DashboardPage() {
   const [userProfileId, setUserProfileId] = useState<string | null>(null);
   const [subscriptionData, setSubscriptionData] = useState<any>(null);
   const [subscriptionLoading, setSubscriptionLoading] = useState(false);
+  const [spotifyConnection, setSpotifyConnection] = useState<any>(null);
   
   // Fetch current user data (with latest status from database)
   useEffect(() => {
@@ -142,6 +144,33 @@ export default function DashboardPage() {
 
     fetchSubscriptionData();
   }, [session?.user, currentUser]);
+
+  // Fetch Spotify connection data for artists
+  useEffect(() => {
+    const fetchSpotifyConnection = async () => {
+      if (!currentUser || currentUser.userType !== 'artist' || !userProfileId) return;
+      
+      try {
+        const response = await fetch(`/api/spotify/artist/${userProfileId}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.artist) {
+            setSpotifyConnection({
+              spotifyArtistId: data.artist.spotifyArtistId,
+              spotifyVerified: data.artist.spotifyVerified,
+              spotifyFollowers: data.artist.spotifyFollowers,
+              spotifyPopularity: data.artist.spotifyPopularity,
+              lastSpotifySync: data.artist.lastSpotifySync
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching Spotify connection:', error);
+      }
+    };
+    
+    fetchSpotifyConnection();
+  }, [currentUser, userProfileId]);
   
   // If not authenticated, redirect to login
   if (status === 'loading' || userLoading) {
@@ -903,6 +932,35 @@ export default function DashboardPage() {
                     </div>
                   )}
                 </div>
+              </div>
+            )}
+
+            {/* Spotify Integration - Artists only */}
+            {userRole === 'artist' && (
+              <div className="mb-8">
+                <SpotifyConnectionCard
+                  artistId={userProfileId || ''}
+                  currentConnection={spotifyConnection}
+                  onConnectionUpdate={() => {
+                    // Refresh Spotify connection data
+                    if (userProfileId) {
+                      fetch(`/api/spotify/artist/${userProfileId}`)
+                        .then(res => res.json())
+                        .then(data => {
+                          if (data.artist) {
+                            setSpotifyConnection({
+                              spotifyArtistId: data.artist.spotifyArtistId,
+                              spotifyVerified: data.artist.spotifyVerified,
+                              spotifyFollowers: data.artist.spotifyFollowers,
+                              spotifyPopularity: data.artist.spotifyPopularity,
+                              lastSpotifySync: data.artist.lastSpotifySync
+                            });
+                          }
+                        })
+                        .catch(err => console.error('Error refreshing Spotify connection:', err));
+                    }
+                  }}
+                />
               </div>
             )}
 

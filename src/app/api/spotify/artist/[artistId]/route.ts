@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { artistId: string } }
+  { params }: { params: Promise<{ artistId: string }> }
 ) {
   try {
     const session = await auth();
@@ -13,7 +13,7 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const artistId = params.artistId;
+    const { artistId } = await params;
 
     // Get artist with Spotify data
     const artist = await prisma.artist.findUnique({
@@ -25,6 +25,9 @@ export async function GET(
         spotifyTracks: {
           orderBy: { popularity: 'desc' },
           take: 10, // Top 10 tracks
+          include: {
+            album: true, // Include album data for artwork
+          },
         },
       },
     });

@@ -218,3 +218,34 @@ html {
   opacity: 1 !important;
   transition: opacity 0.3s ease !important;
 }
+
+/* Spotify Player Volume Slider */
+.slider-primary::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+
+.slider-primary::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.slider-primary::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+  border: none;
+}
+
+.slider-primary::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
