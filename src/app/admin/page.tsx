@@ -117,6 +117,14 @@ export default function AdminPage() {
       href: '/admin/messages'
     },
     {
+      title: 'Spotify Integration',
+      description: 'Manage artist Spotify connections and music data sync',
+      icon: MusicalNoteIcon,
+      color: 'bg-green-500',
+      count: 'Manage',
+      href: '/admin/spotify'
+    },
+    {
       title: 'Support Center',
       description: 'Manage support tickets and user communications',
       icon: ChatBubbleLeftRightIcon,

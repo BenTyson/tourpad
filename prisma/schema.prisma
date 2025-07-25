@@ -79,6 +79,14 @@ model Artist {
   updatedAt               DateTime      @updatedAt
   tourMonthsPerYear       Int?
   tourVehicle             String?
+  
+  // Spotify Integration
+  spotifyArtistId         String?       // Spotify artist URI
+  spotifyVerified         Boolean       @default(false)
+  spotifyFollowers        Int?          // Follower count from Spotify
+  spotifyPopularity       Int?          // 0-100 popularity score
+  spotifyGenres           String[]      @default([])  // Genres from Spotify
+  lastSpotifySync         DateTime?     // Cache refresh timestamp
   venueRequirements       String[]
   willingToTravel         Int?
   videoLinks              Json?
@@ -88,6 +96,10 @@ model Artist {
   bandMembers             BandMember[]
   bookings                Booking[]
   reviews                 Review[]
+  
+  // Spotify Relations
+  spotifyAlbums           SpotifyAlbum[]
+  spotifyTracks           SpotifyTrack[]
 
   @@map("artists")
 }
@@ -564,4 +576,59 @@ enum LocationPrivacy {
   NEIGHBORHOOD  // ±1 mile radius
   STREET       // ±0.2 mile radius
   EXACT        // Only after booking confirmed
+}
+
+// Spotify Integration Models
+
+model SpotifyAlbum {
+  id                  String     @id @default(cuid())
+  spotifyId           String     @unique
+  artistId            String
+  name                String
+  albumType           String     // album, single, compilation
+  releaseDate         String
+  imageUrl            String?
+  spotifyUrl          String
+  totalTracks         Int
+  
+  artist              Artist     @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  tracks              SpotifyTrack[]
+  
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  
+  @@map("spotify_albums")
+}
+
+model SpotifyTrack {
+  id                  String     @id @default(cuid())
+  spotifyId           String     @unique
+  artistId            String
+  albumId             String?
+  name                String
+  durationMs          Int
+  popularity          Int        // 0-100
+  previewUrl          String?    // 30-second preview URL
+  spotifyUrl          String
+  trackNumber         Int?
+  explicit            Boolean    @default(false)
+  
+  artist              Artist     @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  album               SpotifyAlbum? @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  
+  @@map("spotify_tracks")
+}
+
+model SpotifyCache {
+  id                  String     @id @default(cuid())
+  cacheKey            String     @unique
+  data                Json
+  expiresAt           DateTime
+  
+  createdAt           DateTime   @default(now())
+  
+  @@map("spotify_cache")
 }
