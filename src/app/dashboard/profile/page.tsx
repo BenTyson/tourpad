@@ -161,11 +161,13 @@ export default function ProfilePage() {
   // Profile state
   const [artistProfile, setArtistProfile] = useState({
     bandName: '',
-    bio: '',
+    briefBio: '',
+    fullBio: '',
     city: '',
     state: '',
     profilePhoto: '',
     genres: [] as string[],
+    musicalStyle: '',
     instruments: [] as string[],
     formationYear: new Date().getFullYear(),
     tourMonthsPerYear: 3,
@@ -174,6 +176,7 @@ export default function ProfilePage() {
     needsLodging: false,
     equipmentProvided: [] as string[],
     venueRequirements: [] as string[],
+    contentRating: 'family-friendly' as 'family-friendly' | 'explicit' | 'tailored',
     cancellationPolicy: 'flexible' as 'flexible' | 'moderate' | 'strict',
     performanceRadius: 50,
     website: '',
@@ -324,7 +327,8 @@ export default function ProfilePage() {
             if (session.user.type === 'artist') {
               setArtistProfile({
                 bandName: data.bandName || '',
-                bio: data.bio || '',
+                briefBio: data.briefBio || data.bio || '',
+                fullBio: data.fullBio || data.bio || '',
                 city: data.city || '',
                 state: data.state || '',
                 genres: data.genres || [],
@@ -337,6 +341,7 @@ export default function ProfilePage() {
                 equipmentProvided: data.equipmentProvided || [],
                 venueRequirements: data.venueRequirements || [],
                 profilePhoto: data.profilePhoto || '',
+                contentRating: data.contentRating || 'family-friendly',
                 cancellationPolicy: 'flexible',
                 performanceRadius: 50,
                 website: data.website || '',
@@ -874,24 +879,59 @@ export default function ProfilePage() {
                     }}
                     placeholder={isArtist ? "Your stage name or band name" : "Your venue name (e.g., 'Mike's Overlook')"}
                   />
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1">
-                      {isArtist ? "Artist Bio" : "Venue Description"}
-                    </label>
-                    <textarea
-                      value={isArtist ? artistProfile.bio : hostProfile.venueDescription}
-                      onChange={(e) => {
-                        if (isArtist) updateArtistProfile({ bio: e.target.value });
-                        else updateHostProfile({ venueDescription: e.target.value });
-                      }}
-                      className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                      rows={4}
-                      placeholder={isArtist 
-                        ? "Tell hosts about your music, style, and what makes your performances special..."
-                        : "Describe your space, atmosphere, and what makes it perfect for house concerts..."
-                      }
-                    />
-                  </div>
+                  {isArtist ? (
+                    <>
+                      {/* Brief Introductory Bio */}
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-1">
+                          Brief Introduction
+                        </label>
+                        <textarea
+                          value={artistProfile.briefBio || ''}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (value.length <= 500) {
+                              updateArtistProfile({ briefBio: value });
+                            }
+                          }}
+                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                          rows={3}
+                          maxLength={500}
+                          placeholder="A brief intro to you as a band or artist"
+                        />
+                        <p className="text-xs text-neutral-500 mt-1">
+                          This is the first thing people will read when they arrive at your profile ({(artistProfile.briefBio || '').length}/500 characters)
+                        </p>
+                      </div>
+
+                      {/* Full Bio */}
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-1">
+                          Full Bio
+                        </label>
+                        <textarea
+                          value={artistProfile.fullBio || ''}
+                          onChange={(e) => updateArtistProfile({ fullBio: e.target.value })}
+                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                          rows={6}
+                          placeholder="Tell hosts about your music, style, and what makes your performances special. Include your history, influences, upcoming projects, and anything else that helps hosts understand who you are as an artist..."
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">
+                        Venue Description
+                      </label>
+                      <textarea
+                        value={hostProfile.venueDescription}
+                        onChange={(e) => updateHostProfile({ venueDescription: e.target.value })}
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        rows={4}
+                        placeholder="Describe your space, atmosphere, and what makes it perfect for house concerts..."
+                      />
+                    </div>
+                  )}
                   <div className="grid md:grid-cols-3 gap-4">
                     <Input
                       label="City"
@@ -927,6 +967,40 @@ export default function ProfilePage() {
                       />
                     )}
                   </div>
+
+                  {/* Formation Year (Artist only) */}
+                  {isArtist && (
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Formation Year</label>
+                        <select
+                          value={artistProfile.formationYear}
+                          onChange={(e) => updateArtistProfile({ formationYear: parseInt(e.target.value) })}
+                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        >
+                          {(() => {
+                            const currentYear = new Date().getFullYear();
+                            const startYear = 1950;
+                            const years = [];
+                            for (let year = currentYear; year >= startYear; year--) {
+                              years.push(
+                                <option key={year} value={year}>
+                                  {year}
+                                </option>
+                              );
+                            }
+                            return years;
+                          })()}
+                        </select>
+                        <p className="text-xs text-neutral-500 mt-1">
+                          Years active: {new Date().getFullYear() - artistProfile.formationYear + 1}
+                        </p>
+                      </div>
+                      <div>
+                        {/* Empty space for grid alignment */}
+                      </div>
+                    </div>
+                  )}
                   
                   {/* Venue Profile Photo */}
                   {!isArtist && (
@@ -1380,6 +1454,18 @@ export default function ProfilePage() {
                         </div>
                       </div>
 
+                      {/* Musical Style Description */}
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Describe Your Musical Style</label>
+                        <textarea
+                          value={artistProfile.musicalStyle}
+                          onChange={(e) => updateArtistProfile({ musicalStyle: e.target.value })}
+                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                          rows={3}
+                          placeholder="ie: Harmonic Appalachian Folk"
+                        />
+                      </div>
+
                       {/* Instruments */}
                       <div>
                         <label className="block text-sm font-medium text-neutral-700 mb-2">Instruments we play</label>
@@ -1486,38 +1572,32 @@ export default function ProfilePage() {
                         </div>
                       </div>
 
-                      {/* Formation Year */}
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium text-neutral-700 mb-2">Formation Year</label>
-                          <select
-                            value={artistProfile.formationYear}
-                            onChange={(e) => updateArtistProfile({ formationYear: parseInt(e.target.value) })}
-                            className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                          >
-                            {(() => {
-                              const currentYear = new Date().getFullYear();
-                              const startYear = 1950;
-                              const years = [];
-                              for (let year = currentYear; year >= startYear; year--) {
-                                years.push(
-                                  <option key={year} value={year}>
-                                    {year}
-                                  </option>
-                                );
-                              }
-                              return years;
-                            })()}
-                          </select>
-                          <p className="text-xs text-neutral-500 mt-1">
-                            Years active: {new Date().getFullYear() - artistProfile.formationYear + 1}
-                          </p>
-                        </div>
-                        <div>
-                          {/* Empty space for grid alignment */}
-                        </div>
+                      {/* Content Rating */}
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Content Rating</label>
+                        <select
+                          value={artistProfile.contentRating || 'family-friendly'}
+                          onChange={(e) => updateArtistProfile({ contentRating: e.target.value })}
+                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        >
+                          <option value="family-friendly">Family Friendly</option>
+                          <option value="explicit">Explicit</option>
+                          <option value="tailored">Can be tailored to suit the requested environment</option>
+                        </select>
+                        <p className="text-xs text-neutral-500 mt-1">
+                          Let hosts know if your performance contains explicit language or adult themes
+                        </p>
                       </div>
 
+                    </CardContent>
+                  </Card>
+
+                  {/* Tour & Logistics */}
+                  <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
+                    <CardHeader>
+                      <h2 className="text-xl font-semibold text-neutral-900">Tour & Logistics</h2>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
                       {/* Tour Info */}
                       <div className="grid md:grid-cols-3 gap-4">
                         <Input
@@ -1568,7 +1648,6 @@ export default function ProfilePage() {
                           </label>
                         </div>
                       </div>
-
 
                       {/* Cancellation Policy */}
                       <div>

@@ -50,7 +50,10 @@ export async function GET() {
       profileData = {
         ...profileData,
         genres: user.artist.genres || [],
+        musicalStyle: user.artist.musicalStyle || '',
         instruments: [], // Will need to add this field to schema later
+        briefBio: user.artist.briefBio || '',
+        fullBio: user.artist.fullBio || '',
         website: user.profile?.websiteUrl || (user.profile?.socialLinks as any)?.website || '',
         socialLinks: user.profile?.socialLinks || {},
         formationYear: user.artist?.createdAt ? user.artist.createdAt.getFullYear() : new Date().getFullYear(),
@@ -60,6 +63,7 @@ export async function GET() {
         needsLodging: user.artist.needsLodging || false,
         equipmentProvided: user.artist.equipmentNeeds || [],
         venueRequirements: user.artist.venueRequirements || [],
+        contentRating: user.artist.contentRating || 'family-friendly',
         profilePhoto: user.profile?.profileImageUrl || '',
         bandMembers: user.artist.bandMembers?.map(member => ({
           id: member.id,
@@ -283,12 +287,16 @@ export async function PUT(request: NextRequest) {
           data: {
             stageName: data.bandName || undefined,
             genres: data.genres || [],
+            musicalStyle: data.musicalStyle || '',
+            briefBio: data.briefBio || null,
+            fullBio: data.fullBio || null,
             tourMonthsPerYear: data.tourMonthsPerYear || null,
             tourVehicle: data.tourVehicle || null,
             willingToTravel: data.willingToTravel || null,
             needsLodging: data.needsLodging !== undefined ? data.needsLodging : false,
             equipmentNeeds: data.equipmentProvided || [],
             venueRequirements: data.venueRequirements || [],
+            contentRating: data.contentRating || 'family-friendly',
             videoLinks: data.videoLinks || [],
             musicSamples: data.musicSamples || [],
           }

@@ -63,6 +63,7 @@ model Artist {
   userId                  String        @unique
   stageName               String?
   genres                  String[]
+  musicalStyle            String?
   typicalSetLength        Int?
   equipmentNeeds          String[]
   travelRadius            Int?
@@ -91,6 +92,9 @@ model Artist {
   willingToTravel         Int?
   videoLinks              Json?
   needsLodging            Boolean       @default(false)
+  contentRating           String?       @default("family-friendly")
+  briefBio                String?
+  fullBio                 String?
   media                   ArtistMedia[]
   user                    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   bandMembers             BandMember[]

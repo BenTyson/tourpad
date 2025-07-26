@@ -64,8 +64,11 @@ export async function GET(
       userId: artist.userId,
       name: artist.stageName || artist.user.name,
       bio: artist.user.profile?.bio || 'Professional touring musician bringing unique sounds to intimate venues.',
+      briefBio: artist.briefBio || '',
+      fullBio: artist.fullBio || '',
       location: artist.user.profile?.location || '',
       genres: artist.genres || [],
+      musicalStyle: artist.musicalStyle || '',
       instruments: artist.bandMembers.map(member => member.instrument).filter(Boolean),
       yearsActive,
       formationYear,
@@ -124,6 +127,7 @@ export async function GET(
         sortOrder: media.sortOrder,
         category: media.category || 'promotional'
       })) || [],
+      contentRating: artist.contentRating || 'family-friendly',
       // Spotify fields
       spotifyVerified: artist.spotifyVerified || false,
       spotifyFollowers: artist.spotifyFollowers || null,

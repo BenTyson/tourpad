@@ -33,8 +33,11 @@ interface ArtistData {
   userId: string;
   name: string;
   bio: string;
+  briefBio?: string;
+  fullBio?: string;
   location: string;
   genres: string[];
+  musicalStyle: string;
   instruments: string[];
   yearsActive: number;
   experienceLevel: string;
@@ -48,6 +51,7 @@ interface ArtistData {
   willingToTravel: number;
   equipmentProvided: string[];
   venueRequirements: string[];
+  contentRating?: string;
   // Spotify fields
   spotifyVerified?: boolean;
   spotifyFollowers?: number;
@@ -298,7 +302,14 @@ export default function ArtistProfilePage() {
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             {/* Bio Section */}
             <div>
-              <h2 className="text-3xl font-bold text-neutral-900 mb-6">{artistData.name}</h2>
+              <h2 className="text-3xl font-bold text-neutral-900 mb-2">{artistData.name}</h2>
+              
+              {/* Musical Style Description */}
+              {artistData.musicalStyle && (
+                <p className="text-lg text-neutral-500 font-light mb-6 italic">
+                  {artistData.musicalStyle}
+                </p>
+              )}
               
               {/* Genre Tags */}
               {artistData.genres && artistData.genres.length > 0 && (
@@ -312,7 +323,7 @@ export default function ArtistProfilePage() {
               )}
               
               <p className="text-xl text-neutral-600 leading-relaxed">
-                {artistData.bio || 'No bio available yet.'}
+                {artistData.briefBio || artistData.bio || 'No bio available yet.'}
               </p>
             </div>
             
@@ -582,6 +593,27 @@ export default function ArtistProfilePage() {
                 </div>
               </div>
             )}
+
+            {/* Content Rating */}
+            {artistData.contentRating && (
+              <div className="mt-6 pt-6 border-t border-neutral-200">
+                <p className="text-sm text-neutral-600">
+                  <span className="font-medium">Our musical content rating:</span>{' '}
+                  {(() => {
+                    switch (artistData.contentRating) {
+                      case 'family-friendly':
+                        return 'Family Friendly';
+                      case 'explicit':
+                        return 'Explicit';
+                      case 'tailored':
+                        return 'Can be tailored to suit the requested environment';
+                      default:
+                        return 'Family Friendly';
+                    }
+                  })()}
+                </p>
+              </div>
+            )}
           </div>
         </section>
 
@@ -638,6 +670,19 @@ export default function ArtistProfilePage() {
           </div>
         </section>
 
+        {/* Full Bio Section */}
+        {artistData.fullBio && (
+          <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
+            <div className="p-8">
+              <h2 className="text-2xl font-bold text-neutral-900 mb-6">Full Bio</h2>
+              <div className="prose prose-neutral max-w-none">
+                <p className="text-neutral-700 leading-relaxed whitespace-pre-wrap">
+                  {artistData.fullBio}
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Reviews Section */}
         <PublicReviewsSection 
