@@ -105,6 +105,9 @@ model Artist {
   // Spotify Relations
   spotifyAlbums           SpotifyAlbum[]
   spotifyTracks           SpotifyTrack[]
+  
+  // Tour Planning
+  tourSegments            TourSegment[]
 
   @@map("artists")
 }
@@ -140,6 +143,38 @@ model BandMember {
   artist     Artist   @relation(fields: [artistId], references: [id], onDelete: Cascade)
 
   @@map("band_members")
+}
+
+model TourSegment {
+  id          String             @id @default(cuid())
+  artistId    String
+  name        String             // "Southwest Tour Spring 2025" - user-friendly name
+  description String?            // Optional detailed description
+  status      String             @default("planned") // planned, confirmed, cancelled
+  isPublic    Boolean            @default(true)  // Allow private tour planning
+  
+  artist      Artist             @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  stateRanges TourStateRange[]   // Individual state date ranges
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  
+  @@map("tour_segments")
+}
+
+model TourStateRange {
+  id            String      @id @default(cuid())
+  tourSegmentId String
+  state         String      // "CO", "UT", etc. - state abbreviation
+  startDate     DateTime    // When the artist arrives in this state
+  endDate       DateTime    // When the artist leaves this state
+  cities        String[]    // ["Denver", "Boulder"] - optional specific cities
+  notes         String?     // Optional notes for this state leg
+  
+  tourSegment   TourSegment @relation(fields: [tourSegmentId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  
+  @@map("tour_state_ranges")
 }
 
 model Host {

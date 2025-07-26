@@ -10,10 +10,11 @@ import {
   Globe,
   Music,
   CheckCircle,
+  Calendar,
+  MapPin,
   ArrowLeft,
   Share2,
   Heart,
-  MapPin,
   Copy,
   Mail,
   Twitter
@@ -27,6 +28,83 @@ import { VideoPlayer } from '@/components/media/VideoPlayer';
 import { PublicReviewsSection } from '@/components/reviews/PublicReviewsSection';
 import ArtistMusicSection from '@/components/artist/ArtistMusicSection';
 import { mockArtists } from '@/data/mockData';
+
+// US States lookup for display names
+const US_STATES = [
+  { value: 'AL', label: 'Alabama' },
+  { value: 'AK', label: 'Alaska' },
+  { value: 'AZ', label: 'Arizona' },
+  { value: 'AR', label: 'Arkansas' },
+  { value: 'CA', label: 'California' },
+  { value: 'CO', label: 'Colorado' },
+  { value: 'CT', label: 'Connecticut' },
+  { value: 'DE', label: 'Delaware' },
+  { value: 'FL', label: 'Florida' },
+  { value: 'GA', label: 'Georgia' },
+  { value: 'HI', label: 'Hawaii' },
+  { value: 'ID', label: 'Idaho' },
+  { value: 'IL', label: 'Illinois' },
+  { value: 'IN', label: 'Indiana' },
+  { value: 'IA', label: 'Iowa' },
+  { value: 'KS', label: 'Kansas' },
+  { value: 'KY', label: 'Kentucky' },
+  { value: 'LA', label: 'Louisiana' },
+  { value: 'ME', label: 'Maine' },
+  { value: 'MD', label: 'Maryland' },
+  { value: 'MA', label: 'Massachusetts' },
+  { value: 'MI', label: 'Michigan' },
+  { value: 'MN', label: 'Minnesota' },
+  { value: 'MS', label: 'Mississippi' },
+  { value: 'MO', label: 'Missouri' },
+  { value: 'MT', label: 'Montana' },
+  { value: 'NE', label: 'Nebraska' },
+  { value: 'NV', label: 'Nevada' },
+  { value: 'NH', label: 'New Hampshire' },
+  { value: 'NJ', label: 'New Jersey' },
+  { value: 'NM', label: 'New Mexico' },
+  { value: 'NY', label: 'New York' },
+  { value: 'NC', label: 'North Carolina' },
+  { value: 'ND', label: 'North Dakota' },
+  { value: 'OH', label: 'Ohio' },
+  { value: 'OK', label: 'Oklahoma' },
+  { value: 'OR', label: 'Oregon' },
+  { value: 'PA', label: 'Pennsylvania' },
+  { value: 'RI', label: 'Rhode Island' },
+  { value: 'SC', label: 'South Carolina' },
+  { value: 'SD', label: 'South Dakota' },
+  { value: 'TN', label: 'Tennessee' },
+  { value: 'TX', label: 'Texas' },
+  { value: 'UT', label: 'Utah' },
+  { value: 'VT', label: 'Vermont' },
+  { value: 'VA', label: 'Virginia' },
+  { value: 'WA', label: 'Washington' },
+  { value: 'WV', label: 'West Virginia' },
+  { value: 'WI', label: 'Wisconsin' },
+  { value: 'WY', label: 'Wyoming' },
+  { value: 'DC', label: 'District of Columbia' }
+];
+
+const getStateName = (stateCode: string) => {
+  return US_STATES.find(state => state.value === stateCode)?.label || stateCode;
+};
+
+interface TourStateRange {
+  id: string;
+  state: string;
+  startDate: string;
+  endDate: string;
+  cities: string[];
+  notes: string;
+}
+
+interface TourSegment {
+  id: string;
+  name: string;
+  description: string;
+  status: string;
+  isPublic: boolean;
+  stateRanges: TourStateRange[];
+}
 
 interface ArtistData {
   id: string;
@@ -102,6 +180,8 @@ export default function ArtistProfilePage() {
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const [tourSegments, setTourSegments] = useState<TourSegment[]>([]);
+  const [upcomingTours, setUpcomingTours] = useState<TourStateRange[]>([]);
 
   // Fetch artist data from API
   useEffect(() => {
@@ -136,6 +216,51 @@ export default function ArtistProfilePage() {
     fetchArtistData();
     fetchRelatedArtists();
   }, [artistId]);
+
+  // Fetch tour segments for this artist
+  useEffect(() => {
+    const fetchTourSegments = async () => {
+      if (artistData?.userId) {
+        try {
+          console.log('Fetching tour segments for artist:', artistData.userId);
+          const response = await fetch(`/api/artists/${artistData.userId}/tour-segments`);
+          if (response.ok) {
+            const segments = await response.json();
+            console.log('Tour segments received:', segments);
+            setTourSegments(segments);
+            
+            // Process upcoming tours (next 12 months)
+            const now = new Date();
+            const oneYearFromNow = new Date();
+            oneYearFromNow.setFullYear(now.getFullYear() + 1);
+            
+            const upcoming: TourStateRange[] = [];
+            segments.forEach((segment: TourSegment) => {
+              if (segment.isPublic && segment.status !== 'cancelled') {
+                segment.stateRanges.forEach((range) => {
+                  const endDate = new Date(range.endDate);
+                  if (endDate >= now && endDate <= oneYearFromNow) {
+                    upcoming.push(range);
+                  }
+                });
+              }
+            });
+            
+            // Sort by start date
+            upcoming.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+            console.log('Upcoming tours processed:', upcoming);
+            setUpcomingTours(upcoming);
+          } else {
+            console.log('Failed to fetch tour segments:', response.status, response.statusText);
+          }
+        } catch (error) {
+          console.error('Error fetching tour segments:', error);
+        }
+      }
+    };
+    
+    fetchTourSegments();
+  }, [artistData?.userId]);
   
   // Fallback to mock data for sections not yet converted
   const mockArtist = mockArtists.find(a => a.id === artistId || a.userId === artistId);
@@ -688,6 +813,112 @@ export default function ArtistProfilePage() {
                   {artistData.fullBio}
                 </p>
               </div>
+            </div>
+          </section>
+        )}
+
+        {/* Upcoming Tours Section */}
+        {upcomingTours.length > 0 && (
+          <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
+            <div className="p-8">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold text-neutral-900 mb-2">Upcoming Tours</h2>
+                  <p className="text-neutral-600">Catch {artistData?.name} when they're in your area</p>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm text-neutral-500">Next 12 months</div>
+                  <div className="text-lg font-semibold text-primary-600">{upcomingTours.length} state{upcomingTours.length !== 1 ? 's' : ''}</div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {upcomingTours.map((tour, index) => {
+                  const startDate = new Date(tour.startDate);
+                  const endDate = new Date(tour.endDate);
+                  const isComingSoon = startDate.getTime() - Date.now() < 30 * 24 * 60 * 60 * 1000; // 30 days
+                  
+                  return (
+                    <div key={`${tour.id}-${index}`} className={`border rounded-xl p-4 ${isComingSoon ? 'border-primary-200 bg-primary-50' : 'border-neutral-200 bg-white'} hover:shadow-md transition-shadow duration-200`}>
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <MapPin className={`w-4 h-4 ${isComingSoon ? 'text-primary-600' : 'text-neutral-600'}`} />
+                          <span className={`font-semibold ${isComingSoon ? 'text-primary-900' : 'text-neutral-900'}`}>
+                            {getStateName(tour.state)}
+                          </span>
+                        </div>
+                        {isComingSoon && (
+                          <Badge variant="primary" className="text-xs px-2 py-1">
+                            Soon
+                          </Badge>
+                        )}
+                      </div>
+                      
+                      <div className="flex items-center gap-2 text-sm text-neutral-600 mb-3">
+                        <Calendar className="w-4 h-4" />
+                        <span>
+                          {startDate.toLocaleDateString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric' 
+                          })} - {endDate.toLocaleDateString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric',
+                            year: 'numeric'
+                          })}
+                        </span>
+                      </div>
+                      
+                      {tour.cities.length > 0 && (
+                        <div className="mb-3">
+                          <div className="text-xs text-neutral-500 mb-1">Cities</div>
+                          <div className="flex flex-wrap gap-1">
+                            {tour.cities.slice(0, 3).map((city) => (
+                              <Badge key={city} variant="outline" className="text-xs px-2 py-0.5">
+                                {city}
+                              </Badge>
+                            ))}
+                            {tour.cities.length > 3 && (
+                              <Badge variant="outline" className="text-xs px-2 py-0.5">
+                                +{tour.cities.length - 3} more
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {tour.notes && (
+                        <div className="text-xs text-neutral-600 italic line-clamp-2">
+                          {tour.notes}
+                        </div>
+                      )}
+                      
+                      <div className="mt-4 pt-3 border-t border-neutral-100">
+                        <Button 
+                          size="sm" 
+                          className="w-full"
+                          onClick={() => {
+                            // TODO: Implement booking/contact functionality
+                            alert('Booking functionality coming soon!');
+                          }}
+                        >
+                          Contact for Booking
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              
+              {upcomingTours.length > 6 && (
+                <div className="mt-6 text-center">
+                  <Button variant="outline" onClick={() => {
+                    // TODO: Show all tours modal or expand view
+                    alert('Full tour calendar coming soon!');
+                  }}>
+                    View All Upcoming Tours
+                  </Button>
+                </div>
+              )}
             </div>
           </section>
         )}

@@ -11,22 +11,35 @@ const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('🔍 Payment verification started');
+    
     // Get current session
     const session = await auth();
     if (!session?.user?.id) {
+      console.log('❌ Unauthorized: No session or user ID');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { sessionId } = await request.json();
+    console.log('📋 Session ID received:', sessionId);
     
     if (!sessionId) {
+      console.log('❌ No session ID provided');
       return NextResponse.json({ error: 'Session ID required' }, { status: 400 });
     }
 
     // Get the Stripe checkout session
+    console.log('💳 Retrieving Stripe checkout session...');
     const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId);
+    console.log('💳 Checkout session:', {
+      id: checkoutSession.id,
+      payment_status: checkoutSession.payment_status,
+      customer: checkoutSession.customer,
+      amount_total: checkoutSession.amount_total
+    });
     
     if (checkoutSession.payment_status !== 'paid') {
+      console.log('❌ Payment not completed:', checkoutSession.payment_status);
       return NextResponse.json({ 
         error: 'Payment not completed',
         paymentStatus: checkoutSession.payment_status 
@@ -49,8 +62,9 @@ export async function POST(request: NextRequest) {
     console.log('🔍 Payment verification for user:', user.id, 'Status:', user.status);
 
     // Check if user needs to be activated
-    if (user.status === 'APPROVED' && checkoutSession.payment_status === 'paid') {
-      console.log('💡 Activating user after successful payment...');
+    // Accept both PENDING and APPROVED status for testing (new registrations start as PENDING)
+    if ((user.status === 'APPROVED' || user.status === 'PENDING') && checkoutSession.payment_status === 'paid') {
+      console.log('💡 Activating user after successful payment...', 'Current status:', user.status);
       
       // Create payment record if it doesn't exist
       const existingPayment = user.payments.find(p => 

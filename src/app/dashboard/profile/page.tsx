@@ -157,6 +157,25 @@ export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<'info' | 'photos' | 'media' | 'sound-system' | 'lodging'>('info');
   const [loading, setLoading] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+  
+  // Tour segment state
+  const [tourSegments, setTourSegments] = useState<Array<{
+    id: string;
+    name: string;
+    description: string;
+    status: string;
+    isPublic: boolean;
+    stateRanges: Array<{
+      id: string;
+      state: string;
+      startDate: string;
+      endDate: string;
+      cities: string[];
+      notes: string;
+    }>;
+  }>>([]);
+  const [showTourModal, setShowTourModal] = useState(false);
+  const [editingTourSegment, setEditingTourSegment] = useState<string | null>(null);
 
   // Profile state
   const [artistProfile, setArtistProfile] = useState({
@@ -445,6 +464,120 @@ export default function ProfilePage() {
     
     fetchProfile();
   }, [session]);
+
+  // Fetch tour segments
+  useEffect(() => {
+    const fetchTourSegments = async () => {
+      if (session?.user?.type === 'artist') {
+        try {
+          const response = await fetch('/api/tour-segments');
+          if (response.ok) {
+            const segments = await response.json();
+            setTourSegments(segments);
+          }
+        } catch (error) {
+          console.error('Error fetching tour segments:', error);
+        }
+      }
+    };
+    
+    fetchTourSegments();
+  }, [session]);
+
+  // Tour segment management functions
+  const createTourSegment = async (segmentData: {
+    name: string;
+    description?: string;
+    status?: string;
+    isPublic?: boolean;
+    stateRanges: Array<{
+      state: string;
+      startDate: string;
+      endDate: string;
+      cities: string[];
+      notes?: string;
+    }>;
+  }) => {
+    try {
+      const response = await fetch('/api/tour-segments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(segmentData)
+      });
+      
+      if (response.ok) {
+        const newSegment = await response.json();
+        setTourSegments(prev => [...prev, newSegment]);
+        setShowTourModal(false);
+      } else {
+        const error = await response.json();
+        alert(`Error creating tour segment: ${error.error}`);
+      }
+    } catch (error) {
+      console.error('Error creating tour segment:', error);
+      alert('Error creating tour segment');
+    }
+  };
+
+  const updateTourSegment = async (segmentId: string, segmentData: {
+    name?: string;
+    description?: string;
+    status?: string;
+    isPublic?: boolean;
+    stateRanges?: Array<{
+      state: string;
+      startDate: string;
+      endDate: string;
+      cities: string[];
+      notes?: string;
+    }>;
+  }) => {
+    try {
+      const response = await fetch(`/api/tour-segments/${segmentId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(segmentData)
+      });
+      
+      if (response.ok) {
+        const updatedSegment = await response.json();
+        setTourSegments(prev => 
+          prev.map(segment => 
+            segment.id === segmentId ? updatedSegment : segment
+          )
+        );
+        setShowTourModal(false);
+      } else {
+        const error = await response.json();
+        alert(`Error updating tour segment: ${error.error}`);
+      }
+    } catch (error) {
+      console.error('Error updating tour segment:', error);
+      alert('Error updating tour segment');
+    }
+  };
+
+  const deleteTourSegment = async (segmentId: string) => {
+    if (!confirm('Are you sure you want to delete this tour segment?')) {
+      return;
+    }
+    
+    try {
+      const response = await fetch(`/api/tour-segments/${segmentId}`, {
+        method: 'DELETE'
+      });
+      
+      if (response.ok) {
+        setTourSegments(prev => prev.filter(segment => segment.id !== segmentId));
+      } else {
+        const error = await response.json();
+        alert(`Error deleting tour segment: ${error.error}`);
+      }
+    } catch (error) {
+      console.error('Error deleting tour segment:', error);
+      alert('Error deleting tour segment');
+    }
+  };
 
   if (status === 'loading') {
     return (
@@ -767,6 +900,477 @@ export default function ProfilePage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Tour Segment Modal Component
+  const TourSegmentModal = () => {
+    const [formData, setFormData] = useState({
+      name: '',
+      description: '',
+      status: 'planned',
+      isPublic: true,
+      stateRanges: [] as Array<{
+        id: string;
+        state: string;
+        startDate: string;
+        endDate: string;
+        cities: string[];
+        notes: string;
+      }>
+    });
+    const [newStateRange, setNewStateRange] = useState({
+      state: '',
+      startDate: '',
+      endDate: '',
+      cities: [] as string[],
+      notes: ''
+    });
+    const [cityInput, setCityInput] = useState('');
+
+    // Load existing data when editing
+    useEffect(() => {
+      if (editingTourSegment && showTourModal) {
+        const segment = tourSegments.find(s => s.id === editingTourSegment);
+        if (segment) {
+          setFormData({
+            name: segment.name,
+            description: segment.description,
+            status: segment.status,
+            isPublic: segment.isPublic,
+            stateRanges: segment.stateRanges.map(range => ({
+              ...range,
+              startDate: range.startDate.split('T')[0],
+              endDate: range.endDate.split('T')[0]
+            }))
+          });
+        }
+      } else {
+        // Reset form for new segment
+        setFormData({
+          name: '',
+          description: '',
+          status: 'planned',
+          isPublic: true,
+          stateRanges: []
+        });
+      }
+      
+      // Reset new state range form
+      setNewStateRange({
+        state: '',
+        startDate: '',
+        endDate: '',
+        cities: [],
+        notes: ''
+      });
+      setCityInput('');
+    }, [editingTourSegment, showTourModal]);
+
+    const handleSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      
+      if (!formData.name || formData.stateRanges.length === 0) {
+        alert('Please provide a tour name and add at least one state with dates');
+        return;
+      }
+
+      const segmentData = {
+        name: formData.name,
+        description: formData.description,
+        status: formData.status,
+        isPublic: formData.isPublic,
+        stateRanges: formData.stateRanges.map(range => ({
+          state: range.state,
+          startDate: range.startDate + 'T00:00:00.000Z',
+          endDate: range.endDate + 'T23:59:59.999Z',
+          cities: range.cities,
+          notes: range.notes
+        }))
+      };
+
+      if (editingTourSegment) {
+        updateTourSegment(editingTourSegment, segmentData);
+      } else {
+        createTourSegment(segmentData);
+      }
+    };
+
+    const addStateRange = () => {
+      if (!newStateRange.state || !newStateRange.startDate || !newStateRange.endDate) {
+        alert('Please fill in state, start date, and end date');
+        return;
+      }
+      
+      if (new Date(newStateRange.startDate) >= new Date(newStateRange.endDate)) {
+        alert('End date must be after start date');
+        return;
+      }
+      
+      // Check if state already exists in this tour
+      if (formData.stateRanges.some(range => range.state === newStateRange.state)) {
+        alert('This state is already added to the tour');
+        return;
+      }
+      
+      const stateRange = {
+        id: Date.now().toString(),
+        ...newStateRange
+      };
+      
+      setFormData(prev => ({
+        ...prev,
+        stateRanges: [...prev.stateRanges, stateRange]
+      }));
+      
+      // Reset form
+      setNewStateRange({
+        state: '',
+        startDate: '',
+        endDate: '',
+        cities: [],
+        notes: ''
+      });
+      setCityInput('');
+    };
+
+    const removeStateRange = (id: string) => {
+      setFormData(prev => ({
+        ...prev,
+        stateRanges: prev.stateRanges.filter(range => range.id !== id)
+      }));
+    };
+    
+    const updateStateRange = (id: string, field: string, value: any) => {
+      setFormData(prev => ({
+        ...prev,
+        stateRanges: prev.stateRanges.map(range => 
+          range.id === id ? { ...range, [field]: value } : range
+        )
+      }));
+    };
+
+    const addCityToNewRange = () => {
+      if (cityInput && !newStateRange.cities.includes(cityInput)) {
+        setNewStateRange(prev => ({
+          ...prev,
+          cities: [...prev.cities, cityInput]
+        }));
+        setCityInput('');
+      }
+    };
+
+    const removeCityFromNewRange = (city: string) => {
+      setNewStateRange(prev => ({
+        ...prev,
+        cities: prev.cities.filter(c => c !== city)
+      }));
+    };
+    
+    const addCityToRange = (rangeId: string, city: string) => {
+      const range = formData.stateRanges.find(r => r.id === rangeId);
+      if (range && city && !range.cities.includes(city)) {
+        updateStateRange(rangeId, 'cities', [...range.cities, city]);
+      }
+    };
+
+    const removeCityFromRange = (rangeId: string, city: string) => {
+      const range = formData.stateRanges.find(r => r.id === rangeId);
+      if (range) {
+        updateStateRange(rangeId, 'cities', range.cities.filter(c => c !== city));
+      }
+    };
+
+    if (!showTourModal) return null;
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+          <div className="p-8">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-2xl font-bold text-neutral-900 mb-1">
+                  {editingTourSegment ? 'Edit Tour' : 'Plan New Tour'}
+                </h2>
+                <p className="text-neutral-600 text-sm">
+                  {editingTourSegment ? 'Update your tour dates and locations' : 'Add states and dates to let hosts find you'}
+                </p>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => setShowTourModal(false)}
+                className="h-8 w-8 p-0 rounded-full"
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-8">
+              {/* Tour Details */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-neutral-900 mb-3">
+                    Tour Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                    placeholder="Southwest Spring Tour 2025"
+                    className="w-full px-4 py-3 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-semibold text-neutral-900 mb-3">
+                    Description
+                  </label>
+                  <textarea
+                    value={formData.description}
+                    onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                    placeholder="Brief description of your tour..."
+                    rows={3}
+                    className="w-full px-4 py-3 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm resize-none"
+                  />
+                </div>
+              </div>
+
+              {/* State Tour Schedule */}
+              <div>
+                <label className="block text-lg font-bold text-neutral-900 mb-4">
+                  Tour Schedule by State *
+                </label>
+                <p className="text-neutral-600 text-sm mb-6">Add each state you'll visit with specific dates. Hosts can discover you when you're in their area.</p>
+                
+                {/* Add New State Range */}
+                <div className="border border-neutral-200 rounded-2xl p-6 mb-6 bg-gradient-to-br from-neutral-50 to-white shadow-sm">
+                  <h3 className="text-md font-semibold text-neutral-900 mb-4 flex items-center">
+                    <Plus className="w-4 h-4 mr-2 text-primary-600" />
+                    Add State to Tour
+                  </h3>
+                  
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">State</label>
+                      <select
+                        value={newStateRange.state}
+                        onChange={(e) => setNewStateRange(prev => ({ ...prev, state: e.target.value }))}
+                        className="w-full px-4 py-3 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
+                      >
+                        <option value="">Choose state...</option>
+                        {US_STATES.map((state) => (
+                          <option key={state.value} value={state.value}>
+                            {state.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">Arrival Date</label>
+                      <input
+                        type="date"
+                        value={newStateRange.startDate}
+                        onChange={(e) => setNewStateRange(prev => ({ ...prev, startDate: e.target.value }))}
+                        className="w-full px-4 py-3 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">Departure Date</label>
+                      <input
+                        type="date"
+                        value={newStateRange.endDate}
+                        onChange={(e) => setNewStateRange(prev => ({ ...prev, endDate: e.target.value }))}
+                        className="w-full px-4 py-3 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Cities and Notes Row */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">Cities (Optional)</label>
+                      <div className="flex gap-2 mb-3">
+                        <input
+                          type="text"
+                          value={cityInput}
+                          onChange={(e) => setCityInput(e.target.value)}
+                          placeholder="Denver, Boulder..."
+                          className="flex-1 px-4 py-3 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
+                          onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addCityToNewRange())}
+                        />
+                        <Button type="button" onClick={addCityToNewRange} size="sm" className="px-4 py-3 rounded-xl">
+                          Add
+                        </Button>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {newStateRange.cities.map((city) => (
+                          <Badge key={city} variant="secondary" className="px-3 py-1 rounded-full">
+                            {city}
+                            <button
+                              type="button"
+                              onClick={() => removeCityFromNewRange(city)}
+                              className="ml-2 text-neutral-500 hover:text-neutral-700"
+                            >
+                              ×
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">Notes (Optional)</label>
+                      <textarea
+                        value={newStateRange.notes}
+                        onChange={(e) => setNewStateRange(prev => ({ ...prev, notes: e.target.value }))}
+                        placeholder="Looking for outdoor venues, acoustic preferred..."
+                        rows={3}
+                        className="w-full px-4 py-3 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm resize-none"
+                      />
+                    </div>
+                  </div>
+                  
+                  <Button 
+                    type="button" 
+                    onClick={addStateRange}
+                    className="w-full py-3 px-6 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-medium transition-colors duration-200 shadow-sm"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add State to Tour
+                  </Button>
+                </div>
+                
+                {/* Existing State Ranges */}
+                {formData.stateRanges.length > 0 && (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold text-neutral-900">
+                        Planned States ({formData.stateRanges.length})
+                      </h3>
+                    </div>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                      {formData.stateRanges.map((range) => (
+                        <div key={range.id} className="border border-neutral-200 rounded-2xl p-5 bg-white shadow-sm hover:shadow-md transition-shadow duration-200">
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex items-center gap-3">
+                              <Badge variant="primary" className="px-3 py-1 rounded-full font-medium">
+                                {US_STATES.find(s => s.value === range.state)?.label || range.state}
+                              </Badge>
+                            </div>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => removeStateRange(range.id)}
+                              className="h-8 w-8 p-0 rounded-full hover:bg-red-50 hover:border-red-200 hover:text-red-600"
+                            >
+                              <X className="w-3 h-3" />
+                            </Button>
+                          </div>
+                          
+                          <div className="mb-3">
+                            <div className="text-sm font-medium text-neutral-900 mb-1">Tour Dates</div>
+                            <div className="text-sm text-neutral-600">
+                              {new Date(range.startDate).toLocaleDateString('en-US', { 
+                                month: 'short', 
+                                day: 'numeric',
+                                year: 'numeric'
+                              })} - {new Date(range.endDate).toLocaleDateString('en-US', { 
+                                month: 'short', 
+                                day: 'numeric',
+                                year: 'numeric'
+                              })}
+                            </div>
+                          </div>
+                          
+                          {range.cities.length > 0 && (
+                            <div className="mb-3">
+                              <div className="text-sm font-medium text-neutral-900 mb-2">Cities</div>
+                              <div className="flex flex-wrap gap-2">
+                                {range.cities.map((city) => (
+                                  <Badge key={city} variant="outline" className="px-2 py-1 rounded-full text-xs">
+                                    {city}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          
+                          {range.notes && (
+                            <div>
+                              <div className="text-sm font-medium text-neutral-900 mb-1">Notes</div>
+                              <p className="text-sm text-neutral-600 leading-relaxed">{range.notes}</p>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+
+              {/* Tour Settings */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-neutral-900 mb-3">
+                    Tour Status
+                  </label>
+                  <select
+                    value={formData.status}
+                    onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
+                    className="w-full px-4 py-3 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
+                  >
+                    <option value="planned">Planned</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="cancelled">Cancelled</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-semibold text-neutral-900 mb-3">
+                    Visibility
+                  </label>
+                  <div className="flex items-center gap-3 pt-2">
+                    <input
+                      type="checkbox"
+                      id="isPublic"
+                      checked={formData.isPublic}
+                      onChange={(e) => setFormData(prev => ({ ...prev, isPublic: e.target.checked }))}
+                      className="w-4 h-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500 focus:ring-2"
+                    />
+                    <label htmlFor="isPublic" className="text-sm text-neutral-700">
+                      Make this tour visible to hosts
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              {/* Submit Buttons */}
+              <div className="flex gap-4 pt-6 border-t border-neutral-100">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowTourModal(false)}
+                  className="flex-1 py-3 px-6 rounded-xl font-medium border-neutral-200 text-neutral-700 hover:bg-neutral-50"
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  type="submit" 
+                  className="flex-1 py-3 px-6 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-medium shadow-sm transition-colors duration-200"
+                >
+                  {editingTourSegment ? 'Update Tour' : 'Create Tour'}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -1769,6 +2373,114 @@ export default function ProfilePage() {
                           <option value="moderate">Moderate - Free cancellation 7+ days before</option>
                           <option value="strict">Strict - No free cancellation</option>
                         </select>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Tour Planning */}
+                  <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h2 className="text-xl font-semibold text-neutral-900">Tour Planning</h2>
+                          <p className="text-sm text-neutral-600">Plan your touring schedule so hosts can find you when you're in their area</p>
+                        </div>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            setEditingTourSegment(null);
+                            setShowTourModal(true);
+                          }}
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          Add Tour
+                        </Button>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        {tourSegments.length === 0 ? (
+                          <>
+                            <p className="text-sm text-neutral-600">
+                              No tour segments planned yet. Add your first tour to let hosts know when you'll be in their area.
+                            </p>
+                            <div className="bg-neutral-50 rounded-lg p-4 text-center">
+                              <p className="text-sm text-neutral-500 mb-3">
+                                Plan your tours by dates and locations to connect with hosts along your route
+                              </p>
+                              <Button 
+                                variant="outline"
+                                onClick={() => {
+                                  setEditingTourSegment(null);
+                                  setShowTourModal(true);
+                                }}
+                              >
+                                <Plus className="w-4 h-4 mr-2" />
+                                Plan Your First Tour
+                              </Button>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="space-y-3">
+                            {tourSegments.map((segment) => (
+                              <div key={segment.id} className="border border-neutral-200 rounded-lg p-4">
+                                <div className="flex items-start justify-between mb-2">
+                                  <div>
+                                    <h4 className="font-medium text-neutral-900">
+                                      {segment.name || 'Tour Segment'}
+                                    </h4>
+                                    <p className="text-sm text-neutral-600">
+                                      {segment.stateRanges.length} state{segment.stateRanges.length !== 1 ? 's' : ''} planned
+                                    </p>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      onClick={() => {
+                                        setEditingTourSegment(segment.id);
+                                        setShowTourModal(true);
+                                      }}
+                                    >
+                                      <Edit className="w-4 h-4" />
+                                    </Button>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      onClick={() => deleteTourSegment(segment.id)}
+                                    >
+                                      <X className="w-4 h-4" />
+                                    </Button>
+                                  </div>
+                                </div>
+                                <div className="space-y-2">
+                                  {segment.stateRanges.map((range) => (
+                                    <div key={range.id} className="flex items-center justify-between text-sm">
+                                      <div className="flex items-center gap-2">
+                                        <Badge variant="secondary" className="text-xs">
+                                          {range.state}
+                                        </Badge>
+                                        <span className="text-neutral-600">
+                                          {new Date(range.startDate).toLocaleDateString()} - {new Date(range.endDate).toLocaleDateString()}
+                                        </span>
+                                      </div>
+                                      {range.cities.length > 0 && (
+                                        <div className="flex gap-1">
+                                          {range.cities.map((city) => (
+                                            <Badge key={city} variant="outline" className="text-xs">
+                                              {city}
+                                            </Badge>
+                                          ))}
+                                        </div>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </CardContent>
                   </Card>
@@ -3154,6 +3866,9 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+      
+      {/* Tour Segment Modal */}
+      <TourSegmentModal />
     </div>
   );
 }
