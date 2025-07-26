@@ -136,9 +136,25 @@ start_server() {
   sleep 3
   
   # Find the actual Next.js server process
-  local server_pid=$(pgrep -f "next dev" | head -1)
+  local server_pid=""
+  
+  # Wait for the Next.js process to start
+  local wait_count=0
+  while [ $wait_count -lt 30 ]; do
+    server_pid=$(pgrep -f "next dev" | head -1)
+    if [ -n "$server_pid" ]; then
+      break
+    fi
+    sleep 1
+    wait_count=$((wait_count + 1))
+  done
+  
+  # If we still can't find the Next.js process, use the npm PID as fallback
   if [ -z "$server_pid" ]; then
     server_pid=$npm_pid
+    log "WARN" "Could not find Next.js process, monitoring npm PID: $server_pid"
+  else
+    log "INFO" "Found Next.js process PID: $server_pid"
   fi
   
   echo "$server_pid" > "$PID_FILE"
@@ -186,9 +202,19 @@ monitor_server() {
     log "INFO" "Monitoring server (PID: $server_pid)"
     
     while true; do
+        # Check if the monitored process is still running
         if ! kill -0 "$server_pid" 2>/dev/null; then
-            log "WARN" "Server process has died"
-            return 1
+            # If the monitored process died, check if there are any Next.js processes still running
+            local nextjs_pid=$(pgrep -f "next dev" | head -1)
+            if [ -n "$nextjs_pid" ]; then
+                log "INFO" "Monitored process died but Next.js is still running (PID: $nextjs_pid), updating monitor"
+                server_pid=$nextjs_pid
+                echo "$server_pid" > "$PID_FILE"
+                continue
+            else
+                log "WARN" "Server process has died"
+                return 1
+            fi
         fi
         
         # Check for memory issues in logs

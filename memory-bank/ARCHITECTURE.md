@@ -28,10 +28,10 @@
 - **Production Ready** - Vercel deployment configuration
 - **Version Control** - Git with documented branching strategy
 
-### Real-time Features (Temporarily Disabled)
-- **Polling System** - Message updates, typing indicators, online status
-- **Status**: Disabled due to dependency loop causing server crashes
-- **Fix Required**: useRealtimeMessaging hook needs stable refs pattern
+### Real-time Features ✅ OPERATIONAL
+- **Polling System** - Message updates, typing indicators, online status (30s intervals)
+- **Status**: ✅ FIXED - Safe polling with rate limiting implemented
+- **Fix Applied**: useRealtimeMessagingSafe hook with stable refs pattern
 
 ---
 
@@ -1203,6 +1203,13 @@ NEXTAUTH_URL="http://localhost:3000"      // For return URLs
 User Clicks Pay → Stripe Checkout → Payment Success → Webhook → Database Update → User Activation
 ```
 
+### Payment System Improvements ✅ IMPLEMENTED
+**Issue**: Webhook failures in development causing user activation problems
+**Solution**: Fallback activation system implemented
+- `/api/payments/verify-and-activate` - Verifies Stripe payment and activates users when webhooks fail
+- Payment success page enhanced with verification logic
+- Handles both webhook success (production) and webhook failure (development) scenarios
+
 ### Webhook Events Handled
 ```typescript
 // /api/payments/webhook/route.ts
@@ -1612,6 +1619,61 @@ export function resolveProfileImageUrl(user: any): string | null
 - **Reliability**: Multiple fallback levels prevent broken image states
 - **Maintainability**: Centralized logic in single utility file
 - **Scalability**: Easy to extend for additional user types or image sources
+
+---
+
+## Artist Profile System Enhancements ✅ IMPLEMENTED
+
+### Application Data Integration
+**Issue**: Artist profile data not properly flowing from application to dashboard/profile
+**Solutions Implemented**:
+
+#### 1. Profile Photo Fallback System ✅
+- **Hero Image Logic**: Falls back to first application photo when no Press Photo set
+- **API Integration**: Both `/api/profile` and `/api/artists/[id]` include fallback logic
+- **Priority Order**: Press Photo → First Application Photo → Gradient background
+
+#### 2. Performance Video Integration ✅  
+- **Application Video Sync**: Performance videos from applications automatically appear in dashboard
+- **Smart Fallback**: Creates default video object when no custom videos exist
+- **API Enhancement**: Enhanced video title formatting: `{Band Name}: Live Performance`
+- **YouTube URL Parsing**: Robust URL parsing handles various YouTube formats and parameters
+
+#### 3. Profile Data Mapping Fixes ✅
+- **Band Name Correction**: Fixed applicant name vs band name mapping in profile API
+- **User Type Detection**: Enhanced case-insensitive user type handling (`'artist'` vs `'ARTIST'`)
+- **Profile Save Functionality**: Resolved profile edit save issues with proper user type checking
+
+#### 4. UI/UX Improvements ✅
+- **Instruments Section**: Enhanced with custom instrument input and proper plural/singular grammar
+- **Video Embed**: Fixed YouTube embed URLs with proper video ID extraction
+- **Profile Layout**: Improved artist profile sections with better content hierarchy
+
+### Technical Implementation
+```typescript
+// Hero image with application photo fallback
+{artistData.profileImageUrl ? (
+  <img src={artistData.profileImageUrl} />
+) : artistData.photos?.[0]?.fileUrl ? (
+  <img src={artistData.photos[0].fileUrl} />
+) : (
+  <div className="gradient-background" />
+)}
+
+// Performance video integration
+videoLinks: (() => {
+  let videos = artist.videoLinks || [];
+  if (videos.length === 0 && artist.performanceVideoUrl) {
+    videos = [{
+      id: 'application-video',
+      title: `${artist.stageName || artist.user.name}: Live Performance`,
+      url: artist.performanceVideoUrl,
+      isLivePerformance: true
+    }];
+  }
+  return videos;
+})()
+```
 
 ---
 

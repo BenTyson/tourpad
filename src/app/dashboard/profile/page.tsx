@@ -167,8 +167,7 @@ export default function ProfilePage() {
     profilePhoto: '',
     genres: [] as string[],
     instruments: [] as string[],
-    experienceLevel: 'intermediate' as 'beginner' | 'intermediate' | 'professional',
-    yearsActive: 1,
+    formationYear: new Date().getFullYear(),
     tourMonthsPerYear: 3,
     tourVehicle: 'van' as string,
     willingToTravel: 500,
@@ -230,6 +229,7 @@ export default function ProfilePage() {
     url: '',
     platform: 'spotify'
   });
+  const [customInstrument, setCustomInstrument] = useState('');
 
   const [hostProfile, setHostProfile] = useState({
     venueName: '', // This is the venue name like "Mike's Overlook"
@@ -328,8 +328,7 @@ export default function ProfilePage() {
                 state: data.state || '',
                 genres: data.genres || [],
                 instruments: data.instruments || [],
-                experienceLevel: data.experienceLevel || 'intermediate',
-                yearsActive: data.yearsActive || 1,
+                formationYear: data.formationYear || new Date().getFullYear(),
                 tourMonthsPerYear: data.tourMonthsPerYear || 3,
                 tourVehicle: data.tourVehicle || 'van',
                 willingToTravel: data.willingToTravel || 500,
@@ -502,6 +501,12 @@ export default function ProfilePage() {
 
   const removeInstrument = (instrument: string) => {
     updateArtistProfile({ instruments: artistProfile.instruments.filter(i => i !== instrument) });
+  };
+  const addCustomInstrument = () => {
+    if (customInstrument.trim() && !artistProfile.instruments.includes(customInstrument.trim())) {
+      updateArtistProfile({ instruments: [...artistProfile.instruments, customInstrument.trim()] });
+      setCustomInstrument('');
+    }
   };
 
   const addAmenity = (amenity: string) => {
@@ -1161,7 +1166,7 @@ export default function ProfilePage() {
 
                       {/* Instruments */}
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-2">Instruments</label>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Instruments we play</label>
                         <div className="space-y-3">
                           <div className="flex flex-wrap gap-2">
                             {artistProfile.instruments.map(instrument => (
@@ -1187,31 +1192,61 @@ export default function ProfilePage() {
                               </button>
                             ))}
                           </div>
+                          <div className="flex gap-2 mt-3">
+                            <input
+                              type="text"
+                              placeholder="Other instrument..."
+                              value={customInstrument}
+                              onChange={(e) => setCustomInstrument(e.target.value)}
+                              onKeyPress={(e) => {
+                                if (e.key === 'Enter') {
+                                  e.preventDefault();
+                                  addCustomInstrument();
+                                }
+                              }}
+                              className="flex-1 px-3 py-2 text-sm border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                            />
+                            <button
+                              onClick={addCustomInstrument}
+                              disabled={!customInstrument.trim()}
+                              className="px-4 py-2 text-sm bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              Add
+                            </button>
+                          </div>
                         </div>
                       </div>
 
-                      {/* Experience Level & Years */}
+                      {/* Formation Year */}
                       <div className="grid md:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm font-medium text-neutral-700 mb-2">Experience Level</label>
+                          <label className="block text-sm font-medium text-neutral-700 mb-2">Formation Year</label>
                           <select
-                            value={artistProfile.experienceLevel}
-                            onChange={(e) => updateArtistProfile({ experienceLevel: e.target.value as any })}
+                            value={artistProfile.formationYear}
+                            onChange={(e) => updateArtistProfile({ formationYear: parseInt(e.target.value) })}
                             className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                           >
-                            <option value="beginner">Beginner (0-2 years)</option>
-                            <option value="intermediate">Intermediate (2-5 years)</option>
-                            <option value="professional">Professional (5+ years)</option>
+                            {(() => {
+                              const currentYear = new Date().getFullYear();
+                              const startYear = 1950;
+                              const years = [];
+                              for (let year = currentYear; year >= startYear; year--) {
+                                years.push(
+                                  <option key={year} value={year}>
+                                    {year}
+                                  </option>
+                                );
+                              }
+                              return years;
+                            })()}
                           </select>
+                          <p className="text-xs text-neutral-500 mt-1">
+                            Years active: {new Date().getFullYear() - artistProfile.formationYear + 1}
+                          </p>
                         </div>
-                        <Input
-                          label="Years Active"
-                          type="number"
-                          value={artistProfile.yearsActive}
-                          onChange={(e) => updateArtistProfile({ yearsActive: parseInt(e.target.value) || 1 })}
-                          min="1"
-                          max="50"
-                        />
+                        <div>
+                          {/* Empty space for grid alignment */}
+                        </div>
                       </div>
 
                       {/* Tour Info */}

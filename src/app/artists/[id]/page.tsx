@@ -242,6 +242,12 @@ export default function ArtistProfilePage() {
               alt={`${artistData.name} background`}
               className="w-full h-full object-cover"
             />
+          ) : artistData.photos && artistData.photos.length > 0 ? (
+            <img 
+              src={artistData.photos[0].fileUrl} 
+              alt={`${artistData.name} background`}
+              className="w-full h-full object-cover"
+            />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-primary-600 to-primary-800"></div>
           )}
@@ -292,7 +298,7 @@ export default function ArtistProfilePage() {
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             {/* Bio Section */}
             <div>
-              <h2 className="text-3xl font-bold text-neutral-900 mb-6">About {artistData.name}</h2>
+              <h2 className="text-3xl font-bold text-neutral-900 mb-6">{artistData.name}</h2>
               
               {/* Genre Tags */}
               {artistData.genres && artistData.genres.length > 0 && (
@@ -319,7 +325,22 @@ export default function ArtistProfilePage() {
                     <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-black ring-1 ring-neutral-900/5 mb-4">
                       <div className="relative aspect-video">
                         <iframe
-                          src={featuredVideo.url.replace('watch?v=', 'embed/')}
+                          src={(() => {
+                            // Extract YouTube video ID from various URL formats
+                            const url = featuredVideo.url;
+                            let videoId = '';
+                            
+                            // Handle watch URLs: https://www.youtube.com/watch?v=ID or https://youtu.be/ID
+                            if (url.includes('youtube.com/watch?v=')) {
+                              videoId = url.split('watch?v=')[1].split('&')[0];
+                            } else if (url.includes('youtu.be/')) {
+                              videoId = url.split('youtu.be/')[1].split('?')[0];
+                            } else if (url.includes('youtube.com/embed/')) {
+                              videoId = url.split('embed/')[1].split('?')[0];
+                            }
+                            
+                            return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+                          })()}
                           title={featuredVideo.title}
                           className="w-full h-full"
                           allowFullScreen
@@ -354,6 +375,14 @@ export default function ArtistProfilePage() {
                 <span className="text-3xl font-bold text-neutral-900">{artistData.bandMembers?.length || 1}</span>
               </div>
               <p className="text-neutral-600">Band Member{(artistData.bandMembers?.length || 1) > 1 ? 's' : ''}</p>
+            </div>
+            <div className="w-px h-16 bg-neutral-200"></div>
+            <div className="text-center">
+              <div className="flex items-center justify-center mb-2">
+                <Clock className="w-6 h-6 mr-2 text-neutral-600" />
+                <span className="text-3xl font-bold text-neutral-900">{artistData.yearsActive || 1}</span>
+              </div>
+              <p className="text-neutral-600">Years Active</p>
             </div>
           </div>
         </div>
@@ -534,6 +563,25 @@ export default function ArtistProfilePage() {
                 );
               })}
             </div>
+            
+            {/* Band Instruments */}
+            {artistData.instruments && artistData.instruments.length > 0 && (
+              <div className="mt-8 pt-6 border-t border-neutral-200">
+                <h3 className="text-lg font-semibold text-neutral-800 mb-3">
+                  Instruments {(artistData.bandMembers?.length || 1) > 1 ? 'we' : 'I'} play
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {artistData.instruments.map((instrument, index) => (
+                    <span 
+                      key={index}
+                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-50 text-primary-700 border border-primary-200"
+                    >
+                      {instrument}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </section>
 

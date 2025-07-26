@@ -38,7 +38,7 @@ export async function GET() {
 
     // Build response based on user type
     let profileData: any = {
-      bandName: user.name,
+      bandName: user.artist?.stageName || user.name,
       hostName: user.name,
       bio: user.profile?.bio || user.artist?.stageName || user.host?.venueDescription || '',
       location: user.profile?.location || '',
@@ -53,8 +53,7 @@ export async function GET() {
         instruments: [], // Will need to add this field to schema later
         website: user.profile?.websiteUrl || (user.profile?.socialLinks as any)?.website || '',
         socialLinks: user.profile?.socialLinks || {},
-        experienceLevel: 'intermediate', // Will need to add this field to schema later
-        yearsActive: 1, // Will need to add this field to schema later
+        formationYear: user.artist?.createdAt ? user.artist.createdAt.getFullYear() : new Date().getFullYear(),
         tourMonthsPerYear: user.artist.tourMonthsPerYear || 3,
         tourVehicle: user.artist.tourVehicle || 'van',
         willingToTravel: user.artist.willingToTravel || 500,
@@ -68,7 +67,23 @@ export async function GET() {
           instrument: member.instrument || '',
           photo: member.photoUrl || ''
         })) || [],
-        videoLinks: user.artist.videoLinks ? (user.artist.videoLinks as any[]) : [],
+        videoLinks: (() => {
+          let videos = user.artist.videoLinks ? (user.artist.videoLinks as any[]) : [];
+          
+          // If no videos but has application performance video, include it as default
+          if (videos.length === 0 && user.artist.performanceVideoUrl) {
+            videos = [{
+              id: 'application-video',
+              title: `${user.artist.stageName || user.name}: Live Performance`,
+              url: user.artist.performanceVideoUrl,
+              platform: 'youtube', // Assume YouTube for now
+              category: 'live_performance',
+              isLivePerformance: true
+            }];
+          }
+          
+          return videos;
+        })(),
         musicSamples: user.artist.musicSamples ? (user.artist.musicSamples as any[]) : [],
         photos: user.artist.media?.map(media => {
           console.log('Found media:', media);
@@ -195,6 +210,7 @@ export async function PUT(request: NextRequest) {
     const data = await request.json();
     console.log('Received profile data:', data);
     console.log('suggestedDoorFee value:', data.suggestedDoorFee, 'type:', typeof data.suggestedDoorFee);
+    console.log('Session user type:', session.user.type);
     const userId = session.user.id;
 
     // Update user basic info
@@ -255,8 +271,8 @@ export async function PUT(request: NextRequest) {
       throw profileError;
     }
 
-    // Update artist-specific data
-    if (session.user.type === 'artist') {
+    // Update artist-specific data  
+    if (session.user.type === 'artist' || session.user.type === 'ARTIST') {
       const artist = await prisma.artist.findFirst({
         where: { userId }
       });
@@ -332,7 +348,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Update host-specific data
-    if (session.user.type === 'host') {
+    if (session.user.type === 'host' || session.user.type === 'HOST') {
       const host = await prisma.host.findFirst({
         where: { userId }
       });

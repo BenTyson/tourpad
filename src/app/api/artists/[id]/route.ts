@@ -37,8 +37,9 @@ export async function GET(
       return NextResponse.json({ error: 'Artist not found' }, { status: 404 });
     }
 
-    // Calculate approximate years active
-    const yearsActive = Math.max(1, new Date().getFullYear() - artist.createdAt.getFullYear());
+    // Calculate years active from formation year (fallback to creation date)
+    const formationYear = artist.createdAt.getFullYear(); // TODO: Use actual formationYear field when added to schema
+    const yearsActive = Math.max(1, new Date().getFullYear() - formationYear);
     
     // Calculate rating from reviews using database
     const reviewStats = await prisma.review.aggregate({
@@ -67,6 +68,7 @@ export async function GET(
       genres: artist.genres || [],
       instruments: artist.bandMembers.map(member => member.instrument).filter(Boolean),
       yearsActive,
+      formationYear,
       experienceLevel: yearsActive >= 5 ? 'professional' : yearsActive >= 2 ? 'intermediate' : 'emerging',
       profileImageUrl: artist.media
         .filter(m => m.mediaType === 'PHOTO' && m.category === 'profile')
@@ -96,7 +98,23 @@ export async function GET(
         instrument: member.instrument || '',
         photo: member.photoUrl || ''
       })) || [],
-      videoLinks: artist.videoLinks ? (artist.videoLinks as any[]) : [],
+      videoLinks: (() => {
+        let videos = artist.videoLinks ? (artist.videoLinks as any[]) : [];
+        
+        // If no videos but has application performance video, include it as default
+        if (videos.length === 0 && artist.performanceVideoUrl) {
+          videos = [{
+            id: 'application-video',
+            title: `${artist.stageName || artist.user.name}: Live Performance`,
+            url: artist.performanceVideoUrl,
+            platform: 'youtube', // Assume YouTube for now
+            category: 'live_performance',
+            isLivePerformance: true
+          }];
+        }
+        
+        return videos;
+      })(),
       musicSamples: artist.musicSamples ? (artist.musicSamples as any[]) : [],
       photos: artist.media?.map(media => ({
         id: media.id,

@@ -204,6 +204,18 @@ export default function DashboardPage() {
   const userRole: UserRole = rawUserRole as UserRole;
   const userStatus = userData.status || 'pending';
   
+  // PAYMENT DEBUG: Log data source and status for payment troubleshooting
+  if (userRole === 'artist') {
+    console.log('Payment status debug:', {
+      dataSource: currentUser ? 'database' : 'session',
+      userStatus,
+      currentUserLoading: userLoading,
+      rawStatus: userData.status,
+      statusCheck: userStatus !== 'active',
+      willShowPaymentPage: userRole === 'artist' && userStatus === 'approved'
+    });
+  }
+  
   // Helper function to check user role (fixes TypeScript narrowing issues)
   const isUserRole = (role: UserRole) => (userRole as string) === role;
   const selectedUserId = userData.id;

@@ -127,7 +127,7 @@ export default function ArtistPaymentPage() {
         <Card className="max-w-md">
           <CardContent className="text-center p-8">
             <div className="animate-spin w-12 h-12 border-4 border-teal-600 border-t-transparent rounded-full mx-auto mb-4"></div>
-            <h1 className="text-xl font-bold text-gray-900 mb-2">Processing Payment...</h1>
+            <h1 className="text-xl font-bold text-gray-900 mb-2">Redirecting to Payment...</h1>
             <p className="text-gray-600">Please don't close this window</p>
           </CardContent>
         </Card>

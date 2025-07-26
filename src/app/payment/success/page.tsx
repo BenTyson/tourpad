@@ -15,18 +15,40 @@ function PaymentSuccessContent() {
 
   useEffect(() => {
     if (sessionId) {
-      // Force session refresh to pick up the status change from webhook
-      const refreshSession = async () => {
-        // Wait a bit for webhook to process
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        
-        // Force NextAuth session update
-        await update();
-        
-        setStatus('success');
+      // Check payment status and activate user if webhook failed
+      const verifyPaymentAndActivate = async () => {
+        try {
+          // Wait a bit for webhook to process
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          
+          // Check if payment succeeded and activate user if needed
+          const response = await fetch('/api/payments/verify-and-activate', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ sessionId })
+          });
+          
+          if (response.ok) {
+            const result = await response.json();
+            console.log('Payment verification result:', result);
+            
+            // Force NextAuth session update
+            await update();
+            
+            setStatus('success');
+          } else {
+            console.error('Payment verification failed');
+            setStatus('error');
+          }
+        } catch (error) {
+          console.error('Error verifying payment:', error);
+          setStatus('error');
+        }
       };
       
-      refreshSession();
+      verifyPaymentAndActivate();
     } else {
       setStatus('error');
     }
