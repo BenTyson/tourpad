@@ -114,7 +114,8 @@ model Artist {
   typicalSetLength        Int?          // Minutes
   equipmentNeeds          String[]      // [Microphone, Guitar amp]
   travelRadius            Int?          // Miles
-  pressPhotoUrl           String?
+  pressPhotoUrl           String?        // Thumbnail photo (square, 500x500px min)
+  heroPhotoUrl            String?        // Hero banner (1920x1080 or 2400x1200)
   performanceVideoUrl     String?
   performanceVideoFile    String?       // File path for uploaded MP4 video
   musicSamples            Json?         // [{title, url, duration}]
@@ -126,6 +127,9 @@ model Artist {
   willingToTravel         Int?
   videoLinks              Json?
   needsLodging            Boolean       @default(false)
+  contentRating           String?       @default("family-friendly") // family-friendly, explicit, tailored
+  briefBio                String?       // Brief introduction (500 char limit)
+  fullBio                 String?       // Detailed bio (no limit)
   
   // Spotify Integration ✅ IMPLEMENTED
   spotifyArtistId         String?       // Spotify artist ID from API
