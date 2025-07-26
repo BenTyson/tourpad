@@ -2,9 +2,9 @@
 > pad@0.1.0 dev:stable
 > node scripts/dev-server.js
 
-✅ [2025-07-26T21:05:17.576Z] System Memory: 16GB, Allocating: 8192MB old space, 512MB semi space
-✅ [2025-07-26T21:05:17.578Z] Starting Next.js server with memory: 8192MB
-✅ [2025-07-26T21:05:17.579Z] Development server started successfully
+✅ [2025-07-26T23:06:01.789Z] System Memory: 16GB, Allocating: 8192MB old space, 512MB semi space
+✅ [2025-07-26T23:06:01.790Z] Starting Next.js server with memory: 8192MB
+✅ [2025-07-26T23:06:01.792Z] Development server started successfully
    [1m[38;2;173;127;168m▲ Next.js 15.3.5[39m[22m
    - Local:        http://localhost:3001
    - Network:      http://0.0.0.0:3001
@@ -13,8 +13,40 @@
      [1m⨯[22m webpackBuildWorker
 
  [32m[1m✓[22m[39m Starting...
- [32m[1m✓[22m[39m Ready in 978ms
-[2025-07-26 15:05:20] [INFO] Found Next.js process PID: 46753
-[2025-07-26 15:05:20] [INFO] Server started with PID: 46753
-[2025-07-26 15:05:20] [INFO] Server is ready and running at http://localhost:3001
-[2025-07-26 15:05:20] [INFO] Monitoring server (PID: 46753)
+ [33m[1m⚠[22m[39m Invalid next.config.ts options detected: 
+ [33m[1m⚠[22m[39m     Expected object, received boolean at "experimental.serverActions"
+ [33m[1m⚠[22m[39m     Expected object, received boolean at "experimental.turbo"
+ [33m[1m⚠[22m[39m     Unrecognized key(s) in object: 'serverComponentsExternalPackages', 'instrumentationHook' at "experimental"
+ [33m[1m⚠[22m[39m See more info here: https://nextjs.org/docs/messages/invalid-next-config
+ [33m[1m⚠[22m[39m `experimental.instrumentationHook` is no longer needed, because `instrumentation.js` is available by default. You can remove it from next.config.ts.
+ [33m[1m⚠[22m[39m `experimental.serverComponentsExternalPackages` has been moved to `serverExternalPackages`. Please update your next.config.ts file accordingly.
+ [32m[1m✓[22m[39m Ready in 1077ms
+ [37m[1m○[22m[39m Compiling /middleware ...
+ [32m[1m✓[22m[39m Compiled /middleware in 758ms (265 modules)
+ [37m[1m○[22m[39m Compiling /artists/[id] ...
+ [32m[1m✓[22m[39m Compiled /artists/[id] in 3.2s (1030 modules)
+ GET /artists/cmdkqwoc10002lukzgzfmlpcu [32m200[39m in 3717ms
+ [37m[1m○[22m[39m Compiling /api/auth/[...nextauth] ...
+ [32m[1m✓[22m[39m Compiled /api/auth/[...nextauth] in 668ms (1182 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /artists/cmdkqwoc10002lukzgzfmlpcu [32m200[39m in 74ms
+ GET /api/artists?exclude=cmdkqwoc10002lukzgzfmlpcu&limit=3 [32m200[39m in 934ms
+ GET /api/artists/cmdkqwoc10002lukzgzfmlpcu [32m200[39m in 1072ms
+ GET /api/auth/session [32m200[39m in 1073ms
+ GET /api/auth/session [32m200[39m in 14ms
+ [32m[1m✓[22m[39m Compiled /api/messages/poll-test in 133ms (1184 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ [33m[1m⚠[22m[39m Fast Refresh had to perform a full reload due to a runtime error.
+[POLL-TEST] 2025-07-26T23:06:23.541Z - User: cmdkqwoc00000lukznx1p57by - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test [32m200[39m in 212ms
+ GET /artists/cmdkqwoc10002lukzgzfmlpcu [32m200[39m in 164ms
+ GET /api/artists/cmdkqwoc10002lukzgzfmlpcu [32m200[39m in 54ms
+ GET /api/auth/session [32m200[39m in 55ms
+ GET /api/artists?exclude=cmdkqwoc10002lukzgzfmlpcu&limit=3 [32m200[39m in 63ms
+ GET /api/auth/session [32m200[39m in 15ms
+[POLL-TEST] 2025-07-26T23:06:54.265Z - User: cmdkqwoc00000lukznx1p57by - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test [32m200[39m in 41ms
+[POLL-TEST] 2025-07-26T23:07:24.255Z - User: cmdkqwoc00000lukznx1p57by - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test [32m200[39m in 29ms
+[POLL-TEST] 2025-07-26T23:07:54.255Z - User: cmdkqwoc00000lukznx1p57by - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test [32m200[39m in 30ms

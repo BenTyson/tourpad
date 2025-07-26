@@ -181,7 +181,8 @@ export default function ArtistProfilePage() {
   const [isFollowing, setIsFollowing] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [tourSegments, setTourSegments] = useState<TourSegment[]>([]);
-  const [upcomingTours, setUpcomingTours] = useState<TourStateRange[]>([]);
+  const [upcomingTours, setUpcomingTours] = useState<Array<TourStateRange & { tourName: string }>>([]);
+  const [relatedArtists, setRelatedArtists] = useState<any[]>([]);
 
   // Fetch artist data from API
   useEffect(() => {
@@ -234,13 +235,16 @@ export default function ArtistProfilePage() {
             const oneYearFromNow = new Date();
             oneYearFromNow.setFullYear(now.getFullYear() + 1);
             
-            const upcoming: TourStateRange[] = [];
+            const upcoming: Array<TourStateRange & { tourName: string }> = [];
             segments.forEach((segment: TourSegment) => {
               if (segment.isPublic && segment.status !== 'cancelled') {
                 segment.stateRanges.forEach((range) => {
                   const endDate = new Date(range.endDate);
                   if (endDate >= now && endDate <= oneYearFromNow) {
-                    upcoming.push(range);
+                    upcoming.push({
+                      ...range,
+                      tourName: segment.name
+                    });
                   }
                 });
               }
@@ -264,9 +268,6 @@ export default function ArtistProfilePage() {
   
   // Fallback to mock data for sections not yet converted
   const mockArtist = mockArtists.find(a => a.id === artistId || a.userId === artistId);
-  
-  // Related artists state
-  const [relatedArtists, setRelatedArtists] = useState<any[]>([]);
 
   if (loading) {
     return (
@@ -821,105 +822,164 @@ export default function ArtistProfilePage() {
         {upcomingTours.length > 0 && (
           <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
             <div className="p-8">
+              {/* Header */}
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-neutral-900 mb-2">Upcoming Tours</h2>
+                  <h2 className="text-2xl font-bold text-neutral-900 mb-2">
+                    Upcoming Tours
+                  </h2>
                   <p className="text-neutral-600">Catch {artistData?.name} when they're in your area</p>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm text-neutral-500">Next 12 months</div>
-                  <div className="text-lg font-semibold text-primary-600">{upcomingTours.length} state{upcomingTours.length !== 1 ? 's' : ''}</div>
+                  <div className="text-sm text-neutral-500 mb-1">Next 12 months</div>
+                  <div className="text-2xl font-bold text-primary-600">
+                    {upcomingTours.length}
+                  </div>
+                  <div className="text-sm text-neutral-400">
+                    {upcomingTours.length === 1 ? 'location' : 'locations'}
+                  </div>
                 </div>
               </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                
+              {/* Tour Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {upcomingTours.map((tour, index) => {
                   const startDate = new Date(tour.startDate);
                   const endDate = new Date(tour.endDate);
                   const isComingSoon = startDate.getTime() - Date.now() < 30 * 24 * 60 * 60 * 1000; // 30 days
+                  const daysUntil = Math.ceil((startDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
                   
                   return (
-                    <div key={`${tour.id}-${index}`} className={`border rounded-xl p-4 ${isComingSoon ? 'border-primary-200 bg-primary-50' : 'border-neutral-200 bg-white'} hover:shadow-md transition-shadow duration-200`}>
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center gap-2">
-                          <MapPin className={`w-4 h-4 ${isComingSoon ? 'text-primary-600' : 'text-neutral-600'}`} />
-                          <span className={`font-semibold ${isComingSoon ? 'text-primary-900' : 'text-neutral-900'}`}>
-                            {getStateName(tour.state)}
-                          </span>
-                        </div>
-                        {isComingSoon && (
-                          <Badge variant="primary" className="text-xs px-2 py-1">
-                            Soon
-                          </Badge>
-                        )}
-                      </div>
-                      
-                      <div className="flex items-center gap-2 text-sm text-neutral-600 mb-3">
-                        <Calendar className="w-4 h-4" />
-                        <span>
-                          {startDate.toLocaleDateString('en-US', { 
-                            month: 'short', 
-                            day: 'numeric' 
-                          })} - {endDate.toLocaleDateString('en-US', { 
-                            month: 'short', 
-                            day: 'numeric',
-                            year: 'numeric'
-                          })}
-                        </span>
-                      </div>
-                      
-                      {tour.cities.length > 0 && (
-                        <div className="mb-3">
-                          <div className="text-xs text-neutral-500 mb-1">Cities</div>
-                          <div className="flex flex-wrap gap-1">
-                            {tour.cities.slice(0, 3).map((city) => (
-                              <Badge key={city} variant="outline" className="text-xs px-2 py-0.5">
-                                {city}
-                              </Badge>
-                            ))}
-                            {tour.cities.length > 3 && (
-                              <Badge variant="outline" className="text-xs px-2 py-0.5">
-                                +{tour.cities.length - 3} more
-                              </Badge>
-                            )}
+                    <div 
+                      key={`${tour.id}-${index}`} 
+                      className={`group relative overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl border ${
+                        isComingSoon 
+                          ? 'bg-gradient-to-br from-primary-50 to-neutral-50 border-primary-200 shadow-lg' 
+                          : 'bg-white border-neutral-200 hover:border-primary-300 shadow-sm hover:shadow-lg'
+                      }`}
+                    >
+                      {/* Coming Soon Indicator */}
+                      {isComingSoon && (
+                        <div className="absolute top-4 right-4">
+                          <div className="border-2 border-primary-600 text-primary-600 bg-white text-xs font-bold px-3 py-1 rounded-full">
+                            {daysUntil <= 0 ? 'Now' : `${daysUntil}d`}
                           </div>
                         </div>
                       )}
                       
-                      {tour.notes && (
-                        <div className="text-xs text-neutral-600 italic line-clamp-2">
-                          {tour.notes}
-                        </div>
-                      )}
-                      
-                      <div className="mt-4 pt-3 border-t border-neutral-100">
-                        <Button 
-                          size="sm" 
-                          className="w-full"
-                          onClick={() => {
-                            // TODO: Implement booking/contact functionality
-                            alert('Booking functionality coming soon!');
-                          }}
-                        >
-                          Contact for Booking
-                        </Button>
+                      {/* Tour Name */}
+                      <div className="mb-3">
+                        <p className="text-sm font-semibold text-primary-600 uppercase tracking-wide">
+                          {tour.tourName}
+                        </p>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-              
-              {upcomingTours.length > 6 && (
-                <div className="mt-6 text-center">
-                  <Button variant="outline" onClick={() => {
-                    // TODO: Show all tours modal or expand view
-                    alert('Full tour calendar coming soon!');
-                  }}>
-                    View All Upcoming Tours
-                  </Button>
+                      
+                      {/* State Name */}
+                      <div className="mb-4">
+                        <h3 className="text-xl font-bold text-neutral-900">
+                          {getStateName(tour.state)}
+                        </h3>
+                      </div>
+                        
+                        {/* Date Range */}
+                        <div className="mb-5">
+                          <div className={`text-sm font-medium mb-1 ${isComingSoon ? 'text-primary-700' : 'text-neutral-500'}`}>
+                            Tour Dates
+                          </div>
+                          <div className="text-lg font-semibold text-neutral-800">
+                            {startDate.toLocaleDateString('en-US', { 
+                              month: 'short', 
+                              day: 'numeric' 
+                            })} - {endDate.toLocaleDateString('en-US', { 
+                              month: 'short', 
+                              day: 'numeric',
+                              year: 'numeric'
+                            })}
+                          </div>
+                        </div>
+                        
+                        {/* Cities */}
+                        {tour.cities && tour.cities.length > 0 && (
+                          <div className="mb-4">
+                            <div className={`text-xs font-medium mb-2 uppercase tracking-wider ${isComingSoon ? 'text-primary-600' : 'text-neutral-500'}`}>
+                              Cities
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                              {tour.cities.slice(0, 4).map((city, cityIndex) => (
+                                <span 
+                                  key={cityIndex} 
+                                  className={`text-xs font-medium px-3 py-1.5 rounded-full transition-colors duration-200 border ${
+                                    isComingSoon 
+                                      ? 'bg-white/80 text-primary-700 border-primary-200' 
+                                      : 'bg-neutral-100 text-neutral-700 border-neutral-200 group-hover:bg-neutral-200'
+                                  }`}
+                                >
+                                  {city}
+                                </span>
+                              ))}
+                              {tour.cities.length > 4 && (
+                                <span className={`text-xs font-medium px-3 py-1.5 rounded-full border ${
+                                  isComingSoon 
+                                    ? 'bg-white/60 text-primary-600 border-primary-200' 
+                                    : 'bg-neutral-100 text-neutral-600 border-neutral-200'
+                                }`}>
+                                  +{tour.cities.length - 4}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {/* Notes */}
+                        {tour.notes && (
+                          <div className="mt-4 pt-4 border-t border-neutral-200">
+                            <p className="text-sm text-neutral-600 leading-relaxed line-clamp-2">
+                              {tour.notes}
+                            </p>
+                          </div>
+                        )}
+                        
+                        {/* Contact Button */}
+                        <div className="mt-6">
+                          <button 
+                            onClick={() => {
+                              // TODO: Implement booking/contact functionality
+                              alert('Booking functionality coming soon!');
+                            }}
+                            className={`w-full py-3 px-4 rounded-xl font-medium transition-all duration-200 ${
+                              isComingSoon 
+                                ? 'bg-primary-600 text-white shadow-lg hover:bg-primary-700 hover:shadow-xl transform hover:scale-105' 
+                                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 border border-neutral-200'
+                            }`}
+                          >
+                            {isComingSoon ? 'Book Now' : 'Contact for Booking'}
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-              )}
-            </div>
+                
+                {/* View All Button */}
+                {upcomingTours.length > 6 && (
+                  <div className="mt-10 text-center">
+                    <button 
+                      onClick={() => {
+                        // TODO: Show all tours modal or expand view
+                        alert('Full tour calendar coming soon!');
+                      }}
+                      className="inline-flex items-center gap-2 px-8 py-4 bg-primary-600 text-white font-semibold rounded-2xl shadow-lg hover:bg-primary-700 hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+                    >
+                      <span>View Full Tour Calendar</span>
+                      <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
+                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    </button>
+                  </div>
+                )}
+              </div>
           </section>
         )}
 

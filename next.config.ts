@@ -8,12 +8,18 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   
-  // STABLE experimental features only - no caching issues
+  // DISABLE ALL EXPERIMENTAL FEATURES for maximum stability
   experimental: {
-    // Disable problematic features that cause crashes
-    optimizeCss: false,          // Disable during development
-    memoryBasedWorkersCount: false,  // Use default worker count
-    webpackBuildWorker: false,   // Disable for stability
+    // Disable everything that could cause crashes
+    optimizeCss: false,
+    memoryBasedWorkersCount: false,
+    webpackBuildWorker: false,
+    turbo: false,
+    serverComponentsExternalPackages: [],
+    serverActions: false,
+    typedRoutes: false,
+    mdxRs: false,
+    instrumentationHook: false,
   },
 
   serverExternalPackages: ['sharp', 'multer'],
@@ -21,13 +27,10 @@ const nextConfig: NextConfig = {
   // STABLE webpack configuration
   webpack: (config, { dev, isServer }) => {
     if (dev) {
-      // Enable webpack cache with memory limit to prevent OOM
-      config.cache = {
-        type: 'memory',
-        maxGenerations: 1,
-      };
+      // Disable cache completely to prevent corruption
+      config.cache = false;
       
-      // Simplified file watching - no aggressive polling
+      // Ultra-conservative file watching
       config.watchOptions = {
         ignored: [
           '**/node_modules/**',
@@ -36,23 +39,33 @@ const nextConfig: NextConfig = {
           '**/.git/**',
           '**/*.log',
           '**/prisma/dev.db**',
-          '**/prisma/dev.db-journal**'
+          '**/prisma/dev.db-journal**',
+          '**/storage/**',
+          '**/tmp/**',
+          '**/.env*'
         ],
         poll: false,                    // No polling
-        aggregateTimeout: 1000,         // Increased for stability
+        aggregateTimeout: 2000,         // Increased for stability
         followSymlinks: false,          // Prevent symlink issues
       };
 
-      // Reduce log noise and memory pressure
+      // Minimal logging
       config.infrastructureLogging = {
         level: 'error',
       };
 
-      // Prevent memory leaks
-      config.stats = 'errors-warnings';
+      // Minimal stats
+      config.stats = 'errors-only';
       
-      // Limit parallelism to reduce memory usage
+      // Single thread to prevent race conditions
       config.parallelism = 1;
+      
+      // Disable optimizations that cause crashes
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: false,
+        runtimeChunk: false,
+      };
     }
 
     // Disable performance hints to reduce overhead

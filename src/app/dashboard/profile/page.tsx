@@ -176,6 +176,7 @@ export default function ProfilePage() {
   }>>([]);
   const [showTourModal, setShowTourModal] = useState(false);
   const [editingTourSegment, setEditingTourSegment] = useState<string | null>(null);
+  const [editingStateRangeId, setEditingStateRangeId] = useState<string | null>(null);
 
   // Profile state
   const [artistProfile, setArtistProfile] = useState({
@@ -925,9 +926,10 @@ export default function ProfilePage() {
       cities: [] as string[],
       notes: ''
     });
+
     const [cityInput, setCityInput] = useState('');
 
-    // Load existing data when editing
+    // Load existing data when editing - only reset editing state when modal opens/closes
     useEffect(() => {
       if (editingTourSegment && showTourModal) {
         const segment = tourSegments.find(s => s.id === editingTourSegment);
@@ -944,8 +946,8 @@ export default function ProfilePage() {
             }))
           });
         }
-      } else {
-        // Reset form for new segment
+      } else if (!showTourModal) {
+        // Reset form for new segment only when modal is closed
         setFormData({
           name: '',
           description: '',
@@ -953,17 +955,20 @@ export default function ProfilePage() {
           isPublic: true,
           stateRanges: []
         });
+        
+        // Reset new state range form
+        setNewStateRange({
+          state: '',
+          startDate: '',
+          endDate: '',
+          cities: [],
+          notes: ''
+        });
+        setCityInput('');
+        
+        // Reset editing state only when modal closes
+        setEditingStateRangeId(null);
       }
-      
-      // Reset new state range form
-      setNewStateRange({
-        state: '',
-        startDate: '',
-        endDate: '',
-        cities: [],
-        notes: ''
-      });
-      setCityInput('');
     }, [editingTourSegment, showTourModal]);
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -1078,6 +1083,81 @@ export default function ProfilePage() {
       if (range) {
         updateStateRange(rangeId, 'cities', range.cities.filter(c => c !== city));
       }
+    };
+
+    // Function to load existing state range into the form for editing
+    const loadStateRangeForEditing = (range: any) => {
+      // Load the data into the form first
+      setNewStateRange({
+        state: range.state,
+        startDate: range.startDate,
+        endDate: range.endDate,
+        cities: [...range.cities],
+        notes: range.notes
+      });
+      setCityInput('');
+      
+      // Then set editing state
+      setEditingStateRangeId(range.id);
+    };
+
+    // Function to save or update state range
+    const saveStateRange = () => {
+      if (!newStateRange.state || !newStateRange.startDate || !newStateRange.endDate) {
+        alert('Please fill in state and date range');
+        return;
+      }
+
+      if (new Date(newStateRange.startDate) >= new Date(newStateRange.endDate)) {
+        alert('End date must be after start date');
+        return;
+      }
+
+      if (editingStateRangeId) {
+        // Update existing state range
+        updateStateRange(editingStateRangeId, 'state', newStateRange.state);
+        updateStateRange(editingStateRangeId, 'startDate', newStateRange.startDate);
+        updateStateRange(editingStateRangeId, 'endDate', newStateRange.endDate);
+        updateStateRange(editingStateRangeId, 'cities', newStateRange.cities);
+        updateStateRange(editingStateRangeId, 'notes', newStateRange.notes);
+        setEditingStateRangeId(null);
+      } else {
+        // Add new state range
+        const newRange = {
+          id: Date.now().toString(),
+          state: newStateRange.state,
+          startDate: newStateRange.startDate,
+          endDate: newStateRange.endDate,
+          cities: newStateRange.cities,
+          notes: newStateRange.notes
+        };
+        setFormData(prev => ({ 
+          ...prev, 
+          stateRanges: [...prev.stateRanges, newRange] 
+        }));
+      }
+
+      // Reset form
+      setNewStateRange({
+        state: '',
+        startDate: '',
+        endDate: '',
+        cities: [],
+        notes: ''
+      });
+      setCityInput('');
+    };
+
+    const cancelStateRangeEdit = () => {
+      setEditingStateRangeId(null);
+      setNewStateRange({
+        state: '',
+        startDate: '',
+        endDate: '',
+        cities: [],
+        notes: ''
+      });
+      setCityInput('');
     };
 
     if (!showTourModal) return null;
@@ -1233,14 +1313,26 @@ export default function ProfilePage() {
                     </div>
                   </div>
                   
-                  <Button 
-                    type="button" 
-                    onClick={addStateRange}
-                    className="w-full py-3 px-6 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-medium transition-colors duration-200 shadow-sm"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add State to Tour
-                  </Button>
+                  <div className="flex gap-3">
+                    <Button 
+                      type="button" 
+                      onClick={saveStateRange}
+                      className="flex-1 py-3 px-6 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-medium transition-colors duration-200 shadow-sm"
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      {editingStateRangeId ? 'Update State' : 'Add State to Tour'}
+                    </Button>
+                    {editingStateRangeId && (
+                      <Button 
+                        type="button" 
+                        variant="outline"
+                        onClick={cancelStateRangeEdit}
+                        className="py-3 px-6 rounded-xl font-medium"
+                      >
+                        Cancel
+                      </Button>
+                    )}
+                  </div>
                 </div>
                 
                 {/* Existing State Ranges */}
@@ -1253,22 +1345,33 @@ export default function ProfilePage() {
                     </div>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                       {formData.stateRanges.map((range) => (
-                        <div key={range.id} className="border border-neutral-200 rounded-2xl p-5 bg-white shadow-sm hover:shadow-md transition-shadow duration-200">
+                        <div key={range.id} className={`border rounded-2xl p-5 bg-white shadow-sm transition-all duration-200 ${
+                          editingStateRangeId === range.id 
+                            ? 'border-primary-300 shadow-lg ring-2 ring-primary-100' 
+                            : 'border-neutral-200 hover:shadow-md hover:border-neutral-300 cursor-pointer'
+                        }`} onClick={() => loadStateRangeForEditing(range)}>
                           <div className="flex items-start justify-between mb-3">
                             <div className="flex items-center gap-3">
                               <Badge variant="primary" className="px-3 py-1 rounded-full font-medium">
                                 {US_STATES.find(s => s.value === range.state)?.label || range.state}
                               </Badge>
+                              {editingStateRangeId === range.id && (
+                                <Badge variant="secondary" className="px-2 py-1 rounded-full text-xs">
+                                  Editing...
+                                </Badge>
+                              )}
                             </div>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              onClick={() => removeStateRange(range.id)}
-                              className="h-8 w-8 p-0 rounded-full hover:bg-red-50 hover:border-red-200 hover:text-red-600"
-                            >
-                              <X className="w-3 h-3" />
-                            </Button>
+                            <div className="flex items-center gap-2">
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={(e) => { e.stopPropagation(); removeStateRange(range.id); }}
+                                className="h-8 w-8 p-0 rounded-full hover:bg-red-50 hover:border-red-200 hover:text-red-600"
+                              >
+                                <X className="w-3 h-3" />
+                              </Button>
+                            </div>
                           </div>
                           
                           <div className="mb-3">
@@ -1286,25 +1389,25 @@ export default function ProfilePage() {
                             </div>
                           </div>
                           
-                          {range.cities.length > 0 && (
-                            <div className="mb-3">
-                              <div className="text-sm font-medium text-neutral-900 mb-2">Cities</div>
-                              <div className="flex flex-wrap gap-2">
-                                {range.cities.map((city) => (
-                                  <Badge key={city} variant="outline" className="px-2 py-1 rounded-full text-xs">
-                                    {city}
-                                  </Badge>
-                                ))}
-                              </div>
+                          <div className="mb-3">
+                            <div className="text-sm font-medium text-neutral-900 mb-2">Cities</div>
+                            <div className="flex flex-wrap gap-2">
+                              {range.cities.length > 0 ? range.cities.map((city) => (
+                                <Badge key={city} variant="outline" className="px-2 py-1 rounded-full text-xs">
+                                  {city}
+                                </Badge>
+                              )) : (
+                                <span className="text-sm text-neutral-400 italic">No cities specified</span>
+                              )}
                             </div>
-                          )}
+                          </div>
                           
-                          {range.notes && (
-                            <div>
-                              <div className="text-sm font-medium text-neutral-900 mb-1">Notes</div>
-                              <p className="text-sm text-neutral-600 leading-relaxed">{range.notes}</p>
-                            </div>
-                          )}
+                          <div>
+                            <div className="text-sm font-medium text-neutral-900 mb-1">Notes</div>
+                            <p className="text-sm text-neutral-600 leading-relaxed">
+                              {range.notes || <span className="italic text-neutral-400">No notes</span>}
+                            </p>
+                          </div>
                         </div>
                       ))}
                     </div>
