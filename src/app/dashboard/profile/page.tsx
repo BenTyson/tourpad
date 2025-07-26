@@ -230,6 +230,7 @@ export default function ProfilePage() {
     platform: 'spotify'
   });
   const [customInstrument, setCustomInstrument] = useState('');
+  const [customEquipment, setCustomEquipment] = useState('');
 
   const [hostProfile, setHostProfile] = useState({
     venueName: '', // This is the venue name like "Mike's Overlook"
@@ -506,6 +507,12 @@ export default function ProfilePage() {
     if (customInstrument.trim() && !artistProfile.instruments.includes(customInstrument.trim())) {
       updateArtistProfile({ instruments: [...artistProfile.instruments, customInstrument.trim()] });
       setCustomInstrument('');
+    }
+  };
+  const addCustomEquipment = () => {
+    if (customEquipment.trim() && !artistProfile.equipmentProvided.includes(customEquipment.trim())) {
+      updateArtistProfile({ equipmentProvided: [...artistProfile.equipmentProvided, customEquipment.trim()] });
+      setCustomEquipment('');
     }
   };
 
@@ -803,19 +810,6 @@ export default function ProfilePage() {
               <FileText className="w-4 h-4 mr-2" />
               Profile Information
             </button>
-            {isArtist && (
-              <button
-                onClick={() => setActiveTab('photos')}
-                className={`flex items-center px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 ${
-                  activeTab === 'photos'
-                    ? 'bg-white text-primary-600 shadow-sm'
-                    : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
-                }`}
-              >
-                <UserCircle className="w-4 h-4 mr-2" />
-                Press Photos & Band
-              </button>
-            )}
             <button
               onClick={() => setActiveTab('media')}
               className={`flex items-center px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 ${
@@ -868,7 +862,7 @@ export default function ProfilePage() {
               {/* Basic Information */}
               <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
                 <CardHeader>
-                  <h2 className="text-xl font-semibold text-neutral-900">Venue Basics</h2>
+                  <h2 className="text-xl font-semibold text-neutral-900">General Band Info</h2>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <Input
@@ -1010,6 +1004,228 @@ export default function ProfilePage() {
                   )}
                 </CardContent>
               </Card>
+
+              {/* Press Photo / Primary Photo (Artist only) */}
+              {isArtist && (
+                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
+                  <CardHeader>
+                    <h2 className="text-xl font-semibold text-neutral-900">
+                      Press Photo / Primary Photo
+                    </h2>
+                    <p className="text-sm text-neutral-600">
+                      This is your featured profile image that appears on your public profile and in search results.
+                    </p>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center space-x-6">
+                      <div className="w-32 h-32 bg-neutral-100 rounded-lg flex items-center justify-center overflow-hidden">
+                        {artistProfile.profilePhoto ? (
+                          <img 
+                            src={artistProfile.profilePhoto} 
+                            alt="Profile" 
+                            className="w-32 h-32 object-cover"
+                          />
+                        ) : (
+                          <Camera className="w-12 h-12 text-neutral-400" />
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={async (e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                // Check file size (max 5MB)
+                                if (file.size > 5 * 1024 * 1024) {
+                                  alert('Image file is too large. Please choose an image under 5MB.');
+                                  return;
+                                }
+                                
+                                try {
+                                  // Create FormData
+                                  const formData = new FormData();
+                                  formData.append('file', file);
+                                  formData.append('type', 'profile');
+                                  
+                                  // Upload file
+                                  const response = await fetch('/api/upload', {
+                                    method: 'POST',
+                                    body: formData
+                                  });
+                                  
+                                  if (!response.ok) {
+                                    const error = await response.json();
+                                    alert(error.error || 'Failed to upload image');
+                                    return;
+                                  }
+                                  
+                                  const data = await response.json();
+                                  
+                                  // Update profile with the new image URL
+                                  updateArtistProfile({ profilePhoto: data.url });
+                                  
+                                  alert('Image uploaded successfully!');
+                                  
+                                } catch (error) {
+                                  console.error('Upload error:', error);
+                                  alert('Failed to upload image. Please try again.');
+                                }
+                              }
+                            }}
+                            className="hidden"
+                            id="profilePhotoInput"
+                          />
+                          <label htmlFor="profilePhotoInput" className="cursor-pointer">
+                            <div className="inline-flex items-center px-4 py-2 text-sm border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 rounded-md">
+                              <Camera className="w-4 h-4 mr-2" />
+                              {artistProfile.profilePhoto ? 'Change Photo' : 'Upload Photo'}
+                            </div>
+                          </label>
+                          {artistProfile.profilePhoto && (
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => updateArtistProfile({ profilePhoto: '' })}
+                              className="text-red-600 hover:text-red-700"
+                            >
+                              <X className="w-4 h-4" />
+                            </Button>
+                          )}
+                        </div>
+                        <p className="text-xs text-neutral-500">
+                          Recommended: High-quality photo, 1000x1000px minimum, JPG or PNG
+                        </p>
+                        <p className="text-xs text-neutral-500 mt-1">
+                          Professional press photos work best for booking opportunities
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Band Members (Artist only) */}
+              {isArtist && (
+                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h2 className="text-xl font-semibold text-neutral-900">Band Members</h2>
+                        <p className="text-sm text-neutral-600">
+                          Add photos and information for each member of your band
+                        </p>
+                      </div>
+                      <Button onClick={addBandMember} size="sm">
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Member
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    {artistProfile.bandMembers.length === 0 ? (
+                      <div className="text-center py-8 text-neutral-500">
+                        <Users className="w-12 h-12 mx-auto mb-2 text-neutral-400" />
+                        <p>No band members added yet</p>
+                        <p className="text-sm">Add your band members to showcase your full lineup</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        {artistProfile.bandMembers.map((member) => (
+                          <div key={member.id} className="flex items-center space-x-4 p-4 border border-neutral-200 rounded-lg">
+                            <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center">
+                              {member.photo ? (
+                                <img 
+                                  src={member.photo} 
+                                  alt={member.name} 
+                                  className="w-16 h-16 rounded-full object-cover"
+                                />
+                              ) : (
+                                <UserCircle className="w-8 h-8 text-neutral-400" />
+                              )}
+                            </div>
+                            <div className="flex-1 grid md:grid-cols-2 gap-4">
+                              <Input
+                                placeholder="Member name"
+                                value={member.name}
+                                onChange={(e) => updateBandMember(member.id, 'name', e.target.value)}
+                              />
+                              <Input
+                                placeholder="Instrument/Role"
+                                value={member.instrument}
+                                onChange={(e) => updateBandMember(member.id, 'instrument', e.target.value)}
+                              />
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={async (e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) {
+                                    // Check file size (max 5MB)
+                                    if (file.size > 5 * 1024 * 1024) {
+                                      alert('Image file is too large. Please choose an image under 5MB.');
+                                      return;
+                                    }
+                                    
+                                    try {
+                                      // Create FormData
+                                      const formData = new FormData();
+                                      formData.append('file', file);
+                                      formData.append('type', 'band-member');
+                                      
+                                      // Upload file
+                                      const response = await fetch('/api/upload', {
+                                        method: 'POST',
+                                        body: formData
+                                      });
+                                      
+                                      if (!response.ok) {
+                                        const error = await response.json();
+                                        alert(error.error || 'Failed to upload image');
+                                        return;
+                                      }
+                                      
+                                      const data = await response.json();
+                                      
+                                      // Update band member with the new image URL
+                                      updateBandMember(member.id, 'photo', data.url);
+                                      
+                                      alert('Band member photo uploaded successfully!');
+                                      
+                                    } catch (error) {
+                                      console.error('Upload error:', error);
+                                      alert('Failed to upload image. Please try again.');
+                                    }
+                                  }
+                                }}
+                                className="hidden"
+                                id={`bandMemberPhoto-${member.id}`}
+                              />
+                              <Button variant="outline" size="sm" type="button" onClick={(e) => {
+                                e.preventDefault();
+                                document.getElementById(`bandMemberPhoto-${member.id}`)?.click();
+                              }} title={member.photo ? 'Change Photo' : 'Upload Photo'}>
+                                <Camera className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => removeBandMember(member.id)}
+                                className="text-red-600 hover:text-red-700"
+                              >
+                                <X className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
 
               {/* Host-specific personal information */}
               {!isArtist && (
@@ -1217,6 +1433,59 @@ export default function ProfilePage() {
                         </div>
                       </div>
 
+                      {/* Equipment I Bring to Shows */}
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Equipment I Bring to Shows</label>
+                        <div className="space-y-3">
+                          <div className="flex flex-wrap gap-2">
+                            {artistProfile.equipmentProvided.map(equipment => (
+                              <Badge key={equipment} variant="secondary" className="bg-green-50 text-green-800 border-green-200 flex items-center">
+                                {equipment}
+                                <button
+                                  onClick={() => removeEquipment(equipment)}
+                                  className="ml-1 text-xs hover:text-red-600"
+                                >
+                                  <X className="w-3 h-3" />
+                                </button>
+                              </Badge>
+                            ))}
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {EQUIPMENT_OPTIONS.filter(e => !artistProfile.equipmentProvided.includes(e)).map(equipment => (
+                              <button
+                                key={equipment}
+                                onClick={() => addEquipment(equipment)}
+                                className="px-3 py-1 text-xs bg-neutral-100 hover:bg-green-100 rounded-full transition-colors"
+                              >
+                                + {equipment}
+                              </button>
+                            ))}
+                          </div>
+                          <div className="flex gap-2 mt-3">
+                            <input
+                              type="text"
+                              placeholder="Other equipment..."
+                              value={customEquipment}
+                              onChange={(e) => setCustomEquipment(e.target.value)}
+                              onKeyPress={(e) => {
+                                if (e.key === 'Enter') {
+                                  e.preventDefault();
+                                  addCustomEquipment();
+                                }
+                              }}
+                              className="flex-1 px-3 py-2 text-sm border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                            />
+                            <button
+                              onClick={addCustomEquipment}
+                              disabled={!customEquipment.trim()}
+                              className="px-4 py-2 text-sm bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              Add
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
                       {/* Formation Year */}
                       <div className="grid md:grid-cols-2 gap-4">
                         <div>
@@ -1300,70 +1569,6 @@ export default function ProfilePage() {
                         </div>
                       </div>
 
-                      {/* Technical Requirements */}
-                      <div className="grid md:grid-cols-2 gap-6">
-                        {/* Equipment Provided */}
-                        <div>
-                          <label className="block text-sm font-medium text-neutral-700 mb-2">Equipment You Provide</label>
-                          <div className="space-y-3">
-                            <div className="flex flex-wrap gap-2">
-                              {artistProfile.equipmentProvided.map(equipment => (
-                                <Badge key={equipment} variant="secondary" className="bg-green-50 text-green-800 border-green-200 flex items-center">
-                                  {equipment}
-                                  <button
-                                    onClick={() => removeEquipment(equipment)}
-                                    className="ml-1 text-xs hover:text-red-600"
-                                  >
-                                    <X className="w-3 h-3" />
-                                  </button>
-                                </Badge>
-                              ))}
-                            </div>
-                            <div className="flex flex-wrap gap-2">
-                              {EQUIPMENT_OPTIONS.filter(e => !artistProfile.equipmentProvided.includes(e)).map(equipment => (
-                                <button
-                                  key={equipment}
-                                  onClick={() => addEquipment(equipment)}
-                                  className="px-3 py-1 text-xs bg-neutral-100 hover:bg-green-100 rounded-full transition-colors"
-                                >
-                                  + {equipment}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Venue Requirements */}
-                        <div>
-                          <label className="block text-sm font-medium text-neutral-700 mb-2">Venue Requirements</label>
-                          <div className="space-y-3">
-                            <div className="flex flex-wrap gap-2">
-                              {artistProfile.venueRequirements.map(requirement => (
-                                <Badge key={requirement} variant="secondary" className="bg-blue-50 text-blue-800 border-blue-200 flex items-center">
-                                  {requirement}
-                                  <button
-                                    onClick={() => removeVenueRequirement(requirement)}
-                                    className="ml-1 text-xs hover:text-red-600"
-                                  >
-                                    <X className="w-3 h-3" />
-                                  </button>
-                                </Badge>
-                              ))}
-                            </div>
-                            <div className="flex flex-wrap gap-2">
-                              {VENUE_REQUIREMENT_OPTIONS.filter(r => !artistProfile.venueRequirements.includes(r)).map(requirement => (
-                                <button
-                                  key={requirement}
-                                  onClick={() => addVenueRequirement(requirement)}
-                                  className="px-3 py-1 text-xs bg-neutral-100 hover:bg-blue-100 rounded-full transition-colors"
-                                >
-                                  + {requirement}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
 
                       {/* Cancellation Policy */}
                       <div>
@@ -1703,251 +1908,6 @@ export default function ProfilePage() {
             </div>
           )}
 
-          {/* Photos Tab */}
-          {activeTab === 'photos' && (
-            <div className="space-y-6">
-              {/* Primary Photo */}
-              <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                <CardHeader>
-                  <h2 className="text-xl font-semibold text-neutral-900">
-                    {isArtist ? 'Press Photo / Primary Photo' : 'Main Venue Photo'}
-                  </h2>
-                  <p className="text-sm text-neutral-600">
-                    {isArtist 
-                      ? 'This is your featured profile image that appears on your public profile and in search results.'
-                      : 'This is the main photo that represents your venue to potential artists.'
-                    }
-                  </p>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center space-x-6">
-                    <div className="w-32 h-32 bg-neutral-100 rounded-lg flex items-center justify-center overflow-hidden">
-                      {(isArtist ? artistProfile.profilePhoto : hostProfile.hostInfo.profilePhoto) ? (
-                        <img 
-                          src={isArtist ? artistProfile.profilePhoto : hostProfile.hostInfo.profilePhoto} 
-                          alt="Profile" 
-                          className="w-32 h-32 object-cover"
-                        />
-                      ) : (
-                        <Camera className="w-12 h-12 text-neutral-400" />
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={async (e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              // Check file size (max 5MB)
-                              if (file.size > 5 * 1024 * 1024) {
-                                alert('Image file is too large. Please choose an image under 5MB.');
-                                return;
-                              }
-                              
-                              try {
-                                // Create FormData
-                                const formData = new FormData();
-                                formData.append('file', file);
-                                formData.append('type', 'profile');
-                                
-                                // Upload file
-                                const response = await fetch('/api/upload', {
-                                  method: 'POST',
-                                  body: formData
-                                });
-                                
-                                if (!response.ok) {
-                                  const error = await response.json();
-                                  alert(error.error || 'Failed to upload image');
-                                  return;
-                                }
-                                
-                                const data = await response.json();
-                                
-                                // Update profile with the new image URL
-                                if (isArtist) {
-                                  updateArtistProfile({ profilePhoto: data.url });
-                                } else {
-                                  updateHostProfile({ 
-                                    profilePhoto: data.url,
-                                    hostInfo: { ...hostProfile.hostInfo, profilePhoto: data.url } 
-                                  });
-                                }
-                                
-                                alert('Image uploaded successfully!');
-                                
-                              } catch (error) {
-                                console.error('Upload error:', error);
-                                alert('Failed to upload image. Please try again.');
-                              }
-                            }
-                          }}
-                          className="hidden"
-                          id="profilePhotoInput"
-                        />
-                        <label htmlFor="profilePhotoInput" className="cursor-pointer">
-                          <div className="inline-flex items-center px-4 py-2 text-sm border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 rounded-md">
-                            <Camera className="w-4 h-4 mr-2" />
-                            {(isArtist ? artistProfile.profilePhoto : hostProfile.hostInfo.profilePhoto) ? 'Change Photo' : 'Upload Photo'}
-                          </div>
-                        </label>
-                        {(isArtist ? artistProfile.profilePhoto : hostProfile.hostInfo.profilePhoto) && (
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => {
-                              if (isArtist) {
-                                updateArtistProfile({ profilePhoto: '' });
-                              } else {
-                                updateHostProfile({ 
-                                  profilePhoto: '',
-                                  hostInfo: { ...hostProfile.hostInfo, profilePhoto: '' }
-                                });
-                              }
-                            }}
-                            className="text-red-600 hover:text-red-700"
-                          >
-                            <X className="w-4 h-4" />
-                          </Button>
-                        )}
-                      </div>
-                      <p className="text-xs text-neutral-500">
-                        Recommended: High-quality photo, 1000x1000px minimum, JPG or PNG
-                      </p>
-                      {isArtist && (
-                        <p className="text-xs text-neutral-500 mt-1">
-                          Professional press photos work best for booking opportunities
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Band Members (Artist only) */}
-              {isArtist && (
-                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h2 className="text-xl font-semibold text-neutral-900">Band Members</h2>
-                        <p className="text-sm text-neutral-600">
-                          Add photos and information for each member of your band
-                        </p>
-                      </div>
-                      <Button onClick={addBandMember} size="sm">
-                        <Plus className="w-4 h-4 mr-2" />
-                        Add Member
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    {artistProfile.bandMembers.length === 0 ? (
-                      <div className="text-center py-8 text-neutral-500">
-                        <Users className="w-12 h-12 mx-auto mb-2 text-neutral-400" />
-                        <p>No band members added yet</p>
-                        <p className="text-sm">Add your band members to showcase your full lineup</p>
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        {artistProfile.bandMembers.map((member) => (
-                          <div key={member.id} className="flex items-center space-x-4 p-4 border border-neutral-200 rounded-lg">
-                            <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center">
-                              {member.photo ? (
-                                <img 
-                                  src={member.photo} 
-                                  alt={member.name} 
-                                  className="w-16 h-16 rounded-full object-cover"
-                                />
-                              ) : (
-                                <UserCircle className="w-8 h-8 text-neutral-400" />
-                              )}
-                            </div>
-                            <div className="flex-1 grid md:grid-cols-2 gap-4">
-                              <Input
-                                placeholder="Member name"
-                                value={member.name}
-                                onChange={(e) => updateBandMember(member.id, 'name', e.target.value)}
-                              />
-                              <Input
-                                placeholder="Instrument/Role"
-                                value={member.instrument}
-                                onChange={(e) => updateBandMember(member.id, 'instrument', e.target.value)}
-                              />
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <input
-                                type="file"
-                                accept="image/*"
-                                onChange={async (e) => {
-                                  const file = e.target.files?.[0];
-                                  if (file) {
-                                    // Check file size (max 5MB)
-                                    if (file.size > 5 * 1024 * 1024) {
-                                      alert('Image file is too large. Please choose an image under 5MB.');
-                                      return;
-                                    }
-                                    
-                                    try {
-                                      // Create FormData
-                                      const formData = new FormData();
-                                      formData.append('file', file);
-                                      formData.append('type', 'band-member');
-                                      
-                                      // Upload file
-                                      const response = await fetch('/api/upload', {
-                                        method: 'POST',
-                                        body: formData
-                                      });
-                                      
-                                      if (!response.ok) {
-                                        const error = await response.json();
-                                        alert(error.error || 'Failed to upload image');
-                                        return;
-                                      }
-                                      
-                                      const data = await response.json();
-                                      
-                                      // Update band member with the new image URL
-                                      updateBandMember(member.id, 'photo', data.url);
-                                      
-                                      alert('Band member photo uploaded successfully!');
-                                      
-                                    } catch (error) {
-                                      console.error('Upload error:', error);
-                                      alert('Failed to upload image. Please try again.');
-                                    }
-                                  }
-                                }}
-                                className="hidden"
-                                id={`bandMemberPhoto-${member.id}`}
-                              />
-                              <Button variant="outline" size="sm" type="button" onClick={(e) => {
-                                e.preventDefault();
-                                document.getElementById(`bandMemberPhoto-${member.id}`)?.click();
-                              }} title={member.photo ? 'Change Photo' : 'Upload Photo'}>
-                                <Camera className="w-4 h-4" />
-                              </Button>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => removeBandMember(member.id)}
-                                className="text-red-600 hover:text-red-700"
-                              >
-                                <X className="w-4 h-4" />
-                              </Button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              )}
-            </div>
-          )}
 
           {/* Media Tab */}
           {activeTab === 'media' && (

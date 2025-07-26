@@ -615,64 +615,29 @@ export default function ArtistProfilePage() {
                 </div>
               </div>
             </div>
+            
+            {/* Equipment Brought to Shows */}
+            {artistData.equipmentProvided && artistData.equipmentProvided.length > 0 && (
+              <div className="mt-6 pt-6 border-t border-neutral-200">
+                <h3 className="font-semibold text-neutral-900 mb-3 flex items-center">
+                  <Music className="w-5 h-5 text-neutral-600 mr-2" />
+                  Equipment I Bring to Shows
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {artistData.equipmentProvided.map((equipment, index) => (
+                    <span 
+                      key={index}
+                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-neutral-100 text-neutral-700 border border-neutral-200"
+                    >
+                      {equipment}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </section>
 
-        {/* Technical Requirements */}
-        <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
-          <div className="p-8">
-            <h2 className="text-2xl font-bold text-neutral-900 mb-6">Technical Requirements</h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="font-semibold text-neutral-900 mb-4 flex items-center">
-                  <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
-                  Equipment Provided by Artist
-                </h3>
-                <ul className="space-y-2 text-neutral-700">
-                  {artistData.equipmentProvided.length > 0 ? (
-                    artistData.equipmentProvided.map((equipment, index) => (
-                      <li key={index} className="flex items-start">
-                        <span className="text-green-600 mr-2">•</span>
-                        {equipment}
-                      </li>
-                    ))
-                  ) : (
-                    <li className="flex items-start text-neutral-500 italic">
-                      <span className="text-neutral-400 mr-2">•</span>
-                      No equipment information provided
-                    </li>
-                  )}
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-semibold text-neutral-900 mb-4 flex items-center">
-                  <CheckCircle className="w-5 h-5 text-blue-600 mr-2" />
-                  Venue Requirements
-                </h3>
-                <ul className="space-y-2 text-neutral-700">
-                  {artistData.venueRequirements.length > 0 ? (
-                    artistData.venueRequirements.map((requirement, index) => (
-                      <li key={index} className="flex items-start">
-                        <span className="text-blue-600 mr-2">•</span>
-                        {requirement}
-                      </li>
-                    ))
-                  ) : (
-                    <li className="flex items-start text-neutral-500 italic">
-                      <span className="text-neutral-400 mr-2">•</span>
-                      No venue requirements specified
-                    </li>
-                  )}
-                  {/* Always show parking requirement based on tour vehicle */}
-                  <li className="flex items-start">
-                    <span className="text-blue-600 mr-2">•</span>
-                    Parking space for {(artistData.tourVehicle || 'van').toLowerCase() === 'van' ? 'van' : 'vehicle'}
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* Reviews Section */}
         <PublicReviewsSection 
