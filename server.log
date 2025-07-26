@@ -1,45 +1,145 @@
    ▲ Next.js 15.3.5
    - Local:        http://localhost:3001
-   - Network:      http://0.0.0.0:3001
+   - Network:      http://10.0.0.84:3001
    - Environments: .env.local, .env
    - Experiments (use with caution):
      ⨯ webpackBuildWorker
 
  ✓ Starting...
- ✓ Ready in 1162ms
+ ✓ Ready in 1008ms
  ○ Compiling /middleware ...
- ✓ Compiled /middleware in 683ms (265 modules)
+ ✓ Compiled /middleware in 668ms (265 modules)
  ○ Compiling / ...
- ✓ Compiled /pricing in 3.1s (994 modules)
- HEAD /pricing 200 in 2324ms
- GET / 200 in 3445ms
+ ✓ Compiled / in 3s (993 modules)
+ HEAD / 200 in 78ms
+ ✓ Compiled /test-polling in 292ms (993 modules)
+ GET /test-polling 200 in 414ms
+ ✓ Compiled /api/auth/[...nextauth] in 111ms (567 modules)
+ ✓ Compiled in 122ms (429 modules)
+ GET /favicon.ico 200 in 710ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 1024ms
+ GET /api/auth/session 200 in 11ms
+ ✓ Compiled /api/profile in 230ms (1156 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 290ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/notifications?unread=true&limit=0 200 in 316ms
+ GET /api/profile 200 in 272ms
+ GET /api/notifications?unread=true&limit=0 200 in 8ms
+ GET /api/notifications?unread=true&limit=0 200 in 9ms
+ GET /api/notifications?unread=true&limit=0 200 in 6ms
+ GET /api/notifications?unread=true&limit=0 200 in 7ms
+ GET /api/notifications?unread=true&limit=0 200 in 6ms
+ ✓ Compiled /api/messages/poll-test in 140ms (1119 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+[POLL-TEST] 2025-07-25T23:10:31.269Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 231ms
+[POLL-TEST] 2025-07-25T23:11:01.064Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 24ms
+[POLL-TEST] 2025-07-25T23:11:31.046Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 9ms
+[POLL-TEST] 2025-07-25T23:12:01.059Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 20ms
+[POLL-TEST] 2025-07-25T23:12:31.047Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 9ms
+[POLL-TEST] 2025-07-25T23:13:01.060Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 17ms
+[POLL-TEST] 2025-07-25T23:13:31.052Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 14ms
+[POLL-TEST] 2025-07-25T23:14:01.057Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 17ms
+ ✓ Compiled in 1204ms (443 modules)
+ GET /test-polling 200 in 63ms
+[POLL-TEST] 2025-07-25T23:14:31.061Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 19ms
+ GET /test-polling 200 in 120ms
+ ✓ Compiled in 484ms (1398 modules)
+ GET /test-polling 200 in 65ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+[POLL-TEST] 2025-07-25T23:15:01.466Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 30ms
+[POLL-TEST] 2025-07-25T23:15:31.457Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 17ms
+ GET /test-polling 200 in 189ms
+ ✓ Compiled in 545ms (1398 modules)
+ GET /test-polling 200 in 30ms
+ ✓ Compiled in 1178ms (443 modules)
+ GET /test-polling 200 in 12ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+[POLL-TEST] 2025-07-25T23:16:37.514Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 71ms
+ ✓ Compiled /test-realtime in 196ms (1128 modules)
+ HEAD /test-realtime 200 in 337ms
+ ✓ Compiled /api/auth/[...nextauth] in 128ms (698 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 172ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/auth/session 200 in 13ms
+ GET /api/auth/session 200 in 8ms
+ ✓ Compiled /api/profile in 93ms (700 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/profile 200 in 152ms
+ GET /test-realtime 200 in 95ms
+ GET /api/auth/session 200 in 12ms
+ GET /api/auth/session 200 in 12ms
+ ✓ Compiled /api/notifications in 94ms (702 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 197ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/notifications?unread=true&limit=0 200 in 225ms
+ GET /api/notifications?unread=true&limit=0 200 in 8ms
+ GET /api/profile 200 in 11ms
+ ✓ Compiled /api/messages/poll-safe in 163ms (1136 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 11ms - New messages: 0
+ GET /api/messages/poll-safe? 200 in 212ms
+[POLL-TEST] 2025-07-25T23:17:44.512Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 64ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 30ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A17%3A20.804Z 200 in 56ms
+ GET /api/auth/session 200 in 52ms
+ GET /api/auth/session 200 in 10ms
+ GET /api/auth/session 200 in 13ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/profile 200 in 34ms
+ GET /api/profile 200 in 9ms
+ ✓ Compiled / in 251ms (735 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 46ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A17%3A50.645Z 200 in 507ms
+ GET / 200 in 617ms
  ⚠ The "images.domains" configuration is deprecated. Please use "images.remotePatterns" configuration instead.
- ✓ Compiled /api/auth/[...nextauth] in 101ms (576 modules)
- ✓ Compiled in 126ms (421 modules)
- GET /favicon.ico 200 in 678ms
+ GET /api/auth/session 200 in 28ms
+ GET /api/auth/session 200 in 27ms
+ ✓ Compiled /favicon.ico in 415ms (1214 modules)
+ GET /favicon.ico 200 in 438ms
+ GET /login 200 in 513ms
+ GET /favicon.ico 200 in 6ms
 [33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 1002ms
- GET /api/auth/session 200 in 17ms
- ✓ Compiled /api/user/profile-id in 287ms (1164 modules)
-=== GET /api/bookings called ===
+ GET /api/auth/providers 200 in 65ms
+ GET /api/auth/csrf 200 in 8ms
+ POST /api/auth/callback/credentials? 200 in 287ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 8ms
+ ✓ Compiled /dashboard in 91ms (762 modules)
+ ✓ Compiled in 503ms (508 modules)
 [33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 358ms
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
- GET /api/user/profile-id 200 in 361ms
- GET /api/notifications?unread=true&limit=0 200 in 398ms
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/user/current 200 in 364ms
- GET /api/stats 200 in 370ms
- GET /api/bookings 200 in 372ms
+ GET /api/auth/session 200 in 726ms
+ GET /api/notifications?unread=true&limit=0 200 in 748ms
+ GET /dashboard 200 in 740ms
+ GET /api/notifications?unread=true&limit=0 200 in 20ms
+ ✓ Compiled /api/stats in 345ms (1334 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /favicon.ico 200 in 385ms
+ GET /api/user/profile-id 200 in 403ms
+ GET /api/user/current 200 in 405ms
+ GET /api/stats 200 in 408ms
+ GET /api/user/profile-id 200 in 24ms
+ GET /api/user/current 200 in 27ms
+ GET /api/stats 200 in 39ms
  ○ Compiling /api/spotify/artist/[artistId] ...
- ✓ Compiled /api/spotify/artist/[artistId] in 604ms (1367 modules)
+ ✓ Compiled /api/spotify/artist/[artistId] in 629ms (1539 modules)
 === GET /api/bookings called ===
 [33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
 Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
@@ -51,10 +151,8 @@ Querying with whereClause: {
     }
   ]
 }
- GET /api/notifications?unread=true&limit=0 200 in 685ms
- GET /api/bookings 200 in 688ms
+ GET /api/bookings 200 in 718ms
  GET /api/payments/subscription-status 200 in 719ms
- GET /api/notifications?unread=true&limit=0 200 in 21ms
 === GET /api/bookings called ===
 Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
 User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
@@ -65,1067 +163,1087 @@ Querying with whereClause: {
     }
   ]
 }
- GET /api/bookings 200 in 33ms
- GET /api/notifications?unread=true&limit=0 200 in 25ms
-=== GET /api/bookings called ===
- GET /api/payments/subscription-status 200 in 46ms
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/bookings 200 in 22ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 1061ms
- ✓ Compiled in 1193ms (435 modules)
- GET / 200 in 48ms
- ✓ Compiled /artists/[id] in 450ms (1074 modules)
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 908ms
- ✓ Compiled /api/auth/[...nextauth] in 55ms (620 modules)
- ✓ Compiled in 88ms (470 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /favicon.ico 200 in 282ms
- GET /api/auth/session 200 in 279ms
- GET /api/artists?exclude=cmdi3mtba0004ludm6i1aexz0&limit=3 200 in 295ms
- GET /api/auth/session 200 in 14ms
- ✓ Compiled /api/notifications in 81ms (782 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 224ms
- GET /api/notifications?unread=true&limit=0 200 in 238ms
- GET /api/auth/session 200 in 31ms
- GET /api/artists/cmdi3mtba0004ludm6i1aexz0 200 in 563ms
- GET /api/notifications?unread=true&limit=0 200 in 33ms
- ✓ Compiled /api/payments/subscription-status in 93ms (784 modules)
- ✓ Compiled (992 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/user/profile-id 200 in 499ms
- GET /api/user/current 200 in 503ms
- GET /api/stats 200 in 505ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 524ms
- GET /api/payments/subscription-status 200 in 513ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 10ms
- ✓ Compiled /api/bookings in 115ms (994 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-=== GET /api/bookings called ===
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 274ms
- GET /api/payments/subscription-status 200 in 280ms
- GET /api/bookings 200 in 280ms
-=== GET /api/bookings called ===
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/bookings 200 in 8ms
- ⨯ ./src/components/layout/Footer.tsx
-Error:   [31mx[0m You're importing a component that needs `useState`. This React hook only works in a client component. To fix, mark the file (or its parent) with the `"use client"` directive.
-  [31m|[0m
-  [31m|[0m  Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
-  [31m|[0m
-
-   ,-[[36;1;4m/Users/bentyson/pad/src/components/layout/Footer.tsx[0m:1:1]
- [2m1[0m | import { useState } from 'react';
-   : [35;1m         ^^^^^^^^[0m
- [2m2[0m | import Link from 'next/link';
- [2m3[0m | import { 
- [2m4[0m |   Home,
-   `----
-
-Import trace for requested module:
-./src/components/layout/Footer.tsx
-./src/app/layout.tsx
- ○ Compiling /_error ...
- ⨯ ./src/components/layout/Footer.tsx
-Error:   [31mx[0m You're importing a component that needs `useState`. This React hook only works in a client component. To fix, mark the file (or its parent) with the `"use client"` directive.
-  [31m|[0m
-  [31m|[0m  Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
-  [31m|[0m
-
-   ,-[[36;1;4m/Users/bentyson/pad/src/components/layout/Footer.tsx[0m:1:1]
- [2m1[0m | import { useState } from 'react';
-   : [35;1m         ^^^^^^^^[0m
- [2m2[0m | import Link from 'next/link';
- [2m3[0m | import { 
- [2m4[0m |   Home,
-   `----
-
-Import trace for requested module:
-./src/components/layout/Footer.tsx
-./src/app/layout.tsx
- GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 3308ms
- GET / 500 in 3313ms
- GET / 500 in 12ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 14ms
- GET / 500 in 14ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 16ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 14ms
- GET / 500 in 16ms
- ⨯ ./src/components/layout/Footer.tsx
-Error:   [31mx[0m You're importing a component that needs `useState`. This React hook only works in a client component. To fix, mark the file (or its parent) with the `"use client"` directive.
-  [31m|[0m
-  [31m|[0m  Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
-  [31m|[0m
-
-   ,-[[36;1;4m/Users/bentyson/pad/src/components/layout/Footer.tsx[0m:1:1]
- [2m1[0m | import { useState } from 'react';
-   : [35;1m         ^^^^^^^^[0m
- [2m2[0m | import Link from 'next/link';
- [2m3[0m | import { 
- [2m4[0m |   Home,
-   `----
-
-Import trace for requested module:
-./src/components/layout/Footer.tsx
-./src/app/layout.tsx
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 255ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 5ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 12ms
- GET / 500 in 16ms
- ⨯ ./src/components/layout/Footer.tsx
-Error:   [31mx[0m You're importing a component that needs `useState`. This React hook only works in a client component. To fix, mark the file (or its parent) with the `"use client"` directive.
-  [31m|[0m
-  [31m|[0m  Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
-  [31m|[0m
-
-   ,-[[36;1;4m/Users/bentyson/pad/src/components/layout/Footer.tsx[0m:1:1]
- [2m1[0m | import { useState } from 'react';
-   : [35;1m         ^^^^^^^^[0m
- [2m2[0m | import Link from 'next/link';
- [2m3[0m | import { 
- [2m4[0m |   Home,
-   `----
-
-Import trace for requested module:
-./src/components/layout/Footer.tsx
-./src/app/layout.tsx
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 169ms
- GET /favicon.ico 500 in 178ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 5ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /favicon.ico 500 in 10ms
- GET / 500 in 12ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 15ms
- GET /favicon.ico 500 in 6ms
- GET /favicon.ico 500 in 5ms
- ⨯ ./src/components/layout/Footer.tsx
-Error:   [31mx[0m You're importing a component that needs `useState`. This React hook only works in a client component. To fix, mark the file (or its parent) with the `"use client"` directive.
-  [31m|[0m
-  [31m|[0m  Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
-  [31m|[0m
-
-   ,-[[36;1;4m/Users/bentyson/pad/src/components/layout/Footer.tsx[0m:1:1]
- [2m1[0m | import { useState } from 'react';
-   : [35;1m         ^^^^^^^^[0m
- [2m2[0m | import Link from 'next/link';
- [2m3[0m | import { 
- [2m4[0m |   Home,
-   `----
-
-Import trace for requested module:
-./src/components/layout/Footer.tsx
-./src/app/layout.tsx
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 723ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 500 in 766ms
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 19ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET / 500 in 15ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 22ms
- GET /favicon.ico 500 in 14ms
- GET /favicon.ico 500 in 5ms
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 6ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 13ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 21ms
- GET / 500 in 19ms
- GET /favicon.ico 500 in 6ms
- GET /favicon.ico 500 in 7ms
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 4ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 8ms
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 4ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /favicon.ico 500 in 7ms
- GET / 500 in 8ms
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 4ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /favicon.ico 500 in 5ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 10ms
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 6ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /favicon.ico 500 in 9ms
- GET / 500 in 9ms
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 6ms
- GET /favicon.ico 500 in 9ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 8ms
- GET /favicon.ico 500 in 6ms
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 6ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET / 500 in 8ms
- ⨯ ./src/components/layout/Footer.tsx
-Error:   [31mx[0m You're importing a component that needs `useState`. This React hook only works in a client component. To fix, mark the file (or its parent) with the `"use client"` directive.
-  [31m|[0m
-  [31m|[0m  Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
-  [31m|[0m
-
-   ,-[[36;1;4m/Users/bentyson/pad/src/components/layout/Footer.tsx[0m:1:1]
- [2m1[0m | import { useState } from 'react';
-   : [35;1m         ^^^^^^^^[0m
- [2m2[0m | import Link from 'next/link';
- [2m3[0m | import { 
- [2m4[0m |   Home,
-   `----
-
-Import trace for requested module:
-./src/components/layout/Footer.tsx
-./src/app/layout.tsx
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 426ms
- GET /favicon.ico 500 in 425ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 16ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET / 500 in 18ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 24ms
- GET /favicon.ico 500 in 5ms
- GET /favicon.ico 500 in 5ms
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 4ms
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 7ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 12ms
- GET / 500 in 16ms
- GET /favicon.ico 500 in 6ms
- GET /favicon.ico 500 in 5ms
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 4ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 8ms
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 5ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /favicon.ico 500 in 9ms
- GET / 500 in 7ms
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 5ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /favicon.ico 500 in 10ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 6ms
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 7ms
- GET /favicon.ico 500 in 9ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET / 500 in 7ms
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 5ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /favicon.ico 500 in 8ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 6ms
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 6ms
- GET /favicon.ico 500 in 8ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET / 500 in 9ms
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 6ms
- GET /favicon.ico 500 in 9ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /artists/cmdi3mtba0004ludm6i1aexz0 500 in 8ms
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 500 in 6ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /favicon.ico 500 in 9ms
- GET / 500 in 8ms
- ✓ Compiled /api/spotify/artist/[artistId] in 1600ms (1589 modules)
- GET /favicon.ico 200 in 422ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 404 in 637ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /_next/static/webpack/dc69466ac1d2f8c1.webpack.hot-update.json 404 in 48ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 95ms
- GET / 200 in 232ms
- GET /favicon.ico 200 in 8ms
- GET /favicon.ico 200 in 20ms
- ✓ Compiled /api/auth/[...nextauth] in 143ms (857 modules)
- ✓ Compiled (861 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 407ms
- GET /api/artists/cmdi3mtba0004ludm6i1aexz0 200 in 414ms
- GET /api/artists?exclude=cmdi3mtba0004ludm6i1aexz0&limit=3 200 in 424ms
- GET /api/auth/session 200 in 24ms
- ✓ Compiled /api/notifications in 187ms (863 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 446ms
- GET /api/notifications?unread=true&limit=0 200 in 468ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 446ms
- GET /api/auth/session 200 in 37ms
- GET /api/notifications?unread=true&limit=0 200 in 48ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 50ms
- GET /api/auth/session 200 in 21ms
- GET /api/notifications?unread=true&limit=0 200 in 26ms
- GET /api/auth/session 200 in 26ms
- GET /api/notifications?unread=true&limit=0 200 in 26ms
- GET /api/auth/session 200 in 16ms
- ✓ Compiled /api/stats in 255ms (865 modules)
- ✓ Compiled (1071 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 2406ms
- GET /api/user/profile-id 200 in 2422ms
- GET /api/user/current 200 in 2456ms
- GET /api/stats 200 in 2479ms
- GET /api/user/profile-id 200 in 58ms
- GET /api/payments/subscription-status 200 in 2545ms
- GET /api/user/current 200 in 94ms
- GET /api/stats 200 in 255ms
- GET /api/payments/subscription-status 200 in 238ms
- ○ Compiling /api/bookings ...
- ✓ Compiled /api/bookings in 723ms (1073 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-=== GET /api/bookings called ===
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 1413ms
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/bookings 200 in 1467ms
- GET /api/payments/subscription-status 200 in 1241ms
-=== GET /api/bookings called ===
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 67ms
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/bookings 200 in 69ms
- GET /api/payments/subscription-status 200 in 65ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 401 in 19ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 401 in 10ms
- ✓ Compiled in 1459ms (1821 modules)
- GET / 200 in 61ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 61ms
- ✓ Compiled in 234ms (748 modules)
- GET / 200 in 58ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 57ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 130ms
- GET /favicon.ico 200 in 13ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 48ms
- GET /api/auth/session 200 in 22ms
- GET /api/artists/cmdi3mtba0004ludm6i1aexz0 200 in 87ms
- GET /api/notifications?unread=true&limit=0 200 in 35ms
- GET /api/artists?exclude=cmdi3mtba0004ludm6i1aexz0&limit=3 200 in 93ms
- GET /api/auth/session 200 in 13ms
- GET /api/notifications?unread=true&limit=0 200 in 15ms
- GET /api/auth/session 200 in 15ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 18ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 14ms
- GET /api/user/profile-id 200 in 43ms
- GET /api/stats 200 in 47ms
- GET /api/user/current 200 in 49ms
- GET /api/payments/subscription-status 200 in 51ms
-=== GET /api/bookings called ===
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/bookings 200 in 35ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 38ms
-=== GET /api/bookings called ===
- GET /api/payments/subscription-status 200 in 47ms
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/bookings 200 in 17ms
- ⨯ ./src/components/spotify/AlbumGallery.tsx
-Error: Failed to read source code from /Users/bentyson/pad/src/components/spotify/AlbumGallery.tsx
-
-Caused by:
-    No such file or directory (os error 2)
-
-Import trace for requested module:
-./src/components/spotify/AlbumGallery.tsx
-./src/components/artist/ArtistMusicSection.tsx
-./src/app/artists/[id]/page.tsx
- ⨯ ./src/components/spotify/AlbumGallery.tsx
-Error: Failed to read source code from /Users/bentyson/pad/src/components/spotify/AlbumGallery.tsx
-
-Caused by:
-    No such file or directory (os error 2)
-
-Import trace for requested module:
-./src/components/spotify/AlbumGallery.tsx
-./src/components/artist/ArtistMusicSection.tsx
-./src/app/artists/[id]/page.tsx
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- ✓ Compiled in 1380ms (1421 modules)
- ✓ Compiled in 0ms (679 modules)
- ✓ Compiled in 0ms (679 modules)
- ✓ Compiled in 0ms (679 modules)
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 371ms
- GET / 200 in 417ms
- ✓ Compiled /api/auth/[...nextauth] in 104ms (695 modules)
- ✓ Compiled (855 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /favicon.ico 200 in 622ms
- GET /api/auth/session 200 in 601ms
- GET /api/artists/cmdi3mtba0004ludm6i1aexz0 200 in 606ms
- GET /api/artists?exclude=cmdi3mtba0004ludm6i1aexz0&limit=3 200 in 618ms
- GET /api/auth/session 200 in 13ms
- ✓ Compiled /api/spotify/artist/[artistId] in 101ms (857 modules)
- ✓ Compiled (859 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 252ms
- GET /api/notifications?unread=true&limit=0 200 in 268ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 260ms
- GET /api/auth/session 200 in 15ms
- GET /api/notifications?unread=true&limit=0 200 in 18ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 17ms
- ✓ Compiled /api/payments/subscription-status in 95ms (861 modules)
- ✓ Compiled (1067 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/user/profile-id 200 in 657ms
- GET /api/stats 200 in 660ms
- GET /api/user/current 200 in 661ms
- GET /api/payments/subscription-status 200 in 665ms
- ✓ Compiled /api/bookings in 121ms (1069 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-=== GET /api/bookings called ===
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 278ms
- GET /api/bookings 200 in 286ms
- GET /api/payments/subscription-status 200 in 291ms
-=== GET /api/bookings called ===
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/bookings 200 in 11ms
- ✓ Compiled in 1296ms (1811 modules)
- GET / 200 in 45ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 134ms
- GET /favicon.ico 200 in 8ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 32ms
- GET /api/artists/cmdi3mtba0004ludm6i1aexz0 200 in 34ms
- GET /api/artists?exclude=cmdi3mtba0004ludm6i1aexz0&limit=3 200 in 39ms
- GET /api/auth/session 200 in 16ms
- GET /api/notifications?unread=true&limit=0 200 in 18ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 23ms
- GET /api/auth/session 200 in 22ms
- GET /api/notifications?unread=true&limit=0 200 in 26ms
- GET /api/auth/session 200 in 15ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 19ms
- GET /api/user/profile-id 200 in 38ms
- GET /api/user/current 200 in 39ms
- GET /api/stats 200 in 42ms
- GET /api/payments/subscription-status 200 in 58ms
-=== GET /api/bookings called ===
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 31ms
- GET /api/bookings 200 in 34ms
-=== GET /api/bookings called ===
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/payments/subscription-status 200 in 49ms
- GET /api/bookings 200 in 14ms
- ✓ Compiled in 1368ms (1811 modules)
- GET / 200 in 42ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 40ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 38ms
- GET /api/auth/session 200 in 9ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 53ms
- GET /api/user/profile-id 200 in 58ms
- GET /api/user/current 200 in 62ms
- GET /api/stats 200 in 68ms
- GET /api/user/profile-id 200 in 23ms
- GET /api/user/current 200 in 25ms
-=== GET /api/bookings called ===
- GET /api/stats 200 in 35ms
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/bookings 200 in 42ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 39ms
- GET /api/payments/subscription-status 200 in 134ms
-=== GET /api/bookings called ===
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 20ms
- GET /api/bookings 200 in 30ms
- GET /api/payments/subscription-status 200 in 35ms
- GET /api/payments/subscription-status 200 in 19ms
- GET /api/payments/subscription-status 200 in 28ms
- GET /api/auth/session 200 in 10ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/session 200 in 4ms
- GET /api/user/profile-id 200 in 18ms
- GET /api/user/current 200 in 19ms
- GET /api/stats 200 in 20ms
- GET /api/payments/subscription-status 200 in 24ms
-=== GET /api/bookings called ===
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 17ms
  GET /api/bookings 200 in 20ms
- GET /api/payments/subscription-status 200 in 24ms
-=== GET /api/bookings called ===
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/bookings 200 in 9ms
- GET /api/auth/session 200 in 57ms
- GET /api/auth/session 200 in 12ms
- GET /api/auth/session 200 in 9ms
- GET /api/auth/session 200 in 7ms
- GET /api/user/profile-id 200 in 53ms
- GET /api/payments/subscription-status 200 in 55ms
- GET /api/user/current 200 in 60ms
- GET /api/stats 200 in 58ms
-=== GET /api/bookings called ===
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 53ms
- GET /api/bookings 200 in 60ms
-=== GET /api/bookings called ===
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/payments/subscription-status 200 in 69ms
- GET /api/bookings 200 in 11ms
- ✓ Compiled in 1630ms (1421 modules)
- GET / 200 in 104ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 104ms
- ✓ Compiled /api/auth/[...nextauth] in 121ms (849 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 256ms
- GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 7ms
- ✓ Compiled /api/stats in 79ms (851 modules)
- ✓ Compiled (1057 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/user/profile-id 200 in 345ms
- GET /api/payments/subscription-status 200 in 348ms
- GET /api/user/current 200 in 351ms
- GET /api/stats 200 in 352ms
- ✓ Compiled /api/spotify/artist/[artistId] in 155ms (1059 modules)
- ✓ Compiled (1061 modules)
-=== GET /api/bookings called ===
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 327ms
- GET /api/bookings 200 in 333ms
- GET /api/payments/subscription-status 200 in 335ms
-=== GET /api/bookings called ===
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/bookings 200 in 11ms
- GET /api/auth/session 200 in 60ms
- GET /api/auth/session 200 in 14ms
- GET /api/auth/session 200 in 11ms
- GET /api/auth/session 200 in 21ms
- GET /api/user/profile-id 200 in 53ms
- GET /api/user/current 200 in 57ms
- GET /api/stats 200 in 64ms
- GET /api/payments/subscription-status 200 in 84ms
- GET /api/user/profile-id 200 in 32ms
- GET /api/user/current 200 in 37ms
-=== GET /api/bookings called ===
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
- GET /api/stats 200 in 38ms
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/bookings 200 in 33ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 32ms
- GET /api/payments/subscription-status 200 in 42ms
-=== GET /api/bookings called ===
-Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
-User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdi3mtba0004ludm6i1aexz0"
-    }
-  ]
-}
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 18ms
- GET /api/bookings 200 in 32ms
  GET /api/payments/subscription-status 200 in 22ms
- GET /api/payments/subscription-status 200 in 27ms
- ✓ Compiled /dashboard/profile in 478ms (1822 modules)
- GET /dashboard/profile 200 in 543ms
- ✓ Compiled /api/profile in 323ms (1824 modules)
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 1008ms
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 9ms
+ ✓ Compiled /hosts in 338ms (1570 modules)
+ GET /hosts 200 in 378ms
+ ✓ Compiled /api/hosts in 330ms (1572 modules)
+ GET /favicon.ico 200 in 347ms
+ GET /api/hosts 200 in 371ms
+ GET /api/hosts 200 in 9ms
+ ✓ Compiled /hosts/[id] in 466ms (1623 modules)
+ GET /hosts/cmdi3mtbw001dludmvj1piwud 200 in 841ms
+ ✓ Compiled /api/hosts/[id] in 406ms (1625 modules)
+ GET /favicon.ico 200 in 446ms
+ GET /api/hosts/cmdi3mtbw001dludmvj1piwud 200 in 753ms
+ GET /api/hosts/cmdi3mtbw001dludmvj1piwud 200 in 8ms
+ ✓ Compiled /dashboard/messages in 341ms (1650 modules)
+ GET /dashboard/messages?startConversation=cmdi3mtbw001dludmvj1piwud 200 in 382ms
+ ✓ Compiled /api/users/[id] in 444ms (1654 modules)
 [33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-Found media: {
-  id: 'cmdi3mtbg000eludm7jc85cpp',
-  artistId: 'cmdi3mtba0004ludm6i1aexz0',
-  mediaType: 'PHOTO',
-  category: 'PRESS',
-  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
-  fileSize: null,
-  mimeType: null,
-  title: 'Sarah Johnson Press Photo',
-  description: 'Professional press photo for Sarah Johnson',
-  sortOrder: 0,
-  createdAt: 2025-07-25T00:44:34.925Z
+ GET /favicon.ico 200 in 486ms
+Conversations access check: {
+  userId: 'cmdi3mtb90002ludmua79g1q8',
+  userType: 'artist',
+  isAdmin: false
 }
- GET /api/profile 200 in 363ms
-Found media: {
-  id: 'cmdi3mtbg000eludm7jc85cpp',
-  artistId: 'cmdi3mtba0004ludm6i1aexz0',
-  mediaType: 'PHOTO',
-  category: 'PRESS',
-  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
-  fileSize: null,
-  mimeType: null,
-  title: 'Sarah Johnson Press Photo',
-  description: 'Professional press photo for Sarah Johnson',
-  sortOrder: 0,
-  createdAt: 2025-07-25T00:44:34.925Z
+ GET /api/conversations 200 in 502ms
+Conversations access check: {
+  userId: 'cmdi3mtb90002ludmua79g1q8',
+  userType: 'artist',
+  isAdmin: false
 }
- GET /api/profile 200 in 8ms
-Received profile data: {
-  bandName: 'Sarah Johnson',
-  bio: 'Indie folk singer-songwriter with a passion for intimate performances',
-  city: 'Austin',
-  state: 'TX',
-  genres: [ 'Folk', 'Indie', 'Acoustic' ],
-  instruments: [],
-  experienceLevel: 'intermediate',
-  yearsActive: 1,
-  tourMonthsPerYear: 3,
-  tourVehicle: 'van',
-  willingToTravel: 500,
-  needsLodging: false,
-  equipmentProvided: [ 'Microphone', 'Guitar amplifier', 'Stool' ],
-  venueRequirements: [],
-  profilePhoto: 'https://images.unsplash.com/photo-1494790108755-2616b9a8af3c?w=400&h=400&fit=crop&crop=face',
-  cancellationPolicy: 'flexible',
-  performanceRadius: 50,
-  website: 'https://sarahjohnsonmusic.com',
-  socialLinks: {
-    website: 'https://sarahjohnsonmusic.com',
-    instagram: 'sarahjohnsonmusic',
-    youtube: 'sarahjohnsonmusic',
-    spotify: 'sarahjohnsonmusic',
-    bandcamp: '',
-    facebook: ''
-  },
-  bandMembers: [
+ GET /api/conversations 200 in 10ms
+ GET /api/users/cmdi3mtbw001dludmvj1piwud 404 in 796ms
+ GET /api/users/cmdi3mtbw001dludmvj1piwud 404 in 7ms
+[POLL-TEST] 2025-07-25T23:18:44.463Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 24ms
+ GET /dashboard/messages?startConversation=cmdi3mtbw001dludmvj1piwud 200 in 139ms
+ GET /favicon.ico 200 in 8ms
+ GET /api/auth/session 200 in 13ms
+ GET /api/auth/session 200 in 18ms
+Conversations access check: {
+  userId: 'cmdi3mtb90002ludmua79g1q8',
+  userType: 'artist',
+  isAdmin: false
+}
+ GET /api/conversations 200 in 23ms
+ GET /api/users/cmdi3mtbw001dludmvj1piwud 404 in 24ms
+ GET /api/notifications?unread=true&limit=0 200 in 31ms
+Conversations access check: {
+  userId: 'cmdi3mtb90002ludmua79g1q8',
+  userType: 'artist',
+  isAdmin: false
+}
+ GET /api/conversations 200 in 17ms
+ GET /api/users/cmdi3mtbw001dludmvj1piwud 404 in 17ms
+ GET /api/notifications?unread=true&limit=0 200 in 14ms
+ GET /hosts 200 in 28ms
+ GET /favicon.ico 200 in 8ms
+ GET /api/hosts 200 in 21ms
+ GET /api/hosts 200 in 8ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 7ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A18%3A21.920Z 200 in 31ms
+ GET /hosts/cmdi3mtbw001dludmvj1piwud 200 in 37ms
+ GET /favicon.ico 200 in 14ms
+ GET /api/hosts/cmdi3mtbw001dludmvj1piwud 200 in 21ms
+ GET /api/hosts/cmdi3mtbw001dludmvj1piwud 200 in 13ms
+ GET /dashboard/messages?startConversation=cmdi3mtbw001dludmvj1piwud 200 in 22ms
+Conversations access check: {
+  userId: 'cmdi3mtb90002ludmua79g1q8',
+  userType: 'artist',
+  isAdmin: false
+}
+ GET /favicon.ico 200 in 18ms
+ GET /api/conversations 200 in 28ms
+ GET /api/users/cmdi3mtbw001dludmvj1piwud 404 in 26ms
+Conversations access check: {
+  userId: 'cmdi3mtb90002ludmua79g1q8',
+  userType: 'artist',
+  isAdmin: false
+}
+ GET /api/users/cmdi3mtbw001dludmvj1piwud 404 in 13ms
+ GET /api/conversations 200 in 15ms
+ GET /api/auth/csrf 200 in 19ms
+ POST /api/auth/signout 200 in 12ms
+ GET /dashboard/messages?startConversation=cmdi3mtbw001dludmvj1piwud 200 in 54ms
+ GET /favicon.ico 200 in 5ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/auth/session 200 in 7ms
+ GET /login 200 in 17ms
+ GET /favicon.ico 200 in 8ms
+ GET /api/auth/providers 200 in 19ms
+ GET /api/auth/csrf 200 in 12ms
+ POST /api/auth/callback/credentials? 200 in 308ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 10ms
+ GET /api/notifications?unread=true&limit=0 200 in 12ms
+ GET /api/notifications?unread=true&limit=0 200 in 15ms
+ GET /dashboard 200 in 30ms
+ GET /api/auth/session 200 in 26ms
+ GET /favicon.ico 200 in 17ms
+ GET /api/user/profile-id 200 in 31ms
+ GET /api/user/current 200 in 32ms
+ GET /api/stats 200 in 37ms
+ GET /api/user/profile-id 200 in 15ms
+ GET /api/user/current 200 in 26ms
+ GET /api/stats 200 in 24ms
+ ○ Compiling /api/rsvps ...
+ ✓ Compiled /api/rsvps in 530ms (1656 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtbi000jludmsd4ca4ji', userType: 'host' }
+User profiles found: { artist: undefined, host: 'cmdi3mtbi000lludmecf27lcx' }
+Querying with whereClause: {
+  "OR": [
     {
-      id: 'cmdi3mtba0005ludm4ogccejq',
-      name: 'Sarah Johnson',
-      instrument: 'Vocals, Guitar',
-      photo: 'https://images.unsplash.com/photo-1494790108755-2616b9a8af3c?w=400&h=400&fit=crop&crop=face'
-    }
-  ],
-  videoLinks: [
-    {
-      id: '1753475830396',
-      title: 'Buddah',
-      url: 'https://www.youtube.com/watch?v=Wkjy1R7H0dI&list=RDWkjy1R7H0dI&start_radio=1',
-      platform: 'youtube',
-      category: 'live_performance',
-      isLivePerformance: true
-    }
-  ],
-  musicSamples: [],
-  photos: [
-    {
-      id: 'cmdi3mtbg000eludm7jc85cpp',
-      fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
-      title: 'Sarah Johnson Press Photo',
-      description: 'Professional press photo for Sarah Johnson',
-      sortOrder: 0,
-      category: 'PRESS'
+      "hostId": "cmdi3mtbi000lludmecf27lcx"
     }
   ]
 }
-suggestedDoorFee value: undefined type: undefined
-Processing photos: [
-  {
-    id: 'cmdi3mtbg000eludm7jc85cpp',
-    fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
-    title: 'Sarah Johnson Press Photo',
-    description: 'Professional press photo for Sarah Johnson',
-    sortOrder: 0,
-    category: 'PRESS'
-  }
-]
-Creating photos for artist: cmdi3mtba0004ludm6i1aexz0
-Photos created successfully
- PUT /api/profile 200 in 50ms
- GET /api/auth/session 200 in 32ms
+ GET /api/bookings 200 in 582ms
+ GET /api/rsvps?userType=host&limit=50&status=PENDING 200 in 584ms
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtbi000jludmsd4ca4ji', userType: 'host' }
+User profiles found: { artist: undefined, host: 'cmdi3mtbi000lludmecf27lcx' }
+Querying with whereClause: {
+  "OR": [
+    {
+      "hostId": "cmdi3mtbi000lludmecf27lcx"
+    }
+  ]
+}
+ GET /api/rsvps?userType=host&limit=50&status=PENDING 200 in 12ms
+ GET /api/bookings 200 in 15ms
+ ✓ Compiled /artists in 334ms (1671 modules)
+ GET /artists 200 in 374ms
+ GET /favicon.ico 200 in 10ms
+ ✓ Compiled /api/artists in 242ms (1673 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/artists?limit=12&offset=0&sortby=name 200 in 291ms
+ GET /api/artists?limit=12&offset=0&sortby=name 200 in 11ms
+ ✓ Compiled /artists/[id] in 498ms (1712 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 7ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A18%3A51.467Z 200 in 32ms
+ GET /artists/cmdi3mtbe000cludm52d35ns2 200 in 801ms
+ GET /api/artists?exclude=cmdi3mtbe000cludm52d35ns2&limit=3 200 in 29ms
+ ✓ Compiled /api/artists/[id] in 485ms (1714 modules)
+ GET /favicon.ico 200 in 516ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/artists?exclude=cmdi3mtbe000cludm52d35ns2&limit=3 200 in 521ms
+ GET /api/artists/cmdi3mtbe000cludm52d35ns2 200 in 782ms
+ GET /api/artists/cmdi3mtbe000cludm52d35ns2 200 in 8ms
+ ✓ Compiled /messages in 333ms (1706 modules)
+ GET /messages?artistId=cmdi3mtbe000cludm52d35ns2 200 in 425ms
+ GET /favicon.ico 200 in 12ms
+ GET /dashboard 200 in 45ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /favicon.ico 200 in 64ms
+ GET /api/user/current 200 in 70ms
+ GET /api/user/profile-id 200 in 74ms
+ GET /api/stats 200 in 77ms
+ GET /api/user/current 200 in 24ms
+ GET /api/user/profile-id 200 in 22ms
+=== GET /api/bookings called ===
+ GET /api/stats 200 in 32ms
+Session: { userId: 'cmdi3mtbi000jludmsd4ca4ji', userType: 'host' }
+User profiles found: { artist: undefined, host: 'cmdi3mtbi000lludmecf27lcx' }
+Querying with whereClause: {
+  "OR": [
+    {
+      "hostId": "cmdi3mtbi000lludmecf27lcx"
+    }
+  ]
+}
+ GET /api/rsvps?userType=host&limit=50&status=PENDING 200 in 23ms
+ GET /api/bookings 200 in 25ms
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtbi000jludmsd4ca4ji', userType: 'host' }
+User profiles found: { artist: undefined, host: 'cmdi3mtbi000lludmecf27lcx' }
+Querying with whereClause: {
+  "OR": [
+    {
+      "hostId": "cmdi3mtbi000lludmecf27lcx"
+    }
+  ]
+}
+ GET /api/rsvps?userType=host&limit=50&status=PENDING 200 in 15ms
+ GET /api/bookings 200 in 17ms
+[POLL-TEST] 2025-07-25T23:19:44.491Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 28ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 7ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A19%3A21.467Z 200 in 37ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 8ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A19%3A51.477Z 200 in 37ms
+[POLL-TEST] 2025-07-25T23:20:44.480Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 36ms
+[POLL-TEST] 2025-07-25T23:21:44.602Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 70ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 12ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A20%3A21.476Z 200 in 80ms
+ GET /api/auth/csrf 200 in 46ms
+ POST /api/auth/signout 200 in 10ms
+ GET /dashboard 200 in 138ms
+ GET /favicon.ico 200 in 7ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/auth/session 200 in 5ms
+ GET /login 200 in 35ms
+ GET /favicon.ico 200 in 12ms
+ GET /api/auth/providers 200 in 21ms
+ GET /api/auth/csrf 200 in 16ms
+ POST /api/auth/callback/credentials? 200 in 290ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/notifications?unread=true&limit=0 200 in 14ms
+ ✓ Compiled /admin in 409ms (1450 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 502ms
+ GET /admin 200 in 507ms
+ GET /api/notifications?unread=true&limit=0 200 in 512ms
+ ✓ Compiled /api/admin/metrics in 457ms (1452 modules)
+ GET /favicon.ico 200 in 504ms
+ GET /api/admin/metrics 200 in 505ms
+ GET /api/admin/metrics 200 in 6ms
+ ✓ Compiled /admin/messages in 299ms (1465 modules)
+ GET /admin/messages 200 in 343ms
+ ✓ Compiled /api/conversations in 136ms (863 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /favicon.ico 200 in 307ms
+Conversations access check: {
+  userId: 'cmdi3mtb60000ludmo7ybfyea',
+  userType: 'admin',
+  isAdmin: true
+}
+ GET /api/conversations 200 in 326ms
+Conversations access check: {
+  userId: 'cmdi3mtb60000ludmo7ybfyea',
+  userType: 'admin',
+  isAdmin: true
+}
+ GET /api/conversations 200 in 6ms
+[POLL-TEST] 2025-07-25T23:22:44.505Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 56ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 7ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A21%3A44.601Z 200 in 61ms
+[POLL-TEST] 2025-07-25T23:23:44.608Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 131ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 13ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A22%3A44.507Z 200 in 130ms
+[POLL-TEST] 2025-07-25T23:24:44.502Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 44ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 5ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A23%3A44.611Z 200 in 47ms
+[POLL-TEST] 2025-07-25T23:25:44.508Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 40ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 7ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A24%3A44.503Z 200 in 40ms
+ GET /api/auth/session 200 in 41ms
+ GET /api/auth/session 200 in 48ms
+ GET /api/auth/session 200 in 64ms
+ ✓ Compiled /api/profile in 388ms (788 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+Conversations access check: {
+  userId: 'cmdi3mtb60000ludmo7ybfyea',
+  userType: 'admin',
+  isAdmin: true
+}
+ GET /api/auth/session 200 in 598ms
+ GET /api/auth/session 200 in 550ms
+ GET /api/conversations 200 in 604ms
+ GET /api/profile 200 in 615ms
+ GET /api/auth/session 200 in 19ms
+Conversations access check: {
+  userId: 'cmdi3mtb60000ludmo7ybfyea',
+  userType: 'admin',
+  isAdmin: true
+}
+ GET /api/profile 200 in 14ms
+ GET /api/conversations 200 in 28ms
+[POLL-TEST] 2025-07-25T23:26:44.509Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 30ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 11ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A25%3A44.510Z 200 in 32ms
+ ✓ Compiled in 1303ms (618 modules)
+ GET /admin/messages 200 in 117ms
+ GET /test-realtime 200 in 117ms
+ GET /test-polling 200 in 118ms
+[POLL-TEST] 2025-07-25T23:27:18.473Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 10ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 7ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A26%3A44.508Z 200 in 13ms
+ ✓ Compiled in 1225ms (618 modules)
+ GET /test-polling 200 in 26ms
+ GET /admin/messages 200 in 37ms
+ GET /test-realtime 200 in 38ms
+[POLL-SAFE] Rate limited user cmdi3mtb60000ludmo7ybfyea - wait 6999ms
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A27%3A18.472Z 429 in 12ms
+[POLL-TEST] 2025-07-25T23:27:44.496Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 17ms
+ ✓ Compiled in 1202ms (618 modules)
+ GET /test-polling 200 in 36ms
+ GET /admin/messages 200 in 35ms
+ GET /test-realtime 200 in 36ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 8ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A27%3A18.472Z 200 in 27ms
+ ✓ Compiled in 1215ms (618 modules)
+ GET /test-polling 200 in 35ms
+ GET /test-realtime 200 in 36ms
+ GET /admin/messages 200 in 36ms
+[POLL-TEST] 2025-07-25T23:28:03.480Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 12ms
+ ✓ Compiled in 1236ms (618 modules)
+ GET /test-polling 200 in 56ms
+ GET /test-realtime 200 in 57ms
+ GET /admin/messages 200 in 56ms
+[POLL-TEST] 2025-07-25T23:28:44.547Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 59ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 15ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A27%3A51.493Z 200 in 71ms
+[POLL-TEST] 2025-07-25T23:29:44.556Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 62ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 7ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A28%3A44.556Z 200 in 77ms
+[POLL-TEST] 2025-07-25T23:30:44.530Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 35ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 4ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A29%3A44.555Z 200 in 31ms
+ GET /api/auth/session 200 in 63ms
+ GET /api/auth/session 200 in 47ms
+ GET /api/auth/session 200 in 30ms
+ GET /api/auth/session 200 in 33ms
+Conversations access check: {
+  userId: 'cmdi3mtb60000ludmo7ybfyea',
+  userType: 'admin',
+  isAdmin: true
+}
+ GET /api/conversations 200 in 34ms
+ GET /api/auth/session 200 in 19ms
+Conversations access check: {
+  userId: 'cmdi3mtb60000ludmo7ybfyea',
+  userType: 'admin',
+  isAdmin: true
+}
+ GET /api/profile 200 in 57ms
+ GET /api/conversations 200 in 24ms
  GET /api/auth/session 200 in 10ms
+ GET /api/profile 200 in 9ms
+[POLL-TEST] 2025-07-25T23:31:44.528Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 37ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 15ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A30%3A44.531Z 200 in 40ms
+[POLL-TEST] 2025-07-25T23:32:44.537Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 46ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 16ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A31%3A44.527Z 200 in 53ms
+[POLL-TEST] 2025-07-25T23:33:44.542Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 27ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 8ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A32%3A44.534Z 200 in 55ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 29ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A33%3A44.541Z 200 in 69ms
+[POLL-TEST] 2025-07-25T23:34:44.557Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 65ms
+[POLL-TEST] 2025-07-25T23:35:44.555Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 51ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 17ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A34%3A44.537Z 200 in 67ms
+[POLL-TEST] 2025-07-25T23:36:44.529Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 42ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 17ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A35%3A44.554Z 200 in 50ms
+[POLL-TEST] 2025-07-25T23:37:44.533Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 36ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 7ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A36%3A44.528Z 200 in 39ms
+[POLL-TEST] 2025-07-25T23:38:44.537Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 40ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 8ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A37%3A44.532Z 200 in 44ms
+[POLL-TEST] 2025-07-25T23:39:44.543Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 40ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 4ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A38%3A44.536Z 200 in 33ms
+[POLL-TEST] 2025-07-25T23:40:44.532Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 37ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 12ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A39%3A44.545Z 200 in 41ms
+[POLL-TEST] 2025-07-25T23:41:44.547Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 45ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 14ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A40%3A44.530Z 200 in 52ms
+[POLL-TEST] 2025-07-25T23:42:44.528Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 32ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 3ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A41%3A44.546Z 200 in 34ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 7ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A42%3A44.530Z 200 in 35ms
+[POLL-TEST] 2025-07-25T23:43:44.530Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 35ms
+ GET /api/auth/session 200 in 47ms
+ GET /api/auth/session 200 in 36ms
+Conversations access check: {
+  userId: 'cmdi3mtb60000ludmo7ybfyea',
+  userType: 'admin',
+  isAdmin: true
+}
+ GET /api/conversations 200 in 39ms
+Conversations access check: {
+  userId: 'cmdi3mtb60000ludmo7ybfyea',
+  userType: 'admin',
+  isAdmin: true
+}
+ GET /api/conversations 200 in 13ms
+[POLL-TEST] 2025-07-25T23:44:44.570Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 67ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 16ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A43%3A44.526Z 200 in 71ms
+ GET /api/auth/session 200 in 31ms
+ GET /api/auth/session 200 in 12ms
+ GET /api/auth/session 200 in 15ms
+ GET /api/auth/session 200 in 10ms
+ GET /api/profile 200 in 30ms
+ GET /api/profile 200 in 9ms
+ GET /api/auth/session 200 in 22ms
+ GET /api/auth/session 200 in 10ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/profile 200 in 9ms
+ GET /api/auth/session 200 in 31ms
+ GET /api/auth/session 200 in 10ms
+ GET /api/auth/session 200 in 12ms
+ GET /api/profile 200 in 17ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/profile 200 in 6ms
+[POLL-TEST] 2025-07-25T23:45:01.505Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 25ms
+[POLL-TEST] 2025-07-25T23:45:31.505Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 24ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 17ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A44%3A44.578Z 200 in 49ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 11ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A45%3A44.527Z 200 in 35ms
+[POLL-TEST] 2025-07-25T23:46:44.552Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 40ms
+[POLL-TEST] 2025-07-25T23:47:44.581Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 55ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 42ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A46%3A44.543Z 200 in 102ms
+ GET /admin/messages 200 in 152ms
+ ✓ Compiled /api/auth/[...nextauth] in 155ms (784 modules)
+ ✓ Compiled (786 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /favicon.ico 200 in 311ms
+ GET /api/auth/session 200 in 292ms
+ GET /api/auth/session 200 in 8ms
+ ✓ Compiled /api/conversations in 116ms (788 modules)
+ ✓ Compiled (790 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+Conversations access check: {
+  userId: 'cmdi3mtb60000ludmo7ybfyea',
+  userType: 'admin',
+  isAdmin: true
+}
+ GET /api/conversations 200 in 272ms
+ GET /api/notifications?unread=true&limit=0 200 in 291ms
+Conversations access check: {
+  userId: 'cmdi3mtb60000ludmo7ybfyea',
+  userType: 'admin',
+  isAdmin: true
+}
+ GET /api/conversations 200 in 35ms
+ GET /api/notifications?unread=true&limit=0 200 in 23ms
+ GET /api/auth/csrf 200 in 28ms
+ POST /api/auth/signout 200 in 12ms
+ GET /admin/messages 200 in 117ms
+ GET /favicon.ico 200 in 9ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/auth/session 200 in 7ms
+ ✓ Compiled /login in 260ms (812 modules)
+ GET /login 200 in 312ms
+ GET /favicon.ico 200 in 10ms
+ GET /login 200 in 26ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/providers 200 in 68ms
+ GET /api/auth/csrf 200 in 6ms
+ POST /api/auth/callback/credentials? 200 in 285ms
+ GET /api/auth/session 200 in 10ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/notifications?unread=true&limit=0 200 in 13ms
+ GET /dashboard 200 in 29ms
+ GET /api/notifications?unread=true&limit=0 200 in 28ms
+ GET /api/auth/session 200 in 28ms
+ ✓ Compiled /api/stats in 125ms (814 modules)
+ ✓ Compiled (819 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /favicon.ico 200 in 318ms
+ GET /api/user/profile-id 200 in 332ms
+ GET /api/user/current 200 in 337ms
+ GET /api/stats 200 in 338ms
+ GET /api/user/profile-id 200 in 11ms
+ GET /api/user/current 200 in 21ms
+ GET /api/stats 200 in 24ms
+ ✓ Compiled /api/spotify/artist/[artistId] in 144ms (821 modules)
+ ✓ Compiled (1024 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 650ms
+ GET /api/bookings 200 in 656ms
+ GET /api/payments/subscription-status 200 in 656ms
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtb90002ludmua79g1q8', userType: 'artist' }
+User profiles found: { artist: 'cmdi3mtba0004ludm6i1aexz0', host: undefined }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdi3mtba0004ludm6i1aexz0"
+    }
+  ]
+}
+ GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 21ms
+ GET /api/bookings 200 in 22ms
+ GET /api/payments/subscription-status 200 in 25ms
+ ✓ Compiled /hosts in 254ms (1043 modules)
+ GET /hosts 200 in 297ms
+ ✓ Compiled /api/hosts in 162ms (1045 modules)
+ GET /favicon.ico 200 in 332ms
+ GET /api/hosts 200 in 348ms
+ GET /api/hosts 200 in 10ms
+ ✓ Compiled /hosts/[id] in 292ms (1072 modules)
+ GET /hosts/cmdi3mtbw001dludmvj1piwud 200 in 351ms
+ ✓ Compiled /api/hosts/[id] in 185ms (1074 modules)
+ GET /favicon.ico 200 in 389ms
+ GET /api/hosts/cmdi3mtbw001dludmvj1piwud 200 in 406ms
+ GET /api/hosts/cmdi3mtbw001dludmvj1piwud 200 in 15ms
+ ✓ Compiled /dashboard/messages in 275ms (1074 modules)
+ GET /dashboard/messages?startConversation=cmdi3mtbw001bludm35skjz37 200 in 322ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+Conversations access check: {
+  userId: 'cmdi3mtb90002ludmua79g1q8',
+  userType: 'artist',
+  isAdmin: false
+}
+ GET /api/conversations 200 in 40ms
+ ✓ Compiled /api/users/[id] in 187ms (1076 modules)
+ GET /favicon.ico 200 in 396ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+Conversations access check: {
+  userId: 'cmdi3mtb90002ludmua79g1q8',
+  userType: 'artist',
+  isAdmin: false
+}
+ GET /api/conversations 200 in 386ms
+ GET /api/users/cmdi3mtbw001bludm35skjz37 200 in 428ms
+ GET /api/users/cmdi3mtbw001bludm35skjz37 200 in 6ms
+ POST /api/conversations 200 in 61ms
+ ○ Compiling /api/messages ...
+ ✓ Compiled /api/messages in 736ms (1682 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+Conversations access check: {
+  userId: 'cmdi3mtb90002ludmua79g1q8',
+  userType: 'artist',
+  isAdmin: false
+}
+Messages access check: {
+  userId: 'cmdi3mtb90002ludmua79g1q8',
+  userType: 'artist',
+  conversationId: 'cmdjh2bnz0000lu9jv6zrwq5g',
+  participantIds: [ 'cmdi3mtb90002ludmua79g1q8', 'cmdi3mtbw001bludm35skjz37' ],
+  isParticipant: true,
+  isAdmin: false
+}
+[MESSAGES DEBUG] User type: artist, Conv ID: cmdjh2bnz0000lu9jv6zrwq5g
+  Message 0 sender: {
+  id: 'cmdi3mtb90002ludmua79g1q8',
+  name: 'Sarah Johnson',
+  userType: 'ARTIST',
+  profileImageUrl: null,
+  'profile.profileImageUrl': 'https://images.unsplash.com/photo-1494790108755-2616b9a8af3c?w=400&h=400&fit=crop&crop=face',
+  'artist.pressPhotoUrl': 'https://images.unsplash.com/photo-1494790108755-2616b9a8af3c?w=400&h=400&fit=crop&crop=face',
+  'artist.media': 0
+}
+ GET /api/messages?conversationId=cmdjh2bnz0000lu9jv6zrwq5g 200 in 804ms
+ GET /api/conversations 200 in 818ms
+Messages access check: {
+  userId: 'cmdi3mtb90002ludmua79g1q8',
+  userType: 'artist',
+  conversationId: 'cmdjh2bnz0000lu9jv6zrwq5g',
+  participantIds: [ 'cmdi3mtb90002ludmua79g1q8', 'cmdi3mtbw001bludm35skjz37' ],
+  isParticipant: true,
+  isAdmin: false
+}
+[MESSAGES DEBUG] User type: artist, Conv ID: cmdjh2bnz0000lu9jv6zrwq5g
+  Message 0 sender: {
+  id: 'cmdi3mtb90002ludmua79g1q8',
+  name: 'Sarah Johnson',
+  userType: 'ARTIST',
+  profileImageUrl: null,
+  'profile.profileImageUrl': 'https://images.unsplash.com/photo-1494790108755-2616b9a8af3c?w=400&h=400&fit=crop&crop=face',
+  'artist.pressPhotoUrl': 'https://images.unsplash.com/photo-1494790108755-2616b9a8af3c?w=400&h=400&fit=crop&crop=face',
+  'artist.media': 0
+}
+ GET /api/messages?conversationId=cmdjh2bnz0000lu9jv6zrwq5g 200 in 14ms
+[POLL-TEST] 2025-07-25T23:48:44.553Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 48ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 7ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A47%3A44.580Z 200 in 51ms
+[POLL-TEST] 2025-07-25T23:49:44.549Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 36ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 3ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A48%3A44.555Z 200 in 40ms
+[POLL-TEST] 2025-07-25T23:50:44.547Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 42ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 8ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A49%3A44.552Z 200 in 51ms
+[POLL-TEST] 2025-07-25T23:51:44.554Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 47ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 4ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A50%3A44.553Z 200 in 48ms
+[POLL-TEST] 2025-07-25T23:52:44.550Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 43ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 28ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A51%3A44.557Z 200 in 68ms
+[POLL-TEST] 2025-07-25T23:53:44.601Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 75ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 24ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A52%3A44.553Z 200 in 98ms
+[POLL-TEST] 2025-07-25T23:54:44.557Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 41ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 11ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A53%3A44.600Z 200 in 44ms
+[POLL-TEST] 2025-07-25T23:55:44.552Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 42ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 4ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A54%3A44.556Z 200 in 36ms
+[POLL-TEST] 2025-07-25T23:56:44.552Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 37ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 6ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A55%3A44.554Z 200 in 39ms
+[POLL-TEST] 2025-07-25T23:57:44.585Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 46ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 25ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A56%3A44.554Z 200 in 78ms
+[POLL-TEST] 2025-07-25T23:58:44.549Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 33ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 7ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A57%3A44.582Z 200 in 35ms
+ GET /api/auth/csrf 200 in 49ms
+ POST /api/auth/signout 200 in 10ms
+ GET /dashboard/messages?startConversation=cmdi3mtbw001bludm35skjz37 200 in 128ms
+ GET /favicon.ico 200 in 8ms
+ GET /api/auth/session 200 in 12ms
+ GET /api/auth/session 200 in 10ms
+ GET /login 200 in 17ms
+ GET /favicon.ico 200 in 8ms
+[POLL-TEST] 2025-07-25T23:59:44.542Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 33ms
+ GET /api/auth/providers 200 in 32ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 45ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A58%3A44.548Z 200 in 78ms
+ GET /api/auth/csrf 200 in 27ms
+ POST /api/auth/callback/credentials? 200 in 297ms
  GET /api/auth/session 200 in 8ms
  GET /api/auth/session 200 in 7ms
-Found media: {
-  id: 'cmdja8jr50003luczi6pu1aoo',
-  artistId: 'cmdi3mtba0004ludm6i1aexz0',
-  mediaType: 'PHOTO',
-  category: 'PRESS',
-  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
-  fileSize: null,
-  mimeType: null,
-  title: 'Sarah Johnson Press Photo',
-  description: 'Professional press photo for Sarah Johnson',
-  sortOrder: 0,
-  createdAt: 2025-07-25T20:37:12.833Z
+ GET /api/notifications?unread=true&limit=0 200 in 21ms
+ GET /dashboard 200 in 28ms
+ GET /api/auth/session 200 in 32ms
+ GET /api/notifications?unread=true&limit=0 200 in 31ms
+ GET /favicon.ico 200 in 25ms
+ GET /api/user/profile-id 200 in 29ms
+ GET /api/user/current 200 in 33ms
+ GET /api/stats 200 in 34ms
+ GET /api/user/profile-id 200 in 20ms
+ GET /api/user/current 200 in 39ms
+ GET /api/stats 200 in 40ms
+ ✓ Compiled /api/rsvps in 237ms (840 modules)
+=== GET /api/bookings called ===
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+Session: { userId: 'cmdi3mtbi000jludmsd4ca4ji', userType: 'host' }
+User profiles found: { artist: undefined, host: 'cmdi3mtbi000lludmecf27lcx' }
+Querying with whereClause: {
+  "OR": [
+    {
+      "hostId": "cmdi3mtbi000lludmecf27lcx"
+    }
+  ]
 }
- GET /api/profile 200 in 10ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 151ms
- ✓ Compiled /api/artists/[id] in 138ms (1083 modules)
- ✓ Compiled (1087 modules)
- GET /favicon.ico 200 in 300ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 300ms
- GET /api/artists/cmdi3mtba0004ludm6i1aexz0 200 in 307ms
- GET /api/artists?exclude=cmdi3mtba0004ludm6i1aexz0&limit=3 200 in 318ms
- GET /api/auth/session 200 in 10ms
- ✓ Compiled /api/notifications in 155ms (1089 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 371ms
- GET /api/notifications?unread=true&limit=0 200 in 385ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 368ms
- GET /api/auth/session 200 in 54ms
- GET /api/notifications?unread=true&limit=0 200 in 55ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 60ms
-Found media: {
-  id: 'cmdja8jr50003luczi6pu1aoo',
-  artistId: 'cmdi3mtba0004ludm6i1aexz0',
-  mediaType: 'PHOTO',
-  category: 'PRESS',
-  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
-  fileSize: null,
-  mimeType: null,
-  title: 'Sarah Johnson Press Photo',
-  description: 'Professional press photo for Sarah Johnson',
-  sortOrder: 0,
-  createdAt: 2025-07-25T20:37:12.833Z
+ GET /api/bookings 200 in 449ms
+ GET /api/rsvps?userType=host&limit=50&status=PENDING 200 in 449ms
+=== GET /api/bookings called ===
+Session: { userId: 'cmdi3mtbi000jludmsd4ca4ji', userType: 'host' }
+User profiles found: { artist: undefined, host: 'cmdi3mtbi000lludmecf27lcx' }
+Querying with whereClause: {
+  "OR": [
+    {
+      "hostId": "cmdi3mtbi000lludmecf27lcx"
+    }
+  ]
 }
- GET /api/profile 200 in 26ms
- ✓ Compiled in 1356ms (757 modules)
- GET / 200 in 57ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 55ms
- ✓ Compiled in 1204ms (757 modules)
- GET / 200 in 27ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 28ms
- ✓ Compiled in 1253ms (757 modules)
- GET / 200 in 41ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 42ms
- ✓ Compiled in 1187ms (757 modules)
- GET / 200 in 23ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 23ms
- ✓ Compiled in 1447ms (1436 modules)
- GET / 200 in 99ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 116ms
- ✓ Compiled /api/artists/[id] in 177ms (849 modules)
- ✓ Compiled (851 modules)
+ GET /api/bookings 200 in 13ms
+ GET /api/rsvps?userType=host&limit=50&status=PENDING 200 in 11ms
+ ✓ Compiled /artists in 228ms (849 modules)
+ GET /artists 200 in 274ms
+ ✓ Compiled /api/artists in 175ms (851 modules)
+ GET /favicon.ico 200 in 640ms
 [33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/artists/cmdi3mtba0004ludm6i1aexz0 200 in 389ms
- GET /api/artists?exclude=cmdi3mtba0004ludm6i1aexz0&limit=3 200 in 397ms
- ✓ Compiled /api/spotify/artist/[artistId] in 66ms (853 modules)
+ GET /api/artists?limit=12&offset=0&sortby=name 200 in 665ms
+ GET /api/artists?limit=12&offset=0&sortby=name 200 in 9ms
+ ✓ Compiled /artists/[id] in 337ms (883 modules)
+ GET /artists/cmdi3mtbe000cludm52d35ns2 200 in 387ms
 [33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 130ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 12ms
- ✓ Compiled /api/auth/[...nextauth] in 158ms (849 modules)
+ GET /api/artists?exclude=cmdi3mtbe000cludm52d35ns2&limit=3 200 in 43ms
+ ✓ Compiled /api/artists/[id] in 196ms (885 modules)
+ ✓ Compiled in 0ms (885 modules)
+ ✓ Compiled in 0ms (885 modules)
+ ✓ Compiled in 0ms (885 modules)
+ GET /favicon.ico 200 in 751ms
 [33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 211ms
- GET /api/auth/session 200 in 16ms
- ✓ Compiled /api/profile in 93ms (851 modules)
+ GET /api/artists/cmdi3mtbe000cludm52d35ns2 200 in 768ms
+ GET /api/artists?exclude=cmdi3mtbe000cludm52d35ns2&limit=3 200 in 730ms
+ ✓ Compiled in 1ms (885 modules)
+ GET /test-realtime 200 in 766ms
+ GET /test-polling 200 in 767ms
+ GET /artists/cmdi3mtbe000cludm52d35ns2 200 in 767ms
+ GET /api/artists/cmdi3mtbe000cludm52d35ns2 200 in 425ms
 [33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 231ms
-Found media: {
-  id: 'cmdja8jr50003luczi6pu1aoo',
-  artistId: 'cmdi3mtba0004ludm6i1aexz0',
-  mediaType: 'PHOTO',
-  category: 'PRESS',
-  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
-  fileSize: null,
-  mimeType: null,
-  title: 'Sarah Johnson Press Photo',
-  description: 'Professional press photo for Sarah Johnson',
-  sortOrder: 0,
-  createdAt: 2025-07-25T20:37:12.833Z
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 6ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-25T23%3A59%3A44.554Z 200 in 59ms
+ GET /dashboard/messages?startConversation=cmdi3mtbe000aludma3jjwv8x 200 in 39ms
+ ✓ Compiled /api/users/[id] in 176ms (881 modules)
+ ✓ Compiled (883 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /favicon.ico 200 in 383ms
+Conversations access check: {
+  userId: 'cmdi3mtbi000jludmsd4ca4ji',
+  userType: 'host',
+  isAdmin: false
 }
- GET /api/profile 200 in 240ms
- GET /api/auth/session 200 in 9ms
-Found media: {
-  id: 'cmdja8jr50003luczi6pu1aoo',
-  artistId: 'cmdi3mtba0004ludm6i1aexz0',
-  mediaType: 'PHOTO',
-  category: 'PRESS',
-  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
-  fileSize: null,
-  mimeType: null,
-  title: 'Sarah Johnson Press Photo',
-  description: 'Professional press photo for Sarah Johnson',
-  sortOrder: 0,
-  createdAt: 2025-07-25T20:37:12.833Z
+ GET /api/conversations 200 in 400ms
+ GET /api/users/cmdi3mtbe000aludma3jjwv8x 200 in 400ms
+Conversations access check: {
+  userId: 'cmdi3mtbi000jludmsd4ca4ji',
+  userType: 'host',
+  isAdmin: false
 }
- GET /api/profile 200 in 12ms
- ✓ Compiled /dashboard/profile in 206ms (869 modules)
- GET /dashboard/profile 200 in 435ms
- ✓ Compiled /favicon.ico in 109ms (871 modules)
- GET /favicon.ico 200 in 215ms
+ GET /api/conversations 200 in 16ms
+ GET /api/users/cmdi3mtbe000aludma3jjwv8x 200 in 10ms
+ POST /api/conversations 200 in 30ms
+Conversations access check: {
+  userId: 'cmdi3mtbi000jludmsd4ca4ji',
+  userType: 'host',
+  isAdmin: false
+}
+ GET /api/conversations 200 in 40ms
+ ✓ Compiled /api/messages in 196ms (885 modules)
 [33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 212ms
+Messages access check: {
+  userId: 'cmdi3mtbi000jludmsd4ca4ji',
+  userType: 'host',
+  conversationId: 'cmdjhh9bn0005lu9jx9vds70p',
+  participantIds: [ 'cmdi3mtbi000jludmsd4ca4ji', 'cmdi3mtbe000aludma3jjwv8x' ],
+  isParticipant: true,
+  isAdmin: false
+}
+[MESSAGES DEBUG] User type: host, Conv ID: cmdjhh9bn0005lu9jx9vds70p
+  Message 0 sender: {
+  id: 'cmdi3mtbi000jludmsd4ca4ji',
+  name: 'Mike Chen',
+  userType: 'HOST',
+  profileImageUrl: null,
+  'profile.profileImageUrl': 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face',
+  'artist.pressPhotoUrl': undefined,
+  'artist.media': 0
+}
+ GET /api/messages?conversationId=cmdjhh9bn0005lu9jx9vds70p 200 in 242ms
+Messages access check: {
+  userId: 'cmdi3mtbi000jludmsd4ca4ji',
+  userType: 'host',
+  conversationId: 'cmdjhh9bn0005lu9jx9vds70p',
+  participantIds: [ 'cmdi3mtbi000jludmsd4ca4ji', 'cmdi3mtbe000aludma3jjwv8x' ],
+  isParticipant: true,
+  isAdmin: false
+}
+[MESSAGES DEBUG] User type: host, Conv ID: cmdjhh9bn0005lu9jx9vds70p
+  Message 0 sender: {
+  id: 'cmdi3mtbi000jludmsd4ca4ji',
+  name: 'Mike Chen',
+  userType: 'HOST',
+  profileImageUrl: null,
+  'profile.profileImageUrl': 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face',
+  'artist.pressPhotoUrl': undefined,
+  'artist.media': 0
+}
+ GET /api/messages?conversationId=cmdjhh9bn0005lu9jx9vds70p 200 in 8ms
+ ✓ Compiled /api/messages/attachment in 306ms (1493 modules)
+[ATTACHMENT] Starting file upload process...
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+[ATTACHMENT] Processing form data...
+[ATTACHMENT] Form data received: {
+  conversationId: 'cmdjhh9bn0005lu9jx9vds70p',
+  fileName: 'fr_2.jpg',
+  fileSize: 3002742,
+  fileType: 'image/jpeg',
+  contentLength: 0
+}
+[ATTACHMENT] Processing file for storage...
+[ATTACHMENT] File paths: {
+  uploadDir: '/Users/bentyson/pad/public/uploads',
+  filePath: '/Users/bentyson/pad/public/uploads/6671389e-f891-4b77-8bb1-f236c2a1d446.jpg',
+  fileName: '6671389e-f891-4b77-8bb1-f236c2a1d446.jpg'
+}
+[ATTACHMENT] Writing file to disk...
+[ATTACHMENT] File saved successfully: /uploads/6671389e-f891-4b77-8bb1-f236c2a1d446.jpg
+[ATTACHMENT] Creating message in database...
+[ATTACHMENT] Sending response: { messageId: 'cmdjhhfzp000blu9j8u872qds' }
+ POST /api/messages/attachment 200 in 402ms
+Conversations access check: {
+  userId: 'cmdi3mtbi000jludmsd4ca4ji',
+  userType: 'host',
+  isAdmin: false
+}
+ GET /api/conversations 200 in 17ms
+ GET /api/auth/session 200 in 39ms
+ GET /api/auth/session 200 in 7ms
  GET /api/auth/session 200 in 6ms
- ✓ Compiled /api/notifications in 96ms (873 modules)
+ GET /api/auth/session 200 in 7ms
+ ✓ Compiled /api/profile in 193ms (891 modules)
 [33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 225ms
-Found media: {
-  id: 'cmdja8jr50003luczi6pu1aoo',
-  artistId: 'cmdi3mtba0004ludm6i1aexz0',
-  mediaType: 'PHOTO',
-  category: 'PRESS',
-  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
-  fileSize: null,
-  mimeType: null,
-  title: 'Sarah Johnson Press Photo',
-  description: 'Professional press photo for Sarah Johnson',
-  sortOrder: 0,
-  createdAt: 2025-07-25T20:37:12.833Z
-}
- GET /api/profile 200 in 231ms
+ GET /api/profile 200 in 244ms
+ GET /test-realtime 200 in 121ms
+ GET /favicon.ico 200 in 8ms
  GET /api/auth/session 200 in 13ms
- GET /api/notifications?unread=true&limit=0 200 in 249ms
+ GET /api/auth/session 200 in 9ms
  GET /api/notifications?unread=true&limit=0 200 in 15ms
-Found media: {
-  id: 'cmdja8jr50003luczi6pu1aoo',
-  artistId: 'cmdi3mtba0004ludm6i1aexz0',
-  mediaType: 'PHOTO',
-  category: 'PRESS',
-  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
-  fileSize: null,
-  mimeType: null,
-  title: 'Sarah Johnson Press Photo',
-  description: 'Professional press photo for Sarah Johnson',
-  sortOrder: 0,
-  createdAt: 2025-07-25T20:37:12.833Z
-}
- GET /api/profile 200 in 18ms
  GET /api/auth/session 200 in 15ms
- GET /api/auth/session 200 in 13ms
- GET /api/auth/session 200 in 12ms
+ GET /api/notifications?unread=true&limit=0 200 in 9ms
  GET /api/auth/session 200 in 8ms
-Found media: {
-  id: 'cmdja8jr50003luczi6pu1aoo',
-  artistId: 'cmdi3mtba0004ludm6i1aexz0',
-  mediaType: 'PHOTO',
-  category: 'PRESS',
-  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
-  fileSize: null,
-  mimeType: null,
-  title: 'Sarah Johnson Press Photo',
-  description: 'Professional press photo for Sarah Johnson',
-  sortOrder: 0,
-  createdAt: 2025-07-25T20:37:12.833Z
-}
  GET /api/profile 200 in 8ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 138ms
- GET /favicon.ico 200 in 12ms
- ✓ Compiled /api/artists/[id] in 95ms (875 modules)
- ✓ Compiled (877 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/artists/cmdi3mtba0004ludm6i1aexz0 200 in 230ms
- GET /api/auth/session 200 in 233ms
- GET /api/artists?exclude=cmdi3mtba0004ludm6i1aexz0&limit=3 200 in 242ms
- ✓ Compiled /api/spotify/artist/[artistId] in 129ms (879 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 307ms
- GET /api/notifications?unread=true&limit=0 200 in 308ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 314ms
- GET /api/notifications?unread=true&limit=0 200 in 27ms
- GET /api/auth/session 200 in 30ms
- GET /api/spotify/artist/cmdi3mtba0004ludm6i1aexz0 200 in 36ms
- GET /api/auth/session 200 in 15ms
-Found media: {
-  id: 'cmdja8jr50003luczi6pu1aoo',
-  artistId: 'cmdi3mtba0004ludm6i1aexz0',
-  mediaType: 'PHOTO',
-  category: 'PRESS',
-  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
-  fileSize: null,
-  mimeType: null,
-  title: 'Sarah Johnson Press Photo',
-  description: 'Professional press photo for Sarah Johnson',
-  sortOrder: 0,
-  createdAt: 2025-07-25T20:37:12.833Z
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 7ms - New messages: 0
+ GET /api/messages/poll-safe? 200 in 38ms
+ POST /api/messages 200 in 38ms
+Conversations access check: {
+  userId: 'cmdi3mtbi000jludmsd4ca4ji',
+  userType: 'host',
+  isAdmin: false
 }
- GET /api/profile 200 in 17ms
- GET /api/auth/session 200 in 36ms
- GET /api/auth/session 200 in 35ms
- GET /api/auth/session 200 in 11ms
- GET /api/auth/session 200 in 8ms
-Found media: {
-  id: 'cmdja8jr50003luczi6pu1aoo',
-  artistId: 'cmdi3mtba0004ludm6i1aexz0',
-  mediaType: 'PHOTO',
-  category: 'PRESS',
-  fileUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
-  fileSize: null,
-  mimeType: null,
-  title: 'Sarah Johnson Press Photo',
-  description: 'Professional press photo for Sarah Johnson',
-  sortOrder: 0,
-  createdAt: 2025-07-25T20:37:12.833Z
+ GET /api/conversations 200 in 23ms
+[POLL-TEST] 2025-07-26T00:00:44.562Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 52ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 5ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A00%3A18.223Z 200 in 32ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 10ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A00%3A48.221Z 200 in 44ms
+[POLL-TEST] 2025-07-26T00:01:44.581Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 72ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 7ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A01%3A18.240Z 200 in 37ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 3ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A01%3A48.226Z 200 in 17ms
+[POLL-TEST] 2025-07-26T00:02:44.556Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 38ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 8ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A02%3A18.209Z 200 in 44ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 4ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A02%3A48.235Z 200 in 32ms
+[POLL-TEST] 2025-07-26T00:03:44.555Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 35ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 5ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A03%3A18.225Z 200 in 38ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 4ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A03%3A48.232Z 200 in 33ms
+[POLL-TEST] 2025-07-26T00:04:44.548Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 27ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 20ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A04%3A18.227Z 200 in 55ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 5ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A04%3A48.234Z 200 in 32ms
+[POLL-TEST] 2025-07-26T00:05:44.547Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 34ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 9ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A05%3A18.227Z 200 in 89ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 3ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A05%3A48.282Z 200 in 34ms
+[POLL-TEST] 2025-07-26T00:06:44.538Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 32ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 5ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A06%3A18.215Z 200 in 34ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 6ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A06%3A48.214Z 200 in 29ms
+[POLL-TEST] 2025-07-26T00:07:44.540Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 32ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 3ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A07%3A18.210Z 200 in 25ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 16ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A07%3A48.207Z 200 in 42ms
+[POLL-TEST] 2025-07-26T00:08:44.539Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 30ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 15ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A08%3A18.213Z 200 in 41ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 3ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A08%3A48.210Z 200 in 28ms
+[POLL-TEST] 2025-07-26T00:09:44.533Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 25ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 5ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A09%3A18.211Z 200 in 28ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 12ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A09%3A48.211Z 200 in 37ms
+[POLL-TEST] 2025-07-26T00:10:44.536Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 26ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 5ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A10%3A18.213Z 200 in 29ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 5ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A10%3A48.211Z 200 in 31ms
+[POLL-TEST] 2025-07-26T00:11:44.552Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 41ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 3ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A11%3A18.217Z 200 in 38ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 5ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A11%3A48.222Z 200 in 28ms
+[POLL-TEST] 2025-07-26T00:12:44.550Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 38ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 5ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A12%3A18.214Z 200 in 31ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 3ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A12%3A48.216Z 200 in 27ms
+[POLL-TEST] 2025-07-26T00:13:44.540Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 22ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 5ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A13%3A18.213Z 200 in 29ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 4ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A13%3A48.215Z 200 in 27ms
+[POLL-TEST] 2025-07-26T00:14:44.541Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 26ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 3ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A14%3A18.214Z 200 in 23ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 4ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A14%3A48.210Z 200 in 28ms
+[POLL-TEST] 2025-07-26T00:15:44.536Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 24ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 15ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A15%3A18.217Z 200 in 39ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 3ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A15%3A48.217Z 200 in 26ms
+[POLL-TEST] 2025-07-26T00:16:44.556Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 44ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 28ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A16%3A18.214Z 200 in 42ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 18ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A16%3A48.204Z 200 in 46ms
+[POLL-TEST] 2025-07-26T00:17:44.542Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 25ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 5ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A17%3A18.223Z 200 in 30ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 4ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A17%3A48.219Z 200 in 28ms
+[POLL-TEST] 2025-07-26T00:18:44.547Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 28ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 5ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A18%3A18.216Z 200 in 39ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 4ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A18%3A48.228Z 200 in 28ms
+[POLL-TEST] 2025-07-26T00:19:44.560Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 39ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 4ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A19%3A18.219Z 200 in 16ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 4ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A19%3A48.204Z 200 in 22ms
+ ✓ Compiled in 1530ms (618 modules)
+ GET /test-polling 200 in 80ms
+ GET /test-realtime 200 in 81ms
+ GET /dashboard/messages?startConversation=cmdi3mtbe000aludma3jjwv8x 200 in 81ms
+[POLL-TEST] 2025-07-26T00:20:25.518Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 13ms
+ ✓ Compiled in 1337ms (1405 modules)
+ GET /test-realtime 200 in 52ms
+ GET /test-polling 200 in 53ms
+ GET /dashboard/messages?startConversation=cmdi3mtbe000aludma3jjwv8x 200 in 54ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+[POLL-TEST] 2025-07-26T00:20:36.537Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 36ms
+ ✓ Compiled in 1204ms (618 modules)
+ GET /test-polling 200 in 30ms
+ GET /test-realtime 200 in 30ms
+ GET /dashboard/messages?startConversation=cmdi3mtbe000aludma3jjwv8x 200 in 31ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 20ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A20%3A18.522Z 200 in 43ms
+[POLL-TEST] 2025-07-26T00:21:37.575Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 69ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 20ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A20%3A48.531Z 200 in 53ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 18ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A21%3A44.563Z 200 in 44ms
+[POLL-TEST] 2025-07-26T00:22:44.566Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 51ms
+[POLL-TEST] 2025-07-26T00:23:44.569Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 50ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 10ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A22%3A44.552Z 200 in 53ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 21ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A23%3A44.568Z 200 in 54ms
+[POLL-TEST] 2025-07-26T00:24:44.571Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 38ms
+ ✓ Compiled /api/auth/[...nextauth] in 307ms (789 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 475ms
+ GET /api/auth/session 200 in 606ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 60ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A24%3A44.559Z 200 in 548ms
+ GET /api/auth/session 200 in 147ms
+ ✓ Compiled /api/conversations in 172ms (791 modules)
+ ✓ Compiled (793 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session 200 in 480ms
+ GET /api/auth/session 200 in 346ms
+Conversations access check: {
+  userId: 'cmdi3mtbi000jludmsd4ca4ji',
+  userType: 'host',
+  isAdmin: false
 }
- GET /api/profile 200 in 13ms
- ✓ Compiled in 1293ms (757 modules)
- GET / 200 in 85ms
- GET /dashboard/profile 200 in 87ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 80ms
- ✓ Compiled in 1175ms (757 modules)
- GET / 200 in 38ms
- GET /dashboard/profile 200 in 39ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 36ms
- ✓ Compiled in 1258ms (757 modules)
- GET /dashboard/profile 200 in 68ms
- GET / 200 in 71ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 66ms
- ✓ Compiled in 1179ms (757 modules)
- GET /dashboard/profile 200 in 33ms
- GET / 200 in 34ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 32ms
- ✓ Compiled in 1216ms (757 modules)
- GET / 200 in 36ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 33ms
- GET /dashboard/profile 200 in 37ms
- ✓ Compiled in 1311ms (1454 modules)
- GET / 200 in 150ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 144ms
- GET /dashboard/profile 200 in 151ms
- ✓ Compiled in 1442ms (1719 modules)
- GET /dashboard/profile 200 in 84ms
- GET / 200 in 85ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 82ms
- ✓ Compiled in 1245ms (757 modules)
- GET / 200 in 73ms
- GET /artists/cmdi3mtba0004ludm6i1aexz0 200 in 67ms
- GET /dashboard/profile 200 in 76ms
-[?25h
+ GET /api/auth/session 200 in 10ms
+ GET /api/conversations 200 in 502ms
+ GET /api/users/cmdi3mtbe000aludma3jjwv8x 200 in 417ms
+Conversations access check: {
+  userId: 'cmdi3mtbi000jludmsd4ca4ji',
+  userType: 'host',
+  isAdmin: false
+}
+ GET /api/users/cmdi3mtbe000aludma3jjwv8x 200 in 20ms
+ GET /api/conversations 200 in 24ms
+ ✓ Compiled /api/profile in 130ms (795 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/profile 200 in 173ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 4ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A25%3A11.068Z 200 in 21ms
+ ✓ Compiled / in 267ms (823 modules)
+ GET / 200 in 466ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+[POLL-TEST] 2025-07-26T00:25:44.599Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 84ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 3ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A25%3A18.219Z 200 in 15ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 10ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A25%3A48.519Z 200 in 19ms
+[POLL-TEST] 2025-07-26T00:26:44.548Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 32ms
+[POLL-TEST] 2025-07-26T00:27:44.575Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 55ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 5ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A26%3A18.520Z 200 in 43ms
+ GET /api/auth/session 200 in 82ms
+[POLL-SAFE] User: cmdi3mtb60000ludmo7ybfyea - Duration: 12ms - New messages: 0
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A27%3A44.578Z 200 in 70ms
+ GET /api/auth/session 200 in 45ms
+ GET /api/auth/session 200 in 34ms
+Conversations access check: {
+  userId: 'cmdi3mtbi000jludmsd4ca4ji',
+  userType: 'host',
+  isAdmin: false
+}
+ GET /api/auth/session 200 in 22ms
+ GET /api/auth/session 200 in 12ms
+ GET /api/users/cmdi3mtbe000aludma3jjwv8x 200 in 60ms
+ GET /api/conversations 200 in 65ms
+ GET /api/auth/session 200 in 17ms
+Conversations access check: {
+  userId: 'cmdi3mtbi000jludmsd4ca4ji',
+  userType: 'host',
+  isAdmin: false
+}
+ GET /api/users/cmdi3mtbe000aludma3jjwv8x 200 in 18ms
+ GET /api/conversations 200 in 23ms
+ GET /api/profile 200 in 14ms
+[POLL-TEST] 2025-07-26T00:28:44.553Z - User: cmdi3mtb60000ludmo7ybfyea - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap
+ GET /api/messages/poll-test 200 in 25ms
+[POLL-SAFE] Rate limited user cmdi3mtb60000ludmo7ybfyea - wait 5038ms
+ GET /api/messages/poll-safe?since=2025-07-26T00%3A28%3A43.262Z 429 in 21ms

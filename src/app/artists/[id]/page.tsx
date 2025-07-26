@@ -30,6 +30,7 @@ import { mockArtists } from '@/data/mockData';
 
 interface ArtistData {
   id: string;
+  userId: string;
   name: string;
   bio: string;
   location: string;
@@ -272,7 +273,7 @@ export default function ArtistProfilePage() {
                   Request Booking
                 </Button>
               </Link>
-              <Link href={`/messages?artistId=${artistData.id}`}>
+              <Link href={`/dashboard/messages?startConversation=${artistData.userId}`}>
                 <Button size="lg" variant="outline" className="border-white text-white bg-transparent hover:bg-white hover:text-neutral-900 px-8 py-3 font-semibold">
                   Send Message
                 </Button>

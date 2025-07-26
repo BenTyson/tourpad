@@ -56,6 +56,7 @@ import { testHosts } from '@/data/realTestData';
 
 interface HostData {
   id: string;
+  userId: string;
   name: string;
   bio: string;
   city: string;
@@ -158,6 +159,7 @@ export default function HostProfilePage() {
             // Transform test data to match API format
             const transformedHost: HostData = {
               id: testHost.id,
+              userId: testHost.userId,
               name: testHost.name,
               bio: testHost.bio,
               city: testHost.location.city,
@@ -338,7 +340,7 @@ export default function HostProfilePage() {
                     Request Booking
                   </Button>
                 </Link>
-                <Link href={`/dashboard/messages?startConversation=${host.id}`}>
+                <Link href={`/dashboard/messages?startConversation=${host.userId}`}>
                   <Button size="lg" variant="outline" className="border-neutral-300 text-neutral-700 hover:bg-neutral-50">
                     Send Message
                   </Button>

@@ -60,6 +60,7 @@ export async function GET(
     // Return the artist data in the format expected by the profile page
     return NextResponse.json({
       id: artist.id,
+      userId: artist.userId,
       name: artist.stageName || artist.user.name,
       bio: artist.user.profile?.bio || 'Professional touring musician bringing unique sounds to intimate venues.',
       location: artist.user.profile?.location || '',

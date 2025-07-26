@@ -3,9 +3,9 @@ import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 // GET /api/users/[id] - Get user info for messaging
