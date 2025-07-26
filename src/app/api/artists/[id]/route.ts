@@ -78,6 +78,8 @@ export async function GET(
         .map(m => m.fileUrl)[0] || 
         artist.user.profile?.profileImageUrl ||
         'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=faces',
+      thumbnailPhotoUrl: artist.pressPhotoUrl || '',
+      heroPhotoUrl: artist.heroPhotoUrl || '',
       website: artist.user.profile?.websiteUrl || '',
       socialLinks: {
         website: artist.user.profile?.websiteUrl || '',

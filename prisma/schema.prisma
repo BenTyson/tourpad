@@ -68,6 +68,7 @@ model Artist {
   equipmentNeeds          String[]
   travelRadius            Int?
   pressPhotoUrl           String?
+  heroPhotoUrl            String?
   performanceVideoUrl     String?
   performanceVideoFile    String?       // File path for uploaded MP4 video
   musicSamples            Json?

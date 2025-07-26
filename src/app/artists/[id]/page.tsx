@@ -42,6 +42,8 @@ interface ArtistData {
   yearsActive: number;
   experienceLevel: string;
   profileImageUrl: string;
+  thumbnailPhotoUrl?: string;
+  heroPhotoUrl?: string;
   website: string;
   socialLinks: any;
   rating: number;
@@ -240,7 +242,13 @@ export default function ArtistProfilePage() {
       <section className="relative h-[70vh] min-h-[500px] bg-neutral-900 overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0">
-          {artistData.profileImageUrl ? (
+          {artistData.heroPhotoUrl ? (
+            <img 
+              src={artistData.heroPhotoUrl} 
+              alt={`${artistData.name} hero background`}
+              className="w-full h-full object-cover"
+            />
+          ) : artistData.profileImageUrl ? (
             <img 
               src={artistData.profileImageUrl} 
               alt={`${artistData.name} background`}

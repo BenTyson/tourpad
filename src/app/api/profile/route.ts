@@ -65,6 +65,8 @@ export async function GET() {
         venueRequirements: user.artist.venueRequirements || [],
         contentRating: user.artist.contentRating || 'family-friendly',
         profilePhoto: user.profile?.profileImageUrl || '',
+        thumbnailPhoto: user.artist?.pressPhotoUrl || '',
+        heroPhoto: user.artist?.heroPhotoUrl || '',
         bandMembers: user.artist.bandMembers?.map(member => ({
           id: member.id,
           name: member.name,
@@ -215,6 +217,8 @@ export async function PUT(request: NextRequest) {
     console.log('Received profile data:', data);
     console.log('suggestedDoorFee value:', data.suggestedDoorFee, 'type:', typeof data.suggestedDoorFee);
     console.log('Session user type:', session.user.type);
+    console.log('Thumbnail photo:', data.thumbnailPhoto);
+    console.log('Hero photo:', data.heroPhoto);
     const userId = session.user.id;
 
     // Update user basic info
@@ -299,6 +303,8 @@ export async function PUT(request: NextRequest) {
             contentRating: data.contentRating || 'family-friendly',
             videoLinks: data.videoLinks || [],
             musicSamples: data.musicSamples || [],
+            pressPhotoUrl: data.thumbnailPhoto ? data.thumbnailPhoto : null,
+            heroPhotoUrl: data.heroPhoto ? data.heroPhoto : null,
           }
         });
 

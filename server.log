@@ -16,3 +16,7 @@
 [0;32m[INFO][0m Server started with PID: 31289
 [0;32m[INFO][0m Server is ready and running at http://localhost:3001
 [0;32m[INFO][0m Monitoring server (PID: 31289)
+[0;32m[INFO][0m Monitored process died but Next.js is still running (PID: 34386), updating monitor
+[1;33m[WARN][0m Server process has died
+[0;32m[INFO][0m Cleaning up...
+[0;32m[INFO][0m Cleanup completed
