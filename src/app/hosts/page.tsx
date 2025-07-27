@@ -31,10 +31,13 @@ import { HostCard } from '@/components/cards/HostCard';
 
 export default function HostsPage() {
   const { data: session, status } = useSession();
+  const [activeTab, setActiveTab] = useState<'hosts' | 'artists'>('hosts');
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [hosts, setHosts] = useState<any[]>([]);
+  const [artists, setArtists] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [artistsLoading, setArtistsLoading] = useState(false);
   const [filters, setFilters] = useState({
     minAttendance: '',
     maxDoorFee: '',
@@ -46,6 +49,15 @@ export default function HostsPage() {
       bnbOffered: false,
       accessible: false
     }
+  });
+  
+  // Artist discovery filters
+  const [artistFilters, setArtistFilters] = useState({
+    state: '',
+    city: '',
+    startDate: '',
+    endDate: '',
+    genres: [] as string[]
   });
 
   // Check if user has access to browse hosts
@@ -79,6 +91,43 @@ export default function HostsPage() {
 
     fetchHosts();
   }, [hasAccess]);
+
+  // Fetch artists for discovery
+  const fetchArtists = async () => {
+    if (!hasAccess) return;
+    
+    setArtistsLoading(true);
+    try {
+      const searchParams = new URLSearchParams();
+      
+      if (artistFilters.state) searchParams.append('state', artistFilters.state);
+      if (artistFilters.city) searchParams.append('city', artistFilters.city);
+      if (artistFilters.startDate) searchParams.append('startDate', artistFilters.startDate);
+      if (artistFilters.endDate) searchParams.append('endDate', artistFilters.endDate);
+      if (artistFilters.genres.length > 0) searchParams.append('genres', artistFilters.genres.join(','));
+      
+      const response = await fetch(`/api/artists/discover?${searchParams}`);
+      if (response.ok) {
+        const data = await response.json();
+        setArtists(data.artists || []);
+      } else {
+        console.error('Failed to fetch artists');
+        setArtists([]);
+      }
+    } catch (error) {
+      console.error('Error fetching artists:', error);
+      setArtists([]);
+    } finally {
+      setArtistsLoading(false);
+    }
+  };
+
+  // Fetch artists when filters change or tab switches to artists
+  useEffect(() => {
+    if (activeTab === 'artists' && hasAccess) {
+      fetchArtists();
+    }
+  }, [activeTab, artistFilters, hasAccess]);
 
   // If user doesn't have access, show gateway page
   if (status === 'loading' || loading) {
@@ -553,7 +602,39 @@ export default function HostsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-        {/* Search and Filters */}
+        {/* Tab Navigation */}
+        <div className="mb-8">
+          <div className="border-b border-neutral-200">
+            <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+              <button
+                onClick={() => setActiveTab('hosts')}
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'hosts'
+                    ? 'border-primary-500 text-primary-600'
+                    : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300'
+                }`}
+              >
+                <Home className="w-4 h-4 inline mr-2" />
+                Find Hosts
+              </button>
+              <button
+                onClick={() => setActiveTab('artists')}
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'artists'
+                    ? 'border-primary-500 text-primary-600'
+                    : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300'
+                }`}
+              >
+                <Music className="w-4 h-4 inline mr-2" />
+                Discover Artists
+              </button>
+            </nav>
+          </div>
+        </div>
+
+        {activeTab === 'hosts' ? (
+          <>
+            {/* Search and Filters */}
         <Card className="mb-8">
           <CardContent className="p-6">
             <div className="flex flex-col md:flex-row gap-4">
@@ -682,6 +763,218 @@ export default function HostsPage() {
               Clear Filters
             </Button>
           </div>
+        )}
+          </>
+        ) : (
+          <>
+            {/* Artist Discovery Section */}
+            <Card className="mb-8">
+              <CardContent className="p-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* State Filter */}
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-2">
+                      State
+                    </label>
+                    <select
+                      value={artistFilters.state}
+                      onChange={(e) => setArtistFilters(prev => ({ ...prev, state: e.target.value }))}
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    >
+                      <option value="">All States</option>
+                      <option value="CO">Colorado</option>
+                      <option value="CA">California</option>
+                      <option value="TX">Texas</option>
+                      <option value="NY">New York</option>
+                      <option value="FL">Florida</option>
+                      {/* Add more states as needed */}
+                    </select>
+                  </div>
+
+                  {/* City Filter */}
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-2">
+                      City
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter city name"
+                      value={artistFilters.city}
+                      onChange={(e) => setArtistFilters(prev => ({ ...prev, city: e.target.value }))}
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  {/* Date Range */}
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-2">
+                      Date Range
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <input
+                        type="date"
+                        value={artistFilters.startDate}
+                        onChange={(e) => setArtistFilters(prev => ({ ...prev, startDate: e.target.value }))}
+                        className="px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+                      />
+                      <input
+                        type="date"
+                        value={artistFilters.endDate}
+                        onChange={(e) => setArtistFilters(prev => ({ ...prev, endDate: e.target.value }))}
+                        className="px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Clear Filters */}
+                <div className="mt-4 flex justify-end">
+                  <Button
+                    onClick={() => setArtistFilters({
+                      state: '',
+                      city: '',
+                      startDate: '',
+                      endDate: '',
+                      genres: []
+                    })}
+                    variant="outline"
+                    size="sm"
+                  >
+                    Clear Filters
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Artist Results */}
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-semibold text-neutral-900">
+                {artistsLoading ? 'Searching...' : `${artists.length} Artist${artists.length !== 1 ? 's' : ''} Found`}
+              </h2>
+            </div>
+
+            {/* Artist Grid */}
+            {artistsLoading ? (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+                <p className="text-neutral-600">Searching for touring artists...</p>
+              </div>
+            ) : artists.length > 0 ? (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {artists.map((artist) => (
+                  <Card key={artist.id} className="hover:shadow-lg transition-shadow duration-300">
+                    <CardContent className="p-6">
+                      {/* Artist Info */}
+                      <div className="flex items-start space-x-4">
+                        <div className="w-16 h-16 bg-gradient-to-br from-primary-400 to-secondary-500 rounded-full flex items-center justify-center flex-shrink-0">
+                          {artist.thumbnailPhoto ? (
+                            <img 
+                              src={artist.thumbnailPhoto} 
+                              alt={artist.name}
+                              className="w-full h-full rounded-full object-cover"
+                            />
+                          ) : (
+                            <Music className="w-8 h-8 text-white" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-neutral-900 truncate">
+                            {artist.name}
+                          </h3>
+                          <p className="text-sm text-neutral-600">
+                            {artist.city}, {artist.state}
+                          </p>
+                          {artist.genres && artist.genres.length > 0 && (
+                            <div className="mt-1">
+                              <span className="text-xs text-primary-600 font-medium">
+                                {artist.genres.slice(0, 2).join(', ')}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Tour Information */}
+                      <div className="mt-4">
+                        <h4 className="text-sm font-medium text-neutral-900 mb-2">Upcoming Tours:</h4>
+                        <div className="space-y-2">
+                          {artist.tourRanges.slice(0, 2).map((tour: any) => (
+                            <div key={tour.id} className="bg-neutral-50 rounded-lg p-3">
+                              <div className="text-xs font-semibold text-primary-600 uppercase tracking-wide">
+                                {tour.tourName}
+                              </div>
+                              <div className="text-sm font-medium text-neutral-900">
+                                {tour.state} • {new Date(tour.startDate).toLocaleDateString('en-US', { 
+                                  month: 'short', 
+                                  day: 'numeric' 
+                                })} - {new Date(tour.endDate).toLocaleDateString('en-US', { 
+                                  month: 'short', 
+                                  day: 'numeric',
+                                  year: 'numeric'
+                                })}
+                              </div>
+                              {tour.cities && tour.cities.length > 0 && (
+                                <div className="text-xs text-neutral-600 mt-1">
+                                  Cities: {tour.cities.slice(0, 3).join(', ')}
+                                  {tour.cities.length > 3 && ` +${tour.cities.length - 3} more`}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                          {artist.tourRanges.length > 2 && (
+                            <div className="text-xs text-neutral-500 text-center">
+                              +{artist.tourRanges.length - 2} more tour dates
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Brief Bio */}
+                      {artist.briefBio && (
+                        <div className="mt-4">
+                          <p className="text-sm text-neutral-600 line-clamp-2">
+                            {artist.briefBio}
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Action Buttons */}
+                      <div className="mt-4 flex space-x-2">
+                        <Link href={`/artists/${artist.userId}`} className="flex-1">
+                          <Button variant="outline" size="sm" className="w-full">
+                            View Profile
+                          </Button>
+                        </Link>
+                        <Button size="sm" className="flex-1">
+                          Contact Artist
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <Music className="w-16 h-16 text-neutral-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-neutral-900 mb-2">No touring artists found</h3>
+                <p className="text-neutral-600 mb-4">
+                  Try adjusting your search criteria or check back later for new tour announcements.
+                </p>
+                <Button
+                  onClick={() => setArtistFilters({
+                    state: '',
+                    city: '',
+                    startDate: '',
+                    endDate: '',
+                    genres: []
+                  })}
+                  variant="outline"
+                >
+                  Clear All Filters
+                </Button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

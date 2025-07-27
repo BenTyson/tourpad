@@ -14,6 +14,16 @@
   animation: typing-bounce 1.4s infinite ease-in-out;
 }
 
+/* Hide scrollbars for horizontal photo scrolling */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -57,6 +67,18 @@
   --color-french-blue: #6B8CA4;
   --color-sage: #738a6e;
   --color-evergreen: #344c3d;
+  
+  /* CSS Custom Properties for Coastal Colors */
+  --color-mist-50: #f8f8f7;
+  --color-mist-100: #ebebe9;
+  --color-mist-200: #d7d7d3;
+  --color-mist-300: #c3c3bd;
+  --color-mist-400: #afafa7;
+  --color-mist-500: #9b9b91;
+  --color-mist-600: #87877b;
+  --color-mist-700: #737365;
+  --color-mist-800: #5f5f4f;
+  --color-mist-900: #4b4b39;
   
   --color-neutral-50: #f8f9f9;
   --color-neutral-100: #f1f3f3;
@@ -138,6 +160,25 @@ a:focus {
 html {
   scroll-behavior: smooth;
 }
+
+/* TourPad Coastal Color Utilities */
+.text-mist { color: var(--color-mist); }
+.text-sand { color: var(--color-sand); }
+.text-french-blue { color: var(--color-french-blue); }
+.text-sage { color: var(--color-sage); }
+.text-evergreen { color: var(--color-evergreen); }
+
+.bg-mist { background-color: var(--color-mist); }
+.bg-sand { background-color: var(--color-sand); }
+.bg-french-blue { background-color: var(--color-french-blue); }
+.bg-sage { background-color: var(--color-sage); }
+.bg-evergreen { background-color: var(--color-evergreen); }
+
+.border-mist { border-color: var(--color-mist); }
+.border-sand { border-color: var(--color-sand); }
+.border-french-blue { border-color: var(--color-french-blue); }
+.border-sage { border-color: var(--color-sage); }
+.border-evergreen { border-color: var(--color-evergreen); }
 
 /* TourPad Map Styling */
 .tourpad-map .leaflet-control-zoom a {

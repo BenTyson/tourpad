@@ -7,15 +7,15 @@ const rateLimitMap = new Map<string, number>();
 const RATE_LIMIT_WINDOW = 10000; // 10 seconds minimum between polls per user
 const RATE_LIMIT_CLEANUP_INTERVAL = 60000; // Clean up old entries every minute
 
-// Clean up old rate limit entries
-setInterval(() => {
+// Clean up old rate limit entries on-demand (no global intervals)
+function cleanupRateLimit() {
   const now = Date.now();
   for (const [key, timestamp] of rateLimitMap.entries()) {
     if (now - timestamp > RATE_LIMIT_CLEANUP_INTERVAL) {
       rateLimitMap.delete(key);
     }
   }
-}, RATE_LIMIT_CLEANUP_INTERVAL);
+}
 
 // GET /api/messages/poll-safe - Safe polling endpoint with rate limiting
 export async function GET(request: NextRequest) {
@@ -28,6 +28,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Clean up old entries periodically (every ~50 requests)
+    if (Math.random() < 0.02) {
+      cleanupRateLimit();
+    }
+    
     // Rate limiting check
     const lastPollTime = rateLimitMap.get(session.user.id);
     const now = Date.now();

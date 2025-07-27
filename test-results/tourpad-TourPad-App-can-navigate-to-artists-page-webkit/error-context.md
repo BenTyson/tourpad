@@ -1,0 +1,139 @@
+# Page snapshot
+
+```yaml
+- banner:
+  - navigation:
+    - link "TourPad":
+      - /url: /
+    - link "Find Hosts":
+      - /url: /hosts
+    - link "Browse Artists":
+      - /url: /artists
+    - link "How It Works":
+      - /url: /how-it-works
+    - link "Login":
+      - /url: /login
+      - button "Login"
+    - link "Get Started":
+      - /url: /register
+      - button "Get Started"
+- main:
+  - heading "Welcome Back" [level=1]
+  - paragraph: Sign in to your TourPad account
+  - heading "Demo Accounts (Click to Auto-Fill)" [level=3]
+  - button "Admin User admin@tourpad.com Full platform access"
+  - button "Artist sarah@example.com Folk musician Sarah Johnson"
+  - button "Artist marcus@example.com Jazz pianist Marcus Williams"
+  - button "Artist luna@example.com Electronic artist Luna Martinez"
+  - button "Host mike@example.com Mike's Music Room (Denver, CO)"
+  - button "Host emily@example.com Thompson Garden Sessions (Austin, TX)"
+  - button "Host james@example.com The Wilson Barn (Nashville, TN)"
+  - button "Fan fan@example.com Music lover Emma Rodriguez"
+  - text: Email Address
+  - textbox "Enter your email"
+  - text: Password
+  - textbox "Enter your password"
+  - button
+  - checkbox "Remember me"
+  - text: Remember me
+  - link "Forgot password?":
+    - /url: /forgot-password
+  - button "Sign In"
+  - text: Don't have an account?
+  - link "Create Account":
+    - /url: /register
+    - button "Create Account"
+  - paragraph:
+    - text: By signing in, you agree to our
+    - link "Terms of Service":
+      - /url: /terms
+    - text: and
+    - link "Privacy Policy":
+      - /url: /privacy
+- contentinfo:
+  - text: TourPad
+  - paragraph: Where Music Feels Like Home
+  - paragraph: Connecting touring musicians with passionate hosts for unforgettable intimate concerts. Building community, one show at a time.
+  - text: hello@tourpad.com 1-800-TOURPAD Denver, CO
+  - heading "Platform" [level=3]
+  - list:
+    - listitem:
+      - link "Find Hosts":
+        - /url: /hosts
+    - listitem:
+      - link "Browse Artists":
+        - /url: /artists
+    - listitem:
+      - link "How It Works":
+        - /url: /how-it-works
+    - listitem:
+      - link "Pricing":
+        - /url: /pricing
+  - heading "Company" [level=3]
+  - list:
+    - listitem:
+      - link "About Us":
+        - /url: /about
+    - listitem:
+      - link "Press":
+        - /url: /press
+    - listitem:
+      - link "Blog":
+        - /url: /blog
+    - listitem:
+      - link "Contact":
+        - /url: /contact
+  - heading "Support" [level=3]
+  - list:
+    - listitem:
+      - link "Help Center":
+        - /url: /help
+    - listitem:
+      - link "Safety":
+        - /url: /safety
+    - listitem:
+      - link "Community Guidelines":
+        - /url: /guidelines
+    - listitem:
+      - link "Trust & Safety":
+        - /url: /trust
+    - listitem:
+      - link "Report Issue":
+        - /url: /report
+  - heading "Legal" [level=3]
+  - list:
+    - listitem:
+      - link "Terms of Service":
+        - /url: /terms
+    - listitem:
+      - link "Privacy Policy":
+        - /url: /privacy
+    - listitem:
+      - link "Cookie Policy":
+        - /url: /cookies
+    - listitem:
+      - link "Accessibility":
+        - /url: /accessibility
+    - listitem:
+      - link "Sitemap":
+        - /url: /sitemap
+  - heading "Stay Connected" [level=3]
+  - paragraph: Get updates on new features, artist spotlights, and community stories
+  - textbox "Enter your email"
+  - button "Subscribe" [disabled]
+  - paragraph: © 2025 TourPad. All rights reserved.
+  - text: "Made with for musicians Follow us:"
+  - link "Facebook":
+    - /url: "#"
+  - link "Twitter":
+    - /url: "#"
+  - link "Instagram":
+    - /url: "#"
+  - link "YouTube":
+    - /url: "#"
+  - link "LinkedIn":
+    - /url: "#"
+- alert
+- button "Open Next.js Dev Tools":
+  - img
+```

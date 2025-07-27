@@ -35,6 +35,8 @@ export function rateLimit(
   maxRequests: number = 10,
   windowMs: number = 60000
 ): boolean {
+  maybeCleanupRateLimit(); // Clean up on-demand
+  
   const now = Date.now();
   const userLimit = requestCounts.get(identifier);
   
@@ -54,12 +56,21 @@ export function rateLimit(
   return true;
 }
 
-// Clean up old rate limit entries periodically
-setInterval(() => {
+// Clean up old rate limit entries periodically (on-demand instead of interval)
+function cleanupRateLimit() {
   const now = Date.now();
   for (const [key, value] of requestCounts.entries()) {
     if (now > value.resetTime) {
       requestCounts.delete(key);
     }
   }
-}, 300000); // Clean up every 5 minutes
+}
+
+// Clean up every 100 requests instead of on a timer
+let requestCounter = 0;
+function maybeCleanupRateLimit() {
+  requestCounter++;
+  if (requestCounter % 100 === 0) {
+    cleanupRateLimit();
+  }
+}

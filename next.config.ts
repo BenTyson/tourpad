@@ -10,17 +10,15 @@ const nextConfig: NextConfig = {
   
   // DISABLE ALL EXPERIMENTAL FEATURES for maximum stability
   experimental: {
-    // Disable everything that could cause crashes
+    // Minimal experimental features for stability
     optimizeCss: false,
     memoryBasedWorkersCount: false,
     webpackBuildWorker: false,
-    turbo: false,
-    serverComponentsExternalPackages: [],
-    serverActions: false,
     typedRoutes: false,
     mdxRs: false,
-    instrumentationHook: false,
   },
+  
+  // Turbopack is disabled by default in Next.js 15
 
   serverExternalPackages: ['sharp', 'multer'],
 

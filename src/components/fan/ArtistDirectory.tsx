@@ -29,6 +29,12 @@ interface Artist {
   genres: string[];
   profileImageUrl?: string;
   pressPhoto?: string;
+  photos?: Array<{
+    id: string;
+    fileUrl: string;
+    title?: string;
+    category: string;
+  }>;
   travelRadius?: number;
   typicalSetLength?: number;
   minGuarantee?: number;
@@ -65,7 +71,7 @@ export default function ArtistDirectory() {
   const [artists, setArtists] = useState<Artist[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(true);
   
   // Filter state
   const [filters, setFilters] = useState({
@@ -185,12 +191,8 @@ export default function ArtistDirectory() {
 
   return (
     <div className="space-y-6">
-      {/* Header with Filters */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-neutral-900">Artist Directory</h2>
-          <p className="text-neutral-600 mt-1">Discover talented musicians for house concerts</p>
-        </div>
+      {/* Filters Toggle */}
+      <div className="flex justify-end">
         <Button
           onClick={() => setShowFilters(!showFilters)}
           variant="outline"
@@ -313,19 +315,102 @@ export default function ArtistDirectory() {
               className="cursor-pointer hover:shadow-md transition-shadow"
             >
               <CardContent className="p-0">
-                {/* Artist Image */}
+                {/* Artist Images with Horizontal Scroll */}
                 <div className="relative h-48 bg-gradient-to-br from-neutral-100 to-neutral-200">
-                  {artist.pressPhoto ? (
-                    <img 
-                      src={artist.pressPhoto} 
-                      alt={artist.stageName || artist.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <Music className="w-12 h-12 text-neutral-400" />
-                    </div>
-                  )}
+                  {(() => {
+                    // Collect all available photos
+                    const allPhotos = [];
+                    if (artist.pressPhoto) {
+                      allPhotos.push({ url: artist.pressPhoto, title: 'Press Photo' });
+                    }
+                    if (artist.photos && artist.photos.length > 0) {
+                      allPhotos.push(...artist.photos.map(photo => ({ 
+                        url: photo.fileUrl, 
+                        title: photo.title || 'Performance Photo' 
+                      })));
+                    }
+
+                    if (allPhotos.length === 0) {
+                      return (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Music className="w-12 h-12 text-neutral-400" />
+                        </div>
+                      );
+                    }
+
+                    if (allPhotos.length === 1) {
+                      return (
+                        <img 
+                          src={allPhotos[0].url} 
+                          alt={artist.stageName || artist.name}
+                          className="w-full h-full object-cover"
+                        />
+                      );
+                    }
+
+                    // Multiple photos - horizontal scroll with arrows
+                    return (
+                      <div className="relative w-full h-full overflow-hidden group">
+                        <div 
+                          id={`photo-scroll-${artist.id}`}
+                          className="flex h-full overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth"
+                        >
+                          {allPhotos.map((photo, index) => (
+                            <div key={index} className="flex-shrink-0 w-full h-full snap-start">
+                              <img 
+                                src={photo.url} 
+                                alt={`${artist.stageName || artist.name} - ${photo.title}`}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                        
+                        {/* Navigation Arrows */}
+                        {allPhotos.length > 1 && (
+                          <>
+                            {/* Left Arrow */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const container = document.getElementById(`photo-scroll-${artist.id}`);
+                                if (container) {
+                                  container.scrollBy({ left: -container.clientWidth, behavior: 'smooth' });
+                                }
+                              }}
+                              className="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black bg-opacity-50 hover:bg-opacity-70 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10"
+                              aria-label="Previous photo"
+                            >
+                              <ChevronLeft className="w-4 h-4" />
+                            </button>
+                            
+                            {/* Right Arrow */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const container = document.getElementById(`photo-scroll-${artist.id}`);
+                                if (container) {
+                                  container.scrollBy({ left: container.clientWidth, behavior: 'smooth' });
+                                }
+                              }}
+                              className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black bg-opacity-50 hover:bg-opacity-70 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10"
+                              aria-label="Next photo"
+                            >
+                              <ChevronRight className="w-4 h-4" />
+                            </button>
+                          </>
+                        )}
+                        
+                        
+                        {/* Photo count badge */}
+                        {allPhotos.length > 1 && (
+                          <div className="absolute top-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded-full">
+                            {allPhotos.length} photos
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
                   
                   {/* Play button overlay if video available */}
                   {artist.videoLinks && artist.videoLinks.length > 0 && (

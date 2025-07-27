@@ -67,10 +67,8 @@ export async function GET(request: NextRequest) {
         },
         media: {
           where: {
-            mediaType: 'PHOTO',
-            category: 'PRESS'
+            mediaType: 'PHOTO'
           },
-          take: 1,
           orderBy: {
             sortOrder: 'asc'
           }
@@ -123,7 +121,13 @@ export async function GET(request: NextRequest) {
         stageName: artist.stageName,
         genres: artist.genres,
         profileImageUrl: artist.user.profileImageUrl,
-        pressPhoto: artist.media[0]?.fileUrl || null,
+        pressPhoto: artist.pressPhotoUrl || artist.media.find(m => m.category === 'PRESS')?.fileUrl || null,
+        photos: artist.media.map(photo => ({
+          id: photo.id,
+          fileUrl: photo.fileUrl,
+          title: photo.title,
+          category: photo.category
+        })),
         travelRadius: artist.travelRadius,
         typicalSetLength: artist.typicalSetLength,
         minGuarantee: artist.minGuarantee,

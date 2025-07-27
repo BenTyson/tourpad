@@ -1,2320 +1,876 @@
 
 > pad@0.1.0 dev
-> next dev -H 0.0.0.0 -p 3001
+> node dev-stable-final.js
 
-   ▲ Next.js 15.3.5
+🧹 Cleaning up existing processes...
+🚀 Starting TourPad with STABLE configuration...
+✅ [16:31:46] System: 16GB RAM, allocating 8192MB heap
+✅ [16:31:46] Starting Next.js development server...
+✅ [16:31:46] Server started successfully
+   [1m[38;2;173;127;168m▲ Next.js 15.3.5[39m[22m
    - Local:        http://localhost:3001
    - Network:      http://0.0.0.0:3001
    - Environments: .env.local, .env
    - Experiments (use with caution):
-     ⨯ webpackBuildWorker
+     [1m⨯[22m webpackBuildWorker
 
- ✓ Starting...
- ✓ Ready in 1102ms
- ○ Compiling /api/auth/[...nextauth] ...
- ✓ Compiled /api/auth/[...nextauth] in 1125ms (523 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-[31m[auth][error][0m MissingCSRF: CSRF token was missing during an action signin. Read more at https://errors.authjs.dev#missingcsrf
-    at validateCSRF (webpack-internal:///(rsc)/./node_modules/@auth/core/lib/actions/callback/oauth/csrf-token.js:45:11)
-    at AuthInternal (webpack-internal:///(rsc)/./node_modules/@auth/core/lib/index.js:75:100)
-    at async Auth (webpack-internal:///(rsc)/./node_modules/@auth/core/index.js:130:34)
-    at async AppRouteRouteModule.do (/Users/bentyson/pad/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:26:34112)
-    at async AppRouteRouteModule.handle (/Users/bentyson/pad/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:26:41338)
-    at async doRender (/Users/bentyson/pad/node_modules/next/dist/server/base-server.js:1518:42)
-    at async DevServer.renderToResponseWithComponentsImpl (/Users/bentyson/pad/node_modules/next/dist/server/base-server.js:1920:28)
-    at async DevServer.renderPageComponent (/Users/bentyson/pad/node_modules/next/dist/server/base-server.js:2408:24)
-    at async DevServer.renderToResponseImpl (/Users/bentyson/pad/node_modules/next/dist/server/base-server.js:2445:32)
-    at async DevServer.pipeImpl (/Users/bentyson/pad/node_modules/next/dist/server/base-server.js:1008:25)
-    at async NextNodeServer.handleCatchallRenderRequest (/Users/bentyson/pad/node_modules/next/dist/server/next-server.js:305:17)
-    at async DevServer.handleRequestImpl (/Users/bentyson/pad/node_modules/next/dist/server/base-server.js:900:17)
-    at async /Users/bentyson/pad/node_modules/next/dist/server/dev/next-dev-server.js:371:20
-    at async Span.traceAsyncFn (/Users/bentyson/pad/node_modules/next/dist/trace/trace.js:157:20)
-    at async DevServer.handleRequest (/Users/bentyson/pad/node_modules/next/dist/server/dev/next-dev-server.js:368:24)
-    at async invokeRender (/Users/bentyson/pad/node_modules/next/dist/server/lib/router-server.js:237:21)
-    at async handleRequest (/Users/bentyson/pad/node_modules/next/dist/server/lib/router-server.js:428:24)
-    at async requestHandlerImpl (/Users/bentyson/pad/node_modules/next/dist/server/lib/router-server.js:452:13)
-    at async Server.requestListener (/Users/bentyson/pad/node_modules/next/dist/server/lib/start-server.js:158:13)
- POST /api/auth/signin/credentials 302 in 1591ms
- ✓ Compiled /api/user/current in 76ms (525 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-🔍 Session data: null
-❌ No session or user ID found
- GET /api/user/current 401 in 125ms
- ✓ Compiled in 92ms (525 modules)
- ✓ Compiled /api/test-admin in 77ms (367 modules)
-🧪 Testing admin user authentication...
- GET /api/test-admin 200 in 436ms
- ✓ Compiled in 69ms (367 modules)
- ✓ Compiled /api/test-session in 89ms (523 modules)
-🧪 Testing session data...
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-Session: null
- GET /api/test-session 200 in 187ms
- ○ Compiling /middleware ...
- ✓ Compiled /middleware in 589ms (265 modules)
- ○ Compiling /login ...
- ✓ Compiled /login in 1859ms (974 modules)
- GET /login 200 in 1966ms
- ✓ Compiled /api/auth/[...nextauth] in 109ms (713 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/providers 200 in 216ms
- GET /api/auth/csrf 200 in 5ms
- POST /api/auth/callback/credentials? 200 in 328ms
- GET /api/auth/session 200 in 9ms
- GET /api/auth/session 200 in 17ms
- ✓ Compiled /admin in 361ms (1154 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 414ms
- GET /admin 200 in 435ms
- GET /api/notifications?unread=true&limit=0 200 in 458ms
- GET /api/auth/session 200 in 16ms
- GET /api/notifications?unread=true&limit=0 200 in 20ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 9ms
- ✓ Compiled /api/admin/metrics in 112ms (1156 modules)
- GET /api/admin/metrics 200 in 146ms
- GET /api/admin/metrics 200 in 6ms
- GET /admin 200 in 167ms
- ✓ Compiled /_not-found in 201ms (1160 modules)
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 288ms
- ✓ Compiled /favicon.ico in 104ms (737 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /favicon.ico 200 in 232ms
- GET /api/admin/metrics 200 in 195ms
- GET /api/auth/session 200 in 195ms
- GET /api/auth/session 200 in 13ms
- GET /api/notifications?unread=true&limit=0 200 in 15ms
- GET /api/auth/session 200 in 9ms
- GET /api/notifications?unread=true&limit=0 200 in 10ms
- ○ Compiling /map ...
- ✓ Compiled /map in 598ms (1334 modules)
- GET /map 200 in 675ms
- ✓ Compiled /api/map/hosts in 176ms (1318 modules)
- GET /api/map/hosts? 200 in 207ms
- GET /api/map/hosts? 200 in 6ms
- GET /api/map/hosts? 200 in 6ms
- GET /api/map/hosts? 200 in 8ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/csrf 200 in 84ms
- POST /api/auth/signout 200 in 15ms
- GET /api/auth/session 200 in 9ms
- GET /map 200 in 117ms
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 45ms
- GET /api/map/hosts? 200 in 14ms
- GET /api/auth/session 200 in 14ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 5ms
- GET /login 200 in 28ms
- GET /api/auth/providers 200 in 18ms
- GET /api/auth/csrf 200 in 8ms
- POST /api/auth/callback/credentials? 200 in 296ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 5ms
- GET /api/notifications?unread=true&limit=0 200 in 12ms
- GET /admin 200 in 20ms
- GET /api/notifications?unread=true&limit=0 200 in 20ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 10ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/admin/metrics 200 in 8ms
- GET /api/admin/metrics 200 in 5ms
- GET /map 200 in 27ms
- GET /api/map/hosts? 200 in 12ms
- GET /api/map/hosts? 200 in 8ms
- GET /api/map/hosts? 200 in 9ms
- GET /api/map/hosts? 200 in 6ms
- GET /api/map/hosts?searchLocation=a 200 in 24ms
- GET /api/map/hosts?searchLocation=au 200 in 15ms
- GET /api/map/hosts?searchLocation=aus 200 in 16ms
- GET /api/map/hosts?searchLocation=aust 200 in 20ms
- GET /api/map/hosts?searchLocation=austi 200 in 9ms
- GET /api/map/hosts?searchLocation=austin 200 in 13ms
- ✓ Compiled /hosts/[id] in 432ms (1411 modules)
- GET /hosts/cmdhm5kll000llucuremq4pfc 200 in 851ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 47ms
- ✓ Compiled /api/hosts/[id] in 319ms (1413 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 310ms
- GET /api/notifications?unread=true&limit=0 200 in 313ms
- GET /api/auth/session 200 in 12ms
- GET /api/notifications?unread=true&limit=0 200 in 13ms
- GET /api/auth/session 200 in 8ms
- GET /api/hosts/cmdhm5kll000llucuremq4pfc 200 in 667ms
- GET /api/auth/session 200 in 14ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/session 200 in 6ms
- ✓ Compiled /dashboard in 448ms (1470 modules)
- GET /dashboard 200 in 495ms
- ✓ Compiled /api/user/profile-id in 124ms (898 modules)
- ✓ Compiled in 259ms (1477 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/stats 200 in 533ms
- GET /api/user/profile-id 200 in 534ms
- GET /api/user/current 200 in 540ms
- GET /hosts/cmdhm5kll000llucuremq4pfc 200 in 390ms
- GET /dashboard 200 in 397ms
- GET /api/stats 200 in 14ms
- GET /api/user/profile-id 200 in 16ms
- GET /api/user/current 200 in 15ms
- ✓ Compiled /api/payments/subscription-status in 395ms (1678 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/payments/subscription-status 200 in 470ms
- GET /api/payments/subscription-status 200 in 20ms
- GET /api/notifications?unread=true&limit=0 200 in 23ms
- GET /api/notifications?unread=true&limit=0 200 in 22ms
- GET /api/notifications?unread=true&limit=0 200 in 18ms
- GET /api/notifications?unread=true&limit=0 200 in 21ms
- GET /api/notifications?unread=true&limit=0 200 in 19ms
- GET /api/notifications?unread=true&limit=0 200 in 28ms
- GET /api/auth/session 200 in 29ms
- GET /api/auth/session 200 in 30ms
- GET /api/stats 200 in 32ms
- GET /api/user/profile-id 200 in 33ms
- GET /api/user/current 200 in 44ms
- GET /api/payments/subscription-status 200 in 46ms
- GET /api/auth/session 200 in 10ms
- GET /api/auth/session 200 in 5ms
- GET /api/payments/subscription-status 200 in 13ms
- GET /api/user/profile-id 200 in 17ms
- GET /api/user/current 200 in 20ms
- GET /api/stats 200 in 20ms
- GET /api/payments/subscription-status 200 in 39ms
- GET /api/payments/subscription-status 200 in 14ms
- GET /api/notifications?unread=true&limit=0 200 in 31ms
- GET /api/notifications?unread=true&limit=0 200 in 24ms
- GET /api/notifications?unread=true&limit=0 200 in 27ms
- GET /api/notifications?unread=true&limit=0 200 in 25ms
- GET /api/notifications?unread=true&limit=0 200 in 27ms
- GET /api/notifications?unread=true&limit=0 200 in 27ms
- GET /api/notifications?unread=true&limit=0 200 in 24ms
- GET /api/notifications?unread=true&limit=0 200 in 24ms
- GET /api/notifications?unread=true&limit=0 200 in 29ms
- GET /api/notifications?unread=true&limit=0 200 in 27ms
- GET /api/notifications?unread=true&limit=0 200 in 26ms
- GET /api/notifications?unread=true&limit=0 200 in 28ms
- GET /api/notifications?unread=true&limit=0 200 in 25ms
- GET /api/notifications?unread=true&limit=0 200 in 10ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 27ms
- GET /api/notifications?unread=true&limit=0 200 in 13ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 23ms
- GET /api/notifications?unread=true&limit=0 200 in 12ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 20ms
- GET /api/notifications?unread=true&limit=0 200 in 9ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 23ms
- GET /api/notifications?unread=true&limit=0 200 in 12ms
- GET /api/notifications?unread=true&limit=0 200 in 7ms
- GET /api/notifications?unread=true&limit=0 200 in 21ms
- GET /api/notifications?unread=true&limit=0 200 in 14ms
- GET /api/notifications?unread=true&limit=0 200 in 7ms
- GET /api/notifications?unread=true&limit=0 200 in 26ms
- GET /api/notifications?unread=true&limit=0 200 in 16ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 23ms
- GET /api/notifications?unread=true&limit=0 200 in 10ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 19ms
- GET /api/notifications?unread=true&limit=0 200 in 12ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 20ms
- GET /api/notifications?unread=true&limit=0 200 in 19ms
- GET /api/notifications?unread=true&limit=0 200 in 10ms
- GET /api/notifications?unread=true&limit=0 200 in 27ms
- GET /api/notifications?unread=true&limit=0 200 in 10ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 24ms
- GET /api/notifications?unread=true&limit=0 200 in 21ms
- GET /api/notifications?unread=true&limit=0 200 in 12ms
- GET /api/notifications?unread=true&limit=0 200 in 73ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 6ms
- GET /api/notifications?unread=true&limit=0 200 in 62ms
- GET /api/notifications?unread=true&limit=0 200 in 7ms
- GET /api/notifications?unread=true&limit=0 200 in 6ms
- GET /api/notifications?unread=true&limit=0 200 in 39ms
- GET /api/notifications?unread=true&limit=0 200 in 20ms
- GET /api/notifications?unread=true&limit=0 200 in 7ms
- GET /api/auth/session 200 in 41ms
- GET /api/notifications?unread=true&limit=0 200 in 43ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/session 200 in 26ms
- GET /api/stats 200 in 36ms
- GET /api/user/profile-id 200 in 38ms
- GET /api/user/current 200 in 43ms
- GET /api/stats 200 in 16ms
- GET /api/user/profile-id 200 in 11ms
- GET /api/user/current 200 in 13ms
- GET /api/payments/subscription-status 200 in 146ms
- GET /api/payments/subscription-status 200 in 25ms
- GET /api/payments/subscription-status 200 in 15ms
- GET /api/payments/subscription-status 200 in 13ms
- GET /api/notifications?unread=true&limit=0 200 in 25ms
- ✓ Compiled /calendar in 436ms (1656 modules)
- GET /calendar 200 in 491ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 84ms
- GET /api/notifications?unread=true&limit=0 200 in 5ms
- GET /api/notifications?unread=true&limit=0 200 in 23ms
- GET /api/notifications?unread=true&limit=0 200 in 29ms
- GET /api/notifications?unread=true&limit=0 200 in 13ms
- GET /api/notifications?unread=true&limit=0 200 in 24ms
- GET /api/notifications?unread=true&limit=0 200 in 21ms
- GET /api/notifications?unread=true&limit=0 200 in 27ms
- GET /api/notifications?unread=true&limit=0 200 in 22ms
- GET /api/notifications?unread=true&limit=0 200 in 19ms
- GET /api/notifications?unread=true&limit=0 200 in 32ms
- GET /api/notifications?unread=true&limit=0 200 in 20ms
- GET /api/auth/session 200 in 29ms
- GET /api/auth/session 200 in 15ms
- GET /api/auth/session 200 in 9ms
- GET /api/auth/session 200 in 6ms
- GET /api/notifications?unread=true&limit=0 200 in 17ms
- GET /api/notifications?unread=true&limit=0 200 in 13ms
- GET /api/notifications?unread=true&limit=0 200 in 17ms
- GET /api/notifications?unread=true&limit=0 200 in 30ms
- GET /api/notifications?unread=true&limit=0 200 in 48ms
- GET /api/notifications?unread=true&limit=0 200 in 7ms
- GET /api/notifications?unread=true&limit=0 200 in 24ms
- GET /api/notifications?unread=true&limit=0 200 in 28ms
- GET /api/notifications?unread=true&limit=0 200 in 12ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 40ms
- GET /api/auth/session 200 in 38ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 5ms
- GET /api/notifications?unread=true&limit=0 200 in 20ms
- GET /api/notifications?unread=true&limit=0 200 in 12ms
- GET /api/notifications?unread=true&limit=0 200 in 37ms
- GET /api/auth/session 200 in 25ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 17ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 6ms
- GET /api/notifications?unread=true&limit=0 200 in 22ms
- GET /api/auth/session 200 in 10ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 17ms
- GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 45ms
- GET /api/notifications?unread=true&limit=0 200 in 42ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/auth/session 200 in 9ms
- GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 6ms
- GET /api/notifications?unread=true&limit=0 200 in 26ms
- GET /api/auth/session 200 in 20ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 22ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 6ms
- GET /api/notifications?unread=true&limit=0 200 in 29ms
- GET /api/auth/session 200 in 21ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 6ms
- GET /api/notifications?unread=true&limit=0 200 in 20ms
- GET /api/notifications?unread=true&limit=0 200 in 15ms
- GET /api/notifications?unread=true&limit=0 200 in 28ms
- GET /api/auth/session 200 in 20ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 18ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 6ms
- GET /api/notifications?unread=true&limit=0 200 in 26ms
- GET /api/auth/session 200 in 20ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 6ms
- GET /api/notifications?unread=true&limit=0 200 in 38ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 23ms
- GET /api/notifications?unread=true&limit=0 200 in 23ms
- GET /api/notifications?unread=true&limit=0 200 in 21ms
- GET /api/notifications?unread=true&limit=0 200 in 9ms
- GET /api/notifications?unread=true&limit=0 200 in 78ms
- GET /api/auth/session 200 in 33ms
- GET /api/auth/session 200 in 11ms
- GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 6ms
- GET /admin 200 in 25ms
- ✓ Compiled /api/admin/metrics in 136ms (868 modules)
- GET /api/admin/metrics 200 in 193ms
- GET /api/admin/metrics 200 in 12ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 69ms
- ✓ Compiled in 581ms (1722 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 63ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 21ms
- GET /api/notifications?unread=true&limit=0 200 in 51ms
- GET /api/notifications?unread=true&limit=0 200 in 9ms
- GET /api/notifications?unread=true&limit=0 200 in 7ms
- GET /api/notifications?unread=true&limit=0 200 in 34ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 20ms
- GET /api/notifications?unread=true&limit=0 200 in 23ms
- GET /api/notifications?unread=true&limit=0 200 in 14ms
- ✓ Compiled /api/calendar/events in 201ms (1441 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/calendar/events 401 in 239ms
- ✓ Compiled in 723ms (589 modules)
- ✓ Compiled in 674ms (589 modules)
- GET /api/notifications?unread=true&limit=0 200 in 22ms
- GET /api/notifications?unread=true&limit=0 200 in 10ms
- GET /api/notifications?unread=true&limit=0 200 in 7ms
- GET /api/notifications?unread=true&limit=0 200 in 22ms
- ✓ Compiled /api/auth/[...nextauth] in 111ms (868 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 156ms
- GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 6ms
- ✓ Compiled in 730ms (589 modules)
- ✓ Compiled in 684ms (589 modules)
- GET /api/notifications?unread=true&limit=0 200 in 38ms
- GET /api/notifications?unread=true&limit=0 200 in 28ms
- GET /api/auth/session 200 in 26ms
- GET /api/auth/session 200 in 9ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 25ms
- GET /api/notifications?unread=true&limit=0 200 in 23ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 19ms
- GET /api/auth/session 200 in 10ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 8ms
- ✓ Compiled in 712ms (589 modules)
- GET /api/notifications?unread=true&limit=0 200 in 17ms
- ⨯ ./src/app/calendar/page.tsx
-Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/Users/bentyson/pad/src/app/calendar/page.tsx[0m:179:1]
- [2m176[0m |   ];
- [2m177[0m | 
- [2m178[0m |   return (
- [2m179[0m |     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
-     : [35;1m     ^^^[0m
- [2m180[0m |       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
- [2m181[0m |         {/* Header */}
- [2m182[0m |         <div className="mb-8">
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./src/app/calendar/page.tsx
- ○ Compiling /_error ...
- ⨯ ./src/app/calendar/page.tsx
-Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/Users/bentyson/pad/src/app/calendar/page.tsx[0m:179:1]
- [2m176[0m |   ];
- [2m177[0m | 
- [2m178[0m |   return (
- [2m179[0m |     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
-     : [35;1m     ^^^[0m
- [2m180[0m |       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
- [2m181[0m |         {/* Header */}
- [2m182[0m |         <div className="mb-8">
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./src/app/calendar/page.tsx
- GET /api/auth/session 500 in 1883ms
- GET /api/auth/session 500 in 12ms
- GET /api/auth/session 500 in 33ms
- GET /api/auth/session 500 in 28ms
- ✓ Compiled /_error in 827ms (842 modules)
- ✓ Compiled in 719ms (842 modules)
- ✓ Compiled in 728ms (842 modules)
- ✓ Compiled /calendar in 147ms (960 modules)
- GET /calendar 200 in 309ms
- GET /admin 200 in 111ms
- ✓ Compiled /api/auth/[...nextauth] in 111ms (755 modules)
- ✓ Compiled (913 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /favicon.ico 200 in 398ms
- GET /api/admin/metrics 200 in 372ms
- GET /api/auth/session 200 in 367ms
- ✓ Compiled /api/notifications in 93ms (915 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 243ms
- GET /api/notifications?unread=true&limit=0 200 in 248ms
- GET /api/auth/session 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 11ms
- GET /api/auth/session 200 in 10ms
- GET /api/notifications?unread=true&limit=0 200 in 10ms
- GET /api/notifications?unread=true&limit=0 200 in 4ms
- GET /api/notifications?unread=true&limit=0 200 in 4ms
- GET /api/notifications?unread=true&limit=0 200 in 6ms
- ✓ Compiled /calendar in 188ms (922 modules)
- GET /calendar 200 in 328ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 31ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/session 200 in 59ms
- GET /admin 200 in 106ms
- GET /api/auth/session 200 in 13ms
- GET /api/auth/session 200 in 11ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 5ms
- GET /api/admin/metrics 200 in 53ms
- GET /api/notifications?unread=true&limit=0 200 in 34ms
- GET /api/notifications?unread=true&limit=0 200 in 7ms
- GET /api/auth/csrf 200 in 18ms
- POST /api/auth/signout 200 in 19ms
- GET /api/auth/session 200 in 10ms
- GET /api/auth/session 200 in 67ms
- GET /admin 200 in 86ms
- GET /api/admin/metrics 200 in 11ms
- GET /api/auth/session 200 in 11ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 5ms
- ✓ Compiled /login in 253ms (943 modules)
- GET /login 200 in 306ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/providers 200 in 60ms
- GET /api/auth/csrf 200 in 6ms
- POST /api/auth/callback/credentials? 200 in 292ms
- GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 7ms
- GET /api/notifications?unread=true&limit=0 200 in 9ms
- GET /dashboard 200 in 25ms
- GET /api/notifications?unread=true&limit=0 200 in 28ms
- GET /api/auth/session 200 in 24ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 9ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 7ms
- GET /api/notifications?unread=true&limit=0 200 in 9ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- ✓ Compiled /api/stats in 141ms (945 modules)
- ✓ Compiled (950 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/user/profile-id 200 in 347ms
- GET /api/user/current 200 in 350ms
- GET /api/stats 200 in 355ms
- GET /api/user/profile-id 200 in 16ms
- GET /api/user/current 200 in 20ms
- GET /api/stats 200 in 20ms
- ✓ Compiled /api/payments/subscription-status in 355ms (1151 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/payments/subscription-status 200 in 430ms
- GET /api/payments/subscription-status 200 in 16ms
- GET /calendar 200 in 45ms
- ✓ Compiled /api/calendar/events in 163ms (1153 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/calendar/events 200 in 205ms
- GET /api/calendar/events 200 in 9ms
- GET /api/notifications?unread=true&limit=0 200 in 26ms
- GET /api/notifications?unread=true&limit=0 200 in 28ms
- GET /api/notifications?unread=true&limit=0 200 in 18ms
- GET /api/notifications?unread=true&limit=0 200 in 24ms
- GET /api/notifications?unread=true&limit=0 200 in 21ms
- GET /api/notifications?unread=true&limit=0 200 in 11ms
- GET /api/notifications?unread=true&limit=0 200 in 15ms
- GET /api/notifications?unread=true&limit=0 200 in 14ms
- GET /api/notifications?unread=true&limit=0 200 in 10ms
- GET /api/notifications?unread=true&limit=0 200 in 25ms
- GET /api/notifications?unread=true&limit=0 200 in 21ms
- GET /api/notifications?unread=true&limit=0 200 in 11ms
- GET /api/calendar/events 401 in 6ms
- GET /api/notifications?unread=true&limit=0 200 in 24ms
- GET /api/notifications?unread=true&limit=0 200 in 12ms
- GET /api/notifications?unread=true&limit=0 200 in 9ms
- ✓ Compiled in 699ms (841 modules)
- GET /calendar 200 in 54ms
- ✓ Compiled in 746ms (841 modules)
- GET /calendar 200 in 19ms
- GET /api/notifications?unread=true&limit=0 200 in 32ms
- GET /api/notifications?unread=true&limit=0 200 in 19ms
- GET /api/notifications?unread=true&limit=0 200 in 6ms
- GET /api/notifications?unread=true&limit=0 200 in 37ms
- GET /api/notifications?unread=true&limit=0 200 in 35ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 28ms
- GET /api/notifications?unread=true&limit=0 200 in 9ms
- GET /api/notifications?unread=true&limit=0 200 in 9ms
- GET /api/notifications?unread=true&limit=0 200 in 40ms
- GET /api/notifications?unread=true&limit=0 200 in 9ms
- GET /api/notifications?unread=true&limit=0 200 in 7ms
- GET /api/notifications?unread=true&limit=0 200 in 48ms
- GET /api/notifications?unread=true&limit=0 200 in 15ms
- GET /api/notifications?unread=true&limit=0 200 in 7ms
- GET /api/notifications?unread=true&limit=0 200 in 28ms
- GET /api/notifications?unread=true&limit=0 200 in 11ms
- GET /api/notifications?unread=true&limit=0 200 in 9ms
- GET /api/notifications?unread=true&limit=0 200 in 43ms
- GET /api/notifications?unread=true&limit=0 200 in 9ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/auth/session 200 in 59ms
- GET /api/auth/session 200 in 11ms
- GET /api/calendar/events 200 in 21ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/session 200 in 7ms
- GET /api/calendar/events 200 in 8ms
- GET /dashboard 200 in 44ms
-User not found in database: cmdhm5kl90002lucubrw3hmxa
- GET /api/user/current 404 in 33ms
- GET /api/stats 200 in 30ms
- GET /api/user/profile-id 200 in 29ms
- GET /api/stats 200 in 14ms
-User not found in database: cmdhm5kl90002lucubrw3hmxa
- GET /api/user/current 404 in 14ms
- GET /api/user/profile-id 200 in 15ms
- ✓ Compiled /api/shows in 332ms (1756 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/shows 200 in 393ms
- GET /api/shows 200 in 8ms
- GET /calendar 200 in 58ms
- GET /api/calendar/events 200 in 21ms
- GET /api/calendar/events 200 in 13ms
- GET /api/notifications?unread=true&limit=0 200 in 31ms
- GET /api/auth/csrf 200 in 33ms
- POST /api/auth/signout 200 in 12ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/session 200 in 92ms
- GET /calendar 200 in 101ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 5ms
- ✓ Compiled /login in 160ms (950 modules)
- GET /login 200 in 216ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/providers 200 in 77ms
- GET /api/auth/csrf 200 in 4ms
- POST /api/auth/callback/credentials? 200 in 281ms
- GET /api/auth/session 200 in 9ms
- GET /api/auth/session 200 in 7ms
- GET /api/notifications?unread=true&limit=0 200 in 12ms
- GET /dashboard 200 in 26ms
- GET /api/notifications?unread=true&limit=0 200 in 29ms
- GET /api/auth/session 200 in 25ms
- GET /api/auth/session 200 in 13ms
- GET /api/auth/session 200 in 23ms
- GET /api/notifications?unread=true&limit=0 200 in 24ms
- GET /api/notifications?unread=true&limit=0 200 in 16ms
- GET /api/notifications?unread=true&limit=0 200 in 15ms
- GET /api/notifications?unread=true&limit=0 200 in 38ms
- GET /api/user/current 200 in 48ms
- GET /api/user/profile-id 200 in 48ms
- GET /api/stats 200 in 64ms
- GET /api/user/current 200 in 32ms
- GET /api/user/profile-id 200 in 33ms
- ✓ Compiled /api/payments/subscription-status in 167ms (1151 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/stats 200 in 391ms
- GET /api/payments/subscription-status 200 in 403ms
- GET /api/payments/subscription-status 200 in 14ms
- GET /calendar 200 in 43ms
- GET /api/calendar/events 200 in 18ms
- GET /api/calendar/events 200 in 10ms
- GET /api/notifications?limit=10 200 in 13ms
- GET /api/notifications?limit=10 200 in 9ms
- GET /api/auth/csrf 200 in 35ms
- POST /api/auth/signout 200 in 13ms
- GET /api/auth/session 200 in 10ms
- GET /api/auth/session 200 in 78ms
- GET /calendar 200 in 90ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 4ms
- GET /login 200 in 28ms
- GET /api/auth/providers 200 in 15ms
- GET /api/auth/csrf 200 in 16ms
- POST /api/auth/callback/credentials? 200 in 293ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 11ms
- GET /dashboard 200 in 23ms
- GET /api/notifications?unread=true&limit=0 200 in 25ms
- GET /api/auth/session 200 in 22ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 7ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 18ms
- GET /api/user/current 200 in 22ms
- GET /api/user/profile-id 200 in 21ms
- GET /api/stats 200 in 25ms
- GET /api/user/profile-id 200 in 12ms
- GET /api/user/current 200 in 14ms
- GET /api/stats 200 in 11ms
- GET /api/payments/subscription-status 200 in 17ms
- GET /api/payments/subscription-status 200 in 14ms
- ✓ Compiled /dashboard/messages in 445ms (1988 modules)
- GET /dashboard/messages 200 in 483ms
- ✓ Compiled /api/conversations in 224ms (1990 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-Conversations access check: {
-  userId: 'cmdhtqps3000dluf1u6q5tg7d',
-  userType: 'host',
-  isAdmin: false
+ [32m[1m✓[22m[39m Starting...
+ [32m[1m✓[22m[39m Ready in 1035ms
+ [37m[1m○[22m[39m Compiling /middleware ...
+ [32m[1m✓[22m[39m Compiled /middleware in 720ms (265 modules)
+ [37m[1m○[22m[39m Compiling /dashboard/profile ...
+ [32m[1m✓[22m[39m Compiled /dashboard/profile in 3s (946 modules)
+ GET /dashboard/profile [32m200[39m in 3232ms
+ [32m[1m✓[22m[39m Compiled in 2.3s (937 modules)
+ [37m[1m○[22m[39m Compiling /api/auth/[...nextauth] ...
+ [32m[1m✓[22m[39m Compiled /api/auth/[...nextauth] in 550ms (1094 modules)
+ GET /api/auth/session [32m200[39m in 999ms
+ GET /api/auth/session [32m200[39m in 15ms
+ [32m[1m✓[22m[39m Compiled /api/tour-segments in 237ms (1098 modules)
+ GET /api/auth/session [32m200[39m in 339ms
+ GET /api/tour-segments [32m200[39m in 371ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
 }
- GET /api/conversations 200 in 261ms
-Conversations access check: {
-  userId: 'cmdhtqps3000dluf1u6q5tg7d',
-  userType: 'host',
-  isAdmin: false
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
 }
- GET /api/conversations 200 in 21ms
- GET /dashboard 200 in 52ms
- GET /api/user/profile-id 200 in 26ms
- GET /api/user/current 200 in 28ms
- GET /api/stats 200 in 30ms
- GET /api/user/profile-id 200 in 12ms
- GET /api/user/current 200 in 13ms
- GET /api/stats 200 in 14ms
- GET /api/payments/subscription-status 200 in 39ms
- GET /api/payments/subscription-status 200 in 12ms
- GET /api/notifications?unread=true&limit=0 200 in 29ms
- GET /api/notifications?unread=true&limit=0 200 in 16ms
- GET /api/notifications?unread=true&limit=0 200 in 9ms
- GET /api/notifications?unread=true&limit=0 200 in 46ms
- GET /api/notifications?unread=true&limit=0 200 in 11ms
- GET /api/notifications?unread=true&limit=0 200 in 20ms
- GET /api/notifications?unread=true&limit=0 200 in 31ms
- GET /api/notifications?unread=true&limit=0 200 in 16ms
- GET /api/notifications?unread=true&limit=0 200 in 11ms
- GET /api/notifications?unread=true&limit=0 200 in 32ms
- GET /api/notifications?unread=true&limit=0 200 in 10ms
- GET /api/notifications?unread=true&limit=0 200 in 9ms
- GET /api/notifications?unread=true&limit=0 200 in 26ms
- GET /api/notifications?unread=true&limit=0 200 in 10ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 26ms
- GET /api/notifications?unread=true&limit=0 200 in 12ms
- GET /api/notifications?unread=true&limit=0 200 in 9ms
- GET /api/auth/session 200 in 82ms
- GET /api/auth/session 200 in 9ms
- GET /api/auth/session 200 in 19ms
- GET /api/auth/session 200 in 6ms
- GET /api/user/profile-id 200 in 22ms
- GET /api/user/current 200 in 24ms
- GET /api/stats 200 in 26ms
- GET /api/payments/subscription-status 200 in 90ms
- GET /api/payments/subscription-status 200 in 24ms
- GET /api/auth/session 200 in 25ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 20ms
- GET /api/user/profile-id 200 in 23ms
- GET /api/stats 200 in 26ms
- GET /api/user/current 200 in 26ms
- GET /api/user/profile-id 200 in 20ms
- GET /api/payments/subscription-status 200 in 43ms
- GET /api/user/current 200 in 24ms
- GET /api/stats 200 in 28ms
- GET /api/payments/subscription-status 200 in 16ms
- GET /api/payments/subscription-status 200 in 15ms
- GET /api/payments/subscription-status 200 in 26ms
- GET /api/notifications?unread=true&limit=0 200 in 15ms
- ✓ Compiled in 1002ms (1934 modules)
- GET /dashboard 200 in 94ms
- ✓ Compiled /hosts in 475ms (1936 modules)
- GET /hosts 200 in 534ms
- ✓ Compiled /api/hosts in 219ms (1938 modules)
- GET /api/hosts 200 in 268ms
- GET /api/hosts 200 in 20ms
- ✓ Compiled in 857ms (1921 modules)
- GET /hosts 200 in 40ms
- ✓ Compiled /artists in 290ms (1923 modules)
- GET /artists 200 in 329ms
- ✓ Compiled /api/artists in 212ms (1925 modules)
- GET /api/artists 200 in 241ms
- GET /api/artists 200 in 8ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/csrf 200 in 54ms
- POST /api/auth/signout 200 in 8ms
- GET /artists 200 in 111ms
- GET /api/auth/session 200 in 10ms
- GET /api/auth/session 200 in 5ms
- GET /login 200 in 34ms
- GET /api/auth/providers 200 in 7ms
- GET /api/auth/csrf 200 in 6ms
- POST /api/auth/callback/credentials? 200 in 298ms
- GET /api/auth/session 200 in 125ms
- ✓ Compiled in 1014ms (1939 modules)
- ✓ Compiled in 0ms (1074 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 502ms
- ✓ Compiled in 0ms (1074 modules)
- ✓ Compiled in 0ms (1074 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 791ms
- ✓ Compiled in 0ms (1074 modules)
- GET /login 200 in 716ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 646ms
- GET /api/auth/session 200 in 359ms
- GET /dashboard 200 in 353ms
- GET /api/user/profile-id 200 in 23ms
- GET /api/user/current 200 in 24ms
- GET /api/stats 200 in 27ms
- GET /api/user/profile-id 200 in 16ms
- GET /api/user/current 200 in 45ms
- GET /api/stats 200 in 46ms
- GET /api/payments/subscription-status 200 in 62ms
- GET /api/payments/subscription-status 200 in 17ms
- GET /hosts 200 in 29ms
- GET /api/hosts 200 in 16ms
- GET /api/hosts 200 in 14ms
- ✓ Compiled /bookings/new in 326ms (1940 modules)
- GET /bookings/new?hostId=cmdhtqpsg0017luf1l7nxt5dz 200 in 362ms
- ✓ Compiled /api/hosts/[id] in 161ms (1085 modules)
- GET /api/hosts/cmdhtqpsg0017luf1l7nxt5dz 200 in 241ms
- GET /api/hosts/cmdhtqpsg0017luf1l7nxt5dz 200 in 23ms
- ✓ Compiled /api/bookings in 275ms (1935 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- POST /api/bookings 201 in 321ms
- ✓ Compiled in 748ms (871 modules)
- GET /bookings/new?hostId=cmdhtqpsg0017luf1l7nxt5dz 200 in 37ms
- GET /dashboard 200 in 23ms
- GET /api/user/profile-id 200 in 27ms
- GET /api/user/current 200 in 31ms
- GET /api/stats 200 in 34ms
- GET /api/user/profile-id 200 in 13ms
- GET /api/user/current 200 in 15ms
- GET /api/stats 200 in 14ms
- GET /api/payments/subscription-status 200 in 36ms
- GET /api/payments/subscription-status 200 in 13ms
- GET /api/notifications?unread=true&limit=0 200 in 19ms
- GET /hosts 200 in 21ms
- GET /api/hosts 200 in 14ms
- GET /api/hosts 200 in 11ms
- ✓ Compiled in 671ms (871 modules)
- GET /hosts 200 in 18ms
- GET /dashboard 200 in 23ms
- GET /api/user/profile-id 200 in 19ms
- GET /api/user/current 200 in 22ms
- GET /api/stats 200 in 23ms
- GET /api/user/profile-id 200 in 14ms
- GET /api/user/current 200 in 18ms
- GET /api/stats 200 in 17ms
- GET /api/payments/subscription-status 200 in 17ms
- GET /api/payments/subscription-status 200 in 14ms
- GET /artists 200 in 32ms
- GET /api/artists 200 in 14ms
- GET /api/artists 200 in 8ms
- ✓ Compiled in 675ms (871 modules)
- GET /artists 200 in 45ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- ✓ Compiled in 691ms (871 modules)
- GET /artists 200 in 15ms
- ✓ Compiled in 686ms (871 modules)
- GET /artists 200 in 36ms
- GET /dashboard 200 in 23ms
- GET /api/user/profile-id 200 in 21ms
- GET /api/user/current 200 in 26ms
- GET /api/stats 200 in 25ms
- GET /api/user/profile-id 200 in 15ms
- GET /api/user/current 200 in 18ms
- GET /api/stats 200 in 15ms
- GET /api/payments/subscription-status 200 in 15ms
- GET /api/payments/subscription-status 200 in 14ms
- GET /api/notifications?unread=true&limit=0 200 in 15ms
- ✓ Compiled /dashboard/profile in 368ms (1926 modules)
- GET /dashboard/profile 200 in 426ms
- ✓ Compiled /api/profile in 234ms (1928 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/profile 200 in 276ms
- GET /api/profile 200 in 7ms
- ✓ Compiled /api/upload in 249ms (1914 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- POST /api/upload 200 in 297ms
- ✓ Compiled in 706ms (877 modules)
- ✓ Compiled /api/files/[...path] in 435ms (1916 modules)
- GET /dashboard/profile 200 in 497ms
-Error: Route "/api/files/[...path]" used `params.path`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
-    at GET (src/app/api/files/[...path]/route.ts:18:28)
-  16 |     // }
-  17 |
-> 18 |     const filePath = params.path.join('/');
-     |                            ^
-  19 |     
-  20 |     // Security: Prevent directory traversal
-  21 |     if (filePath.includes('..') || filePath.includes('~')) {
- GET /uploads/cmdhtqprv0002luf1o5ci8re2-profile-1753388270995.webp 200 in 839ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 67ms
- POST /api/upload 200 in 25ms
- ✓ Compiled in 720ms (877 modules)
-Error: Route "/api/files/[...path]" used `params.path`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
-    at GET (src/app/api/files/[...path]/route.ts:18:28)
-  16 |     // }
-  17 |
-> 18 |     const filePath = params.path.join('/');
-     |                            ^
-  19 |     
-  20 |     // Security: Prevent directory traversal
-  21 |     if (filePath.includes('..') || filePath.includes('~')) {
- GET /uploads/cmdhtqprv0002luf1o5ci8re2-band-member-1753388290148.jpeg 200 in 62ms
- GET /dashboard/profile 200 in 73ms
-Received profile data: {
-  bandName: 'Sarah Johnson',
-  bio: 'Indie folk singer-songwriter with a passion for intimate performances',
-  city: 'Austin',
-  state: 'TX',
-  genres: [ 'Folk', 'Indie', 'Acoustic' ],
-  instruments: [],
-  experienceLevel: 'intermediate',
-  yearsActive: 1,
-  tourMonthsPerYear: 3,
-  tourVehicle: 'van',
-  willingToTravel: 500,
-  needsLodging: false,
-  equipmentProvided: [ 'Microphone', 'Guitar amplifier', 'Stool' ],
-  venueRequirements: [],
-  profilePhoto: '/uploads/cmdhtqprv0002luf1o5ci8re2-profile-1753388270995.webp',
-  cancellationPolicy: 'flexible',
-  performanceRadius: 50,
-  website: 'https://sarahjohnsonmusic.com',
-  socialLinks: {
-    website: 'https://sarahjohnsonmusic.com',
-    instagram: 'sarahjohnsonmusic',
-    youtube: 'sarahjohnsonmusic',
-    spotify: 'sarahjohnsonmusic',
-    bandcamp: '',
-    facebook: ''
-  },
-  bandMembers: [
-    {
-      id: 'cmdhtqprv0005luf1085sjtsw',
-      name: 'Sarah Johnson',
-      instrument: 'Vocals, Guitar',
-      photo: '/uploads/cmdhtqprv0002luf1o5ci8re2-band-member-1753388290148.jpeg'
-    }
-  ],
-  videoLinks: [],
-  musicSamples: [],
-  photos: []
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
 }
-suggestedDoorFee value: undefined type: undefined
-Processing photos: []
- PUT /api/profile 200 in 41ms
- GET /artists 200 in 31ms
- GET /api/artists 200 in 24ms
- GET /api/artists 200 in 11ms
- ✓ Compiled /artists/[id] in 453ms (1941 modules)
- GET /artists/cmdhtqprv0004luf12p0gtd1c 200 in 835ms
- GET /api/artists?exclude=cmdhtqprv0004luf12p0gtd1c&limit=3 200 in 17ms
- ✓ Compiled /api/artists/[id] in 362ms (1943 modules)
- GET /api/artists?exclude=cmdhtqprv0004luf12p0gtd1c&limit=3 200 in 381ms
- GET /api/artists/cmdhtqprv0004luf12p0gtd1c 200 in 630ms
- GET /api/artists/cmdhtqprv0004luf12p0gtd1c 200 in 8ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 63ms
- ✓ Compiled /calendar in 183ms (1071 modules)
- GET /calendar 200 in 301ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 39ms
- GET /dashboard 200 in 45ms
- GET /api/user/current 200 in 31ms
- GET /api/user/profile-id 200 in 27ms
- GET /api/stats 200 in 31ms
- GET /api/user/current 200 in 16ms
- GET /api/user/profile-id 200 in 17ms
- GET /api/stats 200 in 51ms
- GET /api/payments/subscription-status 200 in 46ms
- GET /api/payments/subscription-status 200 in 15ms
- GET /api/notifications?unread=true&limit=0 200 in 20ms
- GET /api/notifications?unread=true&limit=0 200 in 29ms
- GET /api/notifications?unread=true&limit=0 200 in 63ms
- GET /api/notifications?unread=true&limit=0 200 in 59ms
- GET /api/notifications?unread=true&limit=0 200 in 38ms
- GET /api/notifications?unread=true&limit=0 200 in 44ms
- GET /api/notifications?unread=true&limit=0 200 in 40ms
- GET /api/notifications?unread=true&limit=0 200 in 65ms
- GET /api/notifications?unread=true&limit=0 200 in 53ms
- GET /api/notifications?unread=true&limit=0 200 in 39ms
- GET /api/notifications?unread=true&limit=0 200 in 42ms
- GET /api/notifications?unread=true&limit=0 200 in 30ms
- GET /api/notifications?unread=true&limit=0 200 in 17ms
- GET /calendar 200 in 32ms
- ✓ Compiled /api/calendar/events in 213ms (854 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/calendar/events 200 in 304ms
- GET /api/calendar/events 200 in 16ms
- GET /dashboard 200 in 52ms
- ✓ Compiled /api/stats in 130ms (844 modules)
- ✓ Compiled (849 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/user/profile-id 200 in 303ms
- GET /api/user/profile-id 200 in 6ms
- GET /api/user/current 200 in 323ms
- GET /api/stats 200 in 318ms
- GET /api/user/current 200 in 25ms
- GET /api/stats 200 in 29ms
- ✓ Compiled /api/payments/subscription-status in 200ms (1050 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/payments/subscription-status 200 in 272ms
- GET /api/payments/subscription-status 200 in 18ms
- GET /api/notifications?unread=true&limit=0 200 in 32ms
- GET /api/notifications?unread=true&limit=0 200 in 46ms
- GET /api/notifications?unread=true&limit=0 200 in 29ms
- GET /api/notifications?unread=true&limit=0 200 in 25ms
- GET /api/notifications?unread=true&limit=0 200 in 14ms
- GET /api/notifications?unread=true&limit=0 200 in 17ms
- GET /api/notifications?unread=true&limit=0 200 in 13ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- ✓ Compiled in 966ms (1723 modules)
- GET /dashboard 200 in 187ms
- ✓ Compiled /api/auth/[...nextauth] in 100ms (842 modules)
- ✓ Compiled (844 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /favicon.ico 200 in 242ms
- GET /api/auth/session 200 in 221ms
- GET /api/auth/session 200 in 15ms
- ✓ Compiled /api/stats in 99ms (846 modules)
- ✓ Compiled (851 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 274ms
- GET /api/user/profile-id 200 in 276ms
- GET /api/user/current 200 in 282ms
- GET /api/stats 200 in 285ms
- GET /api/notifications?unread=true&limit=0 200 in 15ms
- GET /api/user/profile-id 200 in 13ms
- GET /api/user/current 200 in 16ms
- GET /api/stats 200 in 16ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- ✓ Compiled in 846ms (1734 modules)
- GET /dashboard 200 in 265ms
- GET /favicon.ico 200 in 7ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 37ms
- GET /api/auth/session 200 in 43ms
- GET /api/notifications?unread=true&limit=0 200 in 48ms
- GET /api/stats 200 in 48ms
- GET /api/user/profile-id 200 in 49ms
- GET /api/user/current 200 in 49ms
- GET /api/notifications?unread=true&limit=0 200 in 48ms
- GET /api/user/profile-id 200 in 54ms
- GET /api/user/current 200 in 55ms
- GET /api/stats 200 in 57ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- ✓ Compiled in 861ms (1734 modules)
- GET /dashboard 200 in 261ms
- GET /favicon.ico 200 in 8ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 23ms
- GET /api/notifications?unread=true&limit=0 200 in 24ms
- GET /api/auth/session 200 in 23ms
- GET /api/user/profile-id 200 in 28ms
- GET /api/user/current 200 in 28ms
- GET /api/stats 200 in 31ms
- GET /api/notifications?unread=true&limit=0 200 in 15ms
- GET /api/user/profile-id 200 in 15ms
- GET /api/user/current 200 in 20ms
- GET /api/stats 200 in 20ms
- ✓ Compiled in 965ms (1734 modules)
- GET /dashboard 200 in 102ms
- GET /favicon.ico 200 in 11ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 22ms
- GET /api/notifications?unread=true&limit=0 200 in 26ms
- GET /api/auth/session 200 in 24ms
- GET /api/user/profile-id 200 in 29ms
- GET /api/user/current 200 in 31ms
- GET /api/stats 200 in 34ms
- GET /api/notifications?unread=true&limit=0 200 in 17ms
- GET /api/user/profile-id 200 in 16ms
- GET /api/user/current 200 in 21ms
- GET /api/stats 200 in 20ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- ✓ Compiled in 869ms (1734 modules)
- GET /dashboard 200 in 284ms
- GET /favicon.ico 200 in 9ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 26ms
- GET /api/notifications?unread=true&limit=0 200 in 24ms
- GET /api/auth/session 200 in 28ms
- GET /api/user/profile-id 200 in 29ms
- GET /api/user/current 200 in 33ms
- GET /api/stats 200 in 34ms
- GET /api/notifications?unread=true&limit=0 200 in 20ms
- GET /api/user/profile-id 200 in 17ms
- GET /api/user/current 200 in 19ms
- GET /api/stats 200 in 20ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- ✓ Compiled in 831ms (1734 modules)
- GET /dashboard 200 in 292ms
- GET /favicon.ico 200 in 8ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 25ms
- GET /api/notifications?unread=true&limit=0 200 in 23ms
- GET /api/auth/session 200 in 23ms
- GET /api/user/profile-id 200 in 24ms
- GET /api/user/current 200 in 26ms
- GET /api/stats 200 in 28ms
- GET /api/notifications?unread=true&limit=0 200 in 15ms
- GET /api/user/profile-id 200 in 15ms
- GET /api/user/current 200 in 16ms
- GET /api/stats 200 in 23ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- ✓ Compiled in 1045ms (1742 modules)
- GET /dashboard 200 in 339ms
- GET /favicon.ico 200 in 12ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 25ms
- GET /api/notifications?unread=true&limit=0 200 in 27ms
- GET /api/auth/session 200 in 24ms
- GET /api/user/profile-id 200 in 30ms
- GET /api/user/current 200 in 30ms
- GET /api/stats 200 in 33ms
- GET /api/notifications?unread=true&limit=0 200 in 17ms
- GET /api/user/profile-id 200 in 16ms
- GET /api/user/current 200 in 17ms
- GET /api/stats 200 in 18ms
- ✓ Compiled in 935ms (1742 modules)
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /dashboard 200 in 167ms
- GET /favicon.ico 200 in 8ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 30ms
- GET /api/auth/session 200 in 31ms
- GET /api/notifications?unread=true&limit=0 200 in 34ms
- GET /api/user/current 200 in 34ms
- GET /api/user/profile-id 200 in 36ms
- GET /api/stats 200 in 39ms
- GET /api/notifications?unread=true&limit=0 200 in 26ms
- GET /api/user/profile-id 200 in 24ms
- GET /api/user/current 200 in 39ms
- GET /api/stats 200 in 45ms
- ✓ Compiled /api/payments/subscription-status in 377ms (1057 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/payments/subscription-status 200 in 461ms
- GET /api/payments/subscription-status 200 in 12ms
- GET /api/notifications?unread=true&limit=0 200 in 51ms
- GET /dashboard 200 in 123ms
- GET /favicon.ico 200 in 10ms
- GET /api/auth/session 200 in 9ms
- GET /api/notifications?unread=true&limit=0 200 in 22ms
- GET /api/auth/session 200 in 21ms
- GET /api/user/profile-id 200 in 26ms
- GET /api/user/current 200 in 28ms
- GET /api/stats 200 in 29ms
- GET /api/notifications?unread=true&limit=0 200 in 13ms
- GET /api/user/profile-id 200 in 15ms
- GET /api/user/current 200 in 15ms
- GET /api/stats 200 in 15ms
- GET /api/payments/subscription-status 200 in 14ms
- GET /api/payments/subscription-status 200 in 14ms
- GET /api/auth/csrf 200 in 18ms
- POST /api/auth/signout 200 in 20ms
- GET /dashboard 200 in 49ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 5ms
- ✓ Compiled /login in 255ms (1078 modules)
- GET /login 200 in 304ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/providers 200 in 60ms
- GET /api/auth/csrf 200 in 7ms
- POST /api/auth/callback/credentials? 200 in 288ms
- GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 4ms
- GET /api/notifications?unread=true&limit=0 200 in 11ms
- GET /dashboard 200 in 22ms
- GET /api/notifications?unread=true&limit=0 200 in 21ms
- GET /api/auth/session 200 in 21ms
- GET /api/user/profile-id 200 in 16ms
- GET /api/user/current 200 in 18ms
- GET /api/stats 200 in 20ms
- GET /api/user/profile-id 200 in 13ms
- GET /api/user/current 200 in 16ms
- GET /api/stats 200 in 17ms
- GET /api/user/profile-id 200 in 37ms
- GET /api/user/current 200 in 37ms
- GET /api/stats 200 in 35ms
- GET /api/payments/subscription-status 200 in 42ms
- GET /api/payments/subscription-status 200 in 13ms
- GET /api/payments/subscription-status 200 in 14ms
- GET /api/notifications?unread=true&limit=0 200 in 17ms
- GET /dashboard 200 in 119ms
- GET /favicon.ico 200 in 7ms
- GET /api/auth/session 200 in 7ms
- GET /api/notifications?unread=true&limit=0 200 in 18ms
- GET /api/auth/session 200 in 20ms
- GET /api/user/profile-id 200 in 21ms
- GET /api/user/current 200 in 22ms
- GET /api/stats 200 in 25ms
- GET /api/notifications?unread=true&limit=0 200 in 17ms
- GET /api/user/profile-id 200 in 14ms
- GET /api/user/current 200 in 15ms
- GET /api/stats 200 in 19ms
- GET /api/payments/subscription-status 200 in 15ms
- GET /api/payments/subscription-status 200 in 14ms
- GET /api/notifications?unread=true&limit=0 200 in 19ms
- GET /api/notifications?unread=true&limit=0 200 in 15ms
- GET /api/notifications?unread=true&limit=0 200 in 36ms
- GET /api/notifications?unread=true&limit=0 200 in 33ms
- GET /api/notifications?unread=true&limit=0 200 in 28ms
- GET /api/notifications?unread=true&limit=0 200 in 28ms
- ✓ Compiled /api/bookings in 946ms (1743 modules)
- ✓ Compiled in 0ms (859 modules)
-=== GET /api/bookings called ===
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-Session: { userId: 'cmdhtqps3000dluf1u6q5tg7d', userType: 'host' }
- GET /dashboard 200 in 246ms
-User profiles found: { artist: undefined, host: 'cmdhtqps3000fluf1w77a9xz1' }
-Querying with whereClause: {
-  "OR": [
-    {
-      "hostId": "cmdhtqps3000fluf1w77a9xz1"
-    }
-  ]
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
 }
- GET /api/bookings 200 in 366ms
-=== GET /api/bookings called ===
-Session: { userId: 'cmdhtqps3000dluf1u6q5tg7d', userType: 'host' }
-User profiles found: { artist: undefined, host: 'cmdhtqps3000fluf1w77a9xz1' }
-Querying with whereClause: {
-  "OR": [
-    {
-      "hostId": "cmdhtqps3000fluf1w77a9xz1"
-    }
-  ]
+ GET /api/profile [32m200[39m in 373ms
+ GET /api/tour-segments [32m200[39m in 14ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
 }
- GET /api/bookings 200 in 8ms
- ✓ Compiled in 838ms (1745 modules)
- GET /dashboard 200 in 43ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 65ms
- GET /api/notifications?unread=true&limit=0 200 in 33ms
- ✓ Compiled /api/auth/[...nextauth] in 151ms (861 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 200ms
- ✓ Compiled /api/stats in 118ms (863 modules)
- ✓ Compiled (868 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 374ms
- GET /api/user/profile-id 200 in 376ms
- GET /api/stats 200 in 382ms
- GET /api/user/current 200 in 387ms
- GET /api/user/profile-id 200 in 14ms
-=== GET /api/bookings called ===
- GET /api/user/current 200 in 18ms
- GET /api/stats 200 in 20ms
-Session: { userId: 'cmdhtqps3000dluf1u6q5tg7d', userType: 'host' }
-User profiles found: { artist: undefined, host: 'cmdhtqps3000fluf1w77a9xz1' }
-Querying with whereClause: {
-  "OR": [
-    {
-      "hostId": "cmdhtqps3000fluf1w77a9xz1"
-    }
-  ]
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
 }
- GET /api/bookings 200 in 15ms
-=== GET /api/bookings called ===
-Session: { userId: 'cmdhtqps3000dluf1u6q5tg7d', userType: 'host' }
-User profiles found: { artist: undefined, host: 'cmdhtqps3000fluf1w77a9xz1' }
-Querying with whereClause: {
-  "OR": [
-    {
-      "hostId": "cmdhtqps3000fluf1w77a9xz1"
-    }
-  ]
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
 }
- GET /api/bookings 200 in 7ms
- GET /api/notifications?unread=true&limit=0 200 in 33ms
- ✓ Compiled in 978ms (1754 modules)
- GET /dashboard 200 in 46ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 49ms
- GET /calendar 200 in 31ms
- ✓ Compiled /api/calendar/events in 109ms (859 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/calendar/events 200 in 148ms
- GET /api/calendar/events 200 in 6ms
- GET /api/notifications?unread=true&limit=0 200 in 26ms
- GET /api/notifications?unread=true&limit=0 200 in 12ms
- ✓ Compiled in 794ms (1743 modules)
- GET /calendar 200 in 61ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 70ms
- ✓ Compiled in 696ms (886 modules)
- GET /calendar 200 in 16ms
- GET /api/notifications?unread=true&limit=0 200 in 34ms
- GET /api/notifications?unread=true&limit=0 200 in 34ms
- GET /api/notifications?unread=true&limit=0 200 in 32ms
- GET /api/notifications?unread=true&limit=0 200 in 34ms
- GET /api/notifications?unread=true&limit=0 200 in 32ms
- ✓ Compiled /api/auth/[...nextauth] in 141ms (859 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 199ms
- GET /api/auth/session 200 in 5ms
- ✓ Compiled /api/calendar/events in 122ms (861 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /calendar 200 in 48ms
- GET /api/calendar/events 200 in 216ms
- GET /api/calendar/events 200 in 26ms
- GET /api/notifications?unread=true&limit=0 200 in 18ms
- GET /api/notifications?unread=true&limit=0 200 in 25ms
- ✓ Compiled /bookings/[id] in 299ms (1745 modules)
- GET /bookings/cmdhtqpsm001mluf1c5gwfw7a 200 in 628ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/calendar/events 200 in 68ms
- GET /api/calendar/events 200 in 18ms
- GET /api/notifications?unread=true&limit=0 200 in 29ms
- ✓ Compiled in 808ms (1757 modules)
- GET /calendar 200 in 39ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 49ms
- ✓ Compiled in 795ms (1757 modules)
- GET /calendar 200 in 32ms
- ✓ Compiled in 820ms (1757 modules)
- GET /calendar 200 in 37ms
- ✓ Compiled in 889ms (1757 modules)
- GET /calendar 200 in 33ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 69ms
- GET /api/notifications?unread=true&limit=0 200 in 29ms
- GET /api/notifications?unread=true&limit=0 200 in 41ms
- ✓ Compiled /api/auth/[...nextauth] in 151ms (859 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 198ms
- GET /api/auth/session 200 in 14ms
- ✓ Compiled /api/calendar/events in 106ms (861 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/calendar/events 200 in 168ms
- GET /api/calendar/events 200 in 8ms
- GET /api/notifications?unread=true&limit=0 200 in 27ms
- GET /api/notifications?unread=true&limit=0 200 in 21ms
- GET /api/notifications?unread=true&limit=0 200 in 19ms
- GET /calendar 200 in 134ms
- ✓ Compiled /api/auth/[...nextauth] in 123ms (859 modules)
- ✓ Compiled (861 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /favicon.ico 200 in 262ms
- GET /api/auth/session 200 in 241ms
- GET /api/auth/session 200 in 5ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- ✓ Compiled in 834ms (1751 modules)
- GET /calendar 200 in 282ms
- GET /favicon.ico 200 in 9ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 28ms
- GET /api/notifications?unread=true&limit=0 200 in 32ms
- ✓ Compiled /api/calendar/events in 137ms (863 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 276ms
- GET /api/calendar/events 200 in 300ms
- GET /api/notifications?unread=true&limit=0 200 in 270ms
- GET /api/calendar/events 200 in 12ms
- ✓ Compiled in 867ms (1753 modules)
- GET /calendar 200 in 54ms
- GET /calendar 200 in 100ms
- GET /favicon.ico 200 in 10ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 25ms
- GET /api/notifications?unread=true&limit=0 200 in 17ms
- GET /api/auth/session 200 in 15ms
- GET /api/calendar/events 200 in 26ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/calendar/events 200 in 8ms
- GET /calendar 200 in 77ms
- GET /favicon.ico 200 in 5ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/session 200 in 12ms
- GET /api/notifications?unread=true&limit=0 200 in 16ms
- GET /api/calendar/events 200 in 17ms
- GET /api/notifications?unread=true&limit=0 200 in 8ms
- GET /api/calendar/events 200 in 11ms
- GET /api/notifications?unread=true&limit=0 200 in 18ms
- GET /api/notifications?unread=true&limit=0 200 in 16ms
- ✓ Compiled in 834ms (1747 modules)
- GET /calendar 200 in 53ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 51ms
- GET /api/notifications?unread=true&limit=0 200 in 17ms
- GET /api/notifications?unread=true&limit=0 200 in 17ms
- ✓ Compiled in 713ms (890 modules)
- GET /calendar 200 in 18ms
- GET /api/notifications?unread=true&limit=0 200 in 21ms
- GET /calendar 200 in 108ms
- ✓ Compiled /api/auth/[...nextauth] in 113ms (859 modules)
- ✓ Compiled (861 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /favicon.ico 200 in 337ms
- GET /api/auth/session 200 in 313ms
- GET /api/auth/session 200 in 5ms
- GET /api/notifications?unread=true&limit=0 200 in 19ms
- ✓ Compiled /api/calendar/events in 102ms (863 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/calendar/events 200 in 255ms
- GET /api/notifications?unread=true&limit=0 200 in 243ms
- GET /api/calendar/events 200 in 10ms
- GET /calendar 200 in 117ms
- GET /favicon.ico 200 in 7ms
- GET /api/auth/session 200 in 10ms
- GET /api/auth/session 200 in 10ms
- GET /api/notifications?unread=true&limit=0 200 in 13ms
- GET /api/calendar/events 200 in 16ms
- GET /api/calendar/events 200 in 9ms
- GET /api/notifications?unread=true&limit=0 200 in 20ms
- GET /api/notifications?unread=true&limit=0 200 in 9ms
-[31m[auth][error][0m SyntaxError: Expected property name or '}' in JSON at position 1
-    at JSON.parse (<anonymous>)
-    at parseJSONFromBytes (node:internal/deps/undici/undici:5738:19)
-    at successSteps (node:internal/deps/undici/undici:5719:27)
-    at fullyReadBody (node:internal/deps/undici/undici:4609:9)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async consumeBody (node:internal/deps/undici/undici:5728:7)
-    at async getBody (webpack-internal:///(rsc)/./node_modules/@auth/core/lib/utils/web.js:24:16)
-    at async toInternalRequest (webpack-internal:///(rsc)/./node_modules/@auth/core/lib/utils/web.js:45:30)
-    at async Auth (webpack-internal:///(rsc)/./node_modules/@auth/core/index.js:87:29)
-    at async AppRouteRouteModule.do (/Users/bentyson/pad/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:26:34112)
-    at async AppRouteRouteModule.handle (/Users/bentyson/pad/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:26:41338)
-    at async doRender (/Users/bentyson/pad/node_modules/next/dist/server/base-server.js:1518:42)
-    at async DevServer.renderToResponseWithComponentsImpl (/Users/bentyson/pad/node_modules/next/dist/server/base-server.js:1920:28)
-    at async DevServer.renderPageComponent (/Users/bentyson/pad/node_modules/next/dist/server/base-server.js:2408:24)
-    at async DevServer.renderToResponseImpl (/Users/bentyson/pad/node_modules/next/dist/server/base-server.js:2445:32)
-    at async DevServer.pipeImpl (/Users/bentyson/pad/node_modules/next/dist/server/base-server.js:1008:25)
-    at async NextNodeServer.handleCatchallRenderRequest (/Users/bentyson/pad/node_modules/next/dist/server/next-server.js:305:17)
-    at async DevServer.handleRequestImpl (/Users/bentyson/pad/node_modules/next/dist/server/base-server.js:900:17)
-    at async /Users/bentyson/pad/node_modules/next/dist/server/dev/next-dev-server.js:371:20
-    at async Span.traceAsyncFn (/Users/bentyson/pad/node_modules/next/dist/trace/trace.js:157:20)
-    at async DevServer.handleRequest (/Users/bentyson/pad/node_modules/next/dist/server/dev/next-dev-server.js:368:24)
-    at async invokeRender (/Users/bentyson/pad/node_modules/next/dist/server/lib/router-server.js:237:21)
-    at async handleRequest (/Users/bentyson/pad/node_modules/next/dist/server/lib/router-server.js:428:24)
-    at async requestHandlerImpl (/Users/bentyson/pad/node_modules/next/dist/server/lib/router-server.js:452:13)
-    at async Server.requestListener (/Users/bentyson/pad/node_modules/next/dist/server/lib/start-server.js:158:13)
-[90m[auth][debug]:[0m request {}
- POST /api/auth/signin/credentials 400 in 11ms
- GET /api/calendar/events 401 in 5ms
- ✓ Compiled in 803ms (1753 modules)
- GET /calendar 200 in 43ms
- ✓ Compiled in 865ms (1753 modules)
- GET /calendar 200 in 33ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 54ms
- GET /api/notifications?unread=true&limit=0 200 in 32ms
- GET /calendar 200 in 95ms
- GET /favicon.ico 200 in 8ms
- GET /api/auth/session 200 in 10ms
- GET /api/auth/session 200 in 15ms
-Calendar API Debug: {
-  userId: 'cmdhtqps3000dluf1u6q5tg7d',
-  userRole: 'host',
-  email: 'mike@example.com'
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
 }
- GET /api/notifications?unread=true&limit=0 200 in 19ms
-Calendar API Profiles: { artistId: undefined, hostId: undefined }
- GET /api/calendar/events 200 in 22ms
- GET /api/notifications?unread=true&limit=0 200 in 10ms
-Calendar API Debug: {
-  userId: 'cmdhtqps3000dluf1u6q5tg7d',
-  userRole: 'host',
-  email: 'mike@example.com'
+ GET /api/profile [32m200[39m in 15ms
+ GET /api/tour-segments [32m200[39m in 11ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
 }
-Calendar API Profiles: { artistId: undefined, hostId: undefined }
- GET /api/calendar/events 200 in 11ms
- ✓ Compiled /_not-found in 222ms (1743 modules)
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 296ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/csrf 200 in 58ms
- POST /api/auth/signout 200 in 7ms
- GET /calendar 200 in 52ms
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 45ms
- GET /api/auth/session 200 in 12ms
- GET /api/auth/session 200 in 4ms
- GET /login 200 in 28ms
- GET /api/auth/providers 200 in 12ms
- GET /api/auth/csrf 200 in 11ms
- POST /api/auth/callback/credentials? 200 in 297ms
- GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 4ms
- GET /api/notifications?unread=true&limit=0 200 in 13ms
- GET /dashboard 200 in 26ms
- GET /api/notifications?unread=true&limit=0 200 in 22ms
- GET /api/auth/session 200 in 9ms
- ✓ Compiled /api/stats in 139ms (866 modules)
- ✓ Compiled (871 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/user/profile-id 200 in 325ms
- GET /api/user/current 200 in 330ms
- GET /api/stats 200 in 331ms
- GET /api/user/profile-id 200 in 13ms
- GET /api/user/current 200 in 15ms
- GET /api/stats 200 in 14ms
- ✓ Compiled /api/bookings in 220ms (873 modules)
-=== GET /api/bookings called ===
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-Session: { userId: 'cmdhvc6zu000jluf3a13u5lfs', userType: 'host' }
-User profiles found: { artist: undefined, host: 'cmdhvc6zu000lluf3ee9hmopu' }
-Querying with whereClause: {
-  "OR": [
-    {
-      "hostId": "cmdhvc6zu000lluf3ee9hmopu"
-    }
-  ]
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
 }
- GET /api/bookings 200 in 268ms
-=== GET /api/bookings called ===
-Session: { userId: 'cmdhvc6zu000jluf3a13u5lfs', userType: 'host' }
-User profiles found: { artist: undefined, host: 'cmdhvc6zu000lluf3ee9hmopu' }
-Querying with whereClause: {
-  "OR": [
-    {
-      "hostId": "cmdhvc6zu000lluf3ee9hmopu"
-    }
-  ]
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
 }
- GET /api/bookings 200 in 10ms
- GET /calendar 200 in 44ms
-Calendar API Debug: {
-  userId: 'cmdhvc6zu000jluf3a13u5lfs',
-  userRole: 'host',
-  email: 'mike@example.com'
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
 }
-Calendar API Profiles: { artistId: undefined, hostId: 'cmdhvc6zu000lluf3ee9hmopu' }
- GET /api/calendar/events 200 in 16ms
-Calendar API Debug: {
-  userId: 'cmdhvc6zu000jluf3a13u5lfs',
-  userRole: 'host',
-  email: 'mike@example.com'
+ GET /api/profile [32m200[39m in 15ms
+ GET /api/auth/session [32m200[39m in 33ms
+ GET /api/auth/session [32m200[39m in 26ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
 }
-Calendar API Profiles: { artistId: undefined, hostId: 'cmdhvc6zu000lluf3ee9hmopu' }
- GET /api/calendar/events 200 in 9ms
- GET /api/notifications?unread=true&limit=0 200 in 26ms
- GET /api/auth/csrf 200 in 21ms
- POST /api/auth/signout 200 in 13ms
- GET /calendar 200 in 82ms
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 45ms
- GET /api/auth/session 200 in 13ms
- GET /api/auth/session 200 in 6ms
- GET /login 200 in 23ms
- GET /api/auth/providers 200 in 20ms
- GET /api/auth/csrf 200 in 8ms
- POST /api/auth/callback/credentials? 200 in 292ms
- GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 6ms
- GET /api/notifications?unread=true&limit=0 200 in 9ms
- GET /dashboard 200 in 19ms
- GET /api/notifications?unread=true&limit=0 200 in 20ms
- GET /api/auth/session 200 in 12ms
- GET /api/user/profile-id 200 in 17ms
- GET /api/user/current 200 in 19ms
- GET /api/stats 200 in 21ms
- GET /api/user/profile-id 200 in 15ms
- GET /api/user/current 200 in 17ms
- GET /api/stats 200 in 16ms
-=== GET /api/bookings called ===
-Session: { userId: 'cmdhvc6zk0002luf3h2sk2rtj', userType: 'artist' }
-User profiles found: { artist: 'cmdhvc6zk0004luf3jcf6kml3', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdhvc6zk0004luf3jcf6kml3"
-    }
-  ]
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
 }
- GET /api/bookings 200 in 26ms
- ✓ Compiled /api/payments/subscription-status in 400ms (1072 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-=== GET /api/bookings called ===
-Session: { userId: 'cmdhvc6zk0002luf3h2sk2rtj', userType: 'artist' }
-User profiles found: { artist: 'cmdhvc6zk0004luf3jcf6kml3', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdhvc6zk0004luf3jcf6kml3"
-    }
-  ]
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
 }
- GET /api/bookings 200 in 653ms
- GET /api/payments/subscription-status 200 in 686ms
- GET /api/payments/subscription-status 200 in 14ms
- GET /calendar 200 in 39ms
-Calendar API Debug: {
-  userId: 'cmdhvc6zk0002luf3h2sk2rtj',
-  userRole: 'artist',
-  email: 'sarah@example.com'
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
 }
-Calendar API Profiles: { artistId: 'cmdhvc6zk0004luf3jcf6kml3', hostId: undefined }
- GET /api/calendar/events 200 in 12ms
-Calendar API Debug: {
-  userId: 'cmdhvc6zk0002luf3h2sk2rtj',
-  userRole: 'artist',
-  email: 'sarah@example.com'
+ GET /api/profile [32m200[39m in 33ms
+ GET /api/tour-segments [32m200[39m in 35ms
+ GET /api/auth/session [32m200[39m in 26ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
 }
-Calendar API Profiles: { artistId: 'cmdhvc6zk0004luf3jcf6kml3', hostId: undefined }
- GET /api/calendar/events 200 in 9ms
- GET /api/notifications?unread=true&limit=0 200 in 17ms
- GET /api/notifications?unread=true&limit=0 200 in 25ms
- GET /api/notifications?unread=true&limit=0 200 in 24ms
- ✓ Compiled in 830ms (1747 modules)
- GET /calendar 200 in 59ms
- ✓ Compiled in 694ms (890 modules)
- GET /calendar 200 in 15ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 45ms
- ✓ Compiled in 900ms (1747 modules)
- GET /calendar 200 in 33ms
- ✓ Compiled in 684ms (890 modules)
- GET /calendar 200 in 15ms
- ✓ Compiled in 676ms (890 modules)
- GET /calendar 200 in 16ms
- ✓ Compiled in 684ms (890 modules)
- GET /calendar 200 in 16ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 53ms
- GET /api/notifications?unread=true&limit=0 200 in 34ms
- ✓ Compiled in 762ms (890 modules)
- GET /calendar 200 in 16ms
- GET /api/notifications?unread=true&limit=0 200 in 32ms
- GET /api/notifications?unread=true&limit=0 200 in 37ms
- GET /api/notifications?unread=true&limit=0 200 in 31ms
- GET /api/notifications?unread=true&limit=0 200 in 35ms
- GET /api/notifications?unread=true&limit=0 200 in 25ms
- GET /api/notifications?unread=true&limit=0 200 in 23ms
- GET /api/notifications?unread=true&limit=0 200 in 22ms
- GET /api/notifications?unread=true&limit=0 200 in 23ms
- GET /api/notifications?unread=true&limit=0 200 in 23ms
- GET /api/notifications?unread=true&limit=0 200 in 29ms
- GET /api/notifications?unread=true&limit=0 200 in 32ms
- GET /api/notifications?unread=true&limit=0 200 in 17ms
- GET /api/notifications?unread=true&limit=0 200 in 35ms
- GET /api/notifications?unread=true&limit=0 200 in 21ms
- GET /api/notifications?unread=true&limit=0 200 in 25ms
- GET /api/notifications?unread=true&limit=0 200 in 21ms
- GET /api/notifications?unread=true&limit=0 200 in 21ms
- GET /api/notifications?unread=true&limit=0 200 in 21ms
- GET /api/notifications?unread=true&limit=0 200 in 23ms
- GET /api/notifications?unread=true&limit=0 200 in 23ms
- GET /api/notifications?unread=true&limit=0 200 in 30ms
- GET /api/notifications?unread=true&limit=0 200 in 22ms
- GET /api/notifications?unread=true&limit=0 200 in 22ms
- GET /api/notifications?unread=true&limit=0 200 in 36ms
- GET /api/notifications?unread=true&limit=0 200 in 25ms
- GET /api/notifications?unread=true&limit=0 200 in 23ms
- GET /api/notifications?unread=true&limit=0 200 in 21ms
- GET /api/notifications?unread=true&limit=0 200 in 25ms
- GET /api/notifications?unread=true&limit=0 200 in 24ms
- GET /api/notifications?unread=true&limit=0 200 in 27ms
- GET /calendar 200 in 116ms
- ✓ Compiled /_not-found in 272ms (1737 modules)
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 366ms
- ✓ Compiled /api/auth/[...nextauth] in 147ms (860 modules)
- ✓ Compiled (862 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /favicon.ico 200 in 350ms
- GET /api/auth/session 200 in 321ms
- GET /api/auth/session 200 in 5ms
- GET /api/notifications?unread=true&limit=0 200 in 15ms
- ✓ Compiled /api/calendar/events in 126ms (864 modules)
- ✓ Compiled in 0ms (864 modules)
- ✓ Compiled in 0ms (864 modules)
- ✓ Compiled in 0ms (864 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-Calendar API Debug: {
-  userId: 'cmdhvc6zk0002luf3h2sk2rtj',
-  userRole: 'artist',
-  email: 'sarah@example.com'
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
 }
-Calendar API Profiles: { artistId: undefined, hostId: undefined }
- GET /api/notifications?unread=true&limit=0 200 in 528ms
- GET /api/calendar/events 200 in 545ms
- ✓ Compiled in 0ms (864 modules)
- GET /calendar 200 in 542ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-Calendar API Debug: {
-  userId: 'cmdhvc6zk0002luf3h2sk2rtj',
-  userRole: 'artist',
-  email: 'sarah@example.com'
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
 }
-Calendar API Profiles: { artistId: undefined, hostId: undefined }
- GET /api/calendar/events 200 in 279ms
- GET /api/auth/csrf 200 in 33ms
- POST /api/auth/signout 200 in 6ms
- GET /calendar 200 in 90ms
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 46ms
- GET /api/auth/session 200 in 11ms
- GET /api/auth/session 200 in 8ms
- GET /login 200 in 26ms
- GET /api/auth/providers 200 in 17ms
- GET /api/auth/csrf 200 in 10ms
- POST /api/auth/callback/credentials? 200 in 299ms
- GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 7ms
- GET /api/notifications?unread=true&limit=0 200 in 11ms
- GET /dashboard 200 in 23ms
- GET /api/notifications?unread=true&limit=0 200 in 23ms
- GET /api/auth/session 200 in 8ms
- ✓ Compiled /api/stats in 124ms (866 modules)
- ✓ Compiled (871 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/user/profile-id 200 in 396ms
- GET /api/user/current 200 in 406ms
- GET /api/stats 200 in 405ms
- GET /api/user/profile-id 200 in 8ms
- GET /api/stats 200 in 13ms
- GET /api/user/current 200 in 16ms
- ✓ Compiled /api/payments/subscription-status in 133ms (873 modules)
- ✓ Compiled (1074 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-=== GET /api/bookings called ===
-Session: { userId: 'cmdhvrd090002lu3s2jro1pua', userType: 'artist' }
-User profiles found: { artist: 'cmdhvrd090004lu3shwp3itoe', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdhvrd090004lu3shwp3itoe"
-    }
-  ]
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
 }
- GET /api/bookings 200 in 555ms
- GET /api/payments/subscription-status 200 in 559ms
-=== GET /api/bookings called ===
-Session: { userId: 'cmdhvrd090002lu3s2jro1pua', userType: 'artist' }
-User profiles found: { artist: 'cmdhvrd090004lu3shwp3itoe', host: undefined }
-Querying with whereClause: {
-  "OR": [
-    {
-      "artistId": "cmdhvrd090004lu3shwp3itoe"
-    }
-  ]
+ GET /api/profile [32m200[39m in 22ms
+ GET /api/tour-segments [32m200[39m in 22ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
 }
- GET /api/bookings 200 in 12ms
- GET /api/payments/subscription-status 200 in 15ms
- GET /calendar 200 in 39ms
-Calendar API Debug: {
-  userId: 'cmdhvrd090002lu3s2jro1pua',
-  userRole: 'artist',
-  email: 'sarah@example.com'
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
 }
-Calendar API Profiles: { artistId: 'cmdhvrd090004lu3shwp3itoe', hostId: undefined }
- GET /api/calendar/events 200 in 15ms
-Calendar API Debug: {
-  userId: 'cmdhvrd090002lu3s2jro1pua',
-  userRole: 'artist',
-  email: 'sarah@example.com'
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
 }
-Calendar API Profiles: { artistId: 'cmdhvrd090004lu3shwp3itoe', hostId: undefined }
- GET /api/calendar/events 200 in 10ms
- GET /api/auth/csrf 200 in 32ms
- POST /api/auth/signout 200 in 14ms
- GET /calendar 200 in 90ms
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 44ms
- GET /api/auth/session 200 in 12ms
- GET /api/auth/session 200 in 8ms
- GET /login 200 in 25ms
- GET /api/auth/providers 200 in 19ms
- GET /api/auth/csrf 200 in 13ms
- POST /api/auth/callback/credentials? 200 in 291ms
- GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 6ms
- GET /api/notifications?unread=true&limit=0 200 in 26ms
- ✓ Compiled /admin in 229ms (1089 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 492ms
- GET /admin 200 in 519ms
- GET /api/notifications?unread=true&limit=0 200 in 495ms
- ✓ Compiled /api/admin/metrics in 157ms (1091 modules)
- GET /api/admin/metrics 200 in 180ms
- GET /api/admin/metrics 200 in 5ms
- GET /calendar 200 in 114ms
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 41ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 30ms
- GET /api/notifications?unread=true&limit=0 200 in 24ms
- GET /api/auth/session 200 in 25ms
-Calendar API Debug: {
-  userId: 'cmdhvrd030000lu3sn19uwo7h',
-  userRole: 'admin',
-  email: 'admin@tourpad.com'
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
 }
-Calendar API Profiles: { artistId: undefined, hostId: undefined }
- GET /api/notifications?unread=true&limit=0 200 in 14ms
- GET /api/calendar/events 200 in 42ms
-Calendar API Debug: {
-  userId: 'cmdhvrd030000lu3sn19uwo7h',
-  userRole: 'admin',
-  email: 'admin@tourpad.com'
+ GET /api/profile [32m200[39m in 17ms
+ GET /api/tour-segments [32m200[39m in 16ms
+ [37m[1m○[22m[39m Compiling /register ...
+ [32m[1m✓[22m[39m Compiled /register in 548ms (1176 modules)
+ GET /register?type=artist [32m200[39m in 745ms
+ [32m[1m✓[22m[39m Compiled /favicon.ico in 94ms (734 modules)
+ GET /favicon.ico [32m200[39m in 194ms
+ GET /api/auth/session [32m200[39m in 218ms
+ GET /api/auth/session [32m200[39m in 11ms
+ [32m[1m✓[22m[39m Compiled in 2.3s (465 modules)
+ GET /register?type=artist [32m200[39m in 68ms
+ [32m[1m✓[22m[39m Compiled in 2.2s (465 modules)
+ GET /register?type=artist [32m200[39m in 26ms
+ [32m[1m✓[22m[39m Compiled in 2.3s (465 modules)
+ GET /register?type=artist [32m200[39m in 15ms
+ GET /api/auth/session [32m200[39m in 34ms
+ GET /api/auth/session [32m200[39m in 25ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
 }
-Calendar API Profiles: { artistId: undefined, hostId: undefined }
- GET /api/calendar/events 200 in 13ms
- GET /api/notifications?unread=true&limit=0 200 in 22ms
- GET /api/notifications?unread=true&limit=0 200 in 22ms
- GET /api/notifications?unread=true&limit=0 200 in 32ms
- GET /api/notifications?unread=true&limit=0 200 in 9ms
- ✓ Compiled in 835ms (1727 modules)
- GET /calendar 200 in 64ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 57ms
- ✓ Compiled in 942ms (1727 modules)
- GET /calendar 200 in 51ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 65ms
- GET /api/notifications?unread=true&limit=0 200 in 34ms
- GET /api/notifications?unread=true&limit=0 200 in 53ms
- GET /api/notifications?unread=true&limit=0 200 in 40ms
- GET /api/notifications?unread=true&limit=0 200 in 35ms
- GET /api/notifications?unread=true&limit=0 200 in 28ms
- GET /api/notifications?unread=true&limit=0 200 in 27ms
- GET /api/notifications?unread=true&limit=0 200 in 28ms
- GET /api/notifications?unread=true&limit=0 200 in 37ms
- GET /api/notifications?unread=true&limit=0 200 in 31ms
- GET /api/notifications?unread=true&limit=0 200 in 31ms
- GET /api/notifications?unread=true&limit=0 200 in 34ms
- GET /api/notifications?unread=true&limit=0 200 in 29ms
- GET /api/notifications?unread=true&limit=0 200 in 31ms
- GET /api/notifications?unread=true&limit=0 200 in 38ms
- GET /api/notifications?unread=true&limit=0 200 in 43ms
- GET /api/notifications?unread=true&limit=0 200 in 28ms
- GET /api/notifications?unread=true&limit=0 200 in 34ms
- GET /api/notifications?unread=true&limit=0 200 in 33ms
- GET /api/notifications?unread=true&limit=0 200 in 41ms
- ✓ Compiled /api/auth/[...nextauth] in 157ms (839 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/csrf 200 in 215ms
- POST /api/auth/signout 200 in 5ms
- GET /calendar 200 in 105ms
- ✓ Compiled /_not-found in 322ms (1719 modules)
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 416ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 33ms
- GET /api/auth/session 200 in 10ms
- GET /login 200 in 32ms
- GET /api/auth/providers 200 in 18ms
- GET /api/auth/csrf 200 in 11ms
- POST /api/auth/callback/credentials? 200 in 297ms
- GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 4ms
- GET /api/notifications?unread=true&limit=0 200 in 11ms
- GET /admin 200 in 20ms
- GET /api/notifications?unread=true&limit=0 200 in 19ms
- GET /api/auth/session 200 in 11ms
- ✓ Compiled /api/admin/metrics in 120ms (842 modules)
- GET /api/admin/metrics 200 in 147ms
- GET /api/admin/metrics 200 in 5ms
- GET /calendar 200 in 116ms
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 42ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 39ms
- GET /api/auth/session 200 in 23ms
- ✓ Compiled /api/calendar/events in 169ms (844 modules)
- ✓ Compiled in 0ms (844 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 345ms
- ✓ Compiled in 0ms (844 modules)
- ✓ Compiled in 0ms (844 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-Calendar API Debug: {
-  userId: 'cmdhvrd030000lu3sn19uwo7h',
-  userRole: 'admin',
-  email: 'admin@tourpad.com'
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
 }
-Calendar API Profiles: { artistId: undefined, hostId: undefined }
- GET /api/calendar/events 200 in 685ms
- ✓ Compiled in 0ms (844 modules)
- GET /calendar 200 in 618ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 600ms
-Calendar API Debug: {
-  userId: 'cmdhvrd030000lu3sn19uwo7h',
-  userRole: 'admin',
-  email: 'admin@tourpad.com'
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
 }
-Calendar API Profiles: { artistId: undefined, hostId: undefined }
- GET /api/calendar/events 200 in 278ms
- GET /api/notifications?unread=true&limit=0 200 in 17ms
- GET /api/notifications?unread=true&limit=0 200 in 34ms
- ✓ Compiled in 796ms (1727 modules)
- GET /calendar 200 in 35ms
- ✓ Compiled in 901ms (1727 modules)
- GET /calendar 200 in 36ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 42ms
- GET /api/notifications?unread=true&limit=0 200 in 27ms
- GET /api/notifications?unread=true&limit=0 200 in 32ms
- GET /api/notifications?unread=true&limit=0 200 in 27ms
- ✓ Compiled /api/auth/[...nextauth] in 150ms (839 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/csrf 200 in 198ms
- POST /api/auth/signout 200 in 7ms
- GET /calendar 200 in 98ms
- ✓ Compiled /_not-found in 304ms (1719 modules)
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 394ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 30ms
- GET /api/auth/session 200 in 8ms
- GET /login 200 in 19ms
- GET /api/auth/providers 200 in 18ms
- GET /api/auth/csrf 200 in 10ms
- POST /api/auth/callback/credentials? 200 in 300ms
- GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 5ms
- GET /api/notifications?unread=true&limit=0 200 in 11ms
- GET /admin 200 in 17ms
- GET /api/notifications?unread=true&limit=0 200 in 19ms
- GET /api/auth/session 200 in 10ms
- ✓ Compiled /api/admin/metrics in 114ms (842 modules)
- GET /api/admin/metrics 200 in 138ms
- GET /api/admin/metrics 200 in 5ms
- GET /calendar 200 in 118ms
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 52ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 25ms
- GET /api/auth/session 200 in 20ms
- ✓ Compiled /api/calendar/events in 127ms (844 modules)
- ✓ Compiled in 1ms (844 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 299ms
- ✓ Compiled in 1ms (844 modules)
- ✓ Compiled in 0ms (844 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-Calendar API Debug: {
-  userId: 'cmdhvrd030000lu3sn19uwo7h',
-  userRole: 'admin',
-  email: 'admin@tourpad.com'
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
 }
-Calendar API Profiles: { artistId: undefined, hostId: undefined }
-Admin deduplication - Original events: 10
-Processing event: booking-cmdhvrd1q001ylu3s0i3vw65i, type: booking, bookingId: cmdhvrd1q001ylu3s0i3vw65i
-Setting event for bookingId cmdhvrd1q001ylu3s0i3vw65i: booking - Sarah Johnson
-Processing event: concert-cmdhvrd1t0024lu3sk6t5k388, type: concert, bookingId: cmdhvrd1t0024lu3sk6t5k388
-Setting event for bookingId cmdhvrd1t0024lu3sk6t5k388: concert - Sarah Johnson - Folk Under the Stars
-Processing event: booking-cmdhvrd1r0020lu3s7atiimnq, type: booking, bookingId: cmdhvrd1r0020lu3s7atiimnq
-Setting event for bookingId cmdhvrd1r0020lu3s7atiimnq: booking - Marcus Williams
-Processing event: concert-cmdhvrd210026lu3sgrmbwcre, type: concert, bookingId: cmdhvrd210026lu3sgrmbwcre
-Setting event for bookingId cmdhvrd210026lu3sgrmbwcre: concert - Mike Chen - Jazz in the Garden
-Processing event: booking-cmdhvrd1n001olu3stdfmnplg, type: booking, bookingId: cmdhvrd1n001olu3stdfmnplg
-Setting event for bookingId cmdhvrd1n001olu3stdfmnplg: booking - Luna Martinez
-Processing event: booking-cmdhvrd1h001klu3sze5w31z0, type: booking, bookingId: cmdhvrd1h001klu3sze5w31z0
-Setting event for bookingId cmdhvrd1h001klu3sze5w31z0: booking - Sarah Johnson
-Processing event: booking-cmdhvrd1o001qlu3s66ifiijy, type: booking, bookingId: cmdhvrd1o001qlu3s66ifiijy
-Setting event for bookingId cmdhvrd1o001qlu3s66ifiijy: booking - Sarah Johnson
-Processing event: booking-cmdhvrd1m001mlu3saofyq3j9, type: booking, bookingId: cmdhvrd1m001mlu3saofyq3j9
-Setting event for bookingId cmdhvrd1m001mlu3saofyq3j9: booking - Marcus Williams
-Processing event: booking-cmdhvrd1s0022lu3su4ywoeg8, type: booking, bookingId: cmdhvrd1s0022lu3su4ywoeg8
-Setting event for bookingId cmdhvrd1s0022lu3su4ywoeg8: booking - Luna Martinez
-Processing event: concert-cmdhvrd25002clu3snx4rr31y, type: concert, bookingId: cmdhvrd25002clu3snx4rr31y
-Setting event for bookingId cmdhvrd25002clu3snx4rr31y: concert - Sarah Johnson - Intimate Folk Session
-Admin deduplication - Final events: 10
- GET /api/calendar/events 200 in 565ms
- ✓ Compiled in 1ms (844 modules)
- GET /calendar 200 in 545ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 528ms
-Calendar API Debug: {
-  userId: 'cmdhvrd030000lu3sn19uwo7h',
-  userRole: 'admin',
-  email: 'admin@tourpad.com'
+ GET /api/profile [32m200[39m in 71ms
+ GET /api/tour-segments [32m200[39m in 73ms
+ GET /api/auth/session [32m200[39m in 58ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
 }
-Calendar API Profiles: { artistId: undefined, hostId: undefined }
-Admin deduplication - Original events: 10
-Processing event: booking-cmdhvrd1q001ylu3s0i3vw65i, type: booking, bookingId: cmdhvrd1q001ylu3s0i3vw65i
-Setting event for bookingId cmdhvrd1q001ylu3s0i3vw65i: booking - Sarah Johnson
-Processing event: concert-cmdhvrd1t0024lu3sk6t5k388, type: concert, bookingId: cmdhvrd1t0024lu3sk6t5k388
-Setting event for bookingId cmdhvrd1t0024lu3sk6t5k388: concert - Sarah Johnson - Folk Under the Stars
-Processing event: booking-cmdhvrd1r0020lu3s7atiimnq, type: booking, bookingId: cmdhvrd1r0020lu3s7atiimnq
-Setting event for bookingId cmdhvrd1r0020lu3s7atiimnq: booking - Marcus Williams
-Processing event: concert-cmdhvrd210026lu3sgrmbwcre, type: concert, bookingId: cmdhvrd210026lu3sgrmbwcre
-Setting event for bookingId cmdhvrd210026lu3sgrmbwcre: concert - Mike Chen - Jazz in the Garden
-Processing event: booking-cmdhvrd1n001olu3stdfmnplg, type: booking, bookingId: cmdhvrd1n001olu3stdfmnplg
-Setting event for bookingId cmdhvrd1n001olu3stdfmnplg: booking - Luna Martinez
-Processing event: booking-cmdhvrd1h001klu3sze5w31z0, type: booking, bookingId: cmdhvrd1h001klu3sze5w31z0
-Setting event for bookingId cmdhvrd1h001klu3sze5w31z0: booking - Sarah Johnson
-Processing event: booking-cmdhvrd1o001qlu3s66ifiijy, type: booking, bookingId: cmdhvrd1o001qlu3s66ifiijy
-Setting event for bookingId cmdhvrd1o001qlu3s66ifiijy: booking - Sarah Johnson
-Processing event: booking-cmdhvrd1m001mlu3saofyq3j9, type: booking, bookingId: cmdhvrd1m001mlu3saofyq3j9
-Setting event for bookingId cmdhvrd1m001mlu3saofyq3j9: booking - Marcus Williams
-Processing event: booking-cmdhvrd1s0022lu3su4ywoeg8, type: booking, bookingId: cmdhvrd1s0022lu3su4ywoeg8
-Setting event for bookingId cmdhvrd1s0022lu3su4ywoeg8: booking - Luna Martinez
-Processing event: concert-cmdhvrd25002clu3snx4rr31y, type: concert, bookingId: cmdhvrd25002clu3snx4rr31y
-Setting event for bookingId cmdhvrd25002clu3snx4rr31y: concert - Sarah Johnson - Intimate Folk Session
-Admin deduplication - Final events: 10
- GET /api/calendar/events 200 in 271ms
- GET /api/notifications?unread=true&limit=0 200 in 36ms
- GET /api/notifications?unread=true&limit=0 200 in 30ms
- GET /api/notifications?unread=true&limit=0 200 in 34ms
- GET /api/notifications?unread=true&limit=0 200 in 36ms
- GET /api/notifications?unread=true&limit=0 200 in 31ms
- GET /api/notifications?unread=true&limit=0 200 in 33ms
- GET /api/notifications?unread=true&limit=0 200 in 26ms
- GET /api/notifications?unread=true&limit=0 200 in 24ms
- GET /api/notifications?unread=true&limit=0 200 in 32ms
- GET /calendar 200 in 110ms
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 40ms
- ✓ Compiled /api/auth/[...nextauth] in 243ms (840 modules)
- ✓ Compiled (842 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /favicon.ico 200 in 408ms
- GET /api/auth/session 200 in 382ms
- GET /api/auth/session 200 in 5ms
- GET /api/notifications?unread=true&limit=0 200 in 15ms
- ✓ Compiled /api/calendar/events in 109ms (844 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-Calendar API Debug: {
-  userId: 'cmdhvrd030000lu3sn19uwo7h',
-  userRole: 'admin',
-  email: 'admin@tourpad.com'
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
 }
-Calendar API Profiles: { artistId: undefined, hostId: undefined }
- GET /api/notifications?unread=true&limit=0 200 in 262ms
-Admin deduplication - Original events: 10
-Processing event: booking-cmdhvrd1q001ylu3s0i3vw65i, type: booking, bookingId: cmdhvrd1q001ylu3s0i3vw65i
-Setting event for bookingId cmdhvrd1q001ylu3s0i3vw65i: booking - Sarah Johnson
-Processing event: concert-cmdhvrd1t0024lu3sk6t5k388, type: concert, bookingId: cmdhvrd1t0024lu3sk6t5k388
-Setting event for bookingId cmdhvrd1t0024lu3sk6t5k388: concert - Sarah Johnson - Folk Under the Stars
-Processing event: booking-cmdhvrd1r0020lu3s7atiimnq, type: booking, bookingId: cmdhvrd1r0020lu3s7atiimnq
-Setting event for bookingId cmdhvrd1r0020lu3s7atiimnq: booking - Marcus Williams
-Processing event: concert-cmdhvrd210026lu3sgrmbwcre, type: concert, bookingId: cmdhvrd210026lu3sgrmbwcre
-Setting event for bookingId cmdhvrd210026lu3sgrmbwcre: concert - Mike Chen - Jazz in the Garden
-Processing event: booking-cmdhvrd1n001olu3stdfmnplg, type: booking, bookingId: cmdhvrd1n001olu3stdfmnplg
-Setting event for bookingId cmdhvrd1n001olu3stdfmnplg: booking - Luna Martinez
-Processing event: booking-cmdhvrd1h001klu3sze5w31z0, type: booking, bookingId: cmdhvrd1h001klu3sze5w31z0
-Setting event for bookingId cmdhvrd1h001klu3sze5w31z0: booking - Sarah Johnson
-Processing event: booking-cmdhvrd1o001qlu3s66ifiijy, type: booking, bookingId: cmdhvrd1o001qlu3s66ifiijy
-Setting event for bookingId cmdhvrd1o001qlu3s66ifiijy: booking - Sarah Johnson
-Processing event: booking-cmdhvrd1m001mlu3saofyq3j9, type: booking, bookingId: cmdhvrd1m001mlu3saofyq3j9
-Setting event for bookingId cmdhvrd1m001mlu3saofyq3j9: booking - Marcus Williams
-Processing event: booking-cmdhvrd1s0022lu3su4ywoeg8, type: booking, bookingId: cmdhvrd1s0022lu3su4ywoeg8
-Setting event for bookingId cmdhvrd1s0022lu3su4ywoeg8: booking - Luna Martinez
-Processing event: concert-cmdhvrd25002clu3snx4rr31y, type: concert, bookingId: cmdhvrd25002clu3snx4rr31y
-Setting event for bookingId cmdhvrd25002clu3snx4rr31y: concert - Sarah Johnson - Intimate Folk Session
-Admin deduplication - Final events: 10
- GET /api/calendar/events 200 in 291ms
-Calendar API Debug: {
-  userId: 'cmdhvrd030000lu3sn19uwo7h',
-  userRole: 'admin',
-  email: 'admin@tourpad.com'
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
 }
-Calendar API Profiles: { artistId: undefined, hostId: undefined }
-Admin deduplication - Original events: 10
-Processing event: booking-cmdhvrd1q001ylu3s0i3vw65i, type: booking, bookingId: cmdhvrd1q001ylu3s0i3vw65i
-Setting event for bookingId cmdhvrd1q001ylu3s0i3vw65i: booking - Sarah Johnson
-Processing event: concert-cmdhvrd1t0024lu3sk6t5k388, type: concert, bookingId: cmdhvrd1t0024lu3sk6t5k388
-Setting event for bookingId cmdhvrd1t0024lu3sk6t5k388: concert - Sarah Johnson - Folk Under the Stars
-Processing event: booking-cmdhvrd1r0020lu3s7atiimnq, type: booking, bookingId: cmdhvrd1r0020lu3s7atiimnq
-Setting event for bookingId cmdhvrd1r0020lu3s7atiimnq: booking - Marcus Williams
-Processing event: concert-cmdhvrd210026lu3sgrmbwcre, type: concert, bookingId: cmdhvrd210026lu3sgrmbwcre
-Setting event for bookingId cmdhvrd210026lu3sgrmbwcre: concert - Mike Chen - Jazz in the Garden
-Processing event: booking-cmdhvrd1n001olu3stdfmnplg, type: booking, bookingId: cmdhvrd1n001olu3stdfmnplg
-Setting event for bookingId cmdhvrd1n001olu3stdfmnplg: booking - Luna Martinez
-Processing event: booking-cmdhvrd1h001klu3sze5w31z0, type: booking, bookingId: cmdhvrd1h001klu3sze5w31z0
-Setting event for bookingId cmdhvrd1h001klu3sze5w31z0: booking - Sarah Johnson
-Processing event: booking-cmdhvrd1o001qlu3s66ifiijy, type: booking, bookingId: cmdhvrd1o001qlu3s66ifiijy
-Setting event for bookingId cmdhvrd1o001qlu3s66ifiijy: booking - Sarah Johnson
-Processing event: booking-cmdhvrd1m001mlu3saofyq3j9, type: booking, bookingId: cmdhvrd1m001mlu3saofyq3j9
-Setting event for bookingId cmdhvrd1m001mlu3saofyq3j9: booking - Marcus Williams
-Processing event: booking-cmdhvrd1s0022lu3su4ywoeg8, type: booking, bookingId: cmdhvrd1s0022lu3su4ywoeg8
-Setting event for bookingId cmdhvrd1s0022lu3su4ywoeg8: booking - Luna Martinez
-Processing event: concert-cmdhvrd25002clu3snx4rr31y, type: concert, bookingId: cmdhvrd25002clu3snx4rr31y
-Setting event for bookingId cmdhvrd25002clu3snx4rr31y: concert - Sarah Johnson - Intimate Folk Session
-Admin deduplication - Final events: 10
- GET /api/calendar/events 200 in 12ms
- GET /api/notifications?unread=true&limit=0 200 in 24ms
- GET /api/notifications?unread=true&limit=0 200 in 23ms
- ✓ Compiled in 891ms (1727 modules)
- GET /calendar 200 in 63ms
- ✓ Compiled in 704ms (890 modules)
- GET /calendar 200 in 15ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/notifications?unread=true&limit=0 200 in 32ms
- ✓ Compiled in 707ms (890 modules)
- GET /calendar 200 in 16ms
- GET /calendar 200 in 106ms
- ✓ Compiled /_not-found in 280ms (1717 modules)
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 370ms
- ✓ Compiled /api/auth/[...nextauth] in 125ms (840 modules)
- ✓ Compiled (842 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /favicon.ico 200 in 303ms
- GET /api/auth/session 200 in 279ms
- ✓ Compiled /api/calendar/events in 145ms (844 modules)
- ✓ Compiled in 0ms (844 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 396ms
- GET /api/notifications?unread=true&limit=0 200 in 415ms
- ✓ Compiled in 0ms (844 modules)
- ✓ Compiled in 0ms (844 modules)
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-Calendar API Debug: {
-  userId: 'cmdhvrd030000lu3sn19uwo7h',
-  userRole: 'admin',
-  email: 'admin@tourpad.com',
-  userType: undefined,
-  type: 'admin',
-  rawSession: {
-    name: 'TourPad Admin',
-    email: 'admin@tourpad.com',
-    id: 'cmdhvrd030000lu3sn19uwo7h',
-    type: 'admin',
-    status: 'active',
-    emailVerified: true,
-    profile: {
-      id: 'cmdhvrd030001lu3sgdnxph5i',
-      userId: 'cmdhvrd030000lu3sn19uwo7h',
-      bio: 'TourPad platform administrator',
-      location: 'Denver, CO',
-      phone: null,
-      websiteUrl: null,
-      socialLinks: null,
-      preferences: [Object],
-      createdAt: '2025-07-24T21:04:10.131Z',
-      updatedAt: '2025-07-24T21:04:10.131Z',
-      profileImageUrl: null
-    },
-    artist: null,
-    host: null,
-    fan: null
-  }
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
 }
-Calendar API Profiles: { artistId: undefined, hostId: undefined }
-Checking admin deduplication: { userRole: 'admin', isAdmin: true }
-Admin deduplication - Original events: 10
-Processing event: booking-cmdhvrd1q001ylu3s0i3vw65i, type: booking, bookingId: cmdhvrd1q001ylu3s0i3vw65i
-Setting event for bookingId cmdhvrd1q001ylu3s0i3vw65i: booking - Sarah Johnson
-Processing event: concert-cmdhvrd1t0024lu3sk6t5k388, type: concert, bookingId: cmdhvrd1t0024lu3sk6t5k388
-Setting event for bookingId cmdhvrd1t0024lu3sk6t5k388: concert - Sarah Johnson - Folk Under the Stars
-Processing event: booking-cmdhvrd1r0020lu3s7atiimnq, type: booking, bookingId: cmdhvrd1r0020lu3s7atiimnq
-Setting event for bookingId cmdhvrd1r0020lu3s7atiimnq: booking - Marcus Williams
-Processing event: concert-cmdhvrd210026lu3sgrmbwcre, type: concert, bookingId: cmdhvrd210026lu3sgrmbwcre
-Setting event for bookingId cmdhvrd210026lu3sgrmbwcre: concert - Mike Chen - Jazz in the Garden
-Processing event: booking-cmdhvrd1n001olu3stdfmnplg, type: booking, bookingId: cmdhvrd1n001olu3stdfmnplg
-Setting event for bookingId cmdhvrd1n001olu3stdfmnplg: booking - Luna Martinez
-Processing event: booking-cmdhvrd1h001klu3sze5w31z0, type: booking, bookingId: cmdhvrd1h001klu3sze5w31z0
-Setting event for bookingId cmdhvrd1h001klu3sze5w31z0: booking - Sarah Johnson
-Processing event: booking-cmdhvrd1o001qlu3s66ifiijy, type: booking, bookingId: cmdhvrd1o001qlu3s66ifiijy
-Setting event for bookingId cmdhvrd1o001qlu3s66ifiijy: booking - Sarah Johnson
-Processing event: booking-cmdhvrd1m001mlu3saofyq3j9, type: booking, bookingId: cmdhvrd1m001mlu3saofyq3j9
-Setting event for bookingId cmdhvrd1m001mlu3saofyq3j9: booking - Marcus Williams
-Processing event: booking-cmdhvrd1s0022lu3su4ywoeg8, type: booking, bookingId: cmdhvrd1s0022lu3su4ywoeg8
-Setting event for bookingId cmdhvrd1s0022lu3su4ywoeg8: booking - Luna Martinez
-Processing event: concert-cmdhvrd25002clu3snx4rr31y, type: concert, bookingId: cmdhvrd25002clu3snx4rr31y
-Setting event for bookingId cmdhvrd25002clu3snx4rr31y: concert - Sarah Johnson - Intimate Folk Session
-Admin deduplication - Final events: 10
- GET /api/calendar/events 200 in 663ms
- ✓ Compiled in 0ms (844 modules)
- GET /calendar 200 in 616ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
-Calendar API Debug: {
-  userId: 'cmdhvrd030000lu3sn19uwo7h',
-  userRole: 'admin',
-  email: 'admin@tourpad.com',
-  userType: undefined,
-  type: 'admin',
-  rawSession: {
-    name: 'TourPad Admin',
-    email: 'admin@tourpad.com',
-    id: 'cmdhvrd030000lu3sn19uwo7h',
-    type: 'admin',
-    status: 'active',
-    emailVerified: true,
-    profile: {
-      id: 'cmdhvrd030001lu3sgdnxph5i',
-      userId: 'cmdhvrd030000lu3sn19uwo7h',
-      bio: 'TourPad platform administrator',
-      location: 'Denver, CO',
-      phone: null,
-      websiteUrl: null,
-      socialLinks: null,
-      preferences: [Object],
-      createdAt: '2025-07-24T21:04:10.131Z',
-      updatedAt: '2025-07-24T21:04:10.131Z',
-      profileImageUrl: null
-    },
-    artist: null,
-    host: null,
-    fan: null
-  }
+ GET /api/profile [32m200[39m in 17ms
+ GET /api/tour-segments [32m200[39m in 17ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
 }
- GET /api/notifications?unread=true&limit=0 200 in 525ms
-Calendar API Profiles: { artistId: undefined, hostId: undefined }
-Checking admin deduplication: { userRole: 'admin', isAdmin: true }
-Admin deduplication - Original events: 10
-Processing event: booking-cmdhvrd1q001ylu3s0i3vw65i, type: booking, bookingId: cmdhvrd1q001ylu3s0i3vw65i
-Setting event for bookingId cmdhvrd1q001ylu3s0i3vw65i: booking - Sarah Johnson
-Processing event: concert-cmdhvrd1t0024lu3sk6t5k388, type: concert, bookingId: cmdhvrd1t0024lu3sk6t5k388
-Setting event for bookingId cmdhvrd1t0024lu3sk6t5k388: concert - Sarah Johnson - Folk Under the Stars
-Processing event: booking-cmdhvrd1r0020lu3s7atiimnq, type: booking, bookingId: cmdhvrd1r0020lu3s7atiimnq
-Setting event for bookingId cmdhvrd1r0020lu3s7atiimnq: booking - Marcus Williams
-Processing event: concert-cmdhvrd210026lu3sgrmbwcre, type: concert, bookingId: cmdhvrd210026lu3sgrmbwcre
-Setting event for bookingId cmdhvrd210026lu3sgrmbwcre: concert - Mike Chen - Jazz in the Garden
-Processing event: booking-cmdhvrd1n001olu3stdfmnplg, type: booking, bookingId: cmdhvrd1n001olu3stdfmnplg
-Setting event for bookingId cmdhvrd1n001olu3stdfmnplg: booking - Luna Martinez
-Processing event: booking-cmdhvrd1h001klu3sze5w31z0, type: booking, bookingId: cmdhvrd1h001klu3sze5w31z0
-Setting event for bookingId cmdhvrd1h001klu3sze5w31z0: booking - Sarah Johnson
-Processing event: booking-cmdhvrd1o001qlu3s66ifiijy, type: booking, bookingId: cmdhvrd1o001qlu3s66ifiijy
-Setting event for bookingId cmdhvrd1o001qlu3s66ifiijy: booking - Sarah Johnson
-Processing event: booking-cmdhvrd1m001mlu3saofyq3j9, type: booking, bookingId: cmdhvrd1m001mlu3saofyq3j9
-Setting event for bookingId cmdhvrd1m001mlu3saofyq3j9: booking - Marcus Williams
-Processing event: booking-cmdhvrd1s0022lu3su4ywoeg8, type: booking, bookingId: cmdhvrd1s0022lu3su4ywoeg8
-Setting event for bookingId cmdhvrd1s0022lu3su4ywoeg8: booking - Luna Martinez
-Processing event: concert-cmdhvrd25002clu3snx4rr31y, type: concert, bookingId: cmdhvrd25002clu3snx4rr31y
-Setting event for bookingId cmdhvrd25002clu3snx4rr31y: concert - Sarah Johnson - Intimate Folk Session
-Admin deduplication - Final events: 10
- GET /api/calendar/events 200 in 302ms
- GET /api/auth/csrf 200 in 29ms
- POST /api/auth/signout 200 in 10ms
- GET /calendar 200 in 105ms
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 48ms
- GET /api/auth/session 200 in 11ms
- GET /api/auth/session 200 in 19ms
- GET /login 200 in 25ms
- GET /api/auth/providers 200 in 20ms
- GET /api/auth/csrf 200 in 8ms
- POST /api/auth/callback/credentials? 200 in 294ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 4ms
- GET /api/notifications?unread=true&limit=0 200 in 10ms
- GET /admin 200 in 16ms
- GET /api/notifications?unread=true&limit=0 200 in 16ms
- GET /api/auth/session 200 in 7ms
- ✓ Compiled /api/admin/metrics in 121ms (846 modules)
- GET /api/admin/metrics 200 in 146ms
- GET /api/admin/metrics 200 in 4ms
- GET /calendar 200 in 117ms
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 44ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
- GET /api/auth/session 200 in 28ms
- GET /api/notifications?unread=true&limit=0 200 in 28ms
- GET /api/auth/session 200 in 24ms
-Calendar API Debug: {
-  userId: 'cmdhvrd030000lu3sn19uwo7h',
-  userRole: 'admin',
-  email: 'admin@tourpad.com',
-  userType: undefined,
-  type: 'admin',
-  rawSession: {
-    name: 'TourPad Admin',
-    email: 'admin@tourpad.com',
-    id: 'cmdhvrd030000lu3sn19uwo7h',
-    type: 'admin',
-    status: 'active',
-    emailVerified: true,
-    profile: {
-      id: 'cmdhvrd030001lu3sgdnxph5i',
-      userId: 'cmdhvrd030000lu3sn19uwo7h',
-      bio: 'TourPad platform administrator',
-      location: 'Denver, CO',
-      phone: null,
-      websiteUrl: null,
-      socialLinks: null,
-      preferences: [Object],
-      createdAt: '2025-07-24T21:04:10.131Z',
-      updatedAt: '2025-07-24T21:04:10.131Z',
-      profileImageUrl: null
-    },
-    artist: null,
-    host: null,
-    fan: null
-  }
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
 }
-Calendar API Profiles: { artistId: undefined, hostId: undefined }
-Checking admin deduplication: { userRole: 'admin', isAdmin: true }
-Admin deduplication - Original events: 10
-Processing event: booking-cmdhvrd1q001ylu3s0i3vw65i, type: booking, bookingId: cmdhvrd1q001ylu3s0i3vw65i
-Setting event for bookingId cmdhvrd1q001ylu3s0i3vw65i: booking - Sarah Johnson
-Processing event: concert-cmdhvrd1t0024lu3sk6t5k388, type: concert, bookingId: cmdhvrd1t0024lu3sk6t5k388
-Setting event for bookingId cmdhvrd1t0024lu3sk6t5k388: concert - Sarah Johnson - Folk Under the Stars
-Processing event: booking-cmdhvrd1r0020lu3s7atiimnq, type: booking, bookingId: cmdhvrd1r0020lu3s7atiimnq
-Setting event for bookingId cmdhvrd1r0020lu3s7atiimnq: booking - Marcus Williams
-Processing event: concert-cmdhvrd210026lu3sgrmbwcre, type: concert, bookingId: cmdhvrd210026lu3sgrmbwcre
-Setting event for bookingId cmdhvrd210026lu3sgrmbwcre: concert - Mike Chen - Jazz in the Garden
-Processing event: booking-cmdhvrd1n001olu3stdfmnplg, type: booking, bookingId: cmdhvrd1n001olu3stdfmnplg
-Setting event for bookingId cmdhvrd1n001olu3stdfmnplg: booking - Luna Martinez
-Processing event: booking-cmdhvrd1h001klu3sze5w31z0, type: booking, bookingId: cmdhvrd1h001klu3sze5w31z0
-Setting event for bookingId cmdhvrd1h001klu3sze5w31z0: booking - Sarah Johnson
-Processing event: booking-cmdhvrd1o001qlu3s66ifiijy, type: booking, bookingId: cmdhvrd1o001qlu3s66ifiijy
-Setting event for bookingId cmdhvrd1o001qlu3s66ifiijy: booking - Sarah Johnson
-Processing event: booking-cmdhvrd1m001mlu3saofyq3j9, type: booking, bookingId: cmdhvrd1m001mlu3saofyq3j9
-Setting event for bookingId cmdhvrd1m001mlu3saofyq3j9: booking - Marcus Williams
-Processing event: booking-cmdhvrd1s0022lu3su4ywoeg8, type: booking, bookingId: cmdhvrd1s0022lu3su4ywoeg8
-Setting event for bookingId cmdhvrd1s0022lu3su4ywoeg8: booking - Luna Martinez
-Processing event: concert-cmdhvrd25002clu3snx4rr31y, type: concert, bookingId: cmdhvrd25002clu3snx4rr31y
-Setting event for bookingId cmdhvrd25002clu3snx4rr31y: concert - Sarah Johnson - Intimate Folk Session
-Admin deduplication - Final events: 10
- GET /api/calendar/events 200 in 41ms
- GET /api/notifications?unread=true&limit=0 200 in 18ms
-Calendar API Debug: {
-  userId: 'cmdhvrd030000lu3sn19uwo7h',
-  userRole: 'admin',
-  email: 'admin@tourpad.com',
-  userType: undefined,
-  type: 'admin',
-  rawSession: {
-    name: 'TourPad Admin',
-    email: 'admin@tourpad.com',
-    id: 'cmdhvrd030000lu3sn19uwo7h',
-    type: 'admin',
-    status: 'active',
-    emailVerified: true,
-    profile: {
-      id: 'cmdhvrd030001lu3sgdnxph5i',
-      userId: 'cmdhvrd030000lu3sn19uwo7h',
-      bio: 'TourPad platform administrator',
-      location: 'Denver, CO',
-      phone: null,
-      websiteUrl: null,
-      socialLinks: null,
-      preferences: [Object],
-      createdAt: '2025-07-24T21:04:10.131Z',
-      updatedAt: '2025-07-24T21:04:10.131Z',
-      profileImageUrl: null
-    },
-    artist: null,
-    host: null,
-    fan: null
-  }
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
 }
-Calendar API Profiles: { artistId: undefined, hostId: undefined }
-Checking admin deduplication: { userRole: 'admin', isAdmin: true }
-Admin deduplication - Original events: 10
-Processing event: booking-cmdhvrd1q001ylu3s0i3vw65i, type: booking, bookingId: cmdhvrd1q001ylu3s0i3vw65i
-Setting event for bookingId cmdhvrd1q001ylu3s0i3vw65i: booking - Sarah Johnson
-Processing event: concert-cmdhvrd1t0024lu3sk6t5k388, type: concert, bookingId: cmdhvrd1t0024lu3sk6t5k388
-Setting event for bookingId cmdhvrd1t0024lu3sk6t5k388: concert - Sarah Johnson - Folk Under the Stars
-Processing event: booking-cmdhvrd1r0020lu3s7atiimnq, type: booking, bookingId: cmdhvrd1r0020lu3s7atiimnq
-Setting event for bookingId cmdhvrd1r0020lu3s7atiimnq: booking - Marcus Williams
-Processing event: concert-cmdhvrd210026lu3sgrmbwcre, type: concert, bookingId: cmdhvrd210026lu3sgrmbwcre
-Setting event for bookingId cmdhvrd210026lu3sgrmbwcre: concert - Mike Chen - Jazz in the Garden
-Processing event: booking-cmdhvrd1n001olu3stdfmnplg, type: booking, bookingId: cmdhvrd1n001olu3stdfmnplg
-Setting event for bookingId cmdhvrd1n001olu3stdfmnplg: booking - Luna Martinez
-Processing event: booking-cmdhvrd1h001klu3sze5w31z0, type: booking, bookingId: cmdhvrd1h001klu3sze5w31z0
-Setting event for bookingId cmdhvrd1h001klu3sze5w31z0: booking - Sarah Johnson
-Processing event: booking-cmdhvrd1o001qlu3s66ifiijy, type: booking, bookingId: cmdhvrd1o001qlu3s66ifiijy
-Setting event for bookingId cmdhvrd1o001qlu3s66ifiijy: booking - Sarah Johnson
-Processing event: booking-cmdhvrd1m001mlu3saofyq3j9, type: booking, bookingId: cmdhvrd1m001mlu3saofyq3j9
-Setting event for bookingId cmdhvrd1m001mlu3saofyq3j9: booking - Marcus Williams
-Processing event: booking-cmdhvrd1s0022lu3su4ywoeg8, type: booking, bookingId: cmdhvrd1s0022lu3su4ywoeg8
-Setting event for bookingId cmdhvrd1s0022lu3su4ywoeg8: booking - Luna Martinez
-Processing event: concert-cmdhvrd25002clu3snx4rr31y, type: concert, bookingId: cmdhvrd25002clu3snx4rr31y
-Setting event for bookingId cmdhvrd25002clu3snx4rr31y: concert - Sarah Johnson - Intimate Folk Session
-Admin deduplication - Final events: 10
- GET /api/calendar/events 200 in 19ms
- GET /api/notifications?unread=true&limit=0 200 in 22ms
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
+}
+ GET /api/profile [32m200[39m in 14ms
+ GET /api/tour-segments [32m200[39m in 15ms
+ GET /api/auth/session [32m200[39m in 25ms
+ GET /api/auth/session [32m200[39m in 25ms
+ GET /api/auth/session [32m200[39m in 11ms
+ GET /api/tour-segments [32m200[39m in 38ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
+}
+ GET /api/profile [32m200[39m in 39ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
+}
+ GET /api/profile [32m200[39m in 16ms
+ GET /api/tour-segments [32m200[39m in 21ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
+}
+ GET /api/profile [32m200[39m in 16ms
+ GET /api/tour-segments [32m200[39m in 16ms
+ [32m[1m✓[22m[39m Compiled /dashboard/profile in 217ms (746 modules)
+ GET /dashboard/profile [32m200[39m in 413ms
+ [32m[1m✓[22m[39m Compiled /_not-found in 200ms (1201 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json [33m404[39m in 342ms
+ [32m[1m✓[22m[39m Compiled /favicon.ico in 112ms (749 modules)
+ GET /favicon.ico [32m200[39m in 239ms
+ GET /api/auth/session [32m200[39m in 271ms
+ GET /api/auth/session [32m200[39m in 9ms
+ [32m[1m✓[22m[39m Compiled /api/notifications in 273ms (1205 modules)
+ GET /api/auth/session [32m200[39m in 407ms
+ GET /api/tour-segments [32m200[39m in 414ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
+}
+ GET /api/profile [32m200[39m in 417ms
+ GET /api/notifications?unread=true&limit=0 [32m200[39m in 424ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
+}
+ GET /api/profile [32m200[39m in 40ms
+ GET /api/tour-segments [32m200[39m in 50ms
+ GET /api/notifications?unread=true&limit=0 [32m200[39m in 54ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
+}
+ GET /api/profile [32m200[39m in 91ms
+ GET /api/tour-segments [32m200[39m in 168ms
 [?25h
+✅ [16:47:15] Server stopped normally

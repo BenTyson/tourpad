@@ -154,7 +154,7 @@ const US_STATES = [
 
 export default function ProfilePage() {
   const { data: session, status } = useSession();
-  const [activeTab, setActiveTab] = useState<'info' | 'photos' | 'media' | 'sound-system' | 'lodging'>('info');
+  const [activeTab, setActiveTab] = useState<'artist' | 'host'>('artist');
   const [loading, setLoading] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   
@@ -174,9 +174,6 @@ export default function ProfilePage() {
       notes: string;
     }>;
   }>>([]);
-  const [showTourModal, setShowTourModal] = useState(false);
-  const [editingTourSegment, setEditingTourSegment] = useState<string | null>(null);
-  const [editingStateRangeId, setEditingStateRangeId] = useState<string | null>(null);
 
   // Profile state
   const [artistProfile, setArtistProfile] = useState({
@@ -241,6 +238,7 @@ export default function ProfilePage() {
   const [showMusicForm, setShowMusicForm] = useState(false);
   const [editingVideoId, setEditingVideoId] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [showTourModal, setShowTourModal] = useState(false);
   
   const [videoForm, setVideoForm] = useState({
     title: '',
@@ -903,578 +901,8 @@ export default function ProfilePage() {
     }
   };
 
-  // Tour Segment Modal Component
-  const TourSegmentModal = () => {
-    const [formData, setFormData] = useState({
-      name: '',
-      description: '',
-      status: 'planned',
-      isPublic: true,
-      stateRanges: [] as Array<{
-        id: string;
-        state: string;
-        startDate: string;
-        endDate: string;
-        cities: string[];
-        notes: string;
-      }>
-    });
-    const [newStateRange, setNewStateRange] = useState({
-      state: '',
-      startDate: '',
-      endDate: '',
-      cities: [] as string[],
-      notes: ''
-    });
+  // Tour planning has been moved to /dashboard/tours
 
-    const [cityInput, setCityInput] = useState('');
-
-    // Load existing data when editing - only reset editing state when modal opens/closes
-    useEffect(() => {
-      if (editingTourSegment && showTourModal) {
-        const segment = tourSegments.find(s => s.id === editingTourSegment);
-        if (segment) {
-          setFormData({
-            name: segment.name,
-            description: segment.description,
-            status: segment.status,
-            isPublic: segment.isPublic,
-            stateRanges: segment.stateRanges.map(range => ({
-              ...range,
-              startDate: range.startDate.split('T')[0],
-              endDate: range.endDate.split('T')[0]
-            }))
-          });
-        }
-      } else if (!showTourModal) {
-        // Reset form for new segment only when modal is closed
-        setFormData({
-          name: '',
-          description: '',
-          status: 'planned',
-          isPublic: true,
-          stateRanges: []
-        });
-        
-        // Reset new state range form
-        setNewStateRange({
-          state: '',
-          startDate: '',
-          endDate: '',
-          cities: [],
-          notes: ''
-        });
-        setCityInput('');
-        
-        // Reset editing state only when modal closes
-        setEditingStateRangeId(null);
-      }
-    }, [editingTourSegment, showTourModal]);
-
-    const handleSubmit = (e: React.FormEvent) => {
-      e.preventDefault();
-      
-      if (!formData.name || formData.stateRanges.length === 0) {
-        alert('Please provide a tour name and add at least one state with dates');
-        return;
-      }
-
-      const segmentData = {
-        name: formData.name,
-        description: formData.description,
-        status: formData.status,
-        isPublic: formData.isPublic,
-        stateRanges: formData.stateRanges.map(range => ({
-          state: range.state,
-          startDate: range.startDate + 'T00:00:00.000Z',
-          endDate: range.endDate + 'T23:59:59.999Z',
-          cities: range.cities,
-          notes: range.notes
-        }))
-      };
-
-      if (editingTourSegment) {
-        updateTourSegment(editingTourSegment, segmentData);
-      } else {
-        createTourSegment(segmentData);
-      }
-    };
-
-    const addStateRange = () => {
-      if (!newStateRange.state || !newStateRange.startDate || !newStateRange.endDate) {
-        alert('Please fill in state, start date, and end date');
-        return;
-      }
-      
-      if (new Date(newStateRange.startDate) >= new Date(newStateRange.endDate)) {
-        alert('End date must be after start date');
-        return;
-      }
-      
-      // Check if state already exists in this tour
-      if (formData.stateRanges.some(range => range.state === newStateRange.state)) {
-        alert('This state is already added to the tour');
-        return;
-      }
-      
-      const stateRange = {
-        id: Date.now().toString(),
-        ...newStateRange
-      };
-      
-      setFormData(prev => ({
-        ...prev,
-        stateRanges: [...prev.stateRanges, stateRange]
-      }));
-      
-      // Reset form
-      setNewStateRange({
-        state: '',
-        startDate: '',
-        endDate: '',
-        cities: [],
-        notes: ''
-      });
-      setCityInput('');
-    };
-
-    const removeStateRange = (id: string) => {
-      setFormData(prev => ({
-        ...prev,
-        stateRanges: prev.stateRanges.filter(range => range.id !== id)
-      }));
-    };
-    
-    const updateStateRange = (id: string, field: string, value: any) => {
-      setFormData(prev => ({
-        ...prev,
-        stateRanges: prev.stateRanges.map(range => 
-          range.id === id ? { ...range, [field]: value } : range
-        )
-      }));
-    };
-
-    const addCityToNewRange = () => {
-      if (cityInput && !newStateRange.cities.includes(cityInput)) {
-        setNewStateRange(prev => ({
-          ...prev,
-          cities: [...prev.cities, cityInput]
-        }));
-        setCityInput('');
-      }
-    };
-
-    const removeCityFromNewRange = (city: string) => {
-      setNewStateRange(prev => ({
-        ...prev,
-        cities: prev.cities.filter(c => c !== city)
-      }));
-    };
-    
-    const addCityToRange = (rangeId: string, city: string) => {
-      const range = formData.stateRanges.find(r => r.id === rangeId);
-      if (range && city && !range.cities.includes(city)) {
-        updateStateRange(rangeId, 'cities', [...range.cities, city]);
-      }
-    };
-
-    const removeCityFromRange = (rangeId: string, city: string) => {
-      const range = formData.stateRanges.find(r => r.id === rangeId);
-      if (range) {
-        updateStateRange(rangeId, 'cities', range.cities.filter(c => c !== city));
-      }
-    };
-
-    // Function to load existing state range into the form for editing
-    const loadStateRangeForEditing = (range: any) => {
-      // Load the data into the form first
-      setNewStateRange({
-        state: range.state,
-        startDate: range.startDate,
-        endDate: range.endDate,
-        cities: [...range.cities],
-        notes: range.notes
-      });
-      setCityInput('');
-      
-      // Then set editing state
-      setEditingStateRangeId(range.id);
-    };
-
-    // Function to save or update state range
-    const saveStateRange = () => {
-      if (!newStateRange.state || !newStateRange.startDate || !newStateRange.endDate) {
-        alert('Please fill in state and date range');
-        return;
-      }
-
-      if (new Date(newStateRange.startDate) >= new Date(newStateRange.endDate)) {
-        alert('End date must be after start date');
-        return;
-      }
-
-      if (editingStateRangeId) {
-        // Update existing state range
-        updateStateRange(editingStateRangeId, 'state', newStateRange.state);
-        updateStateRange(editingStateRangeId, 'startDate', newStateRange.startDate);
-        updateStateRange(editingStateRangeId, 'endDate', newStateRange.endDate);
-        updateStateRange(editingStateRangeId, 'cities', newStateRange.cities);
-        updateStateRange(editingStateRangeId, 'notes', newStateRange.notes);
-        setEditingStateRangeId(null);
-      } else {
-        // Add new state range
-        const newRange = {
-          id: Date.now().toString(),
-          state: newStateRange.state,
-          startDate: newStateRange.startDate,
-          endDate: newStateRange.endDate,
-          cities: newStateRange.cities,
-          notes: newStateRange.notes
-        };
-        setFormData(prev => ({ 
-          ...prev, 
-          stateRanges: [...prev.stateRanges, newRange] 
-        }));
-      }
-
-      // Reset form
-      setNewStateRange({
-        state: '',
-        startDate: '',
-        endDate: '',
-        cities: [],
-        notes: ''
-      });
-      setCityInput('');
-    };
-
-    const cancelStateRangeEdit = () => {
-      setEditingStateRangeId(null);
-      setNewStateRange({
-        state: '',
-        startDate: '',
-        endDate: '',
-        cities: [],
-        notes: ''
-      });
-      setCityInput('');
-    };
-
-    if (!showTourModal) return null;
-
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-          <div className="p-8">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="text-2xl font-bold text-neutral-900 mb-1">
-                  {editingTourSegment ? 'Edit Tour' : 'Plan New Tour'}
-                </h2>
-                <p className="text-neutral-600 text-sm">
-                  {editingTourSegment ? 'Update your tour dates and locations' : 'Add states and dates to let hosts find you'}
-                </p>
-              </div>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => setShowTourModal(false)}
-                className="h-8 w-8 p-0 rounded-full"
-              >
-                <X className="w-4 h-4" />
-              </Button>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-8">
-              {/* Tour Details */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-neutral-900 mb-3">
-                    Tour Name *
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                    placeholder="Southwest Spring Tour 2025"
-                    className="w-full px-4 py-3 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-semibold text-neutral-900 mb-3">
-                    Description
-                  </label>
-                  <textarea
-                    value={formData.description}
-                    onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                    placeholder="Brief description of your tour..."
-                    rows={3}
-                    className="w-full px-4 py-3 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm resize-none"
-                  />
-                </div>
-              </div>
-
-              {/* State Tour Schedule */}
-              <div>
-                <label className="block text-lg font-bold text-neutral-900 mb-4">
-                  Tour Schedule by State *
-                </label>
-                <p className="text-neutral-600 text-sm mb-6">Add each state you'll visit with specific dates. Hosts can discover you when you're in their area.</p>
-                
-                {/* Add New State Range */}
-                <div className="border border-neutral-200 rounded-2xl p-6 mb-6 bg-gradient-to-br from-neutral-50 to-white shadow-sm">
-                  <h3 className="text-md font-semibold text-neutral-900 mb-4 flex items-center">
-                    <Plus className="w-4 h-4 mr-2 text-primary-600" />
-                    Add State to Tour
-                  </h3>
-                  
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">State</label>
-                      <select
-                        value={newStateRange.state}
-                        onChange={(e) => setNewStateRange(prev => ({ ...prev, state: e.target.value }))}
-                        className="w-full px-4 py-3 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
-                      >
-                        <option value="">Choose state...</option>
-                        {US_STATES.map((state) => (
-                          <option key={state.value} value={state.value}>
-                            {state.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">Arrival Date</label>
-                      <input
-                        type="date"
-                        value={newStateRange.startDate}
-                        onChange={(e) => setNewStateRange(prev => ({ ...prev, startDate: e.target.value }))}
-                        className="w-full px-4 py-3 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">Departure Date</label>
-                      <input
-                        type="date"
-                        value={newStateRange.endDate}
-                        onChange={(e) => setNewStateRange(prev => ({ ...prev, endDate: e.target.value }))}
-                        className="w-full px-4 py-3 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* Cities and Notes Row */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">Cities (Optional)</label>
-                      <div className="flex gap-2 mb-3">
-                        <input
-                          type="text"
-                          value={cityInput}
-                          onChange={(e) => setCityInput(e.target.value)}
-                          placeholder="Denver, Boulder..."
-                          className="flex-1 px-4 py-3 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
-                          onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addCityToNewRange())}
-                        />
-                        <Button type="button" onClick={addCityToNewRange} size="sm" className="px-4 py-3 rounded-xl">
-                          Add
-                        </Button>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {newStateRange.cities.map((city) => (
-                          <Badge key={city} variant="secondary" className="px-3 py-1 rounded-full">
-                            {city}
-                            <button
-                              type="button"
-                              onClick={() => removeCityFromNewRange(city)}
-                              className="ml-2 text-neutral-500 hover:text-neutral-700"
-                            >
-                              ×
-                            </button>
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">Notes (Optional)</label>
-                      <textarea
-                        value={newStateRange.notes}
-                        onChange={(e) => setNewStateRange(prev => ({ ...prev, notes: e.target.value }))}
-                        placeholder="Looking for outdoor venues, acoustic preferred..."
-                        rows={3}
-                        className="w-full px-4 py-3 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm resize-none"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-3">
-                    <Button 
-                      type="button" 
-                      onClick={saveStateRange}
-                      className="flex-1 py-3 px-6 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-medium transition-colors duration-200 shadow-sm"
-                    >
-                      <Plus className="w-4 h-4 mr-2" />
-                      {editingStateRangeId ? 'Update State' : 'Add State to Tour'}
-                    </Button>
-                    {editingStateRangeId && (
-                      <Button 
-                        type="button" 
-                        variant="outline"
-                        onClick={cancelStateRangeEdit}
-                        className="py-3 px-6 rounded-xl font-medium"
-                      >
-                        Cancel
-                      </Button>
-                    )}
-                  </div>
-                </div>
-                
-                {/* Existing State Ranges */}
-                {formData.stateRanges.length > 0 && (
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold text-neutral-900">
-                        Planned States ({formData.stateRanges.length})
-                      </h3>
-                    </div>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                      {formData.stateRanges.map((range) => (
-                        <div key={range.id} className={`border rounded-2xl p-5 bg-white shadow-sm transition-all duration-200 ${
-                          editingStateRangeId === range.id 
-                            ? 'border-primary-300 shadow-lg ring-2 ring-primary-100' 
-                            : 'border-neutral-200 hover:shadow-md hover:border-neutral-300 cursor-pointer'
-                        }`} onClick={() => loadStateRangeForEditing(range)}>
-                          <div className="flex items-start justify-between mb-3">
-                            <div className="flex items-center gap-3">
-                              <Badge variant="primary" className="px-3 py-1 rounded-full font-medium">
-                                {US_STATES.find(s => s.value === range.state)?.label || range.state}
-                              </Badge>
-                              {editingStateRangeId === range.id && (
-                                <Badge variant="secondary" className="px-2 py-1 rounded-full text-xs">
-                                  Editing...
-                                </Badge>
-                              )}
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={(e) => { e.stopPropagation(); removeStateRange(range.id); }}
-                                className="h-8 w-8 p-0 rounded-full hover:bg-red-50 hover:border-red-200 hover:text-red-600"
-                              >
-                                <X className="w-3 h-3" />
-                              </Button>
-                            </div>
-                          </div>
-                          
-                          <div className="mb-3">
-                            <div className="text-sm font-medium text-neutral-900 mb-1">Tour Dates</div>
-                            <div className="text-sm text-neutral-600">
-                              {new Date(range.startDate).toLocaleDateString('en-US', { 
-                                month: 'short', 
-                                day: 'numeric',
-                                year: 'numeric'
-                              })} - {new Date(range.endDate).toLocaleDateString('en-US', { 
-                                month: 'short', 
-                                day: 'numeric',
-                                year: 'numeric'
-                              })}
-                            </div>
-                          </div>
-                          
-                          <div className="mb-3">
-                            <div className="text-sm font-medium text-neutral-900 mb-2">Cities</div>
-                            <div className="flex flex-wrap gap-2">
-                              {range.cities.length > 0 ? range.cities.map((city) => (
-                                <Badge key={city} variant="outline" className="px-2 py-1 rounded-full text-xs">
-                                  {city}
-                                </Badge>
-                              )) : (
-                                <span className="text-sm text-neutral-400 italic">No cities specified</span>
-                              )}
-                            </div>
-                          </div>
-                          
-                          <div>
-                            <div className="text-sm font-medium text-neutral-900 mb-1">Notes</div>
-                            <p className="text-sm text-neutral-600 leading-relaxed">
-                              {range.notes || <span className="italic text-neutral-400">No notes</span>}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-
-              {/* Tour Settings */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-neutral-900 mb-3">
-                    Tour Status
-                  </label>
-                  <select
-                    value={formData.status}
-                    onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
-                    className="w-full px-4 py-3 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
-                  >
-                    <option value="planned">Planned</option>
-                    <option value="confirmed">Confirmed</option>
-                    <option value="cancelled">Cancelled</option>
-                  </select>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-semibold text-neutral-900 mb-3">
-                    Visibility
-                  </label>
-                  <div className="flex items-center gap-3 pt-2">
-                    <input
-                      type="checkbox"
-                      id="isPublic"
-                      checked={formData.isPublic}
-                      onChange={(e) => setFormData(prev => ({ ...prev, isPublic: e.target.checked }))}
-                      className="w-4 h-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500 focus:ring-2"
-                    />
-                    <label htmlFor="isPublic" className="text-sm text-neutral-700">
-                      Make this tour visible to hosts
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              {/* Submit Buttons */}
-              <div className="flex gap-4 pt-6 border-t border-neutral-100">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setShowTourModal(false)}
-                  className="flex-1 py-3 px-6 rounded-xl font-medium border-neutral-200 text-neutral-700 hover:bg-neutral-50"
-                >
-                  Cancel
-                </Button>
-                <Button 
-                  type="submit" 
-                  className="flex-1 py-3 px-6 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-medium shadow-sm transition-colors duration-200"
-                >
-                  {editingTourSegment ? 'Update Tour' : 'Create Tour'}
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    );
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
@@ -1485,2493 +913,1399 @@ export default function ProfilePage() {
             <Link href="/dashboard">
               <Button variant="outline" size="sm">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Back
+                Back to Dashboard
               </Button>
             </Link>
-            <h1 className="text-2xl font-bold text-neutral-900">Edit Profile</h1>
-          </div>
-          
-          <div className="flex items-center space-x-3">
-            <Link href={`/${isArtist ? 'artists' : 'hosts'}/${isArtist ? (session.user.artist?.id || session.user.id) : 'cmd8zfdyf000aluf9h4l2k90w'}`} target="_blank">
-              <Button variant="outline" size="sm">
-                <Eye className="w-4 h-4 mr-2" />
-                Preview
-              </Button>
-            </Link>
-            {hasChanges && (
-              <>
-                <Badge variant="warning" className="bg-yellow-100 text-yellow-800">
-                  <AlertTriangle className="w-3 h-3 mr-1" />
-                  Unsaved
-                </Badge>
-                <Button onClick={handleSave} disabled={loading}>
-                  {loading ? 'Saving...' : 'Save Changes'}
-                </Button>
-              </>
-            )}
           </div>
         </div>
 
-        {/* Tab Navigation - Sleek Modern Design */}
+        {/* Profile Type Tabs */}
         <div className="mb-8">
-          <nav className="flex space-x-2 bg-neutral-50 rounded-lg p-1">
-            <button
-              onClick={() => setActiveTab('info')}
-              className={`flex items-center px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 ${
-                activeTab === 'info'
-                  ? 'bg-white text-primary-600 shadow-sm'
-                  : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
-              }`}
-            >
-              <FileText className="w-4 h-4 mr-2" />
-              Profile Information
-            </button>
-            <button
-              onClick={() => setActiveTab('media')}
-              className={`flex items-center px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 ${
-                activeTab === 'media'
-                  ? 'bg-white text-primary-600 shadow-sm'
-                  : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
-              }`}
-            >
-              {isArtist ? (
-                <Video className="w-4 h-4 mr-2" />
-              ) : (
-                <Camera className="w-4 h-4 mr-2" />
-              )}
-              {isArtist ? 'Music & Media' : 'Gallery'}
-            </button>
-            {!isArtist && (
-              <>
-                <button
-                  onClick={() => setActiveTab('sound-system')}
-                  className={`flex items-center px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 ${
-                    activeTab === 'sound-system'
-                      ? 'bg-white text-primary-600 shadow-sm'
-                      : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
-                  }`}
-                >
-                  <Volume2 className="w-4 h-4 mr-2" />
-                  Sound System & Equipment
-                </button>
-                <button
-                  onClick={() => setActiveTab('lodging')}
-                  className={`flex items-center px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 ${
-                    activeTab === 'lodging'
-                      ? 'bg-white text-primary-600 shadow-sm'
-                      : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
-                  }`}
-                >
-                  <Home className="w-4 h-4 mr-2" />
-                  Lodging
-                </button>
-              </>
-            )}
-          </nav>
+          <div className="border-b border-gray-200">
+            <nav className="-mb-px flex space-x-8">
+              <button
+                onClick={() => setActiveTab('artist')}
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'artist'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Artist Profile
+              </button>
+              <button
+                onClick={() => setActiveTab('host')}
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'host'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Host Profile
+              </button>
+            </nav>
+          </div>
         </div>
 
-        {/* Tab Content */}
-        <div className="space-y-6">
-          {/* Profile Information Tab */}
-          {activeTab === 'info' && (
-            <div className="space-y-6">
-              {/* Basic Information */}
-              <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                <CardHeader>
-                  <h2 className="text-xl font-semibold text-neutral-900">General Band Info</h2>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <Input
-                    label={isArtist ? "Artist/Band Name" : "Venue Name"}
-                    value={isArtist ? artistProfile.bandName : hostProfile.venueName}
-                    onChange={(e) => {
-                      if (isArtist) updateArtistProfile({ bandName: e.target.value });
-                      else updateHostProfile({ venueName: e.target.value });
-                    }}
-                    placeholder={isArtist ? "Your stage name or band name" : "Your venue name (e.g., 'Mike's Overlook')"}
-                  />
-                  {isArtist ? (
-                    <>
-                      {/* Brief Introductory Bio */}
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-1">
-                          Brief Introduction
-                        </label>
-                        <textarea
-                          value={artistProfile.briefBio || ''}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            if (value.length <= 500) {
-                              updateArtistProfile({ briefBio: value });
-                            }
-                          }}
-                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                          rows={3}
-                          maxLength={500}
-                          placeholder="A brief intro to you as a band or artist"
-                        />
-                        <p className="text-xs text-neutral-500 mt-1">
-                          This is the first thing people will read when they arrive at your profile ({(artistProfile.briefBio || '').length}/500 characters)
-                        </p>
-                      </div>
-
-                      {/* Full Bio */}
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-1">
-                          Full Bio
-                        </label>
-                        <textarea
-                          value={artistProfile.fullBio || ''}
-                          onChange={(e) => updateArtistProfile({ fullBio: e.target.value })}
-                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                          rows={6}
-                          placeholder="Tell hosts about your music, style, and what makes your performances special. Include your history, influences, upcoming projects, and anything else that helps hosts understand who you are as an artist..."
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-1">
-                        Venue Description
-                      </label>
-                      <textarea
-                        value={hostProfile.venueDescription}
-                        onChange={(e) => updateHostProfile({ venueDescription: e.target.value })}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                        rows={4}
-                        placeholder="Describe your space, atmosphere, and what makes it perfect for house concerts..."
-                      />
-                    </div>
-                  )}
-                  <div className="grid md:grid-cols-3 gap-4">
-                    <Input
-                      label="City"
-                      value={isArtist ? artistProfile.city : hostProfile.city}
-                      onChange={(e) => {
-                        if (isArtist) updateArtistProfile({ city: e.target.value });
-                        else updateHostProfile({ city: e.target.value });
-                      }}
+        {/* Profile Content */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="p-6">
+            {activeTab === 'artist' && (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Band/Artist Name
+                    </label>
+                    <input
+                      type="text"
+                      value={artistProfile.bandName}
+                      onChange={(e) => updateArtistProfile({ bandName: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Your band or artist name"
                     />
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-1">State</label>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Location
+                    </label>
+                    <div className="grid grid-cols-3 gap-2">
+                      <input
+                        type="text"
+                        value={artistProfile.city}
+                        onChange={(e) => updateArtistProfile({ city: e.target.value })}
+                        className="col-span-2 w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="City"
+                      />
                       <select
-                        value={isArtist ? artistProfile.state : hostProfile.state}
-                        onChange={(e) => {
-                          if (isArtist) updateArtistProfile({ state: e.target.value });
-                          else updateHostProfile({ state: e.target.value });
-                        }}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        value={artistProfile.state}
+                        onChange={(e) => updateArtistProfile({ state: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       >
-                        <option value="">Select a state</option>
-                        {US_STATES.map((state) => (
-                          <option key={state.value} value={state.value}>
-                            {state.label}
-                          </option>
+                        <option value="">State</option>
+                        {US_STATES.map(state => (
+                          <option key={state.value} value={state.value}>{state.label}</option>
                         ))}
                       </select>
                     </div>
-                    {!isArtist && (
-                      <Input
-                        label="ZIP Code"
-                        value={hostProfile.zip}
-                        onChange={(e) => updateHostProfile({ zip: e.target.value })}
-                      />
-                    )}
+                  </div>
+                </div>
+
+                {/* Brief Bio */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Brief Bio
+                  </label>
+                  <textarea
+                    value={artistProfile.briefBio || ''}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value.length <= 500) {
+                        updateArtistProfile({ briefBio: value });
+                      }
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    rows={4}
+                    placeholder="Brief introduction that appears at the top of your profile..."
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    This is the first thing people will read when they arrive at your profile ({(artistProfile.briefBio || '').length}/500 characters)
+                  </p>
+                </div>
+
+                {/* Full Bio */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Full Bio
+                  </label>
+                  <textarea
+                    value={artistProfile.fullBio || ''}
+                    onChange={(e) => updateArtistProfile({ fullBio: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    rows={6}
+                    placeholder="Tell your story, your music journey, influences, what makes your performances special..."
+                  />
+                </div>
+
+                {/* Musical Details */}
+                <div className="border-t pt-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Musical Details</h3>
+                  
+                  {/* Genres */}
+                  <div className="mb-6">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Genres
+                    </label>
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {artistProfile.genres.map((genre) => (
+                        <Badge
+                          key={genre}
+                          variant="secondary"
+                          className="flex items-center gap-1"
+                        >
+                          {genre}
+                          <button
+                            onClick={() => removeGenre(genre)}
+                            className="ml-1 text-red-500 hover:text-red-700"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </Badge>
+                      ))}
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {GENRE_OPTIONS.filter(genre => !artistProfile.genres.includes(genre)).map((genre) => (
+                        <button
+                          key={genre}
+                          onClick={() => addGenre(genre)}
+                          className="px-3 py-1 text-xs border border-gray-300 rounded-full hover:bg-gray-50"
+                        >
+                          + {genre}
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
-                  {/* Formation Year (Artist only) */}
-                  {isArtist && (
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-2">Formation Year</label>
-                        <select
-                          value={artistProfile.formationYear}
-                          onChange={(e) => updateArtistProfile({ formationYear: parseInt(e.target.value) })}
-                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  {/* Instruments */}
+                  <div className="mb-6">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Instruments
+                    </label>
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {artistProfile.instruments.map((instrument) => (
+                        <Badge
+                          key={instrument}
+                          variant="secondary"
+                          className="flex items-center gap-1"
                         >
-                          {(() => {
-                            const currentYear = new Date().getFullYear();
-                            const startYear = 1950;
-                            const years = [];
-                            for (let year = currentYear; year >= startYear; year--) {
-                              years.push(
-                                <option key={year} value={year}>
-                                  {year}
-                                </option>
-                              );
-                            }
-                            return years;
-                          })()}
-                        </select>
-                        <p className="text-xs text-neutral-500 mt-1">
-                          Years active: {new Date().getFullYear() - artistProfile.formationYear + 1}
-                        </p>
-                      </div>
-                      <div>
-                        {/* Empty space for grid alignment */}
-                      </div>
+                          {instrument}
+                          <button
+                            onClick={() => removeInstrument(instrument)}
+                            className="ml-1 text-red-500 hover:text-red-700"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </Badge>
+                      ))}
                     </div>
-                  )}
-                  
-                  {/* Venue Profile Photo */}
-                  {!isArtist && (
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {INSTRUMENT_OPTIONS.filter(instrument => !artistProfile.instruments.includes(instrument)).map((instrument) => (
+                        <button
+                          key={instrument}
+                          onClick={() => addInstrument(instrument)}
+                          className="px-3 py-1 text-xs border border-gray-300 rounded-full hover:bg-gray-50"
+                        >
+                          + {instrument}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={customInstrument}
+                        onChange={(e) => setCustomInstrument(e.target.value)}
+                        placeholder="Add custom instrument..."
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      <Button onClick={addCustomInstrument} size="sm">Add</Button>
+                    </div>
+                  </div>
+
+                  {/* Formation Year and Musical Style */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">Venue Profile Photo</label>
-                      <div className="flex items-center space-x-4">
-                        <div className="w-20 h-20 bg-neutral-100 rounded-lg overflow-hidden flex items-center justify-center">
-                          {hostProfile.venuePhoto ? (
-                            <img 
-                              src={hostProfile.venuePhoto} 
-                              alt="Venue profile" 
-                              className="w-20 h-20 object-cover"
-                            />
-                          ) : (
-                            <Home className="w-10 h-10 text-neutral-400" />
-                          )}
-                        </div>
-                        <div className="flex-1">
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={async (e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                // Check file size (max 5MB)
-                                if (file.size > 5 * 1024 * 1024) {
-                                  alert('Image file is too large. Please choose an image under 5MB.');
-                                  return;
-                                }
-                                
-                                try {
-                                  // Create FormData
-                                  const formData = new FormData();
-                                  formData.append('file', file);
-                                  formData.append('type', 'venue');
-                                  
-                                  // Upload file
-                                  const response = await fetch('/api/upload', {
-                                    method: 'POST',
-                                    body: formData
-                                  });
-                                  
-                                  if (!response.ok) {
-                                    const error = await response.json();
-                                    alert(error.error || 'Failed to upload image');
-                                    return;
-                                  }
-                                  
-                                  const result = await response.json();
-                                  
-                                  // Update profile with new photo URL
-                                  updateHostProfile({ venuePhoto: result.url });
-                                  
-                                } catch (error) {
-                                  console.error('Upload error:', error);
-                                  alert('Failed to upload image. Please try again.');
-                                }
-                              }
-                            }}
-                            id="venuePhotoInput"
-                            className="hidden"
-                          />
-                          <label htmlFor="venuePhotoInput" className="cursor-pointer">
-                            <div className="inline-flex items-center px-3 py-1.5 text-sm border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 rounded-md mb-2">
-                              <Camera className="w-4 h-4 mr-2" />
-                              {hostProfile.venuePhoto ? 'Change Photo' : 'Upload Photo'}
-                            </div>
-                          </label>
-                          <p className="text-xs text-neutral-500">
-                            A main photo of your venue space (JPG, PNG up to 5MB)
-                          </p>
-                        </div>
-                      </div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Formation Year
+                      </label>
+                      <input
+                        type="number"
+                        value={artistProfile.formationYear}
+                        onChange={(e) => updateArtistProfile({ formationYear: parseInt(e.target.value) || new Date().getFullYear() })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        min="1900"
+                        max={new Date().getFullYear()}
+                      />
                     </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Thumbnail Photo (Artist only) */}
-              {isArtist && (
-                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                  <CardHeader>
-                    <h2 className="text-xl font-semibold text-neutral-900">
-                      Thumbnail Photo
-                    </h2>
-                    <p className="text-sm text-neutral-600">
-                      Square image (minimum 500x500px). This will be used throughout the site as a thumbnail photo when applicable.
-                    </p>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center space-x-6">
-                      <div className="w-32 h-32 bg-neutral-100 rounded-lg flex items-center justify-center overflow-hidden">
-                        {artistProfile.thumbnailPhoto ? (
-                          <img 
-                            src={artistProfile.thumbnailPhoto} 
-                            alt="Thumbnail" 
-                            className="w-32 h-32 object-cover"
-                          />
-                        ) : (
-                          <Camera className="w-12 h-12 text-neutral-400" />
-                        )}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={async (e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                // Check file size (max 5MB)
-                                if (file.size > 5 * 1024 * 1024) {
-                                  alert('Image file is too large. Please choose an image under 5MB.');
-                                  return;
-                                }
-                                
-                                try {
-                                  // Create FormData
-                                  const formData = new FormData();
-                                  formData.append('file', file);
-                                  formData.append('type', 'profile');
-                                  
-                                  // Upload file
-                                  const response = await fetch('/api/upload', {
-                                    method: 'POST',
-                                    body: formData
-                                  });
-                                  
-                                  if (!response.ok) {
-                                    const error = await response.json();
-                                    alert(error.error || 'Failed to upload image');
-                                    return;
-                                  }
-                                  
-                                  const data = await response.json();
-                                  
-                                  // Update profile with the new image URL
-                                  updateArtistProfile({ thumbnailPhoto: data.url });
-                                  
-                                  alert('Image uploaded successfully!');
-                                  
-                                } catch (error) {
-                                  console.error('Upload error:', error);
-                                  alert('Failed to upload image. Please try again.');
-                                }
-                              }
-                            }}
-                            className="hidden"
-                            id="thumbnailPhotoInput"
-                          />
-                          <label htmlFor="thumbnailPhotoInput" className="cursor-pointer">
-                            <div className="inline-flex items-center px-4 py-2 text-sm border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 rounded-md">
-                              <Camera className="w-4 h-4 mr-2" />
-                              {artistProfile.thumbnailPhoto ? 'Change Photo' : 'Upload Photo'}
-                            </div>
-                          </label>
-                          {artistProfile.thumbnailPhoto && (
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              onClick={() => updateArtistProfile({ thumbnailPhoto: '' })}
-                              className="text-red-600 hover:text-red-700"
-                            >
-                              <X className="w-4 h-4" />
-                            </Button>
-                          )}
-                        </div>
-                        <p className="text-xs text-neutral-500">
-                          Requirements: Square image, minimum 500x500px, JPG or PNG
-                        </p>
-                        <p className="text-xs text-neutral-500 mt-1">
-                          This thumbnail appears in artist cards and search results
-                        </p>
-                      </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Musical Style Description
+                      </label>
+                      <input
+                        type="text"
+                        value={artistProfile.musicalStyle}
+                        onChange={(e) => updateArtistProfile({ musicalStyle: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="e.g., Acoustic folk with jazz influences"
+                      />
                     </div>
-                  </CardContent>
-                </Card>
-              )}
+                  </div>
+                </div>
 
-              {/* Hero Photo (Artist only) */}
-              {isArtist && (
-                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                  <CardHeader>
-                    <h2 className="text-xl font-semibold text-neutral-900">
-                      Hero Photo
-                    </h2>
-                    <p className="text-sm text-neutral-600">
-                      Wide banner image for your artist profile page. Recommended dimensions: 1920x1080 (16:9) or 2400x1200 (2:1)
-                    </p>
-                  </CardHeader>
-                  <CardContent>
+                {/* Band Members */}
+                <div className="border-t pt-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-medium text-gray-900">Band Members</h3>
+                    <Button onClick={addBandMember} size="sm">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Member
+                    </Button>
+                  </div>
+                  
+                  {artistProfile.bandMembers.length === 0 ? (
+                    <div className="text-center py-8 bg-gray-50 rounded-lg">
+                      <Users className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+                      <p className="text-gray-500">No band members added yet</p>
+                      <p className="text-sm text-gray-400">Add your band members to showcase your team</p>
+                    </div>
+                  ) : (
                     <div className="space-y-4">
-                      <div className="w-full h-48 bg-neutral-100 rounded-lg flex items-center justify-center overflow-hidden">
-                        {artistProfile.heroPhoto ? (
-                          <img 
-                            src={artistProfile.heroPhoto} 
-                            alt="Hero Banner" 
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="text-center">
-                            <Camera className="w-12 h-12 text-neutral-400 mx-auto mb-2" />
-                            <p className="text-sm text-neutral-500">No hero photo uploaded</p>
-                          </div>
-                        )}
-                      </div>
-                      <div>
-                        <div className="flex items-center space-x-2 mb-2">
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={async (e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                // Check file size (max 5MB)
-                                if (file.size > 5 * 1024 * 1024) {
-                                  alert('Image file is too large. Please choose an image under 5MB.');
-                                  return;
-                                }
-                                
-                                try {
-                                  // Create FormData
-                                  const formData = new FormData();
-                                  formData.append('file', file);
-                                  formData.append('type', 'hero');
-                                  
-                                  // Upload file
-                                  const response = await fetch('/api/upload', {
-                                    method: 'POST',
-                                    body: formData
-                                  });
-                                  
-                                  if (!response.ok) {
-                                    const error = await response.json();
-                                    alert(error.error || 'Failed to upload image');
-                                    return;
-                                  }
-                                  
-                                  const data = await response.json();
-                                  
-                                  // Update profile with the new image URL
-                                  updateArtistProfile({ heroPhoto: data.url });
-                                  
-                                  alert('Hero photo uploaded successfully!');
-                                  
-                                } catch (error) {
-                                  console.error('Upload error:', error);
-                                  alert('Failed to upload image. Please try again.');
-                                }
-                              }
-                            }}
-                            className="hidden"
-                            id="heroPhotoInput"
-                          />
-                          <label htmlFor="heroPhotoInput" className="cursor-pointer">
-                            <div className="inline-flex items-center px-4 py-2 text-sm border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 rounded-md">
-                              <Camera className="w-4 h-4 mr-2" />
-                              {artistProfile.heroPhoto ? 'Change Hero Photo' : 'Upload Hero Photo'}
-                            </div>
-                          </label>
-                          {artistProfile.heroPhoto && (
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              onClick={() => updateArtistProfile({ heroPhoto: '' })}
-                              className="text-red-600 hover:text-red-700"
-                            >
-                              <X className="w-4 h-4" />
-                            </Button>
-                          )}
-                        </div>
-                        <p className="text-xs text-neutral-500">
-                          This wide banner image appears at the top of your artist profile page
-                        </p>
-                        <p className="text-xs text-neutral-500 mt-1">
-                          Best results: High-quality landscape photo showing your band performing or a professional promotional shot
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Band Members (Artist only) */}
-              {isArtist && (
-                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h2 className="text-xl font-semibold text-neutral-900">Band Members</h2>
-                        <p className="text-sm text-neutral-600">
-                          Add photos and information for each member of your band
-                        </p>
-                      </div>
-                      <Button onClick={addBandMember} size="sm">
-                        <Plus className="w-4 h-4 mr-2" />
-                        Add Member
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    {artistProfile.bandMembers.length === 0 ? (
-                      <div className="text-center py-8 text-neutral-500">
-                        <Users className="w-12 h-12 mx-auto mb-2 text-neutral-400" />
-                        <p>No band members added yet</p>
-                        <p className="text-sm">Add your band members to showcase your full lineup</p>
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        {artistProfile.bandMembers.map((member) => (
-                          <div key={member.id} className="flex items-center space-x-4 p-4 border border-neutral-200 rounded-lg">
-                            <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center">
-                              {member.photo ? (
-                                <img 
-                                  src={member.photo} 
-                                  alt={member.name} 
-                                  className="w-16 h-16 rounded-full object-cover"
-                                />
-                              ) : (
-                                <UserCircle className="w-8 h-8 text-neutral-400" />
-                              )}
-                            </div>
-                            <div className="flex-1 grid md:grid-cols-2 gap-4">
-                              <Input
-                                placeholder="Member name"
+                      {artistProfile.bandMembers.map((member) => (
+                        <div key={member.id} className="border border-gray-200 rounded-lg p-4">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Name
+                              </label>
+                              <input
+                                type="text"
                                 value={member.name}
                                 onChange={(e) => updateBandMember(member.id, 'name', e.target.value)}
-                              />
-                              <Input
-                                placeholder="Instrument/Role"
-                                value={member.instrument}
-                                onChange={(e) => updateBandMember(member.id, 'instrument', e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Member name"
                               />
                             </div>
-                            <div className="flex items-center space-x-2">
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Instrument/Role
+                              </label>
                               <input
-                                type="file"
-                                accept="image/*"
-                                onChange={async (e) => {
-                                  const file = e.target.files?.[0];
-                                  if (file) {
-                                    // Check file size (max 5MB)
-                                    if (file.size > 5 * 1024 * 1024) {
-                                      alert('Image file is too large. Please choose an image under 5MB.');
-                                      return;
-                                    }
-                                    
-                                    try {
-                                      // Create FormData
-                                      const formData = new FormData();
-                                      formData.append('file', file);
-                                      formData.append('type', 'band-member');
-                                      
-                                      // Upload file
-                                      const response = await fetch('/api/upload', {
-                                        method: 'POST',
-                                        body: formData
-                                      });
-                                      
-                                      if (!response.ok) {
-                                        const error = await response.json();
-                                        alert(error.error || 'Failed to upload image');
-                                        return;
-                                      }
-                                      
-                                      const data = await response.json();
-                                      
-                                      // Update band member with the new image URL
-                                      updateBandMember(member.id, 'photo', data.url);
-                                      
-                                      alert('Band member photo uploaded successfully!');
-                                      
-                                    } catch (error) {
-                                      console.error('Upload error:', error);
-                                      alert('Failed to upload image. Please try again.');
-                                    }
-                                  }
-                                }}
-                                className="hidden"
-                                id={`bandMemberPhoto-${member.id}`}
+                                type="text"
+                                value={member.instrument}
+                                onChange={(e) => updateBandMember(member.id, 'instrument', e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="e.g., Lead guitar, Vocals"
                               />
-                              <Button variant="outline" size="sm" type="button" onClick={(e) => {
-                                e.preventDefault();
-                                document.getElementById(`bandMemberPhoto-${member.id}`)?.click();
-                              }} title={member.photo ? 'Change Photo' : 'Upload Photo'}>
-                                <Camera className="w-4 h-4" />
-                              </Button>
+                            </div>
+                            <div className="flex items-end">
                               <Button
+                                onClick={() => removeBandMember(member.id)}
                                 variant="outline"
                                 size="sm"
-                                onClick={() => removeBandMember(member.id)}
+                                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                              >
+                                <X className="w-4 h-4 mr-2" />
+                                Remove
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Video Links */}
+                <div className="border-t pt-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-medium text-gray-900">Video Links</h3>
+                    <Button onClick={() => setShowVideoForm(true)} size="sm">
+                      <Video className="w-4 h-4 mr-2" />
+                      Add Video
+                    </Button>
+                  </div>
+
+                  {showVideoForm && (
+                    <div className="mb-6 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Video Title
+                          </label>
+                          <input
+                            type="text"
+                            value={videoForm.title}
+                            onChange={(e) => setVideoForm({...videoForm, title: e.target.value})}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Video title"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Category
+                          </label>
+                          <select
+                            value={videoForm.category}
+                            onChange={(e) => setVideoForm({...videoForm, category: e.target.value})}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          >
+                            <option value="">Select category</option>
+                            {VIDEO_CATEGORIES.map(category => (
+                              <option key={category.value} value={category.value}>{category.label}</option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Video URL
+                        </label>
+                        <input
+                          type="url"
+                          value={videoForm.url}
+                          onChange={(e) => setVideoForm({...videoForm, url: e.target.value})}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          placeholder="https://youtube.com/watch?v=..."
+                        />
+                      </div>
+                      <div className="flex items-center mb-4">
+                        <input
+                          type="checkbox"
+                          id="isLivePerformance"
+                          checked={videoForm.isLivePerformance}
+                          onChange={(e) => setVideoForm({...videoForm, isLivePerformance: e.target.checked})}
+                          className="mr-2"
+                        />
+                        <label htmlFor="isLivePerformance" className="text-sm text-gray-700">
+                          This is a live performance
+                        </label>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button 
+                          onClick={editingVideoId ? updateVideoLink : addVideoLink}
+                          size="sm"
+                        >
+                          {editingVideoId ? 'Update Video' : 'Add Video'}
+                        </Button>
+                        <Button 
+                          onClick={() => {
+                            setShowVideoForm(false);
+                            setEditingVideoId(null);
+                            setVideoForm({ title: '', url: '', category: '', isLivePerformance: false });
+                          }}
+                          variant="outline"
+                          size="sm"
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
+                  {(artistProfile.videoLinks || []).length === 0 ? (
+                    <div className="text-center py-8 bg-gray-50 rounded-lg">
+                      <Video className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+                      <p className="text-gray-500">No videos added yet</p>
+                      <p className="text-sm text-gray-400">Add performance videos to showcase your music</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {(artistProfile.videoLinks || []).map((video) => (
+                        <div key={video.id} className="border border-gray-200 rounded-lg p-4">
+                          <div className="flex justify-between items-start mb-2">
+                            <h4 className="font-medium text-gray-900">{video.title}</h4>
+                            <div className="flex gap-1">
+                              <button
+                                onClick={() => editVideoLink(video)}
+                                className="text-blue-600 hover:text-blue-700"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => removeVideoLink(video.id)}
                                 className="text-red-600 hover:text-red-700"
                               >
                                 <X className="w-4 h-4" />
-                              </Button>
+                              </button>
                             </div>
                           </div>
-                        ))}
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Host-specific personal information */}
-              {!isArtist && (
-                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                  <CardHeader>
-                    <h2 className="text-xl font-semibold text-neutral-900">Personal Host Information</h2>
-                    <p className="text-sm text-neutral-600">
-                      This personal information helps artists get to know you as a host. This is separate from your venue description.
-                    </p>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <Input
-                      label="Host Name(s)"
-                      value={hostProfile.hostInfo.hostName}
-                      onChange={(e) => updateHostProfile({ 
-                        hostInfo: { ...hostProfile.hostInfo, hostName: e.target.value } 
-                      })}
-                      placeholder="Your name or names (e.g., 'Sarah & Mike Johnson')"
-                    />
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-1">
-                        About Me/Us
-                      </label>
-                      <textarea
-                        value={hostProfile.hostInfo.aboutMe}
-                        onChange={(e) => updateHostProfile({ 
-                          hostInfo: { ...hostProfile.hostInfo, aboutMe: e.target.value } 
-                        })}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                        rows={4}
-                        placeholder="Tell artists about yourself as a host. What drew you to house concerts? What do you enjoy about hosting? This is your personal story, separate from your venue description..."
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">Host Profile Photo</label>
-                      <div className="flex items-center space-x-4">
-                        <div className="w-20 h-20 bg-neutral-100 rounded-full overflow-hidden flex items-center justify-center">
-                          {hostProfile.hostInfo.profilePhoto ? (
-                            <img 
-                              src={hostProfile.hostInfo.profilePhoto} 
-                              alt="Host profile" 
-                              className="w-20 h-20 object-cover"
-                            />
-                          ) : (
-                            <UserCircle className="w-10 h-10 text-neutral-400" />
-                          )}
-                        </div>
-                        <div className="flex-1">
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={async (e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                // Check file size (max 5MB)
-                                if (file.size > 5 * 1024 * 1024) {
-                                  alert('Image file is too large. Please choose an image under 5MB.');
-                                  return;
-                                }
-                                
-                                try {
-                                  // Create FormData
-                                  const formData = new FormData();
-                                  formData.append('file', file);
-                                  formData.append('type', 'profile');
-                                  
-                                  // Upload file
-                                  const response = await fetch('/api/upload', {
-                                    method: 'POST',
-                                    body: formData
-                                  });
-                                  
-                                  if (!response.ok) {
-                                    const error = await response.json();
-                                    alert(error.error || 'Failed to upload image');
-                                    return;
-                                  }
-                                  
-                                  const data = await response.json();
-                                  
-                                  // Update host profile with the new image URL
-                                  updateHostProfile({ 
-                                    hostInfo: { ...hostProfile.hostInfo, profilePhoto: data.url } 
-                                  });
-                                  
-                                  alert('Host photo uploaded successfully!');
-                                  
-                                } catch (error) {
-                                  console.error('Upload error:', error);
-                                  alert('Failed to upload image. Please try again.');
-                                }
-                              }
-                            }}
-                            className="hidden"
-                            id="hostProfilePhotoInput"
-                          />
-                          <label htmlFor="hostProfilePhotoInput" className="cursor-pointer">
-                            <div className="inline-flex items-center px-3 py-1.5 text-sm border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 rounded-md mb-2">
-                              <Camera className="w-4 h-4 mr-2" />
-                              {hostProfile.hostInfo.profilePhoto ? 'Change Photo' : 'Upload Photo'}
-                            </div>
-                          </label>
-                          <p className="text-xs text-neutral-500">
-                            A friendly photo of yourself or yourselves as hosts
+                          <p className="text-sm text-gray-600 mb-2">
+                            {VIDEO_CATEGORIES.find(cat => cat.value === video.category)?.label || video.category}
+                            {video.isLivePerformance && (
+                              <Badge variant="secondary" className="ml-2">Live</Badge>
+                            )}
                           </p>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Artist-specific fields */}
-              {isArtist && (
-                <>
-                  {/* Musical Details */}
-                  <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                    <CardHeader>
-                      <h2 className="text-xl font-semibold text-neutral-900">Musical Details</h2>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                      {/* Genres */}
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-2">Genres</label>
-                        <div className="space-y-3">
-                          <div className="flex flex-wrap gap-2">
-                            {artistProfile.genres.map(genre => (
-                              <Badge key={genre} variant="default" className="flex items-center">
-                                {genre}
-                                <button
-                                  onClick={() => removeGenre(genre)}
-                                  className="ml-1 text-xs hover:text-red-600"
-                                >
-                                  <X className="w-3 h-3" />
-                                </button>
-                              </Badge>
-                            ))}
-                          </div>
-                          <div className="flex flex-wrap gap-2">
-                            {GENRE_OPTIONS.filter(g => !artistProfile.genres.includes(g)).map(genre => (
-                              <button
-                                key={genre}
-                                onClick={() => addGenre(genre)}
-                                className="px-3 py-1 text-xs bg-neutral-100 hover:bg-neutral-200 rounded-full transition-colors"
-                              >
-                                + {genre}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Musical Style Description */}
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-2">Describe Your Musical Style</label>
-                        <textarea
-                          value={artistProfile.musicalStyle}
-                          onChange={(e) => updateArtistProfile({ musicalStyle: e.target.value })}
-                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                          rows={3}
-                          placeholder="ie: Harmonic Appalachian Folk"
-                        />
-                      </div>
-
-                      {/* Instruments */}
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-2">Instruments we play</label>
-                        <div className="space-y-3">
-                          <div className="flex flex-wrap gap-2">
-                            {artistProfile.instruments.map(instrument => (
-                              <Badge key={instrument} variant="secondary" className="flex items-center">
-                                {instrument}
-                                <button
-                                  onClick={() => removeInstrument(instrument)}
-                                  className="ml-1 text-xs hover:text-red-600"
-                                >
-                                  <X className="w-3 h-3" />
-                                </button>
-                              </Badge>
-                            ))}
-                          </div>
-                          <div className="flex flex-wrap gap-2">
-                            {INSTRUMENT_OPTIONS.filter(i => !artistProfile.instruments.includes(i)).map(instrument => (
-                              <button
-                                key={instrument}
-                                onClick={() => addInstrument(instrument)}
-                                className="px-3 py-1 text-xs bg-neutral-100 hover:bg-neutral-200 rounded-full transition-colors"
-                              >
-                                + {instrument}
-                              </button>
-                            ))}
-                          </div>
-                          <div className="flex gap-2 mt-3">
-                            <input
-                              type="text"
-                              placeholder="Other instrument..."
-                              value={customInstrument}
-                              onChange={(e) => setCustomInstrument(e.target.value)}
-                              onKeyPress={(e) => {
-                                if (e.key === 'Enter') {
-                                  e.preventDefault();
-                                  addCustomInstrument();
-                                }
-                              }}
-                              className="flex-1 px-3 py-2 text-sm border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                            />
-                            <button
-                              onClick={addCustomInstrument}
-                              disabled={!customInstrument.trim()}
-                              className="px-4 py-2 text-sm bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                              Add
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Equipment I Bring to Shows */}
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-2">Equipment I Bring to Shows</label>
-                        <div className="space-y-3">
-                          <div className="flex flex-wrap gap-2">
-                            {artistProfile.equipmentProvided.map(equipment => (
-                              <Badge key={equipment} variant="secondary" className="bg-green-50 text-green-800 border-green-200 flex items-center">
-                                {equipment}
-                                <button
-                                  onClick={() => removeEquipment(equipment)}
-                                  className="ml-1 text-xs hover:text-red-600"
-                                >
-                                  <X className="w-3 h-3" />
-                                </button>
-                              </Badge>
-                            ))}
-                          </div>
-                          <div className="flex flex-wrap gap-2">
-                            {EQUIPMENT_OPTIONS.filter(e => !artistProfile.equipmentProvided.includes(e)).map(equipment => (
-                              <button
-                                key={equipment}
-                                onClick={() => addEquipment(equipment)}
-                                className="px-3 py-1 text-xs bg-neutral-100 hover:bg-green-100 rounded-full transition-colors"
-                              >
-                                + {equipment}
-                              </button>
-                            ))}
-                          </div>
-                          <div className="flex gap-2 mt-3">
-                            <input
-                              type="text"
-                              placeholder="Other equipment..."
-                              value={customEquipment}
-                              onChange={(e) => setCustomEquipment(e.target.value)}
-                              onKeyPress={(e) => {
-                                if (e.key === 'Enter') {
-                                  e.preventDefault();
-                                  addCustomEquipment();
-                                }
-                              }}
-                              className="flex-1 px-3 py-2 text-sm border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                            />
-                            <button
-                              onClick={addCustomEquipment}
-                              disabled={!customEquipment.trim()}
-                              className="px-4 py-2 text-sm bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                              Add
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Content Rating */}
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-2">Content Rating</label>
-                        <select
-                          value={artistProfile.contentRating || 'family-friendly'}
-                          onChange={(e) => updateArtistProfile({ contentRating: e.target.value })}
-                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                        >
-                          <option value="family-friendly">Family Friendly</option>
-                          <option value="explicit">Explicit</option>
-                          <option value="tailored">Can be tailored to suit the requested environment</option>
-                        </select>
-                        <p className="text-xs text-neutral-500 mt-1">
-                          Let hosts know if your performance contains explicit language or adult themes
-                        </p>
-                      </div>
-
-                    </CardContent>
-                  </Card>
-
-                  {/* Tour & Logistics */}
-                  <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                    <CardHeader>
-                      <h2 className="text-xl font-semibold text-neutral-900">Tour & Logistics</h2>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                      {/* Tour Info */}
-                      <div className="grid md:grid-cols-3 gap-4">
-                        <Input
-                          label="Months Touring Per Year"
-                          type="number"
-                          value={artistProfile.tourMonthsPerYear}
-                          onChange={(e) => updateArtistProfile({ tourMonthsPerYear: parseInt(e.target.value) || 0 })}
-                          min="0"
-                          max="12"
-                        />
-                        <div>
-                          <label className="block text-sm font-medium text-neutral-700 mb-2">Tour Vehicle</label>
-                          <select
-                            value={artistProfile.tourVehicle}
-                            onChange={(e) => updateArtistProfile({ tourVehicle: e.target.value })}
-                            className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                          <a
+                            href={video.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm text-blue-600 hover:text-blue-700 break-all"
                           >
-                            <option value="van">Van</option>
-                            <option value="car">Car</option>
-                            <option value="bus">Bus</option>
-                            <option value="fly">Fly/Rent</option>
-                            <option value="other">Other</option>
+                            {video.url}
+                          </a>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Music Samples */}
+                <div className="border-t pt-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-medium text-gray-900">Music Samples</h3>
+                    <Button onClick={() => setShowMusicForm(true)} size="sm">
+                      <Music className="w-4 h-4 mr-2" />
+                      Add Music
+                    </Button>
+                  </div>
+
+                  {showMusicForm && (
+                    <div className="mb-6 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Song Title
+                          </label>
+                          <input
+                            type="text"
+                            value={musicForm.title}
+                            onChange={(e) => setMusicForm({...musicForm, title: e.target.value})}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Song title"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Platform
+                          </label>
+                          <select
+                            value={musicForm.platform}
+                            onChange={(e) => setMusicForm({...musicForm, platform: e.target.value})}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          >
+                            {MUSIC_PLATFORMS.map(platform => (
+                              <option key={platform.value} value={platform.value}>{platform.label}</option>
+                            ))}
                           </select>
                         </div>
-                        <Input
-                          label="Willing to Travel (miles)"
-                          type="number"
-                          value={artistProfile.willingToTravel}
-                          onChange={(e) => updateArtistProfile({ willingToTravel: parseInt(e.target.value) || 500 })}
-                          min="50"
-                          max="3000"
+                      </div>
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Music URL
+                        </label>
+                        <input
+                          type="url"
+                          value={musicForm.url}
+                          onChange={(e) => setMusicForm({...musicForm, url: e.target.value})}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          placeholder="https://open.spotify.com/track/..."
                         />
                       </div>
-
-                      {/* Lodging Requirements */}
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-2">Lodging Requirements</label>
-                        <div className="flex items-center">
-                          <input
-                            type="checkbox"
-                            id="needsLodging"
-                            checked={artistProfile.needsLodging}
-                            onChange={(e) => updateArtistProfile({ needsLodging: e.target.checked })}
-                            className="mr-3 h-4 w-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
-                          />
-                          <label htmlFor="needsLodging" className="text-sm text-neutral-700">
-                            I need lodging when traveling for performances
-                          </label>
-                        </div>
-                      </div>
-
-                      {/* Cancellation Policy */}
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-2">Cancellation Policy</label>
-                        <select
-                          value={artistProfile.cancellationPolicy}
-                          onChange={(e) => updateArtistProfile({ cancellationPolicy: e.target.value as any })}
-                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                        >
-                          <option value="flexible">Flexible - Free cancellation 48+ hours before</option>
-                          <option value="moderate">Moderate - Free cancellation 7+ days before</option>
-                          <option value="strict">Strict - No free cancellation</option>
-                        </select>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  {/* Tour Planning */}
-                  <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h2 className="text-xl font-semibold text-neutral-900">Tour Planning</h2>
-                          <p className="text-sm text-neutral-600">Plan your touring schedule so hosts can find you when you're in their area</p>
-                        </div>
+                      <div className="flex gap-2">
+                        <Button onClick={addMusicSample} size="sm">Add Music</Button>
                         <Button 
-                          variant="outline" 
-                          size="sm"
                           onClick={() => {
-                            setEditingTourSegment(null);
-                            setShowTourModal(true);
+                            setShowMusicForm(false);
+                            setMusicForm({ title: '', url: '', platform: 'spotify' });
                           }}
+                          variant="outline"
+                          size="sm"
                         >
-                          <Plus className="w-4 h-4 mr-2" />
-                          Add Tour
+                          Cancel
                         </Button>
                       </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        {tourSegments.length === 0 ? (
-                          <>
-                            <p className="text-sm text-neutral-600">
-                              No tour segments planned yet. Add your first tour to let hosts know when you'll be in their area.
-                            </p>
-                            <div className="bg-neutral-50 rounded-lg p-4 text-center">
-                              <p className="text-sm text-neutral-500 mb-3">
-                                Plan your tours by dates and locations to connect with hosts along your route
-                              </p>
-                              <Button 
-                                variant="outline"
-                                onClick={() => {
-                                  setEditingTourSegment(null);
-                                  setShowTourModal(true);
-                                }}
-                              >
-                                <Plus className="w-4 h-4 mr-2" />
-                                Plan Your First Tour
-                              </Button>
-                            </div>
-                          </>
-                        ) : (
-                          <div className="space-y-3">
-                            {tourSegments.map((segment) => (
-                              <div key={segment.id} className="border border-neutral-200 rounded-lg p-4">
-                                <div className="flex items-start justify-between mb-2">
-                                  <div>
-                                    <h4 className="font-medium text-neutral-900">
-                                      {segment.name || 'Tour Segment'}
-                                    </h4>
-                                    <p className="text-sm text-neutral-600">
-                                      {segment.stateRanges.length} state{segment.stateRanges.length !== 1 ? 's' : ''} planned
-                                    </p>
-                                  </div>
-                                  <div className="flex items-center gap-2">
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      onClick={() => {
-                                        setEditingTourSegment(segment.id);
-                                        setShowTourModal(true);
-                                      }}
-                                    >
-                                      <Edit className="w-4 h-4" />
-                                    </Button>
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      onClick={() => deleteTourSegment(segment.id)}
-                                    >
-                                      <X className="w-4 h-4" />
-                                    </Button>
-                                  </div>
-                                </div>
-                                <div className="space-y-2">
-                                  {segment.stateRanges.map((range) => (
-                                    <div key={range.id} className="flex items-center justify-between text-sm">
-                                      <div className="flex items-center gap-2">
-                                        <Badge variant="secondary" className="text-xs">
-                                          {range.state}
-                                        </Badge>
-                                        <span className="text-neutral-600">
-                                          {new Date(range.startDate).toLocaleDateString()} - {new Date(range.endDate).toLocaleDateString()}
-                                        </span>
-                                      </div>
-                                      {range.cities.length > 0 && (
-                                        <div className="flex gap-1">
-                                          {range.cities.map((city) => (
-                                            <Badge key={city} variant="outline" className="text-xs">
-                                              {city}
-                                            </Badge>
-                                          ))}
-                                        </div>
-                                      )}
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </>
-              )}
-
-              {/* Host-specific fields */}
-              {!isArtist && (
-                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                  <CardHeader>
-                    <h2 className="text-xl font-semibold text-neutral-900">Venue Details</h2>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    {/* Venue Type & Capacity */}
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-2">Venue Type</label>
-                        <select
-                          value={hostProfile.venueType}
-                          onChange={(e) => updateHostProfile({ venueType: e.target.value as any })}
-                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                        >
-                          <option value="home">Home/Living Room</option>
-                          <option value="studio">Studio Space</option>
-                          <option value="backyard">Backyard/Garden</option>
-                          <option value="loft">Loft</option>
-                          <option value="warehouse">Warehouse</option>
-                          <option value="other">Other</option>
-                        </select>
-                      </div>
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <Input
-                          label="Indoor Capacity"
-                          type="number"
-                          value={hostProfile.indoorCapacity}
-                          onChange={(e) => updateHostProfile({ indoorCapacity: parseInt(e.target.value) || 0 })}
-                          min="0"
-                          max="200"
-                        />
-                        <Input
-                          label="Outdoor Capacity"
-                          type="number"
-                          value={hostProfile.outdoorCapacity}
-                          onChange={(e) => updateHostProfile({ outdoorCapacity: parseInt(e.target.value) || 0 })}
-                          min="0"
-                          max="500"
-                        />
-                      </div>
                     </div>
+                  )}
 
-                    {/* Show Length */}
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">Typical Show Length</label>
-                      <div className="flex items-center space-x-2">
-                        <Input
-                          type="number"
-                          value={hostProfile.typicalShowLength}
-                          onChange={(e) => updateHostProfile({ typicalShowLength: parseInt(e.target.value) || 90 })}
-                          min="30"
-                          max="300"
-                          className="w-24"
-                        />
-                        <span className="text-sm text-neutral-600">minutes</span>
-                      </div>
-                      <p className="text-xs text-neutral-500 mt-1">How long do shows typically last at your venue?</p>
+                  {(artistProfile.musicSamples || []).length === 0 ? (
+                    <div className="text-center py-8 bg-gray-50 rounded-lg">
+                      <Music className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+                      <p className="text-gray-500">No music samples added yet</p>
+                      <p className="text-sm text-gray-400">Add links to your music on streaming platforms</p>
                     </div>
-
-                    {/* Suggested Door Fee */}
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">Suggested Door Fee</label>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-sm text-neutral-600">$</span>
-                        <Input
-                          type="number"
-                          value={hostProfile.suggestedDoorFee}
-                          onChange={(e) => updateHostProfile({ suggestedDoorFee: parseInt(e.target.value) || 20 })}
-                          min="0"
-                          max="100"
-                          className="w-24"
-                        />
-                      </div>
-                      <p className="text-xs text-neutral-500 mt-1">Typical door fee you suggest for concerts at your venue</p>
-                    </div>
-
-                    {/* Preferred Days */}
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">Preferred Days for Concerts</label>
-                      <div className="space-y-3">
-                        <div className="flex flex-wrap gap-2">
-                          {hostProfile.preferredDays.map(day => (
-                            <Badge key={day} variant="default" className="flex items-center">
-                              {day}
-                              <button
-                                onClick={() => updateHostProfile({ 
-                                  preferredDays: hostProfile.preferredDays.filter(d => d !== day) 
-                                })}
-                                className="ml-1 text-xs hover:text-red-600"
-                              >
-                                <X className="w-3 h-3" />
-                              </button>
-                            </Badge>
-                          ))}
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-                            .filter(day => !hostProfile.preferredDays.includes(day))
-                            .map(day => (
-                              <button
-                                key={day}
-                                onClick={() => updateHostProfile({ 
-                                  preferredDays: [...hostProfile.preferredDays, day] 
-                                })}
-                                className="px-3 py-1 text-xs bg-neutral-100 hover:bg-neutral-200 rounded-full transition-colors"
-                              >
-                                + {day}
-                              </button>
-                            ))}
-                        </div>
-                      </div>
-                      <p className="text-xs text-neutral-500 mt-1">Which days of the week work best for hosting concerts?</p>
-                    </div>
-
-                    {/* Amenities */}
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">Amenities & Features</label>
-                      <div className="space-y-3">
-                        <div className="flex flex-wrap gap-2">
-                          {hostProfile.amenities.map(amenity => (
-                            <Badge key={amenity} variant="default" className="flex items-center">
-                              {amenity}
-                              <button
-                                onClick={() => removeAmenity(amenity)}
-                                className="ml-1 text-xs hover:text-red-600"
-                              >
-                                <X className="w-3 h-3" />
-                              </button>
-                            </Badge>
-                          ))}
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          {AMENITY_OPTIONS.filter(a => !hostProfile.amenities.includes(a)).map(amenity => (
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {(artistProfile.musicSamples || []).map((sample) => (
+                        <div key={sample.id} className="border border-gray-200 rounded-lg p-4">
+                          <div className="flex justify-between items-start mb-2">
+                            <h4 className="font-medium text-gray-900">{sample.title}</h4>
                             <button
-                              key={amenity}
-                              onClick={() => addAmenity(amenity)}
-                              className="px-3 py-1 text-xs bg-neutral-100 hover:bg-neutral-200 rounded-full transition-colors"
+                              onClick={() => removeMusicSample(sample.id)}
+                              className="text-red-600 hover:text-red-700"
                             >
-                              + {amenity}
+                              <X className="w-4 h-4" />
                             </button>
-                          ))}
+                          </div>
+                          <p className="text-sm text-gray-600 mb-2 capitalize">{sample.platform}</p>
+                          <a
+                            href={sample.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm text-blue-600 hover:text-blue-700 break-all"
+                          >
+                            {sample.url}
+                          </a>
                         </div>
-                      </div>
+                      ))}
                     </div>
-                  </CardContent>
-                </Card>
-              )}
+                  )}
+                </div>
 
-              {/* Social Links */}
-              <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                <CardHeader>
-                  <h2 className="text-xl font-semibold text-neutral-900">Social Links & Website</h2>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <Input
-                      label="Website"
-                      value={isArtist ? artistProfile.website : hostProfile.website}
-                      onChange={(e) => {
-                        const socialLinks = isArtist ? artistProfile.socialLinks : hostProfile.socialLinks;
-                        if (isArtist) {
-                          updateArtistProfile({ 
-                            website: e.target.value,
-                            socialLinks: { 
-                              ...{
-                                instagram: '',
-                                youtube: '',
-                                spotify: '',
-                                bandcamp: '',
-                                facebook: '',
-                                website: ''
-                              },
-                              ...socialLinks, 
-                              website: e.target.value 
-                            } 
-                          });
-                        } else {
-                          updateHostProfile({ 
-                            website: e.target.value,
-                            socialLinks: { 
-                              ...{
-                                instagram: '',
-                                youtube: '',
-                                spotify: '',
-                                bandcamp: '',
-                                facebook: '',
-                                website: ''
-                              },
-                              ...socialLinks, 
-                              website: e.target.value 
-                            } 
-                          });
-                        }
-                      }}
-                      placeholder="https://yourwebsite.com"
-                    />
-                    <Input
-                      label="Instagram"
-                      value={isArtist ? artistProfile.socialLinks.instagram : hostProfile.socialLinks.instagram}
-                      onChange={(e) => {
-                        const socialLinks = isArtist ? artistProfile.socialLinks : hostProfile.socialLinks;
-                        if (isArtist) updateArtistProfile({ socialLinks: { 
-                          ...{
-                            instagram: '',
-                            youtube: '',
-                            spotify: '',
-                            bandcamp: '',
-                            facebook: '',
-                            website: ''
-                          },
-                          ...socialLinks, 
-                          instagram: e.target.value 
-                        } });
-                        else updateHostProfile({ socialLinks: { 
-                          ...{
-                            instagram: '',
-                            youtube: '',
-                            spotify: '',
-                            bandcamp: '',
-                            facebook: '',
-                            website: ''
-                          },
-                          ...socialLinks, 
-                          instagram: e.target.value 
-                        } });
-                      }}
-                      placeholder="https://instagram.com/username"
-                    />
-                    <Input
-                      label="YouTube"
-                      value={isArtist ? artistProfile.socialLinks.youtube : hostProfile.socialLinks.youtube}
-                      onChange={(e) => {
-                        const socialLinks = isArtist ? artistProfile.socialLinks : hostProfile.socialLinks;
-                        if (isArtist) updateArtistProfile({ socialLinks: { 
-                          ...{
-                            instagram: '',
-                            youtube: '',
-                            spotify: '',
-                            bandcamp: '',
-                            facebook: '',
-                            website: ''
-                          },
-                          ...socialLinks, 
-                          youtube: e.target.value 
-                        } });
-                        else updateHostProfile({ socialLinks: { 
-                          ...{
-                            instagram: '',
-                            youtube: '',
-                            spotify: '',
-                            bandcamp: '',
-                            facebook: '',
-                            website: ''
-                          },
-                          ...socialLinks, 
-                          youtube: e.target.value 
-                        } });
-                      }}
-                      placeholder="https://youtube.com/channel/..."
-                    />
-                    <Input
-                      label="Facebook"
-                      value={isArtist ? artistProfile.socialLinks.facebook : hostProfile.socialLinks.facebook}
-                      onChange={(e) => {
-                        const socialLinks = isArtist ? artistProfile.socialLinks : hostProfile.socialLinks;
-                        if (isArtist) updateArtistProfile({ socialLinks: { 
-                          ...{
-                            instagram: '',
-                            youtube: '',
-                            spotify: '',
-                            bandcamp: '',
-                            facebook: '',
-                            website: ''
-                          },
-                          ...socialLinks, 
-                          facebook: e.target.value 
-                        } });
-                        else updateHostProfile({ socialLinks: { 
-                          ...{
-                            instagram: '',
-                            youtube: '',
-                            spotify: '',
-                            bandcamp: '',
-                            facebook: '',
-                            website: ''
-                          },
-                          ...socialLinks, 
-                          facebook: e.target.value 
-                        } });
-                      }}
-                      placeholder="https://facebook.com/username"
-                    />
-                    {isArtist && (
-                      <>
-                        <Input
-                          label="Spotify"
-                          value={artistProfile.socialLinks.spotify}
-                          onChange={(e) => {
-                            updateArtistProfile({ socialLinks: { ...artistProfile.socialLinks, spotify: e.target.value } });
-                          }}
-                          placeholder="https://open.spotify.com/artist/..."
-                        />
-                        <Input
-                          label="Bandcamp"
-                          value={artistProfile.socialLinks.bandcamp}
-                          onChange={(e) => {
-                            updateArtistProfile({ socialLinks: { ...artistProfile.socialLinks, bandcamp: e.target.value } });
-                          }}
-                          placeholder="https://artist.bandcamp.com"
-                        />
-                      </>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
-
-
-          {/* Media Tab */}
-          {activeTab === 'media' && (
-            <div className="space-y-6">
-              {isArtist ? (
-                <>
-                  {/* Photo Management */}
-                  <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h2 className="text-xl font-semibold text-neutral-900">Performance Photos</h2>
-                          <p className="text-sm text-neutral-600">Upload photos from your performances, band photos, and promotional images</p>
-                        </div>
-                        <Button onClick={() => {
-                          document.getElementById('photoUpload')?.click();
-                        }} disabled={uploading}>
-                          <Camera className="w-4 h-4 mr-2" />
-                          {uploading ? 'Uploading...' : 'Upload Photos'}
-                        </Button>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      {/* Hidden file input */}
+                {/* Performance Photos */}
+                <div className="border-t pt-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-medium text-gray-900">Performance Photos</h3>
+                    <label className="cursor-pointer">
                       <input
                         type="file"
-                        id="photoUpload"
-                        accept="image/*"
                         multiple
-                        onChange={(e) => {
-                          if (e.target.files) {
-                            handlePhotoUpload(e.target.files);
-                          }
-                        }}
+                        accept="image/*"
+                        onChange={(e) => e.target.files && handlePhotoUpload(e.target.files)}
                         className="hidden"
                       />
-
-                      {/* Photo Management Controls */}
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center space-x-4">
-                          <h3 className="font-medium text-neutral-900">Photo Gallery</h3>
-                          <Badge variant="secondary" className="text-xs">
-                            {artistProfile.photos?.length || 0} photos
-                          </Badge>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm text-neutral-600">Sort:</span>
-                          <Button variant="outline" size="sm">
-                            Manual Order
-                          </Button>
-                          <Button variant="outline" size="sm">
-                            Upload Date
-                          </Button>
-                        </div>
-                      </div>
-
-                      {/* Photo Grid */}
-                      {artistProfile.photos && artistProfile.photos.length > 0 ? (
-                        <div className="space-y-4">
-                          <div className="text-sm text-neutral-600 bg-neutral-50 p-3 rounded-lg">
-                            <span className="font-medium">💡 Pro tip:</span> Drag and drop photos to reorder them. The first photo will be your featured image.
-                          </div>
-                          
-                          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            {artistProfile.photos.map((photo, index) => (
-                              <div key={photo.id} className="relative group">
-                                <div className="aspect-square bg-neutral-100 rounded-lg overflow-hidden">
-                                  <img 
-                                    src={photo.fileUrl} 
-                                    alt={photo.title || `Photo ${index + 1}`}
-                                    className="w-full h-full object-cover"
-                                  />
-                                </div>
-                                <div className="absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => removePhoto(photo.id)}
-                                    className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 bg-white"
-                                  >
-                                    <X className="w-4 h-4" />
-                                  </Button>
-                                </div>
-                                {index === 0 && (
-                                  <div className="absolute top-2 left-2">
-                                    <Badge variant="warning" className="text-xs">
-                                      Featured
-                                    </Badge>
-                                  </div>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="border-2 border-dashed border-neutral-300 rounded-lg p-12 text-center">
-                          <Camera className="w-16 h-16 text-neutral-400 mx-auto mb-4" />
-                          <h3 className="text-lg font-medium text-neutral-900 mb-2">No photos uploaded yet</h3>
-                          <p className="text-neutral-600 mb-4">
-                            Upload your first photos to showcase your performances and band. You can drag and drop to reorder them.
-                          </p>
-                          <Button onClick={() => document.getElementById('photoUpload')?.click()}>
-                            <Camera className="w-4 h-4 mr-2" />
-                            Upload Your First Photos
-                          </Button>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-
-                  {/* Performance Videos */}
-                  <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h2 className="text-xl font-semibold text-neutral-900">Performance Videos</h2>
-                          <p className="text-sm text-neutral-600">Add YouTube, Vimeo, or other video platform links</p>
-                        </div>
-                        <Button onClick={() => setShowVideoForm(true)}>
-                          <Plus className="w-4 h-4 mr-2" />
-                          Add Video
-                        </Button>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      {/* Video Form */}
-                      {showVideoForm && (
-                        <div className="border border-neutral-200 rounded-lg p-4 bg-neutral-50">
-                          <h3 className="font-medium text-neutral-900 mb-4">
-                            {editingVideoId ? 'Edit Video Link' : 'Add Video Link'}
-                          </h3>
-                          <div className="space-y-4">
-                            <div className="grid md:grid-cols-2 gap-4">
-                              <Input
-                                label="Video Title"
-                                placeholder="e.g., Live at Coffee House - Full Set"
-                                value={videoForm.title}
-                                onChange={(e) => setVideoForm({...videoForm, title: e.target.value})}
-                              />
-                              <Input
-                                label="Video URL"
-                                placeholder="https://youtube.com/watch?v=..."
-                                value={videoForm.url}
-                                onChange={(e) => setVideoForm({...videoForm, url: e.target.value})}
-                              />
-                            </div>
-                            <div className="grid md:grid-cols-2 gap-4">
-                              <div>
-                                <label className="block text-sm font-medium text-neutral-700 mb-2">Category</label>
-                                <select
-                                  value={videoForm.category}
-                                  onChange={(e) => setVideoForm({...videoForm, category: e.target.value})}
-                                  className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                                >
-                                  <option value="">Select category</option>
-                                  {VIDEO_CATEGORIES.map(cat => (
-                                    <option key={cat.value} value={cat.value}>
-                                      {cat.label}
-                                    </option>
-                                  ))}
-                                </select>
-                              </div>
-                              <div className="flex items-center mt-6">
-                                <input
-                                  type="checkbox"
-                                  id="isLivePerformance"
-                                  checked={videoForm.isLivePerformance}
-                                  onChange={(e) => setVideoForm({...videoForm, isLivePerformance: e.target.checked})}
-                                  className="mr-2"
-                                />
-                                <label htmlFor="isLivePerformance" className="text-sm text-neutral-700">
-                                  ⭐ Featured Live Performance
-                                </label>
-                              </div>
-                            </div>
-                            <div className="flex space-x-3">
-                              <Button onClick={editingVideoId ? updateVideoLink : addVideoLink}>
-                                {editingVideoId ? 'Update Video' : 'Add Video'}
-                              </Button>
-                              <Button 
-                                variant="outline" 
-                                onClick={() => {
-                                  setShowVideoForm(false);
-                                  setEditingVideoId(null);
-                                  setVideoForm({ title: '', url: '', category: '', isLivePerformance: false });
-                                }}
-                              >
-                                Cancel
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {/* Video List */}
-                      {artistProfile.videoLinks && artistProfile.videoLinks.length > 0 ? (
-                        <div className="grid md:grid-cols-2 gap-4">
-                          {artistProfile.videoLinks.map((video) => (
-                            <div key={video.id} className="border border-neutral-200 rounded-lg p-4 bg-white">
-                              <div className="flex items-start justify-between mb-2">
-                                <div className="flex-1">
-                                  <h4 className="font-medium text-neutral-900">{video.title}</h4>
-                                  <p className="text-sm text-neutral-600">{VIDEO_CATEGORIES.find(c => c.value === video.category)?.label}</p>
-                                  {video.isLivePerformance && (
-                                    <Badge variant="warning" className="mt-1">
-                                      Featured
-                                    </Badge>
-                                  )}
-                                </div>
-                                <div className="flex space-x-2">
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => editVideoLink(video)}
-                                    className="text-primary-600 hover:text-primary-700 hover:bg-primary-50 border-primary-200"
-                                  >
-                                    <Edit className="w-4 h-4" />
-                                  </Button>
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => removeVideoLink(video.id)}
-                                    className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
-                                  >
-                                    <X className="w-4 h-4" />
-                                  </Button>
-                                </div>
-                              </div>
-                              <p className="text-xs text-neutral-500 truncate">{video.url}</p>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="border-t pt-4">
-                          <p className="text-sm text-neutral-500 text-center py-8">
-                            No videos added yet. Add your first performance video above.
-                          </p>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-
-                  {/* Music Samples */}
-                  <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h2 className="text-xl font-semibold text-neutral-900">Music Samples</h2>
-                          <p className="text-sm text-neutral-600">Add links to your music on streaming platforms</p>
-                        </div>
-                        <Button onClick={() => setShowMusicForm(true)}>
-                          <Music className="w-4 h-4 mr-2" />
-                          Add Track
-                        </Button>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      {/* Music Form */}
-                      {showMusicForm && (
-                        <div className="border border-neutral-200 rounded-lg p-4 bg-neutral-50">
-                          <h3 className="font-medium text-neutral-900 mb-4">Add Music Sample</h3>
-                          <div className="space-y-4">
-                            <div className="grid md:grid-cols-2 gap-4">
-                              <Input
-                                label="Track Title"
-                                placeholder="Song name"
-                                value={musicForm.title}
-                                onChange={(e) => setMusicForm({...musicForm, title: e.target.value})}
-                              />
-                              <Input
-                                label="Streaming Platform URL"
-                                placeholder="https://spotify.com/track/..."
-                                value={musicForm.url}
-                                onChange={(e) => setMusicForm({...musicForm, url: e.target.value})}
-                              />
-                            </div>
-                            <div className="flex space-x-3">
-                              <Button onClick={addMusicSample}>Add Track</Button>
-                              <Button 
-                                variant="outline" 
-                                onClick={() => setShowMusicForm(false)}
-                              >
-                                Cancel
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {/* Music List */}
-                      {artistProfile.musicSamples && artistProfile.musicSamples.length > 0 ? (
-                        <div className="grid md:grid-cols-2 gap-4">
-                          {artistProfile.musicSamples.map((sample) => (
-                            <div key={sample.id} className="border border-neutral-200 rounded-lg p-4 bg-white">
-                              <div className="flex items-start justify-between mb-2">
-                                <div className="flex-1">
-                                  <h4 className="font-medium text-neutral-900">{sample.title}</h4>
-                                  <Badge variant="secondary" className="mt-1">
-                                    {sample.platform}
-                                  </Badge>
-                                </div>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => removeMusicSample(sample.id)}
-                                  className="text-red-600 hover:text-red-700"
-                                >
-                                  <X className="w-4 h-4" />
-                                </Button>
-                              </div>
-                              <p className="text-xs text-neutral-500 truncate">{sample.url}</p>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="border-t pt-4">
-                          <p className="text-sm text-neutral-500 text-center py-8">
-                            No music samples added yet. Add your first track above.
-                          </p>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                </>
-              ) : (
-                /* Host Media Section */
-                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                  <CardHeader>
-                    <h2 className="text-xl font-semibold text-neutral-900">Venue Photos</h2>
-                    <p className="text-sm text-neutral-600">Upload photos of your performance space, exterior, and amenities</p>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="border-2 border-dashed border-neutral-300 rounded-lg p-8 text-center">
-                      <Camera className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium text-neutral-900 mb-2">Upload Venue Photos</h3>
-                      <p className="text-neutral-600 mb-4">
-                        Show artists your performance space, exterior, and amenities
-                      </p>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        onChange={async (e) => {
-                          // Handle multiple file uploads with proper error handling
-                          const files = Array.from(e.target.files || []);
-                          if (files.length === 0) return;
-                          
-                          setUploading(true);
-                          const uploadedPhotos = [];
-                          
-                          try {
-                            for (const file of files) {
-                              // Validate file type and size
-                              if (!file.type.startsWith('image/')) {
-                                console.error('Invalid file type:', file.type);
-                                continue;
-                              }
-                              if (file.size > 5 * 1024 * 1024) { // 5MB limit
-                                console.error('File too large:', file.size);
-                                continue;
-                              }
-                              
-                              const formData = new FormData();
-                              formData.append('file', file);
-                              formData.append('category', 'venue');
-                              
-                              const response = await fetch('/api/upload', {
-                                method: 'POST',
-                                body: formData,
-                              });
-                              
-                              if (response.ok) {
-                                const result = await response.json();
-                                uploadedPhotos.push({
-                                  id: result.id || `temp-${Date.now()}-${Math.random()}`,
-                                  fileUrl: result.url,
-                                  title: file.name.replace(/\.[^/.]+$/, ""), // Remove extension
-                                  description: '',
-                                  category: 'venue',
-                                  sortOrder: (hostProfile.photos?.length || 0) + uploadedPhotos.length
-                                });
-                              } else {
-                                console.error('Upload failed for:', file.name);
-                              }
-                            }
-                            
-                            // Add uploaded photos to state
-                            if (uploadedPhotos.length > 0) {
-                              updateHostProfile({
-                                photos: [...(hostProfile.photos || []), ...uploadedPhotos]
-                              });
-                            }
-                          } catch (error) {
-                            console.error('Upload error:', error);
-                          } finally {
-                            setUploading(false);
-                            // Clear the input
-                            e.target.value = '';
-                          }
-                        }}
-                        className="hidden"
-                        id="venuePhotoInput"
-                      />
-                      <Button type="button" onClick={() => {
-                        document.getElementById('venuePhotoInput')?.click();
-                      }}>
-                        <Plus className="w-4 h-4 mr-2" />
-                        {uploading ? 'Uploading...' : 'Upload Photos'}
+                      <Button size="sm" disabled={uploading}>
+                        <Camera className="w-4 h-4 mr-2" />
+                        {uploading ? 'Uploading...' : 'Add Photos'}
                       </Button>
+                    </label>
+                  </div>
+
+                  {(artistProfile.photos || []).length === 0 ? (
+                    <div className="text-center py-8 bg-gray-50 rounded-lg">
+                      <Camera className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+                      <p className="text-gray-500">No photos added yet</p>
+                      <p className="text-sm text-gray-400">Add performance photos to showcase your shows</p>
                     </div>
-                    
-                    {/* Photo Grid */}
-                    {hostProfile.photos && hostProfile.photos.length > 0 ? (
-                      <div className="border-t pt-4">
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                          {hostProfile.photos.map((photo, index) => (
-                            <div key={photo.id} className="relative group">
-                              <img
-                                src={photo.fileUrl}
-                                alt={photo.title || 'Venue photo'}
-                                className="w-full h-32 object-cover rounded-lg"
-                              />
-                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-200 rounded-lg flex items-center justify-center">
-                                <button
-                                  onClick={() => {
-                                    updateHostProfile({
-                                      photos: hostProfile.photos.filter(p => p.id !== photo.id)
-                                    });
-                                  }}
-                                  className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-red-600 text-white rounded-full p-2 hover:bg-red-700"
-                                >
-                                  <X className="w-4 h-4" />
-                                </button>
-                              </div>
-                              {photo.title && (
-                                <p className="text-xs text-neutral-600 mt-1 truncate">{photo.title}</p>
-                              )}
-                            </div>
-                          ))}
+                  ) : (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {(artistProfile.photos || []).map((photo) => (
+                        <div key={photo.id} className="relative group">
+                          <img
+                            src={photo.fileUrl}
+                            alt={photo.title || 'Performance photo'}
+                            className="w-full h-32 object-cover rounded-lg"
+                          />
+                          <button
+                            onClick={() => removePhoto(photo.id)}
+                            className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
                         </div>
-                      </div>
-                    ) : (
-                      <div className="border-t pt-4">
-                        <p className="text-sm text-neutral-500 text-center py-8">
-                          No photos uploaded yet. Add your first venue photo above.
-                        </p>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              )}
-            </div>
-          )}
-        </div>
-
-
-        {/* Sound System Tab - Only for hosts */}
-        {activeTab === 'sound-system' && !isArtist && (
-          <div className="space-y-6">
-            {/* Sound System Availability */}
-            <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-              <CardHeader>
-                <div className="flex items-center">
-                  <Volume2 className="w-5 h-5 text-neutral-600 mr-3" />
-                  <h2 className="text-xl font-semibold text-neutral-900">Sound System Availability</h2>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <label className="flex items-center">
+
+                {/* Equipment & Requirements */}
+                <div className="border-t pt-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Equipment & Requirements</h3>
+                  
+                  {/* Equipment Provided */}
+                  <div className="mb-6">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Equipment You Provide
+                    </label>
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {artistProfile.equipmentProvided.map((equipment) => (
+                        <Badge
+                          key={equipment}
+                          variant="secondary"
+                          className="flex items-center gap-1"
+                        >
+                          {equipment}
+                          <button
+                            onClick={() => removeEquipment(equipment)}
+                            className="ml-1 text-red-500 hover:text-red-700"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </Badge>
+                      ))}
+                    </div>
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {EQUIPMENT_OPTIONS.filter(equipment => !artistProfile.equipmentProvided.includes(equipment)).map((equipment) => (
+                        <button
+                          key={equipment}
+                          onClick={() => addEquipment(equipment)}
+                          className="px-3 py-1 text-xs border border-gray-300 rounded-full hover:bg-gray-50"
+                        >
+                          + {equipment}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="flex gap-2">
                       <input
-                        type="radio"
-                        name="soundSystemAvailable"
-                        checked={hostProfile.soundSystem.available}
-                        onChange={() => updateHostProfile({ 
-                          soundSystem: { ...hostProfile.soundSystem, available: true }
-                        })}
-                        className="w-4 h-4 text-primary-600 border-neutral-300 focus:ring-primary-500"
+                        type="text"
+                        value={customEquipment}
+                        onChange={(e) => setCustomEquipment(e.target.value)}
+                        placeholder="Add custom equipment..."
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
-                      <span className="ml-2 text-sm font-medium text-neutral-900">
-                        Yes, I have a sound system available for artists
-                      </span>
+                      <Button onClick={addCustomEquipment} size="sm">Add</Button>
+                    </div>
+                  </div>
+
+                  {/* Venue Requirements */}
+                  <div className="mb-6">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Venue Requirements
+                    </label>
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {artistProfile.venueRequirements.map((requirement) => (
+                        <Badge
+                          key={requirement}
+                          variant="secondary"
+                          className="flex items-center gap-1"
+                        >
+                          {requirement}
+                          <button
+                            onClick={() => removeVenueRequirement(requirement)}
+                            className="ml-1 text-red-500 hover:text-red-700"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </Badge>
+                      ))}
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {VENUE_REQUIREMENT_OPTIONS.filter(requirement => !artistProfile.venueRequirements.includes(requirement)).map((requirement) => (
+                        <button
+                          key={requirement}
+                          onClick={() => addVenueRequirement(requirement)}
+                          className="px-3 py-1 text-xs border border-gray-300 rounded-full hover:bg-gray-50"
+                        >
+                          + {requirement}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Social Links */}
+                <div className="border-t pt-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Social Links</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Website
+                      </label>
+                      <input
+                        type="url"
+                        value={artistProfile.socialLinks.website}
+                        onChange={(e) => updateArtistProfile({ 
+                          socialLinks: { ...artistProfile.socialLinks, website: e.target.value }
+                        })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="https://yourwebsite.com"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Instagram
+                      </label>
+                      <input
+                        type="url"
+                        value={artistProfile.socialLinks.instagram}
+                        onChange={(e) => updateArtistProfile({ 
+                          socialLinks: { ...artistProfile.socialLinks, instagram: e.target.value }
+                        })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="https://instagram.com/yourband"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        YouTube
+                      </label>
+                      <input
+                        type="url"
+                        value={artistProfile.socialLinks.youtube}
+                        onChange={(e) => updateArtistProfile({ 
+                          socialLinks: { ...artistProfile.socialLinks, youtube: e.target.value }
+                        })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="https://youtube.com/c/yourband"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Spotify
+                      </label>
+                      <input
+                        type="url"
+                        value={artistProfile.socialLinks.spotify}
+                        onChange={(e) => updateArtistProfile({ 
+                          socialLinks: { ...artistProfile.socialLinks, spotify: e.target.value }
+                        })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="https://open.spotify.com/artist/..."
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Bandcamp
+                      </label>
+                      <input
+                        type="url"
+                        value={artistProfile.socialLinks.bandcamp}
+                        onChange={(e) => updateArtistProfile({ 
+                          socialLinks: { ...artistProfile.socialLinks, bandcamp: e.target.value }
+                        })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="https://yourband.bandcamp.com"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Facebook
+                      </label>
+                      <input
+                        type="url"
+                        value={artistProfile.socialLinks.facebook}
+                        onChange={(e) => updateArtistProfile({ 
+                          socialLinks: { ...artistProfile.socialLinks, facebook: e.target.value }
+                        })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="https://facebook.com/yourband"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tour Preferences */}
+                <div className="border-t pt-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Tour Preferences</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Tour Months Per Year
+                      </label>
+                      <input
+                        type="number"
+                        value={artistProfile.tourMonthsPerYear}
+                        onChange={(e) => updateArtistProfile({ tourMonthsPerYear: parseInt(e.target.value) || 0 })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        min="0"
+                        max="12"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Willing to Travel (miles)
+                      </label>
+                      <input
+                        type="number"
+                        value={artistProfile.willingToTravel}
+                        onChange={(e) => updateArtistProfile({ willingToTravel: parseInt(e.target.value) || 0 })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        min="0"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Tour Vehicle
+                      </label>
+                      <select
+                        value={artistProfile.tourVehicle}
+                        onChange={(e) => updateArtistProfile({ tourVehicle: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      >
+                        <option value="car">Car</option>
+                        <option value="van">Van</option>
+                        <option value="bus">Bus</option>
+                        <option value="trailer">Trailer/RV</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex items-center">
+                    <input
+                      type="checkbox"
+                      id="needsLodging"
+                      checked={artistProfile.needsLodging}
+                      onChange={(e) => updateArtistProfile({ needsLodging: e.target.checked })}
+                      className="mr-2"
+                    />
+                    <label htmlFor="needsLodging" className="text-sm text-gray-700">
+                      Needs lodging accommodations
                     </label>
                   </div>
+                </div>
+
+                {/* Save Button */}
+                <div className="flex justify-end pt-6 border-t">
+                  <Button
+                    onClick={handleSave}
+                    disabled={loading || !hasChanges}
+                    className="min-w-[120px]"
+                  >
+                    {loading ? 'Saving...' : hasChanges ? 'Save Changes' : 'Saved'}
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'host' && (
+              <div className="space-y-6">
+                {/* Basic Host Information */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="soundSystemAvailable"
-                        checked={!hostProfile.soundSystem.available}
-                        onChange={() => updateHostProfile({ 
-                          soundSystem: { ...hostProfile.soundSystem, available: false }
-                        })}
-                        className="w-4 h-4 text-primary-600 border-neutral-300 focus:ring-primary-500"
-                      />
-                      <span className="ml-2 text-sm font-medium text-neutral-900">
-                        No, artists should bring their own sound equipment
-                      </span>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Venue Name
                     </label>
+                    <input
+                      type="text"
+                      value={hostProfile.venueName}
+                      onChange={(e) => updateHostProfile({ venueName: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="e.g., Mike's Music Room, Sarah's Studio"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Host Name
+                    </label>
+                    <input
+                      type="text"
+                      value={hostProfile.hostInfo.hostName}
+                      onChange={(e) => updateHostProfile({ 
+                        hostInfo: { ...hostProfile.hostInfo, hostName: e.target.value }
+                      })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Your name"
+                    />
                   </div>
                 </div>
-              </CardContent>
-            </Card>
 
-            {/* Sound System Details - Only show if available */}
-            {hostProfile.soundSystem.available && (
-              <>
-                {/* System Description */}
-                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                  <CardHeader>
-                    <h2 className="text-xl font-semibold text-neutral-900">System Description</h2>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
+                {/* Location */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      City
+                    </label>
+                    <input
+                      type="text"
+                      value={hostProfile.city}
+                      onChange={(e) => updateHostProfile({ city: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="City"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      State
+                    </label>
+                    <select
+                      value={hostProfile.state}
+                      onChange={(e) => updateHostProfile({ state: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="">Select State</option>
+                      {US_STATES.map(state => (
+                        <option key={state.value} value={state.value}>{state.label}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      ZIP Code
+                    </label>
+                    <input
+                      type="text"
+                      value={hostProfile.zip}
+                      onChange={(e) => updateHostProfile({ zip: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="ZIP"
+                    />
+                  </div>
+                </div>
+
+                {/* Venue Description */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Venue Description
+                  </label>
+                  <textarea
+                    value={hostProfile.venueDescription}
+                    onChange={(e) => updateHostProfile({ venueDescription: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    rows={4}
+                    placeholder="Describe your venue space, atmosphere, and what makes it special for live music..."
+                  />
+                </div>
+
+                {/* About Host */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    About You (Host)
+                  </label>
+                  <textarea
+                    value={hostProfile.hostInfo.aboutMe}
+                    onChange={(e) => updateHostProfile({ 
+                      hostInfo: { ...hostProfile.hostInfo, aboutMe: e.target.value }
+                    })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    rows={4}
+                    placeholder="Tell artists about yourself, your experience with live music, what you enjoy about hosting..."
+                  />
+                </div>
+
+                {/* Venue Details */}
+                <div className="border-t pt-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Venue Details</h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Venue Type
+                      </label>
+                      <select
+                        value={hostProfile.venueType}
+                        onChange={(e) => updateHostProfile({ venueType: e.target.value as any })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      >
+                        <option value="home">Home</option>
+                        <option value="studio">Studio</option>
+                        <option value="backyard">Backyard</option>
+                        <option value="loft">Loft</option>
+                        <option value="warehouse">Warehouse</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Indoor Capacity
+                      </label>
+                      <input
+                        type="number"
+                        value={hostProfile.indoorCapacity}
+                        onChange={(e) => updateHostProfile({ indoorCapacity: parseInt(e.target.value) || 0 })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        min="0"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Outdoor Capacity
+                      </label>
+                      <input
+                        type="number"
+                        value={hostProfile.outdoorCapacity}
+                        onChange={(e) => updateHostProfile({ outdoorCapacity: parseInt(e.target.value) || 0 })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        min="0"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Typical Show Length (minutes)
+                      </label>
+                      <input
+                        type="number"
+                        value={hostProfile.typicalShowLength}
+                        onChange={(e) => updateHostProfile({ typicalShowLength: parseInt(e.target.value) || 90 })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        min="15"
+                        max="300"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Suggested Door Fee ($)
+                      </label>
+                      <input
+                        type="number"
+                        value={hostProfile.suggestedDoorFee}
+                        onChange={(e) => updateHostProfile({ suggestedDoorFee: parseInt(e.target.value) || 0 })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        min="0"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Amenities */}
+                <div className="border-t pt-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Amenities</h3>
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {hostProfile.amenities.map((amenity) => (
+                      <Badge
+                        key={amenity}
+                        variant="secondary"
+                        className="flex items-center gap-1"
+                      >
+                        {amenity}
+                        <button
+                          onClick={() => removeAmenity(amenity)}
+                          className="ml-1 text-red-500 hover:text-red-700"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </Badge>
+                    ))}
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {AMENITY_OPTIONS.filter(amenity => !hostProfile.amenities.includes(amenity)).map((amenity) => (
+                      <button
+                        key={amenity}
+                        onClick={() => addAmenity(amenity)}
+                        className="px-3 py-1 text-xs border border-gray-300 rounded-full hover:bg-gray-50"
+                      >
+                        + {amenity}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Sound System */}
+                <div className="border-t pt-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Sound System</h3>
+                  <div className="mb-4 flex items-center">
+                    <input
+                      type="checkbox"
+                      id="soundSystemAvailable"
+                      checked={hostProfile.soundSystem.available}
+                      onChange={(e) => updateHostProfile({ 
+                        soundSystem: { ...hostProfile.soundSystem, available: e.target.checked }
+                      })}
+                      className="mr-2"
+                    />
+                    <label htmlFor="soundSystemAvailable" className="text-sm text-gray-700">
+                      Sound system available
+                    </label>
+                  </div>
+                  
+                  {hostProfile.soundSystem.available && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label htmlFor="soundSystemDescription" className="block text-sm font-medium text-neutral-700 mb-2">
-                          General Description *
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          System Description
                         </label>
                         <textarea
-                          id="soundSystemDescription"
-                          rows={3}
-                          placeholder="Describe your sound system setup, its quality, and what makes it special..."
                           value={hostProfile.soundSystem.description}
                           onChange={(e) => updateHostProfile({ 
                             soundSystem: { ...hostProfile.soundSystem, description: e.target.value }
                           })}
-                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          rows={3}
+                          placeholder="Describe your sound system setup..."
                         />
+                      </div>
+                      <div className="space-y-3">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Speakers
+                          </label>
+                          <input
+                            type="text"
+                            value={hostProfile.soundSystem.equipment.speakers}
+                            onChange={(e) => updateHostProfile({ 
+                              soundSystem: { 
+                                ...hostProfile.soundSystem, 
+                                equipment: { ...hostProfile.soundSystem.equipment, speakers: e.target.value }
+                              }
+                            })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Speaker details"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Microphones
+                          </label>
+                          <input
+                            type="text"
+                            value={hostProfile.soundSystem.equipment.microphones}
+                            onChange={(e) => updateHostProfile({ 
+                              soundSystem: { 
+                                ...hostProfile.soundSystem, 
+                                equipment: { ...hostProfile.soundSystem.equipment, microphones: e.target.value }
+                              }
+                            })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Microphone details"
+                          />
+                        </div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-
-                {/* Equipment Details */}
-                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                  <CardHeader>
-                    <h2 className="text-xl font-semibold text-neutral-900">Equipment Details</h2>
-                    <p className="text-sm text-neutral-600 mt-1">Knowing what specific equipment you have is very helpful for the artists.</p>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <label htmlFor="speakers" className="block text-sm font-medium text-neutral-700 mb-2">
-                          Speakers
-                        </label>
-                        <textarea
-                          id="speakers"
-                          rows={3}
-                          placeholder="e.g., JBL EON615, Yamaha HS8 monitors..."
-                          value={hostProfile.soundSystem.equipment.speakers}
-                          onChange={(e) => updateHostProfile({ 
-                            soundSystem: { 
-                              ...hostProfile.soundSystem, 
-                              equipment: { ...hostProfile.soundSystem.equipment, speakers: e.target.value }
-                            }
-                          })}
-                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                        />
-                      </div>
-
-                      <div>
-                        <label htmlFor="microphones" className="block text-sm font-medium text-neutral-700 mb-2">
-                          Microphones
-                        </label>
-                        <textarea
-                          id="microphones"
-                          rows={3}
-                          placeholder="e.g., Shure SM58, Audio-Technica AT2020..."
-                          value={hostProfile.soundSystem.equipment.microphones}
-                          onChange={(e) => updateHostProfile({ 
-                            soundSystem: { 
-                              ...hostProfile.soundSystem, 
-                              equipment: { ...hostProfile.soundSystem.equipment, microphones: e.target.value }
-                            }
-                          })}
-                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                        />
-                      </div>
-
-                      <div>
-                        <label htmlFor="instruments" className="block text-sm font-medium text-neutral-700 mb-2">
-                          Available Instruments
-                        </label>
-                        <textarea
-                          id="instruments"
-                          rows={3}
-                          placeholder="e.g., Piano, keyboard, guitar amp..."
-                          value={hostProfile.soundSystem.equipment.instruments}
-                          onChange={(e) => updateHostProfile({ 
-                            soundSystem: { 
-                              ...hostProfile.soundSystem, 
-                              equipment: { ...hostProfile.soundSystem.equipment, instruments: e.target.value }
-                            }
-                          })}
-                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                        />
-                      </div>
-
-                      <div>
-                        <label htmlFor="additional" className="block text-sm font-medium text-neutral-700 mb-2">
-                          Additional Equipment
-                        </label>
-                        <textarea
-                          id="additional"
-                          rows={3}
-                          placeholder="e.g., Cables, stands, lighting..."
-                          value={hostProfile.soundSystem.equipment.additional}
-                          onChange={(e) => updateHostProfile({ 
-                            soundSystem: { 
-                              ...hostProfile.soundSystem, 
-                              equipment: { ...hostProfile.soundSystem.equipment, additional: e.target.value }
-                            }
-                          })}
-                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                        />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </>
-            )}
-          </div>
-        )}
-
-        {/* Lodging Tab - Only for hosts */}
-        {activeTab === 'lodging' && !isArtist && (
-          <div className="space-y-6">
-            {/* Lodging Availability */}
-            <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-              <CardHeader>
-                <div className="flex items-center">
-                  <Home className="w-5 h-5 text-neutral-600 mr-3" />
-                  <h2 className="text-xl font-semibold text-neutral-900">Lodging for Artists</h2>
+                  )}
                 </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <label className="flex items-center">
+
+                {/* Lodging Section */}
+                <div className="border-t pt-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-medium text-gray-900">Lodging</h3>
+                    <div className="flex items-center">
                       <input
-                        type="radio"
-                        name="offersLodging"
+                        type="checkbox"
+                        id="offersLodging"
                         checked={hostProfile.offersLodging}
-                        onChange={() => updateHostProfile({ offersLodging: true })}
-                        className="w-4 h-4 text-primary-600 border-neutral-300 focus:ring-primary-500"
+                        onChange={(e) => updateHostProfile({ offersLodging: e.target.checked })}
+                        className="mr-2"
                       />
-                      <span className="ml-2 text-sm font-medium text-neutral-900">
-                        Yes, I can offer lodging to traveling artists
-                      </span>
-                    </label>
-                  </div>
-                  <div>
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="offersLodging"
-                        checked={!hostProfile.offersLodging}
-                        onChange={() => updateHostProfile({ offersLodging: false })}
-                        className="w-4 h-4 text-primary-600 border-neutral-300 focus:ring-primary-500"
-                      />
-                      <span className="ml-2 text-sm font-medium text-neutral-900">
-                        No, I cannot offer lodging
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Lodging Details - Only show if offering */}
-            {hostProfile.offersLodging && (
-              <>
-                {/* Room Configuration */}
-                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                  <CardHeader>
-                    <h2 className="text-xl font-semibold text-neutral-900">Room Configuration</h2>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">
-                        Number of Rooms Available
+                      <label htmlFor="offersLodging" className="text-sm text-gray-700">
+                        I offer lodging for touring artists
                       </label>
-                      <select
-                        value={hostProfile.lodgingDetails?.numberOfRooms || 1}
-                        onChange={(e) => {
-                          const numRooms = parseInt(e.target.value);
-                          const newRooms = [...(hostProfile.lodgingDetails?.rooms || [])];
-                          
-                          if (numRooms > (hostProfile.lodgingDetails?.rooms?.length || 0)) {
-                            // Add new rooms
-                            for (let i = (hostProfile.lodgingDetails?.rooms?.length || 0); i < numRooms; i++) {
-                              newRooms.push({
-                                id: i + 1,
-                                roomType: 'private_bedroom',
-                                bathroomType: 'private',
-                                beds: [{ type: 'queen' as 'queen' | 'king' | 'twin' | 'full' | 'couch' | 'air_mattress', quantity: 1 }],
-                                maxOccupancy: 2
-                              });
-                            }
-                          } else if (numRooms < (hostProfile.lodgingDetails?.rooms?.length || 0)) {
-                            // Remove rooms
-                            newRooms.splice(numRooms);
-                          }
-                          
-                          updateHostProfile({
-                            lodgingDetails: {
-                              ...hostProfile.lodgingDetails,
-                              numberOfRooms: numRooms,
-                              rooms: newRooms
-                            }
-                          });
-                        }}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                      >
-                        {[1, 2, 3, 4, 5].map(num => (
-                          <option key={num} value={num}>{num} {num === 1 ? 'Room' : 'Rooms'}</option>
-                        ))}
-                      </select>
                     </div>
+                  </div>
 
-                    {/* Room Details */}
-                    {hostProfile.lodgingDetails.rooms && hostProfile.lodgingDetails.rooms.map((room, index) => (
-                      <div key={room.id} className="border border-neutral-200 rounded-lg p-4">
-                        <h3 className="text-lg font-medium text-neutral-900 mb-4">Room {index + 1}</h3>
-                        <div className="grid md:grid-cols-2 gap-4">
-                          <div>
-                            <label className="block text-sm font-medium text-neutral-700 mb-2">
-                              Room Type
-                            </label>
-                            <select
-                              value={room.roomType}
-                              onChange={(e) => {
-                                const updatedRooms = hostProfile.lodgingDetails.rooms.map(r =>
-                                  r.id === room.id ? { ...r, roomType: e.target.value as any } : r
-                                );
-                                updateHostProfile({
-                                  lodgingDetails: {
-                                    ...hostProfile.lodgingDetails,
-                                    rooms: updatedRooms
-                                  }
-                                });
-                              }}
-                              className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                            >
-                              <option value="private_bedroom">Private Bedroom</option>
-                              <option value="shared_room">Shared Room</option>
-                              <option value="entire_space">Entire Space/Apartment</option>
-                            </select>
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium text-neutral-700 mb-2">
-                              Bathroom
-                            </label>
-                            <select
-                              value={room.bathroomType}
-                              onChange={(e) => {
-                                const updatedRooms = hostProfile.lodgingDetails.rooms.map(r =>
-                                  r.id === room.id ? { ...r, bathroomType: e.target.value as any } : r
-                                );
-                                updateHostProfile({
-                                  lodgingDetails: {
-                                    ...hostProfile.lodgingDetails,
-                                    rooms: updatedRooms
-                                  }
-                                });
-                              }}
-                              className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                            >
-                              <option value="private">Private Bathroom</option>
-                              <option value="shared">Shared Bathroom</option>
-                            </select>
-                          </div>
+                  {hostProfile.offersLodging && (
+                    <div className="space-y-6 border border-gray-200 rounded-lg p-4 bg-gray-50">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Check-in Time
+                          </label>
+                          <input
+                            type="text"
+                            value={hostProfile.lodgingDetails.houseRules.checkInTime}
+                            onChange={(e) => updateHostProfile({ 
+                              lodgingDetails: { 
+                                ...hostProfile.lodgingDetails, 
+                                houseRules: { ...hostProfile.lodgingDetails.houseRules, checkInTime: e.target.value }
+                              }
+                            })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="3:00 PM"
+                          />
                         </div>
-                        
-                        {/* Bed Configuration */}
-                        <div className="mt-4">
-                          <h4 className="text-md font-medium text-neutral-900 mb-3">Bed Configuration</h4>
-                          <div className="space-y-3">
-                            {room.beds && room.beds.map((bed, bedIndex) => (
-                              <div key={bedIndex} className="flex items-center space-x-4 p-3 bg-neutral-50 rounded-lg">
-                                <div className="flex-1">
-                                  <label className="block text-sm font-medium text-neutral-700 mb-1">
-                                    Bed Type
-                                  </label>
-                                  <select
-                                    value={bed.type}
-                                    onChange={(e) => {
-                                      const updatedRooms = hostProfile.lodgingDetails.rooms.map(r =>
-                                        r.id === room.id ? {
-                                          ...r,
-                                          beds: r.beds.map((b, i) => 
-                                            i === bedIndex ? { ...b, type: e.target.value as 'queen' | 'king' | 'twin' | 'full' | 'couch' | 'air_mattress' } : b
-                                          )
-                                        } : r
-                                      );
-                                      updateHostProfile({
-                                        lodgingDetails: {
-                                          ...hostProfile.lodgingDetails,
-                                          rooms: updatedRooms
-                                        }
-                                      });
-                                    }}
-                                    className="w-full px-2 py-1 border border-neutral-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-primary-500"
-                                  >
-                                    <option value="twin">Twin</option>
-                                    <option value="full">Full</option>
-                                    <option value="queen">Queen</option>
-                                    <option value="king">King</option>
-                                    <option value="couch">Couch/Sofa</option>
-                                    <option value="air_mattress">Air Mattress</option>
-                                  </select>
-                                </div>
-                                <div className="w-20">
-                                  <label className="block text-sm font-medium text-neutral-700 mb-1">
-                                    Quantity
-                                  </label>
-                                  <input
-                                    type="number"
-                                    min="1"
-                                    max="4"
-                                    value={bed.quantity}
-                                    onChange={(e) => {
-                                      const updatedRooms = hostProfile.lodgingDetails.rooms.map(r =>
-                                        r.id === room.id ? {
-                                          ...r,
-                                          beds: r.beds.map((b, i) => 
-                                            i === bedIndex ? { ...b, quantity: parseInt(e.target.value) || 1 } : b
-                                          )
-                                        } : r
-                                      );
-                                      updateHostProfile({
-                                        lodgingDetails: {
-                                          ...hostProfile.lodgingDetails,
-                                          rooms: updatedRooms
-                                        }
-                                      });
-                                    }}
-                                    className="w-full px-2 py-1 border border-neutral-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-primary-500 text-center"
-                                  />
-                                </div>
-                                {room.beds.length > 1 && (
-                                  <button
-                                    onClick={() => {
-                                      const updatedRooms = hostProfile.lodgingDetails.rooms.map(r =>
-                                        r.id === room.id ? {
-                                          ...r,
-                                          beds: r.beds.filter((_, i) => i !== bedIndex)
-                                        } : r
-                                      );
-                                      updateHostProfile({
-                                        lodgingDetails: {
-                                          ...hostProfile.lodgingDetails,
-                                          rooms: updatedRooms
-                                        }
-                                      });
-                                    }}
-                                    className="p-1 text-red-600 hover:text-red-700 hover:bg-red-50 rounded"
-                                  >
-                                    <X className="w-4 h-4" />
-                                  </button>
-                                )}
-                              </div>
-                            ))}
-                            
-                            {/* Add Bed Button */}
-                            {(!room.beds || room.beds.length < 3) && (
-                              <button
-                                onClick={() => {
-                                  const updatedRooms = hostProfile.lodgingDetails.rooms.map(r =>
-                                    r.id === room.id ? {
-                                      ...r,
-                                      beds: [...(r.beds || []), { type: 'twin' as 'queen' | 'king' | 'twin' | 'full' | 'couch' | 'air_mattress', quantity: 1 }]
-                                    } : r
-                                  );
-                                  updateHostProfile({
-                                    lodgingDetails: {
-                                      ...hostProfile.lodgingDetails,
-                                      rooms: updatedRooms
-                                    }
-                                  });
-                                }}
-                                className="flex items-center text-sm text-primary-600 hover:text-primary-700 font-medium"
-                              >
-                                <Plus className="w-4 h-4 mr-1" />
-                                Add Another Bed
-                              </button>
-                            )}
-                          </div>
-
-                          {/* Room Photos */}
-                          <div className="col-span-2 mt-6">
-                            <div className="flex items-center justify-between mb-4">
-                              <h4 className="text-lg font-medium text-neutral-900">Room Photos</h4>
-                              <label htmlFor={`roomPhotoUpload-${room.id}`} className="cursor-pointer">
-                                <div className="flex items-center px-4 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50">
-                                  <Camera className="w-4 h-4 mr-2" />
-                                  Add Photos
-                                </div>
-                              </label>
-                              <input
-                                id={`roomPhotoUpload-${room.id}`}
-                                type="file"
-                                accept="image/*"
-                                multiple
-                                onChange={async (e) => {
-                                  const files = Array.from(e.target.files || []);
-                                  if (files.length === 0) return;
-
-                                  for (const file of files) {
-                                    const formData = new FormData();
-                                    formData.append('file', file);
-                                    formData.append('type', 'lodging');
-
-                                    try {
-                                      const response = await fetch('/api/upload', {
-                                        method: 'POST',
-                                        body: formData
-                                      });
-
-                                      if (response.ok) {
-                                        const { url } = await response.json();
-                                        
-                                        const newPhoto = {
-                                          id: `temp-${Date.now()}-${Math.random()}`,
-                                          url: url,
-                                          title: file.name.replace(/\.[^/.]+$/, ""),
-                                          description: ''
-                                        };
-
-                                        const updatedRooms = hostProfile.lodgingDetails.rooms.map(r =>
-                                          r.id === room.id ? {
-                                            ...r,
-                                            photos: [...((r as any).photos || []), newPhoto]
-                                          } : r
-                                        );
-                                        
-                                        updateHostProfile({
-                                          lodgingDetails: {
-                                            ...hostProfile.lodgingDetails,
-                                            rooms: updatedRooms
-                                          }
-                                        });
-                                      }
-                                    } catch (error) {
-                                      console.error('Upload error:', error);
-                                    }
-                                  }
-                                  e.target.value = '';
-                                }}
-                                className="hidden"
-                              />
-                            </div>
-                            
-                            {(room as any).photos && (room as any).photos.length > 0 ? (
-                              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                {(room as any).photos.map((photo: any, photoIndex: number) => (
-                                  <div key={photo.id || photoIndex} className="relative group">
-                                    <img
-                                      src={photo.url}
-                                      alt={photo.title || `Room ${index + 1} photo`}
-                                      className="w-full h-32 object-cover rounded-lg"
-                                    />
-                                    <button
-                                      onClick={() => {
-                                        const updatedRooms = hostProfile.lodgingDetails.rooms.map(r =>
-                                          r.id === room.id ? {
-                                            ...r,
-                                            photos: (r as any).photos?.filter((_: any, i: number) => i !== photoIndex) || []
-                                          } : r
-                                        );
-                                        updateHostProfile({
-                                          lodgingDetails: {
-                                            ...hostProfile.lodgingDetails,
-                                            rooms: updatedRooms
-                                          }
-                                        });
-                                      }}
-                                      className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                                    >
-                                      <X className="w-4 h-4" />
-                                    </button>
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <div className="border-2 border-dashed border-neutral-300 rounded-lg p-8 text-center">
-                                <Camera className="w-12 h-12 text-neutral-400 mx-auto mb-3" />
-                                <p className="text-neutral-600 text-sm">No photos uploaded yet</p>
-                                <p className="text-neutral-500 text-xs mt-1">Click "Add Photos" to upload room images</p>
-                              </div>
-                            )}
-                          </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Check-out Time
+                          </label>
+                          <input
+                            type="text"
+                            value={hostProfile.lodgingDetails.houseRules.checkOutTime}
+                            onChange={(e) => updateHostProfile({ 
+                              lodgingDetails: { 
+                                ...hostProfile.lodgingDetails, 
+                                houseRules: { ...hostProfile.lodgingDetails.houseRules, checkOutTime: e.target.value }
+                              }
+                            })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="11:00 AM"
+                          />
                         </div>
                       </div>
-                    ))}
-                  </CardContent>
-                </Card>
 
-                {/* Amenities */}
-                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                  <CardHeader>
-                    <h2 className="text-xl font-semibold text-neutral-900">Amenities</h2>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      {[
-                        { key: 'breakfast', label: 'Breakfast included', icon: Coffee },
-                        { key: 'wifi', label: 'WiFi available', icon: Wifi },
-                        { key: 'parking', label: 'Free parking', icon: Car },
-                        { key: 'laundry', label: 'Laundry access', icon: Home },
-                        { key: 'kitchenAccess', label: 'Kitchen access', icon: Utensils },
-                        { key: 'workspace', label: 'Workspace available', icon: Briefcase },
-                        { key: 'linensProvided', label: 'Linens provided', icon: Home },
-                        { key: 'towelsProvided', label: 'Towels provided', icon: Home }
-                      ].map(({ key, label, icon: Icon }) => (
-                        <label key={key} className="flex items-center">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Smoking Policy
+                          </label>
+                          <select
+                            value={hostProfile.lodgingDetails.houseRules.smokingPolicy}
+                            onChange={(e) => updateHostProfile({ 
+                              lodgingDetails: { 
+                                ...hostProfile.lodgingDetails, 
+                                houseRules: { ...hostProfile.lodgingDetails.houseRules, smokingPolicy: e.target.value as any }
+                              }
+                            })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          >
+                            <option value="no_smoking">No Smoking</option>
+                            <option value="outside_only">Outside Only</option>
+                            <option value="allowed">Allowed</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Pet Policy
+                          </label>
+                          <select
+                            value={hostProfile.lodgingDetails.houseRules.petPolicy}
+                            onChange={(e) => updateHostProfile({ 
+                              lodgingDetails: { 
+                                ...hostProfile.lodgingDetails, 
+                                houseRules: { ...hostProfile.lodgingDetails.houseRules, petPolicy: e.target.value as any }
+                              }
+                            })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          >
+                            <option value="no_pets">No Pets</option>
+                            <option value="cats_ok">Cats OK</option>
+                            <option value="dogs_ok">Dogs OK</option>
+                            <option value="all_pets_ok">All Pets OK</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Alcohol Policy
+                          </label>
+                          <select
+                            value={hostProfile.lodgingDetails.houseRules.alcoholPolicy}
+                            onChange={(e) => updateHostProfile({ 
+                              lodgingDetails: { 
+                                ...hostProfile.lodgingDetails, 
+                                houseRules: { ...hostProfile.lodgingDetails.houseRules, alcoholPolicy: e.target.value as any }
+                              }
+                            })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          >
+                            <option value="allowed">Allowed</option>
+                            <option value="not_allowed">Not Allowed</option>
+                            <option value="byob">BYOB</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="flex items-center">
                           <input
                             type="checkbox"
-                            checked={(hostProfile.lodgingDetails?.amenities?.[key as keyof typeof hostProfile.lodgingDetails.amenities] as boolean) || false}
-                            onChange={(e) => {
-                              updateHostProfile({
-                                lodgingDetails: {
-                                  ...hostProfile.lodgingDetails,
-                                  amenities: {
-                                    ...hostProfile.lodgingDetails.amenities,
-                                    [key]: e.target.checked
-                                  }
-                                }
-                              });
-                            }}
-                            className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
+                            id="breakfast"
+                            checked={hostProfile.lodgingDetails.amenities.breakfast}
+                            onChange={(e) => updateHostProfile({ 
+                              lodgingDetails: { 
+                                ...hostProfile.lodgingDetails, 
+                                amenities: { ...hostProfile.lodgingDetails.amenities, breakfast: e.target.checked }
+                              }
+                            })}
+                            className="mr-2"
                           />
-                          <Icon className="w-4 h-4 text-neutral-500 ml-2 mr-2" />
-                          <span className="text-sm text-neutral-700">{label}</span>
+                          <label htmlFor="breakfast" className="text-sm text-gray-700">Breakfast</label>
+                        </div>
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            id="wifi"
+                            checked={hostProfile.lodgingDetails.amenities.wifi}
+                            onChange={(e) => updateHostProfile({ 
+                              lodgingDetails: { 
+                                ...hostProfile.lodgingDetails, 
+                                amenities: { ...hostProfile.lodgingDetails.amenities, wifi: e.target.checked }
+                              }
+                            })}
+                            className="mr-2"
+                          />
+                          <label htmlFor="wifi" className="text-sm text-gray-700">WiFi</label>
+                        </div>
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            id="parking"
+                            checked={hostProfile.lodgingDetails.amenities.parking}
+                            onChange={(e) => updateHostProfile({ 
+                              lodgingDetails: { 
+                                ...hostProfile.lodgingDetails, 
+                                amenities: { ...hostProfile.lodgingDetails.amenities, parking: e.target.checked }
+                              }
+                            })}
+                            className="mr-2"
+                          />
+                          <label htmlFor="parking" className="text-sm text-gray-700">Parking</label>
+                        </div>
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            id="laundry"
+                            checked={hostProfile.lodgingDetails.amenities.laundry}
+                            onChange={(e) => updateHostProfile({ 
+                              lodgingDetails: { 
+                                ...hostProfile.lodgingDetails, 
+                                amenities: { ...hostProfile.lodgingDetails.amenities, laundry: e.target.checked }
+                              }
+                            })}
+                            className="mr-2"
+                          />
+                          <label htmlFor="laundry" className="text-sm text-gray-700">Laundry</label>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Special Considerations
                         </label>
-                      ))}
+                        <textarea
+                          value={hostProfile.lodgingDetails.specialConsiderations}
+                          onChange={(e) => updateHostProfile({ 
+                            lodgingDetails: { 
+                              ...hostProfile.lodgingDetails, 
+                              specialConsiderations: e.target.value 
+                            }
+                          })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          rows={3}
+                          placeholder="Any special considerations for guests..."
+                        />
+                      </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  )}
+                </div>
 
-              </>
+                {/* Social Links */}
+                <div className="border-t pt-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Social Links</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Website
+                      </label>
+                      <input
+                        type="url"
+                        value={hostProfile.socialLinks.website}
+                        onChange={(e) => updateHostProfile({ 
+                          socialLinks: { ...hostProfile.socialLinks, website: e.target.value }
+                        })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="https://yourwebsite.com"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Instagram
+                      </label>
+                      <input
+                        type="url"
+                        value={hostProfile.socialLinks.instagram}
+                        onChange={(e) => updateHostProfile({ 
+                          socialLinks: { ...hostProfile.socialLinks, instagram: e.target.value }
+                        })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="https://instagram.com/yourvenue"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        YouTube
+                      </label>
+                      <input
+                        type="url"
+                        value={hostProfile.socialLinks.youtube}
+                        onChange={(e) => updateHostProfile({ 
+                          socialLinks: { ...hostProfile.socialLinks, youtube: e.target.value }
+                        })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="https://youtube.com/c/yourvenue"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Facebook
+                      </label>
+                      <input
+                        type="url"
+                        value={hostProfile.socialLinks.facebook}
+                        onChange={(e) => updateHostProfile({ 
+                          socialLinks: { ...hostProfile.socialLinks, facebook: e.target.value }
+                        })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="https://facebook.com/yourvenue"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Save Button */}
+                <div className="flex justify-end pt-6 border-t">
+                  <Button
+                    onClick={handleSave}
+                    disabled={loading || !hasChanges}
+                    className="min-w-[120px]"
+                  >
+                    {loading ? 'Saving...' : hasChanges ? 'Save Changes' : 'Saved'}
+                  </Button>
+                </div>
+              </div>
             )}
-          </div>
-        )}
-
-        {/* Preview Notice */}
-        <div className="mt-8 bg-primary-50 border border-primary-200 rounded-lg p-4">
-          <div className="flex items-center">
-            <Star className="w-5 h-5 text-primary-600 mr-3" />
-            <div>
-              <h4 className="font-medium text-primary-800">Live Profile Preview</h4>
-              <p className="text-sm text-primary-700">
-                Click "Preview Live Profile" above to see exactly how your profile appears to {isArtist ? 'hosts' : 'artists'} in real-time.
-              </p>
-            </div>
           </div>
         </div>
       </div>
-      
-      {/* Tour Segment Modal */}
-      <TourSegmentModal />
     </div>
   );
 }
+

@@ -1,0 +1,187 @@
+# Page snapshot
+
+```yaml
+- banner:
+  - navigation:
+    - link "TourPad":
+      - /url: /
+    - link "Find Hosts":
+      - /url: /hosts
+    - link "Browse Artists":
+      - /url: /artists
+    - link "How It Works":
+      - /url: /how-it-works
+    - link "Login":
+      - /url: /login
+      - button "Login"
+    - link "Get Started":
+      - /url: /register
+      - button "Get Started"
+- main:
+  - text: House Concert Community
+  - heading "Where Music Feels Like Home" [level=1]
+  - paragraph: Connect artists, hosts, and fans for intimate house concerts that create lasting memories and genuine community.
+  - link "Get Started":
+    - /url: /register
+    - button "Get Started"
+  - link "See Community":
+    - /url: /artists
+    - button "See Community"
+  - img "House concert community"
+  - img "House concert community"
+  - heading "Turning Homes Into Venues, Nights Into Memories" [level=2]
+  - paragraph: "Our goal is simple: to make it easier for musicians, hosts, and fans to come together and bring live music into homes and creative spaces everywhere. Whether you're an artist looking for fresh audiences, a host eager to share unforgettable nights, or a fan seeking intimate musical experiences, we're here to help you make it happen."
+  - paragraph: House concerts break down barriers between performers and listeners. These aren't your average gigs—they're cozy, up-close shows where every note matters. We believe every living room, backyard, and community space has the potential to become a stage.
+  - blockquote: "\"Let's turn more homes into venues and more nights into something worth remembering.\""
+  - text: The Magic of House Concerts
+  - heading "What If Your Living Room Could Change Someone's Life?" [level=2]
+  - paragraph: "Imagine this: 25 people gathered in a cozy living room, sitting cross-legged on the floor, leaning against couches, eyes locked on a musician just 5 feet away. No sound system needed. No stage barrier. Just pure, raw connection."
+  - paragraph: That's a house concert. And it's the most intimate, powerful way to experience live music. The artist can see every face, hear every breath, feel every heartbeat. The audience becomes part of the performance, not just observers.
+  - blockquote: "\"In a house concert, there's nowhere to hide—for the artist or the audience. That vulnerability creates something magical that you can't get anywhere else.\""
+  - text: Real House Concert Host After 50+ shows House Concert Magic 15-40 people Intimate audience size Living rooms, backyards, barns Unique, personal venues Artist meets audience Real conversations, lasting connections Every note matters Acoustic perfection, pure emotion
+  - heading "Why House Concerts Matter Now More Than Ever" [level=3]
+  - heading "Artists Need Support" [level=4]
+  - paragraph: Streaming pays pennies. Venues take huge cuts. House concerts let artists connect directly with fans and actually make a living.
+  - heading "Community Connection" [level=4]
+  - paragraph: In our digital world, we're craving real connection. House concerts bring neighbors together around something beautiful.
+  - heading "Music As It Should Be" [level=4]
+  - paragraph: Before amplification, before massive venues, music was intimate. Personal. House concerts bring back that original magic.
+  - text: For Touring Artists
+  - heading "Stop Playing to Empty Rooms. Start Building Real Fans." [level=2]
+  - paragraph: House concerts aren't just gigs—they're fan-building machines. Every show creates lifelong supporters who actually buy your music.
+  - heading "The Venue Problem" [level=3]
+  - paragraph: Bars take 30-50% of your merch sales. Venues book you for $200 and expect you to bring the crowd. You're building their business, not yours.
+  - heading "The House Concert Solution" [level=3]
+  - paragraph: Keep 100% of door fees AND merch. Guaranteed engaged audience. Hosts who actually care about your success. Every show builds your mailing list and creates superfans.
+  - heading "What Our Artists Actually Make" [level=3]
+  - text: $800 Average per show 15+ New email signups $300 Merch sales per show 98% Want you back
+  - img "Artist performing at house concert"
+  - blockquote: "\"In three months on TourPad, I made more from door fees and merch than my entire last year of bar gigs.\""
+  - text: Real TourPad Artist Folk Singer-Songwriter Pre-screened hosts who actually promote your show Guaranteed minimum audience size (15+ people) Payment processing & host vetting handled for you
+  - heading "Ready to Build Real Fans?" [level=3]
+  - paragraph: Join 500+ artists who've discovered that intimate shows create lifelong supporters, not just one-night audiences.
+  - link "Apply as Artist":
+    - /url: /register?type=artist
+    - button "Apply as Artist"
+  - link "See Success Stories":
+    - /url: /artists
+    - button "See Success Stories"
+  - paragraph: No upfront costs • Keep 100% of door fees & merch • We handle the logistics
+  - heading "Find Your Place in Live Music" [level=2]
+  - paragraph: Whether you create, host, or experience music, there's a place for you in our community.
+  - img "Artists story"
+  - heading "Artists" [level=3]
+  - paragraph: Connect with passionate hosts who transform their spaces into intimate venues.
+  - link "Book Your Tour":
+    - /url: /register?type=artist
+    - button "Book Your Tour"
+  - img "Hosts story"
+  - heading "Hosts" [level=3]
+  - paragraph: Open your space and heart to incredible touring artists and music lovers.
+  - link "Create Magic":
+    - /url: /register?type=host
+    - button "Create Magic"
+  - img "Fans story"
+  - heading "Fans" [level=3]
+  - paragraph: Discover intimate concerts where every note matters and connections are real.
+  - link "Find Your Tribe":
+    - /url: /register?type=fan
+    - button "Find Your Tribe"
+  - heading "Ready to Join?" [level=2]
+  - paragraph: Every great musical story starts with someone saying "yes." What's yours?
+  - link "I'm an Artist":
+    - /url: /register?type=artist
+    - button "I'm an Artist"
+  - link "I'm a Host":
+    - /url: /register?type=host
+    - button "I'm a Host"
+  - link "I'm a Fan":
+    - /url: /register?type=fan
+    - button "I'm a Fan"
+- contentinfo:
+  - text: TourPad
+  - paragraph: Where Music Feels Like Home
+  - paragraph: Connecting touring musicians with passionate hosts for unforgettable intimate concerts. Building community, one show at a time.
+  - text: hello@tourpad.com 1-800-TOURPAD Denver, CO
+  - heading "Platform" [level=3]
+  - list:
+    - listitem:
+      - link "Find Hosts":
+        - /url: /hosts
+    - listitem:
+      - link "Browse Artists":
+        - /url: /artists
+    - listitem:
+      - link "How It Works":
+        - /url: /how-it-works
+    - listitem:
+      - link "Pricing":
+        - /url: /pricing
+  - heading "Company" [level=3]
+  - list:
+    - listitem:
+      - link "About Us":
+        - /url: /about
+    - listitem:
+      - link "Press":
+        - /url: /press
+    - listitem:
+      - link "Blog":
+        - /url: /blog
+    - listitem:
+      - link "Contact":
+        - /url: /contact
+  - heading "Support" [level=3]
+  - list:
+    - listitem:
+      - link "Help Center":
+        - /url: /help
+    - listitem:
+      - link "Safety":
+        - /url: /safety
+    - listitem:
+      - link "Community Guidelines":
+        - /url: /guidelines
+    - listitem:
+      - link "Trust & Safety":
+        - /url: /trust
+    - listitem:
+      - link "Report Issue":
+        - /url: /report
+  - heading "Legal" [level=3]
+  - list:
+    - listitem:
+      - link "Terms of Service":
+        - /url: /terms
+    - listitem:
+      - link "Privacy Policy":
+        - /url: /privacy
+    - listitem:
+      - link "Cookie Policy":
+        - /url: /cookies
+    - listitem:
+      - link "Accessibility":
+        - /url: /accessibility
+    - listitem:
+      - link "Sitemap":
+        - /url: /sitemap
+  - heading "Stay Connected" [level=3]
+  - paragraph: Get updates on new features, artist spotlights, and community stories
+  - textbox "Enter your email"
+  - button "Subscribe" [disabled]
+  - paragraph: © 2025 TourPad. All rights reserved.
+  - text: "Made with for musicians Follow us:"
+  - link "Facebook":
+    - /url: "#"
+  - link "Twitter":
+    - /url: "#"
+  - link "Instagram":
+    - /url: "#"
+  - link "YouTube":
+    - /url: "#"
+  - link "LinkedIn":
+    - /url: "#"
+- alert
+- button "Open Next.js Dev Tools":
+  - img
+```

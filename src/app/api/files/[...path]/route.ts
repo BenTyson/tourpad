@@ -5,7 +5,7 @@ import { auth } from '@/lib/auth';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  { params }: { params: Promise<{ path: string[] }> }
 ) {
   try {
     
@@ -15,7 +15,8 @@ export async function GET(
     //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     // }
 
-    const filePath = params.path.join('/');
+    const { path: pathSegments } = await params;
+    const filePath = pathSegments.join('/');
     
     // Security: Prevent directory traversal
     if (filePath.includes('..') || filePath.includes('~')) {
