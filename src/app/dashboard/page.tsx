@@ -39,6 +39,7 @@ import { PrivateReviewsSection } from '@/components/reviews/PrivateReviewsSectio
 import HoldingPage from '@/components/dashboard/HoldingPage';
 import RSVPManagement from '@/components/host/RSVPManagement';
 import SpotifyConnectionCard from '@/components/dashboard/artist/SpotifyConnectionCard';
+import SoundCloudConnectionCard from '@/components/dashboard/artist/SoundCloudConnectionCard';
 
 type UserRole = 'host' | 'artist' | 'admin' | 'fan';
 
@@ -58,6 +59,7 @@ export default function DashboardPage() {
   const [subscriptionData, setSubscriptionData] = useState<any>(null);
   const [subscriptionLoading, setSubscriptionLoading] = useState(false);
   const [spotifyConnection, setSpotifyConnection] = useState<any>(null);
+  const [soundcloudConnection, setSoundcloudConnection] = useState<any>(null);
   
   // Fetch current user data (with latest status from database)
   useEffect(() => {
@@ -170,6 +172,35 @@ export default function DashboardPage() {
     };
     
     fetchSpotifyConnection();
+  }, [currentUser, userProfileId]);
+
+  // Fetch SoundCloud connection data
+  useEffect(() => {
+    const fetchSoundCloudConnection = async () => {
+      if (!currentUser || currentUser.userType !== 'artist' || !userProfileId) return;
+      
+      try {
+        const response = await fetch(`/api/soundcloud/artist/${userProfileId}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.artist) {
+            setSoundcloudConnection({
+              soundcloudUserId: data.artist.soundcloudUserId,
+              soundcloudUsername: data.artist.soundcloudUsername,
+              soundcloudVerified: data.artist.soundcloudVerified,
+              soundcloudFollowers: data.artist.soundcloudFollowers,
+              soundcloudTrackCount: data.artist.soundcloudTrackCount,
+              soundcloudPlaylistCount: data.artist.soundcloudPlaylistCount,
+              lastSoundCloudSync: data.artist.lastSoundCloudSync
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching SoundCloud connection:', error);
+      }
+    };
+    
+    fetchSoundCloudConnection();
   }, [currentUser, userProfileId]);
   
   // If not authenticated, redirect to login
@@ -987,6 +1018,37 @@ export default function DashboardPage() {
                           }
                         })
                         .catch(err => console.error('Error refreshing Spotify connection:', err));
+                    }
+                  }}
+                />
+              </div>
+            )}
+
+            {/* SoundCloud Integration - Artists only */}
+            {userRole === 'artist' && (
+              <div className="mb-8">
+                <SoundCloudConnectionCard
+                  artistId={userProfileId || ''}
+                  currentConnection={soundcloudConnection}
+                  onConnectionUpdate={() => {
+                    // Refresh SoundCloud connection data
+                    if (userProfileId) {
+                      fetch(`/api/soundcloud/artist/${userProfileId}`)
+                        .then(res => res.json())
+                        .then(data => {
+                          if (data.artist) {
+                            setSoundcloudConnection({
+                              soundcloudUserId: data.artist.soundcloudUserId,
+                              soundcloudUsername: data.artist.soundcloudUsername,
+                              soundcloudVerified: data.artist.soundcloudVerified,
+                              soundcloudFollowers: data.artist.soundcloudFollowers,
+                              soundcloudTrackCount: data.artist.soundcloudTrackCount,
+                              soundcloudPlaylistCount: data.artist.soundcloudPlaylistCount,
+                              lastSoundCloudSync: data.artist.lastSoundCloudSync
+                            });
+                          }
+                        })
+                        .catch(err => console.error('Error refreshing SoundCloud connection:', err));
                     }
                   }}
                 />

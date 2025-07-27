@@ -97,7 +97,9 @@ async function main() {
           travelRadius: 300,
           pressPhotoUrl: 'https://images.unsplash.com/photo-1494790108755-2616b9a8af3c?w=400&h=400&fit=crop&crop=face',
           heroPhotoUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
-          performanceVideoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+          performanceVideoUrl: 'https://www.youtube.com/watch?v=tVlcKp3bWH8',
+          briefBio: 'Indie folk singer-songwriter with 8 years of experience performing intimate concerts.',
+          fullBio: 'Sarah Johnson is an accomplished indie folk singer-songwriter who has been captivating audiences for over 8 years with her heartfelt lyrics and intimate acoustic performances. Originally from Austin, Texas, Sarah draws inspiration from the rich musical heritage of her hometown while crafting deeply personal songs that resonate with listeners across genres. Her music combines traditional folk storytelling with modern indie sensibilities, creating a sound that feels both timeless and fresh. Sarah has performed at numerous house concerts, coffee shops, and small venues throughout the Southwest, building a devoted following of fans who appreciate her authentic approach to songwriting. Her performances are known for their emotional depth and the genuine connection she forms with her audience, making every show feel like a personal conversation among friends.',
           minGuarantee: 200,
           preferredBookingAdvance: 14,
           applicationSubmittedAt: new Date(),
@@ -160,7 +162,9 @@ async function main() {
           travelRadius: 500,
           pressPhotoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
           heroPhotoUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
-          performanceVideoUrl: 'https://www.youtube.com/watch?v=jNQXAC9IVRw',
+          performanceVideoUrl: 'https://www.youtube.com/watch?v=NlprozGcs80',
+          briefBio: 'Award-winning jazz pianist with 15 years of experience leading intimate jazz performances.',
+          fullBio: 'Marcus Williams is a celebrated jazz pianist and bandleader whose musical journey spans over 15 years of professional performance. Born and raised in New Orleans, Marcus was immersed in the city\'s rich jazz tradition from an early age, studying under local masters and absorbing the authentic spirit of the music. His playing style blends classic bebop techniques with contemporary jazz fusion elements, creating sophisticated arrangements that appeal to both traditional jazz enthusiasts and modern audiences. As the leader of the Marcus Williams Trio, he has performed at prestigious venues throughout Louisiana and the Southeast, including multiple appearances at the New Orleans Jazz & Heritage Festival. Marcus is known for his dynamic stage presence and ability to create an intimate atmosphere even in larger venues, making him a perfect fit for house concerts and small gatherings. His original compositions have been featured on three studio albums, and his interpretations of jazz standards showcase both technical mastery and deep emotional understanding of the music.',
           minGuarantee: 300,
           preferredBookingAdvance: 21,
           applicationSubmittedAt: new Date(),
@@ -219,7 +223,9 @@ async function main() {
           travelRadius: 400,
           pressPhotoUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=400&fit=crop&crop=face',
           heroPhotoUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=800&h=600&fit=crop&crop=face',
-          performanceVideoUrl: 'https://www.youtube.com/watch?v=M7lc1UVf-VE',
+          performanceVideoUrl: 'https://www.youtube.com/watch?v=zJXQQGiVOuM',
+          briefBio: 'Electronic indie artist creating atmospheric soundscapes and immersive musical experiences.',
+          fullBio: 'Luna Martinez is an innovative electronic indie artist who has been pushing the boundaries of ambient and experimental music for the past 6 years. Based in Portland, Oregon, Luna combines analog synthesizers, digital production techniques, and live vocals to create immersive soundscapes that transport listeners to otherworldly realms. Her music draws inspiration from nature, urban environments, and human emotion, weaving complex layers of sound that evolve and breathe throughout each performance. Luna\'s background in classical piano and electronic production gives her a unique perspective on composition, allowing her to craft pieces that are both technically sophisticated and emotionally resonant. She has gained recognition in the Pacific Northwest electronic music scene for her captivating live performances, which often incorporate visual elements and real-time sound manipulation. Luna\'s approach to house concerts is particularly compelling, as she transforms intimate spaces into sonic environments that encourage deep listening and meditation. Her debut album "Digital Forests" received critical acclaim from electronic music publications, and she continues to explore the intersection of technology and organic sound in her evolving artistic practice.',
           minGuarantee: 250,
           preferredBookingAdvance: 14,
           applicationSubmittedAt: new Date(),
@@ -314,9 +320,9 @@ async function main() {
       artistId: artist1User.artist!.id,
       mediaType: 'VIDEO',
       category: 'PERFORMANCE',
-      fileUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-      title: 'Sarah Johnson Live Performance',
-      description: 'Acoustic set at local venue - showcasing original folk songs',
+      fileUrl: 'https://www.youtube.com/watch?v=tVlcKp3bWH8',
+      title: 'Sarah Johnson Live Folk Performance',
+      description: 'Intimate acoustic performance featuring original folk songs and heartfelt storytelling',
       mimeType: 'video/mp4',
       sortOrder: 2
     }
@@ -327,9 +333,9 @@ async function main() {
       artistId: artist2User.artist!.id,
       mediaType: 'VIDEO',
       category: 'PERFORMANCE',
-      fileUrl: 'https://www.youtube.com/watch?v=jNQXAC9IVRw',
+      fileUrl: 'https://www.youtube.com/watch?v=NlprozGcs80',
       title: 'Marcus Williams Trio Jazz Session',
-      description: 'Live jazz performance featuring original compositions and classic standards',
+      description: 'Smooth jazz performance featuring piano-led compositions and classic standards',
       mimeType: 'video/mp4',
       sortOrder: 2
     }
@@ -340,9 +346,9 @@ async function main() {
       artistId: artist3User.artist!.id,
       mediaType: 'VIDEO',
       category: 'PERFORMANCE',
-      fileUrl: 'https://www.youtube.com/watch?v=M7lc1UVf-VE',
+      fileUrl: 'https://www.youtube.com/watch?v=zJXQQGiVOuM',
       title: 'Luna Martinez Electronic Set',
-      description: 'Ambient electronic performance with live visuals and atmospheric soundscapes',
+      description: 'Ambient electronic performance with atmospheric soundscapes and live synthesizer work',
       mimeType: 'video/mp4',
       sortOrder: 2
     }
@@ -1128,16 +1134,68 @@ async function main() {
     }
   });
 
-  // TODO: Create concert-based reviews with new schema
-  // Reviews will be created through the API endpoints
+  // Create reviews for completed bookings/concerts
+  console.log('📝 Creating reviews for completed concerts...');
+
+  // Review 1: Sarah Johnson at Mike Chen's venue (5 stars)
+  await prisma.review.create({
+    data: {
+      concertId: concert.id,
+      fanId: fanUser.fan!.id,
+      artistId: artist1User.artist!.id,
+      hostId: host1User.host!.id,
+      artistRating: 5,
+      hostRating: 5,
+      overallRating: 5,
+      artistFeedback: 'Sarah\'s performance was absolutely magical. Her voice and guitar work created such an intimate atmosphere.',
+      hostFeedback: 'Mike was an incredible host - the venue was perfect and he made everyone feel welcome.',
+      overallFeedback: 'This was exactly what I love about house concerts. Intimate, personal, and unforgettable. I would definitely attend another event like this.',
+      attendedDate: new Date(),
+      wouldRecommend: true
+    }
+  });
+
+  // Review 2: Marcus Williams at Emily Thompson's venue (5 stars)
+  await prisma.review.create({
+    data: {
+      concertId: activeConcert2.id,
+      fanId: fanUser.fan!.id,
+      artistId: artist2User.artist!.id,
+      hostId: host2User.host!.id,
+      artistRating: 5,
+      hostRating: 4,
+      overallRating: 5,
+      artistFeedback: 'Marcus and his trio delivered an outstanding jazz performance. The improvisation was incredible and the song selection was perfect.',
+      hostFeedback: 'Beautiful garden venue with great acoustics. Emily was organized and professional.',
+      overallFeedback: 'A perfect evening of jazz music in a gorgeous setting. The combination of talented musicians and a thoughtful host made this a special night.',
+      attendedDate: new Date(),
+      wouldRecommend: true
+    }
+  });
+
+  // Review 3: Luna Martinez at James Wilson's venue (4 stars)
+  await prisma.review.create({
+    data: {
+      concertId: activeConcert1.id,
+      fanId: fanUser.fan!.id,
+      artistId: artist3User.artist!.id,
+      hostId: host3User.host!.id,
+      artistRating: 4,
+      hostRating: 5,
+      overallRating: 4,
+      artistFeedback: 'Luna\'s electronic set was innovative and atmospheric. Some songs were amazing, though a couple felt a bit too experimental for my taste.',
+      hostFeedback: 'The barn venue was fantastic - perfect acoustics and James provided excellent hospitality.',
+      overallFeedback: 'A unique musical experience that challenged my expectations. The venue was perfect for this type of experimental performance.',
+      attendedDate: new Date(),
+      wouldRecommend: true
+    }
+  });
 
   console.log('✅ Created multiple reviews with varied ratings:');
-  console.log('  - Sarah Johnson: Average 5.0 (2 reviews)');
-  console.log('  - Marcus Williams: Average 5.0 (1 review)');
-  console.log('  - Luna Martinez: Average 3.0 (1 review)');
-  console.log('  - Mike Chen: Average 4.0 (1 review)');
-  console.log('  - Emily Thompson: Average 5.0 (1 review)');
-  console.log('  - James Wilson: Average 4.5 (2 reviews)');
+  console.log('  - Sarah Johnson: 5 stars (intimate folk performance)');
+  console.log('  - Marcus Williams: 5 stars (outstanding jazz trio)');
+  console.log('  - Luna Martinez: 4 stars (innovative electronic set)');
+  console.log('  - All reviews include detailed feedback for artists and hosts');
 
   // Create sample notification
   const notification = await prisma.notification.create({
