@@ -25,14 +25,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
   const [demoUsers] = useState([
-    { email: 'admin@tourpad.com', password: 'password123', type: 'Admin User', description: 'Full platform access' },
-    { email: 'sarah@example.com', password: 'password123', type: 'Artist', description: 'Folk musician Sarah Johnson' },
-    { email: 'marcus@example.com', password: 'password123', type: 'Artist', description: 'Jazz pianist Marcus Williams' },
-    { email: 'luna@example.com', password: 'password123', type: 'Artist', description: 'Electronic artist Luna Martinez' },
-    { email: 'mike@example.com', password: 'password123', type: 'Host', description: 'Mike\'s Music Room (Denver, CO)' },
-    { email: 'emily@example.com', password: 'password123', type: 'Host', description: 'Thompson Garden Sessions (Austin, TX)' },
-    { email: 'james@example.com', password: 'password123', type: 'Host', description: 'The Wilson Barn (Nashville, TN)' },
-    { email: 'fan@example.com', password: 'password123', type: 'Fan', description: 'Music lover Emma Rodriguez' }
+    { email: 'admin@tourpad.com', password: 'password123', type: 'Admin User', description: 'Full platform access' }
   ]);
 
   const handleSubmit = async (e: React.FormEvent) => {

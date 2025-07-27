@@ -96,7 +96,8 @@ async function main() {
           equipmentNeeds: ['Microphone', 'Guitar amplifier', 'Stool'],
           travelRadius: 300,
           pressPhotoUrl: 'https://images.unsplash.com/photo-1494790108755-2616b9a8af3c?w=400&h=400&fit=crop&crop=face',
-          performanceVideoUrl: 'https://youtube.com/watch?v=example',
+          heroPhotoUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
+          performanceVideoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
           minGuarantee: 200,
           preferredBookingAdvance: 14,
           applicationSubmittedAt: new Date(),
@@ -158,6 +159,8 @@ async function main() {
           equipmentNeeds: ['Piano/Keyboard', 'PA System', 'Stage Lighting'],
           travelRadius: 500,
           pressPhotoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
+          heroPhotoUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=face',
+          performanceVideoUrl: 'https://www.youtube.com/watch?v=jNQXAC9IVRw',
           minGuarantee: 300,
           preferredBookingAdvance: 21,
           applicationSubmittedAt: new Date(),
@@ -215,6 +218,8 @@ async function main() {
           equipmentNeeds: ['DJ Controller', 'Monitor Speakers', 'Mood Lighting'],
           travelRadius: 400,
           pressPhotoUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=400&fit=crop&crop=face',
+          heroPhotoUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=800&h=600&fit=crop&crop=face',
+          performanceVideoUrl: 'https://www.youtube.com/watch?v=M7lc1UVf-VE',
           minGuarantee: 250,
           preferredBookingAdvance: 14,
           applicationSubmittedAt: new Date(),
@@ -263,6 +268,83 @@ async function main() {
       title: 'Luna Martinez Press Photo',
       description: 'Professional press photo for Luna Martinez',
       sortOrder: 0
+    }
+  });
+
+  // Add thumbnail photos for all artists
+  await prisma.artistMedia.create({
+    data: {
+      artistId: artist1User.artist!.id,
+      mediaType: 'PHOTO',
+      category: 'THUMBNAIL',
+      fileUrl: 'https://images.unsplash.com/photo-1494790108755-2616b9a8af3c?w=300&h=300&fit=crop&crop=face',
+      title: 'Sarah Johnson Thumbnail',
+      description: 'Profile thumbnail for Sarah Johnson',
+      sortOrder: 1
+    }
+  });
+
+  await prisma.artistMedia.create({
+    data: {
+      artistId: artist2User.artist!.id,
+      mediaType: 'PHOTO',
+      category: 'THUMBNAIL',
+      fileUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face',
+      title: 'Marcus Williams Thumbnail',
+      description: 'Profile thumbnail for Marcus Williams',
+      sortOrder: 1
+    }
+  });
+
+  await prisma.artistMedia.create({
+    data: {
+      artistId: artist3User.artist!.id,
+      mediaType: 'PHOTO',
+      category: 'THUMBNAIL',
+      fileUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&h=300&fit=crop&crop=face',
+      title: 'Luna Martinez Thumbnail',
+      description: 'Profile thumbnail for Luna Martinez',
+      sortOrder: 1
+    }
+  });
+
+  // Add performance videos for all artists
+  await prisma.artistMedia.create({
+    data: {
+      artistId: artist1User.artist!.id,
+      mediaType: 'VIDEO',
+      category: 'PERFORMANCE',
+      fileUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      title: 'Sarah Johnson Live Performance',
+      description: 'Acoustic set at local venue - showcasing original folk songs',
+      mimeType: 'video/mp4',
+      sortOrder: 2
+    }
+  });
+
+  await prisma.artistMedia.create({
+    data: {
+      artistId: artist2User.artist!.id,
+      mediaType: 'VIDEO',
+      category: 'PERFORMANCE',
+      fileUrl: 'https://www.youtube.com/watch?v=jNQXAC9IVRw',
+      title: 'Marcus Williams Trio Jazz Session',
+      description: 'Live jazz performance featuring original compositions and classic standards',
+      mimeType: 'video/mp4',
+      sortOrder: 2
+    }
+  });
+
+  await prisma.artistMedia.create({
+    data: {
+      artistId: artist3User.artist!.id,
+      mediaType: 'VIDEO',
+      category: 'PERFORMANCE',
+      fileUrl: 'https://www.youtube.com/watch?v=M7lc1UVf-VE',
+      title: 'Luna Martinez Electronic Set',
+      description: 'Ambient electronic performance with live visuals and atmospheric soundscapes',
+      mimeType: 'video/mp4',
+      sortOrder: 2
     }
   });
 
