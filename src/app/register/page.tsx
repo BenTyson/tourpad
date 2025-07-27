@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { registerSchema, registrationSchema, validateData } from '@/lib/validation';
 import ArtistRegistrationWizard from '@/components/registration/ArtistRegistrationWizard';
+import HostRegistrationWizard from '@/components/registration/HostRegistrationWizard';
 
 // US States for dropdown
 const US_STATES = [
@@ -330,6 +331,11 @@ function RegisterForm() {
   // Use wizard for artist registrations
   if (userType === 'artist') {
     return <ArtistRegistrationWizard />;
+  }
+
+  // Use wizard for host registrations
+  if (userType === 'host') {
+    return <HostRegistrationWizard />;
   }
 
   return (

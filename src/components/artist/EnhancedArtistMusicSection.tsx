@@ -1,11 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Play, Pause, Music, ExternalLink, Clock, TrendingUp } from 'lucide-react';
+import { Play, Pause, Music, ExternalLink, Clock, TrendingUp, Users, Headphones, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
-import EnhancedSpotifyPlayer from '@/components/spotify/EnhancedSpotifyPlayer';
 
 interface SpotifyTrack {
   id: string;
@@ -21,17 +20,6 @@ interface SpotifyTrack {
     name: string;
     imageUrl: string | null;
   };
-}
-
-interface SpotifyAlbum {
-  id: string;
-  spotifyId: string;
-  name: string;
-  albumType: string;
-  releaseDate: string;
-  imageUrl: string | null;
-  spotifyUrl: string;
-  totalTracks: number;
 }
 
 interface SoundCloudTrack {
@@ -53,7 +41,7 @@ interface SoundCloudTrack {
   license?: string;
 }
 
-interface ArtistMusicSectionProps {
+interface EnhancedArtistMusicSectionProps {
   artistId: string;
   artistName: string;
   spotifyConnected: boolean;
@@ -63,10 +51,9 @@ interface ArtistMusicSectionProps {
   soundcloudFollowers?: number;
   soundcloudTrackCount?: number;
   onConnect?: () => void;
-  useEnhancedPlayer?: boolean;
 }
 
-export default function ArtistMusicSection({
+export default function EnhancedArtistMusicSection({
   artistId,
   artistName,
   spotifyConnected,
@@ -75,13 +62,11 @@ export default function ArtistMusicSection({
   soundcloudConnected = false,
   soundcloudFollowers,
   soundcloudTrackCount,
-  onConnect,
-  useEnhancedPlayer = true
-}: ArtistMusicSectionProps) {
+  onConnect
+}: EnhancedArtistMusicSectionProps) {
   const [loading, setLoading] = useState(true);
   const [spotifyTracks, setSpotifyTracks] = useState<SpotifyTrack[]>([]);
   const [soundcloudTracks, setSoundcloudTracks] = useState<SoundCloudTrack[]>([]);
-  const [albums, setAlbums] = useState<SpotifyAlbum[]>([]);
   const [playingTrack, setPlayingTrack] = useState<string | null>(null);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [activeTab, setActiveTab] = useState<'spotify' | 'soundcloud'>('spotify');
@@ -101,8 +86,7 @@ export default function ArtistMusicSection({
     } else if (soundcloudConnected && !spotifyConnected) {
       setActiveTab('soundcloud');
     } else if (spotifyConnected && soundcloudConnected) {
-      // Default to Spotify if both are connected
-      setActiveTab('spotify');
+      setActiveTab('spotify'); // Default to Spotify if both available
     }
   }, [spotifyConnected, soundcloudConnected]);
 
@@ -126,12 +110,6 @@ export default function ArtistMusicSection({
         if (spotifyResponse.ok) {
           const spotifyData = await spotifyResponse.json();
           setSpotifyTracks(spotifyData.artist.topTracks || []);
-          setAlbums(spotifyData.artist.albums || []);
-          
-          console.log('🎵 Fetched Spotify data for artist:', {
-            trackCount: spotifyData.artist.topTracks?.length || 0,
-            albumCount: spotifyData.artist.albums?.length || 0,
-          });
         }
       }
 
@@ -141,10 +119,6 @@ export default function ArtistMusicSection({
         if (soundcloudResponse.ok) {
           const soundcloudData = await soundcloudResponse.json();
           setSoundcloudTracks(soundcloudData.artist.tracks || []);
-          
-          console.log('🎧 Fetched SoundCloud data for artist:', {
-            trackCount: soundcloudData.artist.tracks?.length || 0,
-          });
         }
       }
     } catch (error) {
@@ -238,56 +212,95 @@ export default function ArtistMusicSection({
     );
   }
 
+  const hasSpotifyTracks = spotifyTracks.length > 0;
+  const hasSoundCloudTracks = soundcloudTracks.length > 0;
+
   return (
     <div className="space-y-8">
-      {/* Spotify Stats */}
-      {(spotifyFollowers || spotifyPopularity) && (
-        <div className="flex items-center space-x-6 text-sm">
-          {spotifyFollowers && (
-            <div className="flex items-center space-x-2">
-              <Music className="w-4 h-4 text-green-600" />
-              <span className="text-neutral-600">
-                <span className="font-semibold text-neutral-900">
-                  {formatNumber(spotifyFollowers)}
-                </span> Spotify followers
-              </span>
-            </div>
-          )}
-          {spotifyPopularity && (
-            <div className="flex items-center space-x-2">
-              <TrendingUp className="w-4 h-4 text-primary-600" />
-              <span className="text-neutral-600">
-                <span className="font-semibold text-neutral-900">
-                  {spotifyPopularity}
-                </span>/100 popularity
-              </span>
-            </div>
-          )}
+      {/* Stats Section */}
+      <div className="flex flex-wrap items-center gap-6 text-sm">
+        {spotifyConnected && spotifyFollowers && (
+          <div className="flex items-center space-x-2">
+            <Music className="w-4 h-4 text-green-600" />
+            <span className="text-neutral-600">
+              <span className="font-semibold text-neutral-900">
+                {formatNumber(spotifyFollowers)}
+              </span> Spotify followers
+            </span>
+          </div>
+        )}
+        {spotifyConnected && spotifyPopularity && (
+          <div className="flex items-center space-x-2">
+            <TrendingUp className="w-4 h-4 text-primary-600" />
+            <span className="text-neutral-600">
+              <span className="font-semibold text-neutral-900">
+                {spotifyPopularity}
+              </span>/100 popularity
+            </span>
+          </div>
+        )}
+        {soundcloudConnected && soundcloudFollowers && (
+          <div className="flex items-center space-x-2">
+            <Headphones className="w-4 h-4 text-orange-600" />
+            <span className="text-neutral-600">
+              <span className="font-semibold text-neutral-900">
+                {formatNumber(soundcloudFollowers)}
+              </span> SoundCloud followers
+            </span>
+          </div>
+        )}
+        {soundcloudConnected && soundcloudTrackCount && (
+          <div className="flex items-center space-x-2">
+            <Music className="w-4 h-4 text-orange-600" />
+            <span className="text-neutral-600">
+              <span className="font-semibold text-neutral-900">
+                {formatNumber(soundcloudTrackCount)}
+              </span> tracks
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Platform Tabs - Only show if both platforms are connected */}
+      {spotifyConnected && soundcloudConnected && (
+        <div className="flex space-x-1 bg-neutral-100 rounded-lg p-1">
+          <button
+            onClick={() => setActiveTab('spotify')}
+            className={`flex-1 flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              activeTab === 'spotify'
+                ? 'bg-white text-green-700 shadow-sm'
+                : 'text-neutral-600 hover:text-neutral-900'
+            }`}
+          >
+            <Music className="w-4 h-4 mr-2" />
+            Spotify
+          </button>
+          <button
+            onClick={() => setActiveTab('soundcloud')}
+            className={`flex-1 flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              activeTab === 'soundcloud'
+                ? 'bg-white text-orange-700 shadow-sm'
+                : 'text-neutral-600 hover:text-neutral-900'
+            }`}
+          >
+            <Headphones className="w-4 h-4 mr-2" />
+            SoundCloud
+          </button>
         </div>
       )}
 
-      {/* Top Tracks */}
-      {topTracks.length > 0 && (
+      {/* Track Lists */}
+      {activeTab === 'spotify' && spotifyConnected && (
         <div>
-          <h3 className="text-xl font-semibold text-neutral-900 mb-4">
-            Popular Tracks
+          <h3 className="text-xl font-semibold text-neutral-900 mb-4 flex items-center">
+            <Music className="w-5 h-5 mr-2 text-green-600" />
+            Popular Tracks on Spotify
           </h3>
           
-          {useEnhancedPlayer ? (
-            <EnhancedSpotifyPlayer
-              tracks={topTracks}
-              artistName={artistName}
-              autoPlay={false}
-              showPlaylist={true}
-              className="mb-6"
-            />
-          ) : (
+          {hasSpotifyTracks ? (
             <div className="space-y-2">
-              {topTracks.map((track, index) => (
-                <Card 
-                  key={track.id} 
-                  className="hover:shadow-md transition-all duration-200 border-neutral-200"
-                >
+              {spotifyTracks.map((track, index) => (
+                <Card key={track.id} className="hover:shadow-md transition-all duration-200 border-neutral-200">
                   <CardContent className="p-4">
                     <div className="flex items-center space-x-4">
                       {/* Album Artwork & Play Button */}
@@ -304,7 +317,7 @@ export default function ArtistMusicSection({
                           </div>
                         )}
                         <button
-                          onClick={() => handlePlayPause(track)}
+                          onClick={() => handlePlayPause(track, 'spotify')}
                           disabled={!track.previewUrl}
                           className={`absolute inset-0 rounded-lg flex items-center justify-center transition-all ${
                             track.previewUrl 
@@ -312,7 +325,7 @@ export default function ArtistMusicSection({
                               : 'bg-neutral-400/50 text-neutral-600 cursor-not-allowed opacity-0'
                           }`}
                         >
-                          {playingTrack === track.id ? (
+                          {playingTrack === `spotify-${track.id}` ? (
                             <Pause className="w-4 h-4" />
                           ) : (
                             <Play className="w-4 h-4 ml-0.5" />
@@ -355,7 +368,7 @@ export default function ArtistMusicSection({
                         <div className="w-20">
                           <div className="relative h-1 bg-neutral-200 rounded-full overflow-hidden">
                             <div 
-                              className="absolute inset-y-0 left-0 bg-primary-600 rounded-full"
+                              className="absolute inset-y-0 left-0 bg-green-600 rounded-full"
                               style={{ width: `${track.popularity}%` }}
                             />
                           </div>
@@ -365,7 +378,7 @@ export default function ArtistMusicSection({
                         </span>
                       </div>
 
-                      {/* Spotify Link */}
+                      {/* External Link */}
                       <a
                         href={track.spotifyUrl}
                         target="_blank"
@@ -379,80 +392,129 @@ export default function ArtistMusicSection({
                 </Card>
               ))}
             </div>
+          ) : (
+            <div className="text-center py-8">
+              <Music className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+              <p className="text-neutral-600">No Spotify tracks available yet.</p>
+            </div>
           )}
         </div>
       )}
 
-      {/* Latest Albums Section */}
-      {albums.length > 0 && (
+      {activeTab === 'soundcloud' && soundcloudConnected && (
         <div>
-          <h3 className="text-xl font-semibold text-neutral-900 mb-4">
-            Latest Albums
+          <h3 className="text-xl font-semibold text-neutral-900 mb-4 flex items-center">
+            <Headphones className="w-5 h-5 mr-2 text-orange-600" />
+            Tracks on SoundCloud
           </h3>
           
-          <div className="grid grid-cols-6 gap-4">
-            {albums.slice(0, 6).map((album) => (
-              <a
-                key={album.id}
-                href={album.spotifyUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group block"
-              >
-                <Card className="overflow-hidden hover:shadow-lg transition-all duration-200 group-hover:scale-105">
-                  <CardContent className="p-0">
-                    {/* Album Cover */}
-                    <div className="aspect-square bg-gradient-to-br from-neutral-100 to-neutral-200 relative">
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <Music className="w-8 h-8 text-neutral-400" />
+          {hasSoundCloudTracks ? (
+            <div className="space-y-2">
+              {soundcloudTracks.map((track, index) => (
+                <Card key={track.id} className="hover:shadow-md transition-all duration-200 border-neutral-200">
+                  <CardContent className="p-4">
+                    <div className="flex items-center space-x-4">
+                      {/* Artwork & Play Button */}
+                      <div className="relative w-12 h-12 flex-shrink-0">
+                        {track.artworkUrl ? (
+                          <img
+                            src={track.artworkUrl}
+                            alt={track.title}
+                            className="w-12 h-12 rounded-lg object-cover"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center">
+                            <Headphones className="w-6 h-6 text-orange-600" />
+                          </div>
+                        )}
+                        <button
+                          onClick={() => handlePlayPause(track, 'soundcloud')}
+                          disabled={!track.streamUrl || !track.isStreamable}
+                          className={`absolute inset-0 rounded-lg flex items-center justify-center transition-all ${
+                            track.streamUrl && track.isStreamable
+                              ? 'bg-black/50 hover:bg-black/70 text-white opacity-0 hover:opacity-100' 
+                              : 'bg-neutral-400/50 text-neutral-600 cursor-not-allowed opacity-0'
+                          }`}
+                        >
+                          {playingTrack === `soundcloud-${track.id}` ? (
+                            <Pause className="w-4 h-4" />
+                          ) : (
+                            <Play className="w-4 h-4 ml-0.5" />
+                          )}
+                        </button>
                       </div>
-                      {album.imageUrl && (
-                        <img
-                          src={album.imageUrl}
-                          alt={album.name}
-                          className="w-full h-full object-cover"
-                          onLoad={(e) => {
-                            // Hide fallback when image loads
-                            const fallback = e.currentTarget.previousElementSibling as HTMLElement;
-                            if (fallback) fallback.style.display = 'none';
-                          }}
-                          onError={(e) => {
-                            // Image failed to load, keep fallback visible
-                            e.currentTarget.style.display = 'none';
-                            console.log(`Failed to load album image: ${album.name}`);
-                          }}
-                        />
-                      )}
-                      
-                      {/* Hover overlay with external link icon */}
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-200 flex items-center justify-center">
-                        <ExternalLink className="w-5 h-5 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+
+                      {/* Track Number */}
+                      <span className="text-sm text-neutral-500 w-6">
+                        {index + 1}
+                      </span>
+
+                      {/* Track Info */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center space-x-2">
+                          <h4 className="font-medium text-neutral-900 truncate">
+                            {track.title}
+                          </h4>
+                          {track.genre && (
+                            <Badge variant="secondary" className="text-xs">
+                              {track.genre}
+                            </Badge>
+                          )}
+                        </div>
+                        {track.description && (
+                          <p className="text-sm text-neutral-600 truncate">
+                            {track.description}
+                          </p>
+                        )}
                       </div>
-                    </div>
-                    
-                    {/* Album Info */}
-                    <div className="p-2">
-                      <h4 className="font-medium text-neutral-900 text-xs truncate group-hover:text-primary-700 transition-colors">
-                        {album.name}
-                      </h4>
-                      <p className="text-xs text-neutral-500 mt-1">
-                        {new Date(album.releaseDate).getFullYear() || ''}
-                      </p>
+
+                      {/* Duration */}
+                      <div className="flex items-center space-x-2 text-sm text-neutral-500">
+                        <Clock className="w-4 h-4" />
+                        <span>{formatDuration(track.durationMs)}</span>
+                      </div>
+
+                      {/* Stats */}
+                      <div className="hidden sm:flex items-center space-x-4 text-sm text-neutral-500">
+                        <div className="flex items-center space-x-1">
+                          <Play className="w-3 h-3" />
+                          <span>{formatNumber(track.playbackCount)}</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <Heart className="w-3 h-3" />
+                          <span>{formatNumber(track.likesCount)}</span>
+                        </div>
+                      </div>
+
+                      {/* External Link */}
+                      <a
+                        href={track.soundcloudUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-orange-600 hover:text-orange-700 transition-colors"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
                     </div>
                   </CardContent>
                 </Card>
-              </a>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <Headphones className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+              <p className="text-neutral-600">No SoundCloud tracks available yet.</p>
+            </div>
+          )}
         </div>
       )}
 
-      {/* No Music Data */}
-      {topTracks.length === 0 && albums.length === 0 && (
+      {/* Show message if connected but no tracks */}
+      {(spotifyConnected || soundcloudConnected) && !hasSpotifyTracks && !hasSoundCloudTracks && (
         <div className="text-center py-8">
           <Music className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
           <p className="text-neutral-600">
-            No music data available yet. Try syncing with Spotify.
+            No music data available yet. Try syncing with your connected services.
           </p>
         </div>
       )}

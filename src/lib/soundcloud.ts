@@ -1,4 +1,5 @@
 import { prisma } from './prisma';
+import { mockSoundCloudUsers, mockSoundCloudTracks, searchMockUsers, getMockUserTracks } from './mockSoundcloudData';
 
 // Types for SoundCloud data
 export interface SoundCloudUserData {
@@ -85,8 +86,15 @@ class SoundCloudService {
   constructor() {
     this.clientId = process.env.SOUNDCLOUD_CLIENT_ID || '';
     if (!this.clientId) {
-      console.warn('⚠️ SOUNDCLOUD_CLIENT_ID not found in environment variables');
+      console.warn('⚠️ SOUNDCLOUD_CLIENT_ID not found in environment variables - using mock data');
     }
+  }
+
+  /**
+   * Check if we should use mock data (when credentials aren't available)
+   */
+  private get useMockData(): boolean {
+    return !this.clientId || !process.env.SOUNDCLOUD_CLIENT_SECRET;
   }
 
   /**
@@ -162,6 +170,12 @@ class SoundCloudService {
    * Search for users by username
    */
   async searchUsers(query: string, limit: number = 10): Promise<SoundCloudUserData[]> {
+    if (this.useMockData) {
+      console.log('🎧 Using mock SoundCloud data for search:', query);
+      const results = searchMockUsers(query).slice(0, limit);
+      return results;
+    }
+
     try {
       const results = await this.apiRequest('/users', { q: query, limit });
       return Array.isArray(results) ? results : [results];
@@ -175,6 +189,15 @@ class SoundCloudService {
    * Get user details by SoundCloud user ID
    */
   async getUser(userId: number): Promise<SoundCloudUserData> {
+    if (this.useMockData) {
+      console.log('🎧 Using mock SoundCloud data for user:', userId);
+      const user = mockSoundCloudUsers.find(u => u.id === userId);
+      if (!user) {
+        throw new Error('Mock user not found');
+      }
+      return user;
+    }
+
     try {
       return await this.apiRequest(`/users/${userId}`);
     } catch (error) {
@@ -187,6 +210,12 @@ class SoundCloudService {
    * Get user's tracks
    */
   async getUserTracks(userId: number, limit: number = 50): Promise<SoundCloudTrackData[]> {
+    if (this.useMockData) {
+      console.log('🎧 Using mock SoundCloud data for user tracks:', userId);
+      const tracks = getMockUserTracks(userId).slice(0, limit);
+      return tracks;
+    }
+
     try {
       const results = await this.apiRequest(`/users/${userId}/tracks`, { limit });
       return Array.isArray(results) ? results : [results];
@@ -389,6 +418,13 @@ class SoundCloudService {
    * Health check for SoundCloud API
    */
   async healthCheck(): Promise<{ status: 'ok' | 'error'; message: string }> {
+    if (this.useMockData) {
+      return {
+        status: 'ok',
+        message: 'SoundCloud mock data is available (waiting for API credentials)'
+      };
+    }
+
     try {
       await this.authenticate();
       
