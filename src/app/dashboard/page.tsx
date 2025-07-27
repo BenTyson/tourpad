@@ -648,6 +648,19 @@ export default function DashboardPage() {
                     {/* Artist-specific actions */}
                     {userRole === 'artist' && (
                       <>
+                        <Link href="/dashboard/tour-planner">
+                          <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0">
+                                <MapPin className="w-5 h-5 text-neutral-600 group-hover:text-primary-600" />
+                              </div>
+                              <div className="ml-3">
+                                <h3 className="text-sm font-semibold text-neutral-900">Tour Planner</h3>
+                              </div>
+                            </div>
+                          </div>
+                        </Link>
+                        
                         <Link href="/subscription/manage">
                           <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
                             <div className="flex items-center">

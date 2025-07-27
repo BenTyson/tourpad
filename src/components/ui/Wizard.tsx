@@ -225,7 +225,11 @@ export const WizardNavigation = ({
 
   const handleNext = async () => {
     if (onNext) {
-      await onNext();
+      const result = await onNext();
+      // If onNext returns true or undefined, proceed to next step
+      if (result !== false) {
+        nextStep();
+      }
     } else {
       nextStep();
     }

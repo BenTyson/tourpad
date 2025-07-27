@@ -572,3 +572,1159 @@ Found media: {
  [32m[1m✓[22m[39m Compiled in 2.2s (538 modules)
  GET /dashboard/profile [32m200[39m in 16ms
 ✅ [2025-07-27T18:00:24.491Z] Memory: Heap 4/4MB, External 1MB
+ GET /api/auth/session [32m200[39m in 34ms
+ GET /api/auth/session [32m200[39m in 16ms
+ GET /api/auth/session [32m200[39m in 15ms
+ GET /api/tour-segments [32m200[39m in 86ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
+}
+ GET /api/profile [32m200[39m in 89ms
+ GET /api/tour-segments [32m200[39m in 24ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
+}
+ GET /api/profile [32m200[39m in 21ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
+}
+ GET /api/profile [32m200[39m in 17ms
+ GET /api/tour-segments [32m200[39m in 18ms
+ GET /dashboard [32m200[39m in 78ms
+ GET /api/user/current [32m200[39m in 102ms
+ GET /api/user/profile-id [32m200[39m in 105ms
+ GET /api/stats [32m200[39m in 110ms
+ GET /api/user/profile-id [32m200[39m in 20ms
+ GET /api/user/current [32m200[39m in 25ms
+ GET /api/stats [32m200[39m in 20ms
+=== GET /api/bookings called ===
+Session: { userId: [32m'cmdkqwoc00000lukznx1p57by'[39m, userType: [32m'artist'[39m }
+User profiles found: { artist: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m, host: [90mundefined[39m }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdkqwoc10002lukzgzfmlpcu"
+    }
+  ]
+}
+ GET /api/bookings [32m200[39m in 19ms
+=== GET /api/bookings called ===
+ GET /api/payments/subscription-status [32m200[39m in 26ms
+Session: { userId: [32m'cmdkqwoc00000lukznx1p57by'[39m, userType: [32m'artist'[39m }
+User profiles found: { artist: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m, host: [90mundefined[39m }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdkqwoc10002lukzgzfmlpcu"
+    }
+  ]
+}
+ GET /api/bookings [32m200[39m in 25ms
+ GET /api/spotify/artist/cmdkqwoc10002lukzgzfmlpcu [32m200[39m in 18ms
+ GET /api/payments/subscription-status [32m200[39m in 24ms
+ GET /register?type=artist [32m200[39m in 174ms
+ GET /favicon.ico [32m200[39m in 14ms
+ GET /api/auth/session [32m200[39m in 9ms
+ GET /api/auth/session [32m200[39m in 7ms
+ [32m[1m✓[22m[39m Compiled in 2.6s (1565 modules)
+ GET /dashboard [32m200[39m in 122ms
+ GET /register?type=artist [32m200[39m in 123ms
+ [32m[1m✓[22m[39m Compiled in 2.2s (538 modules)
+ GET /register?type=artist [32m200[39m in 27ms
+ GET /dashboard [32m200[39m in 28ms
+ GET /dashboard/profile [32m200[39m in 76ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
+}
+ GET /api/profile [32m200[39m in 110ms
+ GET /api/tour-segments [32m200[39m in 117ms
+ GET /api/tour-segments [32m200[39m in 46ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
+}
+ GET /api/profile [32m200[39m in 56ms
+✅ [2025-07-27T18:05:24.506Z] Memory: Heap 4/4MB, External 1MB
+ GET /dashboard [32m200[39m in 28ms
+ GET /api/user/profile-id [32m200[39m in 76ms
+ GET /api/user/current [32m200[39m in 84ms
+ GET /api/stats [32m200[39m in 83ms
+ GET /api/user/profile-id [32m200[39m in 23ms
+ GET /api/user/current [32m200[39m in 20ms
+ GET /api/stats [32m200[39m in 21ms
+=== GET /api/bookings called ===
+Session: { userId: [32m'cmdkqwoc00000lukznx1p57by'[39m, userType: [32m'artist'[39m }
+User profiles found: { artist: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m, host: [90mundefined[39m }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdkqwoc10002lukzgzfmlpcu"
+    }
+  ]
+}
+ GET /api/bookings [32m200[39m in 111ms
+ GET /api/spotify/artist/cmdkqwoc10002lukzgzfmlpcu [32m200[39m in 105ms
+ GET /api/payments/subscription-status [32m200[39m in 123ms
+=== GET /api/bookings called ===
+Session: { userId: [32m'cmdkqwoc00000lukznx1p57by'[39m, userType: [32m'artist'[39m }
+User profiles found: { artist: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m, host: [90mundefined[39m }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdkqwoc10002lukzgzfmlpcu"
+    }
+  ]
+}
+ GET /api/bookings [32m200[39m in 26ms
+ GET /api/spotify/artist/cmdkqwoc10002lukzgzfmlpcu [32m200[39m in 21ms
+ GET /api/payments/subscription-status [32m200[39m in 21ms
+ [32m[1m✓[22m[39m Compiled /_not-found in 311ms (1551 modules)
+ GET /dashboard/tour-planner [33m404[39m in 387ms
+ GET /dashboard/tour-planner [33m404[39m in 89ms
+ GET /.well-known/appspecific/com.chrome.devtools.json [33m404[39m in 44ms
+ [32m[1m✓[22m[39m Compiled /api/auth/[...nextauth] in 156ms (1026 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session [32m200[39m in 244ms
+ GET /api/auth/session [32m200[39m in 14ms
+ [32m[1m✓[22m[39m Compiled /api/notifications in 130ms (1028 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session [32m200[39m in 380ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
+}
+ GET /api/profile [32m200[39m in 362ms
+ GET /api/tour-segments [32m200[39m in 362ms
+ GET /api/notifications?unread=true&limit=0 [32m200[39m in 399ms
+ GET /api/notifications?unread=true&limit=0 [32m200[39m in 9ms
+ GET /register?type=artist [32m200[39m in 77ms
+ [37m[1m○[22m[39m Compiling /dashboard/tour-planner ...
+ [32m[1m✓[22m[39m Compiled /dashboard/tour-planner in 1029ms (1829 modules)
+ GET /dashboard/tour-planner [32m200[39m in 900ms
+ GET /register?type=artist [32m200[39m in 52ms
+ GET /dashboard/tour-planner [32m200[39m in 55ms
+ GET /dashboard [32m200[39m in 69ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/user/profile-id [32m200[39m in 109ms
+ GET /api/user/current [32m200[39m in 113ms
+ GET /api/stats [32m200[39m in 121ms
+ GET /api/user/profile-id [32m200[39m in 41ms
+ GET /api/user/current [32m200[39m in 58ms
+=== GET /api/bookings called ===
+ GET /api/stats [32m200[39m in 80ms
+Session: { userId: [32m'cmdkqwoc00000lukznx1p57by'[39m, userType: [32m'artist'[39m }
+User profiles found: { artist: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m, host: [90mundefined[39m }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdkqwoc10002lukzgzfmlpcu"
+    }
+  ]
+}
+ GET /api/bookings [32m200[39m in 162ms
+ GET /api/spotify/artist/cmdkqwoc10002lukzgzfmlpcu [32m200[39m in 161ms
+ GET /api/payments/subscription-status [32m200[39m in 174ms
+=== GET /api/bookings called ===
+Session: { userId: [32m'cmdkqwoc00000lukznx1p57by'[39m, userType: [32m'artist'[39m }
+User profiles found: { artist: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m, host: [90mundefined[39m }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdkqwoc10002lukzgzfmlpcu"
+    }
+  ]
+}
+ GET /api/bookings [32m200[39m in 21ms
+ GET /api/spotify/artist/cmdkqwoc10002lukzgzfmlpcu [32m200[39m in 20ms
+ GET /api/payments/subscription-status [32m200[39m in 25ms
+✅ [2025-07-27T18:10:24.520Z] Memory: Heap 4/4MB, External 1MB
+ GET /.well-known/appspecific/com.chrome.devtools.json [33m404[39m in 122ms
+ [32m[1m✓[22m[39m Compiled in 2.5s (1186 modules)
+ GET /dashboard [32m200[39m in 94ms
+ GET /register?type=artist [32m200[39m in 144ms
+ GET /dashboard/tour-planner [32m200[39m in 44ms
+ [32m[1m✓[22m[39m Compiled /api/tour-segments in 93ms (815 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/tour-segments [32m200[39m in 190ms
+ GET /api/tour-segments [32m200[39m in 12ms
+ [32m[1m✓[22m[39m Compiled /api/tour-segments/[id] in 283ms (1344 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ PUT /api/tour-segments/cmdkr4ajb000klukzzsyttps6 [32m200[39m in 763ms
+✅ [2025-07-27T18:15:24.536Z] Memory: Heap 4/4MB, External 1MB
+ [32m[1m✓[22m[39m Compiled in 2.4s (1356 modules)
+ GET /dashboard/tour-planner [32m200[39m in 173ms
+ GET /register?type=artist [32m200[39m in 177ms
+ [32m[1m✓[22m[39m Compiled in 194ms (541 modules)
+ GET /register?type=artist [32m200[39m in 29ms
+ GET /dashboard/tour-planner [32m200[39m in 30ms
+ [32m[1m✓[22m[39m Compiled in 2.6s (1186 modules)
+ GET /register?type=artist [32m200[39m in 132ms
+ GET /dashboard/tour-planner [32m200[39m in 135ms
+ [32m[1m✓[22m[39m Compiled in 2.5s (1186 modules)
+ GET /register?type=artist [32m200[39m in 124ms
+ GET /dashboard/tour-planner [32m200[39m in 125ms
+ GET /dashboard [32m200[39m in 70ms
+ [32m[1m✓[22m[39m Compiled /api/stats in 109ms (815 modules)
+ [32m[1m✓[22m[39m Compiled (820 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/user/profile-id [32m200[39m in 356ms
+ GET /api/user/profile-id [32m200[39m in 7ms
+ GET /api/user/current [32m200[39m in 374ms
+ GET /api/stats [32m200[39m in 373ms
+ GET /api/user/current [32m200[39m in 20ms
+ GET /api/stats [32m200[39m in 21ms
+ [32m[1m✓[22m[39m Compiled /api/spotify/artist/[artistId] in 116ms (822 modules)
+ [32m[1m✓[22m[39m Compiled (1025 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+=== GET /api/bookings called ===
+Session: { userId: [32m'cmdkqwoc00000lukznx1p57by'[39m, userType: [32m'artist'[39m }
+User profiles found: { artist: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m, host: [90mundefined[39m }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdkqwoc10002lukzgzfmlpcu"
+    }
+  ]
+}
+ GET /api/bookings [32m200[39m in 755ms
+=== GET /api/bookings called ===
+ GET /api/spotify/artist/cmdkqwoc10002lukzgzfmlpcu [32m200[39m in 760ms
+ GET /api/payments/subscription-status [32m200[39m in 765ms
+Session: { userId: [32m'cmdkqwoc00000lukznx1p57by'[39m, userType: [32m'artist'[39m }
+User profiles found: { artist: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m, host: [90mundefined[39m }
+Querying with whereClause: {
+  "OR": [
+    {
+      "artistId": "cmdkqwoc10002lukzgzfmlpcu"
+    }
+  ]
+}
+ GET /api/bookings [32m200[39m in 24ms
+ GET /api/spotify/artist/cmdkqwoc10002lukzgzfmlpcu [32m200[39m in 17ms
+ GET /api/payments/subscription-status [32m200[39m in 24ms
+ GET /dashboard/profile [32m200[39m in 66ms
+ GET /register?type=artist [32m200[39m in 168ms
+ [33m[1m⚠[22m[39m Fast Refresh had to perform a full reload due to a runtime error.
+ [32m[1m✓[22m[39m Compiled /_not-found in 295ms (1176 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json [33m404[39m in 653ms
+ GET /dashboard/profile [32m200[39m in 598ms
+ [32m[1m✓[22m[39m Compiled /api/auth/[...nextauth] in 349ms (1348 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json [33m404[39m in 527ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /favicon.ico [32m200[39m in 726ms
+ GET /api/auth/session [32m200[39m in 724ms
+ GET /favicon.ico [32m200[39m in 101ms
+ GET /api/auth/session [32m200[39m in 36ms
+ GET /api/auth/session [32m200[39m in 27ms
+ GET /api/auth/session [32m200[39m in 10ms
+ GET /api/auth/session [32m200[39m in 8ms
+ [32m[1m✓[22m[39m Compiled /api/tour-segments in 138ms (820 modules)
+ [32m[1m✓[22m[39m Compiled (822 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/tour-segments [32m200[39m in 369ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
+}
+ GET /api/profile [32m200[39m in 370ms
+✅ [2025-07-27T18:20:24.549Z] Memory: Heap 4/4MB, External 1MB
+ [32m[1m✓[22m[39m Compiled /api/auth/register in 273ms (1205 modules)
+Registration request body: {
+  "email": "ben@ben.com",
+  "password": "12345678",
+  "name": "asdf",
+  "userType": "artist",
+  "profile": {
+    "bio": "asdkla;sdk ;askdjf laskdjf laskjd fas;dkfj ;skljf ;alskdj f;las djf;alksd fas",
+    "websiteUrl": "www.lumengrave.com",
+    "socialLinks": {
+      "facebook": "facebook.com/bentyson",
+      "instagram": "@bendianajones",
+      "spotify": "www.spotify.com",
+      "website": "www.lumengrave.com"
+    }
+  },
+  "artist": {
+    "stageName": "asdf",
+    "genres": [
+      "Rock",
+      "Jazz",
+      "Country"
+    ],
+    "performanceVideoUrl": "https://www.youtube.com/watch?v=6O-nxeY0Rc8"
+  }
+}
+Validation passed, creating user...
+ [33m[1m⚠[22m[39m Fast Refresh had to perform a full reload due to a runtime error.
+ POST /api/auth/register [32m201[39m in 697ms
+ GET /dashboard/profile [32m200[39m in 160ms
+ [32m[1m✓[22m[39m Compiled /_not-found in 211ms (1209 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json [33m404[39m in 355ms
+ [32m[1m✓[22m[39m Compiled /api/auth/[...nextauth] in 108ms (681 modules)
+ [32m[1m✓[22m[39m Compiled (820 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /favicon.ico [32m200[39m in 331ms
+ GET /api/auth/session [32m200[39m in 292ms
+ GET /api/auth/session [32m200[39m in 10ms
+ GET /api/auth/session [32m200[39m in 8ms
+ [32m[1m✓[22m[39m Compiled /api/tour-segments in 146ms (822 modules)
+ [32m[1m✓[22m[39m Compiled (824 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
+}
+ GET /api/profile [32m200[39m in 391ms
+ GET /api/tour-segments [32m200[39m in 392ms
+ GET /api/auth/providers [32m200[39m in 24ms
+ GET /api/auth/csrf [32m200[39m in 9ms
+ POST /api/auth/callback/credentials? [32m200[39m in 304ms
+ GET /api/auth/session [32m200[39m in 9ms
+ [32m[1m✓[22m[39m Compiled /api/upload in 213ms (1357 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ [33m[1m⚠[22m[39m Fast Refresh had to perform a full reload due to a runtime error.
+Attempting to create artist photo for user: cmdm08heg0003luwdvq7qsofb
+Found artist: cmdm08heh0005luwdubpk6tch
+Created ArtistMedia record: cmdm08k1p0007luwdavf2hsoa
+ POST /api/upload [32m200[39m in 319ms
+Attempting to create artist photo for user: cmdm08heg0003luwdvq7qsofb
+ GET /dashboard/profile [32m200[39m in 209ms
+Found artist: cmdm08heh0005luwdubpk6tch
+Created ArtistMedia record: cmdm08k7t0009luwdgh7204if
+ POST /api/upload [32m200[39m in 216ms
+ GET /.well-known/appspecific/com.chrome.devtools.json [33m404[39m in 73ms
+Attempting to create artist photo for user: cmdm08heg0003luwdvq7qsofb
+Found artist: cmdm08heh0005luwdubpk6tch
+Created ArtistMedia record: cmdm08ka9000bluwdm8t69i2q
+ POST /api/upload [32m200[39m in 81ms
+Attempting to create artist photo for user: cmdm08heg0003luwdvq7qsofb
+Found artist: cmdm08heh0005luwdubpk6tch
+Created ArtistMedia record: cmdm08kas000dluwd6xqg2ve2
+ POST /api/upload [32m200[39m in 16ms
+ GET /dashboard [32m200[39m in 58ms
+ [32m[1m✓[22m[39m Compiled /api/user/profile-id in 214ms (829 modules)
+ [32m[1m✓[22m[39m Compiled in 0ms (834 modules)
+ [32m[1m✓[22m[39m Compiled in 0ms (834 modules)
+ [32m[1m✓[22m[39m Compiled in 1ms (834 modules)
+ GET /favicon.ico [32m200[39m in 736ms
+ GET /favicon.ico [32m200[39m in 535ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/user/current [32m200[39m in 760ms
+ [32m[1m✓[22m[39m Compiled /api/payments/subscription-status in 0ms (834 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session [32m200[39m in 775ms
+ GET /api/user/profile-id [32m200[39m in 996ms
+ GET /api/stats [32m200[39m in 1017ms
+ [32m[1m✓[22m[39m Compiled /api/spotify/artist/[artistId] in 0ms (1035 modules)
+ [32m[1m✓[22m[39m Compiled in 1ms (1037 modules)
+ [32m[1m✓[22m[39m Compiled in 0ms (1037 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/user/current [32m200[39m in 1158ms
+ [32m[1m✓[22m[39m Compiled in 0ms (1037 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session [32m200[39m in 1204ms
+ GET /api/user/profile-id [32m200[39m in 1223ms
+ GET /api/stats [32m200[39m in 1203ms
+ GET /api/payments/subscription-status [32m200[39m in 1467ms
+ [32m[1m✓[22m[39m Compiled in 0ms (1037 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/spotify/artist/cmdm08heh0005luwdubpk6tch [32m200[39m in 1441ms
+ [32m[1m✓[22m[39m Compiled in 0ms (1037 modules)
+ [32m[1m✓[22m[39m Compiled in 0ms (1037 modules)
+ [32m[1m✓[22m[39m Compiled in 0ms (1037 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/tour-segments [32m200[39m in 714ms
+Found media: {
+  id: [32m'cmdkqwqos0004lukzaolh50ly'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301589.png'[39m,
+  fileSize: [33m2979211[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Jonah.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.594Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqpe0006lukze7fkfx9p'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301614.png'[39m,
+  fileSize: [33m3125848[39m,
+  mimeType: [32m'image/png'[39m,
+  title: [32m'Judah_Bike.png'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.618Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqq10008lukz3tov7548'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301638.jpeg'[39m,
+  fileSize: [33m688734[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah1.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.641Z[39m
+}
+Found media: {
+  id: [32m'cmdkqwqr0000alukzwrzzhfqd'[39m,
+  artistId: [32m'cmdkqwoc10002lukzgzfmlpcu'[39m,
+  mediaType: [32m'PHOTO'[39m,
+  category: [32m'promotional'[39m,
+  fileUrl: [32m'/uploads/cmdkqwoc00000lukznx1p57by-artist-1753564301660.jpeg'[39m,
+  fileSize: [33m4426611[39m,
+  mimeType: [32m'image/jpeg'[39m,
+  title: [32m'Judah2.jpg'[39m,
+  description: [1mnull[22m,
+  sortOrder: [33m0[39m,
+  createdAt: [35m2025-07-26T21:11:41.676Z[39m
+}
+ GET /api/profile [32m200[39m in 717ms
+ GET /api/payments/subscription-status [32m200[39m in 758ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/spotify/artist/cmdm08heh0005luwdubpk6tch [32m200[39m in 741ms
+ [33m[1m⚠[22m[39m Fast Refresh had to perform a full reload due to a runtime error.
+ [32m[1m✓[22m[39m Compiled in 2.6s (1186 modules)
+ [32m[1m✓[22m[39m Compiled in 0ms (645 modules)
+ [32m[1m✓[22m[39m Compiled in 0ms (645 modules)
+ [32m[1m✓[22m[39m Compiled in 0ms (645 modules)
+ GET /dashboard/profile [32m200[39m in 649ms
+ [32m[1m✓[22m[39m Compiled /favicon.ico in 247ms (1176 modules)
+ GET /dashboard [32m200[39m in 840ms
+ [32m[1m✓[22m[39m Compiled (1192 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json [33m404[39m in 642ms
+ GET /favicon.ico [32m200[39m in 468ms
+ [32m[1m✓[22m[39m Compiled in 2.5s (1206 modules)
+ GET /dashboard [32m200[39m in 86ms
+ [32m[1m✓[22m[39m Compiled in 2.4s (1186 modules)
+ GET /dashboard [32m200[39m in 101ms
+ [32m[1m✓[22m[39m Compiled /api/auth/[...nextauth] in 489ms (815 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session [32m200[39m in 580ms
+ [32m[1m✓[22m[39m Compiled /api/payments/subscription-status in 191ms (817 modules)
+ [32m[1m✓[22m[39m Compiled (1023 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/auth/session [32m200[39m in 776ms
+ GET /api/user/profile-id [32m200[39m in 786ms
+ GET /api/payments/subscription-status [32m200[39m in 790ms
+ GET /api/user/current [32m200[39m in 792ms
+ GET /api/stats [32m200[39m in 796ms
+ GET /api/user/profile-id [32m200[39m in 37ms
+ GET /api/user/current [32m200[39m in 39ms
+ GET /api/stats [32m200[39m in 39ms
+ GET /api/payments/subscription-status [32m200[39m in 43ms
+ [32m[1m✓[22m[39m Compiled /api/spotify/artist/[artistId] in 149ms (1025 modules)
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev
+ GET /api/spotify/artist/cmdm08heh0005luwdubpk6tch [32m200[39m in 394ms
+ GET /api/payments/subscription-status [32m200[39m in 371ms
+ GET /api/spotify/artist/cmdm08heh0005luwdubpk6tch [32m200[39m in 9ms
+ GET /api/payments/subscription-status [32m200[39m in 17ms
+ [31m[1m⨯[22m[39m Error: Cannot find module './undefined'
+Require stack:
+- /Users/bentyson/pad/.next/server/webpack-runtime.js
+- /Users/bentyson/pad/.next/server/app/api/spotify/artist/[artistId]/route.js
+- /Users/bentyson/pad/node_modules/next/dist/server/require.js
+- /Users/bentyson/pad/node_modules/next/dist/server/load-components.js
+- /Users/bentyson/pad/node_modules/next/dist/build/utils.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/options.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/index.js
+- /Users/bentyson/pad/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/next.js
+- /Users/bentyson/pad/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28)
+    at <unknown> (.next/server/webpack-runtime.js:116:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:167:22)
+    at <unknown> (.next/server/app/login/page.js:1:24505)
+    at Object.<anonymous> (.next/server/app/login/page.js:1:24567) {
+  code: [32m'MODULE_NOT_FOUND'[39m,
+  requireStack: [36m[Array][39m,
+  page: [32m'/login'[39m
+}
+ [37m[1m○[22m[39m Compiling /_error ...
+ [32m[1m✓[22m[39m Compiled /_error in 1137ms (1927 modules)
+ [31m[1m⨯[22m[39m Error: Cannot find module './undefined'
+Require stack:
+- /Users/bentyson/pad/.next/server/webpack-runtime.js
+- /Users/bentyson/pad/.next/server/pages/_document.js
+- /Users/bentyson/pad/node_modules/next/dist/server/require.js
+- /Users/bentyson/pad/node_modules/next/dist/server/load-components.js
+- /Users/bentyson/pad/node_modules/next/dist/build/utils.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/options.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/index.js
+- /Users/bentyson/pad/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/next.js
+- /Users/bentyson/pad/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28)
+    at <unknown> (.next/server/webpack-runtime.js:116:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:167:22)
+    at <unknown> (.next/server/app/dashboard/page.js:1:99841)
+    at Object.<anonymous> (.next/server/app/dashboard/page.js:1:99914) {
+  code: [32m'MODULE_NOT_FOUND'[39m,
+  requireStack: [36m[Array][39m,
+  page: [32m'/dashboard'[39m
+}
+ GET /login [31m500[39m in 1644ms
+ GET /dashboard [31m500[39m in 687ms
+ [31m[1m⨯[22m[39m Error: Cannot find module './undefined'
+Require stack:
+- /Users/bentyson/pad/.next/server/webpack-runtime.js
+- /Users/bentyson/pad/.next/server/pages/_document.js
+- /Users/bentyson/pad/node_modules/next/dist/server/require.js
+- /Users/bentyson/pad/node_modules/next/dist/server/load-components.js
+- /Users/bentyson/pad/node_modules/next/dist/build/utils.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/options.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/index.js
+- /Users/bentyson/pad/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/next.js
+- /Users/bentyson/pad/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28)
+    at <unknown> (.next/server/webpack-runtime.js:116:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:167:22)
+    at <unknown> (.next/server/app/dashboard/page.js:1:99841)
+    at Object.<anonymous> (.next/server/app/dashboard/page.js:1:99914) {
+  code: [32m'MODULE_NOT_FOUND'[39m,
+  requireStack: [36m[Array][39m,
+  page: [32m'/dashboard'[39m
+}
+ [37m[1m○[22m[39m Compiling /_not-found ...
+ [32m[1m✓[22m[39m Compiled /_not-found in 548ms (1931 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json [33m404[39m in 695ms
+ GET /dashboard [31m500[39m in 808ms
+ [31m[1m⨯[22m[39m Error: Cannot find module './undefined'
+Require stack:
+- /Users/bentyson/pad/.next/server/webpack-runtime.js
+- /Users/bentyson/pad/.next/server/pages/_document.js
+- /Users/bentyson/pad/node_modules/next/dist/server/require.js
+- /Users/bentyson/pad/node_modules/next/dist/server/load-components.js
+- /Users/bentyson/pad/node_modules/next/dist/build/utils.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/options.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/index.js
+- /Users/bentyson/pad/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/next.js
+- /Users/bentyson/pad/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28)
+    at <unknown> (.next/server/webpack-runtime.js:116:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:167:22)
+    at <unknown> (.next/server/app/dashboard/page.js:1:99841)
+    at Object.<anonymous> (.next/server/app/dashboard/page.js:1:99914) {
+  code: [32m'MODULE_NOT_FOUND'[39m,
+  requireStack: [36m[Array][39m,
+  page: [32m'/dashboard'[39m
+}
+ GET /dashboard [31m500[39m in 241ms
+ GET /.well-known/appspecific/com.chrome.devtools.json [33m404[39m in 48ms
+ [32m[1m✓[22m[39m Compiled /favicon.ico in 162ms (1115 modules)
+ GET /favicon.ico [32m200[39m in 211ms
+✅ [2025-07-27T18:25:24.569Z] Memory: Heap 4/4MB, External 1MB
+ [33m[1m⚠[22m[39m Fast Refresh had to perform a full reload due to a runtime error.
+ [32m[1m✓[22m[39m Compiled in 2.5s (1947 modules)
+ [31m[1m⨯[22m[39m Error: Cannot find module './undefined'
+Require stack:
+- /Users/bentyson/pad/.next/server/webpack-runtime.js
+- /Users/bentyson/pad/.next/server/app/dashboard/page.js
+- /Users/bentyson/pad/node_modules/next/dist/server/require.js
+- /Users/bentyson/pad/node_modules/next/dist/server/load-components.js
+- /Users/bentyson/pad/node_modules/next/dist/build/utils.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/options.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/index.js
+- /Users/bentyson/pad/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/next.js
+- /Users/bentyson/pad/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28)
+    at <unknown> (.next/server/webpack-runtime.js:116:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:167:22)
+    at <unknown> (.next/server/app/dashboard/page.js:1:99841)
+    at Object.<anonymous> (.next/server/app/dashboard/page.js:1:99914) {
+  code: [32m'MODULE_NOT_FOUND'[39m,
+  requireStack: [36m[Array][39m,
+  page: [32m'/dashboard'[39m
+}
+ [31m[1m⨯[22m[39m Error: Cannot find module './undefined'
+Require stack:
+- /Users/bentyson/pad/.next/server/webpack-runtime.js
+- /Users/bentyson/pad/.next/server/app/dashboard/page.js
+- /Users/bentyson/pad/node_modules/next/dist/server/require.js
+- /Users/bentyson/pad/node_modules/next/dist/server/load-components.js
+- /Users/bentyson/pad/node_modules/next/dist/build/utils.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/options.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/index.js
+- /Users/bentyson/pad/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/next.js
+- /Users/bentyson/pad/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28)
+    at <unknown> (.next/server/webpack-runtime.js:116:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:167:22)
+    at <unknown> (.next/server/app/dashboard/page.js:1:99841)
+    at Object.<anonymous> (.next/server/app/dashboard/page.js:1:99914) {
+  code: [32m'MODULE_NOT_FOUND'[39m,
+  requireStack: [36m[Array][39m,
+  page: [32m'/dashboard'[39m
+}
+ GET /dashboard [31m500[39m in 469ms
+ GET /.well-known/appspecific/com.chrome.devtools.json [33m404[39m in 134ms
+ GET /favicon.ico [32m200[39m in 16ms
+ [33m[1m⚠[22m[39m Fast Refresh had to perform a full reload due to a runtime error.
+ [32m[1m✓[22m[39m Compiled in 2.4s (1947 modules)
+ [31m[1m⨯[22m[39m Error: Cannot find module './undefined'
+Require stack:
+- /Users/bentyson/pad/.next/server/webpack-runtime.js
+- /Users/bentyson/pad/.next/server/app/dashboard/page.js
+- /Users/bentyson/pad/node_modules/next/dist/server/require.js
+- /Users/bentyson/pad/node_modules/next/dist/server/load-components.js
+- /Users/bentyson/pad/node_modules/next/dist/build/utils.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/options.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/index.js
+- /Users/bentyson/pad/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/next.js
+- /Users/bentyson/pad/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28)
+    at <unknown> (.next/server/webpack-runtime.js:116:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:167:22)
+    at <unknown> (.next/server/app/dashboard/page.js:1:99841)
+    at Object.<anonymous> (.next/server/app/dashboard/page.js:1:99914) {
+  code: [32m'MODULE_NOT_FOUND'[39m,
+  requireStack: [36m[Array][39m,
+  page: [32m'/dashboard'[39m
+}
+ [31m[1m⨯[22m[39m Error: Cannot find module './undefined'
+Require stack:
+- /Users/bentyson/pad/.next/server/webpack-runtime.js
+- /Users/bentyson/pad/.next/server/app/dashboard/page.js
+- /Users/bentyson/pad/node_modules/next/dist/server/require.js
+- /Users/bentyson/pad/node_modules/next/dist/server/load-components.js
+- /Users/bentyson/pad/node_modules/next/dist/build/utils.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/options.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/index.js
+- /Users/bentyson/pad/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/next.js
+- /Users/bentyson/pad/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28)
+    at <unknown> (.next/server/webpack-runtime.js:116:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:167:22)
+    at <unknown> (.next/server/app/dashboard/page.js:1:99841)
+    at Object.<anonymous> (.next/server/app/dashboard/page.js:1:99914) {
+  code: [32m'MODULE_NOT_FOUND'[39m,
+  requireStack: [36m[Array][39m,
+  page: [32m'/dashboard'[39m
+}
+ GET /dashboard [31m500[39m in 449ms
+ GET /.well-known/appspecific/com.chrome.devtools.json [33m404[39m in 135ms
+ GET /favicon.ico [32m200[39m in 15ms
+ [33m[1m⚠[22m[39m Fast Refresh had to perform a full reload due to a runtime error.
+ [32m[1m✓[22m[39m Compiled in 2.4s (1947 modules)
+ [31m[1m⨯[22m[39m Error: Cannot find module './undefined'
+Require stack:
+- /Users/bentyson/pad/.next/server/webpack-runtime.js
+- /Users/bentyson/pad/.next/server/app/dashboard/page.js
+- /Users/bentyson/pad/node_modules/next/dist/server/require.js
+- /Users/bentyson/pad/node_modules/next/dist/server/load-components.js
+- /Users/bentyson/pad/node_modules/next/dist/build/utils.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/options.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/index.js
+- /Users/bentyson/pad/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/next.js
+- /Users/bentyson/pad/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28)
+    at <unknown> (.next/server/webpack-runtime.js:116:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:167:22)
+    at <unknown> (.next/server/app/dashboard/page.js:1:99841)
+    at Object.<anonymous> (.next/server/app/dashboard/page.js:1:99914) {
+  code: [32m'MODULE_NOT_FOUND'[39m,
+  requireStack: [36m[Array][39m,
+  page: [32m'/dashboard'[39m
+}
+ [31m[1m⨯[22m[39m Error: Cannot find module './undefined'
+Require stack:
+- /Users/bentyson/pad/.next/server/webpack-runtime.js
+- /Users/bentyson/pad/.next/server/app/dashboard/page.js
+- /Users/bentyson/pad/node_modules/next/dist/server/require.js
+- /Users/bentyson/pad/node_modules/next/dist/server/load-components.js
+- /Users/bentyson/pad/node_modules/next/dist/build/utils.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/options.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/index.js
+- /Users/bentyson/pad/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/next.js
+- /Users/bentyson/pad/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28)
+    at <unknown> (.next/server/webpack-runtime.js:116:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:167:22)
+    at <unknown> (.next/server/app/dashboard/page.js:1:99841)
+    at Object.<anonymous> (.next/server/app/dashboard/page.js:1:99914) {
+  code: [32m'MODULE_NOT_FOUND'[39m,
+  requireStack: [36m[Array][39m,
+  page: [32m'/dashboard'[39m
+}
+ GET /dashboard [31m500[39m in 391ms
+ GET /.well-known/appspecific/com.chrome.devtools.json [33m404[39m in 135ms
+ GET /favicon.ico [32m200[39m in 15ms
+ [31m[1m⨯[22m[39m Error: Cannot find module './undefined'
+Require stack:
+- /Users/bentyson/pad/.next/server/webpack-runtime.js
+- /Users/bentyson/pad/.next/server/app/dashboard/page.js
+- /Users/bentyson/pad/node_modules/next/dist/server/require.js
+- /Users/bentyson/pad/node_modules/next/dist/server/load-components.js
+- /Users/bentyson/pad/node_modules/next/dist/build/utils.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/options.js
+- /Users/bentyson/pad/node_modules/next/dist/build/swc/index.js
+- /Users/bentyson/pad/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/config.js
+- /Users/bentyson/pad/node_modules/next/dist/server/next.js
+- /Users/bentyson/pad/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28)
+    at <unknown> (.next/server/webpack-runtime.js:116:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:167:22)
+    at <unknown> (.next/server/app/login/page.js:1:24505)
+    at Object.<anonymous> (.next/server/app/login/page.js:1:24567) {
+  code: [32m'MODULE_NOT_FOUND'[39m,
+  requireStack: [36m[Array][39m,
+  page: [32m'/login'[39m
+}
+ GET /login [31m500[39m in 255ms
+ GET /.well-known/appspecific/com.chrome.devtools.json [33m404[39m in 57ms
+ GET /favicon.ico [32m200[39m in 27ms
+✅ [2025-07-27T18:26:25.099Z] Shutting down development server...
+✅ [2025-07-27T18:26:25.101Z] Shutting down development server...
+[?25h
+✅ [2025-07-27T18:26:25.223Z] Server stopped normally
+25] [INFO] Stopping server process 99635
+[2025-07-27 12:26:26] [INFO] Cleaning up...
+[2025-07-27 12:26:26] [INFO] Cleanup completed

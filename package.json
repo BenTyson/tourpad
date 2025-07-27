@@ -11,6 +11,7 @@
     "dev:next": "next dev",
     "dev:stable": "node scripts/dev-server.js",
     "dev:super-stable": "node scripts/dev-stable.js",
+    "dev:ultrastable": "./scripts/dev-ultrastable.sh",
     "dev:clean": "node scripts/dev-clean.js",
     "dev:simple": "node scripts/dev-simple.js",
     "dev:fresh": "node scripts/dev-fresh.js",
