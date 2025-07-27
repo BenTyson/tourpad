@@ -24,6 +24,7 @@ import {
   CreditCard,
   TrendingUp,
   DollarSign,
+  Music,
   Calendar as CalendarIcon
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -38,8 +39,6 @@ import { PastShowsSection } from '@/components/reviews/PastShowsSection';
 import { PrivateReviewsSection } from '@/components/reviews/PrivateReviewsSection';
 import HoldingPage from '@/components/dashboard/HoldingPage';
 import RSVPManagement from '@/components/host/RSVPManagement';
-import SpotifyConnectionCard from '@/components/dashboard/artist/SpotifyConnectionCard';
-import SoundCloudConnectionCard from '@/components/dashboard/artist/SoundCloudConnectionCard';
 
 type UserRole = 'host' | 'artist' | 'admin' | 'fan';
 
@@ -58,8 +57,10 @@ export default function DashboardPage() {
   const [userProfileId, setUserProfileId] = useState<string | null>(null);
   const [subscriptionData, setSubscriptionData] = useState<any>(null);
   const [subscriptionLoading, setSubscriptionLoading] = useState(false);
-  const [spotifyConnection, setSpotifyConnection] = useState<any>(null);
-  const [soundcloudConnection, setSoundcloudConnection] = useState<any>(null);
+  const [musicConnections, setMusicConnections] = useState({
+    spotify: { connected: false, followers: 0, verified: false },
+    soundcloud: { connected: false, followers: 0, trackCount: 0 }
+  });
   
   // Fetch current user data (with latest status from database)
   useEffect(() => {
@@ -157,13 +158,14 @@ export default function DashboardPage() {
         if (response.ok) {
           const data = await response.json();
           if (data.artist) {
-            setSpotifyConnection({
-              spotifyArtistId: data.artist.spotifyArtistId,
-              spotifyVerified: data.artist.spotifyVerified,
-              spotifyFollowers: data.artist.spotifyFollowers,
-              spotifyPopularity: data.artist.spotifyPopularity,
-              lastSpotifySync: data.artist.lastSpotifySync
-            });
+            setMusicConnections(prev => ({
+              ...prev,
+              spotify: {
+                connected: !!data.artist.spotifyArtistId,
+                followers: data.artist.spotifyFollowers || 0,
+                verified: data.artist.spotifyVerified || false
+              }
+            }));
           }
         }
       } catch (error) {
@@ -184,15 +186,14 @@ export default function DashboardPage() {
         if (response.ok) {
           const data = await response.json();
           if (data.artist) {
-            setSoundcloudConnection({
-              soundcloudUserId: data.artist.soundcloudUserId,
-              soundcloudUsername: data.artist.soundcloudUsername,
-              soundcloudVerified: data.artist.soundcloudVerified,
-              soundcloudFollowers: data.artist.soundcloudFollowers,
-              soundcloudTrackCount: data.artist.soundcloudTrackCount,
-              soundcloudPlaylistCount: data.artist.soundcloudPlaylistCount,
-              lastSoundCloudSync: data.artist.lastSoundCloudSync
-            });
+            setMusicConnections(prev => ({
+              ...prev,
+              soundcloud: {
+                connected: !!data.artist.soundcloudUserId,
+                followers: data.artist.soundcloudFollowers || 0,
+                trackCount: data.artist.soundcloudTrackCount || 0
+              }
+            }));
           }
         }
       } catch (error) {
@@ -692,6 +693,19 @@ export default function DashboardPage() {
                           </div>
                         </Link>
                         
+                        <Link href="/dashboard/music">
+                          <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0">
+                                <Music className="w-5 h-5 text-neutral-600 group-hover:text-primary-600" />
+                              </div>
+                              <div className="ml-3">
+                                <h3 className="text-sm font-semibold text-neutral-900">Manage Music</h3>
+                              </div>
+                            </div>
+                          </div>
+                        </Link>
+                        
                         <Link href="/subscription/manage">
                           <div className="group rounded-lg bg-white border border-neutral-200 p-4 transition-all duration-300 hover:border-primary-300 hover:shadow-md">
                             <div className="flex items-center">
@@ -995,65 +1009,6 @@ export default function DashboardPage() {
               </div>
             )}
 
-            {/* Spotify Integration - Artists only */}
-            {userRole === 'artist' && (
-              <div className="mb-8">
-                <SpotifyConnectionCard
-                  artistId={userProfileId || ''}
-                  currentConnection={spotifyConnection}
-                  onConnectionUpdate={() => {
-                    // Refresh Spotify connection data
-                    if (userProfileId) {
-                      fetch(`/api/spotify/artist/${userProfileId}`)
-                        .then(res => res.json())
-                        .then(data => {
-                          if (data.artist) {
-                            setSpotifyConnection({
-                              spotifyArtistId: data.artist.spotifyArtistId,
-                              spotifyVerified: data.artist.spotifyVerified,
-                              spotifyFollowers: data.artist.spotifyFollowers,
-                              spotifyPopularity: data.artist.spotifyPopularity,
-                              lastSpotifySync: data.artist.lastSpotifySync
-                            });
-                          }
-                        })
-                        .catch(err => console.error('Error refreshing Spotify connection:', err));
-                    }
-                  }}
-                />
-              </div>
-            )}
-
-            {/* SoundCloud Integration - Artists only */}
-            {userRole === 'artist' && (
-              <div className="mb-8">
-                <SoundCloudConnectionCard
-                  artistId={userProfileId || ''}
-                  currentConnection={soundcloudConnection}
-                  onConnectionUpdate={() => {
-                    // Refresh SoundCloud connection data
-                    if (userProfileId) {
-                      fetch(`/api/soundcloud/artist/${userProfileId}`)
-                        .then(res => res.json())
-                        .then(data => {
-                          if (data.artist) {
-                            setSoundcloudConnection({
-                              soundcloudUserId: data.artist.soundcloudUserId,
-                              soundcloudUsername: data.artist.soundcloudUsername,
-                              soundcloudVerified: data.artist.soundcloudVerified,
-                              soundcloudFollowers: data.artist.soundcloudFollowers,
-                              soundcloudTrackCount: data.artist.soundcloudTrackCount,
-                              soundcloudPlaylistCount: data.artist.soundcloudPlaylistCount,
-                              lastSoundCloudSync: data.artist.lastSoundCloudSync
-                            });
-                          }
-                        })
-                        .catch(err => console.error('Error refreshing SoundCloud connection:', err));
-                    }
-                  }}
-                />
-              </div>
-            )}
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
@@ -1275,6 +1230,86 @@ export default function DashboardPage() {
                 </div>
               </div>
             </div>
+
+            {/* Music Connection Status - Artists only */}
+            {userRole === 'artist' && (
+              <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
+                <div className="px-6 py-4 border-b border-neutral-200 flex items-center justify-between">
+                  <div>
+                    <h2 className="text-lg font-semibold text-neutral-900">Music Platforms</h2>
+                    <p className="text-sm text-neutral-600 mt-1">Connected streaming services</p>
+                  </div>
+                  <Link href="/dashboard/music">
+                    <Button variant="outline" size="sm">
+                      <Music className="w-4 h-4 mr-2" />
+                      Manage
+                    </Button>
+                  </Link>
+                </div>
+                <div className="p-6">
+                  <div className="space-y-4">
+                    {/* Spotify Status */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <div className="w-2 h-2 rounded-full mr-3 bg-green-500" 
+                             style={{ backgroundColor: musicConnections.spotify.connected ? '#1DB954' : '#e5e7eb' }}></div>
+                        <span className="text-sm text-neutral-600">Spotify</span>
+                      </div>
+                      <div className="text-right">
+                        {musicConnections.spotify.connected ? (
+                          <div>
+                            <div className="text-sm font-medium text-neutral-900">
+                              {musicConnections.spotify.followers.toLocaleString()} followers
+                            </div>
+                            {musicConnections.spotify.verified && (
+                              <div className="text-xs text-green-600">Verified</div>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-sm text-neutral-400">Not connected</span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* SoundCloud Status */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <div className="w-2 h-2 rounded-full mr-3" 
+                             style={{ backgroundColor: musicConnections.soundcloud.connected ? '#FF7700' : '#e5e7eb' }}></div>
+                        <span className="text-sm text-neutral-600">SoundCloud</span>
+                      </div>
+                      <div className="text-right">
+                        {musicConnections.soundcloud.connected ? (
+                          <div>
+                            <div className="text-sm font-medium text-neutral-900">
+                              {musicConnections.soundcloud.followers.toLocaleString()} followers
+                            </div>
+                            <div className="text-xs text-neutral-500">
+                              {musicConnections.soundcloud.trackCount} tracks
+                            </div>
+                          </div>
+                        ) : (
+                          <span className="text-sm text-neutral-400">Not connected</span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Connection Summary */}
+                    <div className="pt-2 mt-4 border-t border-neutral-100">
+                      <div className="text-xs text-neutral-500">
+                        {musicConnections.spotify.connected && musicConnections.soundcloud.connected ? (
+                          "Both platforms connected"
+                        ) : musicConnections.spotify.connected || musicConnections.soundcloud.connected ? (
+                          "One platform connected"
+                        ) : (
+                          "No platforms connected"
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
           </>

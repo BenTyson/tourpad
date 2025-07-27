@@ -139,6 +139,15 @@ model Artist {
   spotifyGenres           String[]      @default([])  // Genres from Spotify
   lastSpotifySync         DateTime?     // Last sync timestamp
   
+  // SoundCloud Integration ✅ IMPLEMENTED
+  soundcloudUserId        Int?          // SoundCloud user ID from API
+  soundcloudUsername      String?       // SoundCloud username
+  soundcloudVerified      Boolean       @default(false)
+  soundcloudFollowers     Int?          // Follower count from SoundCloud
+  soundcloudTrackCount    Int?          // Track count from SoundCloud
+  soundcloudPlaylistCount Int?          // Playlist count from SoundCloud
+  lastSoundCloudSync      DateTime?     // Last sync timestamp
+  
   // Application workflow
   applicationSubmittedAt  DateTime?
   approvedAt              DateTime?
@@ -151,6 +160,7 @@ model Artist {
   bookings                Booking[]
   spotifyAlbums           SpotifyAlbum[]    // Spotify album data
   spotifyTracks           SpotifyTrack[]    // Spotify track data
+  soundcloudTracks        SoundCloudTrack[] // SoundCloud track data
   tourSegments            TourSegment[]     // Tour planning data
   
   createdAt               DateTime      @default(now())
@@ -288,9 +298,11 @@ model HostMedia {
 - ✅ Admin applications page displays photos via lightbox gallery
 - ✅ File serving API handles image delivery with proper headers
 
-### Spotify Integration Models ✅ IMPLEMENTED
+### Music Platform Integration Models ✅ IMPLEMENTED
 
-#### SpotifyAlbum Model
+#### Spotify Integration Models
+
+##### SpotifyAlbum Model
 ```prisma
 model SpotifyAlbum {
   id                  String     @id @default(cuid())
@@ -313,7 +325,7 @@ model SpotifyAlbum {
 }
 ```
 
-#### SpotifyTrack Model
+##### SpotifyTrack Model
 ```prisma
 model SpotifyTrack {
   id                  String     @id @default(cuid())
@@ -338,7 +350,7 @@ model SpotifyTrack {
 }
 ```
 
-#### SpotifyCache Model
+##### SpotifyCache Model
 ```prisma
 model SpotifyCache {
   id                  String     @id @default(cuid())
@@ -353,7 +365,56 @@ model SpotifyCache {
 }
 ```
 
-**Spotify Integration Status:**
+#### SoundCloud Integration Models
+
+##### SoundCloudTrack Model
+```prisma
+model SoundCloudTrack {
+  id                  String     @id @default(cuid())
+  soundcloudId        Int        @unique
+  artistId            String
+  title               String
+  description         String?
+  durationMs          Int
+  playbackCount       Int        @default(0)
+  likesCount          Int        @default(0)
+  streamUrl           String?    // Authenticated stream URL
+  soundcloudUrl       String     // Direct link to SoundCloud track
+  artworkUrl          String?    // Track artwork URL
+  waveformUrl         String?    // Waveform visualization URL
+  isStreamable        Boolean    @default(true)
+  genre               String?
+  tags                String[]   @default([])
+  isDownloadable      Boolean    @default(false)
+  license             String?
+  
+  artist              Artist     @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  
+  @@map("soundcloud_tracks")
+}
+```
+
+##### SoundCloudCache Model
+```prisma
+model SoundCloudCache {
+  id                  String     @id @default(cuid())
+  cacheKey            String     @unique
+  data                Json       // Cached SoundCloud API response
+  expiresAt           DateTime   // Cache expiration time
+  
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  
+  @@map("soundcloud_cache")
+}
+```
+
+### Music Platform Integration Status
+
+#### Spotify Integration ✅ FULLY IMPLEMENTED
 - ✅ **Database Schema**: Complete with Album, Track, and Cache models
 - ✅ **Authentication**: Client Credentials flow with auto-refresh tokens
 - ✅ **API Client**: Full Spotify Web API integration (`/src/lib/spotify.ts`)
@@ -362,6 +423,25 @@ model SpotifyCache {
 - ✅ **UI Components**: Latest Albums section with clickable Spotify links
 - ✅ **Audio Player**: Enhanced player with 30-second previews (when available)
 - ✅ **Dashboard Integration**: Artist dashboard Spotify connection and sync controls
+
+#### SoundCloud Integration ✅ FULLY IMPLEMENTED
+- ✅ **Database Schema**: Complete with Track and Cache models
+- ✅ **Authentication**: Client Credentials flow with token management
+- ✅ **API Client**: Full SoundCloud API v2 integration (`/src/lib/soundcloud.ts`)
+- ✅ **Mock Data System**: Comprehensive fallback for API credentials pending approval
+- ✅ **Artist Sync**: Complete artist data sync with track metadata and streaming URLs
+- ✅ **Caching System**: Smart caching to minimize API rate limit usage (60-minute TTL)
+- ✅ **UI Components**: SoundCloud track display with orange theming
+- ✅ **Audio Player**: Stream URL integration with playback controls
+- ✅ **Dashboard Integration**: Artist dashboard SoundCloud connection and sync controls
+- ✅ **Dual Platform Support**: Artists can display both Spotify AND SoundCloud simultaneously
+
+#### Cross-Platform Features ✅ IMPLEMENTED
+- ✅ **Unified Music Display**: EnhancedArtistMusicSection supports both platforms
+- ✅ **Simultaneous Integration**: Artists can sync and display both services
+- ✅ **Platform-Specific Styling**: Green for Spotify, Orange for SoundCloud
+- ✅ **Unified Audio Playback**: Single player handles both Spotify previews and SoundCloud streams
+- ✅ **Mock Data Integration**: Development testing with realistic mock data for both platforms
 
 #### BandMember Model
 ```prisma
@@ -906,7 +986,9 @@ POST   /api/auth/signin          // Google OAuth signin
 POST   /api/auth/signout         // Session termination
 ```
 
-#### Spotify Integration ✅ IMPLEMENTED
+#### Music Platform Integrations ✅ IMPLEMENTED
+
+##### Spotify Integration
 ```typescript
 GET    /api/spotify/artist/[artistId]        // Get artist's Spotify data (albums, tracks)
 POST   /api/spotify/search/artists           // Search for artists on Spotify
@@ -921,6 +1003,37 @@ GET    /api/spotify/health                   // Spotify API health check
 // - Integration with artist dashboard for connection management
 // - Latest Albums section with clickable Spotify links (6 albums, horizontal layout)
 // - Enhanced audio player with 30-second track previews (when available)
+```
+
+##### SoundCloud Integration
+```typescript
+GET    /api/soundcloud/artist/[artistId]     // Get artist's SoundCloud data (tracks)
+POST   /api/soundcloud/search                // Search for artists on SoundCloud
+POST   /api/soundcloud/artist/[artistId]/sync // Sync artist data from SoundCloud API
+POST   /api/soundcloud/artist/[artistId]/disconnect // Disconnect SoundCloud integration
+GET    /api/soundcloud/health                // SoundCloud API health check
+
+// Features implemented:
+// - Client Credentials authentication flow with token management
+// - Complete artist data sync (tracks, metadata, streaming URLs, artwork)
+// - Mock data fallback system for development without API credentials
+// - Smart caching system to minimize API rate limits (60-minute default TTL)
+// - Track artwork and stream URL management with authentication
+// - Integration with artist dashboard for connection management
+// - SoundCloud track display with orange theming and platform-specific metadata
+// - Stream URL integration with unified audio player
+// - Support for SoundCloud-specific features (tags, waveforms, download options)
+```
+
+##### Cross-Platform Integration
+```typescript
+// Unified music display supporting both platforms simultaneously
+// - EnhancedArtistMusicSection component displays both Spotify and SoundCloud
+// - Platform-specific styling (Spotify: green, SoundCloud: orange)
+// - Unified audio playback system handles both platform URLs
+// - Artist profiles show both services when connected
+// - Dashboard integration allows management of both platforms
+// - Mock data system supports development for both platforms
 ```
 
 ### Implemented Systems ✅
@@ -1821,4 +1934,45 @@ TourSegment (e.g., "Southwest Spring 2025")
 
 ---
 
-*This architecture supports TourPad's current working features and provides a solid foundation for implementing the remaining booking, payment, and admin systems.*
+## Key Development Notes for Future Claude Agents
+
+### Database ID System 🚨 CRITICAL
+- **Seeded Data Uses Prisma IDs**: All database records use auto-generated IDs like `cmdm2rrs50004luune9mx0t5h`
+- **Mock Data Uses Simple IDs**: Mock data in `mockData.ts` uses simple IDs like "1", "2", "3"
+- **URL Routing**: Artist profiles must use database IDs, not mock IDs
+- **Correct Artist URLs**: Use `/artists/{prismaId}` not `/artists/1`
+- **Example Working URL**: `/artists/cmdm2rrs50004luune9mx0t5h` (Sarah Johnson with both Spotify + SoundCloud)
+
+### SoundCloud Integration Testing
+- **Sarah Johnson**: ID `cmdm2rrs50004luune9mx0t5h` - Has both Spotify AND SoundCloud verified
+- **Tommy Blue**: ID `cmdm2rrsc0008luunqqflm6z8` - Has SoundCloud only
+- **API Testing**: Always use database IDs when testing APIs
+- **Mock Data Fallback**: SoundCloud service automatically falls back to mock data when credentials unavailable
+
+### Data Flow Architecture
+```
+Mock Data (simple IDs) → Development/UI Testing
+Database Data (Prisma IDs) → Production/API Integration
+API Routes → Always expect and return database IDs
+Artist Profiles → Must use database IDs for proper data loading
+```
+
+### Working SoundCloud Integration Features
+- ✅ Database schema with Artist model SoundCloud fields
+- ✅ API routes for search, sync, and disconnect operations
+- ✅ SoundCloudConnectionCard component in artist dashboard
+- ✅ EnhancedArtistMusicSection supports both platforms simultaneously
+- ✅ Mock data system for development without SoundCloud API credentials
+- ✅ Unified audio playback supporting both Spotify previews and SoundCloud streams
+- ✅ Orange theming for SoundCloud platform (vs green for Spotify)
+
+### Testing URLs for Claude Agents
+- **Sarah Johnson (Both Platforms)**: `http://localhost:3001/artists/cmdm2rrs50004luune9mx0t5h`
+- **Marcus Williams Trio**: `http://localhost:3001/artists/cmdm2rrsc0008luunqqflm6z8`
+- **Luna Martinez**: `http://localhost:3001/artists/cmdm2rrse000cluunb17hgmb0`
+- **Artist Discovery**: `http://localhost:3001/artists`
+- **Dashboard**: `http://localhost:3001/dashboard` (requires authentication)
+
+---
+
+*This architecture document is optimized for future Claude agents and contains complete implementation details for TourPad's dual music platform integration system.*
