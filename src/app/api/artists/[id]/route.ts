@@ -135,6 +135,11 @@ export async function GET(
       spotifyFollowers: artist.spotifyFollowers || null,
       spotifyPopularity: artist.spotifyPopularity || null,
       spotifyArtistId: artist.spotifyArtistId || null,
+      // SoundCloud fields
+      soundcloudVerified: artist.soundcloudVerified || false,
+      soundcloudFollowers: artist.soundcloudFollowers || null,
+      soundcloudTrackCount: artist.soundcloudTrackCount || null,
+      soundcloudUserId: artist.soundcloudUserId || null,
       createdAt: artist.createdAt,
       updatedAt: artist.updatedAt
     });

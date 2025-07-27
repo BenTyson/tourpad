@@ -69,8 +69,6 @@ export default function EnhancedArtistMusicSection({
   const [soundcloudTracks, setSoundcloudTracks] = useState<SoundCloudTrack[]>([]);
   const [playingTrack, setPlayingTrack] = useState<string | null>(null);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
-  const [activeTab, setActiveTab] = useState<'spotify' | 'soundcloud'>('spotify');
-
   useEffect(() => {
     if (spotifyConnected || soundcloudConnected) {
       fetchMusicData();
@@ -78,17 +76,6 @@ export default function EnhancedArtistMusicSection({
       setLoading(false);
     }
   }, [artistId, spotifyConnected, soundcloudConnected]);
-
-  // Set default active tab based on available connections
-  useEffect(() => {
-    if (spotifyConnected && !soundcloudConnected) {
-      setActiveTab('spotify');
-    } else if (soundcloudConnected && !spotifyConnected) {
-      setActiveTab('soundcloud');
-    } else if (spotifyConnected && soundcloudConnected) {
-      setActiveTab('spotify'); // Default to Spotify if both available
-    }
-  }, [spotifyConnected, soundcloudConnected]);
 
   useEffect(() => {
     // Cleanup audio on unmount
@@ -261,36 +248,8 @@ export default function EnhancedArtistMusicSection({
         )}
       </div>
 
-      {/* Platform Tabs - Only show if both platforms are connected */}
-      {spotifyConnected && soundcloudConnected && (
-        <div className="flex space-x-1 bg-neutral-100 rounded-lg p-1">
-          <button
-            onClick={() => setActiveTab('spotify')}
-            className={`flex-1 flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              activeTab === 'spotify'
-                ? 'bg-white text-green-700 shadow-sm'
-                : 'text-neutral-600 hover:text-neutral-900'
-            }`}
-          >
-            <Music className="w-4 h-4 mr-2" />
-            Spotify
-          </button>
-          <button
-            onClick={() => setActiveTab('soundcloud')}
-            className={`flex-1 flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              activeTab === 'soundcloud'
-                ? 'bg-white text-orange-700 shadow-sm'
-                : 'text-neutral-600 hover:text-neutral-900'
-            }`}
-          >
-            <Headphones className="w-4 h-4 mr-2" />
-            SoundCloud
-          </button>
-        </div>
-      )}
-
-      {/* Track Lists */}
-      {activeTab === 'spotify' && spotifyConnected && (
+      {/* Spotify Section */}
+      {spotifyConnected && (
         <div>
           <h3 className="text-xl font-semibold text-neutral-900 mb-4 flex items-center">
             <Music className="w-5 h-5 mr-2 text-green-600" />
@@ -401,7 +360,8 @@ export default function EnhancedArtistMusicSection({
         </div>
       )}
 
-      {activeTab === 'soundcloud' && soundcloudConnected && (
+      {/* SoundCloud Section */}
+      {soundcloudConnected && (
         <div>
           <h3 className="text-xl font-semibold text-neutral-900 mb-4 flex items-center">
             <Headphones className="w-5 h-5 mr-2 text-orange-600" />

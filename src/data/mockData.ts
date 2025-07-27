@@ -915,6 +915,16 @@ export const mockArtists = [
         category: 'band' as const
       }
     ],
+    // Spotify integration (verified artist)
+    spotifyVerified: true,
+    spotifyFollowers: 2847,
+    spotifyPopularity: 68,
+    spotifyArtistId: 'sarah_wanderers_spotify',
+    // SoundCloud integration (also verified)
+    soundcloudVerified: true,
+    soundcloudFollowers: 1293,
+    soundcloudTrackCount: 18,
+    soundcloudUserId: 12345678,
     createdAt: new Date('2023-02-10'),
     updatedAt: new Date('2024-11-30')
   },
@@ -985,6 +995,12 @@ export const mockArtists = [
         category: 'band' as const
       }
     ],
+    // SoundCloud integration only (no Spotify)
+    spotifyVerified: false,
+    soundcloudVerified: true,
+    soundcloudFollowers: 892,
+    soundcloudTrackCount: 32,
+    soundcloudUserId: 87654321,
     createdAt: new Date('2022-11-15'),
     updatedAt: new Date('2024-12-01')
   },

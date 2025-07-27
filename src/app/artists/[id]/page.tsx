@@ -26,7 +26,7 @@ import { ArtistPhotoGallery } from '@/components/media/ArtistPhotoGallery';
 import { ArtistPhotoLightbox } from '@/components/media/ArtistPhotoLightbox';
 import { VideoPlayer } from '@/components/media/VideoPlayer';
 import { PublicReviewsSection } from '@/components/reviews/PublicReviewsSection';
-import ArtistMusicSection from '@/components/artist/ArtistMusicSection';
+import EnhancedArtistMusicSection from '@/components/artist/EnhancedArtistMusicSection';
 import { mockArtists } from '@/data/mockData';
 
 // US States lookup for display names
@@ -137,6 +137,11 @@ interface ArtistData {
   spotifyFollowers?: number;
   spotifyPopularity?: number;
   spotifyArtistId?: string;
+  // SoundCloud fields
+  soundcloudVerified?: boolean;
+  soundcloudFollowers?: number;
+  soundcloudTrackCount?: number;
+  soundcloudUserId?: number;
   bandMembers?: Array<{
     id: string;
     name: string;
@@ -625,24 +630,39 @@ export default function ArtistProfilePage() {
           </section>
         )}
 
-        {/* Spotify Music Section */}
+        {/* Music Section - Spotify & SoundCloud */}
         <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
           <div className="p-8">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-neutral-900">
                 Music
               </h2>
-              <div className="flex items-center space-x-2">
-                <Music className="w-5 h-5 text-green-600" />
-                <span className="text-sm text-neutral-600">Powered by Spotify</span>
+              <div className="flex items-center space-x-4">
+                {artistData.spotifyVerified && (
+                  <div className="flex items-center space-x-2">
+                    <Music className="w-5 h-5 text-green-600" />
+                    <span className="text-sm text-neutral-600">Spotify</span>
+                  </div>
+                )}
+                {artistData.soundcloudVerified && (
+                  <div className="flex items-center space-x-2">
+                    <div className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs font-bold">S</span>
+                    </div>
+                    <span className="text-sm text-neutral-600">SoundCloud</span>
+                  </div>
+                )}
               </div>
             </div>
-            <ArtistMusicSection
+            <EnhancedArtistMusicSection
               artistId={artistData.id}
               artistName={artistData.name}
               spotifyConnected={artistData.spotifyVerified || false}
               spotifyFollowers={artistData.spotifyFollowers}
               spotifyPopularity={artistData.spotifyPopularity}
+              soundcloudConnected={artistData.soundcloudVerified || false}
+              soundcloudFollowers={artistData.soundcloudFollowers}
+              soundcloudTrackCount={artistData.soundcloudTrackCount}
             />
           </div>
         </section>
