@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "./scripts/dev-robust.sh",
+    "dev": "./scripts/dev-ultrastable.sh",
     "dev:watch": "nodemon",
     "dev:auto": "./scripts/dev-with-nodemon.sh",
     "dev:clean": "rm -rf .next && next dev -H 0.0.0.0 -p 3001",
