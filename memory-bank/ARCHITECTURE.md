@@ -35,7 +35,7 @@
 
 ---
 
-## Database Schema (16 Models)
+## Database Schema (18 Models)
 
 ### User Management
 
@@ -151,6 +151,7 @@ model Artist {
   bookings                Booking[]
   spotifyAlbums           SpotifyAlbum[]    // Spotify album data
   spotifyTracks           SpotifyTrack[]    // Spotify track data
+  tourSegments            TourSegment[]     // Tour planning data
   
   createdAt               DateTime      @default(now())
   updatedAt               DateTime      @updatedAt
@@ -377,6 +378,40 @@ model BandMember {
   artist     Artist   @relation(fields: [artistId], references: [id], onDelete: Cascade)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+}
+```
+
+#### TourSegment Model ✅ IMPLEMENTED
+```prisma
+model TourSegment {
+  id          String             @id @default(cuid())
+  artistId    String
+  name        String             // "Southwest Tour Spring 2025" - user-friendly name
+  description String?            // Optional detailed description
+  status      String             @default("planned") // planned, confirmed, cancelled
+  isPublic    Boolean            @default(true)  // Allow private tour planning
+  
+  artist      Artist             @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  stateRanges TourStateRange[]   // Individual state date ranges
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+```
+
+#### TourStateRange Model ✅ IMPLEMENTED
+```prisma
+model TourStateRange {
+  id            String      @id @default(cuid())
+  tourSegmentId String
+  state         String      // "CO", "UT", etc. - state abbreviation
+  startDate     DateTime    // When the artist arrives in this state
+  endDate       DateTime    // When the artist leaves this state
+  cities        String[]    // ["Denver", "Boulder"] - optional specific cities
+  notes         String?     // Optional notes for this state leg
+  
+  tourSegment   TourSegment @relation(fields: [tourSegmentId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
 ```
 
@@ -848,6 +883,7 @@ GET    /api/hosts/[id]           // Public host profile display
 GET    /api/hosts                // Browse all approved hosts with database data
 GET    /api/artists              // Browse all approved artists with database data
 GET    /api/artists/[id]         // Individual artist profile with complete data
+GET    /api/artists/discover     // Discover artists by tour location/dates
 // Supports: search, filters, pagination, photo galleries
 ```
 
@@ -921,6 +957,31 @@ PUT    /api/notifications        // Mark notifications as read
 // - Mark individual/all notifications as read
 // - Deep linking to relevant pages (booking details)
 // - Integrated into header for approved/active users
+```
+
+#### Tour Planning System ✅ FULLY IMPLEMENTED
+```typescript
+// Tour Management CRUD
+GET    /api/tour-segments         // List artist's tour segments with state ranges
+POST   /api/tour-segments         // Create new tour segment with validation
+GET    /api/tour-segments/[id]    // Get specific tour segment details
+PUT    /api/tour-segments/[id]    // Update tour segment and state ranges
+DELETE /api/tour-segments/[id]    // Delete tour segment and all ranges
+
+// Artist Discovery by Tour Location
+GET    /api/artists/discover      // Filter artists by tour state/city/dates
+GET    /api/artists/[id]/tour-segments // Get public tour segments for artist
+
+// Features implemented:
+// - Complete tour planning UI in artist dashboard with modal interface
+// - State-by-state tour scheduling with date ranges and cities
+// - Overlap validation prevents conflicting tour dates
+// - Public/private tour visibility controls
+// - Tour status tracking (planned, confirmed, cancelled)
+// - Host discovery of artists by location and tour dates
+// - Integration with artist profiles showing upcoming tours
+// - Mobile-responsive tour planning interface
+// - Tour display on public artist profiles with upcoming tours section
 ```
 
 ### Ready for Implementation 🔄
@@ -1678,6 +1739,85 @@ videoLinks: (() => {
   return videos;
 })()
 ```
+
+---
+
+## Tour Planning System Architecture ✅ FULLY IMPLEMENTED
+
+### Overview
+The Tour Planning System enables artists to plan their touring schedules by state and date ranges, allowing hosts to discover artists when they're touring in their area. This creates a foundation for the host-artist discovery workflow.
+
+### Core Architecture Decisions
+
+#### 1. Hierarchical Tour Structure
+```
+TourSegment (e.g., "Southwest Spring 2025")
+├── TourStateRange (Colorado: March 1-15)
+├── TourStateRange (Utah: March 16-30)
+└── TourStateRange (Arizona: April 1-10)
+```
+
+#### 2. State-Based Geographic Organization
+- Uses US state abbreviations ("CO", "UT", "AZ") for consistent filtering
+- Optional cities array within each state for granular location data
+- Supports overlapping validation within artist's tour schedule
+
+#### 3. Public/Private Tour Visibility
+- Artists control tour visibility with `isPublic` boolean
+- Private tours allow planning without host discovery
+- Only public tours appear in host discovery results
+
+#### 4. Database Design Benefits
+- **Normalization**: Separate TourSegment and TourStateRange models prevent data duplication
+- **Flexibility**: Artists can have multiple concurrent tour segments
+- **Scalability**: State-based partitioning enables efficient geographic queries
+- **Validation**: Database constraints prevent overlapping date ranges within states
+
+### Integration Points
+
+#### 1. Artist Discovery API (`/api/artists/discover`)
+- Filters artists by state, city, and date ranges
+- Deduplicates artists while preserving all matching tour ranges
+- Supports genre filtering combined with tour location/dates
+- Returns paginated results with tour context
+
+#### 2. Artist Dashboard
+- Modal-based tour creation/editing interface
+- Real-time overlap validation before submission
+- Visual tour calendar representation
+- Bulk tour operations (edit, delete, status changes)
+
+#### 3. Artist Profiles
+- Upcoming tours section displays next 12 months
+- Tour cards show state, dates, cities, and tour notes
+- Coming soon indicators for tours within 30 days
+- Mobile-responsive tour display grid
+
+### Technical Implementation Highlights
+
+#### 1. API Validation
+- Start/end date logical validation
+- State overlap prevention within artist schedules
+- Required field validation with descriptive error messages
+- Atomic operations ensure data consistency
+
+#### 2. Query Optimization
+- Efficient geographic filtering using state-based indexes
+- Date range queries optimized for tour discovery
+- Relationship-based queries minimize N+1 problems
+- Pagination support for large result sets
+
+#### 3. UI/UX Design
+- Progressive disclosure: tour list → edit modal → state details
+- Mobile-first responsive design throughout
+- Optimistic updates for smooth user experience
+- Visual feedback for validation errors and success states
+
+### Future Enhancement Opportunities
+- Real-time tour notifications when artists plan tours in host areas
+- Tour route optimization suggestions
+- Integration with mapping services for geographic visualization
+- Automated booking suggestions based on tour schedules
 
 ---
 
