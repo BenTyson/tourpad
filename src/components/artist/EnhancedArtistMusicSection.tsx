@@ -41,6 +41,33 @@ interface SoundCloudTrack {
   license?: string;
 }
 
+interface UploadedTrack {
+  id: string;
+  title: string;
+  artist?: string;
+  album?: string;
+  genre?: string;
+  year?: number;
+  trackNumber?: number;
+  durationMs?: number;
+  originalFilename: string;
+  filename: string;
+  fileUrl: string;
+  fileSize: number;
+  mimeType: string;
+  bitrate?: number;
+  sampleRate?: number;
+  channels?: number;
+  description?: string;
+  lyrics?: string;
+  isPublic: boolean;
+  sortOrder: number;
+  processingStatus: string;
+  errorMessage?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface EnhancedArtistMusicSectionProps {
   artistId: string;
   artistName: string;
@@ -67,14 +94,11 @@ export default function EnhancedArtistMusicSection({
   const [loading, setLoading] = useState(true);
   const [spotifyTracks, setSpotifyTracks] = useState<SpotifyTrack[]>([]);
   const [soundcloudTracks, setSoundcloudTracks] = useState<SoundCloudTrack[]>([]);
+  const [uploadedTracks, setUploadedTracks] = useState<UploadedTrack[]>([]);
   const [playingTrack, setPlayingTrack] = useState<string | null>(null);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   useEffect(() => {
-    if (spotifyConnected || soundcloudConnected) {
-      fetchMusicData();
-    } else {
-      setLoading(false);
-    }
+    fetchMusicData();
   }, [artistId, spotifyConnected, soundcloudConnected]);
 
   useEffect(() => {
@@ -108,6 +132,18 @@ export default function EnhancedArtistMusicSection({
           setSoundcloudTracks(soundcloudData.artist.tracks || []);
         }
       }
+
+      // Always fetch uploaded tracks (public tracks for profile view)
+      try {
+        const uploadedResponse = await fetch(`/api/artists/${artistId}/uploaded-tracks`);
+        if (uploadedResponse.ok) {
+          const uploadedData = await uploadedResponse.json();
+          setUploadedTracks(uploadedData.tracks || []);
+        }
+      } catch (uploadError) {
+        console.error('Error fetching uploaded tracks:', uploadError);
+        // Don't fail the whole component if uploaded tracks fail
+      }
     } catch (error) {
       console.error('Error fetching music data:', error);
     } finally {
@@ -115,10 +151,16 @@ export default function EnhancedArtistMusicSection({
     }
   };
 
-  const handlePlayPause = (track: SpotifyTrack | SoundCloudTrack, platform: 'spotify' | 'soundcloud') => {
-    const audioUrl = platform === 'spotify' 
-      ? (track as SpotifyTrack).previewUrl 
-      : (track as SoundCloudTrack).streamUrl;
+  const handlePlayPause = (track: SpotifyTrack | SoundCloudTrack | UploadedTrack, platform: 'spotify' | 'soundcloud' | 'uploaded') => {
+    let audioUrl: string | null = null;
+    
+    if (platform === 'spotify') {
+      audioUrl = (track as SpotifyTrack).previewUrl;
+    } else if (platform === 'soundcloud') {
+      audioUrl = (track as SoundCloudTrack).streamUrl || null;
+    } else if (platform === 'uploaded') {
+      audioUrl = (track as UploadedTrack).fileUrl;
+    }
     
     if (!audioUrl) return;
 
@@ -164,15 +206,15 @@ export default function EnhancedArtistMusicSection({
     return num.toString();
   };
 
-  if (!spotifyConnected && !soundcloudConnected) {
+  if (!spotifyConnected && !soundcloudConnected && uploadedTracks.length === 0 && !loading) {
     return (
       <div className="bg-gradient-to-br from-primary-50 to-secondary-50 rounded-xl p-8 text-center">
         <Music className="w-12 h-12 text-primary-600 mx-auto mb-4" />
         <h3 className="text-lg font-semibold text-neutral-900 mb-2">
-          No Music Services Connected
+          No Music Available
         </h3>
         <p className="text-neutral-600 mb-4">
-          Connect this artist to Spotify or SoundCloud to display their music
+          This artist hasn't connected any music services or uploaded tracks yet
         </p>
         {onConnect && (
           <Button onClick={onConnect} className="bg-primary-600 hover:bg-primary-700">
@@ -201,6 +243,7 @@ export default function EnhancedArtistMusicSection({
 
   const hasSpotifyTracks = spotifyTracks.length > 0;
   const hasSoundCloudTracks = soundcloudTracks.length > 0;
+  const hasUploadedTracks = uploadedTracks.length > 0;
 
   return (
     <div className="space-y-8">
@@ -469,12 +512,98 @@ export default function EnhancedArtistMusicSection({
         </div>
       )}
 
+      {/* Uploaded Tracks Section */}
+      {hasUploadedTracks && (
+        <div>
+          <h3 className="text-xl font-semibold text-neutral-900 mb-4 flex items-center">
+            <Music className="w-5 h-5 mr-2 text-blue-600" />
+            Original Tracks
+          </h3>
+          
+          <div className="space-y-2">
+            {uploadedTracks.map((track, index) => (
+              <Card key={track.id} className="hover:shadow-md transition-all duration-200 border-neutral-200">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-4">
+                    {/* Music Icon */}
+                    <div className="relative w-12 h-12 flex-shrink-0">
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center">
+                        <Music className="w-6 h-6 text-blue-600" />
+                      </div>
+                      <button
+                        onClick={() => handlePlayPause(track, 'uploaded')}
+                        className="absolute inset-0 rounded-lg flex items-center justify-center transition-all bg-black/50 hover:bg-black/70 text-white opacity-0 hover:opacity-100"
+                      >
+                        {playingTrack === `uploaded-${track.id}` ? (
+                          <Pause className="w-4 h-4" />
+                        ) : (
+                          <Play className="w-4 h-4 ml-0.5" />
+                        )}
+                      </button>
+                    </div>
+
+                    {/* Track Number */}
+                    <span className="text-sm text-neutral-500 w-6">
+                      {index + 1}
+                    </span>
+
+                    {/* Track Info */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center space-x-2">
+                        <h4 className="font-medium text-neutral-900 truncate">
+                          {track.title}
+                        </h4>
+                        {track.genre && (
+                          <Badge variant="secondary" className="text-xs">
+                            {track.genre}
+                          </Badge>
+                        )}
+                      </div>
+                      <div className="flex items-center space-x-2 text-sm text-neutral-600">
+                        {track.artist && (
+                          <span>by {track.artist}</span>
+                        )}
+                        {track.album && track.artist && (
+                          <span>•</span>
+                        )}
+                        {track.album && (
+                          <span>{track.album}</span>
+                        )}
+                        {track.year && (
+                          <>
+                            <span>•</span>
+                            <span>{track.year}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Duration */}
+                    {track.durationMs && (
+                      <div className="flex items-center space-x-2 text-sm text-neutral-500">
+                        <Clock className="w-4 h-4" />
+                        <span>{formatDuration(track.durationMs)}</span>
+                      </div>
+                    )}
+
+                    {/* File Size */}
+                    <div className="hidden sm:block text-sm text-neutral-500">
+                      {(track.fileSize / (1024 * 1024)).toFixed(1)} MB
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Show message if connected but no tracks */}
-      {(spotifyConnected || soundcloudConnected) && !hasSpotifyTracks && !hasSoundCloudTracks && (
+      {(spotifyConnected || soundcloudConnected) && !hasSpotifyTracks && !hasSoundCloudTracks && !hasUploadedTracks && (
         <div className="text-center py-8">
           <Music className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
           <p className="text-neutral-600">
-            No music data available yet. Try syncing with your connected services.
+            No music data available yet. Try syncing with your connected services or uploading tracks.
           </p>
         </div>
       )}
