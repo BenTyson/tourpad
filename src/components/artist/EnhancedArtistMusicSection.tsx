@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Play, Pause, Music, ExternalLink, Clock, TrendingUp, Users, Headphones, Heart } from 'lucide-react';
+import { Play, Pause, Music, ExternalLink, Clock, TrendingUp, Users, Headphones, Heart, Volume2, SkipBack, SkipForward, Download } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -97,6 +97,10 @@ export default function EnhancedArtistMusicSection({
   const [uploadedTracks, setUploadedTracks] = useState<UploadedTrack[]>([]);
   const [playingTrack, setPlayingTrack] = useState<string | null>(null);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [volume, setVolume] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     fetchMusicData();
   }, [artistId, spotifyConnected, soundcloudConnected]);
@@ -176,18 +180,64 @@ export default function EnhancedArtistMusicSection({
       // Play new track
       if (audio) {
         audio.pause();
+        // Remove old event listeners
+        audio.removeEventListener('timeupdate', updateTime);
+        audio.removeEventListener('loadedmetadata', updateDuration);
+        audio.removeEventListener('ended', handleTrackEnd);
       }
       
+      setIsLoading(true);
       const newAudio = new Audio(audioUrl);
+      newAudio.volume = volume;
+      
+      // Add event listeners for sophisticated controls
+      const updateTime = () => setCurrentTime(newAudio.currentTime);
+      const updateDuration = () => {
+        setDuration(newAudio.duration);
+        setIsLoading(false);
+      };
+      const handleTrackEnd = () => {
+        setPlayingTrack(null);
+        setCurrentTime(0);
+      };
+      
+      newAudio.addEventListener('timeupdate', updateTime);
+      newAudio.addEventListener('loadedmetadata', updateDuration);
+      newAudio.addEventListener('ended', handleTrackEnd);
+      newAudio.addEventListener('canplay', () => setIsLoading(false));
+      
       newAudio.play().catch(err => {
         console.error('Error playing audio:', err);
-      });
-      newAudio.addEventListener('ended', () => {
-        setPlayingTrack(null);
+        setIsLoading(false);
       });
       
       setAudio(newAudio);
       setPlayingTrack(trackId);
+      setCurrentTime(0);
+    }
+  };
+
+  const handleSeek = (seekTime: number) => {
+    if (audio) {
+      audio.currentTime = seekTime;
+      setCurrentTime(seekTime);
+    }
+  };
+
+  const handleVolumeChange = (newVolume: number) => {
+    setVolume(newVolume);
+    if (audio) {
+      audio.volume = newVolume;
+    }
+  };
+
+  const handleSkip = (direction: 'forward' | 'backward') => {
+    if (audio) {
+      const skipAmount = 10; // seconds
+      const newTime = direction === 'forward' 
+        ? Math.min(audio.currentTime + skipAmount, duration)
+        : Math.max(audio.currentTime - skipAmount, 0);
+      handleSeek(newTime);
     }
   };
 
@@ -195,6 +245,12 @@ export default function EnhancedArtistMusicSection({
     const minutes = Math.floor(ms / 60000);
     const seconds = ((ms % 60000) / 1000).toFixed(0);
     return `${minutes}:${seconds.padStart(2, '0')}`;
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
   const formatNumber = (num: number) => {
@@ -247,153 +303,313 @@ export default function EnhancedArtistMusicSection({
 
   return (
     <div className="space-y-8">
-      {/* Stats Section */}
-      <div className="flex flex-wrap items-center gap-6 text-sm">
-        {spotifyConnected && spotifyFollowers && (
-          <div className="flex items-center space-x-2">
-            <Music className="w-4 h-4 text-green-600" />
-            <span className="text-neutral-600">
-              <span className="font-semibold text-neutral-900">
-                {formatNumber(spotifyFollowers)}
-              </span> Spotify followers
-            </span>
+
+      {/* Uploaded Tracks Section */}
+      {hasUploadedTracks && (
+        <div>
+          <h3 className="text-xl font-semibold text-neutral-900 mb-4 flex items-center">
+            <Music className="w-5 h-5 mr-2 text-sage" />
+            Tracks
+          </h3>
+          
+          <div className="space-y-4">
+            {uploadedTracks.map((track, index) => {
+              const isCurrentTrack = playingTrack === `uploaded-${track.id}`;
+              const isTrackPlaying = isCurrentTrack && audio && !audio.paused;
+              
+              return (
+                <Card key={track.id} className={`hover:shadow-lg transition-all duration-200 ${
+                  isCurrentTrack ? 'border-sage bg-sage/5' : 'border-neutral-200'
+                }`}>
+                  <CardContent className="p-6">
+                    <div className="space-y-4">
+                      {/* Top Row - Track Info & Controls */}
+                      <div className="flex items-center space-x-4">
+                        {/* Album Art / Icon */}
+                        <div className="relative w-16 h-16 flex-shrink-0">
+                          <div className="w-16 h-16 bg-sage/10 rounded-xl flex items-center justify-center">
+                            <Music className="w-8 h-8 text-sage" />
+                          </div>
+                          <button
+                            onClick={() => handlePlayPause(track, 'uploaded')}
+                            className="absolute inset-0 rounded-xl flex items-center justify-center transition-all bg-black/50 hover:bg-black/70 text-white opacity-0 hover:opacity-100"
+                          >
+                            {isLoading && isCurrentTrack ? (
+                              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            ) : isTrackPlaying ? (
+                              <Pause className="w-5 h-5" />
+                            ) : (
+                              <Play className="w-5 h-5 ml-0.5" />
+                            )}
+                          </button>
+                        </div>
+
+                        {/* Track Info */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-2 mb-1">
+                            <span className="text-sm text-sage font-medium">
+                              #{index + 1}
+                            </span>
+                            <h4 className="font-semibold text-neutral-900 truncate text-lg">
+                              {track.title}
+                            </h4>
+                            {track.genre && (
+                              <Badge className="bg-sage/10 text-sage border-sage/20 text-xs">
+                                {track.genre}
+                              </Badge>
+                            )}
+                          </div>
+                          <div className="flex items-center space-x-2 text-sm text-neutral-600">
+                            {track.artist && (
+                              <span className="font-medium">by {track.artist}</span>
+                            )}
+                            {track.album && track.artist && (
+                              <span>•</span>
+                            )}
+                            {track.album && (
+                              <span>{track.album}</span>
+                            )}
+                            {track.year && (
+                              <>
+                                <span>•</span>
+                                <span>{track.year}</span>
+                              </>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Right Side Info */}
+                        <div className="flex items-center space-x-4 text-sm text-neutral-500">
+                          {track.durationMs && (
+                            <div className="flex items-center space-x-1">
+                              <Clock className="w-4 h-4" />
+                              <span>{formatDuration(track.durationMs)}</span>
+                            </div>
+                          )}
+                          <div className="hidden sm:block">
+                            {(track.fileSize / (1024 * 1024)).toFixed(1)} MB
+                          </div>
+                          <a
+                            href={track.fileUrl}
+                            download={track.originalFilename}
+                            className="text-sage hover:text-sage/80 transition-colors"
+                            title="Download track"
+                          >
+                            <Download className="w-4 h-4" />
+                          </a>
+                        </div>
+                      </div>
+
+                      {/* Sophisticated Player Controls - Only show for current track */}
+                      {isCurrentTrack && (
+                        <div className="border-t border-sage/20 pt-4 space-y-3">
+                          {/* Progress Bar */}
+                          <div className="space-y-2">
+                            <div className="relative h-2 bg-neutral-200 rounded-full overflow-hidden">
+                              <div 
+                                className="absolute inset-y-0 left-0 bg-sage rounded-full transition-all duration-300"
+                                style={{ width: `${duration > 0 ? (currentTime / duration) * 100 : 0}%` }}
+                              />
+                              <input
+                                type="range"
+                                min="0"
+                                max={duration || 0}
+                                value={currentTime}
+                                onChange={(e) => handleSeek(Number(e.target.value))}
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                              />
+                            </div>
+                            <div className="flex justify-between text-xs text-neutral-500">
+                              <span>{formatTime(currentTime)}</span>
+                              <span>{formatTime(duration)}</span>
+                            </div>
+                          </div>
+
+                          {/* Control Buttons */}
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                              <button
+                                onClick={() => handleSkip('backward')}
+                                className="p-2 text-sage hover:text-sage/80 hover:bg-sage/10 rounded-lg transition-colors"
+                                title="Skip back 10s"
+                              >
+                                <SkipBack className="w-4 h-4" />
+                              </button>
+                              
+                              <button
+                                onClick={() => handlePlayPause(track, 'uploaded')}
+                                className="p-3 bg-sage text-white hover:bg-sage/90 rounded-xl transition-colors"
+                              >
+                                {isLoading ? (
+                                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                ) : isTrackPlaying ? (
+                                  <Pause className="w-5 h-5" />
+                                ) : (
+                                  <Play className="w-5 h-5 ml-0.5" />
+                                )}
+                              </button>
+                              
+                              <button
+                                onClick={() => handleSkip('forward')}
+                                className="p-2 text-sage hover:text-sage/80 hover:bg-sage/10 rounded-lg transition-colors"
+                                title="Skip forward 10s"
+                              >
+                                <SkipForward className="w-4 h-4" />
+                              </button>
+                            </div>
+
+                            {/* Volume Control */}
+                            <div className="flex items-center space-x-2">
+                              <Volume2 className="w-4 h-4 text-neutral-500" />
+                              <div className="relative w-20">
+                                <div className="h-1 bg-neutral-200 rounded-full">
+                                  <div 
+                                    className="h-1 bg-sage rounded-full"
+                                    style={{ width: `${volume * 100}%` }}
+                                  />
+                                </div>
+                                <input
+                                  type="range"
+                                  min="0"
+                                  max="1"
+                                  step="0.1"
+                                  value={volume}
+                                  onChange={(e) => handleVolumeChange(Number(e.target.value))}
+                                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
-        )}
-        {spotifyConnected && spotifyPopularity && (
-          <div className="flex items-center space-x-2">
-            <TrendingUp className="w-4 h-4 text-primary-600" />
-            <span className="text-neutral-600">
-              <span className="font-semibold text-neutral-900">
-                {spotifyPopularity}
-              </span>/100 popularity
-            </span>
-          </div>
-        )}
-        {soundcloudConnected && soundcloudFollowers && (
-          <div className="flex items-center space-x-2">
-            <Headphones className="w-4 h-4 text-orange-600" />
-            <span className="text-neutral-600">
-              <span className="font-semibold text-neutral-900">
-                {formatNumber(soundcloudFollowers)}
-              </span> SoundCloud followers
-            </span>
-          </div>
-        )}
-        {soundcloudConnected && soundcloudTrackCount && (
-          <div className="flex items-center space-x-2">
-            <Music className="w-4 h-4 text-orange-600" />
-            <span className="text-neutral-600">
-              <span className="font-semibold text-neutral-900">
-                {formatNumber(soundcloudTrackCount)}
-              </span> tracks
-            </span>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Spotify Section */}
       {spotifyConnected && (
         <div>
-          <h3 className="text-xl font-semibold text-neutral-900 mb-4 flex items-center">
-            <Music className="w-5 h-5 mr-2 text-green-600" />
-            Popular Tracks on Spotify
-          </h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl font-semibold text-neutral-900 flex items-center">
+              <Music className="w-5 h-5 mr-2 text-green-600" />
+              Popular Tracks on Spotify
+            </h3>
+            <div className="flex items-center space-x-2">
+              <Music className="w-5 h-5 text-green-600" />
+              <span className="text-sm text-neutral-600">Spotify</span>
+            </div>
+          </div>
           
           {hasSpotifyTracks ? (
-            <div className="space-y-2">
-              {spotifyTracks.map((track, index) => (
-                <Card key={track.id} className="hover:shadow-md transition-all duration-200 border-neutral-200">
-                  <CardContent className="p-4">
-                    <div className="flex items-center space-x-4">
-                      {/* Album Artwork & Play Button */}
-                      <div className="relative w-12 h-12 flex-shrink-0">
-                        {track.album?.imageUrl ? (
-                          <img
-                            src={track.album.imageUrl}
-                            alt={track.album.name}
-                            className="w-12 h-12 rounded-lg object-cover"
-                          />
-                        ) : (
-                          <div className="w-12 h-12 bg-neutral-200 rounded-lg flex items-center justify-center">
-                            <Music className="w-6 h-6 text-neutral-400" />
-                          </div>
-                        )}
-                        <button
-                          onClick={() => handlePlayPause(track, 'spotify')}
-                          disabled={!track.previewUrl}
-                          className={`absolute inset-0 rounded-lg flex items-center justify-center transition-all ${
-                            track.previewUrl 
-                              ? 'bg-black/50 hover:bg-black/70 text-white opacity-0 hover:opacity-100' 
-                              : 'bg-neutral-400/50 text-neutral-600 cursor-not-allowed opacity-0'
-                          }`}
-                        >
-                          {playingTrack === `spotify-${track.id}` ? (
-                            <Pause className="w-4 h-4" />
-                          ) : (
-                            <Play className="w-4 h-4 ml-0.5" />
-                          )}
-                        </button>
-                      </div>
-
-                      {/* Track Number */}
-                      <span className="text-sm text-neutral-500 w-6">
-                        {index + 1}
-                      </span>
-
-                      {/* Track Info */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center space-x-2">
-                          <h4 className="font-medium text-neutral-900 truncate">
-                            {track.name}
-                          </h4>
-                          {track.explicit && (
-                            <Badge className="bg-neutral-200 text-neutral-700 text-xs px-1.5 py-0.5">
-                              E
-                            </Badge>
-                          )}
-                        </div>
-                        {track.album && (
-                          <p className="text-sm text-neutral-600 truncate">
-                            {track.album.name}
-                          </p>
-                        )}
-                      </div>
-
-                      {/* Duration */}
-                      <div className="flex items-center space-x-2 text-sm text-neutral-500">
-                        <Clock className="w-4 h-4" />
-                        <span>{formatDuration(track.durationMs)}</span>
-                      </div>
-
-                      {/* Popularity */}
-                      <div className="hidden sm:flex items-center space-x-4">
-                        <div className="w-20">
-                          <div className="relative h-1 bg-neutral-200 rounded-full overflow-hidden">
-                            <div 
-                              className="absolute inset-y-0 left-0 bg-green-600 rounded-full"
-                              style={{ width: `${track.popularity}%` }}
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {spotifyTracks.slice(0, 4).map((track, index) => (
+                  <Card key={track.id} className="hover:shadow-lg transition-all duration-200 border-neutral-200 group">
+                    <CardContent className="p-4">
+                      <div className="space-y-3">
+                        {/* Album Artwork & Play Button */}
+                        <div className="relative aspect-square w-full">
+                          {track.album?.imageUrl ? (
+                            <img
+                              src={track.album.imageUrl}
+                              alt={track.album.name}
+                              className="w-full h-full rounded-lg object-cover"
                             />
+                          ) : (
+                            <div className="w-full h-full bg-neutral-200 rounded-lg flex items-center justify-center">
+                              <Music className="w-8 h-8 text-neutral-400" />
+                            </div>
+                          )}
+                          <button
+                            onClick={() => handlePlayPause(track, 'spotify')}
+                            disabled={!track.previewUrl}
+                            className={`absolute inset-0 rounded-lg flex items-center justify-center transition-all ${
+                              track.previewUrl 
+                                ? 'bg-black/50 hover:bg-black/70 text-white opacity-0 group-hover:opacity-100' 
+                                : 'bg-neutral-400/50 text-neutral-600 cursor-not-allowed opacity-0'
+                            }`}
+                          >
+                            {playingTrack === `spotify-${track.id}` ? (
+                              <Pause className="w-6 h-6" />
+                            ) : (
+                              <Play className="w-6 h-6 ml-1" />
+                            )}
+                          </button>
+                        </div>
+
+                        {/* Track Info */}
+                        <div className="space-y-1">
+                          <div className="flex items-center space-x-2">
+                            <h4 className="font-medium text-neutral-900 truncate text-sm">
+                              {track.name}
+                            </h4>
+                            {track.explicit && (
+                              <Badge className="bg-neutral-200 text-neutral-700 text-xs px-1.5 py-0.5">
+                                E
+                              </Badge>
+                            )}
+                          </div>
+                          {track.album && (
+                            <p className="text-xs text-neutral-600 truncate">
+                              {track.album.name}
+                            </p>
+                          )}
+                          
+                          {/* Duration & Popularity */}
+                          <div className="flex items-center justify-between text-xs text-neutral-500">
+                            <span className="flex items-center space-x-1">
+                              <Clock className="w-3 h-3" />
+                              <span>{formatDuration(track.durationMs)}</span>
+                            </span>
+                            <span>{track.popularity}/100</span>
                           </div>
                         </div>
-                        <span className="text-sm text-neutral-500 w-10">
-                          {track.popularity}
-                        </span>
-                      </div>
 
-                      {/* External Link */}
-                      <a
-                        href={track.spotifyUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-green-600 hover:text-green-700 transition-colors"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                        {/* External Link */}
+                        <a
+                          href={track.spotifyUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center text-green-600 hover:text-green-700 transition-colors text-xs"
+                        >
+                          <ExternalLink className="w-3 h-3 mr-1" />
+                          Open in Spotify
+                        </a>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+              
+              {/* Spotify Stats */}
+              <div className="flex flex-wrap items-center gap-6 text-sm mt-4 pt-4 border-t border-neutral-200">
+                {spotifyFollowers && (
+                  <div className="flex items-center space-x-2">
+                    <Music className="w-4 h-4 text-green-600" />
+                    <span className="text-neutral-600">
+                      <span className="font-semibold text-neutral-900">
+                        {formatNumber(spotifyFollowers)}
+                      </span> Spotify followers
+                    </span>
+                  </div>
+                )}
+                {spotifyPopularity && (
+                  <div className="flex items-center space-x-2">
+                    <TrendingUp className="w-4 h-4 text-primary-600" />
+                    <span className="text-neutral-600">
+                      <span className="font-semibold text-neutral-900">
+                        {spotifyPopularity}
+                      </span>/100 popularity
+                    </span>
+                  </div>
+                )}
+              </div>
+            </>
           ) : (
             <div className="text-center py-8">
               <Music className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
@@ -406,195 +622,133 @@ export default function EnhancedArtistMusicSection({
       {/* SoundCloud Section */}
       {soundcloudConnected && (
         <div>
-          <h3 className="text-xl font-semibold text-neutral-900 mb-4 flex items-center">
-            <Headphones className="w-5 h-5 mr-2 text-orange-600" />
-            Tracks on SoundCloud
-          </h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl font-semibold text-neutral-900 flex items-center">
+              <Headphones className="w-5 h-5 mr-2 text-orange-600" />
+              Popular Tracks on SoundCloud
+            </h3>
+            <div className="flex items-center space-x-2">
+              <div className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-xs font-bold">S</span>
+              </div>
+              <span className="text-sm text-neutral-600">SoundCloud</span>
+            </div>
+          </div>
           
           {hasSoundCloudTracks ? (
-            <div className="space-y-2">
-              {soundcloudTracks.map((track, index) => (
-                <Card key={track.id} className="hover:shadow-md transition-all duration-200 border-neutral-200">
-                  <CardContent className="p-4">
-                    <div className="flex items-center space-x-4">
-                      {/* Artwork & Play Button */}
-                      <div className="relative w-12 h-12 flex-shrink-0">
-                        {track.artworkUrl ? (
-                          <img
-                            src={track.artworkUrl}
-                            alt={track.title}
-                            className="w-12 h-12 rounded-lg object-cover"
-                          />
-                        ) : (
-                          <div className="w-12 h-12 bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center">
-                            <Headphones className="w-6 h-6 text-orange-600" />
-                          </div>
-                        )}
-                        <button
-                          onClick={() => handlePlayPause(track, 'soundcloud')}
-                          disabled={!track.streamUrl || !track.isStreamable}
-                          className={`absolute inset-0 rounded-lg flex items-center justify-center transition-all ${
-                            track.streamUrl && track.isStreamable
-                              ? 'bg-black/50 hover:bg-black/70 text-white opacity-0 hover:opacity-100' 
-                              : 'bg-neutral-400/50 text-neutral-600 cursor-not-allowed opacity-0'
-                          }`}
-                        >
-                          {playingTrack === `soundcloud-${track.id}` ? (
-                            <Pause className="w-4 h-4" />
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {soundcloudTracks.slice(0, 4).map((track, index) => (
+                  <Card key={track.id} className="hover:shadow-lg transition-all duration-200 border-neutral-200 group">
+                    <CardContent className="p-4">
+                      <div className="space-y-3">
+                        {/* Artwork & Play Button */}
+                        <div className="relative aspect-square w-full">
+                          {track.artworkUrl ? (
+                            <img
+                              src={track.artworkUrl}
+                              alt={track.title}
+                              className="w-full h-full rounded-lg object-cover"
+                            />
                           ) : (
-                            <Play className="w-4 h-4 ml-0.5" />
+                            <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center">
+                              <Headphones className="w-8 h-8 text-orange-600" />
+                            </div>
                           )}
-                        </button>
-                      </div>
+                          <button
+                            onClick={() => handlePlayPause(track, 'soundcloud')}
+                            disabled={!track.streamUrl || !track.isStreamable}
+                            className={`absolute inset-0 rounded-lg flex items-center justify-center transition-all ${
+                              track.streamUrl && track.isStreamable
+                                ? 'bg-black/50 hover:bg-black/70 text-white opacity-0 group-hover:opacity-100' 
+                                : 'bg-neutral-400/50 text-neutral-600 cursor-not-allowed opacity-0'
+                            }`}
+                          >
+                            {playingTrack === `soundcloud-${track.id}` ? (
+                              <Pause className="w-6 h-6" />
+                            ) : (
+                              <Play className="w-6 h-6 ml-1" />
+                            )}
+                          </button>
+                        </div>
 
-                      {/* Track Number */}
-                      <span className="text-sm text-neutral-500 w-6">
-                        {index + 1}
-                      </span>
-
-                      {/* Track Info */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center space-x-2">
-                          <h4 className="font-medium text-neutral-900 truncate">
-                            {track.title}
-                          </h4>
-                          {track.genre && (
-                            <Badge variant="secondary" className="text-xs">
-                              {track.genre}
-                            </Badge>
+                        {/* Track Info */}
+                        <div className="space-y-1">
+                          <div className="flex items-center space-x-2">
+                            <h4 className="font-medium text-neutral-900 truncate text-sm">
+                              {track.title}
+                            </h4>
+                            {track.genre && (
+                              <Badge variant="secondary" className="text-xs">
+                                {track.genre}
+                              </Badge>
+                            )}
+                          </div>
+                          {track.description && (
+                            <p className="text-xs text-neutral-600 truncate">
+                              {track.description}
+                            </p>
                           )}
+                          
+                          {/* Duration & Stats */}
+                          <div className="flex items-center justify-between text-xs text-neutral-500">
+                            <span className="flex items-center space-x-1">
+                              <Clock className="w-3 h-3" />
+                              <span>{formatDuration(track.durationMs)}</span>
+                            </span>
+                            <span className="flex items-center space-x-1">
+                              <Play className="w-3 h-3" />
+                              <span>{formatNumber(track.playbackCount)}</span>
+                            </span>
+                          </div>
                         </div>
-                        {track.description && (
-                          <p className="text-sm text-neutral-600 truncate">
-                            {track.description}
-                          </p>
-                        )}
-                      </div>
 
-                      {/* Duration */}
-                      <div className="flex items-center space-x-2 text-sm text-neutral-500">
-                        <Clock className="w-4 h-4" />
-                        <span>{formatDuration(track.durationMs)}</span>
+                        {/* External Link */}
+                        <a
+                          href={track.soundcloudUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center text-orange-600 hover:text-orange-700 transition-colors text-xs"
+                        >
+                          <ExternalLink className="w-3 h-3 mr-1" />
+                          Open in SoundCloud
+                        </a>
                       </div>
-
-                      {/* Stats */}
-                      <div className="hidden sm:flex items-center space-x-4 text-sm text-neutral-500">
-                        <div className="flex items-center space-x-1">
-                          <Play className="w-3 h-3" />
-                          <span>{formatNumber(track.playbackCount)}</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <Heart className="w-3 h-3" />
-                          <span>{formatNumber(track.likesCount)}</span>
-                        </div>
-                      </div>
-
-                      {/* External Link */}
-                      <a
-                        href={track.soundcloudUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-orange-600 hover:text-orange-700 transition-colors"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+              
+              {/* SoundCloud Stats */}
+              <div className="flex flex-wrap items-center gap-6 text-sm mt-4 pt-4 border-t border-neutral-200">
+                {soundcloudFollowers && (
+                  <div className="flex items-center space-x-2">
+                    <Headphones className="w-4 h-4 text-orange-600" />
+                    <span className="text-neutral-600">
+                      <span className="font-semibold text-neutral-900">
+                        {formatNumber(soundcloudFollowers)}
+                      </span> SoundCloud followers
+                    </span>
+                  </div>
+                )}
+                {soundcloudTrackCount && (
+                  <div className="flex items-center space-x-2">
+                    <Music className="w-4 h-4 text-orange-600" />
+                    <span className="text-neutral-600">
+                      <span className="font-semibold text-neutral-900">
+                        {formatNumber(soundcloudTrackCount)}
+                      </span> tracks
+                    </span>
+                  </div>
+                )}
+              </div>
+            </>
           ) : (
             <div className="text-center py-8">
               <Headphones className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
               <p className="text-neutral-600">No SoundCloud tracks available yet.</p>
             </div>
           )}
-        </div>
-      )}
-
-      {/* Uploaded Tracks Section */}
-      {hasUploadedTracks && (
-        <div>
-          <h3 className="text-xl font-semibold text-neutral-900 mb-4 flex items-center">
-            <Music className="w-5 h-5 mr-2 text-blue-600" />
-            Original Tracks
-          </h3>
-          
-          <div className="space-y-2">
-            {uploadedTracks.map((track, index) => (
-              <Card key={track.id} className="hover:shadow-md transition-all duration-200 border-neutral-200">
-                <CardContent className="p-4">
-                  <div className="flex items-center space-x-4">
-                    {/* Music Icon */}
-                    <div className="relative w-12 h-12 flex-shrink-0">
-                      <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center">
-                        <Music className="w-6 h-6 text-blue-600" />
-                      </div>
-                      <button
-                        onClick={() => handlePlayPause(track, 'uploaded')}
-                        className="absolute inset-0 rounded-lg flex items-center justify-center transition-all bg-black/50 hover:bg-black/70 text-white opacity-0 hover:opacity-100"
-                      >
-                        {playingTrack === `uploaded-${track.id}` ? (
-                          <Pause className="w-4 h-4" />
-                        ) : (
-                          <Play className="w-4 h-4 ml-0.5" />
-                        )}
-                      </button>
-                    </div>
-
-                    {/* Track Number */}
-                    <span className="text-sm text-neutral-500 w-6">
-                      {index + 1}
-                    </span>
-
-                    {/* Track Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-2">
-                        <h4 className="font-medium text-neutral-900 truncate">
-                          {track.title}
-                        </h4>
-                        {track.genre && (
-                          <Badge variant="secondary" className="text-xs">
-                            {track.genre}
-                          </Badge>
-                        )}
-                      </div>
-                      <div className="flex items-center space-x-2 text-sm text-neutral-600">
-                        {track.artist && (
-                          <span>by {track.artist}</span>
-                        )}
-                        {track.album && track.artist && (
-                          <span>•</span>
-                        )}
-                        {track.album && (
-                          <span>{track.album}</span>
-                        )}
-                        {track.year && (
-                          <>
-                            <span>•</span>
-                            <span>{track.year}</span>
-                          </>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Duration */}
-                    {track.durationMs && (
-                      <div className="flex items-center space-x-2 text-sm text-neutral-500">
-                        <Clock className="w-4 h-4" />
-                        <span>{formatDuration(track.durationMs)}</span>
-                      </div>
-                    )}
-
-                    {/* File Size */}
-                    <div className="hidden sm:block text-sm text-neutral-500">
-                      {(track.fileSize / (1024 * 1024)).toFixed(1)} MB
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
         </div>
       )}
 

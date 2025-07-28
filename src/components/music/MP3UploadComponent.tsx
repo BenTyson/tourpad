@@ -280,8 +280,8 @@ export const MP3UploadComponent = ({
         className={cn(
           'relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 cursor-pointer group',
           isDragOver 
-            ? 'border-blue-400 bg-blue-50 scale-105' 
-            : 'border-gray-300 hover:border-blue-300 hover:bg-gray-50',
+            ? 'border-sage bg-sage/10 scale-105' 
+            : 'border-neutral-300 hover:border-sage hover:bg-sage/5',
           uploadError && 'border-red-300 bg-red-50'
         )}
         onDragOver={handleDragOver}
@@ -303,26 +303,26 @@ export const MP3UploadComponent = ({
           <div className={cn(
             'mx-auto w-16 h-16 flex items-center justify-center rounded-full transition-all duration-300',
             isDragOver 
-              ? 'bg-blue-100' 
-              : 'bg-gray-100 group-hover:bg-blue-50'
+              ? 'bg-sage/20' 
+              : 'bg-neutral-100 group-hover:bg-sage/10'
           )}>
             <MusicalNoteIcon className={cn(
               'w-8 h-8 transition-colors',
-              isDragOver ? 'text-blue-600' : 'text-gray-500 group-hover:text-blue-500'
+              isDragOver ? 'text-sage' : 'text-neutral-500 group-hover:text-sage'
             )} />
           </div>
 
           {/* Text */}
           <div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <h3 className="text-lg font-semibold text-neutral-900 mb-2">
               Upload MP3 Files
             </h3>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-neutral-600 mb-4">
               Drag and drop your MP3 files here, or click to browse
             </p>
             
             {/* File info */}
-            <div className="flex flex-wrap justify-center gap-2 text-xs text-gray-500">
+            <div className="flex flex-wrap justify-center gap-2 text-xs text-neutral-500">
               <span>Max {maxFiles} files</span>
               <span>•</span>
               <span>Up to {maxSizePerFile / 1024 / 1024}MB each</span>
@@ -333,7 +333,7 @@ export const MP3UploadComponent = ({
 
           {/* Upload button */}
           <div className="pt-2">
-            <span className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors">
+            <span className="inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-lg text-white bg-sage hover:bg-sage/90 transition-colors shadow-sm">
               Choose MP3 Files
             </span>
           </div>
@@ -341,8 +341,8 @@ export const MP3UploadComponent = ({
 
         {/* Drag overlay */}
         {isDragOver && (
-          <div className="absolute inset-0 bg-blue-100/80 border-2 border-blue-400 border-dashed rounded-xl flex items-center justify-center">
-            <div className="text-blue-700 font-medium">
+          <div className="absolute inset-0 bg-sage/10 border-2 border-sage border-dashed rounded-xl flex items-center justify-center backdrop-blur-sm">
+            <div className="text-sage font-semibold">
               Drop MP3 files here to upload
             </div>
           </div>
@@ -351,16 +351,16 @@ export const MP3UploadComponent = ({
 
       {/* Error Display */}
       {uploadError && (
-        <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+        <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-xl">
           <ExclamationTriangleIcon className="w-5 h-5 text-red-600 flex-shrink-0" />
-          <p className="text-sm text-red-700">{uploadError}</p>
+          <p className="text-sm text-red-700 font-medium">{uploadError}</p>
         </div>
       )}
 
       {/* File List */}
       {files.length > 0 && (
         <div className="space-y-4">
-          <h4 className="text-lg font-medium text-gray-900">
+          <h4 className="text-lg font-semibold text-neutral-900">
             Uploaded Tracks ({files.length}/{maxFiles})
           </h4>
           
@@ -419,40 +419,40 @@ const MP3FilePreview = ({ file, onRemove, onRetry }: MP3FilePreviewProps) => {
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all duration-200">
+    <div className="bg-white border border-neutral-200 rounded-xl p-5 hover:shadow-lg transition-all duration-200 hover:border-sage/30">
       <div className="flex items-center space-x-4">
         {/* Icon */}
-        <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-          <MusicalNoteIcon className="w-6 h-6 text-gray-500" />
+        <div className="w-12 h-12 rounded-xl bg-sage/10 flex items-center justify-center flex-shrink-0">
+          <MusicalNoteIcon className="w-6 h-6 text-sage" />
         </div>
 
         {/* File Info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-1">
-            <p className="text-sm font-medium text-gray-900 truncate">
+            <p className="text-sm font-semibold text-neutral-900 truncate">
               {file.metadata?.title || file.name.replace(/\.mp3$/i, '')}
             </p>
             {getStatusIcon()}
           </div>
           
           {file.metadata?.artist && (
-            <p className="text-xs text-gray-600 mb-1">by {file.metadata.artist}</p>
+            <p className="text-xs text-neutral-600 mb-1 font-medium">by {file.metadata.artist}</p>
           )}
           
           <div className="flex items-center justify-between">
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-neutral-500">
               {formatFileSize(file.size)}
             </p>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-neutral-500 font-medium">
               {getStatusText()}
             </p>
           </div>
 
           {/* Progress bar for uploading */}
           {(file.uploadStatus === 'uploading' || file.uploadStatus === 'processing') && (
-            <div className="mt-2 w-full bg-gray-200 rounded-full h-1.5">
+            <div className="mt-2 w-full bg-neutral-200 rounded-full h-2">
               <div 
-                className="bg-blue-600 h-1.5 rounded-full transition-all duration-300" 
+                className="bg-sage h-2 rounded-full transition-all duration-300" 
                 style={{ width: `${file.progress}%` }}
               ></div>
             </div>
@@ -466,6 +466,7 @@ const MP3FilePreview = ({ file, onRemove, onRetry }: MP3FilePreviewProps) => {
               onClick={onRetry}
               variant="outline"
               size="sm"
+              className="border-sage text-sage hover:bg-sage hover:text-white"
             >
               Retry
             </Button>
@@ -473,7 +474,7 @@ const MP3FilePreview = ({ file, onRemove, onRetry }: MP3FilePreviewProps) => {
           
           <button
             onClick={onRemove}
-            className="w-8 h-8 rounded-full bg-red-100 text-red-600 hover:bg-red-200 flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 flex items-center justify-center transition-colors"
           >
             <XMarkIcon className="w-4 h-4" />
           </button>

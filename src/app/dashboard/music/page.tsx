@@ -125,12 +125,12 @@ export default function MusicManagementPage() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <Music className="h-6 w-6 text-blue-600" />
+            <div className="p-2 bg-sage/10 rounded-lg">
+              <Music className="h-6 w-6 text-sage" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900">Manage Music</h1>
+            <h1 className="text-3xl font-bold text-neutral-900">Manage Music</h1>
           </div>
-          <p className="text-gray-600">
+          <p className="text-neutral-600">
             Connect your streaming platforms and manage your music content to showcase your tracks on your artist profile.
           </p>
         </div>
@@ -139,8 +139,8 @@ export default function MusicManagementPage() {
         <div className="space-y-8">
           {/* Streaming Platform Connections */}
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-              <Headphones className="h-5 w-5 text-blue-600" />
+            <h2 className="text-xl font-semibold text-neutral-900 mb-6 flex items-center gap-2">
+              <Headphones className="h-5 w-5 text-sage" />
               Streaming Platform Connections
             </h2>
             
@@ -201,17 +201,17 @@ export default function MusicManagementPage() {
 
           {/* Direct MP3 Upload Section */}
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-              <Upload className="h-5 w-5 text-blue-600" />
+            <h2 className="text-xl font-semibold text-neutral-900 mb-6 flex items-center gap-2">
+              <Upload className="h-5 w-5 text-sage" />
               Direct Music Upload
             </h2>
             
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <div className="mb-4">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <div className="bg-white rounded-xl border border-neutral-200 shadow-sm p-6">
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-neutral-900 mb-2">
                   Upload Your MP3 Files
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-neutral-600">
                   Upload your own MP3 files directly to showcase your music. Perfect for artists not on streaming platforms or for exclusive tracks.
                 </p>
               </div>
@@ -228,8 +228,8 @@ export default function MusicManagementPage() {
 
           {/* Uploaded Tracks Management */}
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-              <Music className="h-5 w-5 text-blue-600" />
+            <h2 className="text-xl font-semibold text-neutral-900 mb-6 flex items-center gap-2">
+              <Music className="h-5 w-5 text-sage" />
               Your Uploaded Music
             </h2>
             
@@ -242,11 +242,11 @@ export default function MusicManagementPage() {
         </div>
 
         {/* Help Section */}
-        <div className="mt-12 bg-blue-50 border border-blue-200 rounded-lg p-6">
-          <h3 className="text-lg font-medium text-blue-900 mb-2">
+        <div className="mt-12 bg-mist/10 border border-mist/20 rounded-xl p-6">
+          <h3 className="text-lg font-semibold text-neutral-900 mb-2">
             Need Help?
           </h3>
-          <div className="text-sm text-blue-700 space-y-2">
+          <div className="text-sm text-neutral-700 space-y-2">
             <p>• <strong>Spotify:</strong> Connect your verified Spotify for Artists account to sync your tracks automatically.</p>
             <p>• <strong>SoundCloud:</strong> Connect your SoundCloud profile to showcase tracks that may not be on Spotify.</p>
             <p>• <strong>Multiple Platforms:</strong> You can connect both Spotify and SoundCloud - they'll both appear on your profile.</p>

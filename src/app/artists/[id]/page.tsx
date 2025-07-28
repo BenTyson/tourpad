@@ -633,27 +633,9 @@ export default function ArtistProfilePage() {
         {/* Music Section - Spotify & SoundCloud */}
         <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
           <div className="p-8">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-neutral-900">
-                Music
-              </h2>
-              <div className="flex items-center space-x-4">
-                {artistData.spotifyVerified && (
-                  <div className="flex items-center space-x-2">
-                    <Music className="w-5 h-5 text-green-600" />
-                    <span className="text-sm text-neutral-600">Spotify</span>
-                  </div>
-                )}
-                {artistData.soundcloudVerified && (
-                  <div className="flex items-center space-x-2">
-                    <div className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">S</span>
-                    </div>
-                    <span className="text-sm text-neutral-600">SoundCloud</span>
-                  </div>
-                )}
-              </div>
-            </div>
+            <h2 className="text-2xl font-bold text-neutral-900 mb-6">
+              Music
+            </h2>
             <EnhancedArtistMusicSection
               artistId={artistData.id}
               artistName={artistData.name}

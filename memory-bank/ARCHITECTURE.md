@@ -412,6 +412,44 @@ model SoundCloudCache {
 }
 ```
 
+#### Direct MP3 Upload Models ✅ FULLY IMPLEMENTED
+
+##### UploadedTrack Model
+```prisma
+model UploadedTrack {
+  id                  String     @id @default(cuid())
+  artistId            String
+  title               String
+  artistName          String?    // Artist name for display (different from Artist model relation)
+  album               String?
+  genre               String?
+  year                Int?
+  trackNumber         Int?
+  durationMs          Int?       // Track duration in milliseconds
+  originalFilename    String     // Original uploaded filename
+  filename            String     // Stored filename (timestamped)
+  filePath            String     // Relative path: /uploads/music/{filename}
+  fileSize            Int        // File size in bytes
+  mimeType            String     // audio/mpeg, audio/mp3
+  bitrate             Int?       // Audio bitrate
+  sampleRate          Int?       // Audio sample rate (e.g., 44100)
+  channels            Int?       // Audio channels (1=mono, 2=stereo)
+  description         String?    // Track description/notes
+  lyrics              String?    // Track lyrics
+  isPublic            Boolean    @default(true)  // Show on public profile
+  sortOrder           Int        @default(0)     // Custom ordering
+  processingStatus    String     @default("READY") // READY, PROCESSING, ERROR, DELETED
+  errorMessage        String?    // Processing error details
+  
+  artist              Artist     @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  
+  @@map("uploaded_tracks")
+}
+```
+
 ### Music Platform Integration Status
 
 #### Spotify Integration ✅ FULLY IMPLEMENTED
