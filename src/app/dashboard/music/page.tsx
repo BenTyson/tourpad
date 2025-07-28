@@ -5,6 +5,8 @@ import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import SpotifyConnectionCard from '@/components/dashboard/artist/SpotifyConnectionCard';
 import SoundCloudConnectionCard from '@/components/dashboard/artist/SoundCloudConnectionCard';
+import { MP3UploadComponent } from '@/components/music/MP3UploadComponent';
+import { UploadedTracksManager } from '@/components/music/UploadedTracksManager';
 import { Music, Upload, Headphones } from 'lucide-react';
 
 interface SpotifyConnection {
@@ -31,6 +33,7 @@ export default function MusicManagementPage() {
   const [soundcloudConnection, setSoundcloudConnection] = useState<SoundCloudConnection | null>(null);
   const [userProfileId, setUserProfileId] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     if (status === 'loading') return;
@@ -44,14 +47,23 @@ export default function MusicManagementPage() {
     fetch('/api/user/current')
       .then(res => res.json())
       .then(data => {
-        if (data.user) {
-          setUserProfileId(data.user.id);
-          setUserRole(data.user.userType?.toLowerCase());
+        console.log('User current API response:', data);
+        
+        if (data) {
+          // For artists, use the artist.id, not user.id
+          if (data.userType?.toLowerCase() === 'artist' && data.artist) {
+            console.log('Setting artist ID:', data.artist.id);
+            setUserProfileId(data.artist.id);
+          } else {
+            console.log('Setting user ID:', data.id);
+            setUserProfileId(data.id);
+          }
+          setUserRole(data.userType?.toLowerCase());
           
           // If user is an artist, fetch music connections
-          if (data.user.userType?.toLowerCase() === 'artist') {
+          if (data.userType?.toLowerCase() === 'artist' && data.artist) {
             // Fetch Spotify connection
-            fetch(`/api/spotify/artist/${data.user.id}`)
+            fetch(`/api/spotify/artist/${data.artist.id}`)
               .then(res => res.json())
               .then(spotifyData => {
                 if (spotifyData.artist) {
@@ -67,7 +79,7 @@ export default function MusicManagementPage() {
               .catch(err => console.error('Error fetching Spotify connection:', err));
 
             // Fetch SoundCloud connection
-            fetch(`/api/soundcloud/artist/${data.user.id}`)
+            fetch(`/api/soundcloud/artist/${data.artist.id}`)
               .then(res => res.json())
               .then(soundcloudData => {
                 if (soundcloudData.artist) {
@@ -187,34 +199,45 @@ export default function MusicManagementPage() {
             </div>
           </div>
 
-          {/* Direct MP3 Upload Section - Coming Soon */}
+          {/* Direct MP3 Upload Section */}
           <div>
             <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
               <Upload className="h-5 w-5 text-blue-600" />
               Direct Music Upload
             </h2>
             
-            <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
-              <div className="max-w-md mx-auto">
-                <div className="p-3 bg-gray-100 rounded-full w-fit mx-auto mb-4">
-                  <Upload className="h-8 w-8 text-gray-400" />
-                </div>
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <div className="mb-4">
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  Direct MP3 Upload
+                  Upload Your MP3 Files
                 </h3>
-                <p className="text-gray-600 mb-4">
-                  Upload your own MP3 files directly to showcase your music, even if you're not on streaming platforms.
+                <p className="text-gray-600">
+                  Upload your own MP3 files directly to showcase your music. Perfect for artists not on streaming platforms or for exclusive tracks.
                 </p>
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <p className="text-sm text-blue-700 font-medium">
-                    Coming Soon
-                  </p>
-                  <p className="text-sm text-blue-600 mt-1">
-                    We're working on this feature. For now, connect your Spotify or SoundCloud to showcase your music.
-                  </p>
-                </div>
               </div>
+              
+              <MP3UploadComponent
+                artistId={userProfileId || ''}
+                onUploadComplete={(tracks) => {
+                  console.log('Upload completed:', tracks);
+                  setRefreshTrigger(prev => prev + 1);
+                }}
+              />
             </div>
+          </div>
+
+          {/* Uploaded Tracks Management */}
+          <div>
+            <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+              <Music className="h-5 w-5 text-blue-600" />
+              Your Uploaded Music
+            </h2>
+            
+            <UploadedTracksManager
+              artistId={userProfileId || ''}
+              key={refreshTrigger} // Force refresh when upload completes
+              onRefresh={() => setRefreshTrigger(prev => prev + 1)}
+            />
           </div>
         </div>
 
@@ -227,7 +250,8 @@ export default function MusicManagementPage() {
             <p>• <strong>Spotify:</strong> Connect your verified Spotify for Artists account to sync your tracks automatically.</p>
             <p>• <strong>SoundCloud:</strong> Connect your SoundCloud profile to showcase tracks that may not be on Spotify.</p>
             <p>• <strong>Multiple Platforms:</strong> You can connect both Spotify and SoundCloud - they'll both appear on your profile.</p>
-            <p>• <strong>Direct Upload:</strong> MP3 upload feature coming soon for artists not on streaming platforms.</p>
+            <p>• <strong>Direct Upload:</strong> Upload MP3 files directly for exclusive tracks or if you're not on streaming platforms.</p>
+            <p>• <strong>File Management:</strong> Edit track details, manage visibility, and organize your uploaded music.</p>
           </div>
         </div>
       </div>

@@ -118,6 +118,9 @@ model Artist {
   // SoundCloud Relations
   soundcloudTracks        SoundCloudTrack[]
   
+  // Direct Upload Relations
+  uploadedTracks          UploadedTrack[]
+  
   // Tour Planning
   tourSegments            TourSegment[]
 
@@ -722,4 +725,56 @@ model SoundCloudCache {
   createdAt           DateTime   @default(now())
   
   @@map("soundcloud_cache")
+}
+
+// Direct MP3 Upload Models
+model UploadedTrack {
+  id                  String     @id @default(cuid())
+  artistId            String
+  
+  // Track metadata
+  title               String
+  artistName          String?    // Artist name from MP3 tags (may differ from account name)
+  album               String?    // Album from MP3 tags
+  genre               String?    // Genre from MP3 tags
+  year                Int?       // Release year from MP3 tags
+  trackNumber         Int?       // Track number from MP3 tags
+  durationMs          Int?       // Track duration in milliseconds
+  
+  // File information
+  originalFilename    String     // Original uploaded filename
+  filename            String     // Stored filename (sanitized)
+  filePath            String     // File path on server/S3
+  fileSize            Int        // File size in bytes
+  mimeType            String     // Should be audio/mpeg for MP3
+  
+  // Audio metadata (extracted from file)
+  bitrate             Int?       // Audio bitrate (kbps)
+  sampleRate          Int?       // Sample rate (Hz)
+  channels            Int?       // Number of audio channels (1=mono, 2=stereo)
+  
+  // User-provided metadata
+  description         String?    // Optional track description
+  lyrics              String?    // Optional lyrics
+  isPublic            Boolean    @default(true)   // Whether to show on artist profile
+  sortOrder           Int        @default(0)      // Custom ordering on profile
+  
+  // Status tracking
+  processingStatus    UploadStatus @default(PROCESSING)
+  errorMessage        String?    // If processing failed
+  
+  // Relations
+  artist              Artist     @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  
+  @@map("uploaded_tracks")
+}
+
+enum UploadStatus {
+  PROCESSING    // File uploaded, being processed
+  READY         // Successfully processed and ready for playback
+  FAILED        // Processing failed
+  DELETED       // Soft delete - keep record but file removed
 }
