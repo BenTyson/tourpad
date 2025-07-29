@@ -78,7 +78,61 @@ export async function GET(
       city: host.city,
       state: host.state,
       country: host.country,
-      displayCoordinates: host.displayCoordinates,
+      displayCoordinates: (() => {
+        // Try multiple sources for coordinates
+        if (host.latitude && host.longitude) {
+          return [host.latitude, host.longitude];
+        }
+        if (host.displayCoordinates) {
+          // If it's a string like "[lat,lng]", parse it
+          try {
+            const parsed = JSON.parse(host.displayCoordinates);
+            if (Array.isArray(parsed) && parsed.length === 2) {
+              return parsed;
+            }
+          } catch (e) {
+            // If not JSON, try comma-separated
+            const parts = host.displayCoordinates.split(',').map(p => parseFloat(p.trim()));
+            if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+              return parts;
+            }
+          }
+        }
+        
+        // Fallback: Use approximate coordinates based on city
+        const cityCoordinates: { [key: string]: [number, number] } = {
+          'Denver': [39.7392, -104.9903],
+          'Boulder': [40.0150, -105.2705],
+          'Nashville': [36.1627, -86.7816],
+          'Austin': [30.2672, -97.7431],
+          'Wheat Ridge': [39.7661, -105.0772],
+          'Los Angeles': [34.0522, -118.2437],
+          'New York': [40.7128, -74.0060],
+          'Chicago': [41.8781, -87.6298],
+          'San Francisco': [37.7749, -122.4194],
+          'Seattle': [47.6062, -122.3321],
+          'Portland': [45.5152, -122.6784],
+          'Miami': [25.7617, -80.1918],
+          'Atlanta': [33.7490, -84.3880],
+          'Boston': [42.3601, -71.0589],
+          'Philadelphia': [39.9526, -75.1652],
+          'Phoenix': [33.4484, -112.0740],
+          'Dallas': [32.7767, -96.7970],
+          'Houston': [29.7604, -95.3698],
+          'San Diego': [32.7157, -117.1611],
+          'Las Vegas': [36.1699, -115.1398]
+        };
+        
+        if (host.city && cityCoordinates[host.city]) {
+          // Add small random offset for privacy (about 1-2 miles)
+          const baseCoords = cityCoordinates[host.city];
+          const latOffset = (Math.random() - 0.5) * 0.02;
+          const lngOffset = (Math.random() - 0.5) * 0.02;
+          return [baseCoords[0] + latOffset, baseCoords[1] + lngOffset];
+        }
+        
+        return null;
+      })(),
       actualAddress: host.actualAddress,
       indoorCapacity: host.indoorCapacity,
       outdoorCapacity: host.outdoorCapacity,

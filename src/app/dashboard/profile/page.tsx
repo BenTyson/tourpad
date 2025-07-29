@@ -377,10 +377,25 @@ export default function ProfilePage() {
               setHostProfile({
                 venueName: data.venueName || '',
                 venueDescription: data.venueDescription || data.bio || '',
-                address: data.actualAddress || '',
+                address: (() => {
+                  // Extract street address from full address if needed
+                  const fullAddress = data.actualAddress || '';
+                  if (fullAddress.includes(',')) {
+                    // If it's a full address, take only the first part (street address)
+                    return fullAddress.split(',')[0].trim();
+                  }
+                  return fullAddress;
+                })(),
                 city: data.city || '',
                 state: data.state || '',
-                zip: data.zip || '',
+                zip: (() => {
+                  // Try to extract zip code from actualAddress if data.zip is not available
+                  if (data.zip) return data.zip;
+                  const fullAddress = data.actualAddress || '';
+                  // Match 5-digit zip code pattern
+                  const zipMatch = fullAddress.match(/\b\d{5}\b/);
+                  return zipMatch ? zipMatch[0] : '';
+                })(),
                 profilePhoto: data.profilePhoto || '',
                 venuePhoto: data.venuePhoto || '',
                 venueType: data.venueType || 'home',

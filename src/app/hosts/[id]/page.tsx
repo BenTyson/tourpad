@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { 
   MapPin,
@@ -54,6 +55,12 @@ import { PublicReviewsSection } from '@/components/reviews/PublicReviewsSection'
 import { mockRSVPs } from '@/data/mockData';
 import { testHosts } from '@/data/realTestData';
 
+// Dynamic import for MapContainer to avoid SSR issues
+const TourPadMapContainer = dynamic(
+  () => import('@/components/map/MapContainer'),
+  { ssr: false }
+);
+
 interface HostData {
   id: string;
   userId: string;
@@ -61,12 +68,15 @@ interface HostData {
   bio: string;
   city: string;
   state: string;
+  displayCoordinates?: [number, number];
   venueName: string;
   venueType: string;
   indoorCapacity?: number;
   outdoorCapacity?: number;
   typicalShowLength?: number;
   preferredDays?: string[];
+  suggestedDoorFee?: number;
+  hostingExperience?: number;
   website?: string;
   socialLinks?: {
     website?: string;
@@ -177,6 +187,7 @@ export default function HostProfilePage() {
               bio: testHost.bio,
               city: testHost.location.city,
               state: testHost.location.state,
+              displayCoordinates: [testHost.location.coordinates.lat, testHost.location.coordinates.lng],
               venueName: testHost.venueName,
               venueType: testHost.venueType,
               rating: testHost.rating,
@@ -332,19 +343,19 @@ export default function HostProfilePage() {
                 {host.bio}
               </p>
               
-              <div className="flex flex-wrap gap-4 mb-8">
-                <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
-                  <Star className="w-5 h-5 mr-2 text-yellow-500" />
-                  <span className="font-semibold text-neutral-900">{host.rating || 0}</span>
-                  <span className="ml-1 text-neutral-600">({host.reviewCount || 0} reviews)</span>
+              <div className="flex flex-wrap gap-3 mb-8">
+                <div className="flex items-center bg-neutral-50 rounded-md px-3 py-1.5 border border-neutral-200">
+                  <Star className="w-4 h-4 mr-1.5 text-yellow-500" />
+                  <span className="font-medium text-sm text-neutral-900">{host.rating || 0}</span>
+                  <span className="ml-1 text-sm text-neutral-600">({host.reviewCount || 0} {host.reviewCount === 1 ? 'review' : 'reviews'})</span>
                 </div>
-                <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
-                  <Users className="w-5 h-5 mr-2 text-neutral-600" />
-                  <span className="text-neutral-900">Up to {host.indoorCapacity || host.outdoorCapacity || 0} guests</span>
+                <div className="flex items-center bg-neutral-50 rounded-md px-3 py-1.5 border border-neutral-200">
+                  <Users className="w-4 h-4 mr-1.5 text-neutral-600" />
+                  <span className="text-sm text-neutral-900">Up to {Math.max(host.indoorCapacity || 0, host.outdoorCapacity || 0)} guests</span>
                 </div>
-                <div className="flex items-center bg-neutral-50 rounded-lg px-4 py-2 border border-neutral-200">
-                  <DollarSign className="w-5 h-5 mr-2 text-neutral-600" />
-                  <span className="text-neutral-900">${(host as any).suggestedDoorFee || 20} suggested door</span>
+                <div className="flex items-center bg-neutral-50 rounded-md px-3 py-1.5 border border-neutral-200">
+                  <DollarSign className="w-4 h-4 mr-1.5 text-neutral-600" />
+                  <span className="text-sm text-neutral-900">${host.suggestedDoorFee || host.showSpecs?.avgDoorFee || 20} suggested</span>
                 </div>
               </div>
               
@@ -1255,6 +1266,79 @@ export default function HostProfilePage() {
                   <p className="text-neutral-600">This venue doesn't have any concerts scheduled yet.</p>
                 </div>
               )}
+            </div>
+          </div>
+        </section>
+
+        {/* Host Location Map */}
+        <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
+          <div className="p-8">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold text-neutral-900 mb-2">Location</h2>
+                <p className="text-neutral-600">General area in {host.city}, {host.state}</p>
+              </div>
+              <Badge variant="secondary" className="bg-neutral-100 text-neutral-700">
+                <MapPin className="w-4 h-4 mr-1" />
+                Approximate
+              </Badge>
+            </div>
+            
+            <div className="rounded-xl overflow-hidden shadow-lg">
+              {host.displayCoordinates ? (
+                <TourPadMapContainer
+                  className="w-full h-[400px]"
+                  initialCenter={host.displayCoordinates}
+                  initialZoom={12}
+                  showFilters={false}
+                  hosts={[{
+                    id: host.id,
+                    userId: host.userId,
+                    name: host.venueName || host.name,
+                    email: '',
+                    profileImageUrl: host.housePhotos[0]?.url || '',
+                    venueName: host.venueName,
+                    venueType: host.venueType,
+                    city: host.city,
+                    state: host.state,
+                    country: 'United States',
+                    description: host.bio,
+                    capacity: (host.indoorCapacity || 0) + (host.outdoorCapacity || 0),
+                    indoorCapacity: host.indoorCapacity,
+                    outdoorCapacity: host.outdoorCapacity,
+                    preferredGenres: host.preferredGenres || [],
+                    suggestedDoorFee: (host as any).suggestedDoorFee,
+                    coordinates: host.displayCoordinates,
+                    actualCoordinates: host.displayCoordinates,
+                    amenities: {
+                      soundSystem: false,
+                      parking: false,
+                      accessible: false,
+                      kidFriendly: false,
+                      outdoorSpace: false
+                    },
+                    media: [],
+                    hostingExperience: host.showSpecs?.estimatedShowsPerYear || 0,
+                    offersLodging: (host as any).offersLodging || false,
+                    lodgingDetails: (host as any).lodgingDetails,
+                    houseRules: '',
+                    mapLocation: {
+                      searchKeywords: [host.city, host.state, host.venueType]
+                    }
+                  }]}
+                />
+              ) : (
+                <div className="bg-neutral-100 rounded-xl flex items-center justify-center h-[400px]">
+                  <div className="text-center">
+                    <MapPin className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+                    <p className="text-neutral-600">Location information not available</p>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            <div className="mt-4 text-sm text-neutral-500 text-center">
+              <p>This map shows the general area. Exact address will be shared after booking confirmation.</p>
             </div>
           </div>
         </section>
