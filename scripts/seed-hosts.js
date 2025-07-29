@@ -5,7 +5,7 @@ const sampleHosts = [
   {
     // User data
     name: "Sarah Chen",
-    email: "sarah.chen.host@tourpad.com",
+    email: "sarah.chen.host.seed@tourpad.com",
     profileImageUrl: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=faces",
     bio: "Former touring musician turned host. I understand what artists need for a great show.",
     location: "Austin, TX",
@@ -19,6 +19,12 @@ const sampleHosts = [
     venueType: "HOME",
     city: "Austin",
     state: "TX",
+    country: "USA",
+    actualAddress: "2847 Barton Hills Dr, Austin, TX 78704",
+    latitude: 30.2500,
+    longitude: -97.7800,
+    displayLat: 30.2520, // Slightly obfuscated
+    displayLng: -97.7820,
     venueDescription: "Cozy living room with a piano and fireplace. Perfect for intimate acoustic shows with our regular community of 25-30 music lovers.",
     indoorCapacity: 30,
     outdoorCapacity: 0,
@@ -26,6 +32,8 @@ const sampleHosts = [
     typicalShowLength: 90,
     hostingExperience: 3,
     offersLodging: true,
+    preferredGenres: ["Folk", "Indie", "Acoustic", "Country"],
+    houseRules: "No smoking indoors. Please be respectful of neighbors after 10pm. Dogs welcome!",
     amenities: [
       "WiFi available",
       "Free parking on premises", 
@@ -35,10 +43,29 @@ const sampleHosts = [
     ],
     soundSystem: {
       available: false,
-      description: "Artists provide their own sound equipment"
+      description: "Artists provide their own sound equipment. Small PA system available if needed.",
+      equipment: {
+        speakers: "",
+        microphones: "",
+        instruments: "Upright piano available",
+        additional: "Basic lighting, extension cords provided"
+      }
     },
     lodgingDetails: {
       numberOfRooms: 1,
+      hostMembers: [
+        {
+          id: "1",
+          hostName: "Sarah Chen",
+          aboutMe: "Former touring musician who loves supporting artists. I always make sure you have everything you need for a great show!",
+          profilePhoto: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=faces"
+        }
+      ],
+      preferredActSize: "Solo",
+      actSizeNotes: "Our living room works best for solo artists or duos. The piano is tuned monthly!",
+      whatWeEnjoy: "We love acoustic sets, singer-songwriters, and folk music. Our audience really appreciates storytelling between songs.",
+      musicWeArentInto: "We prefer not to host heavy metal or electronic music due to our acoustic setup.",
+      contentRating: "Kid Friendly",
       rooms: [{
         id: 1,
         roomType: "guest_bedroom",
@@ -53,11 +80,59 @@ const sampleHosts = [
         linensProvided: true,
         towelsProvided: true
       }
-    }
+    },
+    photos: [
+      {
+        category: "venue",
+        url: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop",
+        title: "Living room performance space",
+        description: "Our cozy living room with piano and fireplace"
+      },
+      {
+        category: "venue", 
+        url: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=600&fit=crop",
+        title: "Piano and seating area",
+        description: "The piano where many artists have performed"
+      },
+      {
+        category: "performance_space",
+        url: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=800&h=600&fit=crop", 
+        title: "Concert setup",
+        description: "How we arrange seating for shows"
+      },
+      {
+        category: "past_show",
+        url: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop",
+        title: "Recent folk performance",
+        description: "Local singer-songwriter performing last month"
+      }
+    ],
+    reviews: [
+      {
+        fanName: "Mike Johnson",
+        artistRating: 5,
+        hostRating: 5,
+        overallRating: 5,
+        hostFeedback: "Sarah created such a warm, welcoming atmosphere. The audience was engaged and respectful.",
+        overallFeedback: "Perfect intimate venue for acoustic music. Great sound and wonderful host!",
+        attendedDate: new Date('2024-09-15'),
+        wouldRecommend: true
+      },
+      {
+        fanName: "Emma Davis",
+        artistRating: 4,
+        hostRating: 5,
+        overallRating: 5,
+        hostFeedback: "Beautiful home venue with amazing acoustics. Sarah was incredibly hospitable.",
+        overallFeedback: "Loved the intimate setting and the piano added so much to the performance.",
+        attendedDate: new Date('2024-08-22'),
+        wouldRecommend: true
+      }
+    ]
   },
   {
     name: "Mike & Emma Rodriguez",
-    email: "mike.emma.host@tourpad.com", 
+    email: "mike.emma.host.seed@tourpad.com", 
     profileImageUrl: "https://images.unsplash.com/photo-1521119989659-a83eee488004?w=400&h=400&fit=crop&crop=faces",
     bio: "We've been hosting house concerts for 5 years and love creating magical evenings for artists and audiences.",
     location: "Nashville, TN",
@@ -70,6 +145,12 @@ const sampleHosts = [
     venueType: "LOFT", 
     city: "Nashville",
     state: "TN",
+    country: "USA",
+    actualAddress: "1205 Division St, Nashville, TN 37203",
+    latitude: 36.1500,
+    longitude: -86.8000,
+    displayLat: 36.1520,
+    displayLng: -86.8020,
     venueDescription: "Industrial loft space in the heart of Music City. High ceilings, exposed brick, and perfect acoustics for all genres.",
     indoorCapacity: 45,
     outdoorCapacity: 0,
@@ -77,6 +158,8 @@ const sampleHosts = [
     typicalShowLength: 120,
     hostingExperience: 5,
     offersLodging: false,
+    preferredGenres: ["Rock", "Country", "Blues", "Folk", "Indie"],
+    houseRules: "Professional venue with full sound system. Load-in through rear entrance. Shows end by 11pm.",
     amenities: [
       "WiFi available",
       "Sound system provided",
@@ -88,16 +171,91 @@ const sampleHosts = [
       available: true,
       description: "Full PA system with wireless mics, monitors, and mixing board",
       equipment: {
-        speakers: "QSC K12.2 mains with subwoofer",
-        microphones: "4 wireless handheld + 2 wireless lavalier",
-        instruments: "DI boxes available for acoustic instruments",
-        additional: "Professional lighting rig and stage backdrop"
+        speakers: "QSC K12.2 mains with KW181 subwoofer",
+        microphones: "4 wireless handheld Shure SM58 + 2 wireless lavalier",
+        instruments: "DI boxes available for acoustic instruments, bass amp available",
+        additional: "Professional lighting rig, stage backdrop, fog machine"
       }
-    }
+    },
+    lodgingDetails: {
+      hostMembers: [
+        {
+          id: "1", 
+          hostName: "Mike Rodriguez",
+          aboutMe: "Sound engineer and venue owner. I make sure every artist sounds their best!",
+          profilePhoto: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=faces"
+        },
+        {
+          id: "2",
+          hostName: "Emma Rodriguez", 
+          aboutMe: "Event coordinator and music lover. I handle all the logistics so artists can focus on performing.",
+          profilePhoto: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=faces"
+        }
+      ],
+      preferredActSize: "Full Band",
+      actSizeNotes: "Our stage and sound system can easily handle full bands. We love electric and acoustic acts!",
+      whatWeEnjoy: "We host everything from indie rock to country to blues. Our audience loves high-energy performances and great songwriting.",
+      musicWeArentInto: "We're open to most genres, though we prefer not to host experimental noise or extreme metal.",
+      contentRating: "Explicit"
+    },
+    photos: [
+      {
+        category: "venue",
+        url: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=600&fit=crop",
+        title: "Main performance space",
+        description: "Our industrial loft with exposed brick and high ceilings"
+      },
+      {
+        category: "venue",
+        url: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=800&h=600&fit=crop", 
+        title: "Stage and lighting setup",
+        description: "Professional stage with full lighting rig"
+      },
+      {
+        category: "performance_space",
+        url: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop",
+        title: "Sound booth and mixing area", 
+        description: "Professional mixing board and monitor setup"
+      },
+      {
+        category: "past_show",
+        url: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop",
+        title: "Rock band performance",
+        description: "Four-piece indie rock band from last weekend"
+      },
+      {
+        category: "past_show",
+        url: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800&h=600&fit=crop",
+        title: "Country duo",
+        description: "Amazing country duo that had the audience dancing"
+      }
+    ],
+    reviews: [
+      {
+        fanName: "Sarah Wilson",
+        artistRating: 5,
+        hostRating: 5, 
+        overallRating: 5,
+        hostFeedback: "Professional venue with top-notch sound system. Mike and Emma were fantastic to work with.",
+        overallFeedback: "This is how all venues should be run. Professional, welcoming, and the sound was perfect.",
+        attendedDate: new Date('2024-10-05'),
+        wouldRecommend: true
+      },
+      {
+        fanName: "David Park",
+        artistRating: 5,
+        hostRating: 4,
+        overallRating: 5,
+        hostFeedback: "Great venue with excellent acoustics. Load-in was easy and the sound system is professional grade.",
+        overallFeedback: "Fantastic space for live music. The atmosphere and sound quality were exceptional.",
+        attendedDate: new Date('2024-09-28'),
+        wouldRecommend: true
+      }
+    ]
   },
   {
     name: "David Kim",
-    email: "david.kim.host@tourpad.com",
+    email: "david.kim.host.seed@tourpad.com",
     profileImageUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=faces", 
     bio: "Tech entrepreneur who fell in love with live music. I host intimate shows in my backyard amphitheater.",
     location: "Portland, OR",
@@ -110,6 +268,12 @@ const sampleHosts = [
     venueType: "BACKYARD",
     city: "Portland", 
     state: "OR",
+    country: "USA",
+    actualAddress: "5234 SE Hawthorne Blvd, Portland, OR 97215",
+    latitude: 45.5120,
+    longitude: -122.6080,
+    displayLat: 45.5140,
+    displayLng: -122.6100,
     venueDescription: "Custom-built outdoor amphitheater in a beautiful garden setting. Weather-protected stage and seating area.",
     indoorCapacity: 0,
     outdoorCapacity: 60,
@@ -117,6 +281,8 @@ const sampleHosts = [
     typicalShowLength: 105,
     hostingExperience: 2,
     offersLodging: true,
+    preferredGenres: ["Folk", "Indie", "World", "Acoustic", "Experimental"],
+    houseRules: "Outdoor venue - shows cancelled if heavy rain. No smoking in garden areas. Dogs welcome on leash.",
     amenities: [
       "WiFi available",
       "Sound system provided",
@@ -128,14 +294,27 @@ const sampleHosts = [
       available: true,
       description: "Outdoor-rated sound system with weather protection",
       equipment: {
-        speakers: "Weather-resistant outdoor speakers",
-        microphones: "Wireless system with wind guards", 
-        instruments: "Full backline available",
-        additional: "Professional outdoor lighting and weather canopy"
+        speakers: "QSC weatherproof outdoor speakers with subwoofer",
+        microphones: "Wireless system with wind guards and weather protection", 
+        instruments: "Full backline available - drums, bass amp, guitar amps",
+        additional: "Professional outdoor lighting, weather canopy, heaters for cool evenings"
       }
     },
     lodgingDetails: {
       numberOfRooms: 1,
+      hostMembers: [
+        {
+          id: "1",
+          hostName: "David Kim",
+          aboutMe: "I built this amphitheater because I believe outdoor music experiences are magical. I love supporting touring artists!",
+          profilePhoto: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=faces"
+        }
+      ],
+      preferredActSize: "Trio",
+      actSizeNotes: "The outdoor setting works great for trios and small bands. Solo artists love the natural acoustics too.",
+      whatWeEnjoy: "We love artists who embrace the outdoor setting and natural beauty. Folk, indie, and world music really shine here.",
+      musicWeArentInto: "Heavy metal and very loud music doesn't work well with our outdoor setup and neighbors.",
+      contentRating: "Kid Friendly",
       rooms: [{
         id: 1,
         roomType: "studio_apartment",
@@ -151,235 +330,45 @@ const sampleHosts = [
         linensProvided: true,
         towelsProvided: true
       }
-    }
-  },
-  {
-    name: "Jenny Martinez",
-    email: "jenny.martinez.host@tourpad.com",
-    profileImageUrl: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=faces",
-    bio: "Former music teacher who loves supporting touring artists. My studio space has hosted over 50 concerts.",
-    location: "Denver, CO", 
-    websiteUrl: "",
-    socialLinks: {
-      instagram: "denvermusicroom"
     },
-    venueName: "The Music Room",
-    venueType: "STUDIO",
-    city: "Denver",
-    state: "CO", 
-    venueDescription: "Professional music studio converted for live performances. Acoustic treatment and intimate setting for up to 25 guests.",
-    indoorCapacity: 25,
-    outdoorCapacity: 0,
-    suggestedDoorFee: 20,
-    typicalShowLength: 90,
-    hostingExperience: 4,
-    offersLodging: false,
-    amenities: [
-      "WiFi available",
-      "Sound system provided",
-      "Power access for equipment",
-      "Air conditioning / Heating", 
-      "Free parking on premises"
-    ],
-    soundSystem: {
-      available: true,
-      description: "Professional studio monitors and recording equipment",
-      equipment: {
-        speakers: "Studio monitor speakers", 
-        microphones: "Professional condenser and dynamic mics",
-        instruments: "Piano, guitar amps, bass amp available",
-        additional: "Professional recording capability available"
+    photos: [
+      {
+        category: "venue",
+        url: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800&h=600&fit=crop",
+        title: "Backyard amphitheater overview",
+        description: "Custom-built amphitheater in garden setting"
+      },
+      {
+        category: "venue",
+        url: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=800&h=600&fit=crop",
+        title: "Stage and covered seating",
+        description: "Weather-protected stage with tiered seating"
+      },
+      {
+        category: "performance_space", 
+        url: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop",
+        title: "Garden performance area",
+        description: "Beautiful garden backdrop for performances"
+      },
+      {
+        category: "past_show",
+        url: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop",
+        title: "Evening folk performance",
+        description: "Magical evening show with string lights"
       }
-    }
-  },
-  {
-    name: "Robert & Lisa Thompson", 
-    email: "thompson.family.host@tourpad.com",
-    profileImageUrl: "https://images.unsplash.com/photo-1520813792240-56fc4a3765a7?w=400&h=400&fit=crop&crop=faces",
-    bio: "Empty nesters who converted our basement into a cozy concert venue. We love cooking for our artists!",
-    location: "Minneapolis, MN",
-    websiteUrl: "",
-    socialLinks: {},
-    venueName: "Thompson Family Basement",
-    venueType: "HOME",
-    city: "Minneapolis", 
-    state: "MN",
-    venueDescription: "Finished basement with a warm, living room feel. Full kitchen upstairs and we always provide dinner for our artists.",
-    indoorCapacity: 20,
-    outdoorCapacity: 0,
-    suggestedDoorFee: 12,
-    typicalShowLength: 75,
-    hostingExperience: 1,
-    offersLodging: true,
-    amenities: [
-      "WiFi available",
-      "Kid friendly environment", 
-      "Food & Refreshments",
-      "Power access for equipment",
-      "Free parking on premises",
-      "Overnight accommodation"
     ],
-    soundSystem: {
-      available: false,
-      description: "Acoustic performances only"
-    },
-    lodgingDetails: {
-      numberOfRooms: 2,
-      rooms: [
-        {
-          id: 1,
-          roomType: "guest_bedroom", 
-          bathroomType: "shared",
-          beds: [{ type: "queen", quantity: 1 }],
-          maxOccupancy: 2
-        },
-        {
-          id: 2,
-          roomType: "guest_bedroom",
-          bathroomType: "shared", 
-          beds: [{ type: "twin", quantity: 2 }],
-          maxOccupancy: 2
-        }
-      ],
-      amenities: {
-        wifi: true,
-        breakfast: true,
-        kitchenAccess: true,
-        parking: true,
-        linensProvided: true,
-        towelsProvided: true
+    reviews: [
+      {
+        fanName: "Lisa Chen",
+        artistRating: 5,
+        hostRating: 5,
+        overallRating: 5,
+        hostFeedback: "The outdoor amphitheater is absolutely magical! David thought of every detail for artists' comfort.",
+        overallFeedback: "One of the most unique and beautiful venues I've ever experienced. Perfect for intimate outdoor shows.",
+        attendedDate: new Date('2024-09-12'),
+        wouldRecommend: true
       }
-    }
-  },
-  {
-    name: "Alex Rivera",
-    email: "alex.rivera.host@tourpad.com", 
-    profileImageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=faces",
-    bio: "Artist and maker who converted my warehouse studio into a multi-purpose venue for music and art events.",
-    location: "Brooklyn, NY",
-    websiteUrl: "https://riverawarehouse.com",
-    socialLinks: {
-      instagram: "riverawarehouse",
-      website: "https://riverawarehouse.com"
-    },
-    venueName: "Rivera Warehouse",
-    venueType: "WAREHOUSE",
-    city: "Brooklyn",
-    state: "NY",
-    venueDescription: "Industrial warehouse space with moveable walls and flexible setup. Can accommodate intimate shows or larger gatherings.",
-    indoorCapacity: 80,
-    outdoorCapacity: 0, 
-    suggestedDoorFee: 35,
-    typicalShowLength: 120,
-    hostingExperience: 3,
-    offersLodging: false,
-    amenities: [
-      "WiFi available",
-      "Sound system provided",
-      "Power access for equipment",
-      "Step-free access"
-    ],
-    soundSystem: {
-      available: true,
-      description: "Modular sound system that scales with event size",
-      equipment: {
-        speakers: "Modular line array system",
-        microphones: "8-channel wireless system",
-        instruments: "Full backline and DJ equipment available", 
-        additional: "Professional lighting grid and video projection"
-      }
-    }
-  },
-  {
-    name: "Maria Santos",
-    email: "maria.santos.host@tourpad.com",
-    profileImageUrl: "https://images.unsplash.com/photo-1485893015013-6f4be9c49de9?w=400&h=400&fit=crop&crop=faces",
-    bio: "Retired teacher who hosts bilingual concerts to build community through music. ¡La música nos une!",
-    location: "San Antonio, TX",
-    websiteUrl: "",
-    socialLinks: {
-      facebook: "https://facebook.com/casadesantos"
-    },
-    venueName: "Casa de Santos",
-    venueType: "HOME",
-    city: "San Antonio",
-    state: "TX", 
-    venueDescription: "Traditional adobe home with a large living area perfect for both English and Spanish-language performances. Family-friendly atmosphere.",
-    indoorCapacity: 35,
-    outdoorCapacity: 0,
-    suggestedDoorFee: 10,
-    typicalShowLength: 90,
-    hostingExperience: 2,
-    offersLodging: true,
-    amenities: [
-      "WiFi available",
-      "Kid friendly environment",
-      "Food & Refreshments", 
-      "Free parking on premises",
-      "Power access for equipment",
-      "Overnight accommodation"
-    ],
-    soundSystem: {
-      available: false,
-      description: "Acoustic performances preferred, small PA available if needed"
-    },
-    lodgingDetails: {
-      numberOfRooms: 1,
-      rooms: [{
-        id: 1,
-        roomType: "guest_bedroom",
-        bathroomType: "private",
-        beds: [{ type: "queen", quantity: 1 }], 
-        maxOccupancy: 2
-      }],
-      amenities: {
-        wifi: true,
-        breakfast: true,
-        kitchenAccess: true,
-        parking: true,
-        linensProvided: true,
-        towelsProvided: true
-      }
-    }
-  },
-  {
-    name: "James Park",
-    email: "james.park.host@tourpad.com",
-    profileImageUrl: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=faces",
-    bio: "Audio engineer who built the perfect listening room. I love showcasing artists in an audiophile-quality environment.", 
-    location: "Seattle, WA",
-    websiteUrl: "https://perfectlistening.com",
-    socialLinks: {
-      instagram: "perfectlisteningroom",
-      youtube: "https://youtube.com/perfectlistening"
-    },
-    venueName: "The Perfect Listening Room",
-    venueType: "STUDIO",
-    city: "Seattle",
-    state: "WA",
-    venueDescription: "Custom-built listening room with acoustic treatment designed by professional engineers. Intimate setting for audiophile experiences.",
-    indoorCapacity: 18,
-    outdoorCapacity: 0,
-    suggestedDoorFee: 40,
-    typicalShowLength: 75, 
-    hostingExperience: 6,
-    offersLodging: false,
-    amenities: [
-      "WiFi available",
-      "Sound system provided",
-      "Power access for equipment",
-      "Air conditioning / Heating"
-    ],
-    soundSystem: {
-      available: true,
-      description: "High-end audiophile sound system with precision acoustic treatment",
-      equipment: {
-        speakers: "Reference monitor speakers with tube preamps",
-        microphones: "Vintage ribbon and condenser microphones",
-        instruments: "Steinway baby grand piano available",
-        additional: "Professional recording and live streaming capabilities"
-      }
-    }
+    ]
   }
 ];
 
@@ -392,14 +381,24 @@ async function seedHosts() {
     for (const hostData of sampleHosts) {
       console.log(`Creating host: ${hostData.venueName}`);
       
-      // Create user first
-      const user = await prisma.user.create({
+      // Create user first (or find existing)
+      let user = await prisma.user.findUnique({
+        where: { email: hostData.email }
+      });
+      
+      if (user) {
+        console.log(`User with email ${hostData.email} already exists, skipping...`);
+        continue;
+      }
+      
+      user = await prisma.user.create({
         data: {
           name: hostData.name,
           email: hostData.email,
           emailVerified: true,
           userType: 'HOST',
           status: 'ACTIVE',
+          profileImageUrl: hostData.profileImageUrl,
           profile: {
             create: {
               bio: hostData.bio,
@@ -420,6 +419,12 @@ async function seedHosts() {
           venueType: hostData.venueType,
           city: hostData.city,
           state: hostData.state,
+          country: hostData.country,
+          actualAddress: hostData.actualAddress,
+          latitude: hostData.latitude,
+          longitude: hostData.longitude,
+          displayLat: hostData.displayLat,
+          displayLng: hostData.displayLng,
           venueDescription: hostData.venueDescription,
           indoorCapacity: hostData.indoorCapacity,
           outdoorCapacity: hostData.outdoorCapacity,
@@ -427,34 +432,126 @@ async function seedHosts() {
           typicalShowLength: hostData.typicalShowLength,
           hostingExperience: hostData.hostingExperience,
           offersLodging: hostData.offersLodging,
+          preferredGenres: hostData.preferredGenres,
+          houseRules: hostData.houseRules,
           amenities: hostData.amenities,
           soundSystem: hostData.soundSystem,
           lodgingDetails: hostData.lodgingDetails,
           approvedAt: new Date(), // Auto-approve sample hosts
-          preferredGenres: ['Folk', 'Indie', 'Acoustic'], // Default genres
-          country: 'USA'
         }
       });
       
-      // Add some sample media for each host
-      const sampleImages = [
-        'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop',
-        'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=600&fit=crop', 
-        'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=800&h=600&fit=crop'
-      ];
+      // Add photos for each host
+      if (hostData.photos) {
+        for (let i = 0; i < hostData.photos.length; i++) {
+          const photo = hostData.photos[i];
+          await prisma.hostMedia.create({
+            data: {
+              hostId: host.id,
+              mediaType: 'PHOTO',
+              category: photo.category,
+              fileUrl: photo.url,
+              title: photo.title,
+              description: photo.description,
+              sortOrder: i
+            }
+          });
+        }
+      }
       
-      for (let i = 0; i < 2; i++) {
-        await prisma.hostMedia.create({
-          data: {
-            hostId: host.id,
-            mediaType: 'PHOTO',
-            category: i === 0 ? 'venue' : 'performance_space',
-            fileUrl: sampleImages[i % sampleImages.length],
-            title: i === 0 ? 'Main venue photo' : 'Performance space',
-            description: `Photo ${i + 1} of ${hostData.venueName}`,
-            sortOrder: i
-          }
-        });
+      // Create sample fans for reviews
+      if (hostData.reviews) {
+        for (const reviewData of hostData.reviews) {
+          // Create a fan user for the review
+          const fanEmail = `${reviewData.fanName.toLowerCase().replace(/\s+/g, '.')}.${Date.now()}@example.com`;
+          const fanUser = await prisma.user.create({
+            data: {
+              name: reviewData.fanName,
+              email: fanEmail,
+              emailVerified: true,
+              userType: 'FAN',
+              status: 'ACTIVE'
+            }
+          });
+          
+          // Create fan profile
+          const fan = await prisma.fan.create({
+            data: {
+              userId: fanUser.id,
+              favoriteGenres: ["Folk", "Indie"],
+              subscriptionStatus: 'ACTIVE'
+            }
+          });
+          
+          // Create a sample artist for the review
+          const artistEmail = `sample.artist.${createdCount}.${Date.now()}@example.com`;
+          const artistUser = await prisma.user.create({
+            data: {
+              name: `Sample Artist ${createdCount}`,
+              email: artistEmail,
+              emailVerified: true,
+              userType: 'ARTIST',
+              status: 'ACTIVE'
+            }
+          });
+          
+          const artist = await prisma.artist.create({
+            data: {
+              userId: artistUser.id,
+              stageName: `Sample Artist ${createdCount}`,
+              genres: ["Folk"],
+              approvedAt: new Date()
+            }
+          });
+          
+          // Create a sample booking first
+          const booking = await prisma.booking.create({
+            data: {
+              artistId: artist.id,
+              hostId: host.id,
+              requestedDate: reviewData.attendedDate,
+              requestedTime: reviewData.attendedDate,
+              estimatedDuration: hostData.typicalShowLength,
+              expectedAttendance: hostData.indoorCapacity || hostData.outdoorCapacity,
+              status: 'COMPLETED',
+              doorFee: hostData.suggestedDoorFee,
+              doorFeeStatus: 'AGREED',
+              confirmedAt: reviewData.attendedDate,
+              completedAt: reviewData.attendedDate
+            }
+          });
+          
+          // Create a sample concert
+          const concert = await prisma.concert.create({
+            data: {
+              bookingId: booking.id,
+              title: `Concert at ${hostData.venueName}`,
+              date: reviewData.attendedDate,
+              startTime: reviewData.attendedDate,
+              doorFee: hostData.suggestedDoorFee,
+              maxCapacity: hostData.indoorCapacity || hostData.outdoorCapacity,
+              status: 'COMPLETED'
+            }
+          });
+          
+          // Create the review
+          await prisma.review.create({
+            data: {
+              concertId: concert.id,
+              fanId: fan.id,
+              artistId: artist.id,
+              hostId: host.id,
+              artistRating: reviewData.artistRating,
+              hostRating: reviewData.hostRating,
+              overallRating: reviewData.overallRating,
+              hostFeedback: reviewData.hostFeedback,
+              overallFeedback: reviewData.overallFeedback,
+              attendedDate: reviewData.attendedDate,
+              wouldRecommend: reviewData.wouldRecommend,
+              isPublic: true
+            }
+          });
+        }
       }
       
       createdCount++;
@@ -465,7 +562,8 @@ async function seedHosts() {
     console.log('📋 Summary:');
     console.log(`   • ${createdCount} hosts created`);
     console.log(`   • ${createdCount} users created`); 
-    console.log(`   • ${createdCount * 2} photos added`);
+    console.log(`   • ${sampleHosts.reduce((sum, host) => sum + (host.photos?.length || 0), 0)} photos added`);
+    console.log(`   • ${sampleHosts.reduce((sum, host) => sum + (host.reviews?.length || 0), 0)} reviews created`);
     console.log(`   • All hosts auto-approved and ready for browsing`);
     
   } catch (error) {
