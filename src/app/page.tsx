@@ -94,9 +94,16 @@ export default function PhotoRichHomePage() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left side - Clean content */}
             <div className={`transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-              <div className="inline-flex items-center px-4 py-2 bg-sage/10 text-evergreen rounded-full text-sm font-medium mb-8">
-                <Sparkles className="w-4 h-4 mr-2" />
-                House Concert Community
+              {/* Logo */}
+              <div className="flex justify-center mb-12">
+                <Image 
+                  src="/logo.png" 
+                  alt="TourPad Logo" 
+                  width={120} 
+                  height={120}
+                  className="h-24 w-24 sm:h-28 sm:w-28 lg:h-32 lg:w-32 drop-shadow-lg"
+                  priority
+                />
               </div>
               
               <h1 className="text-4xl sm:text-6xl font-bold text-gray-900 mb-6 leading-tight">
