@@ -122,6 +122,7 @@ export async function GET() {
         venueDescription: user.host.venueDescription || '',
         city: user.host.city || profileData.city || '',
         state: user.host.state || profileData.state || '',
+        actualAddress: user.host.actualAddress || '',
         venueType: user.host.venueType?.toLowerCase() || 'home',
         indoorCapacity: user.host.indoorCapacity || 0,
         outdoorCapacity: user.host.outdoorCapacity || 0,
@@ -137,12 +138,26 @@ export async function GET() {
         socialLinks: user.profile?.socialLinks || {},
         profilePhoto: user.profile?.profileImageUrl || '',
         venuePhoto: user.host.venuePhotoUrl || '',
-        // Include hostInfo for the personal host information
+        // Include hostInfo for the personal host information (legacy)
         hostInfo: {
           hostName: user.name,
           aboutMe: user.profile?.bio || '',
           profilePhoto: user.profile?.profileImageUrl || ''
         },
+        // Include hostMembers - extract from lodgingDetails or create from hostInfo
+        hostMembers: (() => {
+          const lodging = user.host.lodgingDetails as any;
+          if (lodging?.hostMembers && Array.isArray(lodging.hostMembers)) {
+            return lodging.hostMembers;
+          }
+          // Fallback: create from hostInfo for backward compatibility
+          return [{
+            id: '1',
+            hostName: user.name,
+            aboutMe: user.profile?.bio || '',
+            profilePhoto: user.profile?.profileImageUrl || ''
+          }];
+        })(),
         amenities: user.host.amenities || [],
         soundSystem: user.host.soundSystem || {
           available: false,
@@ -154,6 +169,27 @@ export async function GET() {
             additional: ''
           }
         },
+        // Musical Preferences - extract from lodgingDetails
+        preferredActSize: (() => {
+          const lodging = user.host.lodgingDetails as any;
+          return lodging?.preferredActSize || 'Doesn\'t Matter';
+        })(),
+        actSizeNotes: (() => {
+          const lodging = user.host.lodgingDetails as any;
+          return lodging?.actSizeNotes || '';
+        })(),
+        whatWeEnjoy: (() => {
+          const lodging = user.host.lodgingDetails as any;
+          return lodging?.whatWeEnjoy || '';
+        })(),
+        musicWeArentInto: (() => {
+          const lodging = user.host.lodgingDetails as any;
+          return lodging?.musicWeArentInto || '';
+        })(),
+        contentRating: (() => {
+          const lodging = user.host.lodgingDetails as any;
+          return lodging?.contentRating || 'Kid Friendly';
+        })(),
         photos: hostMedia.map(media => ({
           id: media.id,
           fileUrl: media.fileUrl,
@@ -388,15 +424,44 @@ export async function PUT(request: NextRequest) {
               undefined,
             city: data.city || undefined,
             state: data.state || undefined,
+            actualAddress: data.address || data.actualAddress || undefined,
             indoorCapacity: data.indoorCapacity ? parseInt(data.indoorCapacity) : undefined,
             outdoorCapacity: data.outdoorCapacity ? parseInt(data.outdoorCapacity) : undefined,
-            preferredGenres: data.preferredDays || data.preferredGenres || [],
+            preferredGenres: data.preferredGenres || [],
             hostingExperience: data.hostingExperience ? parseInt(data.hostingExperience) : undefined,
             typicalShowLength: data.typicalShowLength ? parseInt(data.typicalShowLength) : undefined,
             houseRules: data.houseRules || undefined,
             suggestedDoorFee: data.suggestedDoorFee ? parseInt(data.suggestedDoorFee) : undefined,
             offersLodging: data.offersLodging !== undefined ? data.offersLodging : undefined,
-            lodgingDetails: data.lodgingDetails || undefined,
+            lodgingDetails: (() => {
+              // Merge hostMembers and musical preferences with existing lodgingDetails
+              const existingLodging = data.lodgingDetails || {};
+              const updatedLodging = { ...existingLodging };
+              
+              // Add hostMembers if provided
+              if (data.hostMembers && Array.isArray(data.hostMembers)) {
+                updatedLodging.hostMembers = data.hostMembers;
+              }
+              
+              // Add musical preferences if provided
+              if (data.preferredActSize !== undefined) {
+                updatedLodging.preferredActSize = data.preferredActSize;
+              }
+              if (data.actSizeNotes !== undefined) {
+                updatedLodging.actSizeNotes = data.actSizeNotes;
+              }
+              if (data.whatWeEnjoy !== undefined) {
+                updatedLodging.whatWeEnjoy = data.whatWeEnjoy;
+              }
+              if (data.musicWeArentInto !== undefined) {
+                updatedLodging.musicWeArentInto = data.musicWeArentInto;
+              }
+              if (data.contentRating !== undefined) {
+                updatedLodging.contentRating = data.contentRating;
+              }
+              
+              return updatedLodging;
+            })() || undefined,
             venuePhotoUrl: data.venuePhoto || undefined,
             amenities: data.amenities || [],
             soundSystem: data.soundSystem || undefined,

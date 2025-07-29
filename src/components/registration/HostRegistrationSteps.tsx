@@ -24,7 +24,7 @@ const VENUE_TYPES = [
 const PREFERRED_GENRES = [
   'Folk', 'Rock', 'Pop', 'Jazz', 'Blues', 'Country', 'Classical', 
   'Electronic', 'Hip Hop', 'R&B', 'Soul', 'Funk', 'Reggae', 
-  'World', 'Experimental', 'Ambient', 'Indie', 'Alternative'
+  'World', 'Experimental', 'Ambient', 'Indie', 'Alternative', 'Other'
 ];
 
 export interface HostFormData {
@@ -415,9 +415,15 @@ export function HostingExperienceStep({ formData, updateFormData, errors, clearE
   };
 
   const AMENITIES = [
-    'Parking Available', 'Public Transportation', 'Wheelchair Accessible', 
-    'Kitchen Access', 'Bathroom Access', 'Wi-Fi', 'Air Conditioning', 
-    'Heating', 'Outdoor Space', 'Refreshments Provided'
+    'Power access for equipment',
+    'Kid friendly environment',
+    'Sound system provided',
+    'Overnight accommodation',
+    'Air conditioning / Heating',
+    'Free parking on premises',
+    'WiFi available',
+    'Step-free access',
+    'Food & Refreshments'
   ];
 
   return (

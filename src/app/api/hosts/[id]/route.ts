@@ -83,6 +83,7 @@ export async function GET(
       indoorCapacity: host.indoorCapacity,
       outdoorCapacity: host.outdoorCapacity,
       preferredGenres: host.preferredGenres,
+      preferredDays: host.preferredGenres || [], // Preferred days are stored in preferredGenres field
       hostingExperience: host.hostingExperience,
       typicalShowLength: host.typicalShowLength,
       houseRules: host.houseRules,
@@ -111,12 +112,26 @@ export async function GET(
           title: m.title,
           description: m.description
         })),
-      // Host profile info
+      // Host profile info (legacy)
       hostInfo: {
         hostName: host.user.name,
         profilePhoto: host.user.profile?.profileImageUrl || host.user.profileImageUrl,
         aboutMe: host.user.profile?.bio || 'Passionate about bringing live music into intimate settings. I love creating memorable experiences where artists and audiences can connect in a personal, meaningful way.'
       },
+      // Host members - extract from lodgingDetails
+      hostMembers: (() => {
+        const lodging = host.lodgingDetails as any;
+        if (lodging?.hostMembers && Array.isArray(lodging.hostMembers)) {
+          return lodging.hostMembers;
+        }
+        // Fallback: create from user data for backward compatibility
+        return [{
+          id: '1',
+          hostName: host.user.name,
+          aboutMe: host.user.profile?.bio || 'Passionate about bringing live music into intimate settings. I love creating memorable experiences where artists and audiences can connect in a personal, meaningful way.',
+          profilePhoto: host.user.profile?.profileImageUrl || host.user.profileImageUrl
+        }];
+      })(),
       // Calculate rating from reviews using database (single query)
       ...await (async () => {
         const reviewStats = await prisma.review.aggregate({
@@ -172,6 +187,27 @@ export async function GET(
           lodgingDetails: host.lodgingDetails
         }
       } : null,
+      // Musical Preferences - extract from lodgingDetails
+      preferredActSize: (() => {
+        const lodging = host.lodgingDetails as any;
+        return lodging?.preferredActSize || 'Doesn\'t Matter';
+      })(),
+      actSizeNotes: (() => {
+        const lodging = host.lodgingDetails as any;
+        return lodging?.actSizeNotes || '';
+      })(),
+      whatWeEnjoy: (() => {
+        const lodging = host.lodgingDetails as any;
+        return lodging?.whatWeEnjoy || '';
+      })(),
+      musicWeArentInto: (() => {
+        const lodging = host.lodgingDetails as any;
+        return lodging?.musicWeArentInto || '';
+      })(),
+      contentRating: (() => {
+        const lodging = host.lodgingDetails as any;
+        return lodging?.contentRating || 'Kid Friendly';
+      })(),
       // Upcoming concerts
       upcomingConcerts: host.bookings.map(booking => ({
         id: booking.concert?.id,
@@ -242,7 +278,30 @@ export async function PUT(
         typicalShowLength: data.typicalShowLength,
         houseRules: data.houseRules,
         offersLodging: data.offersLodging,
-        lodgingDetails: data.lodgingDetails,
+        lodgingDetails: (() => {
+          // Merge musical preferences with existing lodgingDetails
+          const existingLodging = data.lodgingDetails || {};
+          const updatedLodging = { ...existingLodging };
+          
+          // Add musical preferences if provided
+          if (data.preferredActSize !== undefined) {
+            updatedLodging.preferredActSize = data.preferredActSize;
+          }
+          if (data.actSizeNotes !== undefined) {
+            updatedLodging.actSizeNotes = data.actSizeNotes;
+          }
+          if (data.whatWeEnjoy !== undefined) {
+            updatedLodging.whatWeEnjoy = data.whatWeEnjoy;
+          }
+          if (data.musicWeArentInto !== undefined) {
+            updatedLodging.musicWeArentInto = data.musicWeArentInto;
+          }
+          if (data.contentRating !== undefined) {
+            updatedLodging.contentRating = data.contentRating;
+          }
+          
+          return updatedLodging;
+        })(),
         suggestedDoorFee: data.suggestedDoorFee
       }
     });

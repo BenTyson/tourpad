@@ -197,7 +197,7 @@ model Host {
   typicalShowLength      Int?                // Minutes
   houseRules             String?
   offersLodging          Boolean             @default(false)
-  lodgingDetails         Json?               // Room configuration, amenities
+  lodgingDetails         Json?               // Room configuration, amenities, hostMembers, musical preferences
   suggestedDoorFee       Int?                // Suggested door fee amount
   venuePhotoUrl          String?             // Main venue photo
   venueDescription       String?
@@ -532,6 +532,176 @@ model TourStateRange {
   updatedAt     DateTime    @updatedAt
 }
 ```
+
+---
+
+## Host Profile System ✅ FULLY IMPLEMENTED
+### Overview
+The Host Profile System provides comprehensive venue and host information management, including a sophisticated Musical Preferences system that helps artists find venues that match their style and requirements.
+
+### Musical Preferences System ✅ IMPLEMENTED
+**Location**: `/src/app/hosts/[id]/page.tsx` - Musical Preferences section
+**Edit Interface**: `/src/app/dashboard/profile/page.tsx` - Musical Preferences section
+
+#### Key Features:
+1. **Preferred Genres**: Host-selected music genres with custom genre input
+2. **Act Size Preferences**: Venue suitability for different band sizes (Solo, Duo, Trio, Full Band)
+3. **Act Size Considerations**: Detailed notes about space limitations and requirements
+4. **What We Love to Host**: Positive preferences and venue strengths
+5. **Things We Dislike**: Diplomatic expression of genres/styles to avoid
+6. **Content Rating**: Family-friendly vs. explicit content preferences
+
+#### Data Storage Architecture:
+```typescript
+// Database Fields (Host model)
+preferredGenres: String[]        // Main genres array in database
+lodgingDetails: Json?           // Contains musical preferences object:
+{
+  // Musical Preferences stored here
+  preferredActSize: 'Solo' | 'Duo' | 'Trio' | 'Full Band' | "Doesn't Matter"
+  actSizeNotes: string           // Details about space limitations
+  whatWeEnjoy: string           // Positive venue preferences
+  musicWeArentInto: string      // Genres/styles to avoid
+  contentRating: 'Kid Friendly' | 'Explicit' | "Doesn't Matter"
+  
+  // Host Members (for multiple hosts per venue)
+  hostMembers: Array<{
+    id: string
+    hostName: string
+    aboutMe: string
+    profilePhoto: string
+  }>
+  
+  // Other lodging data...
+}
+```
+
+#### API Integration:
+```typescript
+// Profile API (/api/profile/route.ts)
+GET   - Returns musical preferences from lodgingDetails JSON
+PUT   - Saves musical preferences to lodgingDetails JSON
+
+// Host API (/api/hosts/[id]/route.ts)  
+GET   - Returns musical preferences for public profile display
+PUT   - Updates musical preferences via host-specific API
+```
+
+### Host Profile Multi-Host Support ✅ IMPLEMENTED
+**Issue**: Support for venues with multiple hosts (couples, roommates, etc.)
+**Solution**: hostMembers array within lodgingDetails JSON
+
+#### Features:
+- **Multiple Host Profiles**: Add unlimited host members with individual profiles
+- **Individual About Me**: Each host can have their own bio and photo
+- **Smart Display**: Profile shows "Meet Your Host" vs "Meet Your Hosts" based on count
+- **Unified Contact**: Single point of contact regardless of host count
+
+### Host Profile Display System ✅ IMPLEMENTED
+**Location**: `/src/app/hosts/[id]/page.tsx`
+
+#### Sections:
+1. **Meet Your Host(s)**: Dynamic singular/plural with individual host profiles
+2. **Venue Gallery**: Photo gallery with lightbox functionality  
+3. **About This Venue**: Capacity, venue type, availability, lodging info
+4. **Musical Preferences**: ✅ NEW - Comprehensive musical compatibility info
+5. **Sound System & Equipment**: Available equipment details
+6. **Lodging Information**: Room configurations and amenities (if offered)
+7. **Reviews**: Public review system
+8. **Booking Information**: Contact and booking flow
+
+#### Musical Preferences Display Logic:
+```typescript
+// Smart conditional rendering
+- Only shows sections with actual data
+- "Open to All Music" fallback when no preferences set
+- Custom genre support with text input
+- Act size considerations shown even when preference is "Doesn't Matter"
+- Color-coded sections for different preference types
+```
+
+### Custom Genre System ✅ IMPLEMENTED
+**Location**: `/src/app/dashboard/profile/page.tsx` - Musical Preferences section
+
+#### Features:
+- **Predefined Options**: Standard genre buttons (Folk, Rock, Pop, Jazz, etc.)
+- **Custom Input**: Text field for genres not in predefined list
+- **Add on Enter**: Quick genre addition with Enter key
+- **Duplicate Prevention**: Prevents adding existing genres
+- **Badge Display**: Selected genres shown as removable badges
+
+#### Implementation:
+```typescript
+// State management
+const [customGenreInput, setCustomGenreInput] = useState('')
+
+// Add custom genre function
+const addCustomGenre = () => {
+  const genre = customGenreInput.trim()
+  if (genre && !hostProfile.preferredGenres.includes(genre)) {
+    updateHostProfile({ preferredGenres: [...hostProfile.preferredGenres, genre] })
+    setCustomGenreInput('')
+  }
+}
+```
+
+### Data Architecture Integration
+#### Two-Data-System Pattern:
+- **mockData.ts**: Basic UI display (simple IDs: '1', '2', '3')
+- **realTestData.ts**: Advanced features including musical preferences (prefixed IDs: 'host1', 'artist1')
+- **Database**: Production data with Prisma cUIDs
+
+#### Host Profile Data Flow:
+```
+Host Registration → Database → Profile Edit → Musical Preferences → Public Profile Display
+                     ↓            ↓              ↓                    ↓
+                  hostMembers → preferences → API response → UI rendering
+```
+
+### UI/UX Design System ✅ IMPLEMENTED
+#### Design Principles:
+- **Coastal Color System**: French Blue, Sage, Mist, Sand, Evergreen
+- **Modern Card Layout**: Rounded corners, subtle shadows, proper spacing  
+- **Gradient Backgrounds**: Different colors for different preference types
+- **Smart Icons**: Contextual SVG icons for each section
+- **Mobile-First**: Responsive design across all screen sizes
+
+#### Key Components:
+```typescript
+// Section structure
+<section className="bg-white rounded-2xl shadow-sm border border-neutral-200">
+  <div className="p-8">
+    // Header with icon
+    // Content sections with conditional rendering
+    // Fallback states for empty data
+  </div>
+</section>
+```
+
+### Integration Points:
+1. **Host Registration Wizard**: Collects initial musical preferences
+2. **Profile Edit Dashboard**: Full management interface
+3. **Public Host Profile**: Display optimized for artist browsing
+4. **Admin Dashboard**: Shows preferences in application cards
+5. **Search/Filter System**: Ready for future genre-based host discovery
+
+### Technical Implementation Notes:
+#### Nomenclature Fix ✅ RESOLVED
+- **Issue**: Confusion between "hosts" (array) and "host" (user type)
+- **Solution**: Renamed to "hostMembers" throughout codebase for clarity
+- **Pattern**: Matches "bandMembers" pattern for consistency
+
+#### API Data Mapping ✅ FIXED
+- **Issue**: `preferredGenres` database field incorrectly mapped to `preferredDays`
+- **Solution**: Fixed API response to properly map genres data
+- **Impact**: Genres now display correctly on host profiles
+
+#### Musical Preferences Storage Strategy:
+- **Primary Fields**: `preferredGenres` (String[]) stored directly in Host model
+- **Extended Fields**: Musical preferences stored in `lodgingDetails` JSON
+- **Rationale**: Flexibility for complex nested data without schema changes
+
+---
 
 ### Booking & Event System
 

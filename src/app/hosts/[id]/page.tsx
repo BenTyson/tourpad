@@ -107,6 +107,12 @@ interface HostData {
     profilePhoto?: string;
     aboutMe?: string;
   };
+  hostMembers?: Array<{
+    id: string;
+    hostName: string;
+    profilePhoto?: string;
+    aboutMe?: string;
+  }>;
   soundSystem?: {
     available: boolean;
     description: string;
@@ -123,6 +129,13 @@ interface HostData {
       lodgingDetails?: any;
     };
   };
+  // Musical Preferences
+  preferredGenres?: string[];
+  preferredActSize?: string;
+  actSizeNotes?: string;
+  whatWeEnjoy?: string;
+  musicWeArentInto?: string;
+  contentRating?: string;
   upcomingConcerts?: Array<{
     id: string;
     title: string;
@@ -180,6 +193,7 @@ export default function HostProfilePage() {
               },
               amenities: (testHost as any).amenities || {},
               hostInfo: (testHost as any).hostInfo || { hostName: testHost.name, aboutMe: testHost.bio, profilePhoto: '' },
+              hostMembers: (testHost as any).hostMembers || [],
               soundSystem: (testHost as any).soundSystem || {},
               hostingCapabilities: (testHost as any).hostingCapabilities || {},
               website: '',
@@ -384,21 +398,6 @@ export default function HostProfilePage() {
         {/* About This Venue - Combined section with Apple-inspired design */}
         <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
           <div className="p-8">
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-neutral-900 mb-2">
-                About this venue
-              </h2>
-              <p className="text-neutral-600">
-                {host.venueType === 'home' ? 'Home/Living Room' :
-                 host.venueType === 'studio' ? 'Studio Space' :
-                 host.venueType === 'backyard' ? 'Backyard/Garden' :
-                 host.venueType === 'loft' ? 'Loft' :
-                 host.venueType === 'warehouse' ? 'Warehouse' :
-                 host.venueType === 'other' ? 'Other' :
-                 host.venueType?.charAt(0).toUpperCase() + host.venueType?.slice(1).toLowerCase() || 'Intimate venue'} 
-                for live performances
-              </p>
-            </div>
 
             {/* Venue Details Grid - Apple-style clean layout */}
             <div className="grid md:grid-cols-3 gap-6 mb-8">
@@ -414,50 +413,41 @@ export default function HostProfilePage() {
                   </div>
                 </div>
                 <div className="text-2xl font-bold text-neutral-900 mb-1">
-                  {host.indoorCapacity && host.indoorCapacity > 0 ? (
-                    <>
-                      {host.indoorCapacity}
-                      {host.outdoorCapacity && host.outdoorCapacity > 0 && (
-                        <span className="text-lg text-neutral-600 ml-1">
-                          +{host.outdoorCapacity}
-                        </span>
-                      )}
-                    </>
-                  ) : host.outdoorCapacity && host.outdoorCapacity > 0 ? (
-                    host.outdoorCapacity
-                  ) : (
-                    host.showSpecs.avgAttendance
-                  )}
+                  {((host.indoorCapacity || 0) + (host.outdoorCapacity || 0)) || host.showSpecs.avgAttendance}
                 </div>
                 <p className="text-sm text-neutral-600">
-                  {host.indoorCapacity && host.indoorCapacity > 0 ? (
-                    <>
-                      {host.indoorCapacity} indoor
-                      {host.outdoorCapacity && host.outdoorCapacity > 0 && `, ${host.outdoorCapacity} outdoor`}
-                    </>
-                  ) : host.outdoorCapacity && host.outdoorCapacity > 0 ? (
-                    'Outdoor space'
-                  ) : (
-                    'guests typically'
+                  {host.indoorCapacity && host.indoorCapacity > 0 && (
+                    <span>{host.indoorCapacity} indoor</span>
+                  )}
+                  {host.indoorCapacity && host.indoorCapacity > 0 && host.outdoorCapacity && host.outdoorCapacity > 0 && (
+                    <span>, </span>
+                  )}
+                  {host.outdoorCapacity && host.outdoorCapacity > 0 && (
+                    <span>{host.outdoorCapacity} outdoor</span>
+                  )}
+                  {(!host.indoorCapacity || host.indoorCapacity === 0) && (!host.outdoorCapacity || host.outdoorCapacity === 0) && (
+                    <span>guests typically</span>
                   )}
                 </p>
               </div>
 
-              {/* Show Length */}
+              {/* Lodging Offered */}
               <div className="bg-neutral-50 rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 bg-neutral-200 rounded-lg flex items-center justify-center">
-                    <Clock className="w-5 h-5 text-neutral-600" />
+                    <Bed className="w-5 h-5 text-neutral-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-neutral-900">Show length</h3>
-                    <p className="text-xs text-neutral-500">Typical duration</p>
+                    <h3 className="font-semibold text-neutral-900">Lodging Offered</h3>
+                    <p className="text-xs text-neutral-500">Overnight accommodation</p>
                   </div>
                 </div>
                 <div className="text-2xl font-bold text-neutral-900 mb-1">
-                  {host.typicalShowLength || host.showSpecs.showDurationMins}
+                  {host.offersLodging ? 'Yes' : 'No'}
                 </div>
-                <p className="text-sm text-neutral-600">minutes</p>
+                <p className="text-sm text-neutral-600">
+                  {host.offersLodging ? 'Available for artists' : 'Not available'}
+                </p>
               </div>
 
               {/* Availability */}
@@ -474,7 +464,7 @@ export default function HostProfilePage() {
                 <div className="text-sm font-medium text-neutral-900">
                   {host.preferredDays && host.preferredDays.length > 0 
                     ? host.preferredDays.join(', ')
-                    : host.showSpecs.daysAvailable.join(', ')
+                    : 'Available most days (contact for specific dates)'
                   }
                 </div>
               </div>
@@ -560,100 +550,147 @@ export default function HostProfilePage() {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-2xl font-bold text-neutral-900 mb-2">
-                  Meet Your Host
+                  Meet Your {(host.hostMembers && host.hostMembers.length > 1) ? 'Hosts' : 'Host'}
                 </h2>
-                <p className="text-neutral-600">Hosted by {host.hostInfo?.hostName || host.name}</p>
+                <div>
+                  <p className="text-neutral-600">
+                    Hosted by {
+                      host.hostMembers && host.hostMembers.length > 0
+                        ? host.hostMembers.map(h => h.hostName).join(' & ')
+                        : host.hostInfo?.hostName || host.name
+                    }
+                  </p>
+                  <div className="flex items-center space-x-4 text-sm text-neutral-500 mt-2">
+                    <span>{host.showSpecs.hostingHistory} hosting experience</span>
+                    <span>•</span>
+                    <span>{host.reviewCount} reviews</span>
+                    <span>•</span>
+                    <span>{host.rating} ⭐ average rating</span>
+                  </div>
+                </div>
               </div>
               <Badge variant="default" className="bg-primary-100 text-primary-800">
                 {host.showSpecs.hostingHistory} Experience
               </Badge>
             </div>
-            <div className="flex items-start space-x-6">
-              <div className="w-20 h-20 rounded-full overflow-hidden shadow-lg">
-                {host.hostInfo?.profilePhoto ? (
-                  <img 
-                    src={host.hostInfo.profilePhoto} 
-                    alt={`${host.hostInfo.hostName || host.name} profile photo`}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-primary-400 to-secondary-500 flex items-center justify-center text-white font-bold text-2xl">
-                    {host.name.charAt(0)}
+            
+            {/* Multiple hosts display */}
+            {host.hostMembers && host.hostMembers.length > 0 ? (
+              <div className="space-y-6">
+                {host.hostMembers.map((hostPerson, index) => (
+                  <div key={hostPerson.id} className="flex items-start space-x-6">
+                    <div className="w-20 h-20 rounded-full overflow-hidden shadow-lg flex-shrink-0">
+                      {hostPerson.profilePhoto ? (
+                        <img 
+                          src={hostPerson.profilePhoto} 
+                          alt={`${hostPerson.hostName} profile photo`}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-primary-400 to-secondary-500 flex items-center justify-center text-white font-bold text-2xl">
+                          {hostPerson.hostName.charAt(0)}
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-semibold text-neutral-900 mb-2">{hostPerson.hostName}</h3>
+                      <p className="text-neutral-700 leading-relaxed">
+                        {hostPerson.aboutMe || 'Passionate about bringing live music into intimate settings. I love creating memorable experiences where artists and audiences can connect in a personal, meaningful way.'}
+                      </p>
+                    </div>
                   </div>
-                )}
+                ))}
               </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold text-neutral-900 mb-2">{host.hostInfo?.hostName || host.name}</h3>
-                <div className="flex items-center space-x-4 text-sm text-neutral-600 mb-4">
-                  <span>{host.showSpecs.hostingHistory} hosting experience</span>
-                  <span>•</span>
-                  <span>{host.reviewCount} reviews</span>
-                  <span>•</span>
-                  <span>{host.rating} ⭐ average rating</span>
+            ) : (
+              /* Single host display (legacy) */
+              <div className="flex items-start space-x-6">
+                <div className="w-20 h-20 rounded-full overflow-hidden shadow-lg">
+                  {host.hostInfo?.profilePhoto ? (
+                    <img 
+                      src={host.hostInfo.profilePhoto} 
+                      alt={`${host.hostInfo.hostName || host.name} profile photo`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-primary-400 to-secondary-500 flex items-center justify-center text-white font-bold text-2xl">
+                      {host.name.charAt(0)}
+                    </div>
+                  )}
                 </div>
-                <p className="text-neutral-700 leading-relaxed">
-                  {host.hostInfo?.aboutMe || 'Passionate about bringing live music into intimate settings. I love creating memorable experiences where artists and audiences can connect in a personal, meaningful way.'}
-                </p>
-                
-                {/* Social Links */}
-                {(host.website || host.socialLinks?.instagram || host.socialLinks?.youtube || host.socialLinks?.facebook) && (
-                  <div className="mt-4 flex items-center space-x-4">
-                    {host.website && (
-                      <a 
-                        href={host.website} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-neutral-500 hover:text-primary-600 transition-colors"
-                        title="Website"
-                      >
-                        <Globe className="w-5 h-5" />
-                      </a>
-                    )}
-                    {host.socialLinks?.instagram && (
-                      <a 
-                        href={host.socialLinks.instagram} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-neutral-500 hover:text-pink-600 transition-colors"
-                        title="Instagram"
-                      >
-                        <Instagram className="w-5 h-5" />
-                      </a>
-                    )}
-                    {host.socialLinks?.youtube && (
-                      <a 
-                        href={host.socialLinks.youtube} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-neutral-500 hover:text-red-600 transition-colors"
-                        title="YouTube"
-                      >
-                        <Youtube className="w-5 h-5" />
-                      </a>
-                    )}
-                    {host.socialLinks?.facebook && (
-                      <a 
-                        href={host.socialLinks.facebook} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-neutral-500 hover:text-blue-600 transition-colors"
-                        title="Facebook"
-                      >
-                        <Facebook className="w-5 h-5" />
-                      </a>
-                    )}
+                <div className="flex-1">
+                  <h3 className="text-xl font-semibold text-neutral-900 mb-2">{host.hostInfo?.hostName || host.name}</h3>
+                  <div className="flex items-center space-x-4 text-sm text-neutral-600 mb-4">
+                    <span>{host.showSpecs.hostingHistory} hosting experience</span>
+                    <span>•</span>
+                    <span>{host.reviewCount} reviews</span>
+                    <span>•</span>
+                    <span>{host.rating} ⭐ average rating</span>
                   </div>
-                )}
-                
-                <div className="mt-4 flex space-x-3">
-                  <Button variant="outline" size="sm">
-                    Contact Host
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    View Reviews
-                  </Button>
+                  <p className="text-neutral-700 leading-relaxed">
+                    {host.hostInfo?.aboutMe || 'Passionate about bringing live music into intimate settings. I love creating memorable experiences where artists and audiences can connect in a personal, meaningful way.'}
+                  </p>
                 </div>
               </div>
+            )}
+            
+            {/* Social Links */}
+            {(host.website || host.socialLinks?.instagram || host.socialLinks?.youtube || host.socialLinks?.facebook) && (
+              <div className="mt-6 pt-6 border-t border-neutral-200">
+                <div className="flex items-center space-x-4">
+                  {host.website && (
+                    <a 
+                      href={host.website} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-neutral-500 hover:text-primary-600 transition-colors"
+                      title="Website"
+                    >
+                      <Globe className="w-5 h-5" />
+                    </a>
+                  )}
+                  {host.socialLinks?.instagram && (
+                    <a 
+                      href={host.socialLinks.instagram} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-neutral-500 hover:text-pink-600 transition-colors"
+                      title="Instagram"
+                    >
+                      <Instagram className="w-5 h-5" />
+                    </a>
+                  )}
+                  {host.socialLinks?.youtube && (
+                    <a 
+                      href={host.socialLinks.youtube} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-neutral-500 hover:text-red-600 transition-colors"
+                      title="YouTube"
+                    >
+                      <Youtube className="w-5 h-5" />
+                    </a>
+                  )}
+                  {host.socialLinks?.facebook && (
+                    <a 
+                      href={host.socialLinks.facebook} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-neutral-500 hover:text-blue-600 transition-colors"
+                      title="Facebook"
+                    >
+                      <Facebook className="w-5 h-5" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            )}
+            
+            <div className="mt-6">
+              <Link href={`/messages?hostId=${host.id}`}>
+                <Button variant="outline" size="sm">
+                  Contact Host
+                </Button>
+              </Link>
             </div>
           </div>
         </section>
@@ -761,6 +798,107 @@ export default function HostProfilePage() {
             </div>
           </section>
         )}
+
+        {/* Musical Preferences - Creative Redesign */}
+        <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
+          <div className="p-8">
+            {/* Simple Header */}
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold text-neutral-900 mb-2">Musical Preferences</h2>
+              <p className="text-neutral-600">What this venue loves to host</p>
+            </div>
+
+            {/* Content Grid Layout */}
+            <div className="grid gap-8">
+              {/* Preferred Genres */}
+              {host.preferredGenres && host.preferredGenres.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-semibold text-neutral-900 mb-4">Preferred Genres</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {host.preferredGenres.map((genre, index) => (
+                      <span
+                        key={`main-${index}`}
+                        className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-neutral-50 text-neutral-800 border border-neutral-200/50"
+                      >
+                        {genre}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Act Size Preference */}
+              {((host.preferredActSize && host.preferredActSize !== 'Doesn\'t Matter') || host.actSizeNotes) && (
+                <div>
+                  <h3 className="text-lg font-semibold text-neutral-900 mb-4">
+                    {host.preferredActSize && host.preferredActSize !== 'Doesn\'t Matter' 
+                      ? `Preferred Act Size: ${host.preferredActSize}` 
+                      : 'Act Size Considerations'
+                    }
+                  </h3>
+                  {host.actSizeNotes && (
+                    <div className="border-l-2 border-neutral-200 pl-4">
+                      <p className="text-neutral-700 leading-relaxed">{host.actSizeNotes}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Love & Dislike - Side by Side */}
+              {(host.whatWeEnjoy || host.musicWeArentInto) && (
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* What We Love */}
+                  {host.whatWeEnjoy && (
+                    <div>
+                      <h3 className="text-lg font-semibold text-neutral-900 mb-4">What We Love to Host</h3>
+                      <div className="border-l-2 border-green-200 pl-4">
+                        <p className="text-neutral-700 leading-relaxed">{host.whatWeEnjoy}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Things We Dislike */}
+                  {host.musicWeArentInto && (
+                    <div>
+                      <h3 className="text-lg font-semibold text-neutral-900 mb-4">Things We're Not Into</h3>
+                      <div className="border-l-2 border-orange-200 pl-4">
+                        <p className="text-neutral-700 leading-relaxed">{host.musicWeArentInto}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Content Rating - Small Byline */}
+              {host.contentRating && host.contentRating !== 'Doesn\'t Matter' && (
+                <div className="text-center pt-4 border-t border-neutral-100">
+                  <p className="text-sm text-neutral-600">
+                    Content: <span className="font-medium text-neutral-800">{host.contentRating}</span>
+                    {host.contentRating === 'Kid Friendly' ? ' • Family-friendly environment' : ' • Adult content welcome'}
+                  </p>
+                </div>
+              )}
+
+              {/* No preferences message */}
+              {(!host.preferredGenres || host.preferredGenres.length === 0) && 
+               !host.whatWeEnjoy && 
+               !host.musicWeArentInto && 
+               (!host.preferredActSize || host.preferredActSize === 'Doesn\'t Matter') &&
+               (!host.contentRating || host.contentRating === 'Doesn\'t Matter') &&
+               !host.actSizeNotes && (
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                    </svg>
+                  </div>
+                  <p className="text-neutral-500 text-lg font-medium">Open to All Music</p>
+                  <p className="text-neutral-400 text-sm mt-1">This host welcomes all types of performances</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
 
         {/* Lodging Information */}
         {(host as any).offersLodging && (host as any).lodgingDetails && (
@@ -954,19 +1092,19 @@ export default function HostProfilePage() {
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
                   <span className="text-neutral-600">Suggested door fee:</span>
-                  <span className="font-medium">${host.showSpecs.avgDoorFee}</span>
+                  <span className="font-medium">${host.suggestedDoorFee || host.showSpecs?.avgDoorFee || 20}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-neutral-600">Typical audience:</span>
-                  <span className="font-medium">{host.showSpecs.avgAttendance} people</span>
+                  <span className="font-medium">{host.showSpecs?.avgAttendance || Math.floor((host.indoorCapacity || 20) * 0.8)} people</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-neutral-600">Response rate:</span>
-                  <span className="font-medium">100%</span>
+                  <span className="font-medium">{host.hostingExperience > 2 ? '95%' : host.hostingExperience > 0 ? '85%' : 'New host'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-neutral-600">Response time:</span>
-                  <span className="font-medium">Within 24 hours</span>
+                  <span className="font-medium">{host.hostingExperience > 5 ? 'Within 4 hours' : host.hostingExperience > 1 ? 'Within 12 hours' : 'Within 24 hours'}</span>
                 </div>
               </div>
             </div>
