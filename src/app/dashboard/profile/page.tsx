@@ -486,7 +486,6 @@ export default function ProfilePage() {
     fetchProfile();
   }, [session]);
 
-
   if (status === 'loading') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100 flex items-center justify-center">
@@ -855,7 +854,6 @@ export default function ProfilePage() {
     }
   };
 
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
@@ -891,7 +889,6 @@ export default function ProfilePage() {
             )}
           </div>
         </div>
-
         {/* Tab Navigation - Sleek Modern Design */}
         <div className="mb-8">
           <nav className="flex space-x-2 bg-neutral-50 rounded-lg p-1">

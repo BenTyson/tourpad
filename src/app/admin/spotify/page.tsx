@@ -137,33 +137,27 @@ export default function AdminSpotifyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center space-x-4 mb-6">
-            <Link href="/admin">
-              <Button variant="ghost" size="sm" className="hover:bg-primary-50 hover:text-primary-700">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Admin
-              </Button>
-            </Link>
-          </div>
-          
+    <div className="min-h-screen bg-white">
+      {/* Clean Header */}
+      <div className="border-b border-neutral-200">
+        <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-neutral-900 mb-2">
-                Spotify Integration Management
-              </h1>
-              <p className="text-neutral-600">
-                Manage artist Spotify connections and sync music data
-              </p>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Music className="w-8 h-8 text-primary-600" />
+            <div className="flex items-center space-x-4">
+              <Link href="/admin">
+                <button className="inline-flex items-center px-3 py-2 text-sm font-medium text-neutral-700 bg-transparent hover:bg-neutral-100 rounded-md transition-colors">
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Admin
+                </button>
+              </Link>
+              <div className="h-6 w-px bg-neutral-200"></div>
+              <h1 className="text-xl font-semibold text-neutral-900">Spotify</h1>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 py-6">
 
         {/* Health Status */}
         <Card className="mb-8">

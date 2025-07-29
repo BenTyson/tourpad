@@ -211,23 +211,20 @@ export default function AdminFinancePage() {
   if (!financeData) return null;
 
   return (
-    <div className="min-h-screen py-8" style={{background: 'linear-gradient(135deg, #f8f9f9 0%, #ebebe9 100%)'}}>
-      <PaymentNotifications />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-6">
+    <div className="min-h-screen bg-white">
+      {/* Clean Header */}
+      <div className="border-b border-neutral-200">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <Link href="/admin">
-                <Button variant="outline" size="sm">
+                <button className="inline-flex items-center px-3 py-2 text-sm font-medium text-neutral-700 bg-transparent hover:bg-neutral-100 rounded-md transition-colors">
                   <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to Admin
-                </Button>
+                  Admin
+                </button>
               </Link>
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">Financial Dashboard</h1>
-                <p className="text-gray-600 mt-1">Revenue analytics and subscription metrics</p>
-              </div>
+              <div className="h-6 w-px bg-neutral-200"></div>
+              <h1 className="text-xl font-semibold text-neutral-900">Finance</h1>
             </div>
             <div className="flex items-center space-x-3">
               <select
@@ -251,6 +248,11 @@ export default function AdminFinancePage() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 py-6">
+        <PaymentNotifications />
 
         {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

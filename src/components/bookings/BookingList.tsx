@@ -203,15 +203,6 @@ export default function BookingList({
         <p className="text-neutral-600">
           {filteredBookings.length} of {bookings.length} bookings
         </p>
-        <Button
-          onClick={handleRefresh}
-          variant="outline"
-          size="sm"
-          disabled={refreshing}
-        >
-          <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-          Refresh
-        </Button>
       </div>
 
       {/* Filters and Controls */}

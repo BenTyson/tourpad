@@ -133,17 +133,7 @@ export const PersonalInfoStep = ({ formData, updateFormData, errors, clearError 
             placeholder="Confirm your password"
             required
             error={errors.confirmPassword}
-            description="Must match your password above"
           />
-        </div>
-
-        {/* Welcome Message */}
-        <div className="mt-8 p-4 bg-primary-50 rounded-lg border border-primary-200">
-          <h4 className="font-medium text-primary-800 mb-2">Welcome to TourPad! 🎵</h4>
-          <p className="text-sm text-primary-700">
-            You're joining a community of touring musicians who are transforming how live music happens. 
-            Our platform connects you with verified hosts for intimate, memorable performances.
-          </p>
         </div>
       </CardContent>
     </Card>

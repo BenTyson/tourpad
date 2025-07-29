@@ -39,10 +39,9 @@ export default function AdminPage() {
     activeArtists: 0,
     activeHosts: 0,
     pendingApplications: 0,
-    totalBookings: 892,
-    monthlyRevenue: 168800,
-    upcomingEvents: 47,
-    supportTickets: 12
+    monthlyRevenue: 0,
+    upcomingEvents: 0,
+    supportTickets: 12 // Keep this hardcoded for now as it's not in our schema yet
   });
   const [loading, setLoading] = useState(true);
 
@@ -200,11 +199,17 @@ export default function AdminPage() {
                 </div>
               </div>
               <div className="ml-4">
-                <div className="text-2xl font-bold text-neutral-900">{platformMetrics.totalUsers.toLocaleString()}</div>
+                <div className="text-2xl font-bold text-neutral-900">
+                  {loading ? (
+                    <div className="w-16 h-8 bg-neutral-200 rounded animate-pulse"></div>
+                  ) : (
+                    platformMetrics.totalUsers.toLocaleString()
+                  )}
+                </div>
                 <div className="text-sm text-neutral-600">Total Users</div>
-                <div className="text-sm text-primary-600 flex items-center mt-1">
-                  <ArrowTrendingUpIcon className="w-4 h-4 mr-1" />
-                  +12% this month
+                <div className="text-sm text-neutral-500 flex items-center mt-1">
+                  <UsersIcon className="w-4 h-4 mr-1" />
+                  All platform users
                 </div>
               </div>
             </div>
@@ -218,11 +223,19 @@ export default function AdminPage() {
                 </div>
               </div>
               <div className="ml-4">
-                <div className="text-2xl font-bold text-neutral-900">${(platformMetrics.monthlyRevenue / 1000).toFixed(0)}k</div>
+                <div className="text-2xl font-bold text-neutral-900">
+                  {loading ? (
+                    <div className="w-20 h-8 bg-neutral-200 rounded animate-pulse"></div>
+                  ) : (
+                    platformMetrics.monthlyRevenue > 0 
+                      ? `$${(platformMetrics.monthlyRevenue / 100).toLocaleString()}` 
+                      : '$0'
+                  )}
+                </div>
                 <div className="text-sm text-neutral-600">Monthly Revenue</div>
-                <div className="text-sm text-secondary-600 flex items-center mt-1">
+                <div className="text-sm text-neutral-500 flex items-center mt-1">
                   <ArrowTrendingUpIcon className="w-4 h-4 mr-1" />
-                  +8% vs last month
+                  This month total
                 </div>
               </div>
             </div>
@@ -236,9 +249,17 @@ export default function AdminPage() {
                 </div>
               </div>
               <div className="ml-4">
-                <div className="text-2xl font-bold text-neutral-900">{platformMetrics.pendingApplications}</div>
+                <div className="text-2xl font-bold text-neutral-900">
+                  {loading ? (
+                    <div className="w-12 h-8 bg-neutral-200 rounded animate-pulse"></div>
+                  ) : (
+                    platformMetrics.pendingApplications
+                  )}
+                </div>
                 <div className="text-sm text-neutral-600">Pending Applications</div>
-                <div className="text-sm text-orange-600">Requires attention</div>
+                <div className="text-sm text-orange-600">
+                  {platformMetrics.pendingApplications > 0 ? 'Requires attention' : 'All up to date'}
+                </div>
               </div>
             </div>
           </div>
@@ -251,7 +272,13 @@ export default function AdminPage() {
                 </div>
               </div>
               <div className="ml-4">
-                <div className="text-2xl font-bold text-neutral-900">{platformMetrics.upcomingEvents}</div>
+                <div className="text-2xl font-bold text-neutral-900">
+                  {loading ? (
+                    <div className="w-12 h-8 bg-neutral-200 rounded animate-pulse"></div>
+                  ) : (
+                    platformMetrics.upcomingEvents
+                  )}
+                </div>
                 <div className="text-sm text-neutral-600">Active Bookings</div>
                 <div className="text-sm text-primary-600">Next 30 days</div>
               </div>

@@ -259,17 +259,27 @@ export default function AdminApplicationsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center">
-            <Link href="/admin" className="mr-4">
-              <ArrowLeftIcon className="w-6 h-6 text-gray-600 hover:text-gray-900" />
-            </Link>
-            <h1 className="text-3xl font-bold text-gray-900">Applications</h1>
+    <div className="min-h-screen bg-white">
+      {/* Clean Header */}
+      <div className="border-b border-neutral-200">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Link href="/admin">
+                <button className="inline-flex items-center px-3 py-2 text-sm font-medium text-neutral-700 bg-transparent hover:bg-neutral-100 rounded-md transition-colors">
+                  <ArrowLeftIcon className="w-4 h-4 mr-2" />
+                  Admin
+                </button>
+              </Link>
+              <div className="h-6 w-px bg-neutral-200"></div>
+              <h1 className="text-xl font-semibold text-neutral-900">Applications</h1>
+            </div>
           </div>
         </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 py-6">
 
         {/* Filters */}
         <div className="mb-6">
