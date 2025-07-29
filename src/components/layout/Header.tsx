@@ -1,12 +1,12 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
 import { 
   Menu, 
   X,
   UserCircle,
-  Home,
   ChevronDown
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -108,7 +108,13 @@ export function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <Home className="h-8 w-8 text-blue-600" />
+              <Image 
+                src="/logo.png" 
+                alt="TourPad Logo" 
+                width={32} 
+                height={32}
+                className="h-8 w-8"
+              />
               <span className="text-xl font-bold text-gray-900">
                 TourPad
               </span>
