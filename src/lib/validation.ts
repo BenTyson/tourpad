@@ -65,7 +65,7 @@ export const registrationSchema = z.object({
     // Host-specific fields
     city: z.string().optional(),
     state: z.string().optional(),
-    venueType: z.enum(['HOME', 'LOFT', 'WAREHOUSE', 'OTHER']).optional(),
+    venueType: z.enum(['HOME', 'LOFT', 'BACKYARD', 'WAREHOUSE', 'STUDIO', 'OTHER']).optional(),
     // Fan-specific fields
     favoriteGenres: z.array(z.string()).optional()
   }).optional(),
@@ -82,7 +82,7 @@ export const registrationSchema = z.object({
   host: z.object({
     city: z.string().optional(),
     state: z.string().optional(),
-    venueType: z.enum(['HOME', 'LOFT', 'WAREHOUSE', 'OTHER']).optional(),
+    venueType: z.enum(['HOME', 'LOFT', 'BACKYARD', 'WAREHOUSE', 'STUDIO', 'OTHER']).optional(),
     actualAddress: z.string().optional(),
     indoorCapacity: z.number().optional(),
     serviceRadius: z.number().optional(),

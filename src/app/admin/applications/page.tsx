@@ -408,6 +408,34 @@ export default function AdminApplicationsPage() {
                                   <p className="text-gray-600">{(application as Host).host?.indoorCapacity} people</p>
                                 </div>
                               )}
+                              {(application as Host).host?.outdoorCapacity && (
+                                <div>
+                                  <span className="font-medium text-gray-900">Outdoor Capacity:</span>
+                                  <p className="text-gray-600">{(application as Host).host?.outdoorCapacity} people</p>
+                                </div>
+                              )}
+                              {(application as Host).host?.preferredGenres && ((application as Host).host?.preferredGenres?.length || 0) > 0 && (
+                                <div>
+                                  <span className="font-medium text-gray-900">Preferred Music Genres:</span>
+                                  <p className="text-gray-600">{(application as Host).host?.preferredGenres?.join(', ')}</p>
+                                </div>
+                              )}
+                              {(application as Host).host?.soundSystem && (
+                                <div>
+                                  <span className="font-medium text-gray-900">Sound System:</span>
+                                  <p className="text-gray-600 capitalize">
+                                    {typeof (application as Host).host?.soundSystem === 'object' 
+                                      ? ((application as Host).host?.soundSystem as any)?.type || 'Not specified'
+                                      : (application as Host).host?.soundSystem}
+                                  </p>
+                                </div>
+                              )}
+                              {(application as Host).host?.hostingExperience !== undefined && (
+                                <div>
+                                  <span className="font-medium text-gray-900">New to Hosting:</span>
+                                  <p className="text-gray-600">{(application as Host).host?.hostingExperience === 0 ? 'Yes' : 'No'}</p>
+                                </div>
+                              )}
                             </div>
                             <div className="space-y-3 text-sm">
                               {(application as Host).host?.venueDescription && (
@@ -416,21 +444,23 @@ export default function AdminApplicationsPage() {
                                   <p className="text-gray-600 leading-relaxed">{(application as Host).host?.venueDescription}</p>
                                 </div>
                               )}
-                              {(application as Host).host?.lodgingDetails && typeof (application as Host).host?.lodgingDetails === 'object' && (
-                                <>
-                                  {((application as Host).host?.lodgingDetails as any)?.additionalInfo && (
-                                    <div>
-                                      <span className="font-medium text-gray-900">Additional Information:</span>
-                                      <p className="text-gray-600 leading-relaxed">{((application as Host).host?.lodgingDetails as any).additionalInfo}</p>
-                                    </div>
-                                  )}
-                                  {((application as Host).host?.lodgingDetails as any)?.newToHosting && (
-                                    <div>
-                                      <span className="font-medium text-gray-900">First time hosting?:</span>
-                                      <p className="text-gray-600">{((application as Host).host?.lodgingDetails as any).newToHosting}</p>
-                                    </div>
-                                  )}
-                                </>
+                              {(application as Host).host?.amenities && ((application as Host).host?.amenities?.length || 0) > 0 && (
+                                <div>
+                                  <span className="font-medium text-gray-900">Amenities:</span>
+                                  <p className="text-gray-600">{(application as Host).host?.amenities?.join(', ')}</p>
+                                </div>
+                              )}
+                              {(application as Host).host?.houseRules && (
+                                <div>
+                                  <span className="font-medium text-gray-900">House Rules:</span>
+                                  <p className="text-gray-600 leading-relaxed">{(application as Host).host?.houseRules}</p>
+                                </div>
+                              )}
+                              {(application as Host).host?.lodgingDetails && typeof (application as Host).host?.lodgingDetails === 'object' && ((application as Host).host?.lodgingDetails as any)?.additionalInfo && (
+                                <div>
+                                  <span className="font-medium text-gray-900">Additional Information:</span>
+                                  <p className="text-gray-600 leading-relaxed">{((application as Host).host?.lodgingDetails as any).additionalInfo}</p>
+                                </div>
                               )}
                             </div>
                           </div>

@@ -540,10 +540,10 @@ enum UserStatus {
 enum VenueType {
   HOME
   LOFT
-  WAREHOUSE
-  OTHER
-  STUDIO
   BACKYARD
+  WAREHOUSE
+  STUDIO
+  OTHER
 }
 
 enum MediaType {

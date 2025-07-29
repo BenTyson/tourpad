@@ -241,6 +241,7 @@ export default function ProfilePage() {
   const [hostProfile, setHostProfile] = useState({
     venueName: '', // This is the venue name like "Mike's Overlook"
     venueDescription: '', // This describes the venue/house itself
+    address: '', // Street address
     city: '',
     state: '',
     zip: '',
@@ -263,11 +264,12 @@ export default function ProfilePage() {
         additional: ''
       }
     },
-    hostInfo: {
-      hostName: '', // This is the personal host name like "Mike Chen"
-      aboutMe: '', // This is about the host as a person
-      profilePhoto: ''
-    },
+    hosts: [] as Array<{
+      id: string;
+      hostName: string;
+      aboutMe: string;
+      profilePhoto: string;
+    }>,
     website: '',
     socialLinks: {
       website: '',
@@ -365,11 +367,12 @@ export default function ProfilePage() {
               });
             } else if (session.user.type === 'host') {
               setHostProfile({
-                venueName: data.venueName || data.hostName || '',
+                venueName: data.venueName || '',
                 venueDescription: data.venueDescription || data.bio || '',
+                address: data.actualAddress || '',
                 city: data.city || '',
                 state: data.state || '',
-                zip: '',
+                zip: data.zip || '',
                 profilePhoto: data.profilePhoto || '',
                 venuePhoto: data.venuePhoto || '',
                 venueType: data.venueType || 'home',
@@ -389,11 +392,17 @@ export default function ProfilePage() {
                     additional: ''
                   }
                 },
-                hostInfo: {
-                  hostName: data.hostInfo?.hostName || '',
-                  aboutMe: data.hostInfo?.aboutMe || '',
-                  profilePhoto: data.hostInfo?.profilePhoto || data.profilePhoto || ''
-                },
+                hosts: data.hosts || (data.hostInfo ? [{
+                  id: '1',
+                  hostName: data.hostInfo.hostName || '',
+                  aboutMe: data.hostInfo.aboutMe || '',
+                  profilePhoto: data.hostInfo.profilePhoto || data.profilePhoto || ''
+                }] : [{
+                  id: '1',
+                  hostName: data.name || '',
+                  aboutMe: '',
+                  profilePhoto: data.profilePhoto || ''
+                }]),
                 website: data.website || '',
                 socialLinks: {
                   website: data.socialLinks?.website || data.website || '',
@@ -535,6 +544,28 @@ export default function ProfilePage() {
 
   const removeAmenity = (amenity: string) => {
     updateHostProfile({ amenities: hostProfile.amenities.filter(a => a !== amenity) });
+  };
+
+  const addHost = () => {
+    const newHost = {
+      id: Date.now().toString(),
+      hostName: '',
+      aboutMe: '',
+      profilePhoto: ''
+    };
+    updateHostProfile({ hosts: [...hostProfile.hosts, newHost] });
+  };
+
+  const updateHost = (hostId: string, updates: Partial<typeof hostProfile.hosts[0]>) => {
+    updateHostProfile({
+      hosts: hostProfile.hosts.map(host => 
+        host.id === hostId ? { ...host, ...updates } : host
+      )
+    });
+  };
+
+  const removeHost = (hostId: string) => {
+    updateHostProfile({ hosts: hostProfile.hosts.filter(h => h.id !== hostId) });
   };
 
   const addEquipment = (equipment: string) => {
@@ -874,7 +905,7 @@ export default function ProfilePage() {
               {/* Basic Information */}
               <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
                 <CardHeader>
-                  <h2 className="text-xl font-semibold text-neutral-900">General Band Info</h2>
+                  <h2 className="text-xl font-semibold text-neutral-900">{isArtist ? 'General Band Info' : 'General Venue Info'}</h2>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <Input
@@ -938,6 +969,14 @@ export default function ProfilePage() {
                         placeholder="Describe your space, atmosphere, and what makes it perfect for house concerts..."
                       />
                     </div>
+                  )}
+                  {!isArtist && (
+                    <Input
+                      label="Street Address"
+                      value={hostProfile.address}
+                      onChange={(e) => updateHostProfile({ address: e.target.value })}
+                      placeholder="Your venue's street address"
+                    />
                   )}
                   <div className="grid md:grid-cols-3 gap-4">
                     <Input
@@ -1012,7 +1051,7 @@ export default function ProfilePage() {
                   {/* Venue Profile Photo */}
                   {!isArtist && (
                     <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">Venue Profile Photo</label>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">Venue Primary Photo</label>
                       <div className="flex items-center space-x-4">
                         <div className="w-20 h-20 bg-neutral-100 rounded-lg overflow-hidden flex items-center justify-center">
                           {hostProfile.venuePhoto ? (
@@ -1416,50 +1455,90 @@ export default function ProfilePage() {
               {!isArtist && (
                 <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
                   <CardHeader>
-                    <h2 className="text-xl font-semibold text-neutral-900">Personal Host Information</h2>
-                    <p className="text-sm text-neutral-600">
-                      This personal information helps artists get to know you as a host. This is separate from your venue description.
-                    </p>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <Input
-                      label="Host Name(s)"
-                      value={hostProfile.hostInfo.hostName}
-                      onChange={(e) => updateHostProfile({ 
-                        hostInfo: { ...hostProfile.hostInfo, hostName: e.target.value } 
-                      })}
-                      placeholder="Your name or names (e.g., 'Sarah & Mike Johnson')"
-                    />
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-1">
-                        About Me/Us
-                      </label>
-                      <textarea
-                        value={hostProfile.hostInfo.aboutMe}
-                        onChange={(e) => updateHostProfile({ 
-                          hostInfo: { ...hostProfile.hostInfo, aboutMe: e.target.value } 
-                        })}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                        rows={4}
-                        placeholder="Tell artists about yourself as a host. What drew you to house concerts? What do you enjoy about hosting? This is your personal story, separate from your venue description..."
-                      />
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h2 className="text-xl font-semibold text-neutral-900">Personal Host Information</h2>
+                        <p className="text-sm text-neutral-600">
+                          Add information about each host. This helps artists get to know you personally.
+                        </p>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={addHost}
+                        className="flex items-center"
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Host
+                      </Button>
                     </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">Host Profile Photo</label>
-                      <div className="flex items-center space-x-4">
-                        <div className="w-20 h-20 bg-neutral-100 rounded-full overflow-hidden flex items-center justify-center">
-                          {hostProfile.hostInfo.profilePhoto ? (
-                            <img 
-                              src={hostProfile.hostInfo.profilePhoto} 
-                              alt="Host profile" 
-                              className="w-20 h-20 object-cover"
-                            />
-                          ) : (
-                            <UserCircle className="w-10 h-10 text-neutral-400" />
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {hostProfile.hosts.length === 0 ? (
+                      <div className="text-center py-8 border-2 border-dashed border-neutral-300 rounded-lg">
+                        <UserCircle className="w-12 h-12 text-neutral-400 mx-auto mb-3" />
+                        <p className="text-sm text-neutral-600 mb-3">No hosts added yet</p>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={addHost}
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          Add Your First Host
+                        </Button>
+                      </div>
+                    ) : (
+                      hostProfile.hosts.map((host, index) => (
+                        <div key={host.id} className="border border-neutral-200 rounded-lg p-4 relative">
+                          {hostProfile.hosts.length > 1 && (
+                            <button
+                              onClick={() => removeHost(host.id)}
+                              className="absolute top-4 right-4 text-neutral-400 hover:text-red-600 transition-colors"
+                              title="Remove host"
+                            >
+                              <X className="w-5 h-5" />
+                            </button>
                           )}
-                        </div>
+                          
+                          <div className="space-y-4">
+                            <div className="text-sm font-medium text-neutral-700 mb-2">
+                              Host #{index + 1}
+                            </div>
+                            
+                            <Input
+                              label="Host Name"
+                              value={host.hostName}
+                              onChange={(e) => updateHost(host.id, { hostName: e.target.value })}
+                              placeholder="e.g., 'Sarah Johnson'"
+                            />
+                    
+                            <div>
+                              <label className="block text-sm font-medium text-neutral-700 mb-1">
+                                About Me
+                              </label>
+                              <textarea
+                                value={host.aboutMe}
+                                onChange={(e) => updateHost(host.id, { aboutMe: e.target.value })}
+                                className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                rows={4}
+                                placeholder="Tell artists about yourself. What drew you to house concerts? What do you enjoy about hosting?"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-sm font-medium text-neutral-700 mb-2">Profile Photo</label>
+                              <div className="flex items-center space-x-4">
+                                <div className="w-20 h-20 bg-neutral-100 rounded-full overflow-hidden flex items-center justify-center">
+                                  {host.profilePhoto ? (
+                                    <img 
+                                      src={host.profilePhoto} 
+                                      alt={`${host.hostName} profile`} 
+                                      className="w-20 h-20 object-cover"
+                                    />
+                                  ) : (
+                                    <UserCircle className="w-10 h-10 text-neutral-400" />
+                                  )}
+                                </div>
                         <div className="flex-1">
                           <input
                             type="file"
@@ -1493,10 +1572,8 @@ export default function ProfilePage() {
                                   
                                   const data = await response.json();
                                   
-                                  // Update host profile with the new image URL
-                                  updateHostProfile({ 
-                                    hostInfo: { ...hostProfile.hostInfo, profilePhoto: data.url } 
-                                  });
+                                  // Update this specific host's photo
+                                  updateHost(host.id, { profilePhoto: data.url });
                                   
                                   alert('Host photo uploaded successfully!');
                                   
@@ -1507,20 +1584,24 @@ export default function ProfilePage() {
                               }
                             }}
                             className="hidden"
-                            id="hostProfilePhotoInput"
+                            id={`hostProfilePhotoInput-${host.id}`}
                           />
-                          <label htmlFor="hostProfilePhotoInput" className="cursor-pointer">
+                          <label htmlFor={`hostProfilePhotoInput-${host.id}`} className="cursor-pointer">
                             <div className="inline-flex items-center px-3 py-1.5 text-sm border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 rounded-md mb-2">
                               <Camera className="w-4 h-4 mr-2" />
-                              {hostProfile.hostInfo.profilePhoto ? 'Change Photo' : 'Upload Photo'}
+                              {host.profilePhoto ? 'Change Photo' : 'Upload Photo'}
                             </div>
                           </label>
                           <p className="text-xs text-neutral-500">
-                            A friendly photo of yourself or yourselves as hosts
+                            A friendly photo of this host
                           </p>
                         </div>
                       </div>
                     </div>
+                          </div>
+                        </div>
+                      ))
+                    )}
                   </CardContent>
                 </Card>
               )}
