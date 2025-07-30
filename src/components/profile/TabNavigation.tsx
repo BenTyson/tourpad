@@ -29,16 +29,22 @@ export default function TabNavigation({ activeTab, setActiveTab, isArtist }: Tab
         </button>
         
         <button
-          onClick={() => setActiveTab('media')}
-          className={tabButtonClass('media')}
+          onClick={() => setActiveTab('photos')}
+          className={tabButtonClass('photos')}
         >
-          {isArtist ? (
-            <Video className="w-4 h-4 mr-2" />
-          ) : (
-            <Camera className="w-4 h-4 mr-2" />
-          )}
-          {isArtist ? 'Music & Media' : 'Gallery'}
+          <Camera className="w-4 h-4 mr-2" />
+          {isArtist ? 'Photos' : 'Gallery'}
         </button>
+
+        {isArtist && (
+          <button
+            onClick={() => setActiveTab('media')}
+            className={tabButtonClass('media')}
+          >
+            <Video className="w-4 h-4 mr-2" />
+            Music & Media
+          </button>
+        )}
         
         {!isArtist && (
           <>
