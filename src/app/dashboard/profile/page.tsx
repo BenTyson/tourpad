@@ -6,6 +6,7 @@ import ProfileHeader from '@/components/profile/ProfileHeader';
 import TabNavigation from '@/components/profile/TabNavigation';
 import InfoTab from '@/components/profile/InfoTab';
 import FormationYearField from '@/components/profile/info/FormationYearField';
+import SocialLinksCard from '@/components/profile/info/SocialLinksCard';
 import { 
   ArrowLeft,
   Camera,
@@ -2099,172 +2100,13 @@ export default function ProfilePage() {
               )}
 
               {/* Social Links */}
-              <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                <CardHeader>
-                  <h2 className="text-xl font-semibold text-neutral-900">Social Links & Website</h2>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <Input
-                      label="Website"
-                      value={isArtist ? artistProfile.website : hostProfile.website}
-                      onChange={(e) => {
-                        const socialLinks = isArtist ? artistProfile.socialLinks : hostProfile.socialLinks;
-                        if (isArtist) {
-                          updateArtistProfile({ 
-                            website: e.target.value,
-                            socialLinks: { 
-                              ...{
-                                instagram: '',
-                                youtube: '',
-                                spotify: '',
-                                bandcamp: '',
-                                facebook: '',
-                                website: ''
-                              },
-                              ...socialLinks, 
-                              website: e.target.value 
-                            } 
-                          });
-                        } else {
-                          updateHostProfile({ 
-                            website: e.target.value,
-                            socialLinks: { 
-                              ...{
-                                instagram: '',
-                                youtube: '',
-                                spotify: '',
-                                bandcamp: '',
-                                facebook: '',
-                                website: ''
-                              },
-                              ...socialLinks, 
-                              website: e.target.value 
-                            } 
-                          });
-                        }
-                      }}
-                      placeholder="https://yourwebsite.com"
-                    />
-                    <Input
-                      label="Instagram"
-                      value={isArtist ? artistProfile.socialLinks.instagram : hostProfile.socialLinks.instagram}
-                      onChange={(e) => {
-                        const socialLinks = isArtist ? artistProfile.socialLinks : hostProfile.socialLinks;
-                        if (isArtist) updateArtistProfile({ socialLinks: { 
-                          ...{
-                            instagram: '',
-                            youtube: '',
-                            spotify: '',
-                            bandcamp: '',
-                            facebook: '',
-                            website: ''
-                          },
-                          ...socialLinks, 
-                          instagram: e.target.value 
-                        } });
-                        else updateHostProfile({ socialLinks: { 
-                          ...{
-                            instagram: '',
-                            youtube: '',
-                            spotify: '',
-                            bandcamp: '',
-                            facebook: '',
-                            website: ''
-                          },
-                          ...socialLinks, 
-                          instagram: e.target.value 
-                        } });
-                      }}
-                      placeholder="https://instagram.com/username"
-                    />
-                    <Input
-                      label="YouTube"
-                      value={isArtist ? artistProfile.socialLinks.youtube : hostProfile.socialLinks.youtube}
-                      onChange={(e) => {
-                        const socialLinks = isArtist ? artistProfile.socialLinks : hostProfile.socialLinks;
-                        if (isArtist) updateArtistProfile({ socialLinks: { 
-                          ...{
-                            instagram: '',
-                            youtube: '',
-                            spotify: '',
-                            bandcamp: '',
-                            facebook: '',
-                            website: ''
-                          },
-                          ...socialLinks, 
-                          youtube: e.target.value 
-                        } });
-                        else updateHostProfile({ socialLinks: { 
-                          ...{
-                            instagram: '',
-                            youtube: '',
-                            spotify: '',
-                            bandcamp: '',
-                            facebook: '',
-                            website: ''
-                          },
-                          ...socialLinks, 
-                          youtube: e.target.value 
-                        } });
-                      }}
-                      placeholder="https://youtube.com/channel/..."
-                    />
-                    <Input
-                      label="Facebook"
-                      value={isArtist ? artistProfile.socialLinks.facebook : hostProfile.socialLinks.facebook}
-                      onChange={(e) => {
-                        const socialLinks = isArtist ? artistProfile.socialLinks : hostProfile.socialLinks;
-                        if (isArtist) updateArtistProfile({ socialLinks: { 
-                          ...{
-                            instagram: '',
-                            youtube: '',
-                            spotify: '',
-                            bandcamp: '',
-                            facebook: '',
-                            website: ''
-                          },
-                          ...socialLinks, 
-                          facebook: e.target.value 
-                        } });
-                        else updateHostProfile({ socialLinks: { 
-                          ...{
-                            instagram: '',
-                            youtube: '',
-                            spotify: '',
-                            bandcamp: '',
-                            facebook: '',
-                            website: ''
-                          },
-                          ...socialLinks, 
-                          facebook: e.target.value 
-                        } });
-                      }}
-                      placeholder="https://facebook.com/username"
-                    />
-                    {isArtist && (
-                      <>
-                        <Input
-                          label="Spotify"
-                          value={artistProfile.socialLinks.spotify}
-                          onChange={(e) => {
-                            updateArtistProfile({ socialLinks: { ...artistProfile.socialLinks, spotify: e.target.value } });
-                          }}
-                          placeholder="https://open.spotify.com/artist/..."
-                        />
-                        <Input
-                          label="Bandcamp"
-                          value={artistProfile.socialLinks.bandcamp}
-                          onChange={(e) => {
-                            updateArtistProfile({ socialLinks: { ...artistProfile.socialLinks, bandcamp: e.target.value } });
-                          }}
-                          placeholder="https://artist.bandcamp.com"
-                        />
-                      </>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+              <SocialLinksCard
+                isArtist={isArtist}
+                artistProfile={artistProfile}
+                hostProfile={hostProfile}
+                updateArtistProfile={updateArtistProfile}
+                updateHostProfile={updateHostProfile}
+              />
             </div>
           )}
 
