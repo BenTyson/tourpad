@@ -17,12 +17,24 @@ export default function ProfileHero({ isArtist, data, onShare, onFavorite }: Pro
 
   // Artist profile uses full background image
   if (isArtist) {
+    // Get hero image from API data structure
+    const heroImage = artistData.heroPhotoUrl || 
+                      artistData.thumbnailPhotoUrl || 
+                      artistData.profileImageUrl ||
+                      artistData.photos?.[0]?.fileUrl ||
+                      '/images/default-band.jpg';
+    
+    // Parse location string (format: "City, State")
+    const locationParts = artistData.location?.split(', ') || [];
+    const city = locationParts[0] || '';
+    const state = locationParts[1] || '';
+    
     return (
       <section className="relative h-[70vh] min-h-[500px] bg-neutral-900 overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0">
           <img 
-            src={artistData.heroPhoto || artistData.thumbnailPhoto || '/images/default-band.jpg'} 
+            src={heroImage} 
             alt={`${artistData.name} hero`}
             className="w-full h-full object-cover opacity-50"
           />
@@ -32,24 +44,17 @@ export default function ProfileHero({ isArtist, data, onShare, onFavorite }: Pro
         <div className="relative h-full flex items-end">
           <div className="w-full bg-gradient-to-t from-black/90 via-black/60 to-transparent pb-12 pt-32">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              {/* Back Button */}
-              <Link 
-                href="/artists" 
-                className="inline-flex items-center text-white/80 hover:text-white mb-6 transition-colors"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Artists
-              </Link>
-              
               {/* Artist Info */}
               <div className="flex items-start justify-between">
                 <div>
                   <h1 className="text-5xl font-bold text-white mb-3">{artistData.name}</h1>
                   <div className="flex items-center gap-6 text-white/80 mb-4">
-                    <span className="flex items-center gap-1">
-                      <MapPin className="w-4 h-4" />
-                      {artistData.city}, {artistData.state}
-                    </span>
+                    {(city || state) && (
+                      <span className="flex items-center gap-1">
+                        <MapPin className="w-4 h-4" />
+                        {city}{city && state && ', '}{state}
+                      </span>
+                    )}
                     {artistData.genres && artistData.genres.length > 0 && (
                       <span className="flex items-center gap-2">
                         {artistData.genres.slice(0, 3).map((genre, index) => (
@@ -60,9 +65,6 @@ export default function ProfileHero({ isArtist, data, onShare, onFavorite }: Pro
                       </span>
                     )}
                   </div>
-                  {artistData.briefBio && (
-                    <p className="text-lg text-white/90 max-w-3xl">{artistData.briefBio}</p>
-                  )}
                 </div>
                 
                 {/* Action Buttons */}

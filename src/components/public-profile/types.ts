@@ -189,27 +189,53 @@ export interface ArtistData {
   id: string;
   userId: string;
   name: string;
-  briefBio: string;
+  bio: string;
+  briefBio?: string;
   fullBio?: string;
-  city: string;
-  state: string;
+  location?: string; // Format: "City, State"
   genres: string[];
+  musicalStyle?: string;
   instruments?: string[];
   formationYear?: number;
+  yearsActive?: number;
+  experienceLevel?: 'emerging' | 'intermediate' | 'professional';
   rating: number;
   reviewCount: number;
-  profilePhoto?: string;
-  thumbnailPhoto?: string;
-  heroPhoto?: string;
-  photos: Photo[];
+  // Image properties from API
+  profileImageUrl?: string;
+  thumbnailPhotoUrl?: string;
+  heroPhotoUrl?: string;
+  photos?: Array<{
+    id: string;
+    fileUrl: string;
+    title: string;
+    description: string;
+    category: string;
+    sortOrder: number;
+  }>;
   videoLinks?: VideoLink[];
   musicSamples?: MusicSample[];
   socialLinks?: SocialLinks;
   website?: string;
   bandMembers?: BandMember[];
-  tourRequirements?: TourRequirements;
-  upcomingTours?: TourSegment[];
+  tourMonthsPerYear?: number;
+  tourVehicle?: string;
+  willingToTravel?: number;
+  equipmentProvided?: string[];
+  venueRequirements?: string[];
   contentRating?: string;
+  // Spotify fields
+  spotifyVerified?: boolean;
+  spotifyFollowers?: number;
+  spotifyPopularity?: number;
+  spotifyArtistId?: string;
+  // SoundCloud fields
+  soundcloudVerified?: boolean;
+  soundcloudFollowers?: number;
+  soundcloudTrackCount?: number;
+  soundcloudUserId?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // Component prop types

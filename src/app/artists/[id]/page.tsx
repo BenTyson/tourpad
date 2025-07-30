@@ -405,16 +405,6 @@ export default function ArtistProfilePage() {
                 </p>
               )}
               
-              {/* Genre Tags */}
-              {artistData.genres && artistData.genres.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {artistData.genres.map((genre, index) => (
-                    <span key={index} className="inline-block bg-primary-100 text-primary-800 text-sm font-medium px-3 py-1 rounded-full">
-                      {genre}
-                    </span>
-                  ))}
-                </div>
-              )}
               
               <p className="text-xl text-neutral-600 leading-relaxed">
                 {artistData.briefBio || artistData.bio || 'No bio available yet.'}
