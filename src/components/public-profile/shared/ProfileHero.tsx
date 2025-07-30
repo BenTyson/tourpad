@@ -6,6 +6,11 @@ import { Badge } from '@/components/ui/Badge';
 import { ProfileHeroProps, HostData, ArtistData } from '../types';
 
 export default function ProfileHero({ isArtist, data, onShare, onFavorite }: ProfileHeroProps) {
+  // Add null check
+  if (!data) {
+    return null;
+  }
+
   const isHost = !isArtist;
   const hostData = data as HostData;
   const artistData = data as ArtistData;

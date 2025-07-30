@@ -3,6 +3,18 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+
+// Import new modular components
+import ProfileHero from '@/components/public-profile/shared/ProfileHero';
+import StatsSection from '@/components/public-profile/shared/StatsSection';
+import SocialLinks from '@/components/public-profile/shared/SocialLinks';
+import ShareModal from '@/components/public-profile/shared/ShareModal';
+import VenueDetails from '@/components/public-profile/host/VenueDetails';
+import MusicalPreferences from '@/components/public-profile/host/MusicalPreferences';
+import SoundSystemComponent from '@/components/public-profile/host/SoundSystem';
+import LodgingInfo from '@/components/public-profile/host/LodgingInfo';
+import HostProfile from '@/components/public-profile/host/HostProfile';
+
 import { 
   MapPin,
   Star,
@@ -54,6 +66,7 @@ import { PhotoLightbox } from '@/components/media/PhotoLightbox';
 import { PublicReviewsSection } from '@/components/reviews/PublicReviewsSection';
 import { mockRSVPs } from '@/data/mockData';
 import { testHosts } from '@/data/realTestData';
+
 
 // Dynamic import for MapContainer to avoid SSR issues
 const TourPadMapContainer = dynamic(
@@ -169,6 +182,7 @@ export default function HostProfilePage() {
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const [isFavorited, setIsFavorited] = useState(false);
 
   // Fetch host data from API
   useEffect(() => {
@@ -256,10 +270,10 @@ export default function HostProfilePage() {
   const host = hostData;
 
   // Combine all photos for gallery
-  const allPhotos = [
-    ...host.housePhotos.map(photo => ({ ...photo, category: 'house' as const })), 
-    ...host.performanceSpacePhotos.map(photo => ({ ...photo, category: 'performance_space' as const }))
-  ];
+  const allPhotos = host ? [
+    ...(host.housePhotos || []).map(photo => ({ ...photo, category: 'house' as const })), 
+    ...(host.performanceSpacePhotos || []).map(photo => ({ ...photo, category: 'performance_space' as const }))
+  ] : [];
 
   const handlePhotoClick = (index: number) => {
     setLightboxIndex(index);
@@ -320,219 +334,21 @@ export default function HostProfilePage() {
         </div>
       </div>
 
-      {/* Hero Section - Clean White Design */}
-      <section className="bg-white border-b border-neutral-200">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
-            <div>
-              <div className="flex items-center space-x-3 mb-6">
-                <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">
-                  Verified Host
-                </Badge>
-                <Badge variant="secondary" className="bg-neutral-100 text-neutral-700 border-neutral-200">
-                  <MapPin className="w-4 h-4 mr-1" />
-                  {host.city}, {host.state}
-                </Badge>
-              </div>
-              
-              <h1 className="text-5xl font-bold mb-4 text-neutral-900">
-                {host.name}
-              </h1>
-              
-              <p className="text-xl mb-8 text-neutral-600 leading-relaxed">
-                {host.bio}
-              </p>
-              
-              <div className="flex flex-wrap gap-3 mb-8">
-                <div className="flex items-center bg-neutral-50 rounded-md px-3 py-1.5 border border-neutral-200">
-                  <Star className="w-4 h-4 mr-1.5 text-yellow-500" />
-                  <span className="font-medium text-sm text-neutral-900">{host.rating || 0}</span>
-                  <span className="ml-1 text-sm text-neutral-600">({host.reviewCount || 0} {host.reviewCount === 1 ? 'review' : 'reviews'})</span>
-                </div>
-                <div className="flex items-center bg-neutral-50 rounded-md px-3 py-1.5 border border-neutral-200">
-                  <Users className="w-4 h-4 mr-1.5 text-neutral-600" />
-                  <span className="text-sm text-neutral-900">Up to {Math.max(host.indoorCapacity || 0, host.outdoorCapacity || 0)} guests</span>
-                </div>
-                <div className="flex items-center bg-neutral-50 rounded-md px-3 py-1.5 border border-neutral-200">
-                  <DollarSign className="w-4 h-4 mr-1.5 text-neutral-600" />
-                  <span className="text-sm text-neutral-900">${host.suggestedDoorFee || host.showSpecs?.avgDoorFee || 20} suggested</span>
-                </div>
-              </div>
-              
-              <div className="flex flex-wrap gap-4">
-                <Link href={`/bookings/new?hostId=${host.id}`}>
-                  <Button size="lg" className="bg-primary-600 hover:bg-primary-700 text-white shadow-lg">
-                    Request Booking
-                  </Button>
-                </Link>
-                <Link href={`/dashboard/messages?startConversation=${host.userId}`}>
-                  <Button size="lg" variant="outline" className="border-neutral-300 text-neutral-700 hover:bg-neutral-50">
-                    Send Message
-                  </Button>
-                </Link>
-              </div>
-            </div>
-            
-            {/* Featured Photos */}
-            <div className="lg:pl-8">
-              <div className="grid grid-cols-2 gap-4">
-                {allPhotos.slice(0, 4).map((photo, index) => (
-                  <div
-                    key={photo.id}
-                    className="aspect-square rounded-xl overflow-hidden shadow-lg cursor-pointer hover:shadow-xl transition-shadow group"
-                    onClick={() => handlePhotoClick(index)}
-                  >
-                    <img
-                      src={photo.url}
-                      alt={photo.alt}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                ))}
-              </div>
-              {allPhotos.length > 4 && (
-                <button 
-                  onClick={() => handlePhotoClick(0)}
-                  className="mt-4 text-center w-full text-primary-600 hover:text-primary-700 font-medium"
-                >
-                  View all {allPhotos.length} photos
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Profile Hero Section */}
+      {host && (
+        <ProfileHero 
+          isArtist={false} 
+          data={host} 
+          onShare={() => setShowShareMenu(true)} 
+          onFavorite={() => setIsFavorited(!isFavorited)} 
+        />
+      )}
 
       {/* Content Sections */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 space-y-8">
         
-        {/* About This Venue - Combined section with Apple-inspired design */}
-        <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
-          <div className="p-8">
-
-            {/* Venue Details Grid - Apple-style clean layout */}
-            <div className="grid md:grid-cols-3 gap-6 mb-8">
-              {/* Capacity */}
-              <div className="bg-neutral-50 rounded-xl p-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 bg-neutral-200 rounded-lg flex items-center justify-center">
-                    <Users className="w-5 h-5 text-neutral-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-neutral-900">Capacity</h3>
-                    <p className="text-xs text-neutral-500">Typical attendance</p>
-                  </div>
-                </div>
-                <div className="text-2xl font-bold text-neutral-900 mb-1">
-                  {((host.indoorCapacity || 0) + (host.outdoorCapacity || 0)) || host.showSpecs.avgAttendance}
-                </div>
-                <p className="text-sm text-neutral-600">
-                  {host.indoorCapacity && host.indoorCapacity > 0 && (
-                    <span>{host.indoorCapacity} indoor</span>
-                  )}
-                  {host.indoorCapacity && host.indoorCapacity > 0 && host.outdoorCapacity && host.outdoorCapacity > 0 && (
-                    <span>, </span>
-                  )}
-                  {host.outdoorCapacity && host.outdoorCapacity > 0 && (
-                    <span>{host.outdoorCapacity} outdoor</span>
-                  )}
-                  {(!host.indoorCapacity || host.indoorCapacity === 0) && (!host.outdoorCapacity || host.outdoorCapacity === 0) && (
-                    <span>guests typically</span>
-                  )}
-                </p>
-              </div>
-
-              {/* Lodging Offered */}
-              <div className="bg-neutral-50 rounded-xl p-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 bg-neutral-200 rounded-lg flex items-center justify-center">
-                    <Bed className="w-5 h-5 text-neutral-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-neutral-900">Lodging Offered</h3>
-                    <p className="text-xs text-neutral-500">Overnight accommodation</p>
-                  </div>
-                </div>
-                <div className="text-2xl font-bold text-neutral-900 mb-1">
-                  {host.offersLodging ? 'Yes' : 'No'}
-                </div>
-                <p className="text-sm text-neutral-600">
-                  {host.offersLodging ? 'Available for artists' : 'Not available'}
-                </p>
-              </div>
-
-              {/* Availability */}
-              <div className="bg-neutral-50 rounded-xl p-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 bg-neutral-200 rounded-lg flex items-center justify-center">
-                    <Calendar className="w-5 h-5 text-neutral-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-neutral-900">Available</h3>
-                    <p className="text-xs text-neutral-500">Preferred days</p>
-                  </div>
-                </div>
-                <div className="text-sm font-medium text-neutral-900">
-                  {host.preferredDays && host.preferredDays.length > 0 
-                    ? host.preferredDays.join(', ')
-                    : 'Available most days (contact for specific dates)'
-                  }
-                </div>
-              </div>
-            </div>
-
-            {/* What's offered */}
-            <div>
-              <h3 className="text-lg font-semibold text-neutral-900 mb-6">What's offered</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-6">
-                {host.amenities && host.amenities.length > 0 ? (
-                  // Show actual amenities from database
-                  host.amenities.map((amenity) => {
-                    // Map amenity strings to icons
-                    const amenityConfig = {
-                      'Power access for equipment': { icon: Zap },
-                      'Kid friendly environment': { icon: Baby },
-                      'Sound system provided': { icon: Volume2 },
-                      'Overnight accommodation': { icon: Bed },
-                      'Air conditioning / Heating': { icon: Snowflake },
-                      'Free parking on premises': { icon: Car },
-                      'WiFi available': { icon: Wifi },
-                      'Step-free access': { icon: Accessibility },
-                      'Food & Refreshments': { icon: Coffee }
-                    };
-                    
-                    const config = amenityConfig[amenity as keyof typeof amenityConfig] || { icon: CheckCircle };
-                    const IconComponent = config.icon;
-                    
-                    return (
-                      <div key={amenity} className="flex items-center gap-3 text-neutral-700">
-                        <IconComponent className="w-5 h-5 text-neutral-500" />
-                        <span className="text-sm font-medium">{amenity}</span>
-                      </div>
-                    );
-                  })
-                ) : (
-                  // Fallback to show all possible amenities as available
-                  [
-                    { label: 'Power access', icon: Zap },
-                    { label: 'Kid friendly', icon: Baby },
-                    { label: 'Sound system', icon: Volume2 },
-                    { label: 'Overnight stay', icon: Bed },
-                    { label: 'Climate control', icon: Snowflake },
-                    { label: 'Free parking', icon: Car },
-                    { label: 'WiFi', icon: Wifi },
-                    { label: 'Accessible', icon: Accessibility }
-                  ].map(({label, icon: IconComponent}) => (
-                    <div key={label} className="flex items-center gap-3 text-neutral-700">
-                      <IconComponent className="w-5 h-5 text-neutral-500" />
-                      <span className="text-sm font-medium">{label}</span>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* Venue Details */}
+        {host && <VenueDetails host={host} />}
 
         {/* Photo Gallery */}
         <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
@@ -706,462 +522,104 @@ export default function HostProfilePage() {
           </div>
         </section>
 
-        {/* Sound System Information */}
-        {host.soundSystem?.available && (
+        {/* Sound System */}
+        {host && <SoundSystemComponent soundSystem={host.soundSystem} />}
+
+        {/* Musical Preferences */}
+        {host && <MusicalPreferences host={host} />}
+
+        {/* Lodging Information */}
+        {host && (
+          <LodgingInfo 
+            offersLodging={(host as any).offersLodging} 
+            lodgingDetails={(host as any).lodgingDetails} 
+          />
+        )}
+        
+        {/* Reviews Section */}
+        {host && (
+          <PublicReviewsSection 
+            userId={host.id}
+            userType="host"
+            userName={host.name}
+          />
+        )}
+
+        {/* Booking Information */}
+        {host && (
+          <section className="bg-gradient-to-br from-primary-50 to-secondary-50 rounded-2xl p-8">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-neutral-900 mb-2">Ready to Book?</h2>
+              <p className="text-neutral-600">Get in touch to check availability and discuss your show</p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              <div className="bg-white rounded-xl p-6 shadow-md">
+                <h3 className="font-semibold text-neutral-900 mb-4">Show Details</h3>
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-neutral-600">Suggested door fee:</span>
+                    <span className="font-medium">${host.suggestedDoorFee || host.showSpecs?.avgDoorFee || 20}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-neutral-600">Typical audience:</span>
+                    <span className="font-medium">{host.showSpecs?.avgAttendance || Math.floor((host.indoorCapacity || 20) * 0.8)} people</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-neutral-600">Response rate:</span>
+                    <span className="font-medium">{host.hostingExperience > 2 ? '95%' : host.hostingExperience > 0 ? '85%' : 'New host'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-neutral-600">Response time:</span>
+                    <span className="font-medium">{host.hostingExperience > 5 ? 'Within 4 hours' : host.hostingExperience > 1 ? 'Within 12 hours' : 'Within 24 hours'}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-white rounded-xl p-6 shadow-md">
+                <h3 className="font-semibold text-neutral-900 mb-4">Next Steps</h3>
+                <div className="space-y-3 text-sm text-neutral-700">
+                  <div className="flex items-start">
+                    <span className="w-5 h-5 bg-primary-500 text-white rounded-full flex items-center justify-center text-xs mr-3 mt-0.5">1</span>
+                    <span>Send a booking request with your preferred dates</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="w-5 h-5 bg-primary-500 text-white rounded-full flex items-center justify-center text-xs mr-3 mt-0.5">2</span>
+                    <span>Host reviews your request and responds</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="w-5 h-5 bg-primary-500 text-white rounded-full flex items-center justify-center text-xs mr-3 mt-0.5">3</span>
+                    <span>Coordinate show details and logistics</span>
+                  </div>
+                </div>
+                <div className="mt-6">
+                  <Link href={`/bookings/new?hostId=${host.id}`}>
+                    <Button className="w-full">Send Booking Request</Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Upcoming Shows */}
+        {host && (
           <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
             <div className="p-8">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-neutral-900 mb-1">
-                    Sound System & Equipment
+                  <h2 className="text-2xl font-bold text-neutral-900 mb-2">
+                    Upcoming Shows
                   </h2>
-                  <p className="text-neutral-600">Available to performers</p>
+                  <p className="text-neutral-600">Concerts scheduled at this venue</p>
                 </div>
-                <Badge variant="default" className="bg-primary-100 text-primary-800">
-                  Available
+                <Badge variant="secondary" className="bg-sage/10 text-sage">
+                  {host.upcomingConcerts?.length || 0} Shows
                 </Badge>
               </div>
-              
-              {/* System Description */}
-              {host.soundSystem.description && (
-                <div className="mb-8 bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl p-6 border border-primary-200">
-                  <h3 className="text-lg font-semibold text-neutral-900 mb-3">About Our Sound System</h3>
-                  <p className="text-neutral-700 leading-relaxed">
-                    {host.soundSystem.description}
-                  </p>
-                </div>
-              )}
-              
-              {/* Equipment Grid */}
-              <div className="grid gap-6">
-                {/* Core Equipment Row */}
-                <div className="grid md:grid-cols-2 gap-6">
-                  {host.soundSystem.equipment.speakers && (
-                    <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl p-6 border border-primary-200">
-                      <div className="flex items-start space-x-4">
-                        <div className="w-12 h-12 bg-primary-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                          <Volume2 className="w-6 h-6 text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="font-semibold text-neutral-900 mb-1">Speakers</div>
-                          <p className="text-sm text-neutral-700 leading-relaxed">
-                            {host.soundSystem.equipment.speakers}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {host.soundSystem.equipment.microphones && (
-                    <div className="bg-gradient-to-br from-secondary-50 to-secondary-100 rounded-xl p-6 border border-secondary-200">
-                      <div className="flex items-start space-x-4">
-                        <div className="w-12 h-12 bg-secondary-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                          <Mic className="w-6 h-6 text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="font-semibold text-neutral-900 mb-1">Microphones</div>
-                          <p className="text-sm text-neutral-700 leading-relaxed">
-                            {host.soundSystem.equipment.microphones}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                
-                {/* Additional Equipment Row */}
-                {(host.soundSystem.equipment.instruments || host.soundSystem.equipment.additional) && (
-                  <div className="grid md:grid-cols-2 gap-6">
-                    {host.soundSystem.equipment.instruments && (
-                      <div className="bg-gradient-to-br from-accent-50 to-accent-100 rounded-xl p-6 border border-accent-200">
-                        <div className="flex items-start space-x-4">
-                          <div className="w-12 h-12 bg-primary-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <Guitar className="w-6 h-6 text-white" />
-                          </div>
-                          <div className="flex-1">
-                            <div className="font-semibold text-neutral-900 mb-1">Available Instruments</div>
-                            <p className="text-sm text-neutral-700 leading-relaxed">
-                              {host.soundSystem.equipment.instruments}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {host.soundSystem.equipment.additional && (
-                      <div className="bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-xl p-6 border border-neutral-200">
-                        <div className="flex items-start space-x-4">
-                          <div className="w-12 h-12 bg-neutral-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <Settings className="w-6 h-6 text-white" />
-                          </div>
-                          <div className="flex-1">
-                            <div className="font-semibold text-neutral-900 mb-1">Additional Equipment</div>
-                            <p className="text-sm text-neutral-700 leading-relaxed">
-                              {host.soundSystem.equipment.additional}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-          </section>
-        )}
 
-        {/* Musical Preferences - Creative Redesign */}
-        <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
-          <div className="p-8">
-            {/* Simple Header */}
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-neutral-900 mb-2">Musical Preferences</h2>
-              <p className="text-neutral-600">What this venue loves to host</p>
-            </div>
-
-            {/* Content Grid Layout */}
-            <div className="grid gap-8">
-              {/* Preferred Genres */}
-              {host.preferredGenres && host.preferredGenres.length > 0 && (
-                <div>
-                  <h3 className="text-lg font-semibold text-neutral-900 mb-4">Preferred Genres</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {host.preferredGenres.map((genre, index) => (
-                      <span
-                        key={`main-${index}`}
-                        className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-neutral-50 text-neutral-800 border border-neutral-200/50"
-                      >
-                        {genre}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Act Size Preference */}
-              {((host.preferredActSize && host.preferredActSize !== 'Doesn\'t Matter') || host.actSizeNotes) && (
-                <div>
-                  <h3 className="text-lg font-semibold text-neutral-900 mb-4">
-                    {host.preferredActSize && host.preferredActSize !== 'Doesn\'t Matter' 
-                      ? `Preferred Act Size: ${host.preferredActSize}` 
-                      : 'Act Size Considerations'
-                    }
-                  </h3>
-                  {host.actSizeNotes && (
-                    <div className="border-l-2 border-neutral-200 pl-4">
-                      <p className="text-neutral-700 leading-relaxed">{host.actSizeNotes}</p>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Love & Dislike - Side by Side */}
-              {(host.whatWeEnjoy || host.musicWeArentInto) && (
-                <div className="grid md:grid-cols-2 gap-6">
-                  {/* What We Love */}
-                  {host.whatWeEnjoy && (
-                    <div>
-                      <h3 className="text-lg font-semibold text-neutral-900 mb-4">What We Love to Host</h3>
-                      <div className="border-l-2 border-green-200 pl-4">
-                        <p className="text-neutral-700 leading-relaxed">{host.whatWeEnjoy}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Things We Dislike */}
-                  {host.musicWeArentInto && (
-                    <div>
-                      <h3 className="text-lg font-semibold text-neutral-900 mb-4">Things We're Not Into</h3>
-                      <div className="border-l-2 border-orange-200 pl-4">
-                        <p className="text-neutral-700 leading-relaxed">{host.musicWeArentInto}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Content Rating - Small Byline */}
-              {host.contentRating && host.contentRating !== 'Doesn\'t Matter' && (
-                <div className="text-center pt-4 border-t border-neutral-100">
-                  <p className="text-sm text-neutral-600">
-                    Content: <span className="font-medium text-neutral-800">{host.contentRating}</span>
-                    {host.contentRating === 'Kid Friendly' ? ' • Family-friendly environment' : ' • Adult content welcome'}
-                  </p>
-                </div>
-              )}
-
-              {/* No preferences message */}
-              {(!host.preferredGenres || host.preferredGenres.length === 0) && 
-               !host.whatWeEnjoy && 
-               !host.musicWeArentInto && 
-               (!host.preferredActSize || host.preferredActSize === 'Doesn\'t Matter') &&
-               (!host.contentRating || host.contentRating === 'Doesn\'t Matter') &&
-               !host.actSizeNotes && (
-                <div className="text-center py-12">
-                  <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-                    </svg>
-                  </div>
-                  <p className="text-neutral-500 text-lg font-medium">Open to All Music</p>
-                  <p className="text-neutral-400 text-sm mt-1">This host welcomes all types of performances</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
-
-        {/* Lodging Information */}
-        {(host as any).offersLodging && (host as any).lodgingDetails && (
-          <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
-            <div className="p-8">
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold text-neutral-900 mb-2">
-                  Where you'll sleep
-                </h2>
-                <p className="text-neutral-600">
-                  {(host as any).lodgingDetails?.numberOfRooms || 1} bedroom{((host as any).lodgingDetails?.numberOfRooms || 1) > 1 ? 's' : ''} available
-                </p>
-              </div>
-              
-              {/* Room Cards - Apple-inspired design */}
-              <div className="space-y-6">
-                {(host as any).lodgingDetails?.rooms?.map((room: any, index: number) => {
-                  const mainPhoto = room.photos?.[0];
-                  const bedInfo = room.beds?.map((bed: any) => 
-                    `${bed.quantity} ${bed.type === 'queen' ? 'Queen' : 
-                      bed.type === 'king' ? 'King' : 
-                      bed.type === 'full' ? 'Full' : 
-                      bed.type === 'twin' ? 'Twin' : 
-                      bed.type === 'single' ? 'Single' : 
-                      bed.type === 'sofa_bed' ? 'Sofa bed' : 
-                      bed.type === 'air_mattress' ? 'Air mattress' : 
-                      bed.type}`
-                  ).join(' + ') || '1 Queen';
-                  
-                  return (
-                    <div key={room.id || index} className="group relative bg-neutral-50 rounded-2xl overflow-hidden transition-all hover:shadow-lg">
-                      <div className="flex flex-col md:flex-row">
-                        {/* Photo Section - Constrained height */}
-                        <div className="relative w-full md:w-1/3 h-48 md:h-48 lg:h-56">
-                          {mainPhoto ? (
-                            <>
-                              <img
-                                src={mainPhoto.url}
-                                alt={`Bedroom ${index + 1}`}
-                                className="w-full h-full object-cover"
-                              />
-                              {room.photos && room.photos.length > 1 && (
-                                <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white px-2.5 py-1 rounded-full text-xs font-medium">
-                                  +{room.photos.length - 1} photos
-                                </div>
-                              )}
-                            </>
-                          ) : (
-                            <div className="w-full h-full bg-gradient-to-br from-neutral-100 to-neutral-200 flex items-center justify-center">
-                              <Bed className="w-12 h-12 text-neutral-400" />
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Info Section */}
-                        <div className="flex-1 p-5 md:p-6">
-                          <div className="flex items-start justify-between mb-4">
-                            <div>
-                              <h3 className="text-xl font-semibold text-neutral-900 mb-1">
-                                {room.roomType === 'private_bedroom' ? 'Private Bedroom' :
-                                 room.roomType === 'shared_room' ? 'Shared Room' :
-                                 room.roomType === 'entire_space' ? 'Entire Space' :
-                                 `Bedroom ${index + 1}`}
-                              </h3>
-                              <p className="text-neutral-600">
-                                {bedInfo} · Sleeps {room.maxOccupancy || 2}
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* Key Features */}
-                          <div className="flex items-center gap-4 text-sm">
-                            <div className="flex items-center gap-2">
-                              <div className="w-8 h-8 bg-neutral-200 rounded-lg flex items-center justify-center">
-                                <Bed className="w-4 h-4 text-neutral-700" />
-                              </div>
-                              <span className="text-neutral-700">{bedInfo}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <div className="w-8 h-8 bg-neutral-200 rounded-lg flex items-center justify-center">
-                                <Home className="w-4 h-4 text-neutral-700" />
-                              </div>
-                              <span className="text-neutral-700">
-                                {room.bathroomType === 'private' ? 'Private' : 'Shared'} bath
-                              </span>
-                            </div>
-                          </div>
-
-                          {/* View Photos Link */}
-                          {room.photos && room.photos.length > 0 && (
-                            <button className="mt-4 text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors">
-                              View all {room.photos.length} photos →
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Fallback for single room configuration */}
-              {(!(host as any).lodgingDetails?.rooms || (host as any).lodgingDetails?.rooms.length === 0) && (
-                <div className="group relative bg-neutral-50 rounded-2xl overflow-hidden transition-all hover:shadow-lg">
-                  <div className="flex flex-col md:flex-row">
-                    {/* Photo Section - Placeholder */}
-                    <div className="relative w-full md:w-1/3 h-48 md:h-48 lg:h-56">
-                      <div className="w-full h-full bg-gradient-to-br from-neutral-100 to-neutral-200 flex items-center justify-center">
-                        <Bed className="w-12 h-12 text-neutral-400" />
-                      </div>
-                    </div>
-
-                    {/* Info Section */}
-                    <div className="flex-1 p-5 md:p-6">
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <h3 className="text-xl font-semibold text-neutral-900 mb-1">
-                            Private Bedroom
-                          </h3>
-                          <p className="text-neutral-600">
-                            1 Queen bed · Sleeps 2
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Key Features */}
-                      <div className="flex items-center gap-4 text-sm">
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 bg-neutral-200 rounded-lg flex items-center justify-center">
-                            <Bed className="w-4 h-4 text-neutral-700" />
-                          </div>
-                          <span className="text-neutral-700">1 Queen bed</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 bg-neutral-200 rounded-lg flex items-center justify-center">
-                            <Home className="w-4 h-4 text-neutral-700" />
-                          </div>
-                          <span className="text-neutral-700">Shared bath</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-              
-              {/* What's included - Apple-style minimal design */}
-              <div className="mt-12 pt-8 border-t border-neutral-200">
-                <h3 className="text-lg font-semibold text-neutral-900 mb-6">What's included</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-6">
-                  {[
-                    { key: 'wifi', label: 'WiFi', icon: Wifi },
-                    { key: 'breakfast', label: 'Breakfast', icon: Coffee },
-                    { key: 'parking', label: 'Parking', icon: Car },
-                    { key: 'laundry', label: 'Laundry', icon: Home },
-                    { key: 'kitchenAccess', label: 'Kitchen', icon: Utensils },
-                    { key: 'workspace', label: 'Workspace', icon: Briefcase },
-                    { key: 'linensProvided', label: 'Linens', icon: Bed },
-                    { key: 'towelsProvided', label: 'Towels', icon: Shield },
-                  ].filter(({ key }) => {
-                    const isAvailable = (host as any).lodgingDetails?.amenities?.[key as keyof any] || false;
-                    return isAvailable;
-                  }).map(({ key, label, icon: IconComponent }) => (
-                    <div key={key} className="flex items-center gap-3 text-neutral-700">
-                      <IconComponent className="w-5 h-5 text-neutral-500" />
-                      <span className="text-sm font-medium">{label}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* Reviews Section */}
-        <PublicReviewsSection 
-          userId={host.id}
-          userType="host"
-          userName={host.name}
-        />
-
-        {/* Booking Information */}
-        <section className="bg-gradient-to-br from-primary-50 to-secondary-50 rounded-2xl p-8">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-neutral-900 mb-2">Ready to Book?</h2>
-            <p className="text-neutral-600">Get in touch to check availability and discuss your show</p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <div className="bg-white rounded-xl p-6 shadow-md">
-              <h3 className="font-semibold text-neutral-900 mb-4">Show Details</h3>
-              <div className="space-y-3 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-neutral-600">Suggested door fee:</span>
-                  <span className="font-medium">${host.suggestedDoorFee || host.showSpecs?.avgDoorFee || 20}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-neutral-600">Typical audience:</span>
-                  <span className="font-medium">{host.showSpecs?.avgAttendance || Math.floor((host.indoorCapacity || 20) * 0.8)} people</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-neutral-600">Response rate:</span>
-                  <span className="font-medium">{host.hostingExperience > 2 ? '95%' : host.hostingExperience > 0 ? '85%' : 'New host'}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-neutral-600">Response time:</span>
-                  <span className="font-medium">{host.hostingExperience > 5 ? 'Within 4 hours' : host.hostingExperience > 1 ? 'Within 12 hours' : 'Within 24 hours'}</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-white rounded-xl p-6 shadow-md">
-              <h3 className="font-semibold text-neutral-900 mb-4">Next Steps</h3>
-              <div className="space-y-3 text-sm text-neutral-700">
-                <div className="flex items-start">
-                  <span className="w-5 h-5 bg-primary-500 text-white rounded-full flex items-center justify-center text-xs mr-3 mt-0.5">1</span>
-                  <span>Send a booking request with your preferred dates</span>
-                </div>
-                <div className="flex items-start">
-                  <span className="w-5 h-5 bg-primary-500 text-white rounded-full flex items-center justify-center text-xs mr-3 mt-0.5">2</span>
-                  <span>Host reviews your request and responds</span>
-                </div>
-                <div className="flex items-start">
-                  <span className="w-5 h-5 bg-primary-500 text-white rounded-full flex items-center justify-center text-xs mr-3 mt-0.5">3</span>
-                  <span>Coordinate show details and logistics</span>
-                </div>
-              </div>
-              <div className="mt-6">
-                <Link href={`/bookings/new?hostId=${host.id}`}>
-                  <Button className="w-full">Send Booking Request</Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Upcoming Shows */}
-        <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
-          <div className="p-8">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-2xl font-bold text-neutral-900 mb-2">
-                  Upcoming Shows
-                </h2>
-                <p className="text-neutral-600">Concerts scheduled at this venue</p>
-              </div>
-              <Badge variant="secondary" className="bg-sage/10 text-sage">
-                {host.upcomingConcerts?.length || 0} Shows
-              </Badge>
-            </div>
-
-            <div className="space-y-4">
-              {host.upcomingConcerts && host.upcomingConcerts.length > 0 ? (
+              <div className="space-y-4">
+                {host.upcomingConcerts && host.upcomingConcerts.length > 0 ? (
                 host.upcomingConcerts.map((concert) => {
                   const concertRSVPs = mockRSVPs.filter(rsvp => rsvp.concertId === concert.id);
                   const totalGuests = concertRSVPs.reduce((sum, rsvp) => sum + rsvp.guestCount, 0);
@@ -1269,15 +727,17 @@ export default function HostProfilePage() {
             </div>
           </div>
         </section>
+        )}
 
         {/* Host Location Map */}
-        <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
-          <div className="p-8">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-2xl font-bold text-neutral-900 mb-2">Location</h2>
-                <p className="text-neutral-600">General area in {host.city}, {host.state}</p>
-              </div>
+        {host && (
+          <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
+            <div className="p-8">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold text-neutral-900 mb-2">Location</h2>
+                  <p className="text-neutral-600">General area in {host.city}, {host.state}</p>
+                </div>
               <Badge variant="secondary" className="bg-neutral-100 text-neutral-700">
                 <MapPin className="w-4 h-4 mr-1" />
                 Approximate
@@ -1342,6 +802,7 @@ export default function HostProfilePage() {
             </div>
           </div>
         </section>
+        )}
       </div>
 
       {/* Photo Lightbox */}

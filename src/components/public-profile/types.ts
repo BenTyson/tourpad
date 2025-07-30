@@ -61,19 +61,43 @@ export interface LodgingRoom {
 }
 
 export interface LodgingDetails {
-  available: boolean;
-  rooms: LodgingRoom[];
-  houseRules: {
-    checkInTime: string;
-    checkOutTime: string;
-    quietHours: { start: string; end: string };
-    smokingPolicy: string;
-    petPolicy: string;
-    alcoholPolicy: string;
+  available?: boolean;
+  numberOfRooms?: number;
+  rooms?: Array<{
+    id?: string;
+    roomType?: 'private_bedroom' | 'shared_room' | 'entire_space';
+    beds?: Array<{
+      type: 'queen' | 'king' | 'twin' | 'full' | 'single' | 'sofa_bed' | 'air_mattress';
+      quantity: number;
+    }>;
+    maxOccupancy?: number;
+    bathroomType?: 'private' | 'shared';
+    photos?: Array<{
+      url: string;
+      alt?: string;
+    }>;
+  }>;
+  amenities?: {
+    wifi?: boolean;
+    breakfast?: boolean;
+    parking?: boolean;
+    laundry?: boolean;
+    kitchenAccess?: boolean;
+    workspace?: boolean;
+    linensProvided?: boolean;
+    towelsProvided?: boolean;
   };
-  specialConsiderations: string;
-  localRecommendations: string;
-  safetyFeatures: string[];
+  houseRules?: {
+    checkInTime?: string;
+    checkOutTime?: string;
+    quietHours?: { start: string; end: string };
+    smokingPolicy?: string;
+    petPolicy?: string;
+    alcoholPolicy?: string;
+  };
+  specialConsiderations?: string;
+  localRecommendations?: string;
+  safetyFeatures?: string[];
 }
 
 export interface HostData {

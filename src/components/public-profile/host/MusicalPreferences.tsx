@@ -8,6 +8,11 @@ interface MusicalPreferencesProps {
 }
 
 export default function MusicalPreferences({ host }: MusicalPreferencesProps) {
+  // Add null check
+  if (!host) {
+    return null;
+  }
+
   return (
     <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
       <div className="p-8">
