@@ -9,6 +9,8 @@ import FormationYearField from '@/components/profile/info/FormationYearField';
 import SocialLinksCard from '@/components/profile/info/SocialLinksCard';
 import TourLogisticsCard from '@/components/profile/info/TourLogisticsCard';
 import HostVenueDetailsCard from '@/components/profile/info/HostVenueDetailsCard';
+import ArtistMusicalDetailsCard from '@/components/profile/info/ArtistMusicalDetailsCard';
+import ThumbnailPhotoCard from '@/components/profile/info/ThumbnailPhotoCard';
 import { 
   ArrowLeft,
   Camera,
@@ -43,15 +45,6 @@ import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Badge } from '@/components/ui/Badge';
 
-const GENRE_OPTIONS = [
-  'Folk', 'Rock', 'Pop', 'Jazz', 'Blues', 'Country', 'Classical', 'Electronic',
-  'Hip Hop', 'R&B', 'Soul', 'Funk', 'Reggae', 'World', 'Experimental', 'Ambient'
-];
-
-const INSTRUMENT_OPTIONS = [
-  'Guitar', 'Piano', 'Vocals', 'Bass', 'Drums', 'Violin', 'Cello', 'Flute',
-  'Saxophone', 'Trumpet', 'Harmonica', 'Banjo', 'Mandolin', 'Synthesizer', 'Ukulele'
-];
 
 const AMENITY_OPTIONS = [
   'Power access for equipment',
@@ -65,16 +58,6 @@ const AMENITY_OPTIONS = [
   'Food & Refreshments'
 ];
 
-const EQUIPMENT_OPTIONS = [
-  'All instruments and personal gear',
-  'Professional sound equipment',
-  'Microphones and stands',
-  'Basic lighting setup',
-  'PA system',
-  'Amplifiers',
-  'Cables and adapters',
-  'Stage monitors'
-];
 
 const VENUE_REQUIREMENT_OPTIONS = [
   'Performance space (min 12x10 feet)',
@@ -243,8 +226,6 @@ export default function ProfilePage() {
     url: '',
     platform: 'spotify'
   });
-  const [customInstrument, setCustomInstrument] = useState('');
-  const [customEquipment, setCustomEquipment] = useState('');
 
   const [hostProfile, setHostProfile] = useState({
     venueName: '', // This is the venue name like "Mike's Overlook"
@@ -540,37 +521,6 @@ export default function ProfilePage() {
     setHasChanges(true);
   };
 
-  const addGenre = (genre: string) => {
-    if (!artistProfile.genres.includes(genre)) {
-      updateArtistProfile({ genres: [...artistProfile.genres, genre] });
-    }
-  };
-
-  const removeGenre = (genre: string) => {
-    updateArtistProfile({ genres: artistProfile.genres.filter(g => g !== genre) });
-  };
-
-  const addInstrument = (instrument: string) => {
-    if (!artistProfile.instruments.includes(instrument)) {
-      updateArtistProfile({ instruments: [...artistProfile.instruments, instrument] });
-    }
-  };
-
-  const removeInstrument = (instrument: string) => {
-    updateArtistProfile({ instruments: artistProfile.instruments.filter(i => i !== instrument) });
-  };
-  const addCustomInstrument = () => {
-    if (customInstrument.trim() && !artistProfile.instruments.includes(customInstrument.trim())) {
-      updateArtistProfile({ instruments: [...artistProfile.instruments, customInstrument.trim()] });
-      setCustomInstrument('');
-    }
-  };
-  const addCustomEquipment = () => {
-    if (customEquipment.trim() && !artistProfile.equipmentProvided.includes(customEquipment.trim())) {
-      updateArtistProfile({ equipmentProvided: [...artistProfile.equipmentProvided, customEquipment.trim()] });
-      setCustomEquipment('');
-    }
-  };
 
   const addAmenity = (amenity: string) => {
     if (!hostProfile.amenities.includes(amenity)) {
@@ -627,15 +577,6 @@ export default function ProfilePage() {
     updateHostProfile({ hostMembers: hostProfile.hostMembers.filter(m => m.id !== hostMemberId) });
   };
 
-  const addEquipment = (equipment: string) => {
-    if (!artistProfile.equipmentProvided.includes(equipment)) {
-      updateArtistProfile({ equipmentProvided: [...artistProfile.equipmentProvided, equipment] });
-    }
-  };
-
-  const removeEquipment = (equipment: string) => {
-    updateArtistProfile({ equipmentProvided: artistProfile.equipmentProvided.filter(e => e !== equipment) });
-  };
 
   const addVenueRequirement = (requirement: string) => {
     if (!artistProfile.venueRequirements.includes(requirement)) {
@@ -1082,103 +1023,10 @@ export default function ProfilePage() {
 
               {/* Thumbnail Photo (Artist only) */}
               {isArtist && (
-                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                  <CardHeader>
-                    <h2 className="text-xl font-semibold text-neutral-900">
-                      Thumbnail Photo
-                    </h2>
-                    <p className="text-sm text-neutral-600">
-                      Square image (minimum 500x500px). This will be used throughout the site as a thumbnail photo when applicable.
-                    </p>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center space-x-6">
-                      <div className="w-32 h-32 bg-neutral-100 rounded-lg flex items-center justify-center overflow-hidden">
-                        {artistProfile.thumbnailPhoto ? (
-                          <img 
-                            src={artistProfile.thumbnailPhoto} 
-                            alt="Thumbnail" 
-                            className="w-32 h-32 object-cover"
-                          />
-                        ) : (
-                          <Camera className="w-12 h-12 text-neutral-400" />
-                        )}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={async (e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                // Check file size (max 5MB)
-                                if (file.size > 5 * 1024 * 1024) {
-                                  alert('Image file is too large. Please choose an image under 5MB.');
-                                  return;
-                                }
-                                
-                                try {
-                                  // Create FormData
-                                  const formData = new FormData();
-                                  formData.append('file', file);
-                                  formData.append('type', 'profile');
-                                  
-                                  // Upload file
-                                  const response = await fetch('/api/upload', {
-                                    method: 'POST',
-                                    body: formData
-                                  });
-                                  
-                                  if (!response.ok) {
-                                    const error = await response.json();
-                                    alert(error.error || 'Failed to upload image');
-                                    return;
-                                  }
-                                  
-                                  const data = await response.json();
-                                  
-                                  // Update profile with the new image URL
-                                  updateArtistProfile({ thumbnailPhoto: data.url });
-                                  
-                                  alert('Image uploaded successfully!');
-                                  
-                                } catch (error) {
-                                  console.error('Upload error:', error);
-                                  alert('Failed to upload image. Please try again.');
-                                }
-                              }
-                            }}
-                            className="hidden"
-                            id="thumbnailPhotoInput"
-                          />
-                          <label htmlFor="thumbnailPhotoInput" className="cursor-pointer">
-                            <div className="inline-flex items-center px-4 py-2 text-sm border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 rounded-md">
-                              <Camera className="w-4 h-4 mr-2" />
-                              {artistProfile.thumbnailPhoto ? 'Change Photo' : 'Upload Photo'}
-                            </div>
-                          </label>
-                          {artistProfile.thumbnailPhoto && (
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              onClick={() => updateArtistProfile({ thumbnailPhoto: '' })}
-                              className="text-red-600 hover:text-red-700"
-                            >
-                              <X className="w-4 h-4" />
-                            </Button>
-                          )}
-                        </div>
-                        <p className="text-xs text-neutral-500">
-                          Requirements: Square image, minimum 500x500px, JPG or PNG
-                        </p>
-                        <p className="text-xs text-neutral-500 mt-1">
-                          This thumbnail appears in artist cards and search results
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                <ThumbnailPhotoCard
+                  artistProfile={artistProfile}
+                  updateArtistProfile={updateArtistProfile}
+                />
               )}
 
               {/* Hero Photo (Artist only) */}
@@ -1701,179 +1549,10 @@ export default function ProfilePage() {
               {isArtist && (
                 <>
                   {/* Musical Details */}
-                  <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                    <CardHeader>
-                      <h2 className="text-xl font-semibold text-neutral-900">Musical Details</h2>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                      {/* Genres */}
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-2">Genres</label>
-                        <div className="space-y-3">
-                          <div className="flex flex-wrap gap-2">
-                            {artistProfile.genres.map(genre => (
-                              <Badge key={genre} variant="default" className="flex items-center">
-                                {genre}
-                                <button
-                                  onClick={() => removeGenre(genre)}
-                                  className="ml-1 text-xs hover:text-red-600"
-                                >
-                                  <X className="w-3 h-3" />
-                                </button>
-                              </Badge>
-                            ))}
-                          </div>
-                          <div className="flex flex-wrap gap-2">
-                            {GENRE_OPTIONS.filter(g => !artistProfile.genres.includes(g)).map(genre => (
-                              <button
-                                key={genre}
-                                onClick={() => addGenre(genre)}
-                                className="px-3 py-1 text-xs bg-neutral-100 hover:bg-neutral-200 rounded-full transition-colors"
-                              >
-                                + {genre}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Musical Style Description */}
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-2">Describe Your Musical Style</label>
-                        <textarea
-                          value={artistProfile.musicalStyle}
-                          onChange={(e) => updateArtistProfile({ musicalStyle: e.target.value })}
-                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                          rows={3}
-                          placeholder="ie: Harmonic Appalachian Folk"
-                        />
-                      </div>
-
-                      {/* Instruments */}
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-2">Instruments we play</label>
-                        <div className="space-y-3">
-                          <div className="flex flex-wrap gap-2">
-                            {artistProfile.instruments.map(instrument => (
-                              <Badge key={instrument} variant="secondary" className="flex items-center">
-                                {instrument}
-                                <button
-                                  onClick={() => removeInstrument(instrument)}
-                                  className="ml-1 text-xs hover:text-red-600"
-                                >
-                                  <X className="w-3 h-3" />
-                                </button>
-                              </Badge>
-                            ))}
-                          </div>
-                          <div className="flex flex-wrap gap-2">
-                            {INSTRUMENT_OPTIONS.filter(i => !artistProfile.instruments.includes(i)).map(instrument => (
-                              <button
-                                key={instrument}
-                                onClick={() => addInstrument(instrument)}
-                                className="px-3 py-1 text-xs bg-neutral-100 hover:bg-neutral-200 rounded-full transition-colors"
-                              >
-                                + {instrument}
-                              </button>
-                            ))}
-                          </div>
-                          <div className="flex gap-2 mt-3">
-                            <input
-                              type="text"
-                              placeholder="Other instrument..."
-                              value={customInstrument}
-                              onChange={(e) => setCustomInstrument(e.target.value)}
-                              onKeyPress={(e) => {
-                                if (e.key === 'Enter') {
-                                  e.preventDefault();
-                                  addCustomInstrument();
-                                }
-                              }}
-                              className="flex-1 px-3 py-2 text-sm border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                            />
-                            <button
-                              onClick={addCustomInstrument}
-                              disabled={!customInstrument.trim()}
-                              className="px-4 py-2 text-sm bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                              Add
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Equipment I Bring to Shows */}
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-2">Equipment I Bring to Shows</label>
-                        <div className="space-y-3">
-                          <div className="flex flex-wrap gap-2">
-                            {artistProfile.equipmentProvided.map(equipment => (
-                              <Badge key={equipment} variant="secondary" className="bg-green-50 text-green-800 border-green-200 flex items-center">
-                                {equipment}
-                                <button
-                                  onClick={() => removeEquipment(equipment)}
-                                  className="ml-1 text-xs hover:text-red-600"
-                                >
-                                  <X className="w-3 h-3" />
-                                </button>
-                              </Badge>
-                            ))}
-                          </div>
-                          <div className="flex flex-wrap gap-2">
-                            {EQUIPMENT_OPTIONS.filter(e => !artistProfile.equipmentProvided.includes(e)).map(equipment => (
-                              <button
-                                key={equipment}
-                                onClick={() => addEquipment(equipment)}
-                                className="px-3 py-1 text-xs bg-neutral-100 hover:bg-green-100 rounded-full transition-colors"
-                              >
-                                + {equipment}
-                              </button>
-                            ))}
-                          </div>
-                          <div className="flex gap-2 mt-3">
-                            <input
-                              type="text"
-                              placeholder="Other equipment..."
-                              value={customEquipment}
-                              onChange={(e) => setCustomEquipment(e.target.value)}
-                              onKeyPress={(e) => {
-                                if (e.key === 'Enter') {
-                                  e.preventDefault();
-                                  addCustomEquipment();
-                                }
-                              }}
-                              className="flex-1 px-3 py-2 text-sm border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                            />
-                            <button
-                              onClick={addCustomEquipment}
-                              disabled={!customEquipment.trim()}
-                              className="px-4 py-2 text-sm bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                              Add
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Content Rating */}
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-2">Content Rating</label>
-                        <select
-                          value={artistProfile.contentRating || 'family-friendly'}
-                          onChange={(e) => updateArtistProfile({ contentRating: e.target.value })}
-                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                        >
-                          <option value="family-friendly">Family Friendly</option>
-                          <option value="explicit">Explicit</option>
-                          <option value="tailored">Can be tailored to suit the requested environment</option>
-                        </select>
-                        <p className="text-xs text-neutral-500 mt-1">
-                          Let hosts know if your performance contains explicit language or adult themes
-                        </p>
-                      </div>
-
-                    </CardContent>
-                  </Card>
+                  <ArtistMusicalDetailsCard
+                    artistProfile={artistProfile}
+                    updateArtistProfile={updateArtistProfile}
+                  />
 
                   {/* Tour & Logistics */}
                   <TourLogisticsCard
