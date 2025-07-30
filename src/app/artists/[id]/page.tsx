@@ -29,6 +29,13 @@ import { PublicReviewsSection } from '@/components/reviews/PublicReviewsSection'
 import EnhancedArtistMusicSection from '@/components/artist/EnhancedArtistMusicSection';
 import { mockArtists } from '@/data/mockData';
 
+// Import new modular components for artist profiles
+import ProfileHero from '@/components/public-profile/shared/ProfileHero';
+import BandMembers from '@/components/public-profile/artist/BandMembers';
+import TourLogistics from '@/components/public-profile/artist/TourLogistics';
+import UpcomingTours from '@/components/public-profile/artist/UpcomingTours';
+import RelatedArtists from '@/components/public-profile/artist/RelatedArtists';
+
 // US States lookup for display names
 const US_STATES = [
   { value: 'AL', label: 'Alabama' },
@@ -185,6 +192,7 @@ export default function ArtistProfilePage() {
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const [isFavorited, setIsFavorited] = useState(false);
   const [tourSegments, setTourSegments] = useState<TourSegment[]>([]);
   const [upcomingTours, setUpcomingTours] = useState<Array<TourStateRange & { tourName: string }>>([]);
   const [relatedArtists, setRelatedArtists] = useState<any[]>([]);
@@ -369,68 +377,15 @@ export default function ArtistProfilePage() {
         </div>
       </div>
 
-      {/* Hero Section - Full Image Background */}
-      <section className="relative h-[70vh] min-h-[500px] bg-neutral-900 overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0">
-          {artistData.heroPhotoUrl ? (
-            <img 
-              src={artistData.heroPhotoUrl} 
-              alt={`${artistData.name} hero background`}
-              className="w-full h-full object-cover"
-            />
-          ) : artistData.profileImageUrl ? (
-            <img 
-              src={artistData.profileImageUrl} 
-              alt={`${artistData.name} background`}
-              className="w-full h-full object-cover"
-            />
-          ) : artistData.photos && artistData.photos.length > 0 ? (
-            <img 
-              src={artistData.photos[0].fileUrl} 
-              alt={`${artistData.name} background`}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-br from-primary-600 to-primary-800"></div>
-          )}
-        </div>
-        
-        {/* Overlay Mask */}
-        <div className="absolute inset-0 bg-black/50"></div>
-        
-        {/* Content Overlay */}
-        <div className="relative z-10 flex items-center justify-center h-full">
-          <div className="text-center text-white px-4 sm:px-6 lg:px-8">
-            {/* Artist Name */}
-            <h1 className="text-7xl md:text-8xl font-bold mb-6 text-white drop-shadow-2xl">
-              {artistData.name}
-            </h1>
-            
-            {/* Location */}
-            {artistData.location && (
-              <div className="flex items-center justify-center text-white/90 mb-8">
-                <MapPin className="w-5 h-5 mr-2" />
-                <span className="font-medium text-lg">{artistData.location}</span>
-              </div>
-            )}
-            
-            {/* Action Buttons */}
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link href={`/bookings/new?artistId=${artistData.id}`}>
-                <Button size="lg" className="bg-white text-neutral-900 hover:bg-neutral-100 shadow-lg px-8 py-3 font-semibold">
-                  Request Booking
-                </Button>
-              </Link>
-              <Link href={`/dashboard/messages?startConversation=${artistData.userId}`}>
-                <Button size="lg" variant="outline" className="border-white text-white bg-transparent hover:bg-white hover:text-neutral-900 px-8 py-3 font-semibold">
-                  Send Message
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Profile Hero Section */}
+      {artistData && (
+        <ProfileHero 
+          isArtist={true} 
+          data={artistData} 
+          onShare={() => setShowShareMenu(true)} 
+          onFavorite={() => setIsFavorited(!isFavorited)} 
+        />
+      )}
 
       {/* Content Section - Bio, Stats, Video */}
       <section className="bg-white py-16">
@@ -670,141 +625,24 @@ export default function ArtistProfilePage() {
         )}
 
         {/* Band Members Section */}
-        <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
-          <div className="p-8">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-2xl font-bold text-neutral-900 mb-2">
-                  {artistData.bandMembers?.length === 1 ? 'Solo Artist' : 'Meet the Band'}
-                </h2>
-              </div>
-              <Badge variant="default" className="bg-primary-100 text-primary-800">
-                {artistData.bandMembers?.length || 1} {(artistData.bandMembers?.length || 1) === 1 ? 'Member' : 'Members'}
-              </Badge>
-            </div>
-            <div className="grid md:grid-cols-3 gap-6">
-              {(artistData.bandMembers || []).map((member, index) => {
-                // Fallback photos if no photo provided
-                const fallbackPhotos = [
-                  'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=face',
-                  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
-                  'https://images.unsplash.com/photo-1494790108755-2616b9a8af3c?w=400&h=400&fit=crop&crop=face',
-                  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face',
-                  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face'
-                ];
-                
-                return (
-                  <div key={member.id} className="group flex items-center p-6 bg-white rounded-xl border border-neutral-200 hover:shadow-md transition-all duration-300">
-                    <div className="w-16 h-16 rounded-full overflow-hidden mr-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                      <img 
-                        src={member.photo || fallbackPhotos[index % fallbackPhotos.length]} 
-                        alt={`${member.name} profile photo`}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div>
-                      <div className="font-semibold text-neutral-900 text-lg">{member.name}</div>
-                      <div className="text-sm text-neutral-600 font-medium">{member.instrument}</div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            
-            {/* Band Instruments */}
-            {artistData.instruments && artistData.instruments.length > 0 && (
-              <div className="mt-8 pt-6 border-t border-neutral-200">
-                <h3 className="text-lg font-semibold text-neutral-800 mb-3">
-                  Instruments {(artistData.bandMembers?.length || 1) > 1 ? 'we' : 'I'} play
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {artistData.instruments.map((instrument, index) => (
-                    <span 
-                      key={index}
-                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-50 text-primary-700 border border-primary-200"
-                    >
-                      {instrument}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Content Rating */}
-            {artistData.contentRating && (
-              <div className="mt-6 pt-6 border-t border-neutral-200">
-                <p className="text-sm text-neutral-600">
-                  <span className="font-medium">Our musical content rating:</span>{' '}
-                  {(() => {
-                    switch (artistData.contentRating) {
-                      case 'family-friendly':
-                        return 'Family Friendly';
-                      case 'explicit':
-                        return 'Explicit';
-                      case 'tailored':
-                        return 'Can be tailored to suit the requested environment';
-                      default:
-                        return 'Family Friendly';
-                    }
-                  })()}
-                </p>
-              </div>
-            )}
-          </div>
-        </section>
+        {artistData && (
+          <BandMembers 
+            bandMembers={artistData.bandMembers}
+            instruments={artistData.instruments}
+            contentRating={artistData.contentRating}
+            artistName={artistData.name}
+          />
+        )}
 
         {/* Tour & Logistics Section */}
-        <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
-          <div className="p-6">
-            <h2 className="text-xl font-bold text-neutral-900 mb-4">Tour & Logistics</h2>
-            
-            <div className="grid md:grid-cols-3 gap-4">
-              <div className="flex items-center bg-primary-50 rounded-lg p-4 border border-primary-200">
-                <Clock className="w-5 h-5 text-primary-600 mr-3 flex-shrink-0" />
-                <div>
-                  <div className="font-medium text-neutral-900">{artistData.tourMonthsPerYear || 0} months/year</div>
-                  <div className="text-sm text-neutral-600">Touring</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center bg-secondary-50 rounded-lg p-4 border border-secondary-200">
-                <Truck className="w-5 h-5 text-secondary-600 mr-3 flex-shrink-0" />
-                <div>
-                  <div className="font-medium text-neutral-900 capitalize">{artistData.tourVehicle || 'Van'}</div>
-                  <div className="text-sm text-neutral-600">Transport</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center bg-neutral-50 rounded-lg p-4 border border-neutral-200">
-                <Globe className="w-5 h-5 text-neutral-600 mr-3 flex-shrink-0" />
-                <div>
-                  <div className="font-medium text-neutral-900">{artistData.willingToTravel || 500} miles</div>
-                  <div className="text-sm text-neutral-600">Travel radius</div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Equipment Brought to Shows */}
-            {artistData.equipmentProvided && artistData.equipmentProvided.length > 0 && (
-              <div className="mt-6 pt-6 border-t border-neutral-200">
-                <h3 className="font-semibold text-neutral-900 mb-3 flex items-center">
-                  <Music className="w-5 h-5 text-neutral-600 mr-2" />
-                  Equipment I Bring to Shows
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {artistData.equipmentProvided.map((equipment, index) => (
-                    <span 
-                      key={index}
-                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-neutral-100 text-neutral-700 border border-neutral-200"
-                    >
-                      {equipment}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </section>
+        {artistData && (
+          <TourLogistics 
+            tourMonthsPerYear={artistData.tourMonthsPerYear}
+            tourVehicle={artistData.tourVehicle}
+            willingToTravel={artistData.willingToTravel}
+            equipmentProvided={artistData.equipmentProvided}
+          />
+        )}
 
         {/* Full Bio Section */}
         {artistData.fullBio && (
@@ -821,210 +659,25 @@ export default function ArtistProfilePage() {
         )}
 
         {/* Upcoming Tours Section */}
-        {upcomingTours.length > 0 && (
-          <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
-            <div className="p-8">
-              {/* Header */}
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h2 className="text-2xl font-bold text-neutral-900 mb-2">
-                    Upcoming Tours
-                  </h2>
-                  <p className="text-neutral-600">Catch {artistData?.name} when they're in your area</p>
-                </div>
-                <div className="text-right">
-                  <div className="text-sm text-neutral-500 mb-1">Next 12 months</div>
-                  <div className="text-2xl font-bold text-primary-600">
-                    {upcomingTours.length}
-                  </div>
-                  <div className="text-sm text-neutral-400">
-                    {upcomingTours.length === 1 ? 'location' : 'locations'}
-                  </div>
-                </div>
-              </div>
-                
-              {/* Tour Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {upcomingTours.map((tour, index) => {
-                  const startDate = new Date(tour.startDate);
-                  const endDate = new Date(tour.endDate);
-                  const isComingSoon = startDate.getTime() - Date.now() < 30 * 24 * 60 * 60 * 1000; // 30 days
-                  const daysUntil = Math.ceil((startDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-                  
-                  return (
-                    <div 
-                      key={`${tour.id}-${index}`} 
-                      className={`group relative overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl border ${
-                        isComingSoon 
-                          ? 'bg-gradient-to-br from-primary-50 to-neutral-50 border-primary-200 shadow-lg' 
-                          : 'bg-white border-neutral-200 hover:border-primary-300 shadow-sm hover:shadow-lg'
-                      }`}
-                    >
-                      {/* Coming Soon Indicator */}
-                      {isComingSoon && (
-                        <div className="absolute top-4 right-4">
-                          <div className="border-2 border-primary-600 text-primary-600 bg-white text-xs font-bold px-3 py-1 rounded-full">
-                            {daysUntil <= 0 ? 'Now' : `${daysUntil}d`}
-                          </div>
-                        </div>
-                      )}
-                      
-                      {/* Tour Name */}
-                      <div className="mb-3">
-                        <p className="text-sm font-semibold text-primary-600 uppercase tracking-wide">
-                          {tour.tourName}
-                        </p>
-                      </div>
-                      
-                      {/* State Name */}
-                      <div className="mb-4">
-                        <h3 className="text-xl font-bold text-neutral-900">
-                          {getStateName(tour.state)}
-                        </h3>
-                      </div>
-                        
-                        {/* Date Range */}
-                        <div className="mb-5">
-                          <div className={`text-sm font-medium mb-1 ${isComingSoon ? 'text-primary-700' : 'text-neutral-500'}`}>
-                            Tour Dates
-                          </div>
-                          <div className="text-lg font-semibold text-neutral-800">
-                            {startDate.toLocaleDateString('en-US', { 
-                              month: 'short', 
-                              day: 'numeric' 
-                            })} - {endDate.toLocaleDateString('en-US', { 
-                              month: 'short', 
-                              day: 'numeric',
-                              year: 'numeric'
-                            })}
-                          </div>
-                        </div>
-                        
-                        {/* Cities */}
-                        {tour.cities && tour.cities.length > 0 && (
-                          <div className="mb-4">
-                            <div className={`text-xs font-medium mb-2 uppercase tracking-wider ${isComingSoon ? 'text-primary-600' : 'text-neutral-500'}`}>
-                              Cities
-                            </div>
-                            <div className="flex flex-wrap gap-2">
-                              {tour.cities.slice(0, 4).map((city, cityIndex) => (
-                                <span 
-                                  key={cityIndex} 
-                                  className={`text-xs font-medium px-3 py-1.5 rounded-full transition-colors duration-200 border ${
-                                    isComingSoon 
-                                      ? 'bg-white/80 text-primary-700 border-primary-200' 
-                                      : 'bg-neutral-100 text-neutral-700 border-neutral-200 group-hover:bg-neutral-200'
-                                  }`}
-                                >
-                                  {city}
-                                </span>
-                              ))}
-                              {tour.cities.length > 4 && (
-                                <span className={`text-xs font-medium px-3 py-1.5 rounded-full border ${
-                                  isComingSoon 
-                                    ? 'bg-white/60 text-primary-600 border-primary-200' 
-                                    : 'bg-neutral-100 text-neutral-600 border-neutral-200'
-                                }`}>
-                                  +{tour.cities.length - 4}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        )}
-                        
-                        {/* Notes */}
-                        {tour.notes && (
-                          <div className="mt-4 pt-4 border-t border-neutral-200">
-                            <p className="text-sm text-neutral-600 leading-relaxed line-clamp-2">
-                              {tour.notes}
-                            </p>
-                          </div>
-                        )}
-                        
-                        {/* Contact Button */}
-                        <div className="mt-6">
-                          <button 
-                            onClick={() => {
-                              // TODO: Implement booking/contact functionality
-                              alert('Booking functionality coming soon!');
-                            }}
-                            className={`w-full py-3 px-4 rounded-xl font-medium transition-all duration-200 ${
-                              isComingSoon 
-                                ? 'bg-primary-600 text-white shadow-lg hover:bg-primary-700 hover:shadow-xl transform hover:scale-105' 
-                                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 border border-neutral-200'
-                            }`}
-                          >
-                            {isComingSoon ? 'Book Now' : 'Contact for Booking'}
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-                
-                {/* View All Button */}
-                {upcomingTours.length > 6 && (
-                  <div className="mt-10 text-center">
-                    <button 
-                      onClick={() => {
-                        // TODO: Show all tours modal or expand view
-                        alert('Full tour calendar coming soon!');
-                      }}
-                      className="inline-flex items-center gap-2 px-8 py-4 bg-primary-600 text-white font-semibold rounded-2xl shadow-lg hover:bg-primary-700 hover:shadow-xl transform hover:scale-105 transition-all duration-200"
-                    >
-                      <span>View Full Tour Calendar</span>
-                      <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
-                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                    </button>
-                  </div>
-                )}
-              </div>
-          </section>
+        {artistData && upcomingTours.length > 0 && (
+          <UpcomingTours 
+            tours={upcomingTours}
+            artistName={artistData.name}
+          />
         )}
 
         {/* Reviews Section */}
-        <PublicReviewsSection 
-          userId={artistData.id}
-          userType="artist"
-          userName={artistData.name}
-        />
+        {artistData && (
+          <PublicReviewsSection 
+            userId={artistData.id}
+            userType="artist"
+            userName={artistData.name}
+          />
+        )}
 
-        {/* Related Artists */}
+        {/* Related Artists Section */}
         {relatedArtists.length > 0 && (
-          <section className="bg-gradient-to-br from-neutral-50 to-secondary-50 rounded-2xl p-8">
-            <h2 className="text-2xl font-bold text-neutral-900 mb-6">Similar Artists</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              {relatedArtists.map(relatedArtist => (
-                <Link key={relatedArtist.id} href={`/artists/${relatedArtist.id}`}>
-                  <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer h-full">
-                    <CardContent className="p-6">
-                      <div className="flex items-center mb-4">
-                        <div className="w-12 h-12 bg-gradient-to-br from-primary-400 to-secondary-500 rounded-full flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
-                          <Music className="w-6 h-6 text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-neutral-900 group-hover:text-primary-600 transition-colors">
-                            {relatedArtist.name}
-                          </h3>
-                          <p className="text-sm text-neutral-600">{relatedArtist.location}</p>
-                        </div>
-                      </div>
-                      <p className="text-sm text-neutral-700 line-clamp-2">{relatedArtist.bio || 'Professional musician'}</p>
-                      <div className="flex items-center mt-4 text-sm text-neutral-600">
-                        <Star className="w-4 h-4 text-yellow-400 mr-1" />
-                        <span className="font-medium">{relatedArtist.rating || 'N/A'}</span>
-                        <span className="mx-2">•</span>
-                        <span>{relatedArtist.bandMembers?.length || 1} member{(relatedArtist.bandMembers?.length || 1) > 1 ? 's' : ''}</span>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
-            </div>
-          </section>
+          <RelatedArtists artists={relatedArtists} />
         )}
       </div>
 
