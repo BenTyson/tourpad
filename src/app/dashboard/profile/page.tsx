@@ -5,6 +5,7 @@ import Link from 'next/link';
 import ProfileHeader from '@/components/profile/ProfileHeader';
 import TabNavigation from '@/components/profile/TabNavigation';
 import InfoTab from '@/components/profile/InfoTab';
+import PhotosTab from '@/components/profile/PhotosTab';
 import FormationYearField from '@/components/profile/info/FormationYearField';
 import SocialLinksCard from '@/components/profile/info/SocialLinksCard';
 import TourLogisticsCard from '@/components/profile/info/TourLogisticsCard';
@@ -15,6 +16,7 @@ import HeroPhotoCard from '@/components/profile/info/HeroPhotoCard';
 import BandMembersCard from '@/components/profile/info/BandMembersCard';
 import HostPersonalInfoCard from '@/components/profile/info/HostPersonalInfoCard';
 import HostMusicalPreferencesCard from '@/components/profile/info/HostMusicalPreferencesCard';
+import BasicInformationCard from '@/components/profile/info/BasicInformationCard';
 
 
 import { 
@@ -94,60 +96,6 @@ const MUSIC_PLATFORMS = [
   { value: 'other', label: 'Other' }
 ];
 
-const US_STATES = [
-  { value: 'AL', label: 'Alabama' },
-  { value: 'AK', label: 'Alaska' },
-  { value: 'AZ', label: 'Arizona' },
-  { value: 'AR', label: 'Arkansas' },
-  { value: 'CA', label: 'California' },
-  { value: 'CO', label: 'Colorado' },
-  { value: 'CT', label: 'Connecticut' },
-  { value: 'DE', label: 'Delaware' },
-  { value: 'FL', label: 'Florida' },
-  { value: 'GA', label: 'Georgia' },
-  { value: 'HI', label: 'Hawaii' },
-  { value: 'ID', label: 'Idaho' },
-  { value: 'IL', label: 'Illinois' },
-  { value: 'IN', label: 'Indiana' },
-  { value: 'IA', label: 'Iowa' },
-  { value: 'KS', label: 'Kansas' },
-  { value: 'KY', label: 'Kentucky' },
-  { value: 'LA', label: 'Louisiana' },
-  { value: 'ME', label: 'Maine' },
-  { value: 'MD', label: 'Maryland' },
-  { value: 'MA', label: 'Massachusetts' },
-  { value: 'MI', label: 'Michigan' },
-  { value: 'MN', label: 'Minnesota' },
-  { value: 'MS', label: 'Mississippi' },
-  { value: 'MO', label: 'Missouri' },
-  { value: 'MT', label: 'Montana' },
-  { value: 'NE', label: 'Nebraska' },
-  { value: 'NV', label: 'Nevada' },
-  { value: 'NH', label: 'New Hampshire' },
-  { value: 'NJ', label: 'New Jersey' },
-  { value: 'NM', label: 'New Mexico' },
-  { value: 'NY', label: 'New York' },
-  { value: 'NC', label: 'North Carolina' },
-  { value: 'ND', label: 'North Dakota' },
-  { value: 'OH', label: 'Ohio' },
-  { value: 'OK', label: 'Oklahoma' },
-  { value: 'OR', label: 'Oregon' },
-  { value: 'PA', label: 'Pennsylvania' },
-  { value: 'RI', label: 'Rhode Island' },
-  { value: 'SC', label: 'South Carolina' },
-  { value: 'SD', label: 'South Dakota' },
-  { value: 'TN', label: 'Tennessee' },
-  { value: 'TX', label: 'Texas' },
-  { value: 'UT', label: 'Utah' },
-  { value: 'VT', label: 'Vermont' },
-  { value: 'VA', label: 'Virginia' },
-  { value: 'WA', label: 'Washington' },
-  { value: 'WV', label: 'West Virginia' },
-  { value: 'WI', label: 'Wisconsin' },
-  { value: 'WY', label: 'Wyoming' },
-  { value: 'DC', label: 'District of Columbia' }
-];
-
 export default function ProfilePage() {
   const { data: session, status } = useSession();
   const [activeTab, setActiveTab] = useState<'info' | 'photos' | 'media' | 'sound-system' | 'lodging'>('info');
@@ -217,7 +165,6 @@ export default function ProfilePage() {
   const [showVideoForm, setShowVideoForm] = useState(false);
   const [showMusicForm, setShowMusicForm] = useState(false);
   const [editingVideoId, setEditingVideoId] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
   
   const [videoForm, setVideoForm] = useState({
     title: '',
@@ -630,56 +577,6 @@ export default function ProfilePage() {
     setShowMusicForm(false);
   };
 
-  const handlePhotoUpload = async (files: FileList) => {
-    if (!files.length) return;
-    
-    setUploading(true);
-    try {
-      const uploadedPhotos = [];
-      
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('type', 'performance-photo');
-        
-        const response = await fetch('/api/upload', {
-          method: 'POST',
-          body: formData
-        });
-        
-        if (response.ok) {
-          const data = await response.json();
-          uploadedPhotos.push({
-            id: Date.now().toString() + i,
-            fileUrl: data.url,
-            title: '',
-            description: '',
-            sortOrder: (artistProfile.photos || []).length + i,
-            category: 'performance'
-          });
-        }
-      }
-      
-      if (uploadedPhotos.length > 0) {
-        console.log('Uploading photos to state:', uploadedPhotos);
-        updateArtistProfile({ 
-          photos: [...(artistProfile.photos || []), ...uploadedPhotos] 
-        });
-        console.log('Photos added to state');
-      }
-    } catch (error) {
-      console.error('Photo upload failed:', error);
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const removePhoto = (photoId: string) => {
-    updateArtistProfile({ 
-      photos: (artistProfile.photos || []).filter(photo => photo.id !== photoId) 
-    });
-  };
 
   const reorderPhotos = (dragIndex: number, hoverIndex: number) => {
     const photos = [...(artistProfile.photos || [])];
@@ -764,201 +661,13 @@ export default function ProfilePage() {
           {activeTab === 'info' && (
             <div className="space-y-6">
               {/* Basic Information */}
-              <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                <CardHeader>
-                  <h2 className="text-xl font-semibold text-neutral-900">{isArtist ? 'General Band Info' : 'General Venue Info'}</h2>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <Input
-                    label={isArtist ? "Artist/Band Name" : "Venue Name"}
-                    value={isArtist ? artistProfile.bandName : hostProfile.venueName}
-                    onChange={(e) => {
-                      if (isArtist) updateArtistProfile({ bandName: e.target.value });
-                      else updateHostProfile({ venueName: e.target.value });
-                    }}
-                    placeholder={isArtist ? "Your stage name or band name" : "Your venue name (e.g., 'Mike's Overlook')"}
-                  />
-                  {isArtist ? (
-                    <>
-                      {/* Brief Introductory Bio */}
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-1">
-                          Brief Introduction
-                        </label>
-                        <textarea
-                          value={artistProfile.briefBio || ''}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            if (value.length <= 500) {
-                              updateArtistProfile({ briefBio: value });
-                            }
-                          }}
-                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                          rows={3}
-                          maxLength={500}
-                          placeholder="A brief intro to you as a band or artist"
-                        />
-                        <p className="text-xs text-neutral-500 mt-1">
-                          This is the first thing people will read when they arrive at your profile ({(artistProfile.briefBio || '').length}/500 characters)
-                        </p>
-                      </div>
-
-                      {/* Full Bio */}
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-1">
-                          Full Bio
-                        </label>
-                        <textarea
-                          value={artistProfile.fullBio || ''}
-                          onChange={(e) => updateArtistProfile({ fullBio: e.target.value })}
-                          className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                          rows={6}
-                          placeholder="Tell hosts about your music, style, and what makes your performances special. Include your history, influences, upcoming projects, and anything else that helps hosts understand who you are as an artist..."
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-1">
-                        Venue Description
-                      </label>
-                      <textarea
-                        value={hostProfile.venueDescription}
-                        onChange={(e) => updateHostProfile({ venueDescription: e.target.value })}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                        rows={4}
-                        placeholder="Describe your space, atmosphere, and what makes it perfect for house concerts..."
-                      />
-                    </div>
-                  )}
-                  {!isArtist && (
-                    <Input
-                      label="Street Address"
-                      value={hostProfile.address}
-                      onChange={(e) => updateHostProfile({ address: e.target.value })}
-                      placeholder="Your venue's street address"
-                    />
-                  )}
-                  <div className="grid md:grid-cols-3 gap-4">
-                    <Input
-                      label="City"
-                      value={isArtist ? artistProfile.city : hostProfile.city}
-                      onChange={(e) => {
-                        if (isArtist) updateArtistProfile({ city: e.target.value });
-                        else updateHostProfile({ city: e.target.value });
-                      }}
-                    />
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-1">State</label>
-                      <select
-                        value={isArtist ? artistProfile.state : hostProfile.state}
-                        onChange={(e) => {
-                          if (isArtist) updateArtistProfile({ state: e.target.value });
-                          else updateHostProfile({ state: e.target.value });
-                        }}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                      >
-                        <option value="">Select a state</option>
-                        {US_STATES.map((state) => (
-                          <option key={state.value} value={state.value}>
-                            {state.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    {!isArtist && (
-                      <Input
-                        label="ZIP Code"
-                        value={hostProfile.zip}
-                        onChange={(e) => updateHostProfile({ zip: e.target.value })}
-                      />
-                    )}
-                  </div>
-
-                  {/* Formation Year (Artist only) */}
-                  {isArtist && (
-                    <FormationYearField
-                      artistProfile={artistProfile}
-                      updateArtistProfile={updateArtistProfile}
-                    />
-                  )}
-                  
-                  {/* Venue Profile Photo */}
-                  {!isArtist && (
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">Venue Primary Photo</label>
-                      <div className="flex items-center space-x-4">
-                        <div className="w-20 h-20 bg-neutral-100 rounded-lg overflow-hidden flex items-center justify-center">
-                          {hostProfile.venuePhoto ? (
-                            <img 
-                              src={hostProfile.venuePhoto} 
-                              alt="Venue profile" 
-                              className="w-20 h-20 object-cover"
-                            />
-                          ) : (
-                            <Home className="w-10 h-10 text-neutral-400" />
-                          )}
-                        </div>
-                        <div className="flex-1">
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={async (e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                // Check file size (max 5MB)
-                                if (file.size > 5 * 1024 * 1024) {
-                                  alert('Image file is too large. Please choose an image under 5MB.');
-                                  return;
-                                }
-                                
-                                try {
-                                  // Create FormData
-                                  const formData = new FormData();
-                                  formData.append('file', file);
-                                  formData.append('type', 'venue');
-                                  
-                                  // Upload file
-                                  const response = await fetch('/api/upload', {
-                                    method: 'POST',
-                                    body: formData
-                                  });
-                                  
-                                  if (!response.ok) {
-                                    const error = await response.json();
-                                    alert(error.error || 'Failed to upload image');
-                                    return;
-                                  }
-                                  
-                                  const result = await response.json();
-                                  
-                                  // Update profile with new photo URL
-                                  updateHostProfile({ venuePhoto: result.url });
-                                  
-                                } catch (error) {
-                                  console.error('Upload error:', error);
-                                  alert('Failed to upload image. Please try again.');
-                                }
-                              }
-                            }}
-                            id="venuePhotoInput"
-                            className="hidden"
-                          />
-                          <label htmlFor="venuePhotoInput" className="cursor-pointer">
-                            <div className="inline-flex items-center px-3 py-1.5 text-sm border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 rounded-md mb-2">
-                              <Camera className="w-4 h-4 mr-2" />
-                              {hostProfile.venuePhoto ? 'Change Photo' : 'Upload Photo'}
-                            </div>
-                          </label>
-                          <p className="text-xs text-neutral-500">
-                            A main photo of your venue space (JPG, PNG up to 5MB)
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+              <BasicInformationCard
+                isArtist={isArtist}
+                artistProfile={artistProfile}
+                hostProfile={hostProfile}
+                updateArtistProfile={updateArtistProfile}
+                updateHostProfile={updateHostProfile}
+              />
 
               {/* Thumbnail Photo (Artist only) */}
               {isArtist && (
@@ -1038,114 +747,24 @@ export default function ProfilePage() {
           )}
 
 
+          {/* Photos Tab */}
+          {activeTab === 'photos' && (
+            <PhotosTab
+              isArtist={isArtist}
+              artistProfile={artistProfile}
+              hostProfile={hostProfile}
+              updateArtistProfile={updateArtistProfile}
+              updateHostProfile={updateHostProfile}
+              hasChanges={hasChanges}
+              loading={loading}
+            />
+          )}
+
           {/* Media Tab */}
           {activeTab === 'media' && (
             <div className="space-y-6">
               {isArtist ? (
                 <>
-                  {/* Photo Management */}
-                  <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h2 className="text-xl font-semibold text-neutral-900">Performance Photos</h2>
-                          <p className="text-sm text-neutral-600">Upload photos from your performances, band photos, and promotional images</p>
-                        </div>
-                        <Button onClick={() => {
-                          document.getElementById('photoUpload')?.click();
-                        }} disabled={uploading}>
-                          <Camera className="w-4 h-4 mr-2" />
-                          {uploading ? 'Uploading...' : 'Upload Photos'}
-                        </Button>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      {/* Hidden file input */}
-                      <input
-                        type="file"
-                        id="photoUpload"
-                        accept="image/*"
-                        multiple
-                        onChange={(e) => {
-                          if (e.target.files) {
-                            handlePhotoUpload(e.target.files);
-                          }
-                        }}
-                        className="hidden"
-                      />
-
-                      {/* Photo Management Controls */}
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center space-x-4">
-                          <h3 className="font-medium text-neutral-900">Photo Gallery</h3>
-                          <Badge variant="secondary" className="text-xs">
-                            {artistProfile.photos?.length || 0} photos
-                          </Badge>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm text-neutral-600">Sort:</span>
-                          <Button variant="outline" size="sm">
-                            Manual Order
-                          </Button>
-                          <Button variant="outline" size="sm">
-                            Upload Date
-                          </Button>
-                        </div>
-                      </div>
-
-                      {/* Photo Grid */}
-                      {artistProfile.photos && artistProfile.photos.length > 0 ? (
-                        <div className="space-y-4">
-                          <div className="text-sm text-neutral-600 bg-neutral-50 p-3 rounded-lg">
-                            <span className="font-medium">💡 Pro tip:</span> Drag and drop photos to reorder them. The first photo will be your featured image.
-                          </div>
-                          
-                          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            {artistProfile.photos.map((photo, index) => (
-                              <div key={photo.id} className="relative group">
-                                <div className="aspect-square bg-neutral-100 rounded-lg overflow-hidden">
-                                  <img 
-                                    src={photo.fileUrl} 
-                                    alt={photo.title || `Photo ${index + 1}`}
-                                    className="w-full h-full object-cover"
-                                  />
-                                </div>
-                                <div className="absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => removePhoto(photo.id)}
-                                    className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 bg-white"
-                                  >
-                                    <X className="w-4 h-4" />
-                                  </Button>
-                                </div>
-                                {index === 0 && (
-                                  <div className="absolute top-2 left-2">
-                                    <Badge variant="warning" className="text-xs">
-                                      Featured
-                                    </Badge>
-                                  </div>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="border-2 border-dashed border-neutral-300 rounded-lg p-12 text-center">
-                          <Camera className="w-16 h-16 text-neutral-400 mx-auto mb-4" />
-                          <h3 className="text-lg font-medium text-neutral-900 mb-2">No photos uploaded yet</h3>
-                          <p className="text-neutral-600 mb-4">
-                            Upload your first photos to showcase your performances and band. You can drag and drop to reorder them.
-                          </p>
-                          <Button onClick={() => document.getElementById('photoUpload')?.click()}>
-                            <Camera className="w-4 h-4 mr-2" />
-                            Upload Your First Photos
-                          </Button>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
 
                   {/* Performance Videos */}
                   <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
@@ -1362,131 +981,11 @@ export default function ProfilePage() {
                   </Card>
                 </>
               ) : (
-                /* Host Media Section */
-                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                  <CardHeader>
-                    <h2 className="text-xl font-semibold text-neutral-900">Venue Photos</h2>
-                    <p className="text-sm text-neutral-600">Upload photos of your performance space, exterior, and amenities</p>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="border-2 border-dashed border-neutral-300 rounded-lg p-8 text-center">
-                      <Camera className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium text-neutral-900 mb-2">Upload Venue Photos</h3>
-                      <p className="text-neutral-600 mb-4">
-                        Show artists your performance space, exterior, and amenities
-                      </p>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        onChange={async (e) => {
-                          // Handle multiple file uploads with proper error handling
-                          const files = Array.from(e.target.files || []);
-                          if (files.length === 0) return;
-                          
-                          setUploading(true);
-                          const uploadedPhotos = [];
-                          
-                          try {
-                            for (const file of files) {
-                              // Validate file type and size
-                              if (!file.type.startsWith('image/')) {
-                                console.error('Invalid file type:', file.type);
-                                continue;
-                              }
-                              if (file.size > 5 * 1024 * 1024) { // 5MB limit
-                                console.error('File too large:', file.size);
-                                continue;
-                              }
-                              
-                              const formData = new FormData();
-                              formData.append('file', file);
-                              formData.append('category', 'venue');
-                              
-                              const response = await fetch('/api/upload', {
-                                method: 'POST',
-                                body: formData,
-                              });
-                              
-                              if (response.ok) {
-                                const result = await response.json();
-                                uploadedPhotos.push({
-                                  id: result.id || `temp-${Date.now()}-${Math.random()}`,
-                                  fileUrl: result.url,
-                                  title: file.name.replace(/\.[^/.]+$/, ""), // Remove extension
-                                  description: '',
-                                  category: 'venue',
-                                  sortOrder: (hostProfile.photos?.length || 0) + uploadedPhotos.length
-                                });
-                              } else {
-                                console.error('Upload failed for:', file.name);
-                              }
-                            }
-                            
-                            // Add uploaded photos to state
-                            if (uploadedPhotos.length > 0) {
-                              updateHostProfile({
-                                photos: [...(hostProfile.photos || []), ...uploadedPhotos]
-                              });
-                            }
-                          } catch (error) {
-                            console.error('Upload error:', error);
-                          } finally {
-                            setUploading(false);
-                            // Clear the input
-                            e.target.value = '';
-                          }
-                        }}
-                        className="hidden"
-                        id="venuePhotoInput"
-                      />
-                      <Button type="button" onClick={() => {
-                        document.getElementById('venuePhotoInput')?.click();
-                      }}>
-                        <Plus className="w-4 h-4 mr-2" />
-                        {uploading ? 'Uploading...' : 'Upload Photos'}
-                      </Button>
-                    </div>
-                    
-                    {/* Photo Grid */}
-                    {hostProfile.photos && hostProfile.photos.length > 0 ? (
-                      <div className="border-t pt-4">
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                          {hostProfile.photos.map((photo, index) => (
-                            <div key={photo.id} className="relative group">
-                              <img
-                                src={photo.fileUrl}
-                                alt={photo.title || 'Venue photo'}
-                                className="w-full h-32 object-cover rounded-lg"
-                              />
-                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-200 rounded-lg flex items-center justify-center">
-                                <button
-                                  onClick={() => {
-                                    updateHostProfile({
-                                      photos: hostProfile.photos.filter(p => p.id !== photo.id)
-                                    });
-                                  }}
-                                  className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-red-600 text-white rounded-full p-2 hover:bg-red-700"
-                                >
-                                  <X className="w-4 h-4" />
-                                </button>
-                              </div>
-                              {photo.title && (
-                                <p className="text-xs text-neutral-600 mt-1 truncate">{photo.title}</p>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="border-t pt-4">
-                        <p className="text-sm text-neutral-500 text-center py-8">
-                          No photos uploaded yet. Add your first venue photo above.
-                        </p>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
+                /* Host has no media content - maybe add a placeholder */
+                <div className="text-center py-12">
+                  <h3 className="text-lg font-medium text-neutral-900 mb-2">Media features coming soon!</h3>
+                  <p className="text-neutral-600">Host media features will be available in a future update.</p>
+                </div>
               )}
             </div>
           )}
