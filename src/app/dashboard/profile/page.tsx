@@ -13,6 +13,10 @@ import ArtistMusicalDetailsCard from '@/components/profile/info/ArtistMusicalDet
 import ThumbnailPhotoCard from '@/components/profile/info/ThumbnailPhotoCard';
 import HeroPhotoCard from '@/components/profile/info/HeroPhotoCard';
 import BandMembersCard from '@/components/profile/info/BandMembersCard';
+import HostPersonalInfoCard from '@/components/profile/info/HostPersonalInfoCard';
+import HostMusicalPreferencesCard from '@/components/profile/info/HostMusicalPreferencesCard';
+
+
 import { 
   ArrowLeft,
   Camera,
@@ -214,7 +218,6 @@ export default function ProfilePage() {
   const [showMusicForm, setShowMusicForm] = useState(false);
   const [editingVideoId, setEditingVideoId] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [customGenreInput, setCustomGenreInput] = useState('');
   
   const [videoForm, setVideoForm] = useState({
     title: '',
@@ -534,50 +537,7 @@ export default function ProfilePage() {
     updateHostProfile({ amenities: hostProfile.amenities.filter(a => a !== amenity) });
   };
 
-  const addPreferredGenre = (genre: string) => {
-    if (!hostProfile.preferredGenres.includes(genre)) {
-      updateHostProfile({ preferredGenres: [...hostProfile.preferredGenres, genre] });
-    }
-  };
 
-  const removePreferredGenre = (genre: string) => {
-    updateHostProfile({ preferredGenres: hostProfile.preferredGenres.filter(g => g !== genre) });
-  };
-  const addCustomGenre = () => {
-    const genre = customGenreInput.trim();
-    if (genre && !hostProfile.preferredGenres.includes(genre)) {
-      updateHostProfile({ preferredGenres: [...hostProfile.preferredGenres, genre] });
-      setCustomGenreInput('');
-    }
-  };
-  const handleCustomGenreKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      addCustomGenre();
-    }
-  };
-
-  const addHostMember = () => {
-    const newHostMember = {
-      id: Date.now().toString(),
-      hostName: '',
-      aboutMe: '',
-      profilePhoto: ''
-    };
-    updateHostProfile({ hostMembers: [...hostProfile.hostMembers, newHostMember] });
-  };
-
-  const updateHostMember = (hostMemberId: string, updates: Partial<typeof hostProfile.hostMembers[0]>) => {
-    updateHostProfile({
-      hostMembers: hostProfile.hostMembers.map(member => 
-        member.id === hostMemberId ? { ...member, ...updates } : member
-      )
-    });
-  };
-
-  const removeHostMember = (hostMemberId: string) => {
-    updateHostProfile({ hostMembers: hostProfile.hostMembers.filter(m => m.id !== hostMemberId) });
-  };
 
 
   const addVenueRequirement = (requirement: string) => {
@@ -1026,293 +986,18 @@ export default function ProfilePage() {
 
               {/* Host-specific personal information */}
               {!isArtist && (
-                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h2 className="text-xl font-semibold text-neutral-900">Personal Host Information</h2>
-                        <p className="text-sm text-neutral-600">
-                          Add information about each host. This helps artists get to know you personally.
-                        </p>
-                      </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={addHostMember}
-                        className="flex items-center"
-                      >
-                        <Plus className="w-4 h-4 mr-2" />
-                        Add Host
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    {hostProfile.hostMembers.length === 0 ? (
-                      <div className="text-center py-8 border-2 border-dashed border-neutral-300 rounded-lg">
-                        <UserCircle className="w-12 h-12 text-neutral-400 mx-auto mb-3" />
-                        <p className="text-sm text-neutral-600 mb-3">No hosts added yet</p>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={addHostMember}
-                        >
-                          <Plus className="w-4 h-4 mr-2" />
-                          Add Your First Host
-                        </Button>
-                      </div>
-                    ) : (
-                      hostProfile.hostMembers.map((member, index) => (
-                        <div key={member.id} className="border border-neutral-200 rounded-lg p-4 relative">
-                          {hostProfile.hostMembers.length > 1 && (
-                            <button
-                              onClick={() => removeHostMember(member.id)}
-                              className="absolute top-4 right-4 text-neutral-400 hover:text-red-600 transition-colors"
-                              title="Remove host"
-                            >
-                              <X className="w-5 h-5" />
-                            </button>
-                          )}
-                          
-                          <div className="space-y-4">
-                            <div className="text-sm font-medium text-neutral-700 mb-2">
-                              Host #{index + 1}
-                            </div>
-                            
-                            <Input
-                              label="Host Name"
-                              value={member.hostName}
-                              onChange={(e) => updateHostMember(member.id, { hostName: e.target.value })}
-                              placeholder="e.g., 'Sarah Johnson'"
-                            />
-                    
-                            <div>
-                              <label className="block text-sm font-medium text-neutral-700 mb-1">
-                                About Me
-                              </label>
-                              <textarea
-                                value={member.aboutMe}
-                                onChange={(e) => updateHostMember(member.id, { aboutMe: e.target.value })}
-                                className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                                rows={4}
-                                placeholder="Tell artists about yourself. What drew you to house concerts? What do you enjoy about hosting?"
-                              />
-                            </div>
-
-                            <div>
-                              <label className="block text-sm font-medium text-neutral-700 mb-2">Profile Photo</label>
-                              <div className="flex items-center space-x-4">
-                                <div className="w-20 h-20 bg-neutral-100 rounded-full overflow-hidden flex items-center justify-center">
-                                  {member.profilePhoto ? (
-                                    <img 
-                                      src={member.profilePhoto} 
-                                      alt={`${member.hostName} profile`} 
-                                      className="w-20 h-20 object-cover"
-                                    />
-                                  ) : (
-                                    <UserCircle className="w-10 h-10 text-neutral-400" />
-                                  )}
-                                </div>
-                        <div className="flex-1">
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={async (e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                // Check file size (max 5MB)
-                                if (file.size > 5 * 1024 * 1024) {
-                                  alert('Image file is too large. Please choose an image under 5MB.');
-                                  return;
-                                }
-                                
-                                try {
-                                  // Create FormData
-                                  const formData = new FormData();
-                                  formData.append('file', file);
-                                  formData.append('type', 'profile');
-                                  
-                                  // Upload file
-                                  const response = await fetch('/api/upload', {
-                                    method: 'POST',
-                                    body: formData
-                                  });
-                                  
-                                  if (!response.ok) {
-                                    const error = await response.json();
-                                    alert(error.error || 'Failed to upload image');
-                                    return;
-                                  }
-                                  
-                                  const data = await response.json();
-                                  
-                                  // Update this specific host's photo
-                                  updateHostMember(member.id, { profilePhoto: data.url });
-                                  
-                                  alert('Host photo uploaded successfully!');
-                                  
-                                } catch (error) {
-                                  console.error('Upload error:', error);
-                                  alert('Failed to upload image. Please try again.');
-                                }
-                              }
-                            }}
-                            className="hidden"
-                            id={`hostProfilePhotoInput-${member.id}`}
-                          />
-                          <label htmlFor={`hostProfilePhotoInput-${member.id}`} className="cursor-pointer">
-                            <div className="inline-flex items-center px-3 py-1.5 text-sm border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 rounded-md mb-2">
-                              <Camera className="w-4 h-4 mr-2" />
-                              {member.profilePhoto ? 'Change Photo' : 'Upload Photo'}
-                            </div>
-                          </label>
-                          <p className="text-xs text-neutral-500">
-                            A friendly photo of this host
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                          </div>
-                        </div>
-                      ))
-                    )}
-                  </CardContent>
-                </Card>
+                <HostPersonalInfoCard
+                  hostProfile={hostProfile}
+                  updateHostProfile={updateHostProfile}
+                />
               )}
 
               {/* Musical Preferences - Host only */}
               {!isArtist && (
-                <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">
-                  <CardHeader>
-                    <h2 className="text-xl font-semibold text-neutral-900">Musical Preferences</h2>
-                    <p className="text-sm text-neutral-600">
-                      Help artists understand what music fits best at your venue
-                    </p>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    {/* Preferred Genres */}
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">Preferred Genres</label>
-                      <div className="space-y-3">
-                        <div className="flex flex-wrap gap-2">
-                          {hostProfile.preferredGenres.map(genre => (
-                            <Badge key={genre} variant="default" className="flex items-center">
-                              {genre}
-                              <button
-                                onClick={() => removePreferredGenre(genre)}
-                                className="ml-1 text-xs hover:text-red-600"
-                              >
-                                <X className="w-3 h-3" />
-                              </button>
-                            </Badge>
-                          ))}
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          {GENRE_OPTIONS.filter(g => !hostProfile.preferredGenres.includes(g)).map(genre => (
-                            <button
-                              key={genre}
-                              onClick={() => addPreferredGenre(genre)}
-                              className="px-3 py-1 text-xs bg-neutral-100 hover:bg-neutral-200 rounded-full transition-colors"
-                            >
-                              + {genre}
-                            </button>
-                          ))}
-                        </div>
-                        <div className="flex gap-2">
-                          <input
-                            type="text"
-                            value={customGenreInput}
-                            onChange={(e) => setCustomGenreInput(e.target.value)}
-                            onKeyPress={handleCustomGenreKeyPress}
-                            placeholder="Add custom genre..."
-                            className="flex-1 px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                          />
-                          <button
-                            onClick={addCustomGenre}
-                            disabled={!customGenreInput.trim()}
-                            className="px-4 py-2 bg-primary-600 text-white text-sm rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                          >
-                            Add
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Preferred Act Size */}
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">Preferred Act Size</label>
-                      <select
-                        value={hostProfile.preferredActSize}
-                        onChange={(e) => updateHostProfile({ preferredActSize: e.target.value as any })}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                      >
-                        <option value="Solo">Solo</option>
-                        <option value="Duo">Duo</option>
-                        <option value="Trio">Trio</option>
-                        <option value="Full Band">Full Band</option>
-                        <option value="Doesn't Matter">Doesn't Matter</option>
-                      </select>
-                    </div>
-
-                    {/* Act Size Notes */}
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-1">
-                        Act Size Considerations
-                      </label>
-                      <textarea
-                        value={hostProfile.actSizeNotes}
-                        onChange={(e) => updateHostProfile({ actSizeNotes: e.target.value })}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                        rows={3}
-                        placeholder="e.g., Our living room easily fits a trio but can accommodate a larger band within limits..."
-                      />
-                      <p className="text-xs text-neutral-500 mt-1">{hostProfile.actSizeNotes.length}/300 characters</p>
-                    </div>
-
-                    {/* What We Enjoy */}
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-1">
-                        What We Enjoy
-                      </label>
-                      <textarea
-                        value={hostProfile.whatWeEnjoy}
-                        onChange={(e) => updateHostProfile({ whatWeEnjoy: e.target.value })}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                        rows={4}
-                        placeholder="Describe the types of music and acts that would be a perfect fit for your venue..."
-                      />
-                      <p className="text-xs text-neutral-500 mt-1">{hostProfile.whatWeEnjoy.length}/500 characters</p>
-                    </div>
-
-                    {/* Music We Aren't Into */}
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-1">
-                        Things we Dislike
-                      </label>
-                      <textarea
-                        value={hostProfile.musicWeArentInto}
-                        onChange={(e) => updateHostProfile({ musicWeArentInto: e.target.value })}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                        rows={3}
-                        placeholder="Optional: Mention any types of music or acts that don't fit your venue..."
-                      />
-                      <p className="text-xs text-neutral-500 mt-1">{hostProfile.musicWeArentInto.length}/300 characters</p>
-                    </div>
-
-                    {/* Content Rating */}
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">Content Rating Preference</label>
-                      <select
-                        value={hostProfile.contentRating}
-                        onChange={(e) => updateHostProfile({ contentRating: e.target.value as any })}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                      >
-                        <option value="Kid Friendly">Kid Friendly</option>
-                        <option value="Explicit">Explicit Content OK</option>
-                        <option value="Doesn't Matter">Doesn't Matter</option>
-                      </select>
-                    </div>
-                  </CardContent>
-                </Card>
+                <HostMusicalPreferencesCard
+                  hostProfile={hostProfile}
+                  updateHostProfile={updateHostProfile}
+                />
               )}
 
               {/* Artist-specific fields */}
