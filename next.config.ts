@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   
   // DISABLE ALL EXPERIMENTAL FEATURES for maximum stability
@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
     // Disable everything that could cause crashes
     optimizeCss: false,
     memoryBasedWorkersCount: false,
-    webpackBuildWorker: false,
+    webpackBuildWorker: true,
     turbo: false,
     serverComponentsExternalPackages: [],
     serverActions: false,
