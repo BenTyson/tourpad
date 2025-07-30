@@ -521,15 +521,17 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
-        <ProfileHeader
-          isArtist={isArtist}
-          session={session}
-          hasChanges={hasChanges}
-          loading={loading}
-          onSave={handleSave}
-        />
+    <div className="min-h-screen bg-white">
+      <ProfileHeader
+        isArtist={isArtist}
+        session={session}
+        hasChanges={hasChanges}
+        loading={loading}
+        onSave={handleSave}
+      />
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 py-6">
         {/* Tab Navigation */}
         <TabNavigation
           activeTab={activeTab}
@@ -1260,7 +1262,6 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
-      
     </div>
   );
 }
