@@ -15,6 +15,7 @@ import {
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { CalendarEvent } from '@/app/api/calendar/events/route';
+// import CalendarHeader from '@/components/calendar/CalendarHeader';
 
 type ViewMode = 'month' | 'week' | 'list';
 type CalendarEventStatus = 'pending' | 'approved' | 'rejected' | 'confirmed' | 'completed' | 'cancelled' | 'scheduled' | 'live';
@@ -196,73 +197,23 @@ export default function CalendarPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header - Mobile Responsive */}
-        <div className="mb-6 sm:mb-8">
-          {/* Mobile: Stacked layout */}
-          <div className="sm:hidden">
-            <div className="flex items-center justify-between mb-4">
-              <Link href="/dashboard">
-                <Button variant="ghost" size="sm" className="hover:bg-primary-50 hover:text-primary-700">
-                  <ArrowLeft className="w-4 h-4 mr-1" />
-                  Back
-                </Button>
-              </Link>
-              
-              {/* Mobile View Toggle */}
-              <div className="flex rounded-lg border border-neutral-200 bg-white p-1">
-                <Button
-                  variant={viewMode === 'month' ? 'primary' : 'ghost'}
-                  size="sm"
-                  onClick={() => setViewMode('month')}
-                  className={viewMode === 'month' ? 'bg-primary-600 text-white' : 'text-neutral-600 hover:text-neutral-900'}
-                >
-                  <Grid3X3 className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant={viewMode === 'list' ? 'primary' : 'ghost'}
-                  size="sm"
-                  onClick={() => setViewMode('list')}
-                  className={viewMode === 'list' ? 'bg-primary-600 text-white' : 'text-neutral-600 hover:text-neutral-900'}
-                >
-                  <List className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-            
-            <div className="mb-4">
-              <h1 className="text-2xl font-bold text-neutral-900">Calendar</h1>
-              <p className="text-sm text-neutral-600 mt-1">
-                {session?.user?.type === 'artist' && 'Your gigs & bookings'}
-                {session?.user?.type === 'host' && 'Your hosted shows'}
-                {session?.user?.type === 'fan' && 'Available concerts'}
-                {session?.user?.type === 'admin' && 'All events'}
-              </p>
-            </div>
-          </div>
-          
-          {/* Desktop: Side-by-side layout */}
-          <div className="hidden sm:flex items-center justify-between mb-6">
+    <div className="min-h-screen bg-white">
+      {/* Modern Header */}
+      <div className="border-b border-neutral-200 bg-white">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <Link href="/dashboard">
-                <Button variant="ghost" size="sm" className="hover:bg-primary-50 hover:text-primary-700">
+                <button className="inline-flex items-center px-3 py-2 text-sm font-medium text-neutral-700 bg-transparent hover:bg-neutral-100 rounded-md transition-colors">
                   <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to Dashboard
-                </Button>
+                  Dashboard
+                </button>
               </Link>
-              <div>
-                <h1 className="text-3xl font-bold text-neutral-900">Calendar</h1>
-                <p className="text-neutral-600 mt-1">
-                  {session?.user?.type === 'artist' && 'Your upcoming gigs and booking requests'}
-                  {session?.user?.type === 'host' && 'Shows you\'re hosting and booking requests'}
-                  {session?.user?.type === 'fan' && 'Available concerts and your reservations'}
-                  {session?.user?.type === 'admin' && 'All bookings and concerts'}
-                </p>
-              </div>
+              <div className="h-6 w-px bg-neutral-200"></div>
+              <h1 className="text-xl font-semibold text-neutral-900">Calendar</h1>
             </div>
             
-            {/* Desktop View Mode Toggle */}
+            {/* View Mode Toggle */}
             <div className="flex items-center space-x-2">
               <div className="flex rounded-lg border border-neutral-200 bg-white p-1">
                 <Button
@@ -286,11 +237,15 @@ export default function CalendarPage() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Month Navigation - Mobile Responsive */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <Button
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 py-6">
+        {/* Month Navigation - Mobile Responsive */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2 sm:space-x-4">
+            <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1))}
@@ -331,80 +286,60 @@ export default function CalendarPage() {
             </div>
           </div>
 
-          {/* Filters Panel - Collapsible */}
-          {showFilters && (
-            <div className="mt-4 p-4 bg-neutral-50 rounded-lg border border-neutral-200">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {/* Status Filter */}
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2">Status</label>
-                  <select
-                    value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value)}
-                    className="w-full p-2 border border-neutral-300 rounded-md text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                  >
-                    <option value="all">All Statuses</option>
-                    <option value="pending">Pending</option>
-                    <option value="approved">Approved</option>
-                    <option value="confirmed">Confirmed</option>
-                    <option value="scheduled">Scheduled</option>
-                    <option value="completed">Completed</option>
-                    <option value="cancelled">Cancelled</option>
-                  </select>
-                </div>
+        {/* Filters Panel - Collapsible */}
+        {showFilters && (
+          <div className="mt-4 p-4 bg-neutral-50 rounded-lg border border-neutral-200">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Status Filter */}
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-2">Status</label>
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="w-full p-2 border border-neutral-300 rounded-md text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                >
+                  <option value="all">All Statuses</option>
+                  <option value="pending">Pending</option>
+                  <option value="approved">Approved</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="scheduled">Scheduled</option>
+                  <option value="completed">Completed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+              </div>
 
-                {/* Type Filter */}
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2">Event Type</label>
-                  <select
-                    value={typeFilter}
-                    onChange={(e) => setTypeFilter(e.target.value as 'all' | 'booking' | 'concert')}
-                    className="w-full p-2 border border-neutral-300 rounded-md text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                  >
-                    <option value="all">All Types</option>
-                    <option value="booking">Bookings</option>
-                    <option value="concert">Concerts</option>
-                  </select>
-                </div>
+              {/* Type Filter */}
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-2">Event Type</label>
+                <select
+                  value={typeFilter}
+                  onChange={(e) => setTypeFilter(e.target.value as 'all' | 'booking' | 'concert')}
+                  className="w-full p-2 border border-neutral-300 rounded-md text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                >
+                  <option value="all">All Types</option>
+                  <option value="booking">Bookings</option>
+                  <option value="concert">Concerts</option>
+                </select>
+              </div>
 
-                {/* Clear Filters */}
-                <div className="flex items-end">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      setStatusFilter('all');
-                      setTypeFilter('all');
-                    }}
-                    className="w-full sm:w-auto"
-                  >
-                    Clear Filters
-                  </Button>
-                </div>
+              {/* Clear Filters */}
+              <div className="flex items-end">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setStatusFilter('all');
+                    setTypeFilter('all');
+                  }}
+                  className="w-full sm:w-auto"
+                >
+                  Clear Filters
+                </Button>
               </div>
             </div>
-          )}
-        </div>
-
-        {/* Loading State */}
-        {loading && (
-          <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-12 text-center">
-            <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full mx-auto mb-4"></div>
-            <p className="text-neutral-600">Loading calendar events...</p>
           </div>
         )}
 
-        {/* Error State */}
-        {error && !loading && (
-          <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-12 text-center">
-            <div className="text-red-500 text-xl mb-4">⚠️</div>
-            <h3 className="text-lg font-medium text-neutral-900 mb-2">Error Loading Calendar</h3>
-            <p className="text-neutral-600 mb-4">{error}</p>
-            <Button onClick={() => window.location.reload()}>
-              Try Again
-            </Button>
-          </div>
-        )}
 
         {/* Calendar Content */}
         {!loading && !error && viewMode === 'month' && (

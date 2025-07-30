@@ -7,6 +7,7 @@ import SpotifyConnectionCard from '@/components/dashboard/artist/SpotifyConnecti
 import SoundCloudConnectionCard from '@/components/dashboard/artist/SoundCloudConnectionCard';
 import { MP3UploadComponent } from '@/components/music/MP3UploadComponent';
 import { UploadedTracksManager } from '@/components/music/UploadedTracksManager';
+import MusicHeader from '@/components/dashboard/MusicHeader';
 import { Music, Upload, Headphones } from 'lucide-react';
 
 interface SpotifyConnection {
@@ -120,20 +121,11 @@ export default function MusicManagementPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 bg-sage/10 rounded-lg">
-              <Music className="h-6 w-6 text-sage" />
-            </div>
-            <h1 className="text-3xl font-bold text-neutral-900">Manage Music</h1>
-          </div>
-          <p className="text-neutral-600">
-            Connect your streaming platforms and manage your music content to showcase your tracks on your artist profile.
-          </p>
-        </div>
+    <div className="min-h-screen bg-white">
+      <MusicHeader />
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 py-6">
 
         {/* Music Platform Integrations */}
         <div className="space-y-8">
