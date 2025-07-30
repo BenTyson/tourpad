@@ -12,12 +12,12 @@ import {
   Edit3,
   Download,
   RefreshCw,
-  ArrowLeft,
   Info
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
+import SubscriptionHeader from '@/components/subscription/SubscriptionHeader';
 
 export default function ManageSubscriptionPage() {
   const { data: session } = useSession();
@@ -116,8 +116,9 @@ export default function ManageSubscriptionPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100 py-8">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-white">
+        <SubscriptionHeader />
+        <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-center py-12">
             <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full mr-4"></div>
             <span className="text-lg text-neutral-600">Loading subscription details...</span>
@@ -128,20 +129,13 @@ export default function ManageSubscriptionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center space-x-4 mb-4">
-            <Link href="/dashboard">
-              <Button variant="outline" size="sm">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Dashboard
-              </Button>
-            </Link>
-          </div>
-          <h1 className="text-3xl font-bold text-neutral-900">Manage Subscription</h1>
-          <p className="text-neutral-600 mt-2">View and manage your TourPad membership</p>
+    <div className="min-h-screen bg-white">
+      <SubscriptionHeader />
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 py-6">
+        <div className="mb-6">
+          <p className="text-neutral-600">View and manage your TourPad membership</p>
         </div>
 
         {error && (

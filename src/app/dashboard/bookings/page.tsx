@@ -3,9 +3,8 @@ import { useState, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import BookingList from '@/components/bookings/BookingList';
+import BookingsHeader from '@/components/dashboard/BookingsHeader';
 import { Button } from '@/components/ui/Button';
-import { Plus, ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
 
 export default function BookingsPage() {
   const { data: session, status } = useSession();
@@ -51,9 +50,9 @@ export default function BookingsPage() {
   // Loading state
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin w-8 h-8 border-4 border-[var(--color-french-blue)] border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full mx-auto mb-4"></div>
           <p className="text-neutral-600">Loading...</p>
         </div>
       </div>
@@ -63,7 +62,7 @@ export default function BookingsPage() {
   // Not authenticated
   if (!session?.user) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-neutral-900 mb-4">Access Denied</h1>
           <p className="text-neutral-600 mb-4">Please sign in to access your bookings.</p>
@@ -80,9 +79,9 @@ export default function BookingsPage() {
   if (userType === 'admin') {
     router.push('/admin/bookings');
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin w-8 h-8 border-4 border-[var(--color-french-blue)] border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full mx-auto mb-4"></div>
           <p className="text-neutral-600">Redirecting to admin dashboard...</p>
         </div>
       </div>
@@ -90,45 +89,11 @@ export default function BookingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Link href="/dashboard">
-                <Button variant="outline" size="sm">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Dashboard
-                </Button>
-              </Link>
-              <h1 className="text-xl font-semibold text-neutral-900">
-                {userType === 'artist' ? 'My Bookings' : 'Booking Requests'}
-              </h1>
-            </div>
+    <div className="min-h-screen bg-white">
+      <BookingsHeader userType={userType} />
 
-            {/* Action Buttons */}
-            <div className="flex items-center space-x-4">
-              {userType === 'artist' && (
-                <Link href="/hosts">
-                  <Button>
-                    <Plus className="w-4 h-4 mr-2" />
-                    Request New Booking
-                  </Button>
-                </Link>
-              )}
-              {userType === 'host' && (
-                <Link href="/artists">
-                  <Button variant="outline">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Invite Artists
-                  </Button>
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
-
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 py-6">
         {/* Booking Management Section */}
         <BookingList
           viewType={userType === 'artist' ? 'artist' : 'host'}
