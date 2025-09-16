@@ -27,10 +27,16 @@ export default function TourPlannerPage() {
     setCityInput,
     editingTourSegment,
     setEditingTourSegment,
+    editingStateRangeId,
+    editingStateRangeData,
     resetForm,
     loadTourForEditing,
     addStateRange,
     removeStateRange,
+    startEditingStateRange,
+    updateEditingStateRangeData,
+    updateStateRange,
+    cancelEditingStateRange,
     addCityToNewRange,
     removeCityFromNewRange,
     validateForm
@@ -129,6 +135,22 @@ export default function TourPlannerPage() {
     setNewStateRange(prev => ({ ...prev, ...updates }));
   };
 
+  // City editing handlers
+  const handleAddCityToEditing = (city: string) => {
+    const trimmedCity = city.trim();
+    if (trimmedCity && !editingStateRangeData.cities.includes(trimmedCity)) {
+      updateEditingStateRangeData({
+        cities: [...editingStateRangeData.cities, trimmedCity]
+      });
+    }
+  };
+
+  const handleRemoveCityFromEditing = (city: string) => {
+    updateEditingStateRangeData({
+      cities: editingStateRangeData.cities.filter(c => c !== city)
+    });
+  };
+
   // Loading state
   if (loading || status === 'loading') {
     return (
@@ -164,12 +186,20 @@ export default function TourPlannerPage() {
             formData={formData}
             newStateRange={newStateRange}
             isEditing={!!editingTourSegment}
+            editingStateRangeId={editingStateRangeId}
+            editingStateRangeData={editingStateRangeData}
             onFormDataChange={handleFormDataChange}
             onStateRangeChange={handleStateRangeChange}
             onAddStateRange={addStateRange}
             onRemoveStateRange={removeStateRange}
+            onStartEditingStateRange={startEditingStateRange}
+            onUpdateEditingStateRangeData={updateEditingStateRangeData}
+            onUpdateStateRange={updateStateRange}
+            onCancelEditingStateRange={cancelEditingStateRange}
             onAddCity={addCityToNewRange}
             onRemoveCity={removeCityFromNewRange}
+            onAddCityToEditing={handleAddCityToEditing}
+            onRemoveCityFromEditing={handleRemoveCityFromEditing}
             onSubmit={handleSubmit}
             onCancel={handleCloseForm}
           />

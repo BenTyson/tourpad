@@ -54,10 +54,16 @@ export interface UseTourFormReturn {
   setCityInput: React.Dispatch<React.SetStateAction<string>>;
   editingTourSegment: string | null;
   setEditingTourSegment: React.Dispatch<React.SetStateAction<string | null>>;
+  editingStateRangeId: string | null;
+  editingStateRangeData: NewStateRangeData;
   resetForm: () => void;
   loadTourForEditing: (tour: TourSegment) => void;
   addStateRange: () => boolean;
   removeStateRange: (rangeId: string) => void;
+  startEditingStateRange: (stateRange: StateRange) => void;
+  updateEditingStateRangeData: (updates: Partial<NewStateRangeData>) => void;
+  updateStateRange: () => boolean;
+  cancelEditingStateRange: () => void;
   addCityToNewRange: () => void;
   removeCityFromNewRange: (city: string) => void;
   validateForm: () => boolean;

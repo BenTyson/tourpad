@@ -4,7 +4,7 @@
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
-import { TourFormData, NewStateRangeData } from '../types/tour';
+import { TourFormData, NewStateRangeData, StateRange } from '../types/tour';
 import { TourBasicDetailsForm } from './TourBasicDetailsForm';
 import { StateRangeForm } from './StateRangeForm';
 import { StateRangeList } from './StateRangeList';
@@ -13,12 +13,20 @@ interface TourFormProps {
   formData: TourFormData;
   newStateRange: NewStateRangeData;
   isEditing: boolean;
+  editingStateRangeId: string | null;
+  editingStateRangeData: NewStateRangeData;
   onFormDataChange: (updates: Partial<TourFormData>) => void;
   onStateRangeChange: (updates: Partial<NewStateRangeData>) => void;
   onAddStateRange: () => void;
   onRemoveStateRange: (rangeId: string) => void;
+  onStartEditingStateRange: (stateRange: StateRange) => void;
+  onUpdateEditingStateRangeData: (updates: Partial<NewStateRangeData>) => void;
+  onUpdateStateRange: () => void;
+  onCancelEditingStateRange: () => void;
   onAddCity: (city: string) => void;
   onRemoveCity: (city: string) => void;
+  onAddCityToEditing: (city: string) => void;
+  onRemoveCityFromEditing: (city: string) => void;
   onSubmit: (e: React.FormEvent) => void;
   onCancel: () => void;
 }
@@ -27,12 +35,20 @@ export function TourForm({
   formData,
   newStateRange,
   isEditing,
+  editingStateRangeId,
+  editingStateRangeData,
   onFormDataChange,
   onStateRangeChange,
   onAddStateRange,
   onRemoveStateRange,
+  onStartEditingStateRange,
+  onUpdateEditingStateRangeData,
+  onUpdateStateRange,
+  onCancelEditingStateRange,
   onAddCity,
   onRemoveCity,
+  onAddCityToEditing,
+  onRemoveCityFromEditing,
   onSubmit,
   onCancel
 }: TourFormProps) {
@@ -93,6 +109,14 @@ export function TourForm({
             <StateRangeList
               stateRanges={formData.stateRanges}
               onRemoveStateRange={onRemoveStateRange}
+              editingStateRangeId={editingStateRangeId}
+              editingStateRangeData={editingStateRangeData}
+              onStartEditing={onStartEditingStateRange}
+              onUpdateEditing={onUpdateEditingStateRangeData}
+              onSaveEditing={onUpdateStateRange}
+              onCancelEditing={onCancelEditingStateRange}
+              onAddCityToEditing={onAddCityToEditing}
+              onRemoveCityFromEditing={onRemoveCityFromEditing}
             />
           </div>
 

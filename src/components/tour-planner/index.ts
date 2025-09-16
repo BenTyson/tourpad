@@ -13,6 +13,7 @@ export { DateRangePicker } from './ui/DateRangePicker';
 // Form Components
 export { TourBasicDetailsForm } from './forms/TourBasicDetailsForm';
 export { StateRangeForm } from './forms/StateRangeForm';
+export { StateRangeFormFields } from './forms/StateRangeFormFields';
 export { StateRangeList } from './forms/StateRangeList';
 export { CityInput } from './forms/CityInput';
 export { TourForm } from './forms/TourForm';
