@@ -103,6 +103,9 @@ export default function ProfilePage() {
     fullBio: '',
     city: '',
     state: '',
+    email: '',
+    phone: '',
+    zipCode: '',
     profilePhoto: '',
     thumbnailPhoto: '',
     heroPhoto: '',
@@ -111,8 +114,8 @@ export default function ProfilePage() {
     instruments: [] as string[],
     formationYear: new Date().getFullYear(),
     tourMonthsPerYear: 3,
-    tourVehicle: 'van' as string,
-    willingToTravel: 500,
+    tourVehicle: '' as string,
+    willingToTravel: 0,
     needsLodging: false,
     equipmentProvided: [] as string[],
     venueRequirements: [] as string[],
@@ -161,6 +164,9 @@ export default function ProfilePage() {
     city: '',
     state: '',
     zip: '',
+    email: '',
+    phone: '',
+    zipCode: '',
     profilePhoto: '',
     venuePhoto: '', // Main venue photo
     venueType: 'home' as 'home' | 'studio' | 'backyard' | 'loft' | 'warehouse' | 'other',
@@ -259,12 +265,15 @@ export default function ProfilePage() {
                 fullBio: data.fullBio || data.bio || '',
                 city: data.city || '',
                 state: data.state || '',
+                email: data.email || session.user.email || '',
+                phone: data.phone || '',
+                zipCode: data.zipCode || '',
                 genres: data.genres || [],
                 instruments: data.instruments || [],
                 formationYear: data.formationYear || new Date().getFullYear(),
                 tourMonthsPerYear: data.tourMonthsPerYear || 3,
-                tourVehicle: data.tourVehicle || 'van',
-                willingToTravel: data.willingToTravel || 500,
+                tourVehicle: data.tourVehicle || '',
+                willingToTravel: data.willingToTravel || 0,
                 needsLodging: data.needsLodging || false,
                 equipmentProvided: data.equipmentProvided || [],
                 venueRequirements: data.venueRequirements || [],
@@ -306,6 +315,16 @@ export default function ProfilePage() {
                 zip: (() => {
                   // Try to extract zip code from actualAddress if data.zip is not available
                   if (data.zip) return data.zip;
+                  const fullAddress = data.actualAddress || '';
+                  // Match 5-digit zip code pattern
+                  const zipMatch = fullAddress.match(/\b\d{5}\b/);
+                  return zipMatch ? zipMatch[0] : '';
+                })(),
+                email: data.email || session.user.email || '',
+                phone: data.phone || '',
+                zipCode: (() => {
+                  // Try to extract zip code from actualAddress if data.zipCode is not available
+                  if (data.zipCode) return data.zipCode;
                   const fullAddress = data.actualAddress || '';
                   // Match 5-digit zip code pattern
                   const zipMatch = fullAddress.match(/\b\d{5}\b/);
@@ -405,7 +424,7 @@ export default function ProfilePage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="animate-spin w-8 h-8 border-4 border-[var(--color-french-blue)] border-t-transparent rounded-full mx-auto mb-4"></div>
           <p className="text-neutral-600">Loading profile...</p>
         </div>
       </div>

@@ -5,7 +5,7 @@ import { PrismaClient } from '@prisma/client';
 import { sendPaymentEvent } from '../../events/route';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-06-30.basil',
+  apiVersion: '2024-11-20.acacia',
 });
 
 const prisma = new PrismaClient();

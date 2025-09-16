@@ -535,7 +535,7 @@ export default function EnhancedHomePage() {
           {/* Three-column CTA buttons */}
           <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             <Link href="/register?type=artist">
-              <Button size="lg" className="w-full px-8 py-6 text-lg text-white bg-primary-600 hover:bg-white hover:text-primary-600 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group border-2 border-primary-600">
+              <Button size="lg" className="w-full px-8 py-6 text-lg text-white bg-primary-600 hover:bg-white hover:text-primary-600 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group border-2 border-[var(--color-french-blue)]">
                 <Guitar className="w-6 h-6 mr-3" />
                 Apply as Artist
                 <ArrowRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform" />
@@ -545,7 +545,7 @@ export default function EnhancedHomePage() {
             <Link href="/register?type=host">
               <Button 
                 size="lg" 
-                className="w-full px-8 py-6 text-lg text-white bg-primary-600 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group border-2 border-primary-600"
+                className="w-full px-8 py-6 text-lg text-white bg-primary-600 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group border-2 border-[var(--color-french-blue)]"
                 style={{
                   backgroundColor: 'var(--color-primary-600)',
                   borderColor: 'var(--color-primary-600)',
@@ -567,7 +567,7 @@ export default function EnhancedHomePage() {
             </Link>
             
             <Link href="/register?type=fan">
-              <Button size="lg" className="w-full px-8 py-6 text-lg text-white bg-primary-600 hover:bg-white hover:text-primary-600 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group border-2 border-primary-600">
+              <Button size="lg" className="w-full px-8 py-6 text-lg text-white bg-primary-600 hover:bg-white hover:text-primary-600 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group border-2 border-[var(--color-french-blue)]">
                 <Heart className="w-6 h-6 mr-3" />
                 Join as Fan
                 <ArrowRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform" />

@@ -150,7 +150,7 @@ export const ProgressIndicator = ({ steps, className }: ProgressIndicatorProps) 
                   className={cn(
                     'w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium border-2 transition-all duration-300',
                     isCompleted && 'bg-secondary-500 border-secondary-500 text-white',
-                    isActive && 'bg-primary-600 border-primary-600 text-white shadow-lg scale-110',
+                    isActive && 'bg-primary-600 border-[var(--color-french-blue)] text-white shadow-lg scale-110',
                     !isActive && !isCompleted && 'bg-white border-neutral-300 text-neutral-500'
                   )}
                 >

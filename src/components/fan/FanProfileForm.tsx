@@ -196,7 +196,7 @@ export default function FanProfileForm() {
     return (
       <Card>
         <CardContent className="p-6 text-center">
-          <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="animate-spin w-8 h-8 border-4 border-[var(--color-french-blue)] border-t-transparent rounded-full mx-auto mb-4"></div>
           <p className="text-neutral-600">Loading profile...</p>
         </CardContent>
       </Card>

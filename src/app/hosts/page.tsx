@@ -30,7 +30,7 @@ import { Input } from '@/components/ui/Input';
 import { HostCard } from '@/components/cards/HostCard';
 
 export default function HostsPage() {
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [hosts, setHosts] = useState<any[]>([]);
@@ -50,9 +50,18 @@ export default function HostsPage() {
 
   // Check if user has access to browse hosts
   const hasAccess = session?.user && (
-    session.user.type === 'admin' || 
+    session.user.type === 'admin' ||
     (session.user.status === 'active' && (session.user.type === 'artist' || session.user.type === 'host'))
   );
+
+  // Function to refresh session from database
+  const refreshSession = async () => {
+    await update({});
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  };
+
 
   // Fetch hosts data from API
   useEffect(() => {
@@ -85,7 +94,7 @@ export default function HostsPage() {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-french-blue)] mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading...</p>
         </div>
       </div>
@@ -157,9 +166,26 @@ export default function HostsPage() {
                 <h3 className="text-xl font-semibold text-gray-900">Protected Community</h3>
               </div>
               <p className="text-gray-700 mb-6">
-                Our host directory is only available to approved artists and verified host members. 
+                Our host directory is only available to approved artists and verified host members.
                 To maintain the quality and safety of our community, access requires application and approval.
               </p>
+
+              {/* Show refresh option for logged-in users who were recently activated */}
+              {session?.user && session.user.type === 'artist' && session.user.status === 'approved' && (
+                <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                  <p className="text-sm text-amber-800 mb-3">
+                    <strong>Payment Complete?</strong> If you just completed payment, click below to activate your access.
+                  </p>
+                  <Button
+                    onClick={refreshSession}
+                    variant="outline"
+                    className="w-full sm:w-auto"
+                  >
+                    Activate Access
+                  </Button>
+                </div>
+              )}
+
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/register?type=artist">
                   <Button size="lg" className="px-8 py-3 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">

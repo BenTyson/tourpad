@@ -106,11 +106,39 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
 
       // Handle session updates
-      if (trigger === 'update' && session) {
-        // Update token with new session data
-        token.name = session.user.name;
-        token.email = session.user.email;
-        token.picture = session.user.image;
+      if (trigger === 'update') {
+        // Update token with new session data if provided
+        if (session) {
+          token.name = session.user.name;
+          token.email = session.user.email;
+          token.picture = session.user.image;
+        }
+
+        // Always refresh user data from database to get current status
+        try {
+          const currentUser = await prisma.user.findUnique({
+            where: { id: token.sub! },
+            include: {
+              profile: true,
+              artist: true,
+              host: true,
+              fan: true
+            }
+          });
+
+          if (currentUser) {
+            // Update token with fresh database values
+            token.type = currentUser.userType.toLowerCase();
+            token.status = currentUser.status.toLowerCase();
+            token.emailVerified = Boolean(currentUser.emailVerified);
+            token.profile = currentUser.profile;
+            token.artist = currentUser.artist;
+            token.host = currentUser.host;
+            token.fan = currentUser.fan;
+          }
+        } catch (error) {
+          console.error('Failed to refresh user data during session update:', error);
+        }
       }
 
       return token;

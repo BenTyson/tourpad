@@ -120,7 +120,7 @@ export default function ManageSubscriptionPage() {
         <SubscriptionHeader />
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full mr-4"></div>
+            <div className="animate-spin w-8 h-8 border-4 border-[var(--color-french-blue)] border-t-transparent rounded-full mr-4"></div>
             <span className="text-lg text-neutral-600">Loading subscription details...</span>
           </div>
         </div>

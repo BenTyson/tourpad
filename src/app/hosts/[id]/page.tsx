@@ -247,7 +247,7 @@ export default function HostProfilePage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-french-blue)] mx-auto mb-4"></div>
           <p className="text-gray-600">Loading host profile...</p>
         </div>
       </div>
@@ -502,7 +502,7 @@ export default function HostProfilePage() {
                       href={host.socialLinks.facebook} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="text-neutral-500 hover:text-blue-600 transition-colors"
+                      className="text-neutral-500 hover:text-[var(--color-evergreen)] transition-colors"
                       title="Facebook"
                     >
                       <Facebook className="w-5 h-5" />

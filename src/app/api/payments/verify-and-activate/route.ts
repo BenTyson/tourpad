@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-06-30.basil',
+  apiVersion: '2024-11-20.acacia',
 });
 
 const prisma = new PrismaClient();
@@ -20,23 +20,35 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { sessionId } = await request.json();
-    console.log('📋 Session ID received:', sessionId);
-    
+    const requestBody = await request.json();
+    const { sessionId } = requestBody;
+    console.log('📋 Request body received:', requestBody);
+    console.log('📋 Session ID extracted:', sessionId);
+
     if (!sessionId) {
-      console.log('❌ No session ID provided');
+      console.log('❌ No session ID provided in request body');
       return NextResponse.json({ error: 'Session ID required' }, { status: 400 });
     }
 
     // Get the Stripe checkout session
     console.log('💳 Retrieving Stripe checkout session...');
-    const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId);
-    console.log('💳 Checkout session:', {
-      id: checkoutSession.id,
-      payment_status: checkoutSession.payment_status,
-      customer: checkoutSession.customer,
-      amount_total: checkoutSession.amount_total
-    });
+    let checkoutSession;
+    try {
+      checkoutSession = await stripe.checkout.sessions.retrieve(sessionId);
+      console.log('💳 Checkout session retrieved successfully:', {
+        id: checkoutSession.id,
+        payment_status: checkoutSession.payment_status,
+        customer: checkoutSession.customer,
+        amount_total: checkoutSession.amount_total,
+        payment_intent: checkoutSession.payment_intent
+      });
+    } catch (stripeError) {
+      console.error('❌ Stripe API error:', stripeError);
+      return NextResponse.json({
+        error: 'Failed to retrieve Stripe session',
+        details: stripeError instanceof Error ? stripeError.message : 'Unknown Stripe error'
+      }, { status: 500 });
+    }
     
     if (checkoutSession.payment_status !== 'paid') {
       console.log('❌ Payment not completed:', checkoutSession.payment_status);
@@ -47,6 +59,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get current user from database
+    console.log('👤 Looking up user in database:', session.user.id);
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       include: {
@@ -56,10 +69,18 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user) {
+      console.error('❌ User not found in database:', session.user.id);
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    console.log('🔍 Payment verification for user:', user.id, 'Status:', user.status);
+    console.log('🔍 Payment verification for user:', {
+      id: user.id,
+      email: user.email,
+      status: user.status,
+      type: user.type,
+      existingPayments: user.payments?.length || 0,
+      hasSubscription: !!user.subscription
+    });
 
     // Check if user needs to be activated
     // Accept both PENDING and APPROVED status for testing (new registrations start as PENDING)

@@ -5,6 +5,9 @@ export interface ArtistProfile {
   fullBio: string;
   city: string;
   state: string;
+  email: string;
+  phone: string;
+  zipCode: string;
   genres: string[];
   instruments: string[];
   formationYear: number;
@@ -63,6 +66,9 @@ export interface HostProfile {
   city: string;
   state: string;
   zip: string;
+  email: string;
+  phone: string;
+  zipCode: string;
   profilePhoto: string;
   venuePhoto: string;
   venueType: 'home' | 'studio' | 'backyard' | 'loft' | 'warehouse' | 'other';

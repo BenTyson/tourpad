@@ -181,7 +181,7 @@ export default function ShowCard({ show, viewType, className = '' }: ShowCardPro
           <div className="flex space-x-2">
             <Link 
               href={`/bookings/${show.id}`}
-              className="text-sm text-[var(--color-french-blue)] hover:text-blue-600 hover:underline"
+              className="text-sm text-[var(--color-french-blue)] hover:text-[var(--color-primary-700)] hover:underline"
             >
               View Details
             </Link>

@@ -335,7 +335,7 @@ export default function ArtistMediaPage() {
                             </Badge>
                           </div>
                         </div>
-                        <h4 className="font-medium text-gray-900 group-hover:text-blue-600">
+                        <h4 className="font-medium text-gray-900 group-hover:text-[var(--color-evergreen)]">
                           {video.title}
                         </h4>
                         <p className="text-sm text-gray-600 mt-1">

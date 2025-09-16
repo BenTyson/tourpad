@@ -184,7 +184,7 @@ export default function BookingCard({
                       href={`/hosts/${booking.hostId}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[var(--color-french-blue)] hover:text-blue-600 hover:underline ml-1"
+                      className="text-[var(--color-french-blue)] hover:text-[var(--color-primary-700)] hover:underline ml-1"
                     >
                       {booking.hostName}
                     </Link>
@@ -266,10 +266,10 @@ export default function BookingCard({
 
         {/* Lodging Request */}
         {booking.lodgingRequested && (
-          <div className="mb-4 p-3 bg-orange-50 border border-orange-200 rounded-md">
+          <div className="mb-4 p-3 bg-sage-50 border border-sage-200 rounded-md">
             <div className="flex items-center space-x-2">
-              <Home className="w-4 h-4 text-orange-600" />
-              <span className="text-sm text-orange-700 font-medium">
+              <Home className="w-4 h-4 text-sage-600" />
+              <span className="text-sm text-sage-700 font-medium">
                 Lodging requested
               </span>
             </div>
@@ -282,7 +282,7 @@ export default function BookingCard({
           <div className="mb-4">
             <button
               onClick={() => setShowDetails(!showDetails)}
-              className="flex items-center space-x-2 text-sm text-[var(--color-french-blue)] hover:text-blue-600 transition-colors"
+              className="flex items-center space-x-2 text-sm text-[var(--color-french-blue)] hover:text-[var(--color-primary-700)] transition-colors"
             >
               {showDetails ? (
                 <ChevronUp className="w-4 h-4" />
@@ -294,44 +294,8 @@ export default function BookingCard({
             
             {showDetails && (
               <div className="mt-3 p-3 bg-white border border-neutral-200 rounded-md space-y-2">
-                {/* Debug Info - Temporary */}
-                <div className="text-xs text-neutral-500 bg-neutral-50 border border-neutral-200 p-2 rounded">
-                  <strong>Debug:</strong> lodgingRequested: {booking.lodgingRequested ? 'Yes' : 'No'}, 
-                  host data: {booking.host ? 'Available' : 'Missing'}
-                </div>
-                
-                {/* Event Details */}
+                {/* Booking Details */}
                 <div className="space-y-2">
-                  {booking.requestedTime && (
-                    <div className="flex items-start space-x-2">
-                      <Clock className="w-4 h-4 text-[var(--color-french-blue)] mt-0.5" />
-                      <div>
-                        <span className="text-sm font-medium text-neutral-700">Start Time:</span>
-                        <span className="text-sm text-neutral-600 ml-1">{formatTime(booking.requestedTime)}</span>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {booking.expectedAttendance && (
-                    <div className="flex items-start space-x-2">
-                      <Users className="w-4 h-4 text-[var(--color-french-blue)] mt-0.5" />
-                      <div>
-                        <span className="text-sm font-medium text-neutral-700">Expected Guests:</span>
-                        <span className="text-sm text-neutral-600 ml-1">{booking.expectedAttendance} people</span>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {booking.estimatedDuration && (
-                    <div className="flex items-start space-x-2">
-                      <Clock className="w-4 h-4 text-[var(--color-french-blue)] mt-0.5" />
-                      <div>
-                        <span className="text-sm font-medium text-neutral-700">Duration:</span>
-                        <span className="text-sm text-neutral-600 ml-1">{booking.estimatedDuration} minutes</span>
-                      </div>
-                    </div>
-                  )}
-                  
                   {booking.doorFee && (
                     <div className="flex items-start space-x-2">
                       <DollarSign className="w-4 h-4 text-[var(--color-french-blue)] mt-0.5" />
@@ -379,35 +343,17 @@ export default function BookingCard({
                   </div>
                 )}
                 
-                {/* Special Requirements */}
-                {booking.specialRequirements ? (
-                  <div className="flex items-start space-x-2">
-                    <FileText className="w-4 h-4 text-[var(--color-french-blue)] mt-0.5" />
-                    <div>
-                      <span className="text-sm font-medium text-neutral-700">Special Requirements:</span>
-                      <p className="text-sm text-neutral-600 mt-1">{booking.specialRequirements}</p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex items-start space-x-2">
-                    <FileText className="w-4 h-4 text-neutral-400 mt-0.5" />
-                    <div>
-                      <span className="text-sm font-medium text-neutral-700">Special Requirements:</span>
-                      <span className="text-sm text-neutral-400 ml-1">None specified</span>
-                    </div>
-                  </div>
-                )}
                 
                 {/* Lodging Details */}
                 {booking.lodgingRequested ? (
                   <div className="flex items-start space-x-2">
-                    <Home className="w-4 h-4 text-orange-600 mt-0.5" />
+                    <Home className="w-4 h-4 text-sage-600 mt-0.5" />
                     <div>
                       <span className="text-sm font-medium text-neutral-700">Accommodation:</span>
                       <p className="text-sm text-neutral-600 mt-1">
                         {booking.lodgingDetails ? (
-                          typeof booking.lodgingDetails === 'string' 
-                            ? booking.lodgingDetails 
+                          typeof booking.lodgingDetails === 'string'
+                            ? booking.lodgingDetails
                             : booking.lodgingDetails?.description || 'Overnight accommodation requested'
                         ) : 'Overnight accommodation requested'}
                       </p>

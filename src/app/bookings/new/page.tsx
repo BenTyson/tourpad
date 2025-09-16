@@ -155,7 +155,7 @@ function NewBookingForm() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-french-blue)] mx-auto mb-4"></div>
           <p className="text-gray-600">Loading booking details...</p>
         </div>
       </div>
@@ -338,7 +338,7 @@ function NewBookingForm() {
                 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Date & Time */}
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <div className={isArtistBookingHost ? "" : "grid md:grid-cols-2 gap-4"}>
                     <Input
                       label="Event Date"
                       type="date"
@@ -347,27 +347,32 @@ function NewBookingForm() {
                       required
                       min={new Date().toISOString().split('T')[0]}
                     />
-                    <Input
-                      label="Start Time"
-                      type="time"
-                      value={formData.eventTime}
-                      onChange={(e) => setFormData({ ...formData, eventTime: e.target.value })}
-                      required
-                    />
+                    {isHostBookingArtist && (
+                      <Input
+                        label="Start Time"
+                        type="time"
+                        value={formData.eventTime}
+                        onChange={(e) => setFormData({ ...formData, eventTime: e.target.value })}
+                        required
+                      />
+                    )}
                   </div>
 
                   {/* Capacity & Pricing */}
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <Input
-                      label="Expected Guests"
-                      type="number"
-                      value={formData.expectedGuests}
-                      onChange={(e) => setFormData({ ...formData, expectedGuests: parseInt(e.target.value) })}
-                      required
-                      min="1"
-                      max={host?.showSpecs?.indoorAttendanceMax || 100}
-                    />
-                    {isArtistBookingHost && (
+                  {isHostBookingArtist ? (
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <Input
+                        label="Expected Guests"
+                        type="number"
+                        value={formData.expectedGuests}
+                        onChange={(e) => setFormData({ ...formData, expectedGuests: parseInt(e.target.value) })}
+                        required
+                        min="1"
+                        max={host?.showSpecs?.indoorAttendanceMax || 100}
+                      />
+                    </div>
+                  ) : (
+                    <div>
                       <Input
                         label="Suggested Door Fee ($)"
                         type="number"
@@ -375,8 +380,8 @@ function NewBookingForm() {
                         onChange={(e) => setFormData({ ...formData, doorFee: parseInt(e.target.value) })}
                         min="0"
                       />
-                    )}
-                  </div>
+                    </div>
+                  )}
 
                   {/* Contact */}
                   <Input
@@ -398,24 +403,26 @@ function NewBookingForm() {
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-900 placeholder-gray-400"
                       rows={4}
-                      placeholder={`Tell them about your ${profileType === 'host' ? 'event plans' : 'music and what makes this a good fit'}...`}
+                      placeholder={isArtistBookingHost ? 'Any notes or comments about this booking request?' : `Tell them about your ${profileType === 'host' ? 'event plans' : 'music and what makes this a good fit'}...`}
                       required
                     />
                   </div>
 
-                  {/* Special Requirements */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Special Requirements (optional)
-                    </label>
-                    <textarea
-                      value={formData.specialRequirements}
-                      onChange={(e) => setFormData({ ...formData, specialRequirements: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-900 placeholder-gray-400"
-                      rows={3}
-                      placeholder="Sound setup, accessibility needs, dietary restrictions, etc."
-                    />
-                  </div>
+                  {/* Special Requirements - only for hosts booking artists */}
+                  {isHostBookingArtist && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Special Requirements (optional)
+                      </label>
+                      <textarea
+                        value={formData.specialRequirements}
+                        onChange={(e) => setFormData({ ...formData, specialRequirements: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-900 placeholder-gray-400"
+                        rows={3}
+                        placeholder="Sound setup, accessibility needs, dietary restrictions, etc."
+                      />
+                    </div>
+                  )}
 
                   {/* Lodging Section */}
                   {isArtistBookingHost && host && (
@@ -438,50 +445,20 @@ function NewBookingForm() {
                         
                         {formData.needsLodging && (
                           <div className="ml-6 space-y-4 p-4 bg-gray-50 rounded-lg">
-                            <div className="grid md:grid-cols-2 gap-4">
+                            <div>
                               <Input
                                 label="Number of Guests"
                                 type="number"
                                 value={formData.lodgingDetails.guestCount}
-                                onChange={(e) => setFormData({ 
-                                  ...formData, 
-                                  lodgingDetails: { 
-                                    ...formData.lodgingDetails, 
-                                    guestCount: parseInt(e.target.value) 
-                                  } 
+                                onChange={(e) => setFormData({
+                                  ...formData,
+                                  lodgingDetails: {
+                                    ...formData.lodgingDetails,
+                                    guestCount: parseInt(e.target.value)
+                                  }
                                 })}
                                 min="1"
                                 max="10"
-                                required
-                              />
-                              <div></div>
-                            </div>
-                            
-                            <div className="grid md:grid-cols-2 gap-4">
-                              <Input
-                                label="Arrival Date"
-                                type="date"
-                                value={formData.lodgingDetails.arrivalDate}
-                                onChange={(e) => setFormData({ 
-                                  ...formData, 
-                                  lodgingDetails: { 
-                                    ...formData.lodgingDetails, 
-                                    arrivalDate: e.target.value 
-                                  } 
-                                })}
-                                required
-                              />
-                              <Input
-                                label="Departure Date"
-                                type="date"
-                                value={formData.lodgingDetails.departureDate}
-                                onChange={(e) => setFormData({ 
-                                  ...formData, 
-                                  lodgingDetails: { 
-                                    ...formData.lodgingDetails, 
-                                    departureDate: e.target.value 
-                                  } 
-                                })}
                                 required
                               />
                             </div>
@@ -535,12 +512,6 @@ function NewBookingForm() {
                       <ExclamationTriangleIcon className="w-5 h-5 text-yellow-600 mt-0.5 mr-3 flex-shrink-0" />
                       <div className="text-sm text-yellow-800">
                         <h4 className="font-medium mb-1">Booking Policy</h4>
-                        <p className="mb-2">
-                          {isArtistBookingHost 
-                            ? `This venue has a ${host?.showSpecs?.hostingHistory} hosting history. Cancellation policy and house rules apply.`
-                            : `This artist has a ${artist?.cancellationPolicy} cancellation policy.`
-                          }
-                        </p>
                         <label className="flex items-center mt-3">
                           <input
                             type="checkbox"
@@ -669,7 +640,7 @@ export default function NewBookingPage() {
   return (
     <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-french-blue)] mx-auto mb-4"></div>
         <p className="text-gray-600">Loading...</p>
       </div>
     </div>}>

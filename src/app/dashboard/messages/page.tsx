@@ -23,6 +23,7 @@ import { Badge } from '@/components/ui/Badge';
 import { ProfileImage } from '@/components/ui/ProfileImage';
 import { TypingIndicator } from '@/components/ui/TypingIndicator';
 import { OnlineStatusIndicator, ProfileImageWithStatus } from '@/components/ui/OnlineStatusIndicator';
+import MessagesHeader from '@/components/dashboard/MessagesHeader';
 // import { useRealtimeMessaging } from '@/hooks/useRealtimeMessaging'; // Temporarily disabled
 
 export default function MessagesPage() {
@@ -480,8 +481,11 @@ export default function MessagesPage() {
 
   if (loading || status === 'loading') {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <LoadingSpinner size="lg" />
+      <div className="min-h-screen bg-white">
+        <MessagesHeader />
+        <div className="flex items-center justify-center h-[calc(100vh-8rem)]">
+          <LoadingSpinner size="lg" />
+        </div>
       </div>
     );
   }
@@ -498,9 +502,12 @@ export default function MessagesPage() {
   });
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] bg-white">
-      {/* Conversation List - Left Sidebar */}
-      <div className="w-full sm:w-1/3 lg:w-1/4 border-r border-neutral-200 flex flex-col">
+    <div className="min-h-screen bg-white">
+      <MessagesHeader />
+      
+      <div className="flex h-[calc(100vh-4.5rem)] bg-white">
+        {/* Conversation List - Left Sidebar */}
+        <div className="w-full sm:w-1/3 lg:w-1/4 border-r border-neutral-200 flex flex-col">
         {/* Search Header */}
         <div className="p-4 border-b border-neutral-200">
           <div className="relative">
@@ -509,7 +516,7 @@ export default function MessagesPage() {
               placeholder="Search messages..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 bg-[var(--color-mist)] border border-[var(--color-sage)] focus:ring-2 focus:ring-[var(--color-french-blue)] focus:border-transparent rounded-lg"
+              className="pl-10 bg-neutral-50 border border-neutral-200 focus:ring-2 focus:ring-primary-500 focus:border-transparent rounded-lg"
             />
           </div>
         </div>
@@ -635,7 +642,7 @@ export default function MessagesPage() {
             {/* New Conversation Composer */}
             <div className="flex-1 flex flex-col justify-end">
               <div className="p-4">
-                <div className="bg-[var(--color-mist)] border border-[var(--color-sage)] rounded-lg p-4 mb-4">
+                <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-4 mb-4">
                   <h4 className="font-medium text-[var(--color-french-blue)] mb-2">
                     Start a conversation
                   </h4>
@@ -648,7 +655,7 @@ export default function MessagesPage() {
               <div className="p-4 border-t border-neutral-200 bg-white">
                 {/* File attachment preview for new conversation */}
                 {selectedFile && (
-                  <div className="mb-3 p-3 bg-[var(--color-mist)] border border-[var(--color-sage)] rounded-lg">
+                  <div className="mb-3 p-3 bg-neutral-50 border border-neutral-200 rounded-lg">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
                         <div className="w-8 h-8 bg-[var(--color-sage)]/20 rounded flex items-center justify-center">
@@ -672,7 +679,7 @@ export default function MessagesPage() {
                             fileInputRef.current.value = '';
                           }
                         }}
-                        className="text-[var(--color-french-blue)] border-[var(--color-sage)] hover:bg-[var(--color-mist)]"
+                        className="text-neutral-600 border-neutral-200 hover:bg-neutral-50"
                       >
                         Remove
                       </Button>
@@ -706,7 +713,7 @@ export default function MessagesPage() {
                         startNewConversation(startConversationUserId, messageText);
                       }
                     }}
-                    className="flex-1 resize-none h-12 px-3 py-2 border border-[var(--color-sage)] rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-french-blue)] focus:border-transparent disabled:opacity-50"
+                    className="flex-1 resize-none h-12 px-3 py-2 border border-neutral-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50"
                     disabled={sendingMessage || uploadingFile}
                     rows={2}
                   />
@@ -714,7 +721,7 @@ export default function MessagesPage() {
                     size="sm"
                     disabled={(!messageText.trim() && !selectedFile) || sendingMessage || uploadingFile}
                     onClick={() => startNewConversation(startConversationUserId, messageText)}
-                    className="bg-[var(--color-french-blue)] hover:bg-blue-600"
+                    className="bg-primary-600 hover:bg-primary-700"
                   >
                     {sendingMessage || uploadingFile ? (
                       <LoadingSpinner size="sm" />
@@ -841,7 +848,7 @@ export default function MessagesPage() {
             <div className="p-4 border-t border-neutral-200 bg-white">
               {/* File attachment preview */}
               {selectedFile && (
-                <div className="mb-3 p-3 bg-[var(--color-mist)] border border-[var(--color-sage)] rounded-lg">
+                <div className="mb-3 p-3 bg-neutral-50 border border-neutral-200 rounded-lg">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <div className="w-8 h-8 bg-[var(--color-sage)]/20 rounded flex items-center justify-center">
@@ -865,7 +872,7 @@ export default function MessagesPage() {
                           fileInputRef.current.value = '';
                         }
                       }}
-                      className="text-[var(--color-french-blue)] border-[var(--color-sage)] hover:bg-[var(--color-mist)]"
+                      className="text-neutral-600 border-neutral-200 hover:bg-neutral-50"
                     >
                       Remove
                     </Button>
@@ -902,7 +909,7 @@ export default function MessagesPage() {
                       stopTyping();
                     }
                   }}
-                  className="flex-1 resize-none h-12 px-3 py-2 border border-[var(--color-sage)] rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-french-blue)] focus:border-transparent disabled:opacity-50"
+                  className="flex-1 resize-none h-12 px-3 py-2 border border-neutral-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50"
                   disabled={sendingMessage || uploadingFile}
                   rows={2}
                 />
@@ -910,7 +917,7 @@ export default function MessagesPage() {
                   size="sm"
                   disabled={(!messageText.trim() && !selectedFile) || sendingMessage || uploadingFile}
                   onClick={sendMessage}
-                  className="bg-[var(--color-french-blue)] hover:bg-blue-600"
+                  className="bg-primary-600 hover:bg-primary-700"
                 >
                   {sendingMessage || uploadingFile ? (
                     <LoadingSpinner size="sm" />
@@ -934,6 +941,7 @@ export default function MessagesPage() {
             </div>
           </div>
         )}
+        </div>
       </div>
     </div>
   );

@@ -6,13 +6,12 @@
     "dev": "./scripts/dev-ultrastable.sh",
     "dev:watch": "nodemon",
     "dev:auto": "./scripts/dev-with-nodemon.sh",
-    "dev:clean": "rm -rf .next && next dev -H 0.0.0.0 -p 3001",
+    "dev:clean": "node scripts/dev-clean.js",
     "dev:safe": "NODE_ENV=development next dev -H 0.0.0.0 -p 3001 --no-turbo",
     "dev:next": "next dev",
     "dev:stable": "node scripts/dev-server.js",
     "dev:super-stable": "node scripts/dev-stable.js",
     "dev:ultrastable": "./scripts/dev-ultrastable.sh",
-    "dev:clean": "node scripts/dev-clean.js",
     "dev:simple": "node scripts/dev-simple.js",
     "dev:fresh": "node scripts/dev-fresh.js",
     "dev:basic": "next dev -H 0.0.0.0 -p 3001",
@@ -28,7 +27,10 @@
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
-    "db:reset": "prisma migrate reset"
+    "db:reset": "prisma migrate reset",
+    "db:backup": "node scripts/backup-database.js",
+    "db:restore": "node scripts/restore-database.js",
+    "db:auto-backup": "node scripts/auto-backup.js"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -48,6 +50,7 @@
     "clsx": "^2.1.1",
     "critters": "^0.0.23",
     "date-fns": "^4.1.0",
+    "dotenv": "^17.2.2",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.525.0",
     "multer": "^2.0.1",

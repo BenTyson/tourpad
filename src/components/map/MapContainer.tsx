@@ -92,7 +92,7 @@ export default function TourPadMapContainer({
     return (
       <div className={`bg-neutral-100 rounded-xl flex items-center justify-center h-[600px] ${className}`}>
         <div className="text-center">
-          <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="animate-spin w-8 h-8 border-4 border-[var(--color-french-blue)] border-t-transparent rounded-full mx-auto mb-4"></div>
           <p className="text-neutral-600">Loading map...</p>
         </div>
       </div>

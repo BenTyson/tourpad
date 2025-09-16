@@ -35,6 +35,7 @@ export default function TourLogisticsCard({
               onChange={(e) => updateArtistProfile({ tourVehicle: e.target.value })}
               className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             >
+              <option value="">Select vehicle...</option>
               <option value="van">Van</option>
               <option value="car">Car</option>
               <option value="bus">Bus</option>
@@ -46,9 +47,10 @@ export default function TourLogisticsCard({
             label="Willing to Travel (miles)"
             type="number"
             value={artistProfile.willingToTravel}
-            onChange={(e) => updateArtistProfile({ willingToTravel: parseInt(e.target.value) || 500 })}
-            min="50"
+            onChange={(e) => updateArtistProfile({ willingToTravel: parseInt(e.target.value) || 0 })}
+            min="0"
             max="3000"
+            placeholder="Enter miles"
           />
         </div>
 

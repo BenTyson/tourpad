@@ -887,7 +887,7 @@ export default function DashboardPage() {
                 <div className="p-6">
                   {subscriptionLoading ? (
                     <div className="flex items-center justify-center py-8">
-                      <div className="animate-spin w-6 h-6 border-2 border-primary-600 border-t-transparent rounded-full mr-3"></div>
+                      <div className="animate-spin w-6 h-6 border-2 border-[var(--color-french-blue)] border-t-transparent rounded-full mr-3"></div>
                       <span className="text-neutral-600">Loading billing information...</span>
                     </div>
                   ) : subscriptionData ? (

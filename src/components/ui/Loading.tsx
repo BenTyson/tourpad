@@ -14,7 +14,7 @@ export function LoadingSpinner({ size = 'md', className }: LoadingSpinnerProps) 
   };
 
   return (
-    <div className={cn('animate-spin rounded-full border-2 border-current border-t-transparent', sizes[size], className)} />
+    <div className={cn('animate-spin rounded-full border-2 border-[var(--color-french-blue)] border-t-transparent', sizes[size], className)} />
   );
 }
 

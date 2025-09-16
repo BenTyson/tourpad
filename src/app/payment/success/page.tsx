@@ -26,14 +26,24 @@ function PaymentSuccessContent() {
           if (statusResponse.ok) {
             const profileData = await statusResponse.json();
             console.log('Current user status:', profileData.status);
-            
+
             // If user is already active, payment webhook worked
             if (profileData.status === 'ACTIVE') {
               console.log('User already active, payment webhook succeeded');
+              console.log('🔄 Updating session to reflect active status...');
               await update();
+
+              // Wait for session update to complete
+              await new Promise(resolve => setTimeout(resolve, 1000));
+
               setStatus('success');
               return;
             }
+          } else {
+            console.warn('Failed to check user status:', {
+              status: statusResponse.status,
+              statusText: statusResponse.statusText
+            });
           }
           
           // Check if payment succeeded and activate user if needed
@@ -49,8 +59,12 @@ function PaymentSuccessContent() {
             const result = await response.json();
             console.log('Payment verification result:', result);
             
-            // Force NextAuth session update
+            // Force NextAuth session update to refresh status from database
+            console.log('🔄 Forcing session update after payment verification...');
             await update();
+
+            // Wait a moment for session update to complete
+            await new Promise(resolve => setTimeout(resolve, 1000));
             
             setStatus('success');
           } else {
@@ -64,7 +78,9 @@ function PaymentSuccessContent() {
             console.error('Payment verification failed:', {
               status: response.status,
               statusText: response.statusText,
-              error: errorData
+              error: errorData,
+              sessionId: sessionId,
+              url: '/api/payments/verify-and-activate'
             });
             
             // Don't set error status if it's just a verification issue but payment likely succeeded
@@ -77,7 +93,12 @@ function PaymentSuccessContent() {
             }
           }
         } catch (error) {
-          console.error('Error verifying payment:', error);
+          console.error('Error verifying payment:', {
+            error: error,
+            message: error instanceof Error ? error.message : 'Unknown error',
+            stack: error instanceof Error ? error.stack : undefined,
+            sessionId: sessionId
+          });
           setStatus('error');
         }
       };
@@ -155,6 +176,17 @@ function PaymentSuccessContent() {
             <Link href="/hosts">
               <Button variant="outline" className="w-full">Browse Venues</Button>
             </Link>
+            <Button
+              variant="outline"
+              className="w-full text-sm text-gray-600"
+              onClick={async () => {
+                console.log('🔄 Manual session refresh triggered...');
+                await update();
+                window.location.reload();
+              }}
+            >
+              Refresh Access (if needed)
+            </Button>
           </div>
         </CardContent>
       </Card>
