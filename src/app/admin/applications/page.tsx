@@ -3,15 +3,14 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { 
-  CheckIcon, 
-  XMarkIcon, 
-  UserIcon, 
-  HomeIcon, 
+import {
+  CheckIcon,
+  XMarkIcon,
+  UserIcon,
+  HomeIcon,
   MusicalNoteIcon,
   ClockIcon,
   MapPinIcon,
-  CalendarIcon,
   ArrowLeftIcon,
   PhotoIcon,
   EyeIcon
@@ -97,74 +96,6 @@ const getVideoEmbedUrl = (url: string): string | null => {
   return null;
 };
 
-// Photo Gallery Component
-const PhotoGallery = ({ photos, title }: { photos: (MediaItem | string)[], title: string }) => {
-  const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
-  
-  if (!photos || photos.length === 0) {
-    return (
-      <div className="text-center py-4 text-gray-500">
-        <PhotoIcon className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-        <p className="text-sm">No {title.toLowerCase()} uploaded</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-3">
-      <h5 className="font-medium text-gray-900 flex items-center">
-        <PhotoIcon className="w-4 h-4 mr-2" />
-        {title} ({photos.length})
-      </h5>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-        {photos.map((photo, index) => {
-          const photoUrl = typeof photo === 'string' ? photo : photo.fileUrl;
-          const photoTitle = typeof photo === 'object' ? photo.title : undefined;
-          
-          
-          return (
-            <div key={index} className="relative group">
-              <img
-                src={photoUrl}
-                alt={photoTitle || `${title} ${index + 1}`}
-                className="w-full h-20 object-cover rounded-lg border border-gray-200 cursor-pointer hover:border-blue-400 transition-colors"
-                onClick={() => setSelectedPhoto(photoUrl)}
-              />
-              <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 rounded-lg transition-all duration-200 flex items-center justify-center">
-                <EyeIcon className="w-5 h-5 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
-              </div>
-              {photoTitle && (
-                <p className="text-xs text-gray-600 mt-1 truncate">{photoTitle}</p>
-              )}
-            </div>
-          );
-        })}
-      </div>
-      
-      {/* Photo Modal */}
-      {selectedPhoto && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
-          onClick={() => setSelectedPhoto(null)}
-        >
-          <div className="relative max-w-4xl max-h-full">
-            <img
-              src={selectedPhoto}
-              alt="Full size view"
-              className="max-w-full max-h-full object-contain rounded-lg"
-            />
-            <button
-              onClick={() => setSelectedPhoto(null)}
-              className="absolute top-4 right-4 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-colors"
-            >
-              <XMarkIcon className="w-6 h-6" />
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
 
 export default function AdminApplicationsPage() {
   const [applications, setApplications] = useState<Application[]>([]);
