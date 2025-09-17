@@ -3,9 +3,8 @@ import { useState, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import BookingList from '@/components/bookings/BookingList';
-import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { ArrowLeftIcon, CalendarIcon, CheckCircleIcon, ClockIcon, ExclamationTriangleIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 export default function AdminBookingsPage() {
   const { data: session, status } = useSession();

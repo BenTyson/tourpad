@@ -1,13 +1,12 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { 
-  MessageSquare, 
+import {
+  MessageSquare,
   ArrowLeft,
-  Search, 
-  Filter,
+  Search,
   User,
   Music,
   Home,

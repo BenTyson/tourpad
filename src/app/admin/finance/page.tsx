@@ -3,16 +3,15 @@ import { useState, useEffect } from 'react';
 import { PaymentNotifications } from '@/components/admin/PaymentNotifications';
 import { useAutoRefresh } from '@/hooks/useAutoRefresh';
 import Link from 'next/link';
-import { 
-  DollarSign, 
-  TrendingUp, 
-  TrendingDown, 
-  Users, 
-  CreditCard, 
+import {
+  DollarSign,
+  TrendingUp,
+  TrendingDown,
+  Users,
+  CreditCard,
   AlertTriangle,
   Download,
   RefreshCw,
-  Calendar,
   ArrowLeft,
   BarChart3,
   PieChart,
@@ -134,11 +133,6 @@ export default function AdminFinancePage() {
     return formatted;
   };
 
-  const getGrowthColor = (growth: number) => {
-    if (growth > 0) return 'text-green-600';
-    if (growth < 0) return 'text-red-600';
-    return 'text-gray-600';
-  };
 
   const getGrowthIcon = (growth: number) => {
     if (growth > 0) return <TrendingUp className="w-4 h-4" />;
@@ -394,7 +388,7 @@ export default function AdminFinancePage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {financeData.revenue.trends.slice(-6).map((trend, index) => {
+                {financeData.revenue.trends.slice(-6).map((trend) => {
                   const month = new Date(trend.month + '-01').toLocaleDateString('en-US', { 
                     month: 'short', 
                     year: 'numeric' 
