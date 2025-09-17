@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     const offset = parseInt(searchParams.get('offset') || '0');
 
     // Build where clause
-    let whereClause: any = {};
+    const whereClause: any = {};
 
     if (concertId) {
       whereClause.concertId = concertId;

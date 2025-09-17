@@ -9,7 +9,7 @@ export interface UserStats {
 
 export async function getUserStats(userId: string, userType: 'artist' | 'host' | 'fan'): Promise<UserStats> {
   try {
-    let stats: UserStats = {
+    const stats: UserStats = {
       responseRate: 0,
       averageRating: 0,
       totalShows: 0,

@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Build where clause
-    let whereClause: any = {
+    const whereClause: any = {
       status: status.toUpperCase(),
       date: {
         gte: new Date() // Only future concerts

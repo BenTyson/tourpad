@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Fan profile not found' }, { status: 404 });
       }
 
-      let whereClause: any = { fanId: fan.id };
+      const whereClause: any = { fanId: fan.id };
       if (status) {
         whereClause.status = status.toUpperCase();
       }
@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Host profile not found' }, { status: 404 });
       }
 
-      let whereClause: any = {
+      const whereClause: any = {
         concert: {
           booking: {
             hostId: host.id

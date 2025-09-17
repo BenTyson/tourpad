@@ -148,7 +148,7 @@ export async function GET(request: NextRequest) {
 
     // Fetch concerts based on user role
     if (!type || type === 'concert') {
-      let concertFilter: any = {};
+      const concertFilter: any = {};
       
       if (userRole === 'artist' && artist) {
         concertFilter.booking = {

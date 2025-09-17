@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
 
     // Build filter for upcoming concerts
     const now = new Date();
-    let rsvpFilter: any = {
+    const rsvpFilter: any = {
       fanId: fan.id,
       concert: {
         date: {
