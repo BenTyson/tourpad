@@ -15,6 +15,7 @@ import {
   PhotoIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface User {
   id: string;
@@ -492,9 +493,11 @@ export default function AdminApplicationsPage() {
                           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                             {(application as Host).host?.media?.map((media: any, index: number) => (
                               <div key={index} className="relative">
-                                <img 
+                                <Image
                                   src={media.fileUrl}
                                   alt={media.title || `Venue photo ${index + 1}`}
+                                  width={300}
+                                  height={128}
                                   className="w-full h-32 object-cover rounded-lg border border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all cursor-pointer"
                                   onClick={() => {
                                     console.log('Photo clicked, opening lightbox');
@@ -524,9 +527,11 @@ export default function AdminApplicationsPage() {
                           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                             {(application as Artist).artist?.media?.map((media: any, index: number) => (
                               <div key={index} className="relative">
-                                <img 
+                                <Image
                                   src={media.fileUrl}
                                   alt={media.title || `Artist photo ${index + 1}`}
+                                  width={300}
+                                  height={128}
                                   className="w-full h-32 object-cover rounded-lg border border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all cursor-pointer"
                                   onClick={() => {
                                     console.log('Artist photo clicked, opening lightbox');
@@ -559,9 +564,11 @@ export default function AdminApplicationsPage() {
                             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                               {bandMembersWithPhotos.map((member: any, index: number) => (
                                 <div key={index} className="relative">
-                                  <img 
+                                  <Image
                                     src={member.photoUrl}
                                     alt={`${member.name} - ${member.instrument || 'Band member'}`}
+                                    width={300}
+                                    height={128}
                                     className="w-full h-32 object-cover rounded-lg border border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all cursor-pointer"
                                     onClick={() => {
                                       console.log('Band member photo clicked');
@@ -644,9 +651,11 @@ export default function AdminApplicationsPage() {
               )}
 
               {/* Main Image */}
-              <img
+              <Image
                 src={selectedPhotos[currentPhotoIndex]?.fileUrl}
                 alt={selectedPhotos[currentPhotoIndex]?.title || `Photo ${currentPhotoIndex + 1}`}
+                width={800}
+                height={600}
                 className="max-w-full max-h-full object-contain rounded-lg"
               />
 
