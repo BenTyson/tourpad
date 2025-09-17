@@ -11,15 +11,12 @@ import {
   Music,
   Home,
   AlertTriangle,
-  Eye,
-  Shield,
-  Clock
+  Shield
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { LoadingSpinner } from '@/components/ui/Loading';
-import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { ProfileImage } from '@/components/ui/ProfileImage';
 import { OnlineStatusIndicator, ProfileImageWithStatus } from '@/components/ui/OnlineStatusIndicator';
@@ -144,16 +141,6 @@ export default function AdminMessagesPage() {
     return 'Unknown User';
   }
 
-  function getUserTypeIcon(userType: string) {
-    switch (userType?.toLowerCase()) {
-      case 'artist':
-        return <Music className="w-4 h-4" />;
-      case 'host':
-        return <Home className="w-4 h-4" />;
-      default:
-        return <User className="w-4 h-4" />;
-    }
-  }
 
   function getUserTypeBadge(userType: string) {
     const type = userType?.toLowerCase();
