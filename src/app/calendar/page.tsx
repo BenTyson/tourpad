@@ -2,20 +2,13 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { 
-  Calendar as CalendarIcon,
-  ArrowLeft,
-  ChevronLeft,
-  ChevronRight,
-  Filter,
-  List,
-  Grid3X3,
-  Clock
-} from 'lucide-react';
-import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
 import { CalendarEvent } from '@/app/api/calendar/events/route';
-// import CalendarHeader from '@/components/calendar/CalendarHeader';
+import { CalendarHeader } from '@/components/calendar/CalendarHeader';
+import { CalendarNavigationControls } from '@/components/calendar/CalendarNavigationControls';
+import { CalendarFiltersPanel } from '@/components/calendar/CalendarFiltersPanel';
+import { CalendarMonthView } from '@/components/calendar/CalendarMonthView';
+import { CalendarListView } from '@/components/calendar/CalendarListView';
+import { EventDetailModal } from '@/components/calendar/EventDetailModal';
 
 type ViewMode = 'month' | 'week' | 'list';
 type CalendarEventStatus = 'pending' | 'approved' | 'rejected' | 'confirmed' | 'completed' | 'cancelled' | 'scheduled' | 'live';
@@ -116,232 +109,35 @@ export default function CalendarPage() {
     );
   }
 
-  // Generate calendar days for month view
-  const generateCalendarDays = () => {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const startDate = new Date(firstDay);
-    startDate.setDate(startDate.getDate() - firstDay.getDay());
-    
-    const days = [];
-    const current = new Date(startDate);
-    
-    for (let i = 0; i < 42; i++) {
-      days.push(new Date(current));
-      current.setDate(current.getDate() + 1);
-    }
-    
-    return days;
-  };
-
-  // Get events for a specific date
-  const getEventsForDate = (date: Date) => {
-    return filteredEvents.filter(event => {
-      const eventDate = new Date(event.date);
-      return eventDate.toDateString() === date.toDateString();
-    });
-  };
-
-  // Get status color using TourPad color system
-  const getEventColor = (status: CalendarEventStatus, type: 'booking' | 'concert') => {
-    if (type === 'booking') {
-      switch (status) {
-        case 'approved': 
-        case 'confirmed': return 'bg-[#738a6e]'; // sage - successful
-        case 'pending': return 'bg-[#8ea58c]'; // french blue - in progress
-        case 'rejected': 
-        case 'cancelled': return 'bg-[#ebebe9]'; // mist - inactive
-        case 'completed': return 'bg-[#344c3d]'; // evergreen - final state
-        default: return 'bg-[#d4c4a8]'; // sand - neutral
-      }
-    } else {
-      switch (status) {
-        case 'scheduled': return 'bg-[#8ea58c]'; // french blue - active
-        case 'live': return 'bg-[#344c3d]'; // evergreen - live state
-        case 'completed': return 'bg-[#738a6e]'; // sage - successful
-        case 'cancelled': return 'bg-[#ebebe9]'; // mist - inactive
-        default: return 'bg-[#d4c4a8]'; // sand - neutral
-      }
-    }
-  };
-
-  // Get text color for contrast
-  const getEventTextColor = (status: CalendarEventStatus, type: 'booking' | 'concert') => {
-    if (type === 'booking') {
-      switch (status) {
-        case 'approved': 
-        case 'confirmed': 
-        case 'completed': return 'text-white';
-        case 'pending': return 'text-white';
-        case 'rejected': 
-        case 'cancelled': return 'text-[#344c3d]'; // evergreen text on mist
-        default: return 'text-[#344c3d]'; // evergreen text on sand
-      }
-    } else {
-      switch (status) {
-        case 'scheduled': 
-        case 'live': 
-        case 'completed': return 'text-white';
-        case 'cancelled': return 'text-[#344c3d]'; // evergreen text on mist
-        default: return 'text-[#344c3d]'; // evergreen text on sand
-      }
-    }
-  };
-
-  const calendarDays = generateCalendarDays();
-  const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Modern Header */}
-      <div className="border-b border-neutral-200 bg-white">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Link href="/dashboard">
-                <button className="inline-flex items-center px-3 py-2 text-sm font-medium text-neutral-700 bg-transparent hover:bg-neutral-100 rounded-md transition-colors">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Dashboard
-                </button>
-              </Link>
-              <div className="h-6 w-px bg-neutral-200"></div>
-              <h1 className="text-xl font-semibold text-neutral-900">Calendar</h1>
-            </div>
-            
-            {/* View Mode Toggle */}
-            <div className="flex items-center space-x-2">
-              <div className="flex rounded-lg border border-neutral-200 bg-white p-1">
-                <Button
-                  variant={viewMode === 'month' ? 'primary' : 'ghost'}
-                  size="sm"
-                  onClick={() => setViewMode('month')}
-                  className={viewMode === 'month' ? 'bg-primary-600 text-white' : 'text-neutral-600 hover:text-neutral-900'}
-                >
-                  <Grid3X3 className="w-4 h-4 mr-1" />
-                  Month
-                </Button>
-                <Button
-                  variant={viewMode === 'list' ? 'primary' : 'ghost'}
-                  size="sm"
-                  onClick={() => setViewMode('list')}
-                  className={viewMode === 'list' ? 'bg-primary-600 text-white' : 'text-neutral-600 hover:text-neutral-900'}
-                >
-                  <List className="w-4 h-4 mr-1" />
-                  List
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <CalendarHeader viewMode={viewMode} onViewModeChange={setViewMode} />
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-6">
-        {/* Month Navigation - Mobile Responsive */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2 sm:space-x-4">
-            <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1))}
-                className="hover:bg-primary-50 hover:text-primary-700"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </Button>
-              <h2 className="text-lg sm:text-xl font-semibold text-neutral-900 min-w-0">
-                {/* Show short month name on mobile */}
-                <span className="sm:hidden">{monthNames[currentDate.getMonth()].substring(0, 3)} {currentDate.getFullYear()}</span>
-                <span className="hidden sm:block">{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</span>
-              </h2>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1))}
-                className="hover:bg-primary-50 hover:text-primary-700"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </Button>
-            </div>
-            
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowFilters(!showFilters)}
-                className="hover:bg-primary-50 hover:text-primary-700"
-              >
-                <Filter className="w-4 h-4 mr-1" />
-                <span className="hidden sm:block">Filters</span>
-              </Button>
-              <Badge variant="secondary" className="bg-neutral-100 text-neutral-700 text-xs sm:text-sm">
-                {/* Show shortened count on mobile */}
-                <span className="sm:hidden">{filteredEvents.length}</span>
-                <span className="hidden sm:block">{filteredEvents.length} {filteredEvents.length === 1 ? 'event' : 'events'}</span>
-              </Badge>
-            </div>
-          </div>
+        <CalendarNavigationControls
+          currentDate={currentDate}
+          onDateChange={setCurrentDate}
+          eventCount={filteredEvents.length}
+          showFilters={showFilters}
+          onToggleFilters={() => setShowFilters(!showFilters)}
+        />
 
-        {/* Filters Panel - Collapsible */}
         {showFilters && (
-          <div className="mt-4 p-4 bg-neutral-50 rounded-lg border border-neutral-200">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {/* Status Filter */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-2">Status</label>
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="w-full p-2 border border-neutral-300 rounded-md text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                >
-                  <option value="all">All Statuses</option>
-                  <option value="pending">Pending</option>
-                  <option value="approved">Approved</option>
-                  <option value="confirmed">Confirmed</option>
-                  <option value="scheduled">Scheduled</option>
-                  <option value="completed">Completed</option>
-                  <option value="cancelled">Cancelled</option>
-                </select>
-              </div>
-
-              {/* Type Filter */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-2">Event Type</label>
-                <select
-                  value={typeFilter}
-                  onChange={(e) => setTypeFilter(e.target.value as 'all' | 'booking' | 'concert')}
-                  className="w-full p-2 border border-neutral-300 rounded-md text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                >
-                  <option value="all">All Types</option>
-                  <option value="booking">Bookings</option>
-                  <option value="concert">Concerts</option>
-                </select>
-              </div>
-
-              {/* Clear Filters */}
-              <div className="flex items-end">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setStatusFilter('all');
-                    setTypeFilter('all');
-                  }}
-                  className="w-full sm:w-auto"
-                >
-                  Clear Filters
-                </Button>
-              </div>
-            </div>
-          </div>
+          <CalendarFiltersPanel
+            statusFilter={statusFilter}
+            typeFilter={typeFilter}
+            onStatusFilterChange={setStatusFilter}
+            onTypeFilterChange={setTypeFilter}
+            onClearFilters={() => {
+              setStatusFilter('all');
+              setTypeFilter('all');
+            }}
+          />
         )}
 
 
-        {/* Calendar Content */}
         {!loading && !error && viewMode === 'month' && (
           <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
             {/* Calendar Grid */}
@@ -417,7 +213,6 @@ export default function CalendarPage() {
           </div>
         )}
 
-        {/* List View */}
         {!loading && !error && viewMode === 'list' && (
           <div className="space-y-4">
             {filteredEvents.length === 0 ? (
@@ -469,7 +264,6 @@ export default function CalendarPage() {
           </div>
         )}
 
-        {/* Event Details Modal - Modern UI */}
         {selectedEvent && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[85vh] flex flex-col overflow-hidden">

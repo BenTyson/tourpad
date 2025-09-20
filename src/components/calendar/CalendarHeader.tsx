@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { ArrowLeft, Grid3X3, Calendar as CalendarIcon, List } from 'lucide-react';
+import { ArrowLeft, Grid3X3, List } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
 type ViewMode = 'month' | 'week' | 'list';
@@ -10,7 +10,7 @@ interface CalendarHeaderProps {
   onViewModeChange: (mode: ViewMode) => void;
 }
 
-export default function CalendarHeader({ viewMode, onViewModeChange }: CalendarHeaderProps) {
+export function CalendarHeader({ viewMode, onViewModeChange }: CalendarHeaderProps) {
   return (
     <div className="border-b border-neutral-200 bg-white">
       <div className="max-w-7xl mx-auto px-6 py-4">
@@ -37,15 +37,6 @@ export default function CalendarHeader({ viewMode, onViewModeChange }: CalendarH
               >
                 <Grid3X3 className="w-4 h-4 mr-1" />
                 Month
-              </Button>
-              <Button
-                variant={viewMode === 'week' ? 'primary' : 'ghost'}
-                size="sm"
-                onClick={() => onViewModeChange('week')}
-                className={viewMode === 'week' ? 'bg-primary-600 text-white' : 'text-neutral-600 hover:text-neutral-900'}
-              >
-                <CalendarIcon className="w-4 h-4 mr-1" />
-                Week
               </Button>
               <Button
                 variant={viewMode === 'list' ? 'primary' : 'ghost'}

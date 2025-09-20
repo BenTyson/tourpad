@@ -28,11 +28,12 @@ import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Input } from '@/components/ui/Input';
 import { HostCard } from '@/components/cards/HostCard';
+import { HostFilters } from '@/components/hosts/HostFilters';
+import { HostsGrid } from '@/components/hosts/HostsGrid';
 
 export default function HostsPage() {
   const { data: session, status, update } = useSession();
   const [searchQuery, setSearchQuery] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
   const [hosts, setHosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
@@ -566,12 +567,19 @@ export default function HostsPage() {
     return matchesSearch && matchesAttendance && matchesDoorFee && matchesAmenities;
   });
 
-  const updateAmenityFilter = (amenity: string, value: boolean) => {
+
+  const clearFilters = () => {
+    setSearchQuery('');
     setFilters({
-      ...filters,
+      minAttendance: '',
+      maxDoorFee: '',
       amenities: {
-        ...filters.amenities,
-        [amenity]: value
+        parking: false,
+        wifi: false,
+        soundSystem: false,
+        kidFriendly: false,
+        bnbOffered: false,
+        accessible: false
       }
     });
   };
@@ -580,135 +588,19 @@ export default function HostsPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         {/* Search and Filters */}
-        <Card className="mb-8">
-          <CardContent className="p-6">
-            <div className="flex flex-col md:flex-row gap-4">
-              {/* Search Bar */}
-              <div className="flex-1">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Search by venue name, city, or state..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
-                  />
-                </div>
-              </div>
+        <HostFilters
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          filters={filters}
+          setFilters={setFilters}
+        />
 
-              {/* Filter Toggle */}
-              <Button
-                onClick={() => setShowFilters(!showFilters)}
-                variant="outline"
-                className="flex items-center"
-              >
-                <Filter className="w-4 h-4 mr-2" />
-                Filters
-              </Button>
-            </div>
-
-            {/* Filters Panel */}
-            {showFilters && (
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <div className="grid md:grid-cols-3 gap-6">
-                  {/* Capacity & Pricing */}
-                  <div>
-                    <h3 className="font-medium text-gray-900 mb-3">Capacity & Pricing</h3>
-                    <div className="space-y-3">
-                      <Input
-                        label="Min Attendance"
-                        type="number"
-                        value={filters.minAttendance}
-                        onChange={(e) => setFilters({ ...filters, minAttendance: e.target.value })}
-                        placeholder="20"
-                      />
-                      <Input
-                        label="Max Door Fee ($)"
-                        type="number"
-                        value={filters.maxDoorFee}
-                        onChange={(e) => setFilters({ ...filters, maxDoorFee: e.target.value })}
-                        placeholder="25"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Amenities */}
-                  <div className="md:col-span-2">
-                    <h3 className="font-medium text-gray-900 mb-3">Required Amenities</h3>
-                    <div className="grid grid-cols-2 gap-3">
-                      {Object.entries({
-                        parking: { label: 'Parking', icon: Car },
-                        wifi: { label: 'WiFi', icon: Wifi },
-                        soundSystem: { label: 'Sound System', icon: Volume2 },
-                        kidFriendly: { label: 'Kid Friendly', icon: Baby },
-                        bnbOffered: { label: 'Overnight Stay', icon: Moon },
-                        accessible: { label: 'Wheelchair Accessible', icon: Accessibility }
-                      }).map(([key, { label, icon: Icon }]) => (
-                        <label key={key} className="flex items-center">
-                          <input
-                            type="checkbox"
-                            checked={filters.amenities[key as keyof typeof filters.amenities]}
-                            onChange={(e) => updateAmenityFilter(key, e.target.checked)}
-                            className="mr-2"
-                          />
-                          <Icon className="w-4 h-4 mr-1.5 text-gray-500" />
-                          <span className="text-sm text-gray-700">{label}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Results */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-gray-900">
-            {filteredHosts.length} Host{filteredHosts.length !== 1 ? 's' : ''} Found
-          </h2>
-        </div>
-
-        {/* Host Grid */}
-        {filteredHosts.length > 0 ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredHosts.map((host) => (
-              <HostCard key={host?.id || Math.random()} host={host} showBookingButton={true} />
-            ))}
-          </div>
-        ) : hosts.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No hosts are currently available in the database.</p>
-            <p className="text-gray-400 text-sm mt-2">Hosts need to complete their profiles and be approved to appear here.</p>
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No hosts match your search criteria.</p>
-            <Button
-              onClick={() => {
-                setSearchQuery('');
-                setFilters({
-                  minAttendance: '',
-                  maxDoorFee: '',
-                  amenities: {
-                    parking: false,
-                    wifi: false,
-                    soundSystem: false,
-                    kidFriendly: false,
-                    bnbOffered: false,
-                    accessible: false
-                  }
-                });
-              }}
-              variant="outline"
-              className="mt-4"
-            >
-              Clear Filters
-            </Button>
-          </div>
-        )}
+        {/* Results and Host Grid */}
+        <HostsGrid
+          hosts={hosts}
+          filteredHosts={filteredHosts}
+          onClearFilters={clearFilters}
+        />
       </div>
     </div>
   );

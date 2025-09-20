@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { format } from 'date-fns';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, MessageSquare, Home } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { BookingCardHeader } from './card/BookingCardHeader';
 import { BookingCardMessage } from './card/BookingCardMessage';
