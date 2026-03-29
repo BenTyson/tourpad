@@ -6,7 +6,7 @@ interface Photo {
   id: string;
   url: string;
   alt: string;
-  category: 'house' | 'performance_space' | 'crowd' | 'exterior';
+  category: 'house' | 'performance_space' | 'crowd' | 'exterior' | 'bedroom';
 }
 
 interface PhotoLightboxProps {

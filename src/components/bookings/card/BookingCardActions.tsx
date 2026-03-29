@@ -6,7 +6,7 @@ import { BookingData } from '../BookingCard';
 
 interface BookingCardActionsProps {
   booking: BookingData;
-  viewType: 'host' | 'artist';
+  viewType: 'host' | 'artist' | 'admin';
   isUpdating: boolean;
   onStatusUpdate?: (id: string, status: string, additionalData?: any) => Promise<void>;
 }

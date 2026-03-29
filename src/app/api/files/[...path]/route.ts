@@ -5,17 +5,18 @@ import { auth } from '@/lib/auth';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  { params }: { params: Promise<{ path: string[] }> }
 ) {
   try {
-    
+    const { path: pathSegments } = await params;
+
     // Optional: Add authentication check for private files
     // const session = await auth();
     // if (!session?.user) {
     //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     // }
 
-    const filePath = params.path.join('/');
+    const filePath = pathSegments.join('/');
     
     // Security: Prevent directory traversal
     if (filePath.includes('..') || filePath.includes('~')) {

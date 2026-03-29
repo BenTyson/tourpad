@@ -31,11 +31,13 @@ export interface ArtistDashboardData {
       connected: boolean;
       profileUrl?: string;
       displayName?: string;
+      followers?: number;
     };
     soundcloud?: {
       connected: boolean;
       profileUrl?: string;
       displayName?: string;
+      trackCount?: number;
     };
   };
   billing: {

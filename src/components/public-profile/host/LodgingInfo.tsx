@@ -5,9 +5,10 @@ import { LodgingDetails } from '../types';
 interface LodgingInfoProps {
   offersLodging: boolean;
   lodgingDetails?: LodgingDetails;
+  onPhotoClick?: (photoIndex: number) => void;
 }
 
-export default function LodgingInfo({ offersLodging, lodgingDetails }: LodgingInfoProps) {
+export default function LodgingInfo({ offersLodging, lodgingDetails, onPhotoClick }: LodgingInfoProps) {
   if (!offersLodging || !lodgingDetails) {
     return null;
   }
@@ -119,8 +120,17 @@ export default function LodgingInfo({ offersLodging, lodgingDetails }: LodgingIn
                       </div>
 
                       {/* View Photos Link */}
-                      {room.photos && room.photos.length > 0 && (
-                        <button className="mt-4 text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors">
+                      {room.photos && room.photos.length > 0 && onPhotoClick && (
+                        <button
+                          onClick={() => {
+                            // Calculate the starting index for this room's photos in the main gallery
+                            // The parent component will handle adding room photos to the main photo array
+                            // with a 'bedroom' category and room.id to identify which room
+                            const roomPhotoIndex = (room as any).startingPhotoIndex || 0;
+                            onPhotoClick(roomPhotoIndex);
+                          }}
+                          className="mt-4 text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors"
+                        >
                           View all {room.photos.length} photos →
                         </button>
                       )}

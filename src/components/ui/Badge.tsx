@@ -4,9 +4,10 @@ import { cn } from '@/lib/utils';
 interface BadgeProps extends HTMLAttributes<HTMLDivElement> {
   variant?: 'default' | 'secondary' | 'success' | 'warning' | 'error';
   pulse?: boolean;
+  size?: 'sm' | 'md' | 'lg';
 }
 
-const Badge = ({ className, variant = 'default', pulse = false, ...props }: BadgeProps) => {
+const Badge = ({ className, variant = 'default', pulse = false, size = 'md', ...props }: BadgeProps) => {
   const variants = {
     default: 'bg-neutral-100 text-neutral-800 hover:bg-neutral-200',
     secondary: 'bg-neutral-100 text-neutral-700 border border-neutral-200',
@@ -18,7 +19,10 @@ const Badge = ({ className, variant = 'default', pulse = false, ...props }: Badg
   return (
     <div
       className={cn(
-        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-all duration-200 hover:scale-105',
+        'inline-flex items-center rounded-full font-medium transition-all duration-200 hover:scale-105',
+        size === 'sm' && 'px-2 py-0.5 text-xs',
+        size === 'md' && 'px-2.5 py-0.5 text-xs',
+        size === 'lg' && 'px-3 py-1 text-sm',
         variants[variant],
         pulse && 'animate-pulse',
         className

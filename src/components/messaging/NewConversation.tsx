@@ -26,7 +26,7 @@ interface NewConversationProps {
     primary: string;
     secondary: string;
   };
-  fileInputRef: React.RefObject<HTMLInputElement>;
+  fileInputRef: React.RefObject<HTMLInputElement | null>;
 }
 
 export function NewConversation({

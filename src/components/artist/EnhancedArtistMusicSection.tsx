@@ -180,17 +180,12 @@ export default function EnhancedArtistMusicSection({
       // Play new track
       if (audio) {
         audio.pause();
-        // Remove old event listeners
-        audio.removeEventListener('timeupdate', updateTime);
-        audio.removeEventListener('loadedmetadata', updateDuration);
-        audio.removeEventListener('ended', handleTrackEnd);
       }
-      
+
       setIsLoading(true);
       const newAudio = new Audio(audioUrl);
       newAudio.volume = volume;
-      
-      // Add event listeners for sophisticated controls
+
       const updateTime = () => setCurrentTime(newAudio.currentTime);
       const updateDuration = () => {
         setDuration(newAudio.duration);

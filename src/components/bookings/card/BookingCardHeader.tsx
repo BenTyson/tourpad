@@ -15,7 +15,7 @@ import { BookingData } from '../BookingCard';
 
 interface BookingCardHeaderProps {
   booking: BookingData;
-  viewType: 'host' | 'artist';
+  viewType: 'host' | 'artist' | 'admin';
   onViewDetails?: (id: string) => void;
 }
 

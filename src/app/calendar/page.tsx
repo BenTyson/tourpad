@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { Button } from '@/components/ui/Button';
 import { CalendarEvent } from '@/app/api/calendar/events/route';
 import { CalendarHeader } from '@/components/calendar/CalendarHeader';
 import { CalendarNavigationControls } from '@/components/calendar/CalendarNavigationControls';
@@ -11,7 +12,6 @@ import { CalendarListView } from '@/components/calendar/CalendarListView';
 import { EventDetailModal } from '@/components/calendar/EventDetailModal';
 
 type ViewMode = 'month' | 'week' | 'list';
-type CalendarEventStatus = 'pending' | 'approved' | 'rejected' | 'confirmed' | 'completed' | 'cancelled' | 'scheduled' | 'live';
 
 export default function CalendarPage() {
   const { data: session, status } = useSession();
@@ -139,291 +139,27 @@ export default function CalendarPage() {
 
 
         {!loading && !error && viewMode === 'month' && (
-          <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
-            {/* Calendar Grid */}
-            <div className="grid grid-cols-7 gap-0">
-              {/* Day Headers - Responsive */}
-              {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
-                <div key={day} className="p-2 sm:p-4 text-center text-xs sm:text-sm font-medium text-neutral-600 bg-neutral-50 border-b border-neutral-200">
-                  {/* Show abbreviated on mobile, full on desktop */}
-                  <span className="hidden sm:block">{day}</span>
-                  <span className="sm:hidden">{day.charAt(0)}</span>
-                </div>
-              ))}
-              
-              {/* Calendar Days */}
-              {calendarDays.map((day, index) => {
-                const isCurrentMonth = day.getMonth() === currentDate.getMonth();
-                const isToday = day.toDateString() === new Date().toDateString();
-                const dayEvents = getEventsForDate(day);
-                
-                return (
-                  <div
-                    key={index}
-                    className={`min-h-[80px] sm:min-h-[100px] p-1 sm:p-2 border-b border-r border-neutral-200 ${
-                      isCurrentMonth ? 'bg-white' : 'bg-neutral-50'
-                    } ${isToday ? 'ring-2 ring-primary-500 ring-inset' : ''}`}
-                  >
-                    <div className={`text-xs sm:text-sm font-medium mb-1 ${
-                      isCurrentMonth ? 'text-neutral-900' : 'text-neutral-400'
-                    } ${isToday ? 'text-primary-600' : ''}`}>
-                      {day.getDate()}
-                    </div>
-                    
-                    {/* Event Indicators - Mobile Optimized */}
-                    <div className="space-y-0.5 sm:space-y-1">
-                      {/* Show fewer events on mobile */}
-                      {dayEvents.slice(0, 2).map(event => (
-                        <div
-                          key={event.id}
-                          className={`text-xs px-1 sm:px-2 py-0.5 sm:py-1 rounded cursor-pointer hover:opacity-80 transition-opacity ${getEventColor(event.status, event.type)} ${getEventTextColor(event.status, event.type)}`}
-                          onClick={() => setSelectedEvent(event)}
-                        >
-                          <div className="truncate font-medium">
-                            {/* Show abbreviated titles on mobile */}
-                            <span className="hidden sm:block">{event.title}</span>
-                            <span className="sm:hidden">{event.title.length > 8 ? event.title.substring(0, 8) + '...' : event.title}</span>
-                          </div>
-                        </div>
-                      ))}
-                      {/* Show third event only on desktop */}
-                      {dayEvents.length > 2 && (
-                        <div className="hidden sm:block">
-                          <div
-                            key={dayEvents[2].id}
-                            className={`text-xs px-2 py-1 rounded cursor-pointer hover:opacity-80 transition-opacity ${getEventColor(dayEvents[2].status, dayEvents[2].type)} ${getEventTextColor(dayEvents[2].status, dayEvents[2].type)}`}
-                            onClick={() => setSelectedEvent(dayEvents[2])}
-                          >
-                            <div className="truncate font-medium">{dayEvents[2].title}</div>
-                          </div>
-                        </div>
-                      )}
-                      {/* Show "more" indicator with responsive count */}
-                      {dayEvents.length > 2 && (
-                        <div className="text-xs text-neutral-500 px-1 sm:px-2">
-                          <span className="sm:hidden">+{dayEvents.length - 2} more</span>
-                          <span className="hidden sm:block">{dayEvents.length > 3 ? `+${dayEvents.length - 3} more` : ''}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <CalendarMonthView
+            currentDate={currentDate}
+            filteredEvents={filteredEvents}
+            onEventSelect={setSelectedEvent}
+          />
         )}
 
         {!loading && !error && viewMode === 'list' && (
-          <div className="space-y-4">
-            {filteredEvents.length === 0 ? (
-              <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-12 text-center">
-                <CalendarIcon className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-neutral-900 mb-2">No events found</h3>
-                <p className="text-neutral-600">
-                  {session?.user?.type === 'artist' && 'You don\'t have any upcoming gigs or booking requests.'}
-                  {session?.user?.type === 'host' && 'You don\'t have any upcoming shows or booking requests.'}
-                  {session?.user?.type === 'fan' && 'There are no upcoming concerts available.'}
-                  {session?.user?.type === 'admin' && 'No events are currently scheduled.'}
-                </p>
-              </div>
-            ) : (
-              filteredEvents
-                .sort((a, b) => a.date.getTime() - b.date.getTime())
-                .map(event => (
-                  <div
-                    key={event.id}
-                    className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
-                    onClick={() => setSelectedEvent(event)}
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-3 mb-2">
-                          <h3 className="text-lg font-semibold text-neutral-900">{event.title}</h3>
-                          <Badge 
-                            variant="secondary" 
-                            className={`${getEventColor(event.status, event.type)} ${getEventTextColor(event.status, event.type)} border-0`}
-                          >
-                            {event.status}
-                          </Badge>
-                        </div>
-                        <div className="flex items-center space-x-4 text-sm text-neutral-600">
-                          <div className="flex items-center">
-                            <Clock className="w-4 h-4 mr-1" />
-                            {event.date.toLocaleDateString()} {event.startTime ? `at ${event.startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ''}
-                          </div>
-                          <div>{event.location}</div>
-                          {event.participants.attendeeCount && (
-                            <div>{event.participants.attendeeCount} attendees</div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))
-            )}
-          </div>
+          <CalendarListView
+            filteredEvents={filteredEvents}
+            userType={session?.user?.type}
+            onEventSelect={setSelectedEvent}
+          />
         )}
 
         {selectedEvent && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[85vh] flex flex-col overflow-hidden">
-              {/* Header Image */}
-              {(() => {
-                const userRole = session?.user?.type || 'fan';
-                
-                if (userRole === 'artist') {
-                  // Artists see venue photos
-                  const hostData = selectedEvent.details?.host || selectedEvent.details?.booking?.host;
-                  const venuePhoto = hostData?.media?.find((m: any) => m.mediaType === 'PHOTO' && m.category === 'VENUE');
-                  
-                  return venuePhoto ? (
-                    <div className="relative h-48 bg-gradient-to-br from-neutral-100 to-neutral-200 flex-shrink-0">
-                      <img 
-                        src={venuePhoto.fileUrl} 
-                        alt={`${selectedEvent.participants.host} venue`}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                    </div>
-                  ) : (
-                    <div className="h-48 bg-gradient-to-br from-primary-500 to-primary-600 flex-shrink-0"></div>
-                  );
-                } else {
-                  // Others see artist press photos
-                  const artistData = selectedEvent.details?.artist || selectedEvent.details?.booking?.artist;
-                  const pressPhoto = artistData?.media?.find((m: any) => m.mediaType === 'PHOTO' && m.category === 'PRESS');
-                  
-                  return pressPhoto ? (
-                    <div className="relative h-48 bg-gradient-to-br from-neutral-100 to-neutral-200 flex-shrink-0">
-                      <img 
-                        src={pressPhoto.fileUrl} 
-                        alt={`${selectedEvent.participants.artist}`}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                    </div>
-                  ) : (
-                    <div className="h-48 bg-gradient-to-br from-primary-500 to-primary-600 flex-shrink-0"></div>
-                  );
-                }
-              })()}
-
-              {/* Content - Scrollable */}
-              <div className="flex-1 overflow-y-auto">
-                <div className="p-6">
-                {/* Header */}
-                <div className="flex items-start justify-between mb-6">
-                  <div className="flex-1">
-                    <h3 className="text-xl font-bold text-neutral-900 mb-2">{selectedEvent.title}</h3>
-                    <Badge 
-                      className={`${getEventColor(selectedEvent.status, selectedEvent.type)} ${getEventTextColor(selectedEvent.status, selectedEvent.type)} border-0 text-xs font-medium px-3 py-1`}
-                    >
-                      {selectedEvent.status.toUpperCase()}
-                    </Badge>
-                  </div>
-                  <button
-                    onClick={() => setSelectedEvent(null)}
-                    className="p-2 hover:bg-neutral-100 rounded-full transition-colors duration-200"
-                  >
-                    <svg className="w-5 h-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </div>
-
-                {/* Event Details Grid */}
-                <div className="grid grid-cols-1 gap-4 mb-6">
-                  {/* Date & Time */}
-                  <div className="flex items-center space-x-3 p-3 bg-neutral-50 rounded-xl">
-                    <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
-                      <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-neutral-900">
-                        {selectedEvent.date.toLocaleDateString()}
-                      </div>
-                      <div className="text-xs text-neutral-600">
-                        {selectedEvent.startTime ? selectedEvent.startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Time TBD'}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Location */}
-                  <div className="flex items-center space-x-3 p-3 bg-neutral-50 rounded-xl">
-                    <div className="w-10 h-10 bg-secondary-100 rounded-full flex items-center justify-center">
-                      <svg className="w-5 h-5 text-secondary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-neutral-900">{selectedEvent.location}</div>
-                      <div className="text-xs text-neutral-600">Venue</div>
-                    </div>
-                  </div>
-
-                  {/* Participants */}
-                  <div className="grid grid-cols-2 gap-3">
-                    {selectedEvent.participants.artist && (
-                      <div className="p-3 bg-neutral-50 rounded-xl">
-                        <div className="text-xs text-neutral-600 mb-1">Artist</div>
-                        <div className="text-sm font-medium text-neutral-900">{selectedEvent.participants.artist}</div>
-                      </div>
-                    )}
-                    
-                    {selectedEvent.participants.host && (
-                      <div className="p-3 bg-neutral-50 rounded-xl">
-                        <div className="text-xs text-neutral-600 mb-1">Host</div>
-                        <div className="text-sm font-medium text-neutral-900">{selectedEvent.participants.host}</div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Attendee Count */}
-                  {selectedEvent.participants.attendeeCount && (
-                    <div className="flex items-center space-x-3 p-3 bg-neutral-50 rounded-xl">
-                      <div className="w-10 h-10 bg-neutral-200 rounded-full flex items-center justify-center">
-                        <svg className="w-5 h-5 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <div className="text-sm font-medium text-neutral-900">{selectedEvent.participants.attendeeCount} people</div>
-                        <div className="text-xs text-neutral-600">Expected attendance</div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                </div>
-              </div>
-
-              {/* Fixed Footer with Action Buttons */}
-              <div className="flex-shrink-0 p-6 pt-0 border-t border-neutral-100">
-                <div className="flex space-x-3">
-                  <Link 
-                    href={selectedEvent.type === 'booking' 
-                      ? `/bookings/${selectedEvent.details.id}` 
-                      : `/concerts/${selectedEvent.details.id}`
-                    }
-                    className="flex-1"
-                  >
-                    <button className="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-4 rounded-xl transition-colors duration-200">
-                      View Full Details
-                    </button>
-                  </Link>
-                  <button 
-                    onClick={() => setSelectedEvent(null)}
-                    className="px-6 py-3 border border-neutral-300 hover:border-neutral-400 text-neutral-700 font-medium rounded-xl transition-colors duration-200"
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <EventDetailModal
+            event={selectedEvent}
+            userType={session?.user?.type}
+            onClose={() => setSelectedEvent(null)}
+          />
         )}
       </div>
     </div>

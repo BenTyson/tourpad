@@ -19,6 +19,7 @@ export default function BandMembersCard({
       id: Date.now().toString(),
       name: '',
       instrument: '',
+      yearsWithBand: 0,
       photo: ''
     };
     updateArtistProfile({ bandMembers: [...artistProfile.bandMembers, newMember] });

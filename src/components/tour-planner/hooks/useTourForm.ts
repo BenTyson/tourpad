@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { TourFormData, NewStateRangeData, TourSegment, UseTourFormReturn } from '../types/tour';
+import { TourFormData, NewStateRangeData, TourSegment, StateRange, UseTourFormReturn } from '../types/tour';
 import { DEFAULT_TOUR_FORM_DATA, DEFAULT_STATE_RANGE_DATA } from '../constants/tourConstants';
 import { validateStateRange, isStateAlreadyInTour } from '../utils/tourHelpers';
 

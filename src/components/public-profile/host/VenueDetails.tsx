@@ -102,14 +102,14 @@ export default function VenueDetails({ host }: VenueDetailsProps) {
               )}
               
               {/* Preferred Days */}
-              {(host.preferredDays || host.showSpecs?.daysAvailable) && (
+              {(host.preferredDays || host.showSpecs?.preferredDays) && (
                 <div className="col-span-2 space-y-2">
                   <div className="flex items-center gap-2 text-neutral-600">
                     <Calendar className="w-5 h-5" />
                     <span className="text-sm font-medium">Preferred Days</span>
                   </div>
                   <div className="flex flex-wrap gap-2 pl-7">
-                    {(host.preferredDays || host.showSpecs?.daysAvailable || []).map((day) => (
+                    {(host.preferredDays || host.showSpecs?.preferredDays || []).map((day) => (
                       <Badge key={day} variant="secondary" className="bg-primary-50 text-primary-700">
                         {day}
                       </Badge>

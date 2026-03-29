@@ -9,9 +9,9 @@ import {
 } from '@/lib/notifications';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 // GET /api/bookings/[id] - Get booking by ID

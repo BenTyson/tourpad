@@ -4,48 +4,27 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  console.log('=== UPLOADED TRACKS API START ===');
-  console.log('Params received:', params);
-  console.log('Uploaded tracks API called for artist:', params.id);
-  console.log('Prisma instance:', typeof prisma, !!prisma);
-  console.log('Prisma.uploadedTrack:', typeof prisma?.uploadedTrack);
-  
   try {
-    const artistId = params.id;
+    const { id: artistId } = await params;
 
-    // Get session for authentication
     const session = await auth();
-    console.log('Session found:', !!session?.user?.email);
-    
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get current user
     const currentUser = await prisma.user.findUnique({
       where: { email: session.user.email },
       include: { artist: true }
     });
 
-    console.log('Current user found:', currentUser?.email);
-    console.log('User has artist profile:', !!currentUser?.artist);
-
     if (!currentUser) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    // Check if requesting user owns this artist profile or is admin
     const isOwner = currentUser.artist?.id === artistId;
     const isAdmin = currentUser.userType === 'ADMIN';
-
-    console.log('Access check:', {
-      artistId,
-      currentUserArtistId: currentUser.artist?.id,
-      isOwner,
-      isAdmin
-    });
 
     if (!isOwner && !isAdmin) {
       // For non-owners, only return public tracks
@@ -140,10 +119,10 @@ export async function GET(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const artistId = params.id;
+    const { id: artistId } = await params;
     const url = new URL(req.url);
     const trackId = url.searchParams.get('trackId');
 
@@ -209,10 +188,10 @@ export async function DELETE(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const artistId = params.id;
+    const { id: artistId } = await params;
     const body = await req.json();
     const { trackId, ...updates } = body;
 

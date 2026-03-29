@@ -52,7 +52,7 @@ export default function TourPlannerPage() {
     }
 
     // Check if user is an artist
-    const userType = session.user.type || session.user.userType;
+    const userType = session.user.type;
     if (userType !== 'artist') {
       router.push('/dashboard');
       return;
@@ -85,9 +85,9 @@ export default function TourPlannerPage() {
 
     try {
       if (editingTourSegment) {
-        await updateTourSegment(editingTourSegment, segmentData);
+        await updateTourSegment(editingTourSegment, segmentData as any);
       } else {
-        await createTourSegment(segmentData);
+        await createTourSegment(segmentData as any);
       }
       handleCloseForm();
     } catch (error) {

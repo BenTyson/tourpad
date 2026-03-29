@@ -1,8 +1,10 @@
 import React from 'react';
 
 interface TypingUser {
-  userId: string;
-  userName: string;
+  id?: string;
+  userId?: string;
+  name?: string;
+  userName?: string;
 }
 
 interface TypingIndicatorProps {

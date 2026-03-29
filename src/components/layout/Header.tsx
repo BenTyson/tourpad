@@ -75,7 +75,7 @@ export function Header() {
         // Full access for approved/active users
         if (userType === 'artist') {
           baseNavigation.push(
-            { name: 'My Bookings', href: '/dashboard', requiresAuth: true }
+            { name: 'Dashboard', href: '/dashboard', requiresAuth: true }
           );
         } else if (userType === 'host') {
           baseNavigation.push(

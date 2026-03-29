@@ -1,5 +1,5 @@
 import React from 'react';
-import { Loading } from '@/components/ui/Loading';
+import { LoadingSpinner } from '@/components/ui/Loading';
 import { LoadingStateWrapperProps } from './types';
 
 export function LoadingStateWrapper({
@@ -11,7 +11,7 @@ export function LoadingStateWrapper({
   if (loading) {
     return (
       <div className={`flex items-center justify-center py-8 ${className}`}>
-        <Loading />
+        <LoadingSpinner />
       </div>
     );
   }

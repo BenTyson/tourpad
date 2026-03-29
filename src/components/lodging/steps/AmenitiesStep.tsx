@@ -102,7 +102,7 @@ export function AmenitiesStep({ data, onDataChange }: WizardStepProps) {
           </label>
           <select
             value={data.amenities.transportation}
-            onChange={(e) => handleAmenityChange('transportation', e.target.value)}
+            onChange={(e) => handleAmenityChange('transportation', e.target.value as any)}
             className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           >
             <option value="none">No transportation provided</option>

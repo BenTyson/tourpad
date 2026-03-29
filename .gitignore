@@ -29,6 +29,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+dev.log
+dev-server.log
+dev.pid
+.next_dev_pid
+cookies.txt
+csrf.txt
 
 # env files (can opt-in for committing if needed)
 .env*

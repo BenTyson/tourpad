@@ -226,11 +226,39 @@ export default function HostProfilePage() {
 
   const host = hostData;
 
-  // Combine all photos for gallery
-  const allPhotos = host ? [
-    ...(host.housePhotos || []).map(photo => ({ ...photo, category: 'house' as const })),
-    ...(host.performanceSpacePhotos || []).map(photo => ({ ...photo, category: 'performance_space' as const }))
-  ] : [];
+  // Combine all photos for gallery including bedroom photos
+  const allPhotos = host ? (() => {
+    const photos = [
+      ...(host.housePhotos || []).map(photo => ({ ...photo, category: 'house' as const })),
+      ...(host.performanceSpacePhotos || []).map(photo => ({ ...photo, category: 'performance_space' as const }))
+    ];
+
+    // Add bedroom photos from lodging details if available
+    const lodgingDetails = (host as any).lodgingDetails;
+    if (lodgingDetails?.rooms) {
+      lodgingDetails.rooms.forEach((room: any, roomIndex: number) => {
+        if (room.photos && room.photos.length > 0) {
+          const roomStartIndex = photos.length;
+          // Add starting photo index to room for click handler reference
+          room.startingPhotoIndex = roomStartIndex;
+
+          // Add room photos to main collection
+          room.photos.forEach((photo: any, photoIndex: number) => {
+            photos.push({
+              id: `${room.id || `room-${roomIndex}`}-photo-${photoIndex}`,
+              url: photo.url,
+              alt: photo.alt || `Bedroom ${roomIndex + 1} - Photo ${photoIndex + 1}`,
+              title: photo.title || `Bedroom ${roomIndex + 1}`,
+              description: photo.description,
+              category: 'house' as const
+            });
+          });
+        }
+      });
+    }
+
+    return photos;
+  })() : [];
 
   const handlePhotoClick = (index: number) => {
     setLightboxIndex(index);
@@ -252,7 +280,7 @@ export default function HostProfilePage() {
       {host && (
         <ProfileHero
           isArtist={false}
-          data={host}
+          data={host as any}
           onShare={() => setShowShareMenu(true)}
           onFavorite={() => setIsFavorited(!isFavorited)}
         />
@@ -262,7 +290,7 @@ export default function HostProfilePage() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 space-y-8">
 
         {/* Venue Details */}
-        {host && <VenueDetails host={host} />}
+        {host && <VenueDetails host={host as any} />}
 
         {/* Photo Gallery */}
         <section className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
@@ -289,16 +317,17 @@ export default function HostProfilePage() {
         <HostDetailsSection host={host} />
 
         {/* Sound System */}
-        {host && <SoundSystemComponent soundSystem={host.soundSystem} />}
+        {host && <SoundSystemComponent soundSystem={host.soundSystem as any} />}
 
         {/* Musical Preferences */}
-        {host && <MusicalPreferences host={host} />}
+        {host && <MusicalPreferences host={host as any} />}
 
         {/* Lodging Information */}
         {host && (
           <LodgingInfo
             offersLodging={(host as any).offersLodging}
             lodgingDetails={(host as any).lodgingDetails}
+            onPhotoClick={handlePhotoClick}
           />
         )}
 

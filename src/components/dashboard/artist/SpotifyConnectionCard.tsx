@@ -34,11 +34,11 @@ interface SpotifyArtist {
 interface SpotifyConnectionCardProps {
   artistId: string;
   currentConnection?: {
-    spotifyArtistId: string;
-    spotifyVerified: boolean;
-    spotifyFollowers: number;
-    spotifyPopularity: number;
-    lastSpotifySync: string;
+    spotifyArtistId?: string;
+    spotifyVerified?: boolean;
+    spotifyFollowers?: number;
+    spotifyPopularity?: number;
+    lastSpotifySync?: string;
   };
   onConnectionUpdate?: () => void;
 }
@@ -198,7 +198,7 @@ export default function SpotifyConnectionCard({
                   <Users className="w-4 h-4 text-green-600" />
                   <div>
                     <div className="font-semibold text-green-900">
-                      {formatNumber(currentConnection.spotifyFollowers)}
+                      {formatNumber(currentConnection.spotifyFollowers ?? 0)}
                     </div>
                     <div className="text-xs text-green-700">Followers</div>
                   </div>
@@ -222,7 +222,7 @@ export default function SpotifyConnectionCard({
                   <Calendar className="w-4 h-4 text-secondary-600" />
                   <div>
                     <div className="font-semibold text-secondary-900 text-xs">
-                      {formatLastSync(currentConnection.lastSpotifySync)}
+                      {formatLastSync(currentConnection.lastSpotifySync ?? '')}
                     </div>
                     <div className="text-xs text-secondary-700">Last Sync</div>
                   </div>

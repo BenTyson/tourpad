@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import Stripe from 'stripe';
 import { PrismaClient } from '@prisma/client';
-import { sendPaymentEvent } from '../../events/route';
+import { sendPaymentEvent } from '@/lib/sse-clients';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-11-20.acacia',
+  apiVersion: '2025-06-30.basil',
 });
 
 const prisma = new PrismaClient();

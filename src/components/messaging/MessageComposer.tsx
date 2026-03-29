@@ -17,7 +17,7 @@ interface MessageComposerProps {
   formatFileSize: (size: number) => string;
   disabled?: boolean;
   placeholder?: string;
-  fileInputRef: React.RefObject<HTMLInputElement>;
+  fileInputRef: React.RefObject<HTMLInputElement | null>;
 }
 
 export function MessageComposer({

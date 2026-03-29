@@ -238,6 +238,8 @@ export default function ArtistMusicSection({
     );
   }
 
+  const topTracks = spotifyTracks;
+
   return (
     <div className="space-y-8">
       {/* Spotify Stats */}
@@ -304,7 +306,7 @@ export default function ArtistMusicSection({
                           </div>
                         )}
                         <button
-                          onClick={() => handlePlayPause(track)}
+                          onClick={() => handlePlayPause(track, 'spotify')}
                           disabled={!track.previewUrl}
                           className={`absolute inset-0 rounded-lg flex items-center justify-center transition-all ${
                             track.previewUrl 

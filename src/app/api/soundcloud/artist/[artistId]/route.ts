@@ -4,16 +4,15 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { artistId: string } }
+  { params }: { params: Promise<{ artistId: string }> }
 ) {
   try {
+    const { artistId } = await params;
     const session = await auth();
-    
+
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    const { artistId } = params;
 
     // Get artist with SoundCloud data
     const artist = await prisma.artist.findUnique({
@@ -32,7 +31,7 @@ export async function GET(
     }
 
     // Check if the requesting user owns this artist profile or is an admin
-    if (artist.userId !== session.user.id && session.user.userType !== 'admin') {
+    if (artist.userId !== session.user.id && session.user.type !== 'admin') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 

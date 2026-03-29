@@ -89,7 +89,7 @@ export default function FanRegistrationWizard({}: FanRegistrationWizardProps) {
 
       if (!validation.success) {
         const errorMap: Record<string, string> = {};
-        validation.errors.forEach(error => {
+        validation.errors?.forEach(error => {
           const [field, message] = error.split(': ');
           errorMap[field] = message;
         });

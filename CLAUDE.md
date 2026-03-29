@@ -1,116 +1,71 @@
-# CLAUDE.md - Core Development Rules
+# CLAUDE.md - TourPad Development Rules
 
-## Modular Framework Integration
-This project uses the Claude Code modular framework for optimized development workflows:
-- Commands are organized in `.claude/commands/` by category
-- Use `/[category]:[command]` syntax for execution (e.g., `/project:setup-environment`)
-- Framework provides 50-80% token savings through progressive disclosure
-- Commands are environment-aware and security-focused
+## Tech Stack
+- **Next.js 15** (App Router) + **React 19** + **TypeScript**
+- **Tailwind CSS v4** + coastal color system (French Blue, Sage, Mist, Sand, Evergreen)
+- **Prisma** ORM + **PostgreSQL** (18 models, see `prisma/schema.prisma`)
+- **NextAuth.js v5** (Google OAuth + credentials)
+- **Stripe** ($400/yr artists, $10/mo fans)
+- **React Hook Form + Zod** for all forms
+- **Lucide** icons (never emoji in UI)
 
-## Available Commands
+Do not introduce other libraries unless approved by user.
 
-### Project Management
-- `/project:setup-environment` - Initialize development environment
-- `/project:create-feature` - Create new feature with scaffolding
+## Project Structure
+```
+src/
+  app/          # Next.js App Router pages (~50 routes)
+    api/        # API routes (~65 endpoints)
+    admin/      # Admin dashboard
+    dashboard/  # User dashboards (artist, host, fan)
+  components/   # React components (~31 directories)
+  data/         # Mock data files (see Data Architecture below)
+  hooks/        # Custom React hooks
+  lib/          # Utilities (auth, prisma, storage, validation)
+  types/        # TypeScript type definitions
+docs/           # All documentation (see docs/README.md)
+prisma/         # Schema + migrations
+scripts/        # DB seeds, backups, utilities
+```
 
-### Development Workflow  
-- `/dev:code-review` - Comprehensive code review with TourPad standards
-- `/dev:debug-session` - Systematic debugging and problem solving
+## Documentation
+All docs live in `/docs/`. Key files:
+- `docs/STATUS.md` -- current priorities and state
+- `docs/ARCHITECTURE.md` -- database, APIs, file storage
+- `docs/CONVENTIONS.md` -- code standards and patterns
+- `docs/cleanup.md` -- multi-phase cleanup roadmap
 
-### Testing
-- `/test:generate-tests` - Generate comprehensive test suites
-- `/test:coverage-analysis` - Test coverage assessment and improvement
+## Data Architecture
+Two data files with specific purposes:
 
-## Methodology
-- Development must follow the TDD (Test-Driven Development) methodology.
-- All implementation must strictly follow the steps outlined in PROJECT_STATUS.md.
-- Use modular commands for consistent workflows and token optimization.
+**`src/data/mockData.ts`** -- UI display data, listings, cards. IDs: `'1'`, `'2'`, `'3'`
+**`src/data/realTestData.ts`** -- Auth (`getCurrentUser`), lodging, concerts. IDs: `'artist1'`, `'host1'`
 
-## Tech Stack Constraints
-Our primary tech stack is:
-- **Next.js 15.3.5** (App Router)
-- **React 19**
-- **TypeScript**
-- **Tailwind CSS v4**
-- **React Hook Form + Zod**
-- **NextAuth.js**
-- **Stripe**
-
-Do not introduce other libraries unless specified in the plan or approved by user.
-
-## Git Workflow
-- Remind user to git push after each major conclusion
-- Always commit with descriptive messages before switching contexts
-- Check git status before making significant changes
+ID mapping: session uses realTestData IDs, UI uses mockData IDs.
+Dashboard maps between them: `mockArtists.find(a => a.userId === 'artist1')`
 
 ## Development Standards
-- **NEVER** create files unless explicitly required for the task
-- **ALWAYS** prefer editing existing files over creating new ones
-- **NEVER** proactively create documentation files (*.md) unless requested
-- **NEVER** create new .md files without explicit user approval - use existing optimized structure
-- Use TypeScript for all new code
-- Follow existing component patterns and naming conventions
-- Maintain mobile-first responsive design
-
-## Critical Patterns
-- Check `/memory-bank/` folder for project context and patterns
-- Read `PROJECT_STATUS.md` for current priorities and state
-- **Data Sources** (see Data Architecture section below)
+- Prefer editing existing files over creating new ones
+- TypeScript for all new code, match neighboring code style
 - All forms must have Zod validation schemas
-- Use the established coastal color system (French Blue, Sage, Mist, Sand, Evergreen)
+- Only use `/api/upload/route.ts` for file uploads (JPEG/PNG/WebP, 5MB limit)
+- Mobile-first responsive design
+- `npm run dev` for local server (localhost:3000)
 
-## Data Architecture - CRITICAL
-We maintain TWO data files with specific purposes:
+## Known Issues (Phase 0-1 of cleanup.md)
+- Calendar page crash (undefined `calendarDays` variable)
+- Message send button non-functional on standalone page
+- Footer links to non-existent pages
+- No automated tests exist yet
+- Console.log calls throughout API routes (cleanup in progress)
 
-### `/src/data/mockData.ts` - Use for:
-- **Basic UI display data** (artist profiles, host profiles)
-- **Artist/host listings and cards**
-- **Simple data structures**
-- **Core features** (bookings, messages, notifications)
-- **IDs**: Simple numeric strings ('1', '2', '3')
-
-### `/src/data/realTestData.ts` - Use for:
-- **Authentication system** (`getCurrentUser` function)
-- **Advanced features** (lodging system, concerts, detailed capabilities)
-- **Complex data structures** with extended properties
-- **IDs**: Prefixed strings ('artist1', 'host1', 'fan1')
-
-### ID Mapping Pattern:
-- Session uses realTestData IDs ('artist1')
-- UI components use mockData IDs ('1') 
-- Dashboard maps between them: `mockArtists.find(a => a.userId === 'artist1')`
-- **NEVER** change this mapping without updating both files consistently
-
-### When in doubt:
-- **Profile pages** → mockData (richer display data)
-- **Authentication** → realTestData (getCurrentUser)
-- **Lodging features** → realTestData (detailed host capabilities)
-- **Basic listings** → mockData (simpler structures)
-
-## Server & Testing
-- Run `npm run dev` to start development server (localhost:3000)
-- Test all UI changes in the browser before marking complete
-- Add TODO comments for future backend integration points
-
-## Documentation Architecture
-- **Optimized Structure**: Only 4 .md files in `/memory-bank/`
-- **PROJECT_STATUS.md**: Current state, priorities, what's working
-- **ARCHITECTURE.md**: Complete technical reference (database, APIs, file storage)
-- **TROUBLESHOOTING.md**: Crisis prevention and debugging
-- **DEVELOPMENT_PATTERNS.md**: Code standards and required patterns
-- **NEVER** create additional .md files - update existing ones
-
-## Image Upload Architecture
-- **CRITICAL**: Only use `/api/upload/route.ts` for file uploads
-- **NEVER** create `/api/media/upload/` or similar competing routes
-- Local storage: `public/uploads/` directory (dev), S3 ready (prod)
-- File validation: JPEG/PNG/WebP, 5MB limit, authentication required
-- See `/memory-bank/ARCHITECTURE.md` for full details
-
-## Security & Privacy
+## Security
+- Gated access model: apply -> approve -> pay -> access
 - Never expose real user data in public views
-- Implement proper input validation on all forms
-- Follow the gated access model (apply → approve → pay → access)
+- Validate all form inputs with Zod
+- Use shared Prisma instance from `src/lib/prisma.ts` (never `new PrismaClient()`)
 
----
-*This file contains core rules that must be followed in every Claude Code session*
+## Git
+- Don't commit unless asked
+- Don't push unless asked
+- Conventional commit style

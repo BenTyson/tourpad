@@ -36,13 +36,13 @@ interface SoundCloudUser {
 interface SoundCloudConnectionCardProps {
   artistId: string;
   currentConnection?: {
-    soundcloudUserId: number;
-    soundcloudUsername: string;
-    soundcloudVerified: boolean;
-    soundcloudFollowers: number;
-    soundcloudTrackCount: number;
-    soundcloudPlaylistCount: number;
-    lastSoundCloudSync: string;
+    soundcloudUserId?: number;
+    soundcloudUsername?: string;
+    soundcloudVerified?: boolean;
+    soundcloudFollowers?: number;
+    soundcloudTrackCount?: number;
+    soundcloudPlaylistCount?: number;
+    lastSoundCloudSync?: string;
   };
   onConnectionUpdate?: () => void;
 }
@@ -196,7 +196,7 @@ export default function SoundCloudConnectionCard({
                   <Users className="w-4 h-4 text-orange-600" />
                   <div>
                     <div className="font-semibold text-orange-900">
-                      {formatNumber(currentConnection.soundcloudFollowers)}
+                      {formatNumber(currentConnection.soundcloudFollowers ?? 0)}
                     </div>
                     <div className="text-xs text-orange-700">Followers</div>
                   </div>
@@ -208,7 +208,7 @@ export default function SoundCloudConnectionCard({
                   <Music className="w-4 h-4 text-primary-600" />
                   <div>
                     <div className="font-semibold text-primary-900">
-                      {formatNumber(currentConnection.soundcloudTrackCount)}
+                      {formatNumber(currentConnection.soundcloudTrackCount ?? 0)}
                     </div>
                     <div className="text-xs text-primary-700">Tracks</div>
                   </div>
@@ -220,7 +220,7 @@ export default function SoundCloudConnectionCard({
                   <Play className="w-4 h-4 text-secondary-600" />
                   <div>
                     <div className="font-semibold text-secondary-900">
-                      {formatNumber(currentConnection.soundcloudPlaylistCount)}
+                      {formatNumber(currentConnection.soundcloudPlaylistCount ?? 0)}
                     </div>
                     <div className="text-xs text-secondary-700">Playlists</div>
                   </div>
@@ -232,7 +232,7 @@ export default function SoundCloudConnectionCard({
                   <Clock className="w-4 h-4 text-yellow-600" />
                   <div>
                     <div className="font-semibold text-yellow-900 text-xs">
-                      {formatLastSync(currentConnection.lastSoundCloudSync)}
+                      {formatLastSync(currentConnection.lastSoundCloudSync ?? '')}
                     </div>
                     <div className="text-xs text-yellow-700">Last Sync</div>
                   </div>

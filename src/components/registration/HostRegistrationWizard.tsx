@@ -309,7 +309,7 @@ export default function HostRegistrationWizard() {
               clearError={clearError}
             />
             <WizardNavigation 
-              onNext={() => validateCurrentStep(0)}
+              onNext={() => void validateCurrentStep(0)}
             />
           </WizardStep>
 
@@ -323,7 +323,7 @@ export default function HostRegistrationWizard() {
               clearError={clearError}
             />
             <WizardNavigation 
-              onNext={() => validateCurrentStep(1)}
+              onNext={() => void validateCurrentStep(1)}
             />
           </WizardStep>
 
@@ -337,7 +337,7 @@ export default function HostRegistrationWizard() {
               clearError={clearError}
             />
             <WizardNavigation 
-              onNext={() => validateCurrentStep(2)}
+              onNext={() => void validateCurrentStep(2)}
             />
           </WizardStep>
 

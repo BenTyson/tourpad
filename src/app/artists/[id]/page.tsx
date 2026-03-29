@@ -263,27 +263,33 @@ export default function ArtistProfilePage() {
         />
 
         {/* Band Members Section */}
-        {artistData && (
+        {artistData?.bandMembers && (
           <BandMembers
             bandMembers={artistData.bandMembers}
-            instruments={artistData.instruments}
-            contentRating={artistData.contentRating}
-            artistName={artistData.name}
+            bandName={artistData.name}
           />
         )}
 
         {/* Tour & Logistics Section */}
         {artistData && (
           <TourLogistics
-            tourMonthsPerYear={artistData.tourMonthsPerYear}
-            tourVehicle={artistData.tourVehicle}
-            willingToTravel={artistData.willingToTravel}
-            equipmentProvided={artistData.equipmentProvided}
+            tourRequirements={{
+              tourMonthsPerYear: artistData.tourMonthsPerYear,
+              tourVehicle: artistData.tourVehicle,
+              willingToTravel: artistData.willingToTravel,
+              needsLodging: true,
+              travelPartySize: 1,
+              equipmentProvided: artistData.equipmentProvided,
+              venueRequirements: [],
+            }}
+            contentRating={artistData.contentRating}
           />
         )}
 
         {/* Full Bio Section */}
-        <ArtistBioSection fullBio={artistData.fullBio} />
+        {artistData?.fullBio && (
+          <ArtistBioSection fullBio={artistData.fullBio} />
+        )}
 
         {/* Upcoming Tours Section */}
         {artistData && upcomingTours.length > 0 && (

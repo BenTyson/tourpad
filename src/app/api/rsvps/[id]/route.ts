@@ -5,17 +5,18 @@ import { prisma } from '@/lib/prisma';
 // GET /api/rsvps/[id] - Get specific RSVP details
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await auth();
-    
+
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const rsvp = await prisma.fanRSVP.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         fan: {
           include: {
@@ -120,11 +121,12 @@ export async function GET(
 // PUT /api/rsvps/[id] - Update RSVP status (host only)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await auth();
-    
+
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -142,7 +144,7 @@ export async function PUT(
 
     // Get RSVP with concert and host info
     const rsvp = await prisma.fanRSVP.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         fan: {
           include: {
@@ -210,7 +212,7 @@ export async function PUT(
 
     // Update RSVP status
     const updatedRSVP = await prisma.fanRSVP.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         status: status.toUpperCase(),
         statusUpdatedAt: new Date(),
@@ -281,18 +283,19 @@ export async function PUT(
 // DELETE /api/rsvps/[id] - Cancel RSVP (fan only)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await auth();
-    
+
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Get RSVP with fan info
     const rsvp = await prisma.fanRSVP.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         fan: {
           include: {
@@ -334,7 +337,7 @@ export async function DELETE(
 
     // Delete the RSVP
     await prisma.fanRSVP.delete({
-      where: { id: params.id }
+      where: { id }
     });
 
     // TODO: Send notification to host about cancellation

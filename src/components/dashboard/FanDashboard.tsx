@@ -260,7 +260,7 @@ export function FanDashboard({
                   {profile.favoriteGenres && profile.favoriteGenres.length > 0 ? (
                     <div className="flex flex-wrap gap-1">
                       {profile.favoriteGenres.map((genre, index) => (
-                        <Badge key={index} variant="default" size="sm">{genre}</Badge>
+                        <Badge key={index} variant="default">{genre}</Badge>
                       ))}
                     </div>
                   ) : (

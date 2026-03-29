@@ -39,6 +39,53 @@ export function ArtistDashboard({
         <QuickActions userType="artist" />
       </div>
 
+      {/* Artist Profile Completion - PROMINENT BANNER */}
+      <div className="bg-gradient-to-r from-primary-50 to-primary-100 rounded-xl shadow-lg border border-primary-200 overflow-hidden">
+        <div className="px-6 py-6">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+            {/* Left side - Header and status */}
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-3">
+                <h2 className="text-xl font-bold text-primary-900">Complete Your Artist Profile</h2>
+                <span className="text-sm bg-primary-200 text-primary-800 px-3 py-1 rounded-full font-medium">
+                  2 of 4 sections complete
+                </span>
+              </div>
+              <p className="text-primary-700 mb-4">Stand out to venues by completing your profile with music samples and press photos</p>
+
+              {/* Horizontal progress indicators */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-[var(--color-evergreen)] rounded-full"></div>
+                  <span className="text-sm text-primary-800">Basic Info</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-[var(--color-evergreen)] rounded-full"></div>
+                  <span className="text-sm text-primary-800">Bio & Genres</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-[var(--color-sand)] rounded-full"></div>
+                  <span className="text-sm text-primary-800">Music Samples</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-[var(--color-sand)] rounded-full"></div>
+                  <span className="text-sm text-primary-800">Press Photos</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right side - Call to action */}
+            <div className="lg:flex-shrink-0">
+              <Link href="/dashboard/profile">
+                <Button variant="primary" size="lg" className="w-full lg:w-auto px-8 py-3 text-base font-semibold shadow-lg hover:shadow-xl">
+                  Update Profile
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatsCard
@@ -210,39 +257,6 @@ export function ArtistDashboard({
 
         {/* Sidebar */}
         <div className="space-y-6">
-          {/* Profile Completion - ELEVATED */}
-          <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl shadow-sm border border-primary-200 overflow-hidden">
-            <div className="px-6 py-4 border-b border-primary-200">
-              <h2 className="text-xl font-semibold text-primary-900">Artist Profile</h2>
-              <p className="text-sm text-primary-700 mt-1">Complete your profile to attract more venues</p>
-            </div>
-            <div className="p-6">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-primary-800 font-medium">Basic Info</span>
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">Complete</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-primary-800 font-medium">Bio & Genres</span>
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">Complete</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-primary-800 font-medium">Music Samples</span>
-                  <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full">Incomplete</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-primary-800 font-medium">Press Photos</span>
-                  <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full">Incomplete</span>
-                </div>
-              </div>
-              <Link href="/dashboard/profile">
-                <Button variant="primary" className="w-full mt-4">
-                  Update Profile
-                </Button>
-              </Link>
-            </div>
-          </div>
-
           {/* Quick Tour Planning */}
           <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
             <div className="px-6 py-4 border-b border-neutral-200">

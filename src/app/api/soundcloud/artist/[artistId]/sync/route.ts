@@ -5,16 +5,15 @@ import { soundcloudService } from '@/lib/soundcloud';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { artistId: string } }
+  { params }: { params: Promise<{ artistId: string }> }
 ) {
   try {
+    const { artistId } = await params;
     const session = await auth();
-    
+
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    const { artistId } = params;
 
     // Get artist record
     const artist = await prisma.artist.findUnique({
@@ -82,16 +81,15 @@ export async function POST(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { artistId: string } }
+  { params }: { params: Promise<{ artistId: string }> }
 ) {
   try {
+    const { artistId } = await params;
     const session = await auth();
-    
+
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    const { artistId } = params;
 
     // Get artist record
     const artist = await prisma.artist.findUnique({

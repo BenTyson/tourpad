@@ -270,6 +270,7 @@ export default function ProfilePage() {
                 email: data.email || session.user.email || '',
                 phone: data.phone || '',
                 zipCode: data.zipCode || '',
+                musicalStyle: data.musicalStyle || '',
                 genres: data.genres || [],
                 instruments: data.instruments || [],
                 formationYear: data.formationYear || new Date().getFullYear(),
@@ -568,49 +569,49 @@ export default function ProfilePage() {
               {/* Basic Information */}
               <BasicInformationCard
                 isArtist={isArtist}
-                artistProfile={artistProfile}
-                hostProfile={hostProfile}
-                updateArtistProfile={updateArtistProfile}
-                updateHostProfile={updateHostProfile}
+                artistProfile={artistProfile as any}
+                hostProfile={hostProfile as any}
+                updateArtistProfile={updateArtistProfile as any}
+                updateHostProfile={updateHostProfile as any}
               />
 
               {/* Thumbnail Photo (Artist only) */}
               {isArtist && (
                 <ThumbnailPhotoCard
-                  artistProfile={artistProfile}
-                  updateArtistProfile={updateArtistProfile}
+                  artistProfile={artistProfile as any}
+                  updateArtistProfile={updateArtistProfile as any}
                 />
               )}
 
               {/* Hero Photo (Artist only) */}
               {isArtist && (
                 <HeroPhotoCard
-                  artistProfile={artistProfile}
-                  updateArtistProfile={updateArtistProfile}
+                  artistProfile={artistProfile as any}
+                  updateArtistProfile={updateArtistProfile as any}
                 />
               )}
 
               {/* Band Members (Artist only) */}
               {isArtist && (
                 <BandMembersCard
-                  artistProfile={artistProfile}
-                  updateArtistProfile={updateArtistProfile}
+                  artistProfile={artistProfile as any}
+                  updateArtistProfile={updateArtistProfile as any}
                 />
               )}
 
               {/* Host-specific personal information */}
               {!isArtist && (
                 <HostPersonalInfoCard
-                  hostProfile={hostProfile}
-                  updateHostProfile={updateHostProfile}
+                  hostProfile={hostProfile as any}
+                  updateHostProfile={updateHostProfile as any}
                 />
               )}
 
               {/* Musical Preferences - Host only */}
               {!isArtist && (
                 <HostMusicalPreferencesCard
-                  hostProfile={hostProfile}
-                  updateHostProfile={updateHostProfile}
+                  hostProfile={hostProfile as any}
+                  updateHostProfile={updateHostProfile as any}
                 />
               )}
 
@@ -619,14 +620,14 @@ export default function ProfilePage() {
                 <>
                   {/* Musical Details */}
                   <ArtistMusicalDetailsCard
-                    artistProfile={artistProfile}
-                    updateArtistProfile={updateArtistProfile}
+                    artistProfile={artistProfile as any}
+                    updateArtistProfile={updateArtistProfile as any}
                   />
 
                   {/* Tour & Logistics */}
                   <TourLogisticsCard
-                    artistProfile={artistProfile}
-                    updateArtistProfile={updateArtistProfile}
+                    artistProfile={artistProfile as any}
+                    updateArtistProfile={updateArtistProfile as any}
                   />
 
                 </>
@@ -635,18 +636,18 @@ export default function ProfilePage() {
               {/* Host-specific fields */}
               {!isArtist && (
                 <HostVenueDetailsCard
-                  hostProfile={hostProfile}
-                  updateHostProfile={updateHostProfile}
+                  hostProfile={hostProfile as any}
+                  updateHostProfile={updateHostProfile as any}
                 />
               )}
 
               {/* Social Links */}
               <SocialLinksCard
                 isArtist={isArtist}
-                artistProfile={artistProfile}
-                hostProfile={hostProfile}
-                updateArtistProfile={updateArtistProfile}
-                updateHostProfile={updateHostProfile}
+                artistProfile={artistProfile as any}
+                hostProfile={hostProfile as any}
+                updateArtistProfile={updateArtistProfile as any}
+                updateHostProfile={updateHostProfile as any}
               />
             </div>
           )}
@@ -656,10 +657,10 @@ export default function ProfilePage() {
           {activeTab === 'photos' && (
             <PhotosTab
               isArtist={isArtist}
-              artistProfile={artistProfile}
-              hostProfile={hostProfile}
-              updateArtistProfile={updateArtistProfile}
-              updateHostProfile={updateHostProfile}
+              artistProfile={artistProfile as any}
+              hostProfile={hostProfile as any}
+              updateArtistProfile={updateArtistProfile as any}
+              updateHostProfile={updateHostProfile as any}
               hasChanges={hasChanges}
               loading={loading}
             />
@@ -669,10 +670,10 @@ export default function ProfilePage() {
           {activeTab === 'media' && (
             <MediaTab
               isArtist={isArtist}
-              artistProfile={artistProfile}
-              hostProfile={hostProfile}
-              updateArtistProfile={updateArtistProfile}
-              updateHostProfile={updateHostProfile}
+              artistProfile={artistProfile as any}
+              hostProfile={hostProfile as any}
+              updateArtistProfile={updateArtistProfile as any}
+              updateHostProfile={updateHostProfile as any}
               hasChanges={hasChanges}
               loading={loading}
             />
@@ -683,16 +684,16 @@ export default function ProfilePage() {
         {/* Sound System Tab - Only for hosts */}
         {activeTab === 'sound-system' && !isArtist && (
           <SoundSystemTab
-            hostProfile={hostProfile}
-            updateHostProfile={updateHostProfile}
+            hostProfile={hostProfile as any}
+            updateHostProfile={updateHostProfile as any}
           />
         )}
 
         {/* Lodging Tab - Only for hosts */}
         {activeTab === 'lodging' && !isArtist && (
           <LodgingTab
-            hostProfile={hostProfile}
-            updateHostProfile={updateHostProfile}
+            hostProfile={hostProfile as any}
+            updateHostProfile={updateHostProfile as any}
           />
         )}
 

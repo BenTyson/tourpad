@@ -8,18 +8,8 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: false,
   },
   
-  // DISABLE ALL EXPERIMENTAL FEATURES for maximum stability
   experimental: {
-    // Disable everything that could cause crashes
-    optimizeCss: false,
-    memoryBasedWorkersCount: false,
     webpackBuildWorker: true,
-    turbo: false,
-    serverComponentsExternalPackages: [],
-    serverActions: false,
-    typedRoutes: false,
-    mdxRs: false,
-    instrumentationHook: false,
   },
 
   serverExternalPackages: ['sharp', 'multer'],

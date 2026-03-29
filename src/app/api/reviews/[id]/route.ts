@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma';
 // GET /api/reviews/[id] - Get specific review
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
@@ -14,7 +14,7 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const reviewId = params.id;
+    const { id: reviewId } = await params;
 
     const review = await prisma.review.findUnique({
       where: { id: reviewId },
@@ -150,7 +150,7 @@ export async function GET(
 // PUT /api/reviews/[id] - Update review
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
@@ -159,7 +159,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const reviewId = params.id;
+    const { id: reviewId } = await params;
 
     // Verify user is a fan
     const fan = await prisma.fan.findUnique({
@@ -260,7 +260,7 @@ export async function PUT(
 // DELETE /api/reviews/[id] - Delete review
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
@@ -269,7 +269,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const reviewId = params.id;
+    const { id: reviewId } = await params;
 
     // Verify user is a fan
     const fan = await prisma.fan.findUnique({

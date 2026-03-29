@@ -199,7 +199,7 @@ export const ProgressIndicator = ({ steps, className }: ProgressIndicatorProps) 
 };
 
 interface WizardNavigationProps {
-  onNext?: () => void | Promise<void>;
+  onNext?: () => void | boolean | Promise<void | boolean>;
   onPrev?: () => void;
   nextLabel?: string;
   prevLabel?: string;

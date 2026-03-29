@@ -140,7 +140,7 @@ export default function MusicManagementPage() {
               {/* Spotify Integration */}
               <SpotifyConnectionCard
                 artistId={userProfileId || ''}
-                currentConnection={spotifyConnection}
+                currentConnection={spotifyConnection ?? undefined}
                 onConnectionUpdate={() => {
                   // Refresh Spotify connection data
                   if (userProfileId) {
@@ -165,7 +165,7 @@ export default function MusicManagementPage() {
               {/* SoundCloud Integration */}
               <SoundCloudConnectionCard
                 artistId={userProfileId || ''}
-                currentConnection={soundcloudConnection}
+                currentConnection={soundcloudConnection ?? undefined}
                 onConnectionUpdate={() => {
                   // Refresh SoundCloud connection data
                   if (userProfileId) {

@@ -28,7 +28,7 @@ export default function SocialLinksCard({
   };
 
   const updateSocialLink = (field: string, value: string) => {
-    const currentSocialLinks = isArtist ? artistProfile.socialLinks : hostProfile.socialLinks;
+    const currentSocialLinks = isArtist ? artistProfile.socialLinks : (hostProfile.socialLinks ?? defaultSocialLinks);
     const updatedSocialLinks = {
       ...defaultSocialLinks,
       ...currentSocialLinks,
@@ -46,7 +46,7 @@ export default function SocialLinksCard({
     }
   };
 
-  const currentSocialLinks = isArtist ? artistProfile.socialLinks : hostProfile.socialLinks;
+  const currentSocialLinks = isArtist ? artistProfile.socialLinks : (hostProfile.socialLinks ?? defaultSocialLinks);
 
   return (
     <Card className="bg-white rounded-xl shadow-sm border border-neutral-200">

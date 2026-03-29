@@ -7,7 +7,7 @@ interface Message {
   id: string;
   senderName: string;
   content: string;
-  timestamp: string;
+  timestamp: string | Date;
   read: boolean;
   senderId: string;
   recipientId: string;

@@ -8,6 +8,7 @@ export interface ArtistProfile {
   email: string;
   phone: string;
   zipCode: string;
+  musicalStyle: string;
   genres: string[];
   instruments: string[];
   formationYear: number;
@@ -100,6 +101,14 @@ export interface HostProfile {
   preferredActSize: string;
   actSizeNotes: string;
   contentRating: string;
+  socialLinks?: {
+    website?: string;
+    instagram?: string;
+    youtube?: string;
+    spotify?: string;
+    bandcamp?: string;
+    facebook?: string;
+  };
   photos?: Array<{
     id: string;
     fileUrl: string;

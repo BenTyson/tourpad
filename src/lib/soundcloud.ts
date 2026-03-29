@@ -173,7 +173,7 @@ class SoundCloudService {
     if (this.useMockData) {
       console.log('🎧 Using mock SoundCloud data for search:', query);
       const results = searchMockUsers(query).slice(0, limit);
-      return results;
+      return results as SoundCloudUserData[];
     }
 
     try {
@@ -195,7 +195,7 @@ class SoundCloudService {
       if (!user) {
         throw new Error('Mock user not found');
       }
-      return user;
+      return user as SoundCloudUserData;
     }
 
     try {
@@ -213,7 +213,7 @@ class SoundCloudService {
     if (this.useMockData) {
       console.log('🎧 Using mock SoundCloud data for user tracks:', userId);
       const tracks = getMockUserTracks(userId).slice(0, limit);
-      return tracks;
+      return tracks as SoundCloudTrackData[];
     }
 
     try {

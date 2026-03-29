@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { 
@@ -23,7 +23,7 @@ import BookingCoordinator from '@/components/bookings/BookingCoordinator';
 import { sendCoordinationNotification } from '@/lib/coordination';
 import { testHosts } from '@/data/realTestData';
 
-export default function BookingCoordinationPage() {
+function BookingCoordinationPageContent() {
   const searchParams = useSearchParams();
   const showBookingId = searchParams.get('showBookingId');
   const lodgingBookingId = searchParams.get('lodgingBookingId');
@@ -250,5 +250,13 @@ export default function BookingCoordinationPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function BookingCoordinationPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <BookingCoordinationPageContent />
+    </Suspense>
   );
 }
