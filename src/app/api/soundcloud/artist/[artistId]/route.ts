@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 export async function GET(
   request: NextRequest,
@@ -69,7 +70,7 @@ export async function GET(
       }
     });
   } catch (error) {
-    console.error('Error fetching SoundCloud artist data:', error);
+    logger.error('Failed to fetch SoundCloud artist data', error);
     return NextResponse.json(
       { error: 'Failed to fetch artist data' },
       { status: 500 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 export type CalendarEventType = 'booking' | 'concert';
 export type CalendarEventStatus = 'pending' | 'approved' | 'rejected' | 'confirmed' | 'completed' | 'cancelled' | 'scheduled' | 'live';
@@ -42,15 +43,6 @@ export async function GET(request: NextRequest) {
     const rawUserRole = session.user.type || 'fan';
     const userRole = rawUserRole.toLowerCase() as 'artist' | 'host' | 'fan' | 'admin';
     const userId = session.user.id;
-    
-    console.log('Calendar API Debug:', { 
-      userId, 
-      rawUserRole,
-      userRole, 
-      email: session.user.email,
-      userType: session.user.type,
-      type: session.user.type
-    });
 
     // First, find the user's artist or host profile IDs
     const artist = await prisma.artist.findUnique({
@@ -63,8 +55,6 @@ export async function GET(request: NextRequest) {
       select: { id: true }
     });
     
-    console.log('Calendar API Profiles:', { artistId: artist?.id, hostId: host?.id });
-
     const events: CalendarEvent[] = [];
 
     // Build date filter
@@ -241,32 +231,25 @@ export async function GET(request: NextRequest) {
     
     // For admin users, deduplicate events (prioritize concerts over bookings)
     let finalEvents = events;
-    console.log('Checking admin deduplication:', { userRole, isAdmin: userRole === 'admin' });
     if (userRole === 'admin') {
-      console.log('Admin deduplication - Original events:', events.length);
       const eventMap = new Map();
-      
+
       // Process events, keeping concerts over bookings when they have the same booking ID
       events.forEach(event => {
         const bookingId = event.type === 'booking' ? event.details?.id : event.details?.bookingId;
-        console.log(`Processing event: ${event.id}, type: ${event.type}, bookingId: ${bookingId}, title: ${event.title}`);
-        
+
         if (bookingId) {
           const existing = eventMap.get(bookingId);
           if (!existing || (event.type === 'concert' && existing.type === 'booking')) {
-            console.log(`Setting event for bookingId ${bookingId}: ${event.type} - ${event.title}`);
             eventMap.set(bookingId, event);
-          } else {
-            console.log(`Skipping event for bookingId ${bookingId}: ${event.type} (keeping ${existing.type})`);
           }
         } else {
           // Events without booking IDs are kept as-is
           eventMap.set(event.id, event);
         }
       });
-      
+
       finalEvents = Array.from(eventMap.values()).sort((a, b) => a.date.getTime() - b.date.getTime());
-      console.log('Admin deduplication - Final events:', finalEvents.length);
     }
 
     return NextResponse.json({
@@ -282,7 +265,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error fetching calendar events:', error);
+    logger.error('Error fetching calendar events', error);
     return NextResponse.json(
       { error: 'Failed to fetch calendar events' },
       { status: 500 }

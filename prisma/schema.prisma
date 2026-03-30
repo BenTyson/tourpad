@@ -300,6 +300,10 @@ model Booking {
   conversations      Conversation[]
   payments           Payment[]
 
+  @@index([artistId])
+  @@index([hostId])
+  @@index([requestedDate])
+  @@index([status])
   @@map("bookings")
 }
 
@@ -323,6 +327,8 @@ model Concert {
   rsvps                   FanRSVP[]
   reviews                 Review[]
 
+  @@index([date])
+  @@index([status])
   @@map("concerts")
 }
 
@@ -339,6 +345,8 @@ model FanRSVP {
   fan             Fan        @relation(fields: [fanId], references: [id])
 
   @@unique([fanId, concertId])
+  @@index([concertId])
+  @@index([fanId])
   @@map("fan_rsvps")
 }
 
@@ -421,6 +429,8 @@ model Message {
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   sender         User         @relation(fields: [senderId], references: [id])
 
+  @@index([conversationId])
+  @@index([senderId])
   @@map("messages")
 }
 
@@ -652,6 +662,7 @@ model SpotifyAlbum {
   createdAt           DateTime   @default(now())
   updatedAt           DateTime   @updatedAt
   
+  @@index([artistId])
   @@map("spotify_albums")
 }
 

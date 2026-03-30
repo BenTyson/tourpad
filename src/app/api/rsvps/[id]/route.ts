@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 // GET /api/rsvps/[id] - Get specific RSVP details
 export async function GET(
@@ -110,7 +111,7 @@ export async function GET(
       rsvp: transformedRSVP
     });
   } catch (error) {
-    console.error('Error fetching RSVP:', error);
+    logger.error('Failed to fetch RSVP', error);
     return NextResponse.json(
       { error: 'Failed to fetch RSVP' },
       { status: 500 }
@@ -272,7 +273,7 @@ export async function PUT(
       }
     });
   } catch (error) {
-    console.error('Error updating RSVP:', error);
+    logger.error('Failed to update RSVP', error);
     return NextResponse.json(
       { error: 'Failed to update RSVP' },
       { status: 500 }
@@ -347,7 +348,7 @@ export async function DELETE(
       message: 'RSVP cancelled successfully'
     });
   } catch (error) {
-    console.error('Error cancelling RSVP:', error);
+    logger.error('Failed to cancel RSVP', error);
     return NextResponse.json(
       { error: 'Failed to cancel RSVP' },
       { status: 500 }

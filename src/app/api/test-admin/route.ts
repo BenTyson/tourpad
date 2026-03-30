@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
+import { logger } from '@/lib/logger';
 
 export async function GET() {
   try {
-    console.log('🧪 Testing admin user authentication...');
-    
     // Get admin user from database
     const adminUser = await prisma.user.findFirst({
       where: { 
@@ -59,7 +58,7 @@ export async function GET() {
     });
 
   } catch (error) {
-    console.error('❌ Test admin error:', error);
+    logger.error('Test admin failed', error);
     return NextResponse.json({ 
       error: 'Test failed',
       details: error instanceof Error ? error.message : 'Unknown error'

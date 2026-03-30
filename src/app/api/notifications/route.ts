@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 // GET /api/notifications - Get user's notifications
 export async function GET(request: NextRequest) {
@@ -51,7 +52,7 @@ export async function GET(request: NextRequest) {
       unreadCount
     });
   } catch (error) {
-    console.error('Error fetching notifications:', error);
+    logger.error('Failed to fetch notifications', error);
     return NextResponse.json(
       { error: 'Failed to fetch notifications' },
       { status: 500 }
@@ -95,7 +96,7 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error updating notifications:', error);
+    logger.error('Failed to update notifications', error);
     return NextResponse.json(
       { error: 'Failed to update notifications' },
       { status: 500 }

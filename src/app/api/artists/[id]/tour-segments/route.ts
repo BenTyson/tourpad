@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 // GET /api/artists/[id]/tour-segments - Get public tour segments for a specific artist
 export async function GET(
@@ -47,7 +48,7 @@ export async function GET(
 
     return NextResponse.json(tourSegments);
   } catch (error) {
-    console.error('Error fetching artist tour segments:', error);
+    logger.error('Failed to fetch artist tour segments', error);
     return NextResponse.json({ 
       error: 'Failed to fetch tour segments',
       details: error instanceof Error ? error.message : 'Unknown error'

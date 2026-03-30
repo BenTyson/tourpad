@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 export async function POST(
   request: NextRequest,
@@ -22,7 +23,7 @@ export async function POST(
       user: updatedUser 
     });
   } catch (error) {
-    console.error('Error rejecting application:', error);
+    logger.error('Failed to reject application', error);
     return NextResponse.json({ error: 'Failed to reject application' }, { status: 500 });
   }
 }

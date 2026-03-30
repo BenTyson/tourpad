@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 export async function GET() {
   try {
@@ -35,7 +36,7 @@ export async function GET() {
     });
 
     if (!user) {
-      console.error('User not found in database:', session.user.id);
+      logger.error('User not found in database', { userId: session.user.id });
       return NextResponse.json(
         { error: 'User not found' },
         { status: 404 }
@@ -59,7 +60,7 @@ export async function GET() {
     });
 
   } catch (error) {
-    console.error('Error fetching current user:', error);
+    logger.error('Failed to fetch current user', error);
     return NextResponse.json(
       { error: 'Failed to fetch user data' },
       { status: 500 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 // GET /api/messages/poll - Poll for new messages and conversation updates
 export async function GET(request: NextRequest) {
@@ -250,7 +251,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error polling messages:', error);
+    logger.error('Failed to poll messages', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

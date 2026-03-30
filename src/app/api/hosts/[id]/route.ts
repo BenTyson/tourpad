@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/lib/auth';
+import { logger } from '@/lib/logger';
 
 export async function GET(
   request: NextRequest,
@@ -277,7 +278,7 @@ export async function GET(
 
     return NextResponse.json(transformedHost);
   } catch (error) {
-    console.error('Error fetching host:', error);
+    logger.error('Failed to fetch host', error);
     return NextResponse.json(
       { error: 'Failed to fetch host data' },
       { status: 500 }
@@ -377,7 +378,7 @@ export async function PUT(
 
     return NextResponse.json({ success: true, host: updatedHost });
   } catch (error) {
-    console.error('Error updating host:', error);
+    logger.error('Failed to update host', error);
     return NextResponse.json(
       { error: 'Failed to update host profile' },
       { status: 500 }

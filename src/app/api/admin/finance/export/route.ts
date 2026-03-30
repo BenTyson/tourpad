@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
     const session = await auth();
-    
+
     // Check admin authorization
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -253,12 +252,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Unsupported format' }, { status: 400 });
 
   } catch (error) {
-    console.error('Error exporting finance data:', error);
+    logger.error('Failed to export finance data', error);
     return NextResponse.json(
       { error: 'Failed to export finance data' },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { getUserStats } from '@/lib/stats';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
@@ -17,7 +18,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(stats);
   } catch (error) {
-    console.error('Error fetching user stats:', error);
+    logger.error('Failed to fetch user stats', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

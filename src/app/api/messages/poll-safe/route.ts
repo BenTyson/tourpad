@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 // Rate limiting - in-memory for development (use Redis in production)
 const rateLimitMap = new Map<string, number>();
@@ -34,7 +35,6 @@ export async function GET(request: NextRequest) {
     
     if (lastPollTime && (now - lastPollTime) < RATE_LIMIT_WINDOW) {
       const waitTime = RATE_LIMIT_WINDOW - (now - lastPollTime);
-      console.log(`[POLL-SAFE] Rate limited user ${session.user.id} - wait ${waitTime}ms`);
       return NextResponse.json(
         { 
           error: 'Too many requests', 
@@ -166,12 +166,10 @@ export async function GET(request: NextRequest) {
     // Calculate response time
     response.pollDuration = Date.now() - startTime;
     
-    console.log(`[POLL-SAFE] User: ${session.user.id} - Duration: ${response.pollDuration}ms - New messages: ${response.newMessages.length}`);
-
     return NextResponse.json(response);
 
   } catch (error) {
-    console.error('[POLL-SAFE] Error:', error);
+    logger.error('Failed to poll messages (safe)', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

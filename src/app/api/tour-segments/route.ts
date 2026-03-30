@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 // GET /api/tour-segments - List artist's tour segments
 export async function GET() {
@@ -40,7 +41,7 @@ export async function GET() {
 
     return NextResponse.json(tourSegments);
   } catch (error) {
-    console.error('Error fetching tour segments:', error);
+    logger.error('Failed to fetch tour segments', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -154,7 +155,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(tourSegment, { status: 201 });
   } catch (error) {
-    console.error('Error creating tour segment:', error);
+    logger.error('Failed to create tour segment', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

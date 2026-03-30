@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 export async function GET(
   req: NextRequest,
@@ -102,16 +103,13 @@ export async function GET(
     });
 
   } catch (error) {
-    console.error('=== ERROR IN UPLOADED TRACKS API ===');
-    console.error('Error details:', error);
-    console.error('Error message:', error instanceof Error ? error.message : String(error));
-    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
-    
+    logger.error('Failed to fetch uploaded tracks', error);
+
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to fetch uploaded tracks',
         details: error instanceof Error ? error.message : String(error)
-      }, 
+      },
       { status: 500 }
     );
   }
@@ -178,7 +176,7 @@ export async function DELETE(
     return NextResponse.json({ success: true });
 
   } catch (error) {
-    console.error('Error deleting track:', error);
+    logger.error('Failed to delete track', error);
     return NextResponse.json(
       { error: 'Failed to delete track' }, 
       { status: 500 }
@@ -251,7 +249,7 @@ export async function PUT(
     });
 
   } catch (error) {
-    console.error('Error updating track:', error);
+    logger.error('Failed to update track', error);
     return NextResponse.json(
       { error: 'Failed to update track' }, 
       { status: 500 }

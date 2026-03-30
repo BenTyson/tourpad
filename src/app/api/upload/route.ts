@@ -3,6 +3,8 @@ import { auth } from '@/lib/auth';
 import { writeFile } from 'fs/promises';
 import path from 'path';
 import { prisma } from '@/lib/prisma';
+import { rateLimit } from '@/lib/api-helpers';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,6 +12,13 @@ export async function POST(request: NextRequest) {
     
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    if (!rateLimit(`upload:${session.user.id}`, 10, 60000)) {
+      return NextResponse.json(
+        { error: 'Too many uploads. Please try again later.' },
+        { status: 429 }
+      );
     }
 
     const formData = await request.formData();
@@ -86,15 +95,12 @@ export async function POST(request: NextRequest) {
     
     // If it's an artist photo, create ArtistMedia record
     if (type === 'artist' && category) {
-      console.log('Attempting to create artist photo for user:', session.user.id);
       const artist = await prisma.artist.findUnique({
         where: { userId: session.user.id }
       });
       
-      console.log('Found artist:', artist ? artist.id : 'NOT FOUND');
-      
       if (artist) {
-        const mediaRecord = await prisma.artistMedia.create({
+        await prisma.artistMedia.create({
           data: {
             artistId: artist.id,
             mediaType: 'PHOTO',
@@ -106,9 +112,8 @@ export async function POST(request: NextRequest) {
             sortOrder: 0
           }
         });
-        console.log('Created ArtistMedia record:', mediaRecord.id);
       } else {
-        console.error('No artist found for user:', session.user.id);
+        logger.error('No artist found for upload user', null, { userId: session.user.id });
       }
     }
     
@@ -119,7 +124,7 @@ export async function POST(request: NextRequest) {
     });
     
   } catch (error) {
-    console.error('Upload error:', error);
+    logger.error('Failed to upload file', error);
     return NextResponse.json({ 
       error: 'Failed to upload file'
     }, { status: 500 });

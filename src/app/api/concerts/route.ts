@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 // GET /api/concerts - Get available concerts for discovery
 export async function GET(request: NextRequest) {
@@ -209,7 +210,7 @@ export async function GET(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Error fetching concerts:', error);
+    logger.error('Failed to fetch concerts', error);
     return NextResponse.json(
       { error: 'Failed to fetch concerts' },
       { status: 500 }

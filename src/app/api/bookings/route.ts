@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { rateLimit } from '@/lib/api-helpers';
+import { sanitizeHtml } from '@/lib/validation';
+import { logger } from '@/lib/logger';
 
 // GET /api/bookings - Get user's bookings
 export async function GET(request: NextRequest) {
   try {
-    console.log('=== GET /api/bookings called ===');
     const session = await auth();
-    console.log('Session:', { userId: session?.user?.id, userType: session?.user?.type });
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -28,8 +29,6 @@ export async function GET(request: NextRequest) {
       select: { id: true }
     });
     
-    console.log('User profiles found:', { artist: artist?.id, host: host?.id });
-
     // Build where clause based on user type
     let whereClause: any = {};
     
@@ -37,7 +36,6 @@ export async function GET(request: NextRequest) {
     if (session.user.type === 'admin') {
       // Admin sees all bookings - no user restriction
       whereClause = {};
-      console.log('Admin user - showing all bookings');
     } else {
       // Regular users only see their own bookings
       whereClause.OR = [];
@@ -64,8 +62,6 @@ export async function GET(request: NextRequest) {
       whereClause.status = status.toUpperCase();
     }
 
-    console.log('Querying with whereClause:', JSON.stringify(whereClause, null, 2));
-    
     const bookings = await prisma.booking.findMany({
       where: whereClause,
       include: {
@@ -165,7 +161,7 @@ export async function GET(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Error fetching bookings:', error);
+    logger.error('Failed to fetch bookings', error);
     return NextResponse.json(
       { error: 'Failed to fetch bookings' },
       { status: 500 }
@@ -179,6 +175,13 @@ export async function POST(request: NextRequest) {
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    if (!rateLimit(`bookings:${session.user.id}`, 10, 60000)) {
+      return NextResponse.json(
+        { error: 'Too many booking requests. Please try again later.' },
+        { status: 429 }
+      );
     }
 
     const data = await request.json();
@@ -239,7 +242,7 @@ export async function POST(request: NextRequest) {
         estimatedDuration: data.estimatedDuration || 120, // Default 2 hours
         expectedAttendance: parseInt(data.expectedAttendance),
         doorFee: data.doorFee ? parseInt(data.doorFee) : null,
-        artistMessage: data.artistMessage,
+        artistMessage: sanitizeHtml(data.artistMessage),
         lodgingRequested: Boolean(data.lodgingRequested),
         lodgingDetails: data.lodgingRequested ? data.lodgingDetails : null,
         status: 'PENDING'
@@ -291,7 +294,7 @@ export async function POST(request: NextRequest) {
       }
     }, { status: 201 });
   } catch (error) {
-    console.error('Error creating booking:', error);
+    logger.error('Failed to create booking', error);
     return NextResponse.json(
       { error: 'Failed to create booking request' },
       { status: 500 }

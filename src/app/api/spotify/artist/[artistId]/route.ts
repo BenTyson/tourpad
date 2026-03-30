@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 export async function GET(
   request: NextRequest,
@@ -8,7 +9,7 @@ export async function GET(
 ) {
   try {
     const session = await auth();
-    
+
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -52,7 +53,7 @@ export async function GET(
       }
     });
   } catch (error) {
-    console.error('Error getting artist Spotify data:', error);
+    logger.error('Failed to get artist Spotify data', error);
     return NextResponse.json(
       { error: 'Failed to get artist Spotify data' },
       { status: 500 }

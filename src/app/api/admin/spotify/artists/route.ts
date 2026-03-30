@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
     const session = await auth();
-    
+
     // Only admin users can access this
     if (!session?.user?.id || session.user.type !== 'admin') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -57,7 +58,7 @@ export async function GET(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Error getting artists for Spotify admin:', error);
+    logger.error('Failed to get artists for Spotify admin', error);
     return NextResponse.json(
       { error: 'Failed to get artists' },
       { status: 500 }

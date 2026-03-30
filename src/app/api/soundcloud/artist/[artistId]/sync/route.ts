@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { soundcloudService } from '@/lib/soundcloud';
+import { logger } from '@/lib/logger';
 
 export async function POST(
   request: NextRequest,
@@ -71,7 +72,7 @@ export async function POST(
       }
     });
   } catch (error) {
-    console.error('Error syncing SoundCloud data:', error);
+    logger.error('Failed to sync SoundCloud data', error);
     return NextResponse.json(
       { error: 'Failed to sync SoundCloud data' },
       { status: 500 }
@@ -131,7 +132,7 @@ export async function DELETE(
       message: 'SoundCloud disconnected successfully'
     });
   } catch (error) {
-    console.error('Error disconnecting SoundCloud:', error);
+    logger.error('Failed to disconnect SoundCloud', error);
     return NextResponse.json(
       { error: 'Failed to disconnect SoundCloud' },
       { status: 500 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 // GET /api/reviews/[id] - Get specific review
 export async function GET(
@@ -139,7 +140,7 @@ export async function GET(
       review: transformedReview
     });
   } catch (error) {
-    console.error('Error fetching review:', error);
+    logger.error('Failed to fetch review', error);
     return NextResponse.json(
       { error: 'Failed to fetch review' },
       { status: 500 }
@@ -249,7 +250,7 @@ export async function PUT(
       }
     });
   } catch (error) {
-    console.error('Error updating review:', error);
+    logger.error('Failed to update review', error);
     return NextResponse.json(
       { error: 'Failed to update review' },
       { status: 500 }
@@ -303,7 +304,7 @@ export async function DELETE(
       message: 'Review deleted successfully'
     });
   } catch (error) {
-    console.error('Error deleting review:', error);
+    logger.error('Failed to delete review', error);
     return NextResponse.json(
       { error: 'Failed to delete review' },
       { status: 500 }

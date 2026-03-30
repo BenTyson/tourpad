@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { auth } from '@/lib/auth';
+import { logger } from '@/lib/logger';
 
 // GET /api/users - Get users with filtering
 export async function GET(request: NextRequest) {
@@ -64,7 +63,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error fetching users:', error);
+    logger.error('Failed to fetch users', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -111,7 +110,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(mockUser, { status: 201 });
 
   } catch (error) {
-    console.error('Error creating user:', error);
+    logger.error('Failed to create user', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

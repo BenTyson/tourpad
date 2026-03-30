@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { 
-  notifyBookingApproved, 
-  notifyBookingConfirmed, 
+import {
+  notifyBookingApproved,
+  notifyBookingConfirmed,
   notifyBookingRejected,
-  notifyDoorFeeChange 
+  notifyDoorFeeChange
 } from '@/lib/notifications';
+import { logger } from '@/lib/logger';
 
 interface RouteParams {
   params: Promise<{
@@ -129,7 +130,7 @@ export async function GET(
     });
 
   } catch (error) {
-    console.error('Error fetching booking:', error);
+    logger.error('Failed to fetch booking', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -232,7 +233,7 @@ export async function PUT(
       if (validDoorFeeStatuses.includes(doorFeeStatus)) {
         updateData.doorFeeStatus = doorFeeStatus;
       } else {
-        console.log('Invalid doorFeeStatus value:', doorFeeStatus);
+        // Invalid doorFeeStatus value - skip update
       }
     }
 
@@ -285,7 +286,7 @@ export async function PUT(
         await notifyDoorFeeChange(updatedBooking, false);
       }
     } catch (notifError) {
-      console.error('Failed to send notification:', notifError);
+      logger.error('Failed to send booking notification', notifError);
       // Don't fail the request if notification fails - continue with response
     }
 
@@ -306,7 +307,7 @@ export async function PUT(
     });
 
   } catch (error) {
-    console.error('Error updating booking:', error);
+    logger.error('Failed to update booking', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -371,7 +372,7 @@ export async function DELETE(
     });
 
   } catch (error) {
-    console.error('Error cancelling booking:', error);
+    logger.error('Failed to cancel booking', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

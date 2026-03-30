@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 // GET /api/shows - Get upcoming confirmed shows
 export async function GET(request: NextRequest) {
@@ -105,7 +106,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ shows: transformedShows });
   } catch (error) {
-    console.error('Error fetching shows:', error);
+    logger.error('Failed to fetch shows', error);
     return NextResponse.json(
       { error: 'Failed to fetch shows' },
       { status: 500 }

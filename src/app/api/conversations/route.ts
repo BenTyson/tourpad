@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 // GET /api/conversations - Get user's conversations
 export async function GET(request: NextRequest) {
@@ -17,12 +18,6 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * pageSize;
 
     // Get conversations - admins see all, others see only their own
-    console.log('Conversations access check:', {
-      userId: session.user.id,
-      userType: session.user.type,
-      isAdmin: session.user.type?.toLowerCase() === 'admin'
-    });
-    
     const whereClause = session.user.type?.toLowerCase() === 'admin' 
       ? {} // Admin sees all conversations
       : {
@@ -173,7 +168,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error fetching conversations:', error);
+    logger.error('Failed to fetch conversations', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -271,7 +266,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error creating conversation:', error);
+    logger.error('Failed to create conversation', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

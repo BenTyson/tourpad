@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 // Default coordinates for shows without location data
 const DEFAULT_LOCATIONS = [
@@ -271,7 +272,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error fetching map shows:', error);
+    logger.error('Failed to fetch map shows', error);
     return NextResponse.json(
       { error: 'Failed to fetch shows' },
       { status: 500 }

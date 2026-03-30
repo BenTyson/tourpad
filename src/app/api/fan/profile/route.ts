@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 // GET /api/fan/profile - Get fan profile data
 export async function GET(request: NextRequest) {
@@ -57,7 +58,7 @@ export async function GET(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Error fetching fan profile:', error);
+    logger.error('Failed to fetch fan profile', error);
     return NextResponse.json(
       { error: 'Failed to fetch fan profile' },
       { status: 500 }
@@ -145,7 +146,7 @@ export async function PUT(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Error updating fan profile:', error);
+    logger.error('Failed to update fan profile', error);
     return NextResponse.json(
       { error: 'Failed to update fan profile' },
       { status: 500 }

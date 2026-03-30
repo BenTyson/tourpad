@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 // GET /api/fan/concerts/past - Get fan's past attended concerts
 export async function GET(request: NextRequest) {
@@ -167,7 +168,7 @@ export async function GET(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Error fetching past concerts:', error);
+    logger.error('Failed to fetch past concerts', error);
     return NextResponse.json(
       { error: 'Failed to fetch past concerts' },
       { status: 500 }

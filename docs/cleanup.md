@@ -137,10 +137,10 @@ Current CLAUDE.md references non-existent `.claude/commands/`, claims "only 4 .m
 
 `src/lib/api-helpers.ts` already has a `rateLimit()` helper that is **never called**.
 
-- [ ] Apply rate limiting to auth endpoints:
+- [x] Apply rate limiting to auth endpoints:
   - `src/app/api/auth/register/route.ts` -- 5 requests/minute per IP
   - `src/app/api/auth/[...nextauth]/route.ts` -- 10 requests/minute per IP (login attempts)
-- [ ] Apply rate limiting to sensitive endpoints:
+- [x] Apply rate limiting to sensitive endpoints:
   - `src/app/api/messages/route.ts` (POST) -- 30 requests/minute
   - `src/app/api/upload/route.ts` -- 10 requests/minute
   - `src/app/api/bookings/route.ts` (POST) -- 10 requests/minute
@@ -150,7 +150,7 @@ Current CLAUDE.md references non-existent `.claude/commands/`, claims "only 4 .m
 
 `src/lib/validation.ts` defines `sanitizeHtml()` but it is **never called** anywhere in the codebase.
 
-- [ ] Apply `sanitizeHtml()` to all user-submitted text fields:
+- [x] Apply `sanitizeHtml()` to all user-submitted text fields:
   - Registration: name, bio fields in `src/app/api/auth/register/route.ts`
   - Profile updates: all text fields in `src/app/api/profile/route.ts`
   - Messages: body field in `src/app/api/messages/route.ts`
@@ -160,65 +160,44 @@ Current CLAUDE.md references non-existent `.claude/commands/`, claims "only 4 .m
 
 ### 1.3 Authentication Hardening
 
-- [ ] Add email verification to registration flow:
+- [ ] Add email verification to registration flow (requires external email service -- deferred):
   - Generate verification token on signup
   - Send verification email (use Resend, SendGrid, or similar)
   - Block login until email verified
   - Add verification callback route
-- [ ] Strengthen password requirements in `src/lib/validation.ts`:
+- [x] Strengthen password requirements in `src/lib/validation.ts`:
   - Minimum 12 characters
   - Require uppercase, lowercase, number, special character
   - Update Zod schema and error messages
-- [ ] Add account lockout after 5 failed login attempts (15-minute cooldown)
-- [ ] Review JWT token payload -- remove unnecessary data (full profile/artist/host objects bloat the token)
+- [x] Add account lockout after 5 failed login attempts (15-minute cooldown)
+- [ ] Review JWT token payload -- remove unnecessary data (full profile/artist/host objects bloat the token; deferred -- requires audit of all session consumers)
 
 ### 1.4 Stripe Webhook Idempotency
 
 `src/app/api/payments/webhook/route.ts` processes webhooks but has no idempotency check -- replay attacks can create duplicate payments.
 
-- [ ] Before processing any webhook event, check if `stripePaymentId` already exists:
+- [x] Before processing any webhook event, check if `stripePaymentId` already exists:
   ```
   const existing = await prisma.payment.findFirst({ where: { stripePaymentId } });
   if (existing) return NextResponse.json({ received: true });
   ```
-- [ ] Fix: webhook route creates `new PrismaClient()` instead of importing shared instance from `src/lib/prisma.ts`
+- [x] Fix: webhook route creates `new PrismaClient()` instead of importing shared instance from `src/lib/prisma.ts`
 - [ ] Add handling for missing event types: `charge.refunded`, `customer.subscription.updated`
 
 ### 1.5 Fix PrismaClient Instances
 
 Multiple files create `new PrismaClient()` instead of using the shared singleton at `src/lib/prisma.ts`. This causes connection pool exhaustion.
 
-- [ ] `src/app/api/payments/webhook/route.ts` -- import from `@/lib/prisma`
+- [x] `src/app/api/payments/webhook/route.ts` -- import from `@/lib/prisma`
 - [ ] `prisma/seed.ts` -- import from `@/lib/prisma` (or acceptable for seed script)
-- [ ] Search entire codebase for `new PrismaClient` -- ensure only `src/lib/prisma.ts` creates instances
+- [x] Search entire codebase for `new PrismaClient` -- all 9 files in src/app/api/ now use shared singleton
 - [ ] Add connection pool config to Prisma schema if not present
 
 ### 1.6 Database Indexes
 
 Missing indexes on frequently queried foreign keys:
 
-- [ ] Add to `prisma/schema.prisma`:
-  ```
-  model Booking {
-    @@index([artistId])
-    @@index([hostId])
-    @@index([requestedDate])
-  }
-  model Message {
-    @@index([conversationId])
-    @@index([senderId])
-  }
-  model Concert {
-    @@index([bookingId])
-  }
-  model FanRSVP {
-    @@index([concertId])
-    @@index([fanId])
-  }
-  model SpotifyAlbum {
-    @@index([artistId])
-  }
-  ```
+- [x] Add to `prisma/schema.prisma`: indexes on Booking (artistId, hostId, requestedDate, status), Message (conversationId, senderId), Concert (date, status), FanRSVP (concertId, fanId), SpotifyAlbum (artistId)
 - [ ] Run `npx prisma migrate dev` to generate migration
 - [ ] Test that existing queries still work
 
@@ -226,24 +205,21 @@ Missing indexes on frequently queried foreign keys:
 
 217 console.log/console.error calls across API routes.
 
-- [ ] Remove all `console.log` calls from API routes (not debug scripts)
-- [ ] Replace critical error logging with structured approach:
-  - Create `src/lib/logger.ts` with `info()`, `warn()`, `error()` functions
-  - In development: logs to console
+- [x] Remove all `console.log` calls from API routes (204 calls removed across 67 files)
+- [x] Replace critical error logging with structured approach:
+  - Created `src/lib/logger.ts` with `info()`, `warn()`, `error()` functions
+  - In development: logs to console with level prefix
   - In production: logs structured JSON (ready for log aggregation)
-- [ ] Remove debug-specific logging patterns:
-  - `console.log('=== GET /api/bookings called ===')` -- delete
-  - `console.log('Session:', { userId, userType })` -- delete
-  - `console.error('Full error details:', JSON.stringify(error, null, 2))` -- replace with logger.error (raw error objects could expose secrets)
+- [x] Remove debug-specific logging patterns: all removed, error handling uses logger.error
 
 ### 1.8 Verification
 
 - [ ] Test login with wrong password 6+ times -- verify lockout works
-- [ ] Test registration -- verify email sent, account blocked until verified
+- [ ] Test registration -- verify password requirements enforced
 - [ ] Test Stripe webhook replay -- verify no duplicate payments
 - [ ] Submit `<script>alert('xss')</script>` in profile bio -- verify sanitized
-- [ ] `npm run build` passes
-- [ ] Run `grep -r "new PrismaClient" src/` -- should return zero results
+- [x] `npm run build` passes
+- [x] Run `grep -r "new PrismaClient" src/` -- only `src/lib/prisma.ts` creates instances
 
 ---
 

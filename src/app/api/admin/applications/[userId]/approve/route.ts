@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 export async function POST(
   request: NextRequest,
@@ -98,8 +99,7 @@ export async function POST(
       user: updatedUser 
     });
   } catch (error) {
-    console.error('Error approving application:', error);
-    console.error('Error details:', error);
+    logger.error('Failed to approve application', error);
     return NextResponse.json({ 
       error: 'Failed to approve application', 
       details: error instanceof Error ? error.message : 'Unknown error'

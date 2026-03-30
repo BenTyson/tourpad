@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,31 +9,18 @@ import { existsSync } from 'fs';
 
 // POST /api/messages/attachment - Send a message with file attachment
 export async function POST(request: NextRequest) {
-  console.log('[ATTACHMENT] Starting file upload process...');
-  
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      console.log('[ATTACHMENT] Unauthorized - no session');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    console.log('[ATTACHMENT] Processing form data...');
     const formData = await request.formData();
     const conversationId = formData.get('conversationId') as string;
     const file = formData.get('file') as File;
     const content = formData.get('content') as string || ''; // Optional message text with file
 
-    console.log('[ATTACHMENT] Form data received:', {
-      conversationId,
-      fileName: file?.name,
-      fileSize: file?.size,
-      fileType: file?.type,
-      contentLength: content?.length
-    });
-
     if (!conversationId || !file) {
-      console.log('[ATTACHMENT] Missing required fields');
       return NextResponse.json(
         { error: 'conversationId and file are required' },
         { status: 400 }
@@ -75,7 +63,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Save file to storage
-    console.log('[ATTACHMENT] Processing file for storage...');
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     
@@ -84,21 +71,15 @@ export async function POST(request: NextRequest) {
     const uploadDir = join(process.cwd(), 'public', 'uploads');
     const filePath = join(uploadDir, fileName);
 
-    console.log('[ATTACHMENT] File paths:', { uploadDir, filePath, fileName });
-
     // Ensure uploads directory exists
     if (!existsSync(uploadDir)) {
-      console.log('[ATTACHMENT] Creating uploads directory...');
       await mkdir(uploadDir, { recursive: true });
     }
 
-    console.log('[ATTACHMENT] Writing file to disk...');
     await writeFile(filePath, buffer);
     const fileUrl = `/uploads/${fileName}`;
-    console.log('[ATTACHMENT] File saved successfully:', fileUrl);
 
     // Create the message with attachment
-    console.log('[ATTACHMENT] Creating message in database...');
     const message = await prisma.message.create({
       data: {
         conversationId,
@@ -183,11 +164,10 @@ export async function POST(request: NextRequest) {
       }
     };
 
-    console.log('[ATTACHMENT] Sending response:', { messageId: message.id });
     return NextResponse.json(formattedMessage);
 
   } catch (error) {
-    console.error('[ATTACHMENT] Error sending attachment:', error);
+    logger.error('Error sending message attachment', error);
     return NextResponse.json(
       { error: 'Failed to send attachment: ' + (error as Error).message },
       { status: 500 }

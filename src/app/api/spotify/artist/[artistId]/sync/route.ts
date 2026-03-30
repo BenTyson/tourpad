@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { spotifyService } from '@/lib/spotify';
+import { logger } from '@/lib/logger';
 
 export async function POST(
   request: NextRequest,
@@ -74,7 +75,7 @@ export async function POST(
       }
     });
   } catch (error) {
-    console.error('Error syncing artist with Spotify:', error);
+    logger.error('Failed to sync artist with Spotify', error);
     return NextResponse.json(
       { 
         error: error instanceof Error ? error.message : 'Failed to sync with Spotify'
@@ -145,7 +146,7 @@ export async function DELETE(
       message: 'Spotify connection removed successfully'
     });
   } catch (error) {
-    console.error('Error removing Spotify connection:', error);
+    logger.error('Failed to remove Spotify connection', error);
     return NextResponse.json(
       { error: 'Failed to remove Spotify connection' },
       { status: 500 }

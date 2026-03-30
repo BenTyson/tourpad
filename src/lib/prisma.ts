@@ -19,24 +19,8 @@ export async function disconnectPrisma() {
 export async function checkDatabaseConnection() {
   try {
     await prisma.$connect();
-    console.log('✅ Database connected successfully');
     return true;
-  } catch (error) {
-    console.error('❌ Database connection failed:', error);
-    return false;
-  }
-}
-
-// Helper function to run database migrations
-export async function runMigrations() {
-  try {
-    // This would be handled by npx prisma migrate deploy in production
-    console.log('📁 Checking database schema...');
-    await prisma.$connect();
-    console.log('✅ Database schema is up to date');
-    return true;
-  } catch (error) {
-    console.error('❌ Database migration failed:', error);
+  } catch {
     return false;
   }
 }

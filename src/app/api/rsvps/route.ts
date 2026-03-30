@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 // GET /api/rsvps - Get RSVPs (fan or host specific)
 export async function GET(request: NextRequest) {
@@ -188,7 +189,7 @@ export async function GET(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Error fetching RSVPs:', error);
+    logger.error('Failed to fetch RSVPs', error);
     return NextResponse.json(
       { error: 'Failed to fetch RSVPs' },
       { status: 500 }
@@ -361,7 +362,7 @@ export async function POST(request: NextRequest) {
       }
     }, { status: 201 });
   } catch (error) {
-    console.error('Error creating RSVP:', error);
+    logger.error('Failed to create RSVP', error);
     return NextResponse.json(
       { error: 'Failed to create RSVP request' },
       { status: 500 }

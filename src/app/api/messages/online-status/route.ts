@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 // Simple in-memory store for online status
 // In production, this would be Redis or similar
@@ -34,7 +35,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true });
 
   } catch (error) {
-    console.error('Error updating online status:', error);
+    logger.error('Failed to update online status', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -90,7 +91,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ onlineStatus });
 
   } catch (error) {
-    console.error('Error fetching online status:', error);
+    logger.error('Failed to fetch online status', error);
     return NextResponse.json(
       { error: 'Unhandled server error' },
       { status: 500 }
@@ -116,7 +117,7 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ success: true });
 
   } catch (error) {
-    console.error('Error updating heartbeat:', error);
+    logger.error('Failed to update heartbeat', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

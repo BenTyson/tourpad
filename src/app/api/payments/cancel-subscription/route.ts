@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 import Stripe from 'stripe';
+import { logger } from '@/lib/logger';
 
-const prisma = new PrismaClient();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-06-30.basil',
 });
@@ -55,12 +55,10 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error canceling subscription:', error);
+    logger.error('Failed to cancel subscription', error);
     return NextResponse.json(
       { error: 'Failed to cancel subscription' },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }

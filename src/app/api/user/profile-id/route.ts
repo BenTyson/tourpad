@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 export async function GET() {
   try {
@@ -30,7 +31,7 @@ export async function GET() {
     
     return NextResponse.json({ profileId: null, type: session.user.type });
   } catch (error) {
-    console.error('Error fetching profile ID:', error);
+    logger.error('Failed to fetch profile ID', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

@@ -1,5 +1,3 @@
-import { NextResponse } from 'next/server';
-
 // Memory management for API routes
 export function withMemoryManagement<T extends (...args: any[]) => any>(
   handler: T
@@ -15,8 +13,6 @@ export function withMemoryManagement<T extends (...args: any[]) => any>(
       
       return result;
     } catch (error) {
-      console.error('API Error:', error);
-      
       // Clean up on error
       if (process.env.NODE_ENV === 'development' && global.gc) {
         global.gc();

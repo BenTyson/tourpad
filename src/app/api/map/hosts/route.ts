@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 interface LocationPrivacy {
   displayCoordinates: {
@@ -281,7 +282,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error fetching map hosts:', error);
+    logger.error('Failed to fetch map hosts', error);
     return NextResponse.json(
       { error: 'Failed to fetch hosts' },
       { status: 500 }

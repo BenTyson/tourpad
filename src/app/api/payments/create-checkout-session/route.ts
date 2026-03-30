@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { stripe } from '@/lib/stripe-server';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
   try {
@@ -75,7 +76,7 @@ export async function POST(request: NextRequest) {
     });
     
   } catch (error) {
-    console.error('Create checkout session error:', error);
+    logger.error('Failed to create checkout session', error);
     return NextResponse.json(
       { error: 'Failed to create checkout session' },
       { status: 500 }

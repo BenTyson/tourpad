@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 import Stripe from 'stripe';
+import { logger } from '@/lib/logger';
 
-const prisma = new PrismaClient();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-06-30.basil',
 });
@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
           }
         }
       } catch (stripeError) {
-        console.error('Error fetching Stripe subscription:', stripeError);
+        logger.error('Failed to fetch Stripe subscription', stripeError);
       }
     }
 
@@ -124,12 +124,10 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error fetching subscription status:', error);
+    logger.error('Failed to fetch subscription status', error);
     return NextResponse.json(
       { error: 'Failed to fetch subscription status' },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }

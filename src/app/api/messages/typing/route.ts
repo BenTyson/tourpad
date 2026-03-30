@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 // Simple in-memory store for typing indicators
 // In production, this would be Redis or similar
@@ -68,7 +69,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true });
 
   } catch (error) {
-    console.error('Error handling typing indicator:', error);
+    logger.error('Failed to handle typing indicator', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -122,7 +123,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error fetching typing indicators:', error);
+    logger.error('Failed to fetch typing indicators', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

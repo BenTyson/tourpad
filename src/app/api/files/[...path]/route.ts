@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { readFile, stat } from 'fs/promises';
 import path from 'path';
 import { auth } from '@/lib/auth';
+import { logger } from '@/lib/logger';
 
 export async function GET(
   request: NextRequest,
@@ -103,7 +104,7 @@ export async function GET(
     }
     
   } catch (error) {
-    console.error('File serving error:', error);
+    logger.error('File serving error', error);
     return NextResponse.json({ error: 'Failed to serve file' }, { status: 500 });
   }
 }

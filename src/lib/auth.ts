@@ -6,6 +6,37 @@ import bcrypt from 'bcryptjs';
 import { prisma } from './prisma';
 import { loginSchema } from './validation';
 
+// Account lockout: track failed login attempts per email
+const failedAttempts = new Map<string, { count: number; lockedUntil: number }>();
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_DURATION_MS = 15 * 60 * 1000; // 15 minutes
+
+function checkLockout(email: string): { locked: boolean; minutesRemaining?: number } {
+  const record = failedAttempts.get(email);
+  if (!record) return { locked: false };
+  if (Date.now() > record.lockedUntil) {
+    failedAttempts.delete(email);
+    return { locked: false };
+  }
+  if (record.count >= MAX_ATTEMPTS) {
+    return { locked: true, minutesRemaining: Math.ceil((record.lockedUntil - Date.now()) / 60000) };
+  }
+  return { locked: false };
+}
+
+function recordFailedAttempt(email: string): void {
+  const record = failedAttempts.get(email);
+  const count = (record?.count || 0) + 1;
+  failedAttempts.set(email, {
+    count,
+    lockedUntil: count >= MAX_ATTEMPTS ? Date.now() + LOCKOUT_DURATION_MS : (record?.lockedUntil || 0)
+  });
+}
+
+function clearFailedAttempts(email: string): void {
+  failedAttempts.delete(email);
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -27,11 +58,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
 
         const { email, password } = validation.data;
+        const normalizedEmail = email.toLowerCase();
+
+        // Check account lockout
+        const lockout = checkLockout(normalizedEmail);
+        if (lockout.locked) {
+          throw new Error(`Account locked. Try again in ${lockout.minutesRemaining} minutes.`);
+        }
 
         try {
           // Find user with profile
           const user = await prisma.user.findUnique({
-            where: { email: email.toLowerCase() },
+            where: { email: normalizedEmail },
             include: {
               profile: true,
               artist: true,
@@ -41,14 +79,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           });
 
           if (!user || !user.passwordHash) {
+            recordFailedAttempt(normalizedEmail);
             return null;
           }
 
           // Verify password
           const isValidPassword = await bcrypt.compare(password, user.passwordHash);
           if (!isValidPassword) {
+            recordFailedAttempt(normalizedEmail);
             return null;
           }
+
+          clearFailedAttempts(normalizedEmail);
 
           // Update last login
           await prisma.user.update({

@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { rateLimit } from '@/lib/api-helpers';
+import { sanitizeHtml } from '@/lib/validation';
+import { logger } from '@/lib/logger';
 
 // GET /api/messages - Get messages for a conversation
 export async function GET(request: NextRequest) {
@@ -28,16 +31,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Conversation not found' }, { status: 404 });
     }
 
-    // Check access: participant or admin
-    console.log('Messages access check:', {
-      userId: session.user.id,
-      userType: session.user.type,
-      conversationId,
-      participantIds: conversation.participantIds,
-      isParticipant: conversation.participantIds.includes(session.user.id),
-      isAdmin: session.user.type?.toLowerCase() === 'admin'
-    });
-    
     const hasAccess = conversation.participantIds.includes(session.user.id) || 
                      session.user.type?.toLowerCase() === 'admin';
     if (!hasAccess) {
@@ -103,22 +96,6 @@ export async function GET(request: NextRequest) {
     const hasMore = messages.length > pageSize;
     const messagesToReturn = messages.slice(0, pageSize);
 
-    // Debug logging for profile image data in messages
-    console.log(`[MESSAGES DEBUG] User type: ${session.user.type}, Conv ID: ${conversationId}`);
-    messagesToReturn.forEach((msg, idx) => {
-      if (msg.sender) {
-        console.log(`  Message ${idx} sender:`, {
-          id: msg.sender.id,
-          name: msg.sender.name,
-          userType: msg.sender.userType,
-          profileImageUrl: msg.sender.profileImageUrl,
-          'profile.profileImageUrl': msg.sender.profile?.profileImageUrl,
-          'artist.pressPhotoUrl': msg.sender.artist?.pressPhotoUrl,
-          'artist.media': msg.sender.artist?.media?.length || 0
-        });
-      }
-    });
-
     // Mark messages as read (only for participants, not admins)
     if (session.user.type?.toLowerCase() !== 'admin') {
       const unreadMessageIds = messagesToReturn
@@ -146,7 +123,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error fetching messages:', error);
+    logger.error('Failed to fetch messages', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -160,6 +137,13 @@ export async function POST(request: NextRequest) {
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    if (!rateLimit(`messages:${session.user.id}`, 30, 60000)) {
+      return NextResponse.json(
+        { error: 'Too many messages. Please slow down.' },
+        { status: 429 }
+      );
     }
 
     const body = await request.json();
@@ -189,7 +173,7 @@ export async function POST(request: NextRequest) {
       data: {
         conversationId,
         senderId: session.user.id,
-        content,
+        content: sanitizeHtml(content),
         messageType,
         readBy: [session.user.id] // Sender has read their own message
       },
@@ -260,7 +244,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message });
 
   } catch (error) {
-    console.error('Error sending message:', error);
+    logger.error('Failed to send message', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

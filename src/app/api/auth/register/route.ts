@@ -1,26 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
-import { registrationSchema } from '@/lib/validation';
+import { registrationSchema, sanitizeHtml } from '@/lib/validation';
+import { rateLimit } from '@/lib/api-helpers';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
   try {
+    const ip = request.headers.get('x-forwarded-for') || 'unknown';
+    if (!rateLimit(`register:${ip}`, 5, 60000)) {
+      return NextResponse.json(
+        { error: 'Too many registration attempts. Please try again later.' },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
-    console.log('Registration request body:', JSON.stringify(body, null, 2));
-    
+
     // Validate input
     const validation = registrationSchema.safeParse(body);
     if (!validation.success) {
-      console.log('Validation failed:', validation.error.errors);
       return NextResponse.json(
         { error: 'Invalid input', details: validation.error.errors },
         { status: 400 }
       );
     }
 
-    console.log('Validation passed, creating user...');
-
-    const { email, password, name, userType, profile, artist, host } = validation.data;
+    const { email, password, userType, profile, artist, host } = validation.data;
+    const name = sanitizeHtml(validation.data.name);
+    if (profile?.bio) profile.bio = sanitizeHtml(profile.bio);
+    if (artist?.stageName) artist.stageName = sanitizeHtml(artist.stageName);
+    if (host?.venueDescription) host.venueDescription = sanitizeHtml(host.venueDescription);
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -88,11 +98,7 @@ export async function POST(request: NextRequest) {
               venueDescription: host?.venueDescription || '',
               hostingExperience: host?.hostingExperience || 0,
               offersLodging: host?.offersLodging || false,
-              lodgingDetails: (() => {
-                console.log('Raw host data from request:', host);
-                console.log('lodgingDetails being saved:', host?.lodgingDetails);
-                return host?.lodgingDetails || {};
-              })(),
+              lodgingDetails: host?.lodgingDetails || {},
               applicationSubmittedAt: new Date()
             }
           }
@@ -132,7 +138,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(response, { status: 201 });
 
   } catch (error) {
-    console.error('Registration error:', error);
+    logger.error('Registration failed', error);
     return NextResponse.json(
       { error: 'Registration failed' },
       { status: 500 }

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { sanitizeHtml } from '@/lib/validation';
+import { logger } from '@/lib/logger';
 
 export async function GET() {
   try {
@@ -91,17 +93,14 @@ export async function GET() {
           return videos;
         })(),
         musicSamples: user.artist.musicSamples ? (user.artist.musicSamples as any[]) : [],
-        photos: user.artist.media?.map(media => {
-          console.log('Found media:', media);
-          return {
+        photos: user.artist.media?.map(media => ({
             id: media.id,
             fileUrl: media.fileUrl,
             title: media.title,
             description: media.description,
             sortOrder: media.sortOrder,
             category: media.category
-          };
-        }) || [],
+        })) || [],
       };
     }
 
@@ -203,7 +202,7 @@ export async function GET() {
 
     return NextResponse.json(profileData);
   } catch (error) {
-    console.error('Error fetching profile:', error);
+    logger.error('Error fetching profile', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -250,11 +249,17 @@ export async function PUT(request: NextRequest) {
     }
 
     const data = await request.json();
-    console.log('Received profile data:', data);
-    console.log('suggestedDoorFee value:', data.suggestedDoorFee, 'type:', typeof data.suggestedDoorFee);
-    console.log('Session user type:', session.user.type);
-    console.log('Thumbnail photo:', data.thumbnailPhoto);
-    console.log('Hero photo:', data.heroPhoto);
+    if (data.bandName) data.bandName = sanitizeHtml(data.bandName);
+    if (data.bio) data.bio = sanitizeHtml(data.bio);
+    if (data.briefBio) data.briefBio = sanitizeHtml(data.briefBio);
+    if (data.fullBio) data.fullBio = sanitizeHtml(data.fullBio);
+    if (data.musicalStyle) data.musicalStyle = sanitizeHtml(data.musicalStyle);
+    if (data.venueDescription) data.venueDescription = sanitizeHtml(data.venueDescription);
+    if (data.houseRules) data.houseRules = sanitizeHtml(data.houseRules);
+    if (data.hostInfo?.aboutMe) data.hostInfo.aboutMe = sanitizeHtml(data.hostInfo.aboutMe);
+    if (data.hostInfo?.hostName) data.hostInfo.hostName = sanitizeHtml(data.hostInfo.hostName);
+    if (data.hostName) data.hostName = sanitizeHtml(data.hostName);
+    if (data.venueName) data.venueName = sanitizeHtml(data.venueName);
     const userId = session.user.id;
 
     // Update user basic info
@@ -311,7 +316,7 @@ export async function PUT(request: NextRequest) {
         update: profileUpdateData
       });
     } catch (profileError) {
-      console.error('Profile update error:', profileError);
+      logger.error('Profile update error', profileError);
       throw profileError;
     }
 
@@ -367,11 +372,9 @@ export async function PUT(request: NextRequest) {
 
         // Handle photos if provided
         if (data.photos && Array.isArray(data.photos)) {
-          console.log('Processing photos:', data.photos);
-          
           // Delete existing photos
           await prisma.artistMedia.deleteMany({
-            where: { 
+            where: {
               artistId: artist.id,
               mediaType: 'PHOTO'
             }
@@ -379,7 +382,6 @@ export async function PUT(request: NextRequest) {
 
           // Create new photos
           if (data.photos.length > 0) {
-            console.log('Creating photos for artist:', artist.id);
             await prisma.artistMedia.createMany({
               data: data.photos.map((photo: any, index: number) => ({
                 artistId: artist.id,
@@ -391,7 +393,6 @@ export async function PUT(request: NextRequest) {
                 sortOrder: photo.sortOrder || index
               }))
             });
-            console.log('Photos created successfully');
           }
         }
       }
@@ -470,11 +471,9 @@ export async function PUT(request: NextRequest) {
 
         // Handle host photos if provided
         if (data.photos && Array.isArray(data.photos)) {
-          console.log('Processing host photos:', data.photos);
-          
           // Delete existing photos
           await prisma.hostMedia.deleteMany({
-            where: { 
+            where: {
               hostId: host.id,
               mediaType: 'PHOTO'
             }
@@ -482,7 +481,6 @@ export async function PUT(request: NextRequest) {
 
           // Create new photos
           if (data.photos.length > 0) {
-            console.log('Creating photos for host:', host.id);
             await prisma.hostMedia.createMany({
               data: data.photos.map((photo: any, index: number) => ({
                 hostId: host.id,
@@ -494,7 +492,6 @@ export async function PUT(request: NextRequest) {
                 sortOrder: photo.sortOrder || index
               }))
             });
-            console.log('Host photos created successfully');
           }
         }
       }
@@ -502,27 +499,22 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error updating profile:', error);
-    console.error('Full error details:', JSON.stringify(error, null, 2));
-    
-    // More detailed error handling
+    logger.error('Error updating profile', error);
+
     if (error instanceof Error) {
-      console.error('Error details:', error.message);
-      
       if (error.message.includes('value too long')) {
-        return NextResponse.json({ 
-          error: 'Image file is too large. Please use a smaller image.' 
+        return NextResponse.json({
+          error: 'Image file is too large. Please use a smaller image.'
         }, { status: 413 });
       }
-      
+
       if (error.message.includes('prisma') || error.message.includes('database')) {
-        console.error('Database error details:', error);
-        return NextResponse.json({ 
-          error: 'Database error. Please try again.' 
+        return NextResponse.json({
+          error: 'Database error. Please try again.'
         }, { status: 500 });
       }
     }
-    
+
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { sanitizeHtml } from '@/lib/validation';
+import { logger } from '@/lib/logger';
 
 // GET /api/reviews - Get reviews for concerts
 export async function GET(request: NextRequest) {
@@ -183,7 +185,7 @@ export async function GET(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Error fetching reviews:', error);
+    logger.error('Failed to fetch reviews', error);
     return NextResponse.json(
       { error: 'Failed to fetch reviews' },
       { status: 500 }
@@ -295,9 +297,9 @@ export async function POST(request: NextRequest) {
         artistRating,
         hostRating,
         overallRating,
-        artistFeedback: artistFeedback?.trim() || null,
-        hostFeedback: hostFeedback?.trim() || null,
-        overallFeedback: overallFeedback.trim(),
+        artistFeedback: artistFeedback ? sanitizeHtml(artistFeedback.trim()) : null,
+        hostFeedback: hostFeedback ? sanitizeHtml(hostFeedback.trim()) : null,
+        overallFeedback: sanitizeHtml(overallFeedback.trim()),
         isPublic: isPublic !== false, // Default to true
         attendedDate: concert.date,
         wouldRecommend: wouldRecommend !== false // Default to true
@@ -325,7 +327,7 @@ export async function POST(request: NextRequest) {
       }
     }, { status: 201 });
   } catch (error) {
-    console.error('Error creating review:', error);
+    logger.error('Failed to create review', error);
     return NextResponse.json(
       { error: 'Failed to create review' },
       { status: 500 }

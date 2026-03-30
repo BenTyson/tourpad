@@ -1,7 +1,26 @@
 # PROJECT STATUS - TourPad Development
 
-## Current Sprint: July 2025
-**Focus: COMPLETED ✅ All Critical Issues Resolved**
+## Current Sprint: March 2026
+**Focus: Cleanup & Launch Roadmap (see docs/cleanup.md)**
+
+### Phase 0: Foundation Cleanup -- DONE (commit 8d31570)
+### Phase 1: Critical Security Fixes -- DONE (pending commit)
+- Rate limiting on auth, messages, uploads, bookings
+- Input sanitization (sanitizeHtml) on all user text fields
+- Password requirements: 12+ chars, uppercase, lowercase, number, special char
+- Account lockout: 5 failed attempts = 15-min lockout
+- Stripe webhook idempotency (duplicate payment prevention)
+- 9 PrismaClient instances replaced with shared singleton
+- Database indexes added (Booking, Message, Concert, FanRSVP, SpotifyAlbum)
+- Structured logger (src/lib/logger.ts), 204 console calls removed
+- Deferred: email verification (needs external service), JWT trimming (needs consumer audit)
+
+### Next: Phase 2 -- UI/UX Hardening
+
+---
+
+## Previous: July 2025
+**Focus: COMPLETED -- All Critical Issues Resolved**
 
 ### Major Infrastructure Completed:
 - **Node.js 20.x LTS**: Stable on Node 20.19.4 LTS with nodemon auto-restart

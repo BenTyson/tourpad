@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
   try {
@@ -76,7 +75,6 @@ export async function POST(request: NextRequest) {
         subscriptionEnd: oneYearFromPayment
       });
 
-      console.log(`✅ Created subscription for user: ${user.email}`);
     }
 
     return NextResponse.json({
@@ -85,12 +83,10 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error fixing missing subscriptions:', error);
+    logger.error('Failed to fix missing subscriptions', error);
     return NextResponse.json(
       { error: 'Failed to fix missing subscriptions' },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }

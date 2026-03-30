@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,14 +26,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    console.log('🔄 Force refresh session data:', {
-      userId: user.id,
-      email: user.email,
-      currentSessionStatus: session.user.status,
-      actualDatabaseStatus: user.status,
-      userType: user.userType
-    });
-
     // Return the fresh user data
     return NextResponse.json({
       success: true,
@@ -54,7 +47,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Session refresh error:', error);
+    logger.error('Session refresh failed', error);
     return NextResponse.json({
       error: 'Failed to refresh session',
       details: error instanceof Error ? error.message : 'Unknown error'

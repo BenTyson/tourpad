@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 // PUT /api/tour-segments/[id] - Update existing tour segment
 export async function PUT(
@@ -134,7 +135,7 @@ export async function PUT(
 
     return NextResponse.json(updatedSegment);
   } catch (error) {
-    console.error('Error updating tour segment:', error);
+    logger.error('Failed to update tour segment', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -182,7 +183,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true, message: 'Tour segment deleted' });
   } catch (error) {
-    console.error('Error deleting tour segment:', error);
+    logger.error('Failed to delete tour segment', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

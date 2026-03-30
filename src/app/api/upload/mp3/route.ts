@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 import { existsSync } from 'fs';
@@ -22,13 +23,10 @@ interface AudioMetadata {
 }
 
 export async function POST(req: NextRequest) {
-  console.log('MP3 Upload endpoint called');
-  
   try {
     // Check authentication
     const session = await auth();
-    console.log('Session:', session?.user?.email ? 'Found' : 'Not found');
-    
+
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized - No session found' }, { status: 401 });
     }
@@ -38,10 +36,6 @@ export async function POST(req: NextRequest) {
       where: { email: session.user.email },
       include: { artist: true }
     });
-
-    console.log('Current user found:', currentUser?.email);
-    console.log('User type:', currentUser?.userType);
-    console.log('Has artist profile:', !!currentUser?.artist);
 
     if (!currentUser) {
       return NextResponse.json({ error: 'User not found in database' }, { status: 404 });
@@ -57,39 +51,17 @@ export async function POST(req: NextRequest) {
     }
 
     // Parse form data
-    console.log('Parsing form data...');
     const formData = await req.formData();
-    
-    // Debug what's in the form data
-    console.log('FormData entries:');
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}:`, typeof value, value instanceof File ? `File(${value.name}, ${value.size} bytes)` : value);
-    }
-    
+
     const file = formData.get('file') as File;
     const artistId = formData.get('artistId') as string;
     const metadataString = formData.get('metadata') as string;
-
-    console.log('Form data parsed:', {
-      hasFile: !!file,
-      fileName: file?.name,
-      fileSize: file?.size,
-      artistId,
-      hasMetadata: !!metadataString
-    });
 
     if (!file) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
     // Validate artist ID matches current user
-    console.log('Upload validation:', {
-      providedArtistId: artistId,
-      currentUserArtistId: currentUser.artist?.id,
-      userType: currentUser.userType,
-      hasArtist: !!currentUser.artist
-    });
-    
     if (!artistId || artistId !== currentUser.artist?.id) {
       return NextResponse.json({ 
         error: 'Invalid artist ID',
@@ -103,9 +75,7 @@ export async function POST(req: NextRequest) {
     // Validate file type
     const fileType = file.type || '';
     const fileName = file.name || '';
-    
-    console.log('File validation:', { fileType, fileName, size: file.size });
-    
+
     // Accept files that either have audio MIME type OR end with .mp3
     const isValidMimeType = fileType.includes('audio') || fileType === 'audio/mpeg' || fileType === 'audio/mp3';
     const isValidExtension = fileName.toLowerCase().endsWith('.mp3');
@@ -131,8 +101,8 @@ export async function POST(req: NextRequest) {
     if (metadataString) {
       try {
         metadata = JSON.parse(metadataString);
-      } catch (error) {
-        console.error('Error parsing metadata:', error);
+      } catch {
+        // Invalid metadata JSON, use defaults
       }
     }
 
@@ -202,20 +172,16 @@ export async function POST(req: NextRequest) {
     });
 
   } catch (error) {
-    console.error('MP3 upload error:', error);
-    
-    // Return detailed error information
+    logger.error('MP3 upload error', error);
+
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    const errorStack = error instanceof Error ? error.stack : '';
-    
-    console.error('Error details:', { errorMessage, errorStack });
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to upload MP3 file',
         details: errorMessage,
         timestamp: new Date().toISOString()
-      }, 
+      },
       { status: 500 }
     );
   }

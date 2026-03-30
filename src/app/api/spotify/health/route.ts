@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { spotifyService } from '@/lib/spotify';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
@@ -23,7 +24,7 @@ export async function GET(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Error checking Spotify health:', error);
+    logger.error('Failed to check Spotify health', error);
     return NextResponse.json(
       { 
         error: 'Failed to check Spotify health',

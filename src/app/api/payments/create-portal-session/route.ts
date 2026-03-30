@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 import Stripe from 'stripe';
+import { logger } from '@/lib/logger';
 
-const prisma = new PrismaClient();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-06-30.basil',
 });
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ url: portalSession.url });
 
   } catch (error) {
-    console.error('Error creating portal session:', error);
+    logger.error('Failed to create portal session', error);
     
     // Handle Stripe configuration errors specifically
     if (error instanceof Error && error.message.includes('No configuration provided')) {
@@ -51,7 +51,5 @@ export async function POST(request: NextRequest) {
       { error: 'Failed to create portal session' },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }
