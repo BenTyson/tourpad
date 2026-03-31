@@ -1,6 +1,7 @@
 // Cloud storage utilities for file uploads
 import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { logger } from '@/lib/logger';
 
 // Configure S3 client
 const s3Client = new S3Client({
@@ -63,7 +64,7 @@ export async function uploadToS3(
       contentType
     };
   } catch (error) {
-    console.error('Error uploading to S3:', error);
+    logger.error('Error uploading to S3', error);
     throw new Error('Failed to upload file');
   }
 }
@@ -84,7 +85,7 @@ export async function generatePresignedUploadUrl(
 
     return await getSignedUrl(s3Client, command, { expiresIn });
   } catch (error) {
-    console.error('Error generating presigned URL:', error);
+    logger.error('Error generating presigned URL', error);
     throw new Error('Failed to generate upload URL');
   }
 }
@@ -99,7 +100,7 @@ export async function deleteFromS3(key: string): Promise<void> {
 
     await s3Client.send(command);
   } catch (error) {
-    console.error('Error deleting from S3:', error);
+    logger.error('Error deleting from S3', error);
     throw new Error('Failed to delete file');
   }
 }
@@ -117,7 +118,7 @@ export async function generatePresignedDownloadUrl(
 
     return await getSignedUrl(s3Client, command, { expiresIn });
   } catch (error) {
-    console.error('Error generating download URL:', error);
+    logger.error('Error generating download URL', error);
     throw new Error('Failed to generate download URL');
   }
 }
@@ -197,7 +198,7 @@ function getContentTypeFromBuffer(buffer: Buffer, filename: string): string | nu
   return fileExt ? extToType[fileExt] || null : null;
 }
 
-// Image processing utilities (placeholder for future implementation)
+// Image processing with Sharp
 export async function processImage(
   buffer: Buffer,
   options: {
@@ -207,19 +208,73 @@ export async function processImage(
     format?: 'jpeg' | 'png' | 'webp';
   } = {}
 ): Promise<Buffer> {
-  // TODO: Implement image processing with Sharp or similar
-  // For now, return original buffer
-  return buffer;
+  const sharp = (await import('sharp')).default;
+  const { width = 1920, quality = 80 } = options;
+
+  try {
+    const image = sharp(buffer);
+    const metadata = await image.metadata();
+
+    // Skip if already smaller than target width
+    if (metadata.width && metadata.width <= width) {
+      // Still strip EXIF for privacy
+      return image.rotate().toBuffer();
+    }
+
+    let pipeline = image
+      .rotate() // auto-rotate based on EXIF, then strip EXIF
+      .resize(width, undefined, { withoutEnlargement: true });
+
+    // Compress in original format
+    switch (metadata.format) {
+      case 'png':
+        pipeline = pipeline.png({ quality });
+        break;
+      case 'webp':
+        pipeline = pipeline.webp({ quality });
+        break;
+      default:
+        pipeline = pipeline.jpeg({ quality, mozjpeg: true });
+    }
+
+    return pipeline.toBuffer();
+  } catch (error) {
+    logger.error('Image processing failed, returning original', error);
+    return buffer;
+  }
 }
 
 // Generate thumbnail
 export async function generateThumbnail(
   buffer: Buffer,
-  size: number = 300
+  size: number = 400
 ): Promise<Buffer> {
-  // TODO: Implement thumbnail generation
-  // For now, return original buffer
-  return buffer;
+  const sharp = (await import('sharp')).default;
+
+  try {
+    const image = sharp(buffer);
+    const metadata = await image.metadata();
+
+    let pipeline = image
+      .rotate()
+      .resize(size, undefined, { withoutEnlargement: true });
+
+    switch (metadata.format) {
+      case 'png':
+        pipeline = pipeline.png({ quality: 70 });
+        break;
+      case 'webp':
+        pipeline = pipeline.webp({ quality: 70 });
+        break;
+      default:
+        pipeline = pipeline.jpeg({ quality: 70, mozjpeg: true });
+    }
+
+    return pipeline.toBuffer();
+  } catch (error) {
+    logger.error('Thumbnail generation failed, returning original', error);
+    return buffer;
+  }
 }
 
 // Fallback local storage for development
@@ -250,7 +305,7 @@ export class LocalStorageAdapter {
         contentType
       };
     } catch (error) {
-      console.error('Error uploading to local storage:', error);
+      logger.error('Error uploading to local storage', error);
       throw new Error('Failed to upload file locally');
     }
   }
@@ -265,7 +320,7 @@ export class LocalStorageAdapter {
     } catch (error) {
       // Ignore file not found errors
       if ((error as any).code !== 'ENOENT') {
-        console.error('Error deleting from local storage:', error);
+        logger.error('Error deleting from local storage', error);
       }
     }
   }

@@ -5,6 +5,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import bcrypt from 'bcryptjs';
 import { prisma } from './prisma';
 import { loginSchema } from './validation';
+import { logger } from '@/lib/logger';
 
 // Account lockout: track failed login attempts per email
 const failedAttempts = new Map<string, { count: number; lockedUntil: number }>();
@@ -112,7 +113,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             fan: user.fan
           };
         } catch (error) {
-          console.error('Authentication error:', error);
+          logger.error('Authentication error', error);
           return null;
         }
       }
@@ -179,7 +180,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             token.fan = currentUser.fan;
           }
         } catch (error) {
-          console.error('Failed to refresh user data during session update:', error);
+          logger.error('Failed to refresh user data during session update', error);
         }
       }
 
@@ -238,7 +239,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
           return true;
         } catch (error) {
-          console.error('OAuth sign in error:', error);
+          logger.error('OAuth sign in error', error);
           return false;
         }
       }

@@ -1,16 +1,17 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { rateLimit } from '@/lib/api-helpers';
 import { sanitizeHtml } from '@/lib/validation';
 import { logger } from '@/lib/logger';
+import { apiSuccess, ApiErrors } from '@/lib/api-response';
 
 // GET /api/bookings - Get user's bookings
 export async function GET(request: NextRequest) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return ApiErrors.unauthorized();
     }
 
     const { searchParams } = new URL(request.url);
@@ -50,10 +51,7 @@ export async function GET(request: NextRequest) {
       
       // If user has no artist or host profile, return empty results
       if (whereClause.OR.length === 0) {
-        return NextResponse.json({
-          bookings: [],
-          pagination: { total: 0, limit, offset }
-        });
+        return apiSuccess({ bookings: [], pagination: { total: 0, limit, offset } });
       }
     }
 
@@ -152,7 +150,7 @@ export async function GET(request: NextRequest) {
       } : null
     }));
 
-    return NextResponse.json({
+    return apiSuccess({
       bookings: transformedBookings,
       pagination: {
         total: await prisma.booking.count({ where: whereClause }),
@@ -162,10 +160,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     logger.error('Failed to fetch bookings', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch bookings' },
-      { status: 500 }
-    );
+    return ApiErrors.internal('Failed to fetch bookings');
   }
 }
 
@@ -174,14 +169,11 @@ export async function POST(request: NextRequest) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return ApiErrors.unauthorized();
     }
 
     if (!rateLimit(`bookings:${session.user.id}`, 10, 60000)) {
-      return NextResponse.json(
-        { error: 'Too many booking requests. Please try again later.' },
-        { status: 429 }
-      );
+      return ApiErrors.rateLimited('Too many booking requests. Please try again later.');
     }
 
     const data = await request.json();
@@ -190,10 +182,7 @@ export async function POST(request: NextRequest) {
     const requiredFields = ['hostId', 'requestedDate', 'expectedAttendance', 'artistMessage'];
     for (const field of requiredFields) {
       if (!data[field]) {
-        return NextResponse.json(
-          { error: `Missing required field: ${field}` },
-          { status: 400 }
-        );
+        return ApiErrors.validation(`Missing required field: ${field}`);
       }
     }
 
@@ -203,10 +192,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!artist) {
-      return NextResponse.json(
-        { error: 'Artist profile not found' },
-        { status: 404 }
-      );
+      return ApiErrors.notFound('Artist profile not found');
     }
 
     // Verify the host exists
@@ -215,10 +201,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!host) {
-      return NextResponse.json(
-        { error: 'Host not found' },
-        { status: 404 }
-      );
+      return ApiErrors.notFound('Host not found');
     }
 
     // Parse the requested date and time
@@ -277,8 +260,7 @@ export async function POST(request: NextRequest) {
 
     // TODO: Send notification to host about new booking request
     
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       booking: {
         id: booking.id,
         artistId: booking.artistId,
@@ -292,12 +274,9 @@ export async function POST(request: NextRequest) {
         artistMessage: booking.artistMessage,
         lodgingRequested: booking.lodgingRequested
       }
-    }, { status: 201 });
+    }, 201);
   } catch (error) {
     logger.error('Failed to create booking', error);
-    return NextResponse.json(
-      { error: 'Failed to create booking request' },
-      { status: 500 }
-    );
+    return ApiErrors.internal('Failed to create booking request');
   }
 }

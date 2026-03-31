@@ -360,85 +360,76 @@ Current state: ~10 ARIA attributes across 200+ tsx files. ~30% WCAG AA compliant
 
 Keep Prisma and NextAuth -- only change the database hosting. No application code rewrite.
 
-- [ ] Create Supabase project at supabase.com
-- [ ] Get connection strings (pooled + direct)
-- [ ] Update `.env.local`:
-  ```
-  DATABASE_URL="postgresql://...@...pooler.supabase.com:6543/postgres?pgbouncer=true"
-  DIRECT_URL="postgresql://...@...supabase.com:5432/postgres"
-  ```
-- [ ] Update `prisma/schema.prisma` to add `directUrl`:
-  ```
-  datasource db {
-    provider  = "postgresql"
-    url       = env("DATABASE_URL")
-    directUrl = env("DIRECT_URL")
-  }
-  ```
+- [x] Update `prisma/schema.prisma` to add `directUrl` for PgBouncer support
+- [x] Update `.env.example` with Supabase connection string template
+- [x] Add `DIRECT_URL` to `.env` and `.env.local` (points to local DB for now)
+- [ ] Create Supabase project at supabase.com (requires user credentials)
+- [ ] Get connection strings (pooled + direct) and update `.env.local`
 - [ ] Run `npx prisma migrate deploy` against Supabase DB
 - [ ] Seed database or restore from backup (`scripts/restore-database.js`)
-- [ ] Update `.env.example` and `docs/env.md` (create if doesn't exist)
 - [ ] Verify all existing functionality works against Supabase Postgres
 - [ ] Set up automatic backups in Supabase dashboard (point-in-time recovery)
 
-### 3.2 Image Processing
+### 3.2 Image Processing -- DONE
 
-`src/lib/storage.ts` has `processImage()` and `generateThumbnail()` that return the original buffer unprocessed.
-
-- [ ] Install `sharp` package
-- [ ] Implement `processImage()`:
-  - Resize to max 1920px width
-  - Convert to WebP for web display
-  - Strip EXIF data (privacy)
-  - Compress to 80% quality
-- [ ] Implement `generateThumbnail()`:
-  - Resize to 400px width
-  - WebP format
+- [x] Install `sharp` package (already in `next.config.ts` `serverExternalPackages`)
+- [x] Implement `processImage()` in `src/lib/storage.ts`:
+  - Resize to max 1920px width (maintains aspect ratio, skips if smaller)
+  - Keep original format (not WebP -- avoids breaking stored URLs; Next.js handles WebP delivery)
+  - Strip EXIF data via `sharp.rotate()` (privacy)
+  - Compress to 80% quality, mozjpeg for JPEG
+- [x] Implement `generateThumbnail()`:
+  - Resize to 400px width, original format
   - 70% quality
-- [ ] Update upload route to process images on upload
-- [ ] Generate thumbnails for existing uploads (migration script)
+- [x] Update `src/app/api/upload/route.ts` to process images on upload
+  - Saves processed image + `-thumb` thumbnail side by side
+  - Response includes `thumbnailUrl`
+- [ ] Generate thumbnails for existing uploads (migration script -- deferred, low priority)
 
-### 3.3 Fix File Serving
+### 3.3 File Serving -- NO CHANGES NEEDED
 
-Upload route saves to `./storage/uploads/` but files are not publicly accessible via HTTP.
+File serving already works via rewrite + API route with caching:
+- Upload saves to `./storage/uploads/`
+- `next.config.ts` rewrites `/uploads/:path*` to `/api/files/:path*`
+- `src/app/api/files/[...path]/route.ts` serves with Cache-Control, ETag, 304 support
 
-- [ ] Option A (recommended): Move uploads to `public/uploads/` and serve via Next.js static files
-- [ ] Option B: Set up S3 + CloudFront (AWS credentials already in .env) and serve via CDN
-- [ ] Verify all existing upload references resolve correctly
-- [ ] Update `src/lib/storage.ts` to use correct paths
-- [ ] Update `next.config.ts` with image remote patterns if using S3
+Real optimization (Supabase Storage or S3+CDN) is a future consideration per Appendix D.
 
-### 3.4 Structured Logging
+### 3.4 Structured Logging -- DONE
 
-- [ ] Create `src/lib/logger.ts`:
-  - `logger.info(message, context)` -- development: console.log, production: structured JSON
-  - `logger.warn(message, context)`
-  - `logger.error(message, error, context)` -- never logs raw error objects
-  - Include timestamp, request ID, user ID where available
-- [ ] Replace remaining console.log calls with logger (Phase 1.7 removes most, this catches stragglers)
-- [ ] Add request logging middleware for API routes (optional, for debugging)
+`src/lib/logger.ts` was created in Phase 1. All 67 API routes already used it.
 
-### 3.5 Unified API Response Format
+- [x] Migrated remaining 68 `console.log/error/warn` calls across 9 server-side lib files:
+  - `src/lib/spotify.ts` (18 calls), `src/lib/soundcloud.ts` (20), `src/lib/profileImageUtils.ts` (17)
+  - `src/lib/storage.ts` (6), `src/lib/auth.ts` (3), `src/lib/coordination.ts` (2)
+  - `src/lib/stats.ts` (1), `src/lib/notifications.ts` (1)
+- [x] Stripped emoji prefixes from log messages (spotify/soundcloud had them)
+- [x] Removed verbose debug traces in profileImageUtils (17 trace logs reduced to 2 meaningful ones)
+- [x] Only `src/lib/logger.ts` internals and `stripe.ts.disabled` retain raw console calls
 
-Currently API routes return inconsistent response shapes.
+### 3.5 Unified API Response Format -- IN PROGRESS
 
-- [ ] Define standard response type:
-  ```typescript
-  type ApiResponse<T> =
-    | { success: true; data: T }
-    | { success: false; error: { code: string; message: string } }
-  ```
-- [ ] Define error codes: `AUTH_REQUIRED`, `FORBIDDEN`, `NOT_FOUND`, `VALIDATION_ERROR`, `RATE_LIMITED`, `INTERNAL_ERROR`
-- [ ] Create `src/lib/api-response.ts` helper functions
-- [ ] Gradually migrate API routes to use standard format (can be done incrementally)
+- [x] Created `src/lib/api-response.ts` with:
+  - `apiSuccess(data, status)` -- spreads data at top level with `success: true`
+  - `apiError(code, message, status)` -- keeps `error` as string for backwards compat, adds `errorCode`
+  - `ApiErrors.*` convenience helpers (unauthorized, forbidden, notFound, validation, rateLimited, conflict, internal)
+  - `ErrorCode` constants: AUTH_REQUIRED, FORBIDDEN, NOT_FOUND, VALIDATION_ERROR, RATE_LIMITED, CONFLICT, INTERNAL_ERROR
+- [x] Migrated 5 high-traffic routes as proof of concept:
+  - `api/bookings/route.ts` (GET + POST)
+  - `api/upload/route.ts` (POST)
+  - `api/messages/route.ts` (GET + POST)
+  - `api/reviews/route.ts` (GET + POST)
+  - `api/profile/route.ts` (GET + PUT)
+- [ ] Migrate remaining ~65 routes incrementally (future sessions)
 
 ### 3.6 Verification
 
-- [ ] All pages load data from Supabase-hosted DB
-- [ ] Upload an image -- verify it's processed, thumbnail generated, publicly accessible
-- [ ] Check logs in production mode -- verify structured JSON, no raw error objects
-- [ ] `npm run build` passes
-- [ ] Run `scripts/backup-database.js` -- verify backup works against new DB
+- [ ] All pages load data from Supabase-hosted DB (blocked on 3.1 credentials)
+- [x] `npm run build` passes
+- [x] `npx prisma validate` passes
+- [x] `grep console src/lib/` shows only logger.ts internals
+- [ ] Upload an image -- verify it's processed, thumbnail generated (manual test)
+- [ ] Check logs in production mode -- verify structured JSON (manual test)
 
 ---
 

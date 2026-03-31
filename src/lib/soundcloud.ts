@@ -1,5 +1,6 @@
 import { prisma } from './prisma';
 import { mockSoundCloudUsers, mockSoundCloudTracks, searchMockUsers, getMockUserTracks } from './mockSoundcloudData';
+import { logger } from '@/lib/logger';
 
 // Types for SoundCloud data
 export interface SoundCloudUserData {
@@ -86,7 +87,7 @@ class SoundCloudService {
   constructor() {
     this.clientId = process.env.SOUNDCLOUD_CLIENT_ID || '';
     if (!this.clientId) {
-      console.warn('⚠️ SOUNDCLOUD_CLIENT_ID not found in environment variables - using mock data');
+      logger.warn('SOUNDCLOUD_CLIENT_ID not found in environment variables - using mock data');
     }
   }
 
@@ -108,8 +109,8 @@ class SoundCloudService {
         return; // Token is still valid
       }
 
-      console.log('🎧 Authenticating with SoundCloud API...');
-      
+      logger.info('Authenticating with SoundCloud API');
+
       const response = await fetch(`${this.apiBase}/oauth2/token`, {
         method: 'POST',
         headers: {
@@ -132,9 +133,9 @@ class SoundCloudService {
       // Set expiration time (subtract 5 minutes for safety)
       this.tokenExpirationTime = Date.now() + (data.expires_in - 300) * 1000;
       
-      console.log('✅ SoundCloud authentication successful');
+      logger.info('SoundCloud authentication successful');
     } catch (error) {
-      console.error('❌ SoundCloud authentication failed:', error);
+      logger.error('SoundCloud authentication failed', error);
       throw new Error('Failed to authenticate with SoundCloud API');
     }
   }
@@ -171,7 +172,7 @@ class SoundCloudService {
    */
   async searchUsers(query: string, limit: number = 10): Promise<SoundCloudUserData[]> {
     if (this.useMockData) {
-      console.log('🎧 Using mock SoundCloud data for search:', query);
+      logger.info('Using mock SoundCloud data for search', { query });
       const results = searchMockUsers(query).slice(0, limit);
       return results as SoundCloudUserData[];
     }
@@ -180,7 +181,7 @@ class SoundCloudService {
       const results = await this.apiRequest('/users', { q: query, limit });
       return Array.isArray(results) ? results : [results];
     } catch (error) {
-      console.error('Error searching SoundCloud users:', error);
+      logger.error('Error searching SoundCloud users', error);
       throw new Error('Failed to search for users on SoundCloud');
     }
   }
@@ -190,7 +191,7 @@ class SoundCloudService {
    */
   async getUser(userId: number): Promise<SoundCloudUserData> {
     if (this.useMockData) {
-      console.log('🎧 Using mock SoundCloud data for user:', userId);
+      logger.info('Using mock SoundCloud data for user', { userId });
       const user = mockSoundCloudUsers.find(u => u.id === userId);
       if (!user) {
         throw new Error('Mock user not found');
@@ -201,7 +202,7 @@ class SoundCloudService {
     try {
       return await this.apiRequest(`/users/${userId}`);
     } catch (error) {
-      console.error('Error getting SoundCloud user:', error);
+      logger.error('Error getting SoundCloud user', error);
       throw new Error('Failed to get user from SoundCloud');
     }
   }
@@ -211,7 +212,7 @@ class SoundCloudService {
    */
   async getUserTracks(userId: number, limit: number = 50): Promise<SoundCloudTrackData[]> {
     if (this.useMockData) {
-      console.log('🎧 Using mock SoundCloud data for user tracks:', userId);
+      logger.info('Using mock SoundCloud data for user tracks', { userId });
       const tracks = getMockUserTracks(userId).slice(0, limit);
       return tracks as SoundCloudTrackData[];
     }
@@ -220,7 +221,7 @@ class SoundCloudService {
       const results = await this.apiRequest(`/users/${userId}/tracks`, { limit });
       return Array.isArray(results) ? results : [results];
     } catch (error) {
-      console.error('Error getting user tracks:', error);
+      logger.error('Error getting SoundCloud user tracks', error);
       throw new Error('Failed to get user tracks from SoundCloud');
     }
   }
@@ -232,7 +233,7 @@ class SoundCloudService {
     try {
       return await this.apiRequest(`/tracks/${trackId}`);
     } catch (error) {
-      console.error('Error getting SoundCloud track:', error);
+      logger.error('Error getting SoundCloud track', error);
       throw new Error('Failed to get track from SoundCloud');
     }
   }
@@ -245,7 +246,7 @@ class SoundCloudService {
     try {
       return await this.apiRequest('/resolve', { url });
     } catch (error) {
-      console.error('Error resolving SoundCloud URL:', error);
+      logger.error('Error resolving SoundCloud URL', error);
       throw new Error('Failed to resolve SoundCloud URL');
     }
   }
@@ -268,7 +269,7 @@ class SoundCloudService {
 
       return null;
     } catch (error) {
-      console.error('Error getting stream URL:', error);
+      logger.error('Error getting SoundCloud stream URL', error);
       return null;
     }
   }
@@ -278,7 +279,7 @@ class SoundCloudService {
    */
   async syncUserData(artistId: string, soundcloudUserId: number): Promise<void> {
     try {
-      console.log(`🔄 Syncing SoundCloud data for artist ${artistId}...`);
+      logger.info('Syncing SoundCloud data', { artistId });
 
       // Get user data from SoundCloud
       const soundcloudUser = await this.getUser(soundcloudUserId);
@@ -303,9 +304,9 @@ class SoundCloudService {
         await this.syncTrackData(artistId, track);
       }
 
-      console.log(`✅ SoundCloud sync completed for artist ${artistId}`);
+      logger.info('SoundCloud sync completed', { artistId });
     } catch (error) {
-      console.error('Error syncing SoundCloud data:', error);
+      logger.error('Error syncing SoundCloud data', error);
       throw error;
     }
   }
@@ -361,7 +362,7 @@ class SoundCloudService {
         },
       });
     } catch (error) {
-      console.error('Error syncing SoundCloud track data:', error);
+      logger.error('Error syncing SoundCloud track data', error);
       // Don't throw, continue with other tracks
     }
   }
@@ -387,7 +388,7 @@ class SoundCloudService {
 
       return cached.data;
     } catch (error) {
-      console.error('Error getting from SoundCloud cache:', error);
+      logger.error('Error getting from SoundCloud cache', error);
       return null;
     }
   }
@@ -409,7 +410,7 @@ class SoundCloudService {
         },
       });
     } catch (error) {
-      console.error('Error setting SoundCloud cache:', error);
+      logger.error('Error setting SoundCloud cache', error);
       // Don't throw, caching is not critical
     }
   }

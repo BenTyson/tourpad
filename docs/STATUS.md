@@ -41,7 +41,29 @@
 - Added md:grid-cols-2 to 12 grid layouts missing the tablet breakpoint
 - Deferred: touch target audit, typography scaling
 
-### Next: Phase 2.5 (design consistency) or Phase 3 (infrastructure)
+### Phase 3: Infrastructure & Scalability -- IN PROGRESS
+**3.1 Supabase Migration -- PREP DONE** (schema + env ready, blocked on user credentials)
+- Prisma schema updated with `directUrl` for PgBouncer connection pooling
+- `.env.example` updated with Supabase connection string templates
+
+**3.2 Image Processing -- DONE**
+- Installed `sharp` for server-side image processing
+- Implemented `processImage()`: max 1920px, EXIF strip, 80% quality, original format
+- Implemented `generateThumbnail()`: 400px width, 70% quality
+- Upload route now processes images and generates thumbnails on upload
+
+**3.3 File Serving -- NO CHANGES** (current rewrite + API route + caching is functional)
+
+**3.4 Structured Logging -- DONE**
+- Migrated 68 remaining console calls across 9 lib files to structured logger
+- Only logger.ts internals retain raw console calls
+
+**3.5 Unified API Response Format -- STARTED**
+- Created `src/lib/api-response.ts` with `apiSuccess`/`apiError`/`ApiErrors` helpers
+- Migrated 5 high-traffic routes (bookings, upload, messages, reviews, profile)
+- ~65 routes remaining for incremental migration
+
+### Next: Phase 3.1 completion (Supabase credentials) then Phase 4 (Feature Completion)
 
 ---
 

@@ -1,8 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { sanitizeHtml } from '@/lib/validation';
 import { logger } from '@/lib/logger';
+import { apiSuccess, ApiErrors } from '@/lib/api-response';
 
 // GET /api/reviews - Get reviews for concerts
 export async function GET(request: NextRequest) {
@@ -10,7 +11,7 @@ export async function GET(request: NextRequest) {
     const session = await auth();
     
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return ApiErrors.unauthorized();
     }
 
     const { searchParams } = new URL(request.url);
@@ -174,8 +175,7 @@ export async function GET(request: NextRequest) {
       where: whereClause
     });
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       reviews: transformedReviews,
       pagination: {
         total: totalCount,
@@ -186,10 +186,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     logger.error('Failed to fetch reviews', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch reviews' },
-      { status: 500 }
-    );
+    return ApiErrors.internal('Failed to fetch reviews');
   }
 }
 
@@ -199,7 +196,7 @@ export async function POST(request: NextRequest) {
     const session = await auth();
     
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return ApiErrors.unauthorized();
     }
 
     // Verify user is a fan
@@ -208,7 +205,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!fan) {
-      return NextResponse.json({ error: 'Only fans can create reviews' }, { status: 403 });
+      return ApiErrors.forbidden('Only fans can create reviews');
     }
 
     const body = await request.json();
@@ -226,16 +223,12 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!concertId || !artistRating || !hostRating || !overallRating || !overallFeedback) {
-      return NextResponse.json({ 
-        error: 'Missing required fields: concertId, artistRating, hostRating, overallRating, overallFeedback' 
-      }, { status: 400 });
+      return ApiErrors.validation('Missing required fields: concertId, artistRating, hostRating, overallRating, overallFeedback');
     }
 
     // Validate ratings are 1-5
     if (artistRating < 1 || artistRating > 5 || hostRating < 1 || hostRating > 5 || overallRating < 1 || overallRating > 5) {
-      return NextResponse.json({ 
-        error: 'Ratings must be between 1 and 5' 
-      }, { status: 400 });
+      return ApiErrors.validation('Ratings must be between 1 and 5');
     }
 
     // Verify concert exists and get artist/host IDs
@@ -252,7 +245,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!concert) {
-      return NextResponse.json({ error: 'Concert not found' }, { status: 404 });
+      return ApiErrors.notFound('Concert not found');
     }
 
     // Verify fan attended the concert (has approved RSVP)
@@ -266,9 +259,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!rsvp || rsvp.status !== 'APPROVED') {
-      return NextResponse.json({ 
-        error: 'You can only review concerts you attended' 
-      }, { status: 403 });
+      return ApiErrors.forbidden('You can only review concerts you attended');
     }
 
     // Check if review already exists
@@ -282,9 +273,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (existingReview) {
-      return NextResponse.json({ 
-        error: 'You have already reviewed this concert' 
-      }, { status: 409 });
+      return ApiErrors.conflict('You have already reviewed this concert');
     }
 
     // Create the review
@@ -306,8 +295,7 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       review: {
         id: review.id,
         concertId: review.concertId,
@@ -325,12 +313,9 @@ export async function POST(request: NextRequest) {
         wouldRecommend: review.wouldRecommend,
         createdAt: review.createdAt
       }
-    }, { status: 201 });
+    }, 201);
   } catch (error) {
     logger.error('Failed to create review', error);
-    return NextResponse.json(
-      { error: 'Failed to create review' },
-      { status: 500 }
-    );
+    return ApiErrors.internal('Failed to create review');
   }
 }

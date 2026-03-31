@@ -1,15 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { sanitizeHtml } from '@/lib/validation';
 import { logger } from '@/lib/logger';
+import { apiSuccess, ApiErrors } from '@/lib/api-response';
 
 export async function GET() {
   try {
     const session = await auth();
     
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return ApiErrors.unauthorized();
     }
 
     const userId = session.user.id;
@@ -35,7 +36,7 @@ export async function GET() {
     });
 
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return ApiErrors.notFound('User not found');
     }
 
     // Build response based on user type
@@ -200,10 +201,10 @@ export async function GET() {
       };
     }
 
-    return NextResponse.json(profileData);
+    return apiSuccess(profileData);
   } catch (error) {
     logger.error('Error fetching profile', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return ApiErrors.internal();
   }
 }
 
@@ -245,7 +246,7 @@ export async function PUT(request: NextRequest) {
     const session = await auth();
     
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return ApiErrors.unauthorized();
     }
 
     const data = await request.json();
@@ -497,24 +498,20 @@ export async function PUT(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({ success: true });
+    return apiSuccess({});
   } catch (error) {
     logger.error('Error updating profile', error);
 
     if (error instanceof Error) {
       if (error.message.includes('value too long')) {
-        return NextResponse.json({
-          error: 'Image file is too large. Please use a smaller image.'
-        }, { status: 413 });
+        return ApiErrors.validation('Image file is too large. Please use a smaller image.');
       }
 
       if (error.message.includes('prisma') || error.message.includes('database')) {
-        return NextResponse.json({
-          error: 'Database error. Please try again.'
-        }, { status: 500 });
+        return ApiErrors.internal('Database error. Please try again.');
       }
     }
 
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return ApiErrors.internal();
   }
 }

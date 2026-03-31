@@ -1,5 +1,6 @@
 import SpotifyWebApi from 'spotify-web-api-node';
 import { prisma } from './prisma';
+import { logger } from '@/lib/logger';
 
 // Types for Spotify data
 export interface SpotifyArtistData {
@@ -83,16 +84,16 @@ class SpotifyService {
         return; // Token is still valid
       }
 
-      console.log('🎵 Authenticating with Spotify API...');
+      logger.info('Authenticating with Spotify API');
       const data = await this.api.clientCredentialsGrant();
-      
+
       this.api.setAccessToken(data.body.access_token);
       // Set expiration time (subtract 5 minutes for safety)
       this.tokenExpirationTime = Date.now() + (data.body.expires_in - 300) * 1000;
-      
-      console.log('✅ Spotify authentication successful');
+
+      logger.info('Spotify authentication successful');
     } catch (error) {
-      console.error('❌ Spotify authentication failed:', error);
+      logger.error('Spotify authentication failed', error);
       throw new Error('Failed to authenticate with Spotify API');
     }
   }
@@ -107,7 +108,7 @@ class SpotifyService {
       const searchResults = await this.api.searchArtists(artistName, { limit: 10 });
       return searchResults.body.artists?.items || [];
     } catch (error) {
-      console.error('Error searching for artist:', error);
+      logger.error('Error searching for artist', error);
       throw new Error('Failed to search for artist on Spotify');
     }
   }
@@ -122,7 +123,7 @@ class SpotifyService {
       const artist = await this.api.getArtist(spotifyArtistId);
       return artist.body;
     } catch (error) {
-      console.error('Error getting artist:', error);
+      logger.error('Error getting Spotify artist', error);
       throw new Error('Failed to get artist from Spotify');
     }
   }
@@ -141,7 +142,7 @@ class SpotifyService {
       });
       return (albums as any).body.items;
     } catch (error) {
-      console.error('Error getting artist albums:', error);
+      logger.error('Error getting artist albums', error);
       throw new Error('Failed to get artist albums from Spotify');
     }
   }
@@ -156,7 +157,7 @@ class SpotifyService {
       const topTracks = await this.api.getArtistTopTracks(spotifyArtistId, 'US');
       return (topTracks as any).body.tracks;
     } catch (error) {
-      console.error('Error getting artist top tracks:', error);
+      logger.error('Error getting artist top tracks', error);
       throw new Error('Failed to get artist top tracks from Spotify');
     }
   }
@@ -171,7 +172,7 @@ class SpotifyService {
       const album = await this.api.getAlbum(spotifyAlbumId);
       return (album as any).body;
     } catch (error) {
-      console.error('Error getting album:', error);
+      logger.error('Error getting Spotify album', error);
       throw new Error('Failed to get album from Spotify');
     }
   }
@@ -181,7 +182,7 @@ class SpotifyService {
    */
   async syncArtistData(artistId: string, spotifyArtistId: string): Promise<void> {
     try {
-      console.log(`🔄 Syncing Spotify data for artist ${artistId}...`);
+      logger.info('Syncing Spotify data', { artistId });
 
       // Get artist data from Spotify
       const spotifyArtist = await this.getArtist(spotifyArtistId);
@@ -226,7 +227,7 @@ class SpotifyService {
               const fullAlbumData = await this.getAlbum(track.album.id);
               await this.syncAlbumData(artistId, fullAlbumData);
             } catch (error) {
-              console.warn(`Could not fetch full album data for ${track.album.id}, using track info`);
+              logger.warn(`Could not fetch full album data, using track info`, { albumId: track.album.id });
               // Fallback to track info if full album fetch fails
               const albumData: SpotifyAlbumData = {
                 id: track.album.id,
@@ -245,9 +246,9 @@ class SpotifyService {
         await this.syncTrackData(artistId, track, albumSpotifyId || undefined);
       }
 
-      console.log(`✅ Spotify sync completed for artist ${artistId}`);
+      logger.info('Spotify sync completed', { artistId });
     } catch (error) {
-      console.error('Error syncing artist data:', error);
+      logger.error('Error syncing Spotify artist data', error);
       throw error;
     }
   }
@@ -261,11 +262,7 @@ class SpotifyService {
       const imageUrl = albumData.images?.[0]?.url || null;
       
       // Debug logging for image URLs
-      console.log(`🖼️  Syncing album "${albumData.name}":`, {
-        hasImages: albumData.images?.length > 0,
-        imageCount: albumData.images?.length || 0,
-        imageUrl: imageUrl ? imageUrl.substring(0, 50) + '...' : 'NULL'
-      });
+      logger.info('Syncing Spotify album', { album: albumData.name, imageCount: albumData.images?.length || 0 });
 
       await prisma.spotifyAlbum.upsert({
         where: { spotifyId: albumData.id },
@@ -296,7 +293,7 @@ class SpotifyService {
         }
       }
     } catch (error) {
-      console.error('Error syncing album data:', error);
+      logger.error('Error syncing Spotify album data', error);
       // Don't throw, continue with other albums
     }
   }
@@ -346,7 +343,7 @@ class SpotifyService {
         },
       });
     } catch (error) {
-      console.error('Error syncing track data:', error);
+      logger.error('Error syncing Spotify track data', error);
       // Don't throw, continue with other tracks
     }
   }
@@ -372,7 +369,7 @@ class SpotifyService {
 
       return cached.data;
     } catch (error) {
-      console.error('Error getting from cache:', error);
+      logger.error('Error getting from Spotify cache', error);
       return null;
     }
   }
@@ -394,7 +391,7 @@ class SpotifyService {
         },
       });
     } catch (error) {
-      console.error('Error setting cache:', error);
+      logger.error('Error setting Spotify cache', error);
       // Don't throw, caching is not critical
     }
   }

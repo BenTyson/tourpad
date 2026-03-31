@@ -1,16 +1,17 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { rateLimit } from '@/lib/api-helpers';
 import { sanitizeHtml } from '@/lib/validation';
 import { logger } from '@/lib/logger';
+import { apiSuccess, ApiErrors } from '@/lib/api-response';
 
 // GET /api/messages - Get messages for a conversation
 export async function GET(request: NextRequest) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return ApiErrors.unauthorized();
     }
 
     const searchParams = request.nextUrl.searchParams;
@@ -19,7 +20,7 @@ export async function GET(request: NextRequest) {
     const pageSize = parseInt(searchParams.get('pageSize') || '50');
 
     if (!conversationId) {
-      return NextResponse.json({ error: 'conversationId is required' }, { status: 400 });
+      return ApiErrors.validation('conversationId is required');
     }
 
     // Verify user has access to this conversation
@@ -28,13 +29,13 @@ export async function GET(request: NextRequest) {
     });
 
     if (!conversation) {
-      return NextResponse.json({ error: 'Conversation not found' }, { status: 404 });
+      return ApiErrors.notFound('Conversation not found');
     }
 
-    const hasAccess = conversation.participantIds.includes(session.user.id) || 
+    const hasAccess = conversation.participantIds.includes(session.user.id) ||
                      session.user.type?.toLowerCase() === 'admin';
     if (!hasAccess) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+      return ApiErrors.forbidden();
     }
 
     // Get messages with cursor-based pagination
@@ -116,7 +117,7 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({
+    return apiSuccess({
       messages: messagesToReturn.reverse(), // Return in chronological order
       hasMore,
       nextCursor: hasMore ? messages[pageSize].createdAt.toISOString() : null
@@ -124,10 +125,7 @@ export async function GET(request: NextRequest) {
 
   } catch (error) {
     logger.error('Failed to fetch messages', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return ApiErrors.internal();
   }
 }
 
@@ -136,24 +134,18 @@ export async function POST(request: NextRequest) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return ApiErrors.unauthorized();
     }
 
     if (!rateLimit(`messages:${session.user.id}`, 30, 60000)) {
-      return NextResponse.json(
-        { error: 'Too many messages. Please slow down.' },
-        { status: 429 }
-      );
+      return ApiErrors.rateLimited('Too many messages. Please slow down.');
     }
 
     const body = await request.json();
     const { conversationId, content, messageType = 'TEXT' } = body;
 
     if (!conversationId || !content) {
-      return NextResponse.json(
-        { error: 'conversationId and content are required' },
-        { status: 400 }
-      );
+      return ApiErrors.validation('conversationId and content are required');
     }
 
     // Verify user has access to this conversation
@@ -165,7 +157,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!conversation || !conversation.participantIds.includes(session.user.id)) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+      return ApiErrors.forbidden();
     }
 
     // Create the message
@@ -241,13 +233,10 @@ export async function POST(request: NextRequest) {
       )
     );
 
-    return NextResponse.json({ message });
+    return apiSuccess({ message });
 
   } catch (error) {
     logger.error('Failed to send message', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return ApiErrors.internal();
   }
 }

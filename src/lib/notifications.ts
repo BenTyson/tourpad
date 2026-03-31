@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { NotificationType } from '@prisma/client';
+import { logger } from '@/lib/logger';
 
 interface CreateNotificationParams {
   userId: string;
@@ -29,7 +30,7 @@ export async function createNotification(params: CreateNotificationParams) {
     
     return notification;
   } catch (error) {
-    console.error('Failed to create notification:', error);
+    logger.error('Failed to create notification', error);
     throw error;
   }
 }

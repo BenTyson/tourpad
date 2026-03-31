@@ -1,4 +1,5 @@
 import { prisma } from './prisma';
+import { logger } from '@/lib/logger';
 
 export interface UserStats {
   responseRate: number;
@@ -165,7 +166,7 @@ export async function getUserStats(userId: string, userType: 'artist' | 'host' |
     return stats;
 
   } catch (error) {
-    console.error('Error fetching user stats:', error);
+    logger.error('Error fetching user stats', error);
     // Return default stats on error
     return {
       responseRate: 95,

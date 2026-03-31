@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 // Mock coordination service
 export interface CoordinationData {
   id: string;
@@ -18,7 +20,7 @@ export async function getCoordinationData(userId: string): Promise<CoordinationD
 
 export async function updateCoordinationStatus(userId: string, status: string): Promise<void> {
   // Mock implementation
-  console.log(`Updating coordination status for ${userId} to ${status}`);
+  logger.info('Updating coordination status', { userId, status });
 }
 
 export async function sendCoordinationNotification(
@@ -30,12 +32,5 @@ export async function sendCoordinationNotification(
   metadata: any
 ): Promise<void> {
   // Mock implementation
-  console.log('Sending coordination notification:', {
-    userId,
-    recipients,
-    message,
-    type,
-    bookingIds,
-    metadata
-  });
+  logger.info('Sending coordination notification', { userId, recipients, type, bookingIds });
 }
