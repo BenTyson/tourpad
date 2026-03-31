@@ -4,18 +4,19 @@ import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { 
-  X, 
-  Calendar, 
-  Clock, 
-  MapPin, 
-  User, 
-  Users, 
+import {
+  X,
+  Calendar,
+  Clock,
+  MapPin,
+  User,
+  Users,
   DollarSign,
   Music,
   Home,
   MessageSquare
 } from 'lucide-react';
+import { useModalAccessibility } from '@/hooks/useModalAccessibility';
 
 interface Concert {
   id: string;
@@ -66,6 +67,7 @@ export default function ConcertBookingModal({
   onBookingSuccess 
 }: ConcertBookingModalProps) {
   const { data: session } = useSession();
+  const modalRef = useModalAccessibility(onClose, isOpen);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -168,7 +170,7 @@ export default function ConcertBookingModal({
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden">
+      <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="concert-booking-title" className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden">
         {/* Header Image */}
         <div className="relative h-48 bg-gradient-to-br from-neutral-100 to-neutral-200 flex-shrink-0">
           {concert.artist.pressPhoto ? (
@@ -185,6 +187,7 @@ export default function ConcertBookingModal({
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
           <button
             onClick={onClose}
+            aria-label="Close"
             className="absolute top-4 right-4 p-2 bg-white/90 hover:bg-white rounded-full transition-colors"
           >
             <X className="w-5 h-5 text-neutral-600" />
@@ -196,7 +199,7 @@ export default function ConcertBookingModal({
           <div className="p-6">
             {/* Title and Status */}
             <div className="mb-6">
-              <h2 className="text-2xl font-bold text-neutral-900 mb-2">
+              <h2 id="concert-booking-title" className="text-2xl font-bold text-neutral-900 mb-2">
                 {concert.title || `${concert.artist.name} Live`}
               </h2>
               <div className="flex items-center gap-3 mb-3">

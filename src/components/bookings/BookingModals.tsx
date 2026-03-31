@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
+import { useModalAccessibility } from '@/hooks/useModalAccessibility';
 
 interface BookingModalsProps {
   showDeclineModal: boolean;
@@ -23,6 +24,8 @@ export function BookingModals({
 }: BookingModalsProps) {
   const [declineReason, setDeclineReason] = useState('');
   const [cancellationReason, setCancellationReason] = useState('');
+  const declineRef = useModalAccessibility(onCloseDeclineModal, showDeclineModal);
+  const cancelRef = useModalAccessibility(onCloseCancellationModal, showCancellationModal);
 
   const handleDecline = () => {
     if (!declineReason.trim()) {
@@ -47,9 +50,9 @@ export function BookingModals({
       {/* Decline Modal */}
       {showDeclineModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full">
+          <div ref={declineRef} role="dialog" aria-modal="true" aria-labelledby="decline-modal-title" className="bg-white rounded-xl shadow-xl max-w-md w-full">
             <div className="px-6 py-4 border-b border-neutral-200">
-              <h3 className="text-lg font-semibold text-neutral-900">Decline Booking Request</h3>
+              <h3 id="decline-modal-title" className="text-lg font-semibold text-neutral-900">Decline Booking Request</h3>
             </div>
             <div className="p-6">
               <div className="space-y-4">
@@ -59,6 +62,7 @@ export function BookingModals({
                 <textarea
                   value={declineReason}
                   onChange={(e) => setDeclineReason(e.target.value)}
+                  aria-label="Reason for declining"
                   className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm text-neutral-900 placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   rows={4}
                   placeholder="e.g., Date conflict, venue capacity, etc."
@@ -87,9 +91,9 @@ export function BookingModals({
       {/* Cancellation Request Modal */}
       {showCancellationModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full">
+          <div ref={cancelRef} role="dialog" aria-modal="true" aria-labelledby="cancel-modal-title" className="bg-white rounded-xl shadow-xl max-w-md w-full">
             <div className="px-6 py-4 border-b border-neutral-200">
-              <h3 className="text-lg font-semibold text-[#344c3d]">Request Cancellation</h3>
+              <h3 id="cancel-modal-title" className="text-lg font-semibold text-[#344c3d]">Request Cancellation</h3>
             </div>
             <div className="p-6">
               <div className="space-y-4">
@@ -99,6 +103,7 @@ export function BookingModals({
                 <textarea
                   value={cancellationReason}
                   onChange={(e) => setCancellationReason(e.target.value)}
+                  aria-label="Reason for cancellation"
                   className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm text-neutral-900 placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   rows={4}
                   placeholder="e.g., Schedule conflict, venue issue, emergency, etc."

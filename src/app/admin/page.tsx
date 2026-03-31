@@ -286,7 +286,7 @@ export default function AdminPage() {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Admin Sections Grid */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">

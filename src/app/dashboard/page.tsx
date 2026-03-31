@@ -457,7 +457,7 @@ export default function DashboardPage() {
           )}
 
           {/* Sidebar with Messages - Available for all roles */}
-          <div className="grid lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3">
               {/* Main content is handled by role-specific components above */}
             </div>

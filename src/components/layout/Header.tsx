@@ -156,14 +156,17 @@ export function Header() {
                 <div className="relative" ref={userMenuRef}>
                   <button
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
-                    className="flex items-center space-x-1 px-3 py-2 text-sm text-gray-700 hover:text-gray-900 focus:outline-none"
+                    aria-expanded={userMenuOpen}
+                    aria-haspopup="menu"
+                    aria-label="User menu"
+                    className="flex items-center space-x-1 px-3 py-2 text-sm text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-md"
                   >
                     <UserCircle className="h-5 w-5" />
                     <ChevronDown className="h-4 w-4" />
                   </button>
                   
                   {userMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50">
+                    <div role="menu" aria-label="User menu" className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50">
                       <div className="py-1">
                         <div className="px-4 py-2 border-b border-gray-100">
                           <div className="text-sm font-medium text-gray-900">{session.user?.name}</div>
@@ -171,16 +174,18 @@ export function Header() {
                           <div className="text-xs text-blue-600 mt-1 capitalize">{session.user?.type}</div>
                         </div>
                         {(session.user?.status === 'approved' || session.user?.status === 'active') ? (
-                          <Link 
+                          <Link
                             href="/dashboard"
+                            role="menuitem"
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                             onClick={() => setUserMenuOpen(false)}
                           >
                             Dashboard
                           </Link>
                         ) : (
-                          <Link 
+                          <Link
                             href="/account/status"
+                            role="menuitem"
                             className="block px-4 py-2 text-sm text-primary-600 hover:bg-primary-50 font-medium"
                             onClick={() => setUserMenuOpen(false)}
                           >
@@ -188,8 +193,9 @@ export function Header() {
                           </Link>
                         )}
                         {session.user?.type === 'admin' && (
-                          <Link 
+                          <Link
                             href="/admin"
+                            role="menuitem"
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                             onClick={() => setUserMenuOpen(false)}
                           >
@@ -197,6 +203,7 @@ export function Header() {
                           </Link>
                         )}
                         <button
+                          role="menuitem"
                           onClick={() => {
                             setUserMenuOpen(false);
                             signOut();
@@ -230,7 +237,9 @@ export function Header() {
           <div className="md:hidden">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-gray-700"
+              aria-expanded={mobileMenuOpen}
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+              className="text-gray-700 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               {mobileMenuOpen ? (
                 <X className="h-6 w-6" />
@@ -243,7 +252,7 @@ export function Header() {
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-200 pt-4 pb-4">
+          <div role="navigation" aria-label="Mobile menu" className="md:hidden border-t border-gray-200 pt-4 pb-4">
             {session && (
               <div className="px-3 py-2 mb-3 bg-gray-50 rounded-lg mx-3">
                 <div className="text-sm font-medium text-gray-900">{session.user?.name}</div>

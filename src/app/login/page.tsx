@@ -24,6 +24,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
+  const isDev = process.env.NODE_ENV === 'development';
   const [demoUsers] = useState([
     { email: 'admin@tourpad.com', password: 'password123', type: 'Admin User', description: 'Full platform access' }
   ]);
@@ -62,8 +63,7 @@ export default function LoginPage() {
           router.push('/dashboard');
         }
       }
-    } catch (error) {
-      console.error('Login error:', error);
+    } catch {
       setErrors(['An error occurred during login. Please try again.']);
     } finally {
       setIsLoading(false);
@@ -71,7 +71,6 @@ export default function LoginPage() {
   };
 
   const handleDemoLogin = async (email: string, password: string) => {
-    console.log('Demo login clicked:', email, password);
     setFormData({ email, password });
     setErrors([]); // Clear any previous errors
     
@@ -98,8 +97,7 @@ export default function LoginPage() {
             router.push('/dashboard');
           }
         }
-      } catch (error) {
-        console.error('Demo login error:', error);
+      } catch {
         setErrors(['An error occurred during login. Please try again.']);
       } finally {
         setIsLoading(false);
@@ -116,30 +114,32 @@ export default function LoginPage() {
           <p className="text-gray-600">Sign in to your TourPad account</p>
         </div>
 
-        {/* Demo Users */}
-        <Card className="border-secondary-200">
-          <CardHeader>
-            <h3 className="text-sm font-medium text-secondary-800">Demo Accounts (Click to Auto-Fill)</h3>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {demoUsers.map((user, index) => (
-              <button
-                key={index}
-                onClick={() => handleDemoLogin(user.email, user.password)}
-                className="w-full text-left p-3 bg-secondary-50 hover:bg-secondary-100 rounded-lg transition-colors border border-secondary-200"
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-medium text-secondary-900">{user.type}</div>
-                    <div className="text-xs text-secondary-600">{user.email}</div>
-                    <div className="text-xs text-secondary-500">{user.description}</div>
+        {/* Demo Users - development only */}
+        {isDev && (
+          <Card className="border-secondary-200">
+            <CardHeader>
+              <h3 className="text-sm font-medium text-secondary-800">Demo Accounts (Click to Auto-Fill)</h3>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              {demoUsers.map((user, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleDemoLogin(user.email, user.password)}
+                  className="w-full text-left p-3 bg-secondary-50 hover:bg-secondary-100 rounded-lg transition-colors border border-secondary-200"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium text-secondary-900">{user.type}</div>
+                      <div className="text-xs text-secondary-600">{user.email}</div>
+                      <div className="text-xs text-secondary-500">{user.description}</div>
+                    </div>
+                    <UserIcon className="w-4 h-4 text-secondary-400" />
                   </div>
-                  <UserIcon className="w-4 h-4 text-secondary-400" />
-                </div>
-              </button>
-            ))}
-          </CardContent>
-        </Card>
+                </button>
+              ))}
+            </CardContent>
+          </Card>
+        )}
 
         {/* Login Form */}
         <Card>

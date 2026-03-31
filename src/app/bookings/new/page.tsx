@@ -276,7 +276,7 @@ function NewBookingForm() {
           isHostBookingArtist={isHostBookingArtist}
         />
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <BookingForm
             formData={formData}
             errors={errors}

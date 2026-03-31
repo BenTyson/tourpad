@@ -11,7 +11,7 @@ import { CalendarMonthView } from '@/components/calendar/CalendarMonthView';
 import { CalendarListView } from '@/components/calendar/CalendarListView';
 import { EventDetailModal } from '@/components/calendar/EventDetailModal';
 
-type ViewMode = 'month' | 'week' | 'list';
+type ViewMode = 'month' | 'list';
 
 export default function CalendarPage() {
   const { data: session, status } = useSession();
@@ -53,8 +53,7 @@ export default function CalendarPage() {
         
         setEvents(eventsWithDates);
         setFilteredEvents(eventsWithDates);
-      } catch (err) {
-        console.error('Error fetching calendar events:', err);
+      } catch {
         setError('Failed to load calendar events');
         setEvents([]);
         setFilteredEvents([]);

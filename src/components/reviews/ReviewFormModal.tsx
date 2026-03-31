@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { 
+import {
   Star,
   X,
   Save,
@@ -14,6 +14,7 @@ import {
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
+import { useModalAccessibility } from '@/hooks/useModalAccessibility';
 
 interface ReviewFormModalProps {
   booking: {
@@ -31,6 +32,7 @@ interface ReviewFormModalProps {
 }
 
 export function ReviewFormModal({ booking, reviewerType, onClose }: ReviewFormModalProps) {
+  const modalRef = useModalAccessibility(onClose);
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [feedback, setFeedback] = useState('');
@@ -93,7 +95,7 @@ export function ReviewFormModal({ booking, reviewerType, onClose }: ReviewFormMo
 
   if (showSuccess) {
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" role="dialog" aria-modal="true" aria-label="Review submitted">
         <Card className="w-full max-w-md">
           <CardContent className="p-8 text-center">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -113,11 +115,12 @@ export function ReviewFormModal({ booking, reviewerType, onClose }: ReviewFormMo
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="review-form-title">
       <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b p-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">
+              <h2 id="review-form-title" className="text-xl font-semibold text-gray-900">
                 Leave a Review
               </h2>
               <p className="text-sm text-gray-600 mt-1">
@@ -128,6 +131,7 @@ export function ReviewFormModal({ booking, reviewerType, onClose }: ReviewFormMo
               variant="outline"
               size="sm"
               onClick={onClose}
+              aria-label="Close review form"
               className="h-8 w-8 p-0"
             >
               <X className="w-4 h-4" />
@@ -311,6 +315,7 @@ export function ReviewFormModal({ booking, reviewerType, onClose }: ReviewFormMo
           </form>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }

@@ -65,10 +65,11 @@ export function PhotoLightbox({ photos, initialIndex, isOpen, onClose }: PhotoLi
   const currentPhoto = photos[currentIndex];
 
   return (
-    <div className="fixed inset-0 z-50 bg-black bg-opacity-95 flex items-center justify-center">
+    <div role="dialog" aria-modal="true" aria-label={`Photo ${currentIndex + 1} of ${photos.length}`} className="fixed inset-0 z-50 bg-black bg-opacity-95 flex items-center justify-center">
       {/* Close Button */}
       <button
         onClick={onClose}
+        aria-label="Close lightbox"
         className="absolute top-4 right-4 z-10 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 transition-colors"
       >
         <XMarkIcon className="w-6 h-6" />
@@ -79,12 +80,14 @@ export function PhotoLightbox({ photos, initialIndex, isOpen, onClose }: PhotoLi
         <>
           <button
             onClick={goToPrevious}
+            aria-label="Previous photo"
             className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 text-white rounded-full p-3 transition-colors"
           >
             <ChevronLeftIcon className="w-6 h-6" />
           </button>
           <button
             onClick={goToNext}
+            aria-label="Next photo"
             className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 text-white rounded-full p-3 transition-colors"
           >
             <ChevronRightIcon className="w-6 h-6" />

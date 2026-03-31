@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Copy, Mail, Twitter, Facebook, Check } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { useModalAccessibility } from '@/hooks/useModalAccessibility';
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -13,6 +14,7 @@ interface ShareModalProps {
 
 export default function ShareModal({ isOpen, onClose, profileName, profileUrl, profileType }: ShareModalProps) {
   const [copied, setCopied] = useState(false);
+  const modalRef = useModalAccessibility(onClose, isOpen);
 
   if (!isOpen) return null;
 
@@ -63,8 +65,8 @@ export default function ShareModal({ isOpen, onClose, profileName, profileUrl, p
       />
       
       {/* Modal */}
-      <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl p-8 z-50 w-full max-w-md">
-        <h3 className="text-2xl font-bold text-neutral-900 mb-6">
+      <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="share-modal-title" className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl p-8 z-50 w-full max-w-md">
+        <h3 id="share-modal-title" className="text-2xl font-bold text-neutral-900 mb-6">
           Share this {profileType === 'artist' ? 'artist' : 'venue'}
         </h3>
         

@@ -427,7 +427,7 @@ export default function MapPage() {
           )}
         </div>
 
-        <div className="grid lg:grid-cols-4 gap-6 min-h-[600px]">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 min-h-[600px]">
           {/* Filters Sidebar */}
           {showFilters && (
             <div className="lg:col-span-1">

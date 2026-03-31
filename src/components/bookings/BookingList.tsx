@@ -200,7 +200,7 @@ export default function BookingList({
     <div className={`${className} space-y-6`}>
       {/* Controls */}
       <div className="flex items-center justify-between">
-        <p className="text-neutral-600">
+        <p className="text-neutral-600" aria-live="polite">
           {filteredBookings.length} of {bookings.length} bookings
         </p>
       </div>
@@ -212,6 +212,7 @@ export default function BookingList({
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--color-french-blue)] w-4 h-4" />
           <Input
             placeholder="Search bookings..."
+            aria-label="Search bookings"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10 border-neutral-300 focus:border-[var(--color-french-blue)] focus:ring-[var(--color-french-blue)]"
@@ -224,6 +225,7 @@ export default function BookingList({
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
+            aria-label="Filter by status"
             className="pl-10 pr-8 py-2 border border-neutral-300 rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-french-blue)] focus:border-transparent"
           >
             <option value="all">All Status ({statusCounts.all})</option>
@@ -241,6 +243,7 @@ export default function BookingList({
           <select
             value={sortField}
             onChange={(e) => setSortField(e.target.value as SortField)}
+            aria-label="Sort by"
             className="px-3 py-2 border border-neutral-300 rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-french-blue)] focus:border-transparent"
           >
             <option value="date">Show Date</option>
@@ -250,6 +253,7 @@ export default function BookingList({
           <Button
             variant="outline"
             size="sm"
+            aria-label={`Sort ${sortDirection === 'asc' ? 'descending' : 'ascending'}`}
             onClick={() => setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')}
           >
             {sortDirection === 'asc' ? 
@@ -309,7 +313,7 @@ export default function BookingList({
           </p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div role="list" aria-label="Bookings" className="space-y-4">
           {filteredBookings.map((booking) => (
             <BookingCard
               key={booking.id}

@@ -4,7 +4,7 @@
 **Focus: Cleanup & Launch Roadmap (see docs/cleanup.md)**
 
 ### Phase 0: Foundation Cleanup -- DONE (commit 8d31570)
-### Phase 1: Critical Security Fixes -- DONE (pending commit)
+### Phase 1: Critical Security Fixes -- DONE (commit 29b426a)
 - Rate limiting on auth, messages, uploads, bookings
 - Input sanitization (sanitizeHtml) on all user text fields
 - Password requirements: 12+ chars, uppercase, lowercase, number, special char
@@ -15,7 +15,33 @@
 - Structured logger (src/lib/logger.ts), 204 console calls removed
 - Deferred: email verification (needs external service), JWT trimming (needs consumer audit)
 
-### Next: Phase 2 -- UI/UX Hardening
+### Phase 2: UI/UX Hardening -- IN PROGRESS
+**2.1 Critical Bug Fixes -- DONE**
+- Calendar: cleaned up stale week ViewMode, removed console.error
+- Messages: /messages redirects to working /dashboard/messages
+- Footer: 10 placeholder pages created for dead links + ComingSoon component
+- Login: demo accounts gated behind NODE_ENV, console.logs removed, /forgot-password created
+
+**2.2 Accessibility -- DONE**
+- Skip-to-content link added to root layout
+- useModalAccessibility hook: focus trap + escape key + focus restore
+- 7 modals updated with role="dialog", aria-modal, aria-labelledby, focus trap
+- Header: aria-expanded, aria-haspopup, role="menu", role="menuitem", mobile menu aria
+- BookingList: role="list", aria-live, aria-labels on controls
+- Calendar grid: role="grid", role="columnheader", role="gridcell", keyboard-accessible events
+- Color contrast: global placeholder fix (neutral-700), Input error text changed to red-600
+- Deferred: inert attribute, keyboard arrow nav in dropdowns, form asterisks, image alt audit
+
+**2.3 Loading, Error & Empty States -- DONE**
+- Skeleton component system (Skeleton, SkeletonCard, SkeletonGrid, SkeletonTable)
+- loading.tsx files for: artists, hosts, calendar, dashboard, dashboard/bookings, admin
+- error.tsx files for: root, admin, dashboard, calendar (all with retry buttons)
+
+**2.4 Responsive Design -- DONE**
+- Added md:grid-cols-2 to 12 grid layouts missing the tablet breakpoint
+- Deferred: touch target audit, typography scaling
+
+### Next: Phase 2.5 (design consistency) or Phase 3 (infrastructure)
 
 ---
 

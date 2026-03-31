@@ -89,13 +89,13 @@ export function CalendarMonthView({ currentDate, filteredEvents, onEventSelect }
   return (
     <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
       {/* Calendar Grid */}
-      <div className="grid grid-cols-7 gap-0">
+      <div role="grid" aria-label="Calendar" className="grid grid-cols-7 gap-0">
         {/* Day Headers - Responsive */}
-        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
-          <div key={day} className="p-2 sm:p-4 text-center text-xs sm:text-sm font-medium text-neutral-600 bg-neutral-50 border-b border-neutral-200">
-            {/* Show abbreviated on mobile, full on desktop */}
+        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+          <div key={day} role="columnheader" className="p-2 sm:p-4 text-center text-xs sm:text-sm font-medium text-neutral-600 bg-neutral-50 border-b border-neutral-200">
             <span className="hidden sm:block">{day}</span>
-            <span className="sm:hidden">{day.charAt(0)}</span>
+            <span className="sm:hidden" aria-hidden="true">{day.charAt(0)}</span>
+            <span className="sr-only sm:hidden">{day}</span>
           </div>
         ))}
 
@@ -108,6 +108,8 @@ export function CalendarMonthView({ currentDate, filteredEvents, onEventSelect }
           return (
             <div
               key={index}
+              role="gridcell"
+              aria-label={`${day.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}${dayEvents.length > 0 ? `, ${dayEvents.length} event${dayEvents.length > 1 ? 's' : ''}` : ''}`}
               className={`min-h-[80px] sm:min-h-[100px] p-1 sm:p-2 border-b border-r border-neutral-200 ${
                 isCurrentMonth ? 'bg-white' : 'bg-neutral-50'
               } ${isToday ? 'ring-2 ring-primary-500 ring-inset' : ''}`}
@@ -124,8 +126,12 @@ export function CalendarMonthView({ currentDate, filteredEvents, onEventSelect }
                 {dayEvents.slice(0, 2).map(event => (
                   <div
                     key={event.id}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`${event.title} - ${event.status}`}
                     className={`text-xs px-1 sm:px-2 py-0.5 sm:py-1 rounded cursor-pointer hover:opacity-80 transition-opacity ${getEventColor(event.status, event.type)} ${getEventTextColor(event.status, event.type)}`}
                     onClick={() => onEventSelect(event)}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onEventSelect(event); } }}
                   >
                     <div className="truncate font-medium">
                       {/* Show abbreviated titles on mobile */}
@@ -139,8 +145,12 @@ export function CalendarMonthView({ currentDate, filteredEvents, onEventSelect }
                   <div className="hidden sm:block">
                     <div
                       key={dayEvents[2].id}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`${dayEvents[2].title} - ${dayEvents[2].status}`}
                       className={`text-xs px-2 py-1 rounded cursor-pointer hover:opacity-80 transition-opacity ${getEventColor(dayEvents[2].status, dayEvents[2].type)} ${getEventTextColor(dayEvents[2].status, dayEvents[2].type)}`}
                       onClick={() => onEventSelect(dayEvents[2])}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onEventSelect(dayEvents[2]); } }}
                     >
                       <div className="truncate font-medium">{dayEvents[2].title}</div>
                     </div>

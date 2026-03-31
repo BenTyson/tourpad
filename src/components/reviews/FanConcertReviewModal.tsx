@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { 
+import {
   Star,
   X,
   Save,
@@ -17,6 +17,7 @@ import {
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
+import { useModalAccessibility } from '@/hooks/useModalAccessibility';
 
 interface FanConcertReviewModalProps {
   concert: {
@@ -53,6 +54,7 @@ export interface FanConcertReview {
 }
 
 export function FanConcertReviewModal({ concert, onClose, onSubmit }: FanConcertReviewModalProps) {
+  const modalRef = useModalAccessibility(onClose);
   const [artistRating, setArtistRating] = useState(0);
   const [artistHoverRating, setArtistHoverRating] = useState(0);
   const [hostRating, setHostRating] = useState(0);
@@ -233,7 +235,7 @@ export function FanConcertReviewModal({ concert, onClose, onSubmit }: FanConcert
 
   if (showSuccess) {
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" role="dialog" aria-modal="true" aria-label="Review submitted">
         <Card className="w-full max-w-md">
           <CardContent className="p-6 text-center">
             <div className="w-16 h-16 bg-sage/10 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -256,6 +258,7 @@ export function FanConcertReviewModal({ concert, onClose, onSubmit }: FanConcert
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="fan-review-title">
       <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <CardContent className="p-0">
           {/* Header */}
@@ -266,7 +269,7 @@ export function FanConcertReviewModal({ concert, onClose, onSubmit }: FanConcert
                   <Music className="w-5 h-5 text-sage" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-semibold text-evergreen">
+                  <h2 id="fan-review-title" className="text-xl font-semibold text-evergreen">
                     Review Concert Experience
                   </h2>
                   <p className="text-neutral-600 text-sm">
@@ -551,6 +554,7 @@ export function FanConcertReviewModal({ concert, onClose, onSubmit }: FanConcert
           </form>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }

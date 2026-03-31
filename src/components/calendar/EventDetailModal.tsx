@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { CalendarEvent } from '@/app/api/calendar/events/route';
+import { useModalAccessibility } from '@/hooks/useModalAccessibility';
 
 interface EventDetailModalProps {
   event: CalendarEvent;
@@ -9,9 +10,11 @@ interface EventDetailModalProps {
 }
 
 export function EventDetailModal({ event, userType, onClose }: EventDetailModalProps) {
+  const modalRef = useModalAccessibility(onClose);
+
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[85vh] flex flex-col overflow-hidden">
+      <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="event-detail-title" className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[85vh] flex flex-col overflow-hidden">
         {/* Header Image */}
         {(() => {
           if (userType === 'artist') {
@@ -56,7 +59,7 @@ export function EventDetailModal({ event, userType, onClose }: EventDetailModalP
           <div className="p-6">
             {/* Title and Status */}
             <div className="mb-6">
-              <h2 className="text-2xl font-bold text-neutral-900 mb-2">{event.title}</h2>
+              <h2 id="event-detail-title" className="text-2xl font-bold text-neutral-900 mb-2">{event.title}</h2>
               <div className="flex items-center space-x-3">
                 <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                   event.status === 'confirmed' || event.status === 'approved' ? 'bg-green-100 text-green-800' :
@@ -132,6 +135,7 @@ export function EventDetailModal({ event, userType, onClose }: EventDetailModalP
             </Link>
             <button
               onClick={onClose}
+              aria-label="Close event details"
               className="px-6 py-3 border border-neutral-300 hover:border-neutral-400 text-neutral-700 font-medium rounded-xl transition-colors duration-200"
             >
               Close

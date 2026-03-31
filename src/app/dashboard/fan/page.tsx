@@ -301,7 +301,7 @@ export default function FanDashboardPage() {
         </Card>
 
         {/* Profile Summary */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
           <Card className="lg:col-span-1">
             <CardHeader>
               <h2 className="text-xl font-semibold text-neutral-900">Your Profile</h2>

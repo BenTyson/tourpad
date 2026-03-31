@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowLeft, Grid3X3, List } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
-type ViewMode = 'month' | 'week' | 'list';
+type ViewMode = 'month' | 'list';
 
 interface CalendarHeaderProps {
   viewMode: ViewMode;
