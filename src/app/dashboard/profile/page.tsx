@@ -451,14 +451,6 @@ export default function ProfilePage() {
   const userType = session.user.type;
   const isArtist = userType === 'artist';
   
-  // Debug logging
-  console.log('Session user:', {
-    id: session.user.id,
-    type: session.user.type,
-    host: session.user.host,
-    artist: session.user.artist
-  });
-
   // Artist helper functions
   const updateArtistProfile = (updates: Partial<typeof artistProfile>) => {
     setArtistProfile(prev => ({ ...prev, ...updates }));

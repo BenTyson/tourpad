@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 
 interface ArtistPhoto {
@@ -61,7 +62,7 @@ export function ArtistPhotoLightbox({
 
     preloadIndices.forEach(i => {
       if (!loadedImages.has(i)) {
-        const img = new Image();
+        const img = new window.Image();
         img.src = photos[i].url;
         setLoadedImages(prev => new Set(prev).add(i));
       }
@@ -105,11 +106,14 @@ export function ArtistPhotoLightbox({
       )}
 
       {/* Main image */}
-      <div className="max-w-7xl max-h-screen p-4">
-        <img
+      <div className="relative max-w-7xl max-h-screen p-4 w-full h-full">
+        <Image
           src={currentPhoto.url}
           alt={currentPhoto.alt}
-          className="max-w-full max-h-full object-contain"
+          fill
+          className="object-contain p-4"
+          sizes="100vw"
+          unoptimized
         />
       </div>
 

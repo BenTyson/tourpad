@@ -52,12 +52,15 @@ Dashboard maps between them: `mockArtists.find(a => a.userId === 'artist1')`
 - Mobile-first responsive design
 - `npm run dev` for local server (localhost:3000)
 
-## Known Issues (Phase 0-1 of cleanup.md)
-- Calendar page crash (undefined `calendarDays` variable)
-- Message send button non-functional on standalone page
-- Footer links to non-existent pages
+## Current State (Phases 0-4 complete)
+- Phases 0-4 of `docs/cleanup.md` are done. Next: Phase 5 (Launch Prep)
+- No TODO/FIXME comments remain in src/ -- deferred items use `DEFERRED:` or `NOTE:` comments
+- No `console.log` calls in `src/app/` -- server code uses `src/lib/logger.ts`
+- Notification system fully wired (`src/lib/notifications.ts`) for bookings + RSVPs
+- Admin activity feed is DB-sourced (`/api/admin/activity`)
+- `/onboarding/artist` and `/onboarding/host` redirect to `/register`
 - No automated tests exist yet
-- Console.log calls throughout API routes (cleanup in progress)
+- Mock data (`src/data/`) still used in dashboard -- gradual replacement deferred
 
 ## Security
 - Gated access model: apply -> approve -> pay -> access

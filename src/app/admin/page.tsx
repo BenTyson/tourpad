@@ -24,14 +24,16 @@ import {
   MapPinIcon
 } from '@heroicons/react/24/outline';
 
-// Static activity data (will be replaced with real data later)
-const recentActivityData = [
-  { id: 1, type: 'application', message: 'New artist application from Sarah Johnson (Austin, TX)', time: '2 minutes ago', urgent: false },
-  { id: 2, type: 'payment', message: 'Payment failed for artist Marcus Williams - $400 annual fee', time: '15 minutes ago', urgent: true },
-  { id: 3, type: 'booking', message: 'Booking dispute reported between Emma Rodriguez and Mike Chen', time: '1 hour ago', urgent: true },
-  { id: 4, type: 'support', message: 'New support ticket #847 - Host venue verification question', time: '2 hours ago', urgent: false },
-  { id: 5, type: 'system', message: 'System maintenance scheduled for tonight 2-4 AM EST', time: '3 hours ago', urgent: false }
-];
+function formatRelativeTime(isoTime: string): string {
+  const diff = Date.now() - new Date(isoTime).getTime();
+  const minutes = Math.floor(diff / 60000);
+  if (minutes < 1) return 'just now';
+  if (minutes < 60) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+  const days = Math.floor(hours / 24);
+  return `${days} day${days > 1 ? 's' : ''} ago`;
+}
 
 export default function AdminPage() {
   const [platformMetrics, setPlatformMetrics] = useState({
@@ -43,10 +45,14 @@ export default function AdminPage() {
     upcomingEvents: 0,
     supportTickets: 12 // Keep this hardcoded for now as it's not in our schema yet
   });
+  const [recentActivity, setRecentActivity] = useState<Array<{
+    id: string; type: string; message: string; time: string; urgent: boolean;
+  }>>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchRealMetrics();
+    fetchActivity();
   }, []);
 
   const fetchRealMetrics = async () => {
@@ -59,10 +65,22 @@ export default function AdminPage() {
           ...data
         }));
       }
-    } catch (error) {
-      console.error('Error fetching metrics:', error);
+    } catch {
+      // Metrics fetch failed silently
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchActivity = async () => {
+    try {
+      const response = await fetch('/api/admin/activity');
+      if (response.ok) {
+        const data = await response.json();
+        setRecentActivity(data.activities || []);
+      }
+    } catch {
+      // Activity fetch failed silently
     }
   };
 
@@ -333,10 +351,12 @@ export default function AdminPage() {
               </div>
               <div className="p-6">
                 <div className="space-y-4">
-                  {recentActivityData.map((activity) => {
+                  {recentActivity.length === 0 ? (
+                    <p className="text-sm text-neutral-500 text-center py-4">No recent activity</p>
+                  ) : recentActivity.map((activity) => {
                     const Icon = getActivityIcon(activity.type);
                     const colorClasses = getActivityColor(activity.type, activity.urgent);
-                    
+
                     return (
                       <div key={activity.id} className={`p-3 rounded-lg border ${activity.urgent ? 'border-red-200 bg-red-50' : 'border-neutral-200'}`}>
                         <div className="flex items-start space-x-3">
@@ -345,7 +365,7 @@ export default function AdminPage() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm text-neutral-900 leading-relaxed">{activity.message}</p>
-                            <p className="text-xs text-neutral-500 mt-1">{activity.time}</p>
+                            <p className="text-xs text-neutral-500 mt-1">{formatRelativeTime(activity.time)}</p>
                             {activity.urgent && (
                               <Badge variant="secondary" className="bg-red-100 text-red-800 border-red-200 mt-2">
                                 Urgent

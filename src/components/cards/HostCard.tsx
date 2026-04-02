@@ -1,8 +1,9 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
-import { 
-  MapPin, 
-  Star, 
+import {
+  MapPin,
+  Star,
   Users,
   Volume2,
   Home,
@@ -113,11 +114,13 @@ export function HostCard({ host, showBookingButton = false }: HostCardProps) {
                 style={{ transform: `translateX(-${currentPhotoIndex * 100}%)` }}
               >
                 {allPhotos.map((photo, index) => (
-                  <div key={photo.id} className="w-full h-full flex-shrink-0">
-                    <img
+                  <div key={photo.id} className="w-full h-full flex-shrink-0 relative">
+                    <Image
                       src={photo.url}
                       alt={`${host.name} venue - ${photo.alt}`}
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   </div>
                 ))}

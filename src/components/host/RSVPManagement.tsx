@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -376,10 +377,12 @@ export default function RSVPManagement() {
                     {/* Fan Avatar */}
                     <div className="w-12 h-12 bg-neutral-100 rounded-full flex items-center justify-center flex-shrink-0">
                       {rsvp.fan.profileImageUrl ? (
-                        <img 
-                          src={rsvp.fan.profileImageUrl} 
+                        <Image
+                          src={rsvp.fan.profileImageUrl}
                           alt={rsvp.fan.name}
-                          className="w-12 h-12 rounded-full object-cover"
+                          width={48}
+                          height={48}
+                          className="rounded-full object-cover"
                         />
                       ) : (
                         <User className="w-6 h-6 text-neutral-400" />

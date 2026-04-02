@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Calendar, Users, MapPin, Star, Eye, Home } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
@@ -163,10 +164,13 @@ export function BookingDetailsSection({ booking, artist, host, formatDate, curre
         <div className="p-6">
           <div className="flex items-center space-x-4 mb-6">
             {host?.hostInfo?.profilePhoto ? (
-              <img
+              <Image
                 src={host.hostInfo.profilePhoto}
                 alt={`${host.hostInfo.hostName} profile photo`}
-                className="w-16 h-16 rounded-full object-cover"
+                width={64}
+                height={64}
+                className="rounded-full object-cover"
+                unoptimized
               />
             ) : (
               <div className="w-16 h-16 bg-gradient-to-br from-secondary-400 to-primary-500 rounded-full flex items-center justify-center text-white text-xl font-bold">

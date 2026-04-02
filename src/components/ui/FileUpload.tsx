@@ -1,8 +1,9 @@
 'use client';
 import { useState, useRef, DragEvent, ChangeEvent } from 'react';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { 
-  CloudArrowUpIcon, 
+import {
+  CloudArrowUpIcon,
   PhotoIcon, 
   XMarkIcon,
   ExclamationTriangleIcon 
@@ -265,10 +266,13 @@ const FilePreview = ({ file, onRemove }: FilePreviewProps) => {
         {/* Preview */}
         <div className="w-12 h-12 rounded-lg overflow-hidden bg-neutral-100 flex items-center justify-center flex-shrink-0">
           {preview ? (
-            <img 
-              src={preview} 
+            <Image
+              src={preview}
               alt={file.name}
-              className="w-full h-full object-cover"
+              width={48}
+              height={48}
+              className="object-cover"
+              unoptimized
             />
           ) : (
             <PhotoIcon className="w-6 h-6 text-neutral-500" />

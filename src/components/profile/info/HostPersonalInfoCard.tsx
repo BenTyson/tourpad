@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { Card, CardHeader, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -110,10 +111,12 @@ export default function HostPersonalInfoCard({
                   <div className="flex items-center space-x-4">
                     <div className="w-20 h-20 bg-neutral-100 rounded-full overflow-hidden flex items-center justify-center">
                       {member.profilePhoto ? (
-                        <img 
-                          src={member.profilePhoto} 
-                          alt={`${member.hostName} profile`} 
-                          className="w-20 h-20 object-cover"
+                        <Image
+                          src={member.profilePhoto}
+                          alt={`${member.hostName} profile`}
+                          width={80}
+                          height={80}
+                          className="object-cover"
                         />
                       ) : (
                         <UserCircle className="w-10 h-10 text-neutral-400" />

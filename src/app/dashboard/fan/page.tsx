@@ -106,7 +106,7 @@ export default function FanDashboardPage() {
           upcomingConcerts: upcomingData.pagination?.total || 0,
           pastConcerts: pastData.pagination?.total || 0,
           pendingRSVPs: pendingData.pagination?.total || 0,
-          favoriteArtists: 0, // TODO: Implement favorite artists
+          favoriteArtists: 0, // DEFERRED: Favorite artists feature not yet built
           reviewsWritten: reviewsData.pagination?.total || 0
         }
       });

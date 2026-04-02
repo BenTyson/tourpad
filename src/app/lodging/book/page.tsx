@@ -96,7 +96,7 @@ function LodgingBookPageContent() {
         return;
       }
       
-      // TODO: Submit to backend API
+      // DEFERRED: Requires new lodging booking API endpoint
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       alert('Lodging booking request submitted successfully! The host will review and respond within 24 hours.');

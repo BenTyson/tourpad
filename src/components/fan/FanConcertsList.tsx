@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -231,10 +232,12 @@ export default function FanConcertsList({
               {/* Artist/Venue Image */}
               <div className="w-16 h-16 rounded-lg overflow-hidden bg-neutral-100 flex-shrink-0">
                 {item.concert.artist.pressPhoto ? (
-                  <img 
-                    src={item.concert.artist.pressPhoto} 
+                  <Image
+                    src={item.concert.artist.pressPhoto}
                     alt={item.concert.artist.name}
-                    className="w-full h-full object-cover"
+                    width={64}
+                    height={64}
+                    className="object-cover"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">

@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Image from 'next/image';
 import { ChevronLeftIcon, ChevronRightIcon, PhotoIcon } from '@heroicons/react/24/outline';
 
 interface Photo {
@@ -36,11 +37,14 @@ export function PhotoGallery({ photos, onPhotoClick }: PhotoGalleryProps) {
     <div className="space-y-3">
       {/* Main Photo */}
       <div className="relative group cursor-pointer" onClick={() => onPhotoClick(currentIndex)}>
-        <div className="aspect-[16/9] overflow-hidden rounded-lg">
-          <img
+        <div className="relative aspect-[16/9] overflow-hidden rounded-lg">
+          <Image
             src={mainPhoto.url}
             alt={mainPhoto.alt}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            unoptimized
           />
         </div>
         
@@ -97,16 +101,19 @@ export function PhotoGallery({ photos, onPhotoClick }: PhotoGalleryProps) {
                 setCurrentIndex(index);
                 onPhotoClick(index);
               }}
-              className={`aspect-square overflow-hidden rounded-lg transition-all ${
+              className={`relative aspect-square overflow-hidden rounded-lg transition-all ${
                 index === currentIndex
                   ? 'ring-2 ring-blue-500 opacity-100'
                   : 'opacity-70 hover:opacity-100'
               }`}
             >
-              <img
+              <Image
                 src={photo.url}
                 alt={photo.alt}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 20vw, 10vw"
+                unoptimized
               />
             </button>
           ))}

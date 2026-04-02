@@ -39,7 +39,7 @@ export async function GET(
     }
 
     // Calculate years active from formation year (fallback to creation date)
-    const formationYear = artist.createdAt.getFullYear(); // TODO: Use actual formationYear field when added to schema
+    const formationYear = artist.createdAt.getFullYear(); // NOTE: Using createdAt as proxy; add formationYear to schema if needed
     const yearsActive = Math.max(1, new Date().getFullYear() - formationYear);
     
     // Calculate rating from reviews using database

@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { 
-  Play, 
+import Image from 'next/image';
+import {
+  Play,
   Pause, 
   SkipBack, 
   SkipForward, 
@@ -315,10 +316,13 @@ export default function EnhancedSpotifyPlayer({
                 {/* Album Art */}
                 <div className="relative aspect-square overflow-hidden rounded-t-lg">
                   {track.album?.imageUrl ? (
-                    <img
+                    <Image
                       src={track.album.imageUrl}
                       alt={`${track.name} by ${artistName}`}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      unoptimized
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-primary-200 to-secondary-200 flex items-center justify-center">
@@ -421,10 +425,13 @@ export default function EnhancedSpotifyPlayer({
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4 flex-1 min-w-0">
                   {currentTrack?.album?.imageUrl ? (
-                    <img
+                    <Image
                       src={currentTrack.album.imageUrl}
                       alt={currentTrack.name}
-                      className="w-16 h-16 rounded-lg shadow-lg flex-shrink-0"
+                      width={64}
+                      height={64}
+                      className="rounded-lg shadow-lg flex-shrink-0"
+                      unoptimized
                     />
                   ) : (
                     <div className="w-16 h-16 bg-primary-700 rounded-lg flex items-center justify-center flex-shrink-0">

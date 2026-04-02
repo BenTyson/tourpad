@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX } from 'lucide-react';
 
 interface SpotifyPlayerProps {
@@ -135,10 +136,13 @@ export default function SpotifyPlayer({ tracks, className = '' }: SpotifyPlayerP
       {/* Track Info */}
       <div className="flex items-center space-x-4 mb-6">
         {currentTrack?.imageUrl ? (
-          <img
+          <Image
             src={currentTrack.imageUrl}
             alt={currentTrack.name}
-            className="w-16 h-16 rounded-lg shadow-lg"
+            width={64}
+            height={64}
+            className="rounded-lg shadow-lg"
+            unoptimized
           />
         ) : (
           <div className="w-16 h-16 bg-primary-700 rounded-lg flex items-center justify-center">

@@ -18,6 +18,7 @@ import { getStripe } from '@/lib/stripe';
 
 export default function ArtistPaymentPage() {
   const [paymentStep, setPaymentStep] = useState<'plan' | 'payment' | 'processing' | 'success'>('plan');
+  const [paymentError, setPaymentError] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'bank'>('card');
   const [cardData, setCardData] = useState({
     number: '',
@@ -43,8 +44,9 @@ export default function ArtistPaymentPage() {
   ];
 
   const handlePayment = async () => {
+    setPaymentError(null);
     setPaymentStep('processing');
-    
+
     try {
       // Create Stripe checkout session
       const response = await fetch('/api/payments/create-checkout-session', {
@@ -69,8 +71,8 @@ export default function ArtistPaymentPage() {
       if (stripe && sessionId) {
         const { error } = await stripe.redirectToCheckout({ sessionId });
         if (error) {
-          console.error('Stripe redirect error:', error);
           setPaymentStep('plan');
+          setPaymentError(error.message || 'Failed to redirect to payment. Please try again.');
         }
       } else if (url) {
         // Fallback to direct URL redirect
@@ -80,9 +82,8 @@ export default function ArtistPaymentPage() {
       }
       
     } catch (error) {
-      console.error('Error creating payment:', error);
       setPaymentStep('plan');
-      // TODO: Show error message to user
+      setPaymentError('Failed to create payment session. Please try again.');
     }
   };
 
@@ -199,9 +200,18 @@ export default function ArtistPaymentPage() {
                     </div>
                   </div>
 
-                  <Button 
+                  {paymentError && (
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                      <div className="flex items-start">
+                        <ExclamationTriangleIcon className="w-5 h-5 text-red-600 mt-0.5 mr-3 flex-shrink-0" />
+                        <p className="text-sm text-red-800">{paymentError}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  <Button
                     onClick={handlePayment}
-                    size="lg" 
+                    size="lg"
                     className="w-full"
                   >
                     Start Your Music Journey - $400/year

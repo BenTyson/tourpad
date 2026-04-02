@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { Card, CardHeader, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Camera, X } from 'lucide-react';
@@ -27,10 +28,12 @@ export default function ThumbnailPhotoCard({
         <div className="flex items-center space-x-6">
           <div className="w-32 h-32 bg-neutral-100 rounded-lg flex items-center justify-center overflow-hidden">
             {artistProfile.thumbnailPhoto ? (
-              <img 
-                src={artistProfile.thumbnailPhoto} 
-                alt="Thumbnail" 
-                className="w-32 h-32 object-cover"
+              <Image
+                src={artistProfile.thumbnailPhoto}
+                alt="Thumbnail"
+                width={128}
+                height={128}
+                className="object-cover"
               />
             ) : (
               <Camera className="w-12 h-12 text-neutral-400" />

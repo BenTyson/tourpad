@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Star, ChevronLeft, ChevronRight, Users, Calendar, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -223,10 +224,12 @@ export default function FanConcertReviewsList({
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
                     {review.fan.profileImageUrl ? (
-                      <img 
-                        src={review.fan.profileImageUrl} 
+                      <Image
+                        src={review.fan.profileImageUrl}
                         alt={review.fan.name}
-                        className="w-10 h-10 rounded-full object-cover"
+                        width={40}
+                        height={40}
+                        className="rounded-full object-cover"
                       />
                     ) : (
                       <Users className="w-5 h-5 text-primary-600" />

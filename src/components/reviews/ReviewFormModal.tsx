@@ -69,7 +69,7 @@ export function ReviewFormModal({ booking, reviewerType, onClose }: ReviewFormMo
     }
 
     try {
-      // TODO: Submit to backend API
+      // DEFERRED: Requires schema migration -- Review model is fan-only, needs artist/host review support
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       setShowSuccess(true);

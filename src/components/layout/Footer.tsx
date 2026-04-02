@@ -69,16 +69,9 @@ export function Footer() {
     setStatus('loading');
     
     try {
-      // Simulate API call - replace with actual newsletter service
+      // DEFERRED: Wire to newsletter service (Mailchimp, Resend, etc.)
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // For now, just log the submission
-      console.log('Newsletter signup:', {
-        email,
-        timestamp: new Date().toISOString(),
-        source: 'footer'
-      });
-      
+
       setStatus('success');
       setEmail('');
       

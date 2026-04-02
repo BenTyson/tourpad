@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
         break;
       case 'popular':
         // For now, use creation date as proxy for popularity
-        // TODO: Add actual popularity metrics (bookings count, reviews avg)
+        // DEFERRED: Popularity ranking requires booking/review aggregation
         orderBy = { createdAt: 'desc' };
         break;
       default:

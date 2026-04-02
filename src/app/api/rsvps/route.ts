@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { logger } from '@/lib/logger';
+import { createNotification } from '@/lib/notifications';
 
 // GET /api/rsvps - Get RSVPs (fan or host specific)
 export async function GET(request: NextRequest) {
@@ -339,8 +340,36 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    // TODO: Send notification to host about new RSVP request
-    // TODO: If auto-approved, send confirmation with address to fan
+    // Notify host about new RSVP request
+    try {
+      const hostUserId = rsvp.concert.booking.host.user.id;
+      await createNotification({
+        userId: hostUserId,
+        type: 'BOOKING',
+        title: 'New RSVP Request',
+        message: `A fan has RSVP'd for "${rsvp.concert.title}" (${guestsCount} guest${guestsCount > 1 ? 's' : ''})`,
+        relatedId: rsvp.concertId,
+        relatedType: 'concert',
+        actionUrl: '/dashboard/bookings',
+        actionText: 'View RSVPs'
+      });
+
+      // If auto-approved, notify the fan
+      if (rsvp.status === 'APPROVED') {
+        await createNotification({
+          userId: session.user.id,
+          type: 'BOOKING',
+          title: 'RSVP Approved',
+          message: `Your RSVP for "${rsvp.concert.title}" has been automatically approved`,
+          relatedId: rsvp.id,
+          relatedType: 'rsvp',
+          actionUrl: '/dashboard/fan',
+          actionText: 'View Details'
+        });
+      }
+    } catch (notifError) {
+      logger.error('Failed to send RSVP notification', notifError);
+    }
 
     return NextResponse.json({
       success: true,

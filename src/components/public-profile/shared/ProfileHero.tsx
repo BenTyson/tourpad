@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, Share2, Heart, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -33,10 +34,12 @@ export default function ProfileHero({ isArtist, data, onShare, onFavorite }: Pro
       <section className="relative h-[70vh] min-h-[500px] bg-neutral-900 overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0">
-          <img 
-            src={heroImage} 
+          <Image
+            src={heroImage}
             alt={`${artistData.name} hero`}
-            className="w-full h-full object-cover opacity-50"
+            fill
+            sizes="100vw"
+            className="object-cover opacity-50"
           />
         </div>
         
@@ -169,14 +172,16 @@ export default function ProfileHero({ isArtist, data, onShare, onFavorite }: Pro
           
           {/* Right Column - Hero Image */}
           <div className="relative aspect-video rounded-xl overflow-hidden shadow-xl">
-            <img 
+            <Image
               src={
-                hostData.performanceSpacePhotos?.[0]?.url || 
-                hostData.housePhotos?.[0]?.url || 
+                hostData.performanceSpacePhotos?.[0]?.url ||
+                hostData.housePhotos?.[0]?.url ||
                 '/images/default-venue.jpg'
-              } 
+              }
               alt={`${hostData.venueName} venue`}
-              className="w-full h-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
           </div>

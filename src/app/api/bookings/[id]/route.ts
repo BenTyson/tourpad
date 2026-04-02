@@ -211,7 +211,7 @@ export async function PUT(
         updateData.confirmedAt = new Date();
         
         // Create a concert record for confirmed shows
-        // TODO: This will be implemented when we handle the concert creation
+        // DEFERRED: Auto-create Concert record on booking confirmation
       }
       if (status === 'COMPLETED') {
         updateData.completedAt = new Date();

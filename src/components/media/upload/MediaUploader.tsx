@@ -1,8 +1,9 @@
 'use client';
 import { useState, useCallback } from 'react';
+import Image from 'next/image';
 import { useDropzone } from 'react-dropzone';
-import { 
-  PhotoIcon, 
+import {
+  PhotoIcon,
   VideoCameraIcon, 
   XMarkIcon,
   CloudArrowUpIcon,
@@ -192,10 +193,13 @@ export function MediaUploader({
                     {/* Preview */}
                     <div className="aspect-video relative bg-gray-100">
                       {file.type === 'image' ? (
-                        <img
+                        <Image
                           src={file.preview}
                           alt="Preview"
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                          unoptimized
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">

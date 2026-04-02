@@ -65,17 +65,17 @@ This document maps all 65 API endpoints in TourPad, showing their purposes, para
 
 ### `/api/users` - User Directory
 **Methods:** `GET`
+**Auth:** Admin only (Prisma-backed, no mock data)
 **Purpose:** Retrieve user listings with filtering and pagination
 **Query Parameters:**
-- `type`: Filter by user type
-- `status`: Filter by user status
-- `search`: Text search
-- `page`: Pagination
-- `limit`: Results per page
+- `type`: Filter by user type (maps to `userType` uppercase)
+- `status`: Filter by user status (maps to `status` uppercase)
+- `search`: Text search (name or email, case-insensitive)
+- `page`: Pagination (default 1)
+- `limit`: Results per page (default 20)
 
 **Frontend Integration:**
 - `/admin/users` - Admin user management
-- Browse pages for user discovery
 
 ### `/api/users/[id]` - Individual User Details
 **Methods:** `GET`, `PUT`, `DELETE`
@@ -459,6 +459,28 @@ FormData {
 ```
 
 **Frontend Integration:** Admin dashboard overview
+
+### `/api/admin/activity` - Recent Platform Activity
+**Methods:** `GET`
+**Auth:** Admin only
+**Purpose:** DB-sourced activity feed for admin dashboard (replaces hardcoded data)
+
+Queries recent registrations, bookings, failed payments, and pending applications (last 7 days). Returns sorted, merged activity items.
+
+**Response:**
+```typescript
+{
+  activities: Array<{
+    id: string,       // e.g. "app-cuid", "book-cuid", "pay-cuid", "user-cuid"
+    type: string,     // "application" | "payment" | "booking" | "system"
+    message: string,
+    time: string,     // ISO timestamp
+    urgent: boolean   // true for failed payments
+  }>
+}
+```
+
+**Frontend Integration:** Admin dashboard (`src/app/admin/page.tsx`)
 
 ### `/api/admin/users` - User Management
 **Methods:** `GET`, `PUT`

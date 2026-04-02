@@ -66,6 +66,20 @@ const nextConfig: NextConfig = {
     return config;
   },
 
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(self)' },
+        ],
+      },
+    ];
+  },
+
   // Static file serving
   async rewrites() {
     return [
@@ -79,7 +93,13 @@ const nextConfig: NextConfig = {
   output: 'standalone',
   
   images: {
-    domains: ['localhost', 'images.unsplash.com'],
+    remotePatterns: [
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: '*.supabase.co' },
+      { protocol: 'https', hostname: '*.amazonaws.com' },
+      { protocol: 'https', hostname: 'i.scdn.co' },
+      { protocol: 'http', hostname: 'localhost' },
+    ],
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 60,
   },

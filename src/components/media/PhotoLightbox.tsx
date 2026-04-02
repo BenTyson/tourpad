@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 
 interface Photo {
@@ -96,11 +97,14 @@ export function PhotoLightbox({ photos, initialIndex, isOpen, onClose }: PhotoLi
       )}
 
       {/* Main Image */}
-      <div className="relative max-w-7xl max-h-[90vh] mx-4">
-        <img
+      <div className="relative max-w-7xl max-h-[90vh] mx-4 w-full h-full">
+        <Image
           src={currentPhoto.url}
           alt={currentPhoto.alt}
-          className="max-w-full max-h-full object-contain rounded-lg"
+          fill
+          className="object-contain rounded-lg"
+          sizes="100vw"
+          unoptimized
         />
         
         {/* Photo Info */}
@@ -124,16 +128,19 @@ export function PhotoLightbox({ photos, initialIndex, isOpen, onClose }: PhotoLi
                 <button
                   key={photo.id}
                   onClick={() => setCurrentIndex(actualIndex)}
-                  className={`w-12 h-12 overflow-hidden rounded transition-all ${
+                  className={`relative w-12 h-12 overflow-hidden rounded transition-all ${
                     actualIndex === currentIndex
                       ? 'ring-2 ring-white opacity-100'
                       : 'opacity-60 hover:opacity-80'
                   }`}
                 >
-                  <img
+                  <Image
                     src={photo.url}
                     alt={photo.alt}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
+                    sizes="48px"
+                    unoptimized
                   />
                 </button>
               );

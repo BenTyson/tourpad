@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { User, MapPin, Heart, FileText, Camera } from 'lucide-react';
@@ -222,10 +223,12 @@ export default function FanProfileForm() {
           <div className="flex items-center space-x-4">
             <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center">
               {profile.profileImageUrl ? (
-                <img 
-                  src={profile.profileImageUrl} 
+                <Image
+                  src={profile.profileImageUrl}
                   alt={profile.name}
-                  className="w-16 h-16 rounded-full object-cover"
+                  width={64}
+                  height={64}
+                  className="rounded-full object-cover"
                 />
               ) : (
                 <User className="w-8 h-8 text-primary-600" />
@@ -265,10 +268,12 @@ export default function FanProfileForm() {
               <div className="flex items-center space-x-6">
                 <div className="w-24 h-24 bg-neutral-100 rounded-full flex items-center justify-center overflow-hidden">
                   {(formData.profileImageUrl || profile?.profileImageUrl) ? (
-                    <img 
-                      src={formData.profileImageUrl || profile?.profileImageUrl} 
+                    <Image
+                      src={formData.profileImageUrl || profile?.profileImageUrl || ''}
                       alt="Profile"
-                      className="w-24 h-24 rounded-full object-cover"
+                      width={96}
+                      height={96}
+                      className="rounded-full object-cover"
                     />
                   ) : (
                     <User className="w-12 h-12 text-neutral-400" />

@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { Users, Music } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { BandMember } from '../types';
@@ -35,12 +36,14 @@ export default function BandMembers({ bandMembers, bandName }: BandMembersProps)
             >
               <div className="flex items-start gap-4">
                 {/* Photo */}
-                <div className="w-16 h-16 rounded-full overflow-hidden bg-neutral-200 flex-shrink-0">
+                <div className="relative w-16 h-16 rounded-full overflow-hidden bg-neutral-200 flex-shrink-0">
                   {member.photo ? (
-                    <img 
-                      src={member.photo} 
+                    <Image
+                      src={member.photo}
                       alt={member.name}
-                      className="w-full h-full object-cover"
+                      fill
+                      sizes="64px"
+                      className="object-cover"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">

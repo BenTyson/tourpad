@@ -165,6 +165,18 @@ export async function GET(request: NextRequest) {
       }
     });
 
+    // Aggregate review stats per host
+    const hostIds = hosts.map(h => h.id);
+    const reviewStats = await prisma.review.groupBy({
+      by: ['hostId'],
+      where: { hostId: { in: hostIds } },
+      _avg: { hostRating: true },
+      _count: { id: true }
+    });
+    const reviewStatsMap = new Map(
+      reviewStats.map(r => [r.hostId, { avg: r._avg.hostRating || 0, count: r._count.id }])
+    );
+
     // Transform hosts data with location obfuscation and map format
     const mapHosts = hosts.map((host, index) => {
       // Use actual coordinates if available, otherwise assign default location
@@ -242,9 +254,9 @@ export async function GET(request: NextRequest) {
         offersLodging: host.offersLodging,
         lodgingDetails: host.lodgingDetails,
         houseRules: host.houseRules,
-        // UI properties for sorting (placeholder values for now)
-        rating: 4.0 + Math.random() * 1.0, // TODO: Calculate from actual reviews
-        reviewCount: Math.floor(Math.random() * 20), // TODO: Count actual reviews
+        // Review aggregation from database
+        rating: reviewStatsMap.get(host.id)?.avg || 0,
+        reviewCount: reviewStatsMap.get(host.id)?.count || 0,
         // Map-specific data
         mapLocation: {
           searchKeywords: [

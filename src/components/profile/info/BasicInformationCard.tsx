@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { Card, CardHeader, CardContent } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Camera, Home } from 'lucide-react';
@@ -212,10 +213,12 @@ export default function BasicInformationCard({
             <div className="flex items-center space-x-4">
               <div className="w-20 h-20 bg-neutral-100 rounded-lg overflow-hidden flex items-center justify-center">
                 {hostProfile.venuePhoto ? (
-                  <img 
-                    src={hostProfile.venuePhoto} 
-                    alt="Venue profile" 
-                    className="w-20 h-20 object-cover"
+                  <Image
+                    src={hostProfile.venuePhoto}
+                    alt="Venue profile"
+                    width={80}
+                    height={80}
+                    className="object-cover"
                   />
                 ) : (
                   <Home className="w-10 h-10 text-neutral-400" />

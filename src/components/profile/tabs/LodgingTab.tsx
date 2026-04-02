@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Image from 'next/image';
 import { Home, Camera, Plus, X, Wifi, Car, Coffee, Utensils, Briefcase } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -339,11 +340,15 @@ export function LodgingTab({ hostProfile, updateHostProfile }: LodgingTabProps) 
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                           {room.photos.map((photo, photoIndex) => (
                             <div key={photo.id} className="relative group">
-                              <img
-                                src={photo.fileUrl}
-                                alt={photo.title}
-                                className="w-full h-24 object-cover rounded-lg"
-                              />
+                              <div className="relative w-full h-24">
+                                <Image
+                                  src={photo.fileUrl}
+                                  alt={photo.title}
+                                  fill
+                                  sizes="(max-width: 768px) 50vw, 33vw"
+                                  className="object-cover rounded-lg"
+                                />
+                              </div>
                               <button
                                 onClick={() => {
                                   const updatedPhotos = room.photos?.filter((_, i) => i !== photoIndex);

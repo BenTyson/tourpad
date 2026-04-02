@@ -155,11 +155,11 @@ export default function ArtistProfilePage() {
     const fetchTourSegments = async () => {
       if (artistData?.userId) {
         try {
-          console.log('Fetching tour segments for artist:', artistData.userId);
+
           const response = await fetch(`/api/artists/${artistData.userId}/tour-segments`);
           if (response.ok) {
             const segments = await response.json();
-            console.log('Tour segments received:', segments);
+
             setTourSegments(segments);
 
             // Process upcoming tours (next 12 months)
@@ -184,10 +184,10 @@ export default function ArtistProfilePage() {
 
             // Sort by start date
             upcoming.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
-            console.log('Upcoming tours processed:', upcoming);
+
             setUpcomingTours(upcoming);
           } else {
-            console.log('Failed to fetch tour segments:', response.status, response.statusText);
+
           }
         } catch (error) {
           console.error('Error fetching tour segments:', error);

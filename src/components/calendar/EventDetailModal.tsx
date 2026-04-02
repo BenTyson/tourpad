@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { CalendarEvent } from '@/app/api/calendar/events/route';
 import { useModalAccessibility } from '@/hooks/useModalAccessibility';
 
@@ -24,10 +25,13 @@ export function EventDetailModal({ event, userType, onClose }: EventDetailModalP
 
             return venuePhoto ? (
               <div className="relative h-48 bg-gradient-to-br from-neutral-100 to-neutral-200 flex-shrink-0">
-                <img
+                <Image
                   src={venuePhoto.fileUrl}
                   alt={`${event.participants.host} venue`}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  unoptimized
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>
@@ -41,10 +45,13 @@ export function EventDetailModal({ event, userType, onClose }: EventDetailModalP
 
             return pressPhoto ? (
               <div className="relative h-48 bg-gradient-to-br from-neutral-100 to-neutral-200 flex-shrink-0">
-                <img
+                <Image
                   src={pressPhoto.fileUrl}
                   alt={`${event.participants.artist} press photo`}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  unoptimized
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>

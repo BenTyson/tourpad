@@ -22,12 +22,7 @@ export default function ContactUs() {
       // In production, this would send to your email service
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // For now, just log the submission
-      console.log('Form submitted:', {
-        ...formData,
-        to: 'tourpad.music@gmail.com'
-      });
-      
+      // DEFERRED: Wire to email service (Resend, SendGrid, etc.)
       setStatus('success');
       setFormData({ name: '', email: '', subject: '', message: '' });
       

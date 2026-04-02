@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { logger } from '@/lib/logger';
+import { createNotification } from '@/lib/notifications';
 
 // GET /api/rsvps/[id] - Get specific RSVP details
 export async function GET(
@@ -246,9 +247,30 @@ export async function PUT(
       }
     });
 
-    // TODO: Send notification to fan about RSVP status update
-    // TODO: If approved, send venue address to fan
-    // TODO: If declined/waitlisted, send appropriate message
+    // Notify fan about RSVP status change
+    try {
+      const fanUserId = updatedRSVP.fan.user.id;
+      const concertTitle = updatedRSVP.concert.title;
+      const statusMessages: Record<string, string> = {
+        APPROVED: `Your RSVP for "${concertTitle}" has been approved! Check your dashboard for venue details.`,
+        DECLINED: `Your RSVP for "${concertTitle}" has been declined.`,
+        WAITLISTED: `You've been added to the waitlist for "${concertTitle}".`
+      };
+      const message = statusMessages[updatedRSVP.status] || `Your RSVP status for "${concertTitle}" has been updated to ${updatedRSVP.status}`;
+
+      await createNotification({
+        userId: fanUserId,
+        type: 'BOOKING',
+        title: `RSVP ${updatedRSVP.status.charAt(0) + updatedRSVP.status.slice(1).toLowerCase()}`,
+        message,
+        relatedId: updatedRSVP.id,
+        relatedType: 'rsvp',
+        actionUrl: '/dashboard/fan',
+        actionText: 'View Details'
+      });
+    } catch (notifError) {
+      logger.error('Failed to send RSVP status notification', notifError);
+    }
 
     return NextResponse.json({
       success: true,
@@ -341,7 +363,22 @@ export async function DELETE(
       where: { id }
     });
 
-    // TODO: Send notification to host about cancellation
+    // Notify host about RSVP cancellation
+    try {
+      const hostUserId = rsvp.concert.booking.host.userId;
+      await createNotification({
+        userId: hostUserId,
+        type: 'BOOKING',
+        title: 'RSVP Cancelled',
+        message: `A fan has cancelled their RSVP for "${rsvp.concert.title}"`,
+        relatedId: rsvp.concertId,
+        relatedType: 'concert',
+        actionUrl: '/dashboard/bookings',
+        actionText: 'View RSVPs'
+      });
+    } catch (notifError) {
+      logger.error('Failed to send RSVP cancellation notification', notifError);
+    }
 
     return NextResponse.json({
       success: true,

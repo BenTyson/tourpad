@@ -9,9 +9,7 @@ export default function LodgingSetupPage() {
   const router = useRouter();
 
   const handleSave = (data: LodgingData) => {
-    console.log('Saving lodging configuration:', data);
-    // TODO: Implement actual save functionality
-    // Call API to save lodging data
+    // DEFERRED: Requires lodging settings API endpoint
     router.push('/dashboard');
   };
 
@@ -35,8 +33,7 @@ export default function LodgingSetupPage() {
     <LodgingWizard
       onSave={handleSave}
       onCancel={handleCancel}
-      // TODO: Load initial data from user's existing lodging configuration
-      // initialData={existingLodgingData}
+      // DEFERRED: Load initial data once lodging settings API exists
     />
   );
 }

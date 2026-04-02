@@ -9,8 +9,27 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'TourPad - Where Music Feels Like Home',
+  title: {
+    default: 'TourPad - Where Music Feels Like Home',
+    template: '%s | TourPad',
+  },
   description: 'Connect artists with intimate venues for unforgettable house concerts.',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://tourpad.com'),
+  openGraph: {
+    title: 'TourPad - Where Music Feels Like Home',
+    description: 'Connect artists with intimate venues for unforgettable house concerts.',
+    siteName: 'TourPad',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'TourPad - Where Music Feels Like Home',
+    description: 'Connect artists with intimate venues for unforgettable house concerts.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -21,6 +40,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} text-gray-900`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'TourPad',
+              url: process.env.NEXT_PUBLIC_BASE_URL || 'https://tourpad.com',
+              description: 'Connect artists with intimate venues for unforgettable house concerts.',
+              sameAs: [],
+            }),
+          }}
+        />
         <AuthProvider>
           <ToastProvider>
             <div className="min-h-screen flex flex-col">

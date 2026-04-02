@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Image from 'next/image';
 import { Card, CardHeader, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -199,11 +200,13 @@ export default function PhotosTab({
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {artistProfile.photos.map((photo, index) => (
                     <div key={photo.id} className="relative group">
-                      <div className="aspect-square bg-neutral-100 rounded-lg overflow-hidden">
-                        <img 
-                          src={photo.fileUrl} 
+                      <div className="relative aspect-square bg-neutral-100 rounded-lg overflow-hidden">
+                        <Image
+                          src={photo.fileUrl}
                           alt={photo.title || `Photo ${index + 1}`}
-                          className="w-full h-full object-cover"
+                          fill
+                          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                          className="object-cover"
                         />
                       </div>
                       <div className="absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -282,11 +285,15 @@ export default function PhotosTab({
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {hostProfile.photos.map((photo, index) => (
                     <div key={photo.id} className="relative group">
-                      <img
-                        src={photo.fileUrl}
-                        alt={photo.title || 'Venue photo'}
-                        className="w-full h-32 object-cover rounded-lg"
-                      />
+                      <div className="relative w-full h-32">
+                        <Image
+                          src={photo.fileUrl}
+                          alt={photo.title || 'Venue photo'}
+                          fill
+                          sizes="(max-width: 768px) 50vw, 33vw"
+                          className="object-cover rounded-lg"
+                        />
+                      </div>
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-200 rounded-lg flex items-center justify-center">
                         <button
                           onClick={() => removeHostPhoto(photo.id)}

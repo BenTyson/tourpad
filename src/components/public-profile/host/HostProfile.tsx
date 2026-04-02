@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { Users, User } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { HostMember } from '../types';
@@ -54,12 +55,14 @@ export default function HostProfile({
           <div className="space-y-6">
             {hostMembers.map((hostPerson) => (
               <div key={hostPerson.id} className="flex items-start space-x-6">
-                <div className="w-20 h-20 rounded-full overflow-hidden shadow-lg flex-shrink-0">
+                <div className="relative w-20 h-20 rounded-full overflow-hidden shadow-lg flex-shrink-0">
                   {hostPerson.profilePhoto ? (
-                    <img 
-                      src={hostPerson.profilePhoto} 
+                    <Image
+                      src={hostPerson.profilePhoto}
                       alt={`${hostPerson.hostName} profile photo`}
-                      className="w-full h-full object-cover"
+                      fill
+                      sizes="80px"
+                      className="object-cover"
                     />
                   ) : (
                     <div className="w-full h-full bg-neutral-200 flex items-center justify-center">

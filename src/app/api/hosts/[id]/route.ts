@@ -217,7 +217,7 @@ export async function GET(
           ? ['Friday', 'Saturday', 'Sunday'] 
           : host.venueType === 'WAREHOUSE' 
             ? ['Thursday', 'Friday', 'Saturday'] 
-            : ['Friday', 'Saturday'], // Derived from venue type, TODO: Store in database
+            : ['Friday', 'Saturday'], // NOTE: Derived from venue type; store in DB when host sets availability
         estimatedShowsPerYear: host.hostingExperience || 10,
         avgDoorFee: host.suggestedDoorFee || 20, // Use suggested door fee with fallback
         hostingHistory: `${host.hostingExperience || 0} years`

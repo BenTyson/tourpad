@@ -48,15 +48,13 @@ export default function MusicManagementPage() {
     fetch('/api/user/current')
       .then(res => res.json())
       .then(data => {
-        console.log('User current API response:', data);
-        
         if (data) {
           // For artists, use the artist.id, not user.id
           if (data.userType?.toLowerCase() === 'artist' && data.artist) {
-            console.log('Setting artist ID:', data.artist.id);
+
             setUserProfileId(data.artist.id);
           } else {
-            console.log('Setting user ID:', data.id);
+
             setUserProfileId(data.id);
           }
           setUserRole(data.userType?.toLowerCase());
@@ -210,8 +208,7 @@ export default function MusicManagementPage() {
               
               <MP3UploadComponent
                 artistId={userProfileId || ''}
-                onUploadComplete={(tracks) => {
-                  console.log('Upload completed:', tracks);
+                onUploadComplete={() => {
                   setRefreshTrigger(prev => prev + 1);
                 }}
               />

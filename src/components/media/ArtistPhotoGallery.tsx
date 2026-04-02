@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 
 interface ArtistPhoto {
   id: string;
@@ -20,13 +21,16 @@ export function ArtistPhotoGallery({ photos, onPhotoClick }: ArtistPhotoGalleryP
     return (
       <div className="w-full max-w-2xl mx-auto">
         <div
-          className="aspect-[4/3] bg-neutral-100 rounded-xl overflow-hidden cursor-pointer hover:shadow-lg transition-shadow group"
+          className="relative aspect-[4/3] bg-neutral-100 rounded-xl overflow-hidden cursor-pointer hover:shadow-lg transition-shadow group"
           onClick={() => onPhotoClick?.(0)}
         >
-          <img
+          <Image
             src={photos[0].url}
             alt={photos[0].alt || 'Artist photo'}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            unoptimized
           />
         </div>
       </div>
@@ -40,13 +44,16 @@ export function ArtistPhotoGallery({ photos, onPhotoClick }: ArtistPhotoGalleryP
     <div className="grid grid-cols-4 gap-3 h-[500px]">
       {/* Hero Photo - Large on Left, spans 2 columns and 2 rows */}
       <div
-        className="col-span-2 row-span-2 bg-neutral-100 rounded-xl overflow-hidden cursor-pointer hover:shadow-lg transition-shadow group"
+        className="relative col-span-2 row-span-2 bg-neutral-100 rounded-xl overflow-hidden cursor-pointer hover:shadow-lg transition-shadow group"
         onClick={() => onPhotoClick?.(0)}
       >
-        <img
+        <Image
           src={heroPhoto.url}
           alt={heroPhoto.alt || 'Featured artist photo'}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          fill
+          className="object-cover group-hover:scale-105 transition-transform duration-300"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          unoptimized
         />
       </div>
 
@@ -54,13 +61,16 @@ export function ArtistPhotoGallery({ photos, onPhotoClick }: ArtistPhotoGalleryP
       {remainingPhotos.slice(0, 6).map((photo, idx) => (
         <div
           key={photo.id}
-          className="col-span-1 row-span-1 bg-neutral-100 rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition-shadow group"
+          className="relative col-span-1 row-span-1 bg-neutral-100 rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition-shadow group"
           onClick={() => onPhotoClick?.(idx + 1)}
         >
-          <img
+          <Image
             src={photo.url}
             alt={photo.alt || 'Artist photo'}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 768px) 50vw, 25vw"
+            unoptimized
           />
         </div>
       ))}

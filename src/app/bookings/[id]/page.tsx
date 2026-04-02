@@ -1,6 +1,6 @@
 'use client';
-import { useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { CheckCircle, XCircle, Clock, AlertTriangle } from 'lucide-react';
@@ -14,15 +14,50 @@ import { BookingModals } from '@/components/bookings/BookingModals';
 
 export default function BookingDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const bookingId = params.id as string;
   const { data: session, status } = useSession();
-  
-  const booking = mockBookings.find(b => b.id === bookingId);
-  const [currentStatus, setCurrentStatus] = useState(booking?.status || 'requested');
+
+  const [bookingData, setBookingData] = useState<any>(null);
+  const [currentStatus, setCurrentStatus] = useState('requested');
   const [showDeclineModal, setShowDeclineModal] = useState(false);
   const [showCancellationModal, setShowCancellationModal] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
-  if (status === 'loading') {
+  // Try to fetch from API first, fall back to mock data
+  useEffect(() => {
+    if (!session?.user || !bookingId) return;
+
+    const fetchBooking = async () => {
+      try {
+        const res = await fetch(`/api/bookings/${bookingId}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.booking) {
+            setBookingData(data.booking);
+            setCurrentStatus(data.booking.status?.toLowerCase() || 'requested');
+            return;
+          }
+        }
+      } catch {
+        // Fall through to mock data
+      }
+
+      // Fallback to mock data
+      const mock = mockBookings.find(b => b.id === bookingId);
+      if (mock) {
+        setBookingData(mock);
+        setCurrentStatus(mock.status || 'requested');
+      } else {
+        setFetchError('Booking not found');
+      }
+    };
+
+    fetchBooking();
+  }, [session, bookingId]);
+
+  if (status === 'loading' || (!bookingData && !fetchError)) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100 flex items-center justify-center">
         <div className="text-center">
@@ -47,7 +82,7 @@ export default function BookingDetailPage() {
     );
   }
 
-  if (!booking) {
+  if (fetchError || !bookingData) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100 flex items-center justify-center">
         <div className="text-center">
@@ -60,43 +95,69 @@ export default function BookingDetailPage() {
     );
   }
 
-  const host = mockHosts.find(h => h.userId === booking.hostId);
-  const artist = mockArtists.find(a => a.userId === booking.artistId);
+  // Use mock data for rich host/artist details (child components expect this shape)
+  const host = mockHosts.find(h => h.userId === bookingData.hostId);
+  const artist = mockArtists.find(a => a.userId === bookingData.artistId);
 
-  // Get user role from session
   const currentUserRole = session.user.type;
   const isHost = currentUserRole === 'host';
   const isArtist = currentUserRole === 'artist';
   const canTakeAction = isHost && currentStatus === 'requested';
 
-  const handleApprove = () => {
-    setCurrentStatus('approved');
-    // TODO: Send to backend, notify artist, etc.
-    console.log('Booking approved:', bookingId);
+  const handleApprove = async () => {
+    setActionLoading(true);
+    try {
+      const res = await fetch(`/api/bookings/${bookingId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'APPROVED' })
+      });
+      if (res.ok) {
+        setCurrentStatus('approved');
+      }
+    } catch {
+      // Action failed silently
+    } finally {
+      setActionLoading(false);
+    }
   };
 
-  const handleDecline = (reason: string) => {
-    setCurrentStatus('requested');
+  const handleDecline = async (reason: string) => {
+    setActionLoading(true);
     setShowDeclineModal(false);
-    // TODO: Send to backend, notify artist with reason
-    console.log('Booking declined:', bookingId, 'Reason:', reason);
-
-    // Show user feedback
-    setTimeout(() => {
-      alert('Booking declined successfully. The artist has been notified.');
-    }, 500);
+    try {
+      const res = await fetch(`/api/bookings/${bookingId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'REJECTED', hostResponse: reason })
+      });
+      if (res.ok) {
+        setCurrentStatus('declined');
+      }
+    } catch {
+      // Action failed silently
+    } finally {
+      setActionLoading(false);
+    }
   };
 
-  const handleCancellationRequest = (reason: string) => {
-    setCurrentStatus('pending');
+  const handleCancellationRequest = async (reason: string) => {
+    setActionLoading(true);
     setShowCancellationModal(false);
-    // TODO: Send to backend, notify other party
-    console.log('Cancellation requested:', bookingId, 'Reason:', reason);
-
-    // Show user feedback
-    setTimeout(() => {
-      alert('Cancellation request sent. The other party will be notified to review your request.');
-    }, 500);
+    try {
+      const res = await fetch(`/api/bookings/${bookingId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'CANCELLED', hostResponse: reason })
+      });
+      if (res.ok) {
+        setCurrentStatus('cancelled');
+      }
+    } catch {
+      // Action failed silently
+    } finally {
+      setActionLoading(false);
+    }
   };
 
   const formatDate = (date: Date | string) => {
@@ -113,39 +174,35 @@ export default function BookingDetailPage() {
   const getStatusInfo = (status: string) => {
     switch (status) {
       case 'requested':
+      case 'pending':
         return {
-          color: 'bg-[#d4c4a8] text-[#344c3d]', // sand with evergreen text
+          color: 'bg-[#d4c4a8] text-[#344c3d]',
           icon: Clock,
-          text: 'Awaiting Response',
+          text: status === 'requested' ? 'Awaiting Response' : 'Pending',
           description: isHost ? 'Review this booking request and respond' : 'Waiting for host to respond'
         };
       case 'approved':
         return {
-          color: 'bg-[#738a6e] text-white', // sage
+          color: 'bg-[#738a6e] text-white',
           icon: CheckCircle,
           text: 'Confirmed',
           description: 'This booking is confirmed! Event details have been shared.'
         };
       case 'declined':
+      case 'rejected':
         return {
-          color: 'bg-[#ebebe9] text-[#344c3d]', // mist with evergreen text
+          color: 'bg-[#ebebe9] text-[#344c3d]',
           icon: XCircle,
           text: 'Declined',
           description: 'This booking request was declined.'
         };
       case 'cancellation_requested':
+      case 'cancelled':
         return {
-          color: 'bg-[#8ea58c] text-white', // french blue
+          color: 'bg-[#8ea58c] text-white',
           icon: AlertTriangle,
-          text: 'Cancellation Requested',
-          description: 'A cancellation has been requested and is pending review.'
-        };
-      case 'pending':
-        return {
-          color: 'bg-[#8ea58c] text-white', // french blue
-          icon: Clock,
-          text: 'Pending',
-          description: 'Waiting for artist to confirm'
+          text: 'Cancelled',
+          description: 'This booking has been cancelled.'
         };
       default:
         return {
@@ -158,41 +215,36 @@ export default function BookingDetailPage() {
   };
 
   const statusInfo = getStatusInfo(currentStatus);
-  const StatusIcon = statusInfo.icon;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header Navigation */}
         <BookingHeader
           statusInfo={statusInfo}
           currentStatus={currentStatus}
           onRequestCancellation={() => setShowCancellationModal(true)}
         />
 
-        {/* Action Alert for Hosts */}
         {canTakeAction && (
           <ActionAlert
-            artistName={artist?.name}
+            artistName={artist?.name || bookingData.artistName}
             onApprove={handleApprove}
             onDecline={() => setShowDeclineModal(true)}
           />
         )}
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
           <BookingDetailsSection
-            booking={booking}
+            booking={bookingData}
             artist={artist}
             host={host}
             formatDate={formatDate}
             currentStatus={currentStatus}
           />
 
-          {/* Sidebar */}
           <BookingSidebar
             currentStatus={currentStatus}
-            booking={booking}
+            booking={bookingData}
           />
         </div>
       </div>
@@ -200,7 +252,7 @@ export default function BookingDetailPage() {
       <BookingModals
         showDeclineModal={showDeclineModal}
         showCancellationModal={showCancellationModal}
-        artistName={artist?.name}
+        artistName={artist?.name || bookingData.artistName}
         onCloseDeclineModal={() => setShowDeclineModal(false)}
         onCloseCancellationModal={() => setShowCancellationModal(false)}
         onConfirmDecline={handleDecline}

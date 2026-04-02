@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { Card, CardHeader, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -68,10 +69,12 @@ export default function BandMembersCard({
               <div key={member.id} className="flex items-center space-x-4 p-4 border border-neutral-200 rounded-lg">
                 <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center">
                   {member.photo ? (
-                    <img 
-                      src={member.photo} 
-                      alt={member.name} 
-                      className="w-16 h-16 rounded-full object-cover"
+                    <Image
+                      src={member.photo}
+                      alt={member.name}
+                      width={64}
+                      height={64}
+                      className="rounded-full object-cover"
                     />
                   ) : (
                     <UserCircle className="w-8 h-8 text-neutral-400" />

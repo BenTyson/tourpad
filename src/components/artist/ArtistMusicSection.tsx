@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Play, Pause, Music, ExternalLink, Clock, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -295,10 +296,13 @@ export default function ArtistMusicSection({
                       {/* Album Artwork & Play Button */}
                       <div className="relative w-12 h-12 flex-shrink-0">
                         {track.album?.imageUrl ? (
-                          <img
+                          <Image
                             src={track.album.imageUrl}
                             alt={track.album.name}
-                            className="w-12 h-12 rounded-lg object-cover"
+                            width={48}
+                            height={48}
+                            className="rounded-lg object-cover"
+                            unoptimized
                           />
                         ) : (
                           <div className="w-12 h-12 bg-neutral-200 rounded-lg flex items-center justify-center">
@@ -409,19 +413,21 @@ export default function ArtistMusicSection({
                         <Music className="w-8 h-8 text-neutral-400" />
                       </div>
                       {album.imageUrl && (
-                        <img
+                        <Image
                           src={album.imageUrl}
                           alt={album.name}
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          unoptimized
                           onLoad={(e) => {
                             // Hide fallback when image loads
-                            const fallback = e.currentTarget.previousElementSibling as HTMLElement;
+                            const fallback = (e.currentTarget as HTMLElement).previousElementSibling as HTMLElement;
                             if (fallback) fallback.style.display = 'none';
                           }}
                           onError={(e) => {
                             // Image failed to load, keep fallback visible
-                            e.currentTarget.style.display = 'none';
-                            console.log(`Failed to load album image: ${album.name}`);
+                            (e.currentTarget as HTMLElement).style.display = 'none';
                           }}
                         />
                       )}

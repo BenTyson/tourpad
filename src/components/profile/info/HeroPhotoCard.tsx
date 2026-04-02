@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { Card, CardHeader, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Camera, X } from 'lucide-react';
@@ -25,12 +26,14 @@ export default function HeroPhotoCard({
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div className="w-full h-48 bg-neutral-100 rounded-lg flex items-center justify-center overflow-hidden">
+          <div className="relative w-full h-48 bg-neutral-100 rounded-lg flex items-center justify-center overflow-hidden">
             {artistProfile.heroPhoto ? (
-              <img 
-                src={artistProfile.heroPhoto} 
-                alt="Hero Banner" 
-                className="w-full h-full object-cover"
+              <Image
+                src={artistProfile.heroPhoto}
+                alt="Hero Banner"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
               />
             ) : (
               <div className="text-center">

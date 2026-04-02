@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { 
-  Music, 
-  Search, 
-  Link as LinkIcon, 
-  Unlink, 
-  RefreshCw, 
-  CheckCircle, 
+import Image from 'next/image';
+import {
+  Music,
+  Search,
+  Link as LinkIcon,
+  Unlink,
+  RefreshCw,
+  CheckCircle,
   AlertCircle,
   ExternalLink,
   Users,
@@ -340,10 +341,13 @@ export default function SoundCloudConnectionCard({
                         >
                           <div className="flex items-center space-x-4">
                             {user.avatar_url ? (
-                              <img
+                              <Image
                                 src={user.avatar_url}
                                 alt={user.username}
-                                className="w-12 h-12 rounded-lg object-cover"
+                                width={48}
+                                height={48}
+                                className="rounded-lg object-cover"
+                                unoptimized
                               />
                             ) : (
                               <div className="w-12 h-12 bg-neutral-200 rounded-lg flex items-center justify-center">

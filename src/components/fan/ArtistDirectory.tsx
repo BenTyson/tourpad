@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -316,10 +317,12 @@ export default function ArtistDirectory() {
                 {/* Artist Image */}
                 <div className="relative h-48 bg-gradient-to-br from-neutral-100 to-neutral-200">
                   {artist.pressPhoto ? (
-                    <img 
-                      src={artist.pressPhoto} 
+                    <Image
+                      src={artist.pressPhoto}
                       alt={artist.stageName || artist.name}
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">

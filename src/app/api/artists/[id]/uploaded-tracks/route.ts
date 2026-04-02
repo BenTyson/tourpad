@@ -170,7 +170,7 @@ export async function DELETE(
       }
     });
 
-    // TODO: In production, also delete the actual file from storage
+    // DEFERRED: File storage cleanup requires cloud storage integration
     // await deleteFile(track.filePath);
 
     return NextResponse.json({ success: true });

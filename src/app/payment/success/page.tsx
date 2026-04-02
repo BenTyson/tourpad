@@ -25,12 +25,9 @@ function PaymentSuccessContent() {
           const statusResponse = await fetch('/api/profile');
           if (statusResponse.ok) {
             const profileData = await statusResponse.json();
-            console.log('Current user status:', profileData.status);
 
             // If user is already active, payment webhook worked
             if (profileData.status === 'ACTIVE') {
-              console.log('User already active, payment webhook succeeded');
-              console.log('🔄 Updating session to reflect active status...');
               await update();
 
               // Wait for session update to complete
@@ -57,10 +54,8 @@ function PaymentSuccessContent() {
           
           if (response.ok) {
             const result = await response.json();
-            console.log('Payment verification result:', result);
-            
+
             // Force NextAuth session update to refresh status from database
-            console.log('🔄 Forcing session update after payment verification...');
             await update();
 
             // Wait a moment for session update to complete
@@ -180,7 +175,6 @@ function PaymentSuccessContent() {
               variant="outline"
               className="w-full text-sm text-gray-600"
               onClick={async () => {
-                console.log('🔄 Manual session refresh triggered...');
                 await update();
                 window.location.reload();
               }}

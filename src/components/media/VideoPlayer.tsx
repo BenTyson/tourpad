@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Image from 'next/image';
 import { PlayIcon, SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/24/outline';
 
 interface VideoPlayerProps {
@@ -31,11 +32,14 @@ export function VideoPlayer({ videoUrl, thumbnailUrl, title, className = '' }: V
       {!isPlaying ? (
         // Video Thumbnail with Play Button
         <div className="relative group cursor-pointer" onClick={handlePlay}>
-          <div className="aspect-video bg-gray-900">
-            <img
+          <div className="relative aspect-video bg-gray-900">
+            <Image
               src={placeholder}
               alt={title}
-              className="w-full h-full object-cover opacity-80"
+              fill
+              className="object-cover opacity-80"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              unoptimized
             />
           </div>
           

@@ -99,7 +99,7 @@ export async function GET(request: NextRequest) {
               ? ['Friday', 'Saturday', 'Sunday'] 
               : host.venueType === 'WAREHOUSE' 
                 ? ['Thursday', 'Friday', 'Saturday'] 
-                : ['Friday', 'Saturday'], // Derived from venue type, TODO: Store in database
+                : ['Friday', 'Saturday'], // NOTE: Derived from venue type; store in DB when host sets availability
             performanceLocation: host.venueType?.toLowerCase() || 'home'
           },
           amenities: {

@@ -1038,4 +1038,56 @@ const closeModal = () => {
 
 ---
 
-*These patterns are battle-tested and ensure stable, maintainable code. Follow them religiously to prevent development issues.*
+## Notification Pattern (Phase 4)
+
+All notification wiring uses `createNotification()` from `src/lib/notifications.ts`. Wrap in try/catch, never fail the main request on notification error.
+
+```typescript
+import { createNotification } from '@/lib/notifications';
+import { logger } from '@/lib/logger';
+
+// After the main DB operation succeeds:
+try {
+  await createNotification({
+    userId: targetUserId,        // Who receives it
+    type: 'BOOKING',             // BOOKING | MESSAGE | PAYMENT | SYSTEM
+    title: 'New Booking Request',
+    message: `${artistName} has requested a show on ${date}`,
+    relatedId: bookingId,        // For linking to the entity
+    relatedType: 'booking',      // booking | concert | rsvp
+    actionUrl: '/dashboard/bookings',
+    actionText: 'View Request'
+  });
+} catch (notifError) {
+  logger.error('Failed to send notification', notifError);
+  // Don't fail the main request
+}
+```
+
+Pre-built helpers in `src/lib/notifications.ts`:
+- `notifyBookingApproved(booking, host)`
+- `notifyBookingConfirmed(booking, artist)`
+- `notifyBookingRejected(booking, host)`
+- `notifyDoorFeeChange(booking, isForArtist)`
+
+Already wired at: booking POST, RSVP POST/PUT/DELETE, booking [id] PUT.
+
+---
+
+## Deferred Work Convention
+
+Items not implemented use `DEFERRED:` or `NOTE:` comments instead of `TODO`. This distinguishes "intentionally deferred with reason" from "forgot to implement." Zero TODO/FIXME comments should exist in src/.
+
+```typescript
+// DEFERRED: Requires schema migration -- Review model is fan-only
+// DEFERRED: Requires Stripe test environment to wire cancel API
+// NOTE: Using createdAt as proxy; add formationYear to schema if needed
+```
+
+---
+
+## Logging Rules
+
+- **Server code** (`src/app/api/`, `src/lib/`): Use `logger` from `src/lib/logger.ts`. Never `console.log`.
+- **Client code** (`src/app/` pages, `src/components/`): No `console.log`. Use error state for user-facing errors. `console.warn` in catch blocks is acceptable.
+- **Only exception**: `src/lib/logger.ts` internals use raw `console` calls.

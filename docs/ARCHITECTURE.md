@@ -1599,19 +1599,23 @@ DELETE /api/bookings/[id]        // Cancel booking
 // - Mobile-responsive booking cards
 ```
 
-#### Notification System ✅ FULLY IMPLEMENTED
+#### Notification System ✅ FULLY WIRED (Phase 4)
 ```typescript
 GET    /api/notifications        // Fetch user notifications (paginated)
 PUT    /api/notifications        // Mark notifications as read
 
-// Features implemented:
-// - Real-time notification creation on booking events
-// - In-app notification bell with unread count badge
-// - Notification dropdown with action links
-// - Auto-polling every 30 seconds for new notifications
-// - Mark individual/all notifications as read
-// - Deep linking to relevant pages (booking details)
-// - Integrated into header for approved/active users
+// Creation: src/lib/notifications.ts -- createNotification()
+// Pre-built helpers: notifyBookingApproved, notifyBookingConfirmed, notifyBookingRejected, notifyDoorFeeChange
+//
+// Wired at:
+// - POST /api/bookings          → notifies host of new booking request
+// - PUT  /api/bookings/[id]     → notifies artist/host on status change (approve/reject/confirm)
+// - POST /api/rsvps             → notifies host of new RSVP; auto-approve notifies fan
+// - PUT  /api/rsvps/[id]        → notifies fan of RSVP status change (approved/declined/waitlisted)
+// - DELETE /api/rsvps/[id]      → notifies host of RSVP cancellation
+//
+// UI: NotificationBell + NotificationDropdown in header for approved/active users
+// Polling: 30-second intervals for new notifications
 ```
 
 #### Tour Planning System ✅ FULLY IMPLEMENTED
@@ -1745,6 +1749,7 @@ GET    /api/admin/finance/overview            // Revenue analytics (READY)
 ```typescript
 GET    /api/admin/applications        // Pending user applications (WORKING)
 GET    /api/admin/metrics            // Real-time dashboard metrics (WORKING)
+GET    /api/admin/activity           // DB-sourced activity feed (Phase 4)
 POST   /api/admin/applications/[userId]/approve // Approve users (WORKING)
 POST   /api/admin/applications/[userId]/reject  // Reject users (WORKING)
 

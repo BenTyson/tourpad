@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { User } from 'lucide-react';
 import { resolveProfileImageUrl } from '@/lib/profileImageUtils';
 
@@ -12,8 +13,14 @@ interface ProfileImageProps {
 
 const sizeClasses = {
   sm: 'w-8 h-8',
-  md: 'w-10 h-10', 
+  md: 'w-10 h-10',
   lg: 'w-12 h-12'
+};
+
+const sizePx = {
+  sm: 32,
+  md: 40,
+  lg: 48
 };
 
 const iconSizes = {
@@ -24,10 +31,10 @@ const iconSizes = {
 
 export function ProfileImage({ src, user, alt = 'Profile', size = 'md', className = '' }: ProfileImageProps) {
   const [imageError, setImageError] = React.useState(false);
-  
+
   // Resolve the correct profile image URL
   const resolvedImageUrl = src || (user ? resolveProfileImageUrl(user) : null);
-  
+
   if (!resolvedImageUrl || imageError) {
     return (
       <div className={`${sizeClasses[size]} bg-[var(--color-sage)] rounded-full flex items-center justify-center ${className}`}>
@@ -35,13 +42,16 @@ export function ProfileImage({ src, user, alt = 'Profile', size = 'md', classNam
       </div>
     );
   }
-  
+
   return (
-    <img
+    <Image
       src={resolvedImageUrl}
       alt={alt}
+      width={sizePx[size]}
+      height={sizePx[size]}
       className={`${sizeClasses[size]} rounded-full object-cover ${className}`}
       onError={() => setImageError(true)}
+      unoptimized={resolvedImageUrl.startsWith('http')}
     />
   );
 }

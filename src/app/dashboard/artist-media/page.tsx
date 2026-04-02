@@ -123,7 +123,7 @@ export default function ArtistMediaPage() {
 
   const handleVideoLinkSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Video link submitted:', videoLinkForm);
+    // DEFERRED: Wire to video link save API
     setVideoLinkForm({
       title: '',
       url: '',

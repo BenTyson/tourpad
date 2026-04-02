@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Play, Pause, Music, ExternalLink, Clock, TrendingUp, Users, Headphones, Heart, Volume2, SkipBack, SkipForward, Download } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -510,10 +511,13 @@ export default function EnhancedArtistMusicSection({
                         {/* Album Artwork & Play Button */}
                         <div className="relative aspect-square w-full">
                           {track.album?.imageUrl ? (
-                            <img
+                            <Image
                               src={track.album.imageUrl}
                               alt={track.album.name}
-                              className="w-full h-full rounded-lg object-cover"
+                              fill
+                              className="rounded-lg object-cover"
+                              sizes="(max-width: 768px) 100vw, 50vw"
+                              unoptimized
                             />
                           ) : (
                             <div className="w-full h-full bg-neutral-200 rounded-lg flex items-center justify-center">
@@ -640,10 +644,13 @@ export default function EnhancedArtistMusicSection({
                         {/* Artwork & Play Button */}
                         <div className="relative aspect-square w-full">
                           {track.artworkUrl ? (
-                            <img
+                            <Image
                               src={track.artworkUrl}
                               alt={track.title}
-                              className="w-full h-full rounded-lg object-cover"
+                              fill
+                              className="rounded-lg object-cover"
+                              sizes="(max-width: 768px) 100vw, 50vw"
+                              unoptimized
                             />
                           ) : (
                             <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center">

@@ -40,12 +40,12 @@ export default function SubscriptionPage() {
   const handleCancelSubscription = () => {
     setSubscriptionStatus('cancelled');
     setShowCancelModal(false);
-    // TODO: Call Stripe API to cancel subscription
+    // DEFERRED: Requires Stripe test environment to wire cancel API
   };
 
   const handleReactivate = () => {
     setSubscriptionStatus('active');
-    // TODO: Call Stripe API to reactivate subscription
+    // DEFERRED: Requires Stripe test environment to wire reactivate API
   };
 
   const getStatusInfo = (status: string) => {

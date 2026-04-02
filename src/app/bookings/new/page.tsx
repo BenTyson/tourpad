@@ -96,13 +96,10 @@ function NewBookingForm() {
     };
 
     if (hostId || artistId) {
-      console.log('Fetching data for hostId:', hostId, 'artistId:', artistId);
-      fetchData().catch(error => {
-        console.error('Unhandled error in fetchData:', error);
+      fetchData().catch(() => {
         setLoading(false);
       });
     } else {
-      console.log('No hostId or artistId provided');
       setLoading(false);
     }
   }, [hostId, artistId]);
@@ -208,8 +205,6 @@ function NewBookingForm() {
         lodgingDetails: formData.needsLodging ? formData.lodgingDetails : null
       };
       
-      console.log('Submitting booking data:', bookingData);
-      
       // Submit to API
       const response = await fetch('/api/bookings', {
         method: 'POST',
@@ -222,23 +217,19 @@ function NewBookingForm() {
       let data;
       try {
         data = await response.json();
-      } catch (parseError) {
-        console.error('Failed to parse response as JSON:', parseError);
+      } catch {
         setErrors(['Invalid server response. Please try again.']);
         return;
       }
-      
+
       if (!response.ok) {
-        console.error('API Error:', response.status, data);
         setErrors([data.error || `Server error (${response.status}). Please try again.`]);
         return;
       }
-      
-      console.log('Booking created successfully:', data);
+
       setShowConfirmation(true);
       
     } catch (error) {
-      console.error('Error creating booking:', error);
       if (error instanceof TypeError && error.message.includes('fetch')) {
         setErrors(['Network error. Please check your connection and try again.']);
       } else {

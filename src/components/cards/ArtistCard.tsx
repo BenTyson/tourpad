@@ -1,7 +1,8 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
-import { 
-  Star, 
+import {
+  Star,
   Users,
   Music,
   Globe,
@@ -109,11 +110,13 @@ export function ArtistCard({ artist, showBookingButton = false }: ArtistCardProp
                 style={{ transform: `translateX(-${currentPhotoIndex * 100}%)` }}
               >
                 {allPhotos.map((photo, index) => (
-                  <div key={photo.id} className="w-full h-full flex-shrink-0">
-                    <img
+                  <div key={photo.id} className="w-full h-full flex-shrink-0 relative">
+                    <Image
                       src={photo.url}
                       alt={`${artist.name} - ${photo.alt}`}
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   </div>
                 ))}

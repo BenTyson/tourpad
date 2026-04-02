@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
+import Image from 'next/image';
 import {
   X,
   Calendar,
@@ -174,10 +175,12 @@ export default function ConcertBookingModal({
         {/* Header Image */}
         <div className="relative h-48 bg-gradient-to-br from-neutral-100 to-neutral-200 flex-shrink-0">
           {concert.artist.pressPhoto ? (
-            <img 
-              src={concert.artist.pressPhoto} 
+            <Image
+              src={concert.artist.pressPhoto}
               alt={concert.artist.name}
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">

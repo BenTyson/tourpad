@@ -5,6 +5,7 @@ import { rateLimit } from '@/lib/api-helpers';
 import { sanitizeHtml } from '@/lib/validation';
 import { logger } from '@/lib/logger';
 import { apiSuccess, ApiErrors } from '@/lib/api-response';
+import { createNotification } from '@/lib/notifications';
 
 // GET /api/bookings - Get user's bookings
 export async function GET(request: NextRequest) {
@@ -137,7 +138,7 @@ export async function GET(request: NextRequest) {
         city: booking.host.city,
         state: booking.host.state
       },
-      specialRequirements: null, // TODO: Add this field if needed
+      specialRequirements: null, // NOTE: Not in schema; add if needed
       concert: booking.concert ? {
         id: booking.concert.id,
         title: booking.concert.title,
@@ -258,8 +259,22 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    // TODO: Send notification to host about new booking request
-    
+    // Notify host about new booking request
+    try {
+      await createNotification({
+        userId: booking.host.user.id,
+        type: 'BOOKING',
+        title: 'New Booking Request',
+        message: `${booking.artist.user.name} has requested to book a show on ${new Date(booking.requestedDate).toLocaleDateString()}`,
+        relatedId: booking.id,
+        relatedType: 'booking',
+        actionUrl: '/dashboard/bookings',
+        actionText: 'View Request'
+      });
+    } catch (notifError) {
+      logger.error('Failed to send booking notification', notifError);
+    }
+
     return apiSuccess({
       booking: {
         id: booking.id,

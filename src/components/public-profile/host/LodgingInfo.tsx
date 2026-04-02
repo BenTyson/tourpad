@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { Bed, Home, Wifi, Coffee, Car, Utensils, Briefcase, Shield } from 'lucide-react';
 import { LodgingDetails } from '../types';
 
@@ -67,10 +68,12 @@ export default function LodgingInfo({ offersLodging, lodgingDetails, onPhotoClic
                     <div className="relative w-full md:w-1/3 h-48 md:h-48 lg:h-56">
                       {mainPhoto ? (
                         <>
-                          <img
+                          <Image
                             src={mainPhoto.url}
                             alt={`Bedroom ${index + 1}`}
-                            className="w-full h-full object-cover"
+                            fill
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                            className="object-cover"
                           />
                           {room.photos && room.photos.length > 1 && (
                             <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white px-2.5 py-1 rounded-full text-xs font-medium">
